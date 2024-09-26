@@ -1,0 +1,16 @@
+{
+  "name": "@quiz/common",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "yarn clean && tsc --outDir dist",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "devDependencies": {
+  }
+}
