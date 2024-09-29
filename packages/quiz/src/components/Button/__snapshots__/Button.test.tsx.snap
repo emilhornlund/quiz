@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Button > should receive onClick event when button is clicked 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <button
+      class="primary"
+      data-testid="test-my-button-button"
+      id="my-button"
+      name="my-button"
+      type="button"
+    >
+      My Button
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Button > should render a Button with default props 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <button
+      class="primary"
+      data-testid="test-my-button-button"
+      id="my-button"
+      name="my-button"
+      type="button"
+    >
+      My Button
+    </button>
+  </div>
+</div>
+`;
