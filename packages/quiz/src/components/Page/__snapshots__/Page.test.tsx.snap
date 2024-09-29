@@ -1,0 +1,78 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should render Page with default props 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <div
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </div>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content center"
+    >
+      Content
+    </div>
+  </div>
+</div>
+`;
+
+exports[`should render Page with header 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <div
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </div>
+      <div
+        class="side"
+      >
+        <a
+          href="#"
+        >
+          Link1
+        </a>
+        <a
+          href="#"
+        >
+          Link2
+        </a>
+      </div>
+    </div>
+    <div
+      class="content center"
+    >
+      Content
+    </div>
+  </div>
+</div>
+`;

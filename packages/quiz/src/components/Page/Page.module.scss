@@ -1,0 +1,184 @@
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: $blue-1;
+  background: linear-gradient(180deg, $blue-1 25%, 75%, $blue-2);
+  row-gap: $layout-gutter;
+  overflow: hidden;
+  padding: 0 $layout-gutter;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: $layout-gutter;
+    width: 100%;
+
+    .logo {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background-color: $white;
+        color: black;
+        mix-blend-mode: screen;
+
+        &::after {
+          position: absolute;
+          content: 'Q';
+          top: pxToRem(-1px);
+          font-weight: bolder;
+        }
+      }
+
+      .text {
+        position: relative;
+        @include fontSize(20px);
+        font-weight: bolder;
+        color: $white;
+        top: pxToRem(-1px);
+      }
+
+      @include mobile {
+        column-gap: $layout-gutter * 0.7;
+
+        .icon {
+          width: pxToRem(36px);
+          height: pxToRem(36px);
+          border-radius: pxToRem(10px);
+
+          &::after {
+            @include fontSize(24px);
+          }
+        }
+      }
+
+      @include tablet {
+        column-gap: $layout-gutter * 0.85;
+
+        .icon {
+          width: pxToRem(42px);
+          height: pxToRem(42px);
+          border-radius: pxToRem(12px);
+
+          &::after {
+            @include fontSize(28px);
+          }
+        }
+
+        .text {
+          @include fontSize(24px);
+        }
+      }
+
+      @include desktop {
+        column-gap: $layout-gutter;
+
+        .icon {
+          width: pxToRem(48px);
+          height: pxToRem(48px);
+          border-radius: pxToRem(14px);
+
+          &::after {
+            @include fontSize(32px);
+          }
+        }
+
+        .text {
+          @include fontSize(27px);
+        }
+      }
+    }
+
+    .side {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      column-gap: $layout-gutter;
+
+      @include mobile {
+        column-gap: $layout-gutter;
+      }
+      @include tablet {
+        column-gap: $layout-gutter * 1.5;
+      }
+      @include desktop {
+        column-gap: $layout-gutter * 2;
+      }
+
+      a {
+        font-weight: bold;
+        text-decoration: none;
+        color: $white;
+
+        @include mobile {
+          @include fontSize(16px);
+        }
+        @include tablet {
+          @include fontSize(18px);
+        }
+        @include desktop {
+          @include fontSize(20px);
+        }
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+
+    @include tablet {
+      &:not(&.fullWidth) {
+        width: $tablet-width;
+      }
+    }
+    @include desktop {
+      &:not(&.fullWidth) {
+        width: $desktop-width;
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: $layout-gutter;
+    width: 100%;
+    height: 100%;
+
+    &.noPadding {
+      padding-bottom: 0;
+    }
+
+    &.center {
+      justify-content: center;
+      align-items: center;
+    }
+
+    @include tablet {
+      &:not(&.fullWidth) {
+        width: $tablet-width;
+      }
+    }
+    @include desktop {
+      &:not(&.fullWidth) {
+        width: $desktop-width;
+      }
+    }
+  }
+}

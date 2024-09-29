@@ -1,4 +1,6 @@
 export type { ButtonProps } from './Button'
 export type { TextFieldProps } from './TextField'
+export type { PageProps } from './Page'
 export { default as Button } from './Button'
 export { default as TextField } from './TextField'
+export { default as Page } from './Page'
