@@ -1,0 +1,34 @@
+@import '../../styles/colors.scss';
+@import '../../styles/variables.scss';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+
+  input {
+    display: flex;
+    flex-direction: column;
+    appearance: none;
+    padding: 12px 1rem;
+    outline-offset: 2px;
+    border: none;
+    border-radius: 0.5rem;
+    outline: 2px solid $white;
+    background-color: $white;
+    font-size: 17px;
+    line-height: 17px;
+    color: $gray-4;
+
+    &:disabled {
+      background-color: $gray-3;
+      outline-color: $gray-3;
+      color: $gray-4;
+    }
+
+    @media only screen and (min-width: $breakpoint-md) {
+      font-size: 18px;
+      padding: 14px 1rem;
+    }
+  }
+}
