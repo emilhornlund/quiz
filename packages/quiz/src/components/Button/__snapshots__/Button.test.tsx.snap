@@ -3,7 +3,7 @@
 exports[`Button > should receive onClick event when button is clicked 1`] = `
 <div>
   <div
-    class="container"
+    class="main"
   >
     <button
       class="primary"
@@ -21,7 +21,7 @@ exports[`Button > should receive onClick event when button is clicked 1`] = `
 exports[`Button > should render a Button with default props 1`] = `
 <div>
   <div
-    class="container"
+    class="main"
   >
     <button
       class="primary"

@@ -1,23 +1,19 @@
 @import '../../styles/colors.scss';
-@import '../../styles/variables.scss';
+@import '../../styles/helpers.scss';
 
 .main {
   display: flex;
   flex-direction: column;
-  padding: 4px;
 
   input {
     display: flex;
     flex-direction: column;
     appearance: none;
-    padding: 12px 1rem;
-    outline-offset: 2px;
+    height: 100%;
+    outline-offset: pxToRem(2px);
     border: none;
-    border-radius: 0.5rem;
-    outline: 2px solid $white;
+    outline: pxToRem(2px) solid $white;
     background-color: $white;
-    font-size: 17px;
-    line-height: 17px;
     color: $gray-4;
 
     &:disabled {
@@ -25,10 +21,33 @@
       outline-color: $gray-3;
       color: $gray-4;
     }
+  }
 
-    @media only screen and (min-width: $breakpoint-md) {
-      font-size: 18px;
-      padding: 14px 1rem;
+  @include mobile {
+    height: pxToRem(42px);
+
+    input {
+      padding: 0 $layout-gutter * 0.8;
+      border-radius: $layout-gutter * 0.5;
+      @include fontSize(16px);
+    }
+  }
+  @include tablet {
+    height: pxToRem(44px);
+
+    input {
+      padding: 0 $layout-gutter * 0.9;
+      border-radius: $layout-gutter * 0.6;
+      @include fontSize(17px);
+    }
+  }
+  @include desktop {
+    height: pxToRem(46px);
+
+    input {
+      padding: 0 $layout-gutter;
+      border-radius: $layout-gutter * 0.7;
+      @include fontSize(18px);
     }
   }
 }

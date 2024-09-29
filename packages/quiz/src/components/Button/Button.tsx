@@ -28,7 +28,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
 }) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={classNames(
+        styles.main,
+        size === 'small' ? styles.small : undefined,
+      )}>
       <button
         id={id}
         name={name ?? id}
@@ -38,7 +42,6 @@ const Button: React.FC<ButtonProps> = ({
         className={classNames(
           kind === 'primary' ? styles.primary : undefined,
           kind === 'secondary' ? styles.secondary : undefined,
-          size === 'small' ? styles.small : undefined,
         )}
         data-testid={`test-${id}-button`}>
         {arrow == 'left' && (

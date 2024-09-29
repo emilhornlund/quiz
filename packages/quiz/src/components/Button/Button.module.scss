@@ -1,10 +1,9 @@
 @import '../../styles/colors.scss';
-@import '../../styles/variables.scss';
+@import '../../styles/helpers.scss';
 
-.container {
+.main {
   display: flex;
   flex-direction: column;
-  padding: 4px;
 
   button {
     display: flex;
@@ -14,19 +13,15 @@
     appearance: none;
     outline: none;
     border: none;
-    font-size: 16px;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
     font-weight: bold;
-    height: 45px;
-    outline-offset: 2px;
-    column-gap: 0.5rem;
     width: 100%;
+    height: 100%;
+    outline-offset: pxToRem(2px);
 
     &.primary {
-      border: 2px solid transparent;
+      border: pxToRem(2px) solid transparent;
       background-color: $white;
-      outline: 2px solid $white;
+      outline: pxToRem(2px) solid $white;
       color: $gray-4;
 
       &:hover {
@@ -35,9 +30,9 @@
     }
 
     &.secondary {
-      border: 2px solid transparent;
+      border: pxToRem(2px) solid transparent;
       background-color: $yellow-2;
-      outline: 2px solid $yellow-2;
+      outline: pxToRem(2px) solid $yellow-2;
       color: $gray-4;
 
       &:hover {
@@ -58,26 +53,11 @@
       }
     }
 
-    &.small {
-      font-size: 14px;
-      height: 35px;
-    }
-
-    @media only screen and (min-width: $breakpoint-md) {
-      font-size: 18px;
-      height: 50px;
-
-      &:not(&.small) {
-        font-size: 18px;
-        height: 50px;
-      }
-    }
-
     .arrow {
       border: solid black;
-      border-width: 0 2px 2px 0;
+      border-width: 0 pxToRem(2px) pxToRem(2px) 0;
       display: inline-block;
-      padding: 3px;
+      padding: pxToRem(3px);
     }
 
     .right {
@@ -88,6 +68,61 @@
     .left {
       transform: rotate(135deg);
       -webkit-transform: rotate(135deg);
+    }
+  }
+
+  @include mobile {
+    height: pxToRem(42px);
+
+    button {
+      padding: 0 $layout-gutter * 0.8;
+      column-gap: $layout-gutter * 0.5;
+      border-radius: $layout-gutter * 0.5;
+      @include fontSize(16px);
+    }
+
+    &.small {
+      height: pxToRem(32px);
+
+      button {
+        @include fontSize(14px);
+      }
+    }
+  }
+  @include tablet {
+    height: pxToRem(44px);
+
+    button {
+      padding: 0 $layout-gutter * 0.9;
+      column-gap: $layout-gutter * 0.6;
+      border-radius: $layout-gutter * 0.6;
+      @include fontSize(17px);
+    }
+
+    &.small {
+      height: pxToRem(34px);
+
+      button {
+        @include fontSize(15px);
+      }
+    }
+  }
+  @include desktop {
+    height: pxToRem(46px);
+
+    button {
+      padding: 0 $layout-gutter;
+      column-gap: $layout-gutter * 0.7;
+      border-radius: $layout-gutter * 0.7;
+      @include fontSize(18px);
+    }
+
+    &.small {
+      height: pxToRem(36px);
+
+      button {
+        @include fontSize(16px);
+      }
     }
   }
 }
