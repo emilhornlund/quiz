@@ -36,7 +36,15 @@ const HomePage: FC = () => {
   const handleJoinSubmit = () => undefined
 
   return (
-    <Page>
+    <Page
+      header={
+        <a
+          href="https://github.com/emilhornlund/quiz"
+          target="_blank"
+          rel="noreferrer">
+          GitHub
+        </a>
+      }>
       <div className={styles.main}>
         <div className={styles.image}>
           <img src={RocketImage} alt="rocket" />
