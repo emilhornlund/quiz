@@ -1,18 +1,21 @@
 @import '../../styles/colors.scss';
 @import '../../styles/helpers.scss';
 
+$outline-offset: pxToRem(2px);
+
 .main {
   display: flex;
   flex-direction: column;
+  margin: $outline-offset;
 
   input {
     display: flex;
     flex-direction: column;
     appearance: none;
     height: 100%;
-    outline-offset: pxToRem(2px);
+    outline-offset: $outline-offset;
     border: none;
-    outline: pxToRem(2px) solid $white;
+    outline: $outline-offset solid $white;
     background-color: $white;
     color: $gray-4;
 

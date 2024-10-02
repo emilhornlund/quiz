@@ -1,9 +1,12 @@
 @import '../../styles/colors.scss';
 @import '../../styles/helpers.scss';
 
+$outline-offset: pxToRem(2px);
+
 .main {
   display: flex;
   flex-direction: column;
+  margin: $outline-offset;
 
   button {
     display: flex;
@@ -16,12 +19,12 @@
     font-weight: bold;
     width: 100%;
     height: 100%;
-    outline-offset: pxToRem(2px);
+    outline-offset: $outline-offset;
 
     &.primary {
-      border: pxToRem(2px) solid transparent;
+      border: $outline-offset solid transparent;
       background-color: $white;
-      outline: pxToRem(2px) solid $white;
+      outline: $outline-offset solid $white;
       color: $gray-4;
 
       &:hover {
@@ -30,9 +33,9 @@
     }
 
     &.secondary {
-      border: pxToRem(2px) solid transparent;
+      border: $outline-offset solid transparent;
       background-color: $yellow-2;
-      outline: pxToRem(2px) solid $yellow-2;
+      outline: $outline-offset solid $yellow-2;
       color: $gray-4;
 
       &:hover {
@@ -55,7 +58,7 @@
 
     .arrow {
       border: solid black;
-      border-width: 0 pxToRem(2px) pxToRem(2px) 0;
+      border-width: 0 $outline-offset $outline-offset 0;
       display: inline-block;
       padding: pxToRem(3px);
     }
