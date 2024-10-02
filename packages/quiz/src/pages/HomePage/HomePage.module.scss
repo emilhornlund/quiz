@@ -1,0 +1,78 @@
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  row-gap: $layout-gutter * 1.5;
+  width: 100%;
+
+  .image {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    > img {
+      width: 45%;
+    }
+  }
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: bolder;
+    color: white;
+
+    @include fontSize(56px);
+
+  }
+
+  .message {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    color: white;
+
+    @include fontSize(18px);
+  }
+
+  .form > form {
+    display: flex;
+    flex-direction: column;
+    row-gap: $layout-gutter;
+    padding: $layout-gutter 0;
+  }
+
+  @include tablet {
+    width: $mobile-width;
+
+    .title {
+      @include fontSize(76px);
+    }
+
+    .message {
+      @include fontSize(24px);
+    }
+
+    .form > form {
+      padding: $layout-gutter * 1.5 0;
+    }
+  }
+
+  @include desktop {
+    width: $mobile-width;
+
+    .title {
+      @include fontSize(86px);
+    }
+
+    .message {
+      @include fontSize(28px);
+    }
+
+    .form > form {
+      padding: $layout-gutter * 2 0;
+    }
+  }
+}
