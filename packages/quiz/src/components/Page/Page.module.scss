@@ -26,21 +26,8 @@
       align-items: center;
 
       .icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        background-color: $white;
-        color: black;
-        mix-blend-mode: screen;
-
-        &::after {
-          position: absolute;
-          content: 'Q';
-          top: pxToRem(-1px);
-          font-weight: bolder;
-        }
+        background-image: url(../../assets/images/logo-small.svg);
+        background-size: 100% auto;
       }
 
       .text {
