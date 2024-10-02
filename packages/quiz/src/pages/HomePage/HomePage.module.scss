@@ -12,7 +12,8 @@
     justify-content: center;
 
     > img {
-      width: 45%;
+      width: 140px;
+      height: 140px;
     }
   }
 
@@ -24,7 +25,6 @@
     color: white;
 
     @include fontSize(56px);
-
   }
 
   .message {
@@ -47,6 +47,11 @@
   @include tablet {
     width: $mobile-width;
 
+    .image > img {
+      width: 170px;
+      height: 170px;
+    }
+
     .title {
       @include fontSize(76px);
     }
@@ -62,6 +67,11 @@
 
   @include desktop {
     width: $mobile-width;
+
+    .image > img {
+      width: 200px;
+      height: 200px;
+    }
 
     .title {
       @include fontSize(86px);
