@@ -60,7 +60,13 @@ const HomePage: FC = () => {
               value={gamePIN ?? ''}
               onChange={handleGamePINChange}
             />
-            <Button id="join" type="submit" kind="secondary" value="Join" />
+            <Button
+              id="join"
+              type="submit"
+              kind="secondary"
+              value="Join the game"
+              arrow="right"
+            />
           </form>
         </div>
       </div>
