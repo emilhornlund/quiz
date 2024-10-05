@@ -4,6 +4,7 @@ import TextField from './TextField.tsx'
 
 const meta = {
   component: TextField,
+  tags: ['autodocs'],
 } satisfies Meta<typeof TextField>
 
 export default meta
