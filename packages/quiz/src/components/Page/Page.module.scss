@@ -150,6 +150,12 @@
     flex: 1;
     overflow-y: scroll;
 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     &.noPadding {
       padding-bottom: 0;
     }
