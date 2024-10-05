@@ -18,7 +18,12 @@ export type GameEventLobbyPlayer = {
 
 export type GameEventLeaderboardHost = {
   type: GameEventType.LeaderboardHost
+  gamePIN: string
   leaderboard: { position: number; nickname: string; score: number }[]
+  question: {
+    current: number
+    total: number
+  }
 }
 
 export type GameEvent = GameEventLobbyHost | GameEventLobbyPlayer

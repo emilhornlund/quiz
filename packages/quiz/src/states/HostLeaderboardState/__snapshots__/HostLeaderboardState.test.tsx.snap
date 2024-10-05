@@ -42,7 +42,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
       </div>
     </div>
     <div
-      class="content center noPadding"
+      class="content center"
     >
       <div
         class="main"
@@ -306,6 +306,32 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          1
+           / 
+          20
+        </div>
+        <div
+          class="gamePIN"
+        >
+          Game PIN: 
+          <span>
+            123456
+          </span>
+        </div>
+        <div
+          class="actions"
+        />
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 import { GameEventLeaderboardHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Button, Page } from '../../components'
+import { Button, HostGameFooter, Page } from '../../components'
 
 import styles from './HostLeaderboardState.module.scss'
 
@@ -10,7 +10,11 @@ export interface HostLeaderboardStateProps {
 }
 
 const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
-  event: { leaderboard },
+  event: {
+    gamePIN,
+    leaderboard,
+    question: { current: currentQuestion, total: totalQuestions },
+  },
 }) => {
   return (
     <Page
@@ -24,7 +28,13 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
           arrow="right"
         />
       }
-      noPadding>
+      footer={
+        <HostGameFooter
+          gamePIN={gamePIN}
+          currentQuestion={currentQuestion}
+          totalQuestions={totalQuestions}
+        />
+      }>
       <div className={styles.main}>
         <div className={styles.title}>Leaderboard</div>
         <div className={styles.leaderboard}>
