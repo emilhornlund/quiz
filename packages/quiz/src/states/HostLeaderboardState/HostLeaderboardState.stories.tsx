@@ -30,7 +30,7 @@ export const Default = {
         { position: 9, nickname: 'Willo', score: 9360 },
         { position: 10, nickname: 'ScarletFlame', score: 6723 },
       ],
-      question: { current: 1, total: 20 },
+      pagination: { current: 1, total: 20 },
     },
   },
 } satisfies Story

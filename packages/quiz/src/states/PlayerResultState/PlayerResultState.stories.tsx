@@ -25,7 +25,7 @@ export const Correct = {
         position: 1,
         streak: 3,
       },
-      question: {
+      pagination: {
         current: 1,
         total: 20,
       },
@@ -45,7 +45,7 @@ export const Incorrect = {
         position: 1,
         streak: 0,
       },
-      question: {
+      pagination: {
         current: 1,
         total: 20,
       },

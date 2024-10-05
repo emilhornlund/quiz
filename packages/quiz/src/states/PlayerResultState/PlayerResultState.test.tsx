@@ -19,7 +19,7 @@ describe('PlayerResultState', () => {
             position: 1,
             streak: 3,
           },
-          question: {
+          pagination: {
             current: 1,
             total: 20,
           },

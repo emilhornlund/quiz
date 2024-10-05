@@ -13,7 +13,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
   event: {
     gamePIN,
     leaderboard,
-    question: { current: currentQuestion, total: totalQuestions },
+    pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {
   return (

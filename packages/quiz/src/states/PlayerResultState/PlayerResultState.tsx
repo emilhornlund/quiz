@@ -18,7 +18,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
     nickname,
     correct,
     score: { last: lastScore, total: totalScore, position, streak },
-    question: { current: currentQuestion, total: totalQuestions },
+    pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {
   const message = useMemo(() => {
