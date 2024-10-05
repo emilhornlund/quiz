@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should render RocketImage with default props 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <img
+      alt="rocket"
+      src="/src/assets/images/rocket.svg"
+    />
+  </div>
+</div>
+`;

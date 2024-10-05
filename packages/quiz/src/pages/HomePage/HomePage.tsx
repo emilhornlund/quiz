@@ -1,7 +1,6 @@
 import React, { FC, useMemo, useState } from 'react'
 
-import RocketImage from '../../assets/images/rocket.svg'
-import { Button, Page, TextField } from '../../components'
+import { Button, Page, RocketImage, TextField } from '../../components'
 
 import styles from './HomePage.module.scss'
 
@@ -46,9 +45,7 @@ const HomePage: FC = () => {
         </a>
       }>
       <div className={styles.main}>
-        <div className={styles.image}>
-          <img src={RocketImage} alt="rocket" />
-        </div>
+        <RocketImage />
         <div className={styles.title}>Let’s play</div>
         <div className={styles.message}>{message}</div>
         <div className={styles.form}>

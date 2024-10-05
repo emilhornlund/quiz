@@ -1,13 +1,13 @@
 import { GameEventType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import HostLobbyState from './HostLobbyState'
 
-describe('LobbyState', () => {
+describe('HostLobbyState', () => {
   it('should render HostLobbyState', async () => {
-    render(
+    const { container } = render(
       <HostLobbyState
         event={{
           type: GameEventType.LobbyHost,
@@ -28,5 +28,7 @@ describe('LobbyState', () => {
         }}
       />,
     )
+
+    expect(container).toMatchSnapshot()
   })
 })

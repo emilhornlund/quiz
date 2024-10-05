@@ -2,7 +2,7 @@ import { GameEventLobbyHost } from '@quiz/common'
 import React, { FC } from 'react'
 import QRCode from 'react-qr-code'
 
-import { Button, Page } from '../../components'
+import { Button, NicknameChip, Page } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import styles from './HostLobbyState.module.scss'
@@ -42,9 +42,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
         <div className={styles.content}>
           <div className={styles.players}>
             {players.map((nickname) => (
-              <div key={nickname} className={styles.nickname}>
-                {nickname}
-              </div>
+              <NicknameChip key={nickname} value={nickname} />
             ))}
           </div>
         </div>

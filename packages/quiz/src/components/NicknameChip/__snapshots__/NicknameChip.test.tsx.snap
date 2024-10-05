@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should render NicknameChip with default props 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    FrostyBear
+  </div>
+</div>
+`;

@@ -1,0 +1,35 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-weight: bold;
+
+  @include mobile {
+    padding: 0 pxToRem(16px);
+    border-radius: calc(34px / 2);
+    height: 34px;
+
+    @include fontSize(14px);
+  }
+
+  @include tablet {
+    padding: 0 pxToRem(20px);
+    border-radius: calc(41px / 2);
+    height: 41px;
+
+    @include fontSize(18px);
+  }
+
+  @include desktop {
+    padding: 0 pxToRem(24px);
+    border-radius: calc(48px / 2);
+    height: 48px;
+
+    @include fontSize(22px);
+  }
+}

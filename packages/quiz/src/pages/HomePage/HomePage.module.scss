@@ -6,17 +6,6 @@
   row-gap: $layout-gutter * 1.5;
   width: 100%;
 
-  .image {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    > img {
-      width: 140px;
-      height: 140px;
-    }
-  }
-
   .title {
     display: flex;
     flex-direction: row;
@@ -47,11 +36,6 @@
   @include tablet {
     width: $mobile-width;
 
-    .image > img {
-      width: 170px;
-      height: 170px;
-    }
-
     .title {
       @include fontSize(76px);
     }
@@ -67,11 +51,6 @@
 
   @include desktop {
     width: $mobile-width;
-
-    .image > img {
-      width: 200px;
-      height: 200px;
-    }
 
     .title {
       @include fontSize(86px);
