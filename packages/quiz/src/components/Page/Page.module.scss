@@ -11,6 +11,8 @@
   row-gap: $layout-gutter;
   overflow: hidden;
   padding: 0 $layout-gutter;
+  -webkit-user-select: none;
+  user-select: none;
 
   .header {
     display: flex;
