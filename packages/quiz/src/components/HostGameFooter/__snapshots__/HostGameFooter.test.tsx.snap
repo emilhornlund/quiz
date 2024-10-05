@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HostGameFooter > should render HostGameFooter with default props 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="questions"
+    >
+      1
+       / 
+      20
+    </div>
+    <div
+      class="gamePIN"
+    >
+      Game PIN: 
+      <span>
+        123456
+      </span>
+    </div>
+    <div
+      class="actions"
+    />
+  </div>
+</div>
+`;

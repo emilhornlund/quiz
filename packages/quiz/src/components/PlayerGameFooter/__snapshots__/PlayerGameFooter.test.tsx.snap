@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerGameFooter > should render PlayerGameFooter with default props 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="nickname"
+    >
+      FrostyBear
+    </div>
+    <div
+      class="score"
+    >
+      <span>
+        10361
+      </span>
+    </div>
+  </div>
+</div>
+`;

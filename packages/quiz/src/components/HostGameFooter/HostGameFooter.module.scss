@@ -1,0 +1,82 @@
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  @include mobile {
+    border-radius: $layout-gutter * 0.5;
+    padding: $layout-gutter * 0.5;
+  }
+
+  @include tablet {
+    border-radius: $layout-gutter * 0.75;
+    padding: $layout-gutter * 0.75;
+  }
+
+  @include desktop {
+    border-radius: $layout-gutter;
+    padding: $layout-gutter;
+  }
+
+  .questions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1;
+    font-weight: bold;
+
+    @include mobile {
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      @include fontSize(20px);
+    }
+
+    @include desktop {
+      @include fontSize(24px);
+    }
+  }
+
+  .gamePIN {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    column-gap: $layout-gutter * 0.5;
+
+    @include mobile {
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      @include fontSize(20px);
+    }
+
+    @include desktop {
+      @include fontSize(24px);
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+
+    @include mobile {}
+    @include tablet {}
+    @include desktop {}
+  }
+}
