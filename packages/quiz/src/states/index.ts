@@ -1,6 +1,8 @@
 export type { HostLeaderboardStateProps } from './HostLeaderboardState'
 export type { HostLobbyStateProps } from './HostLobbyState'
 export type { PlayerLobbyStateProps } from './PlayerLobbyState'
+export type { PlayerResultStateProps } from './PlayerResultState'
 export { default as HostLeaderboardState } from './HostLeaderboardState'
 export { default as HostLobbyState } from './HostLobbyState'
 export { default as PlayerLobbyState } from './PlayerLobbyState'
+export { default as PlayerResultState } from './PlayerResultState'
