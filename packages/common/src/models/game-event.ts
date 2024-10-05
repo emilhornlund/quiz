@@ -10,9 +10,9 @@ export type GameEventLobbyHost = {
   players: string[]
 }
 
-export type GameEventPlayerLobby = {
+export type GameEventLobbyPlayer = {
   type: GameEventType.LobbyPlayer
   nickname: string
 }
 
-export type GameEvent = GameEventLobbyHost | GameEventPlayerLobby
+export type GameEvent = GameEventLobbyHost | GameEventLobbyPlayer
