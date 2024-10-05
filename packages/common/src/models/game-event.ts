@@ -1,12 +1,18 @@
 export enum GameEventType {
-  Lobby = 'LOBBY',
+  LobbyHost = 'LOBBY_HOST',
+  LobbyPlayer = 'LOBBY_PLAYER',
 }
 
-export type GameEventLobby = {
-  type: GameEventType.Lobby
+export type GameEventLobbyHost = {
+  type: GameEventType.LobbyHost
   url: string
   pin: string
   players: string[]
 }
 
-export type GameEvent = GameEventLobby
+export type GameEventPlayerLobby = {
+  type: GameEventType.LobbyPlayer
+  nickname: string
+}
+
+export type GameEvent = GameEventLobbyHost | GameEventPlayerLobby

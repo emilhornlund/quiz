@@ -1,17 +1,19 @@
-import { GameEventLobby } from '@quiz/common'
+import { GameEventLobbyHost } from '@quiz/common'
 import React, { FC } from 'react'
 import QRCode from 'react-qr-code'
 
 import { Button, Page } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
-import styles from './LobbyState.module.scss'
+import styles from './HostLobbyState.module.scss'
 
-export interface LobbyStateProps {
-  event: GameEventLobby
+export interface HostLobbyStateProps {
+  event: GameEventLobbyHost
 }
 
-const LobbyState: FC<LobbyStateProps> = ({ event: { url, pin, players } }) => {
+const HostLobbyState: FC<HostLobbyStateProps> = ({
+  event: { url, pin, players },
+}) => {
   return (
     <Page
       header={
@@ -51,4 +53,4 @@ const LobbyState: FC<LobbyStateProps> = ({ event: { url, pin, players } }) => {
   )
 }
 
-export default LobbyState
+export default HostLobbyState

@@ -3,14 +3,14 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, it } from 'vitest'
 
-import LobbyState from './LobbyState'
+import HostLobbyState from './HostLobbyState'
 
 describe('LobbyState', () => {
-  it('should render LobbyState', async () => {
+  it('should render HostLobbyState', async () => {
     render(
-      <LobbyState
+      <HostLobbyState
         event={{
-          type: GameEventType.Lobby,
+          type: GameEventType.LobbyHost,
           url: 'http://localhost:3000/join',
           pin: '123456',
           players: [

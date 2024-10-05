@@ -1,14 +1,14 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import LobbyState from './LobbyState'
+import HostLobbyState from './HostLobbyState'
 
 const meta = {
-  component: LobbyState,
+  component: HostLobbyState,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof LobbyState>
+} satisfies Meta<typeof HostLobbyState>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.Lobby,
+      type: GameEventType.LobbyHost,
       url: 'http://localhost:3000/join',
       pin: '123456',
       players: [
