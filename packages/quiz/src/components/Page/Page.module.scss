@@ -10,7 +10,6 @@
   background: linear-gradient(180deg, $blue-1 25%, 75%, $blue-2);
   row-gap: $layout-gutter;
   overflow: hidden;
-  padding: 0 $layout-gutter;
   -webkit-user-select: none;
   user-select: none;
 
@@ -18,7 +17,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-top: $layout-gutter;
+    padding: $layout-gutter $layout-gutter 0 $layout-gutter;
     width: 100%;
 
     .logo {
@@ -146,9 +145,10 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding-bottom: $layout-gutter;
+    padding: 0 $layout-gutter;
     width: 100%;
-    height: 100%;
+    flex: 1;
+    overflow-y: scroll;
 
     &.noPadding {
       padding-bottom: 0;
@@ -169,5 +169,16 @@
         width: $desktop-width;
       }
     }
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: $layout-gutter;
+    padding: 0 $layout-gutter $layout-gutter $layout-gutter;
+    width: 100%;
+    color: $white;
   }
 }

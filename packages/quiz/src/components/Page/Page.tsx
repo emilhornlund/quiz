@@ -9,6 +9,7 @@ export interface PageProps {
   center?: boolean
   noPadding?: boolean
   header?: React.ReactNode
+  footer?: React.ReactNode
   children: React.ReactNode | React.ReactNode[]
 }
 
@@ -17,6 +18,7 @@ const Page: React.FC<PageProps> = ({
   center = true,
   noPadding = false,
   header,
+  footer,
   children,
 }) => {
   return (
@@ -41,6 +43,15 @@ const Page: React.FC<PageProps> = ({
         )}>
         {children}
       </div>
+      {footer && (
+        <div
+          className={classNames(
+            styles.footer,
+            fullWidth ? styles.fullWidth : undefined,
+          )}>
+          {footer}
+        </div>
+      )}
     </div>
   )
 }
