@@ -1,0 +1,141 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  row-gap: 0.5rem;
+  width: 100%;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $white;
+    border-radius: 0;
+    color: $black-1-70;
+
+    @include mobile {
+      @include fontSize(16px);
+
+      padding: $layout-gutter * 0.5;
+    }
+
+    @include tablet {
+      @include fontSize(22px);
+
+      padding: $layout-gutter * 0.75;
+    }
+
+    @include desktop {
+      @include fontSize(28px);
+
+      padding: $layout-gutter;
+    }
+
+    &.podium:nth-child(-n+3) {
+      background-color: $gold;
+    }
+
+    &.podium:nth-child(n+4):nth-child(-n+6) {
+      background-color: $silver;
+    }
+
+    &.podium:nth-child(n+7):nth-child(-n+9) {
+      background-color: $bronze;
+    }
+
+    &:nth-child(3n+1) {
+      @include mobile {
+        border-top-left-radius: $layout-gutter * 0.5;
+        border-bottom-left-radius: $layout-gutter * 0.5;
+      }
+
+      @include tablet {
+        border-top-left-radius: $layout-gutter * 0.75;
+        border-bottom-left-radius: $layout-gutter * 0.75;
+      }
+
+      @include desktop {
+        border-top-left-radius: $layout-gutter;
+        border-bottom-left-radius: $layout-gutter;
+      }
+    }
+
+    &:nth-child(3n+3) {
+      align-items: flex-end;
+      font-weight: bold;
+
+      @include mobile {
+        border-top-right-radius: $layout-gutter * 0.5;
+        border-bottom-right-radius: $layout-gutter * 0.5;
+      }
+
+      @include tablet {
+        border-top-right-radius: $layout-gutter * 0.75;
+        border-bottom-right-radius: $layout-gutter * 0.75;
+      }
+
+      @include desktop {
+        border-top-right-radius: $layout-gutter;
+        border-bottom-right-radius: $layout-gutter;
+      }
+    }
+
+    .position {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1 / 1;
+        height: 100%;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.2);
+        color: $black-1-70;
+        font-weight: bold;
+
+        @include mobile {
+          padding: 0.2rem;
+          @include fontSize(16px);
+        }
+
+        @include tablet {
+          padding: 0.2rem;
+          @include fontSize(22px);
+        }
+
+        @include desktop {
+          padding: 0.2rem;
+          @include fontSize(28px);
+        }
+      }
+    }
+
+    .score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.1);
+      color: rgba(0, 0, 0, 0.8);
+
+      @include mobile {
+        padding: 0 $layout-gutter * 0.5;
+        border-radius: pxToRem(8px);
+      }
+
+      @include tablet {
+        padding: 0 $layout-gutter * 0.75;
+        border-radius: pxToRem(10px);
+      }
+
+      @include desktop {
+        padding: 0 $layout-gutter;
+        border-radius: pxToRem(12px);
+      }
+    }
+  }
+}

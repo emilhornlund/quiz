@@ -1,5 +1,6 @@
 export type { ButtonProps } from './Button'
 export type { HostGameFooterProps } from './HostGameFooter'
+export type { LeaderboardProps } from './Leaderboard'
 export type { NicknameChipProps } from './NicknameChip'
 export type { PageProps } from './Page'
 export type { PlayerGameFooterProps } from './PlayerGameFooter'
@@ -10,6 +11,7 @@ export {
   IconButtonArrowRight,
 } from './Button'
 export { default as HostGameFooter } from './HostGameFooter'
+export { default as Leaderboard } from './Leaderboard'
 export { default as NicknameChip } from './NicknameChip'
 export { default as Page } from './Page'
 export { default as PlayerGameFooter } from './PlayerGameFooter'
