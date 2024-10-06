@@ -14,9 +14,11 @@ const Leaderboard: FC<LeaderboardProps> = ({
   includePodium = true,
 }) => (
   <div className={styles.main}>
-    {(includePodium || values.length < 4
+    {(includePodium
       ? values
-      : values.slice(3, values.length)
+      : values.length >= 3
+        ? values.slice(3, values.length)
+        : []
     ).map(({ position, nickname, score }) => (
       <React.Fragment key={`${position}_${nickname}_${score}`}>
         <div

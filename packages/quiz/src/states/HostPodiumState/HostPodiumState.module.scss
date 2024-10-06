@@ -1,0 +1,45 @@
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+
+  @include mobile {
+    row-gap: $layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    row-gap: $layout-gutter * 1.5;
+    width: $mobile-width;
+  }
+
+  @include desktop {
+    row-gap: $layout-gutter * 2;
+    width: $tablet-width;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    width: 100%;
+
+    @include mobile {
+      @include fontSize(18px);
+    }
+
+    @include tablet {
+      @include fontSize(28px);
+    }
+
+    @include desktop {
+      @include fontSize(38px);
+    }
+  }
+}

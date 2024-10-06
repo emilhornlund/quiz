@@ -67,10 +67,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
           Leaderboard
         </div>
         <div
-          class="leaderboard"
+          class="main"
         >
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -81,12 +81,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             ShadowCyborg
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -95,7 +95,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -106,12 +106,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             Radar
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -120,7 +120,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -131,12 +131,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             ShadowWhirlwind
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -145,7 +145,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -156,12 +156,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             WhiskerFox
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -170,7 +170,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -181,12 +181,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             JollyNimbus
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -195,7 +195,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -206,12 +206,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             PuddingPop
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -220,7 +220,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -231,12 +231,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             MysticPine
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -245,7 +245,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -256,12 +256,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             FrostyBear
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -270,7 +270,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -281,12 +281,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             Willo
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"
@@ -295,7 +295,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <div
               class="position"
@@ -306,12 +306,12 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             ScarletFlame
           </div>
           <div
-            class="column"
+            class="column podium"
           >
             <span
               class="score"

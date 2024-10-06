@@ -1,0 +1,169 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0;
+  border-bottom: pxToRem(4px) solid $white;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    min-width: calc(100% / 3);
+    max-width: calc(100% / 3);
+    justify-content: flex-start;
+    align-items: center;
+
+    @include mobile {
+      row-gap: $layout-gutter * 0.5;
+    }
+
+    @include tablet {
+      row-gap: $layout-gutter * 0.75;
+    }
+
+    @include desktop {
+      row-gap: $layout-gutter;
+    }
+
+    .spacer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      @include mobile {
+        height: 30px;
+      }
+
+      @include tablet {
+        height: 40px;
+      }
+
+      @include desktop {
+        height: 50px;
+      }
+    }
+
+    .nickname {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+
+      &::after {
+        padding-top: 25%;
+        display: block;
+        content: '';
+      }
+
+      div {
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+      }
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      flex: 1;
+
+      @include mobile {
+        padding: $layout-gutter 0 $layout-gutter * 2 0;
+        row-gap: $layout-gutter * 0.5;
+      }
+
+      @include tablet {
+        padding: $layout-gutter * 1.5 0 $layout-gutter * 3 0;
+        row-gap: $layout-gutter * 0.75;
+      }
+
+      @include desktop {
+        padding: $layout-gutter * 2 0 $layout-gutter * 4 0;
+        row-gap: $layout-gutter;
+      }
+
+      .position {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background-color: $white-1-50;
+        color: $black-1-50;
+        font-weight: bolder;
+
+        @include mobile {
+          padding: 0.1rem;
+          @include fontSize(26px);
+        }
+
+        @include tablet {
+          padding: 0.2rem;
+          @include fontSize(36px);
+        }
+
+        @include desktop {
+          padding: 0.3rem;
+          @include fontSize(46px);
+        }
+      }
+
+      .score {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: $black-1-50;
+
+        @include mobile {
+          @include fontSize(16px);
+        }
+
+        @include tablet {
+          @include fontSize(26px);
+        }
+
+        @include desktop {
+          @include fontSize(36px);
+        }
+      }
+    }
+
+    &:nth-child(1) {
+      .stack {
+        border-radius: pxToRem(12px) 0 0 0;
+        background-color: $silver;
+
+        box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        -webkit-box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        -moz-box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+      }
+    }
+
+    &:nth-child(2) {
+      .stack {
+        border-radius: pxToRem(12px) pxToRem(12px) 0 0;
+        background-color: $gold;
+      }
+    }
+
+    &:nth-child(3) {
+      .stack {
+        border-radius: 0 pxToRem(12px) 0 0;
+        background-color: $bronze;
+
+        box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        -webkit-box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        -moz-box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+      }
+    }
+  }
+}
