@@ -146,7 +146,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            WhiskerFox
+            <div
+              class="row"
+            >
+              <span>
+                WhiskerFox
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -171,7 +177,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            JollyNimbus
+            <div
+              class="row"
+            >
+              <span>
+                JollyNimbus
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -196,7 +208,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            PuddingPop
+            <div
+              class="row"
+            >
+              <span>
+                PuddingPop
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -221,7 +239,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            MysticPine
+            <div
+              class="row"
+            >
+              <span>
+                MysticPine
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -246,7 +270,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            FrostyBear
+            <div
+              class="row"
+            >
+              <span>
+                FrostyBear
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -271,7 +301,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            Willo
+            <div
+              class="row"
+            >
+              <span>
+                Willo
+              </span>
+            </div>
           </div>
           <div
             class="column"
@@ -296,7 +332,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <div
             class="column"
           >
-            ScarletFlame
+            <div
+              class="row"
+            >
+              <span>
+                ScarletFlame
+              </span>
+            </div>
           </div>
           <div
             class="column"

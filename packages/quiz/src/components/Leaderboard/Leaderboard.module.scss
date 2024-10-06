@@ -115,6 +115,55 @@
       }
     }
 
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      column-gap: $layout-gutter * 2;
+
+      .streaks {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          aspect-ratio: 1 / 1;
+          height: 100%;
+          border-radius: 50%;
+          border: pxToRem(2px) solid $orange-2;
+          background-color: $white;
+          color: $orange-2;
+          font-weight: bold;
+
+          @include mobile {
+            padding: 0.2rem;
+            @include fontSize(16px);
+          }
+
+          @include tablet {
+            padding: 0.2rem;
+            @include fontSize(22px);
+          }
+
+          @include desktop {
+            padding: 0.2rem;
+            @include fontSize(18px);
+          }
+        }
+      }
+    }
+
+    &.podium .row .streaks span {
+      border: pxToRem(2px) solid $white;
+      background-color: $orange-2;
+      color: $white;
+    }
+
     .score {
       display: flex;
       align-items: center;

@@ -19,7 +19,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      WhiskerFox
+      <div
+        class="row"
+      >
+        <span>
+          WhiskerFox
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -44,7 +50,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      JollyNimbus
+      <div
+        class="row"
+      >
+        <span>
+          JollyNimbus
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -69,7 +81,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      PuddingPop
+      <div
+        class="row"
+      >
+        <span>
+          PuddingPop
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -94,7 +112,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      MysticPine
+      <div
+        class="row"
+      >
+        <span>
+          MysticPine
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -119,7 +143,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      FrostyBear
+      <div
+        class="row"
+      >
+        <span>
+          FrostyBear
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -144,7 +174,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      Willo
+      <div
+        class="row"
+      >
+        <span>
+          Willo
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -169,7 +205,13 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     <div
       class="column"
     >
-      ScarletFlame
+      <div
+        class="row"
+      >
+        <span>
+          ScarletFlame
+        </span>
+      </div>
     </div>
     <div
       class="column"
@@ -203,7 +245,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      ShadowCyborg
+      <div
+        class="row"
+      >
+        <span>
+          ShadowCyborg
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -228,7 +276,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      Radar
+      <div
+        class="row"
+      >
+        <span>
+          Radar
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -253,7 +307,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      ShadowWhirlwind
+      <div
+        class="row"
+      >
+        <span>
+          ShadowWhirlwind
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -278,7 +338,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      WhiskerFox
+      <div
+        class="row"
+      >
+        <span>
+          WhiskerFox
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -303,7 +369,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      JollyNimbus
+      <div
+        class="row"
+      >
+        <span>
+          JollyNimbus
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -328,7 +400,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      PuddingPop
+      <div
+        class="row"
+      >
+        <span>
+          PuddingPop
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -353,7 +431,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      MysticPine
+      <div
+        class="row"
+      >
+        <span>
+          MysticPine
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -378,7 +462,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      FrostyBear
+      <div
+        class="row"
+      >
+        <span>
+          FrostyBear
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -403,7 +493,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      Willo
+      <div
+        class="row"
+      >
+        <span>
+          Willo
+        </span>
+      </div>
     </div>
     <div
       class="column podium"
@@ -428,7 +524,13 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     <div
       class="column podium"
     >
-      ScarletFlame
+      <div
+        class="row"
+      >
+        <span>
+          ScarletFlame
+        </span>
+      </div>
     </div>
     <div
       class="column podium"

@@ -5,7 +5,12 @@ import { classNames } from '../../utils/helpers.ts'
 import styles from './Leaderboard.module.scss'
 
 export interface LeaderboardProps {
-  values: { position: number; nickname: string; score: number }[]
+  values: {
+    position: number
+    nickname: string
+    score: number
+    streaks?: number
+  }[]
   includePodium?: boolean
 }
 
@@ -19,7 +24,7 @@ const Leaderboard: FC<LeaderboardProps> = ({
       : values.length >= 3
         ? values.slice(3, values.length)
         : []
-    ).map(({ position, nickname, score }) => (
+    ).map(({ position, nickname, score, streaks }) => (
       <React.Fragment key={`${position}_${nickname}_${score}`}>
         <div
           className={classNames(
@@ -35,7 +40,14 @@ const Leaderboard: FC<LeaderboardProps> = ({
             styles.column,
             includePodium ? styles.podium : undefined,
           )}>
-          {nickname}
+          <div className={styles.row}>
+            <span>{nickname}</span>
+            {!!streaks && (
+              <div className={styles.streaks}>
+                <span>{streaks}</span>
+              </div>
+            )}
+          </div>
         </div>
         <div
           className={classNames(

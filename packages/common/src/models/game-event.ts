@@ -79,7 +79,12 @@ export type GameEventQuestionHost = {
 export type GameEventLeaderboardHost = {
   type: GameEventType.LeaderboardHost
   gamePIN: string
-  leaderboard: { position: number; nickname: string; score: number }[]
+  leaderboard: {
+    position: number
+    nickname: string
+    score: number
+    streaks: number
+  }[]
   pagination: {
     current: number
     total: number
