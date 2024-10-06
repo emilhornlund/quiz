@@ -25,69 +25,49 @@
     width: $desktop-width;
   }
 
-  .questions {
+  .questions, .nickname, .score {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    flex: 1;
-    font-weight: bold;
-
-    @include mobile {
-      @include fontSize(16px);
-    }
-
-    @include tablet {
-      @include fontSize(20px);
-    }
-
-    @include desktop {
-      @include fontSize(24px);
-    }
-  }
-
-  .nickname {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    font-weight: bold;
-
-    @include mobile {
-      @include fontSize(16px);
-    }
-
-    @include tablet {
-      @include fontSize(20px);
-    }
-
-    @include desktop {
-      @include fontSize(24px);
-    }
-  }
-
-  .score {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
     align-items: center;
     flex: 1;
 
     @include mobile {
+      column-gap: $layout-gutter * 0.5;
+
       @include fontSize(16px);
     }
 
     @include tablet {
+      column-gap: $layout-gutter * 0.75;
+
       @include fontSize(20px);
     }
 
     @include desktop {
+      column-gap: $layout-gutter;
+
       @include fontSize(24px);
     }
 
     span {
+      margin-top: -1%;
       font-weight: bold;
+    }
+  }
+
+  .questions {
+    justify-content: flex-start;
+  }
+
+  .nickname {
+    justify-content: center;
+  }
+
+  .score {
+    justify-content: flex-end;
+
+    span {
+      margin: 0;
       background-color: $white;
       color: $gray-4;
 

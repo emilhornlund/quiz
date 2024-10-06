@@ -71,6 +71,8 @@
 
     @include mobile {}
     @include tablet {}
-    @include desktop {}
+    @include desktop {
+      column-gap: $layout-gutter * 1.5;
+    }
   }
 }

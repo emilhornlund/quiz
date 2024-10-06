@@ -44,7 +44,21 @@ $outline-offset: pxToRem(2px);
       }
     }
 
-    &:disabled {
+    &.plain {
+      border: none;
+      background-color: transparent;
+      outline: none;
+      outline-offset: 0;
+      color: $white;
+      border-radius: 0;
+      padding: 0;
+
+      &:hover {
+        color: $gray-1;
+      }
+    }
+
+    &:disabled &:not(.plain) {
       background-color: $gray-1;
       outline-color: $gray-1;
       color: $gray-2;
@@ -61,17 +75,28 @@ $outline-offset: pxToRem(2px);
     height: pxToRem(42px);
 
     button {
-      padding: 0 $layout-gutter * 0.8;
       column-gap: $layout-gutter * 0.5;
-      border-radius: $layout-gutter * 0.5;
       @include fontSize(16px);
+
+      &:not(.plain) {
+        padding: 0 $layout-gutter * 0.8;
+        border-radius: $layout-gutter * 0.5;
+      }
     }
 
     &.small {
       height: pxToRem(32px);
 
       button {
-        @include fontSize(14px);
+        &:not(.plain) {
+          @include fontSize(14px);
+        }
+
+        &.plain {
+          svg {
+            @include fontSize(24px);
+          }
+        }
 
         span {
           margin-top: -2%;
@@ -83,17 +108,28 @@ $outline-offset: pxToRem(2px);
     height: pxToRem(44px);
 
     button {
-      padding: 0 $layout-gutter * 0.9;
       column-gap: $layout-gutter * 0.6;
-      border-radius: $layout-gutter * 0.6;
       @include fontSize(17px);
+
+      &:not(.plain) {
+        padding: 0 $layout-gutter * 0.9;
+        border-radius: $layout-gutter * 0.6;
+      }
     }
 
     &.small {
       height: pxToRem(34px);
 
       button {
-        @include fontSize(15px);
+        &:not(.plain) {
+          @include fontSize(15px);
+        }
+
+        &.plain {
+          svg {
+            @include fontSize(25px);
+          }
+        }
 
         span {
           margin-top: -2%;
@@ -101,21 +137,40 @@ $outline-offset: pxToRem(2px);
       }
     }
   }
+
   @include desktop {
     height: pxToRem(46px);
 
     button {
-      padding: 0 $layout-gutter;
       column-gap: $layout-gutter * 0.7;
-      border-radius: $layout-gutter * 0.7;
-      @include fontSize(18px);
+
+      &:not(.plain) {
+        border-radius: $layout-gutter * 0.7;
+        padding: 0 $layout-gutter;
+
+        @include fontSize(18px);
+      }
+
+      &.plain {
+        svg {
+          @include fontSize(28px);
+        }
+      }
     }
 
     &.small {
       height: pxToRem(36px);
 
       button {
-        @include fontSize(16px);
+        &:not(.plain) {
+          @include fontSize(16px);
+        }
+
+        &.plain {
+          svg {
+            @include fontSize(26px);
+          }
+        }
 
         span {
           margin-top: -2%;

@@ -38,7 +38,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right icon"
+              class="svg-inline--fa fa-arrow-right "
               data-icon="arrow-right"
               data-prefix="fas"
               focusable="false"

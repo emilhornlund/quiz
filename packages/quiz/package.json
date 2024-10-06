@@ -12,6 +12,7 @@
     "lint:fix": "yarn lint --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:update": "vitest --update",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
