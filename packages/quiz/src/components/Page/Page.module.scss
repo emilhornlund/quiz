@@ -186,5 +186,16 @@
     padding: 0 $layout-gutter $layout-gutter $layout-gutter;
     width: 100%;
     color: $white;
+
+    @include tablet {
+      &:not(&.fullWidth) {
+        width: $tablet-width;
+      }
+    }
+    @include desktop {
+      &:not(&.fullWidth) {
+        width: $desktop-width;
+      }
+    }
   }
 }

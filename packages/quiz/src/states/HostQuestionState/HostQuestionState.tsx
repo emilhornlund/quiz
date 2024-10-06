@@ -1,0 +1,79 @@
+import { faComment, faHourglass } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GameEventQuestionHost } from '@quiz/common'
+import React, { FC } from 'react'
+
+import { Button, HostGameFooter, Page } from '../../components'
+import { classNames } from '../../utils/helpers.ts'
+
+import styles from './HostQuestionState.module.scss'
+
+export interface HostQuestionStateProps {
+  event: GameEventQuestionHost
+}
+
+const HostQuestionState: FC<HostQuestionStateProps> = ({
+  event: {
+    gamePIN,
+    question: { type: questionType, question, duration, imageURL },
+    submissions: { current: currentSubmission, total: totalSubmissions },
+    pagination: { current: currentQuestion, total: totalQuestions },
+  },
+}) => (
+  <Page
+    header={
+      <Button
+        id={'skip-button'}
+        type="button"
+        kind="secondary"
+        size="small"
+        value="Skip"
+        arrow="right"
+      />
+    }
+    footer={
+      <HostGameFooter
+        gamePIN={gamePIN}
+        currentQuestion={currentQuestion}
+        totalQuestions={totalQuestions}
+      />
+    }>
+    <div className={styles.main}>
+      <div className={classNames(styles.row, styles.flexibleHeight)}>
+        <div className={styles.column}>
+          <div className={classNames(styles.title, styles.large)}>
+            {question}
+          </div>
+        </div>
+      </div>
+      <div className={classNames(styles.row, styles.flexibleHeight)}>
+        <div className={styles.column}>
+          <div className={classNames(styles.iconInfo)}>
+            <FontAwesomeIcon icon={faHourglass} />
+            <span>{duration}</span>
+          </div>
+        </div>
+        <div className={styles.column}>
+          <div className={classNames(styles.iconInfo)}>
+            <FontAwesomeIcon icon={faComment} />
+            <span>
+              {currentSubmission} / {totalSubmissions}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className={classNames(styles.row, styles.fullHeight)}>
+        <div className={classNames(styles.column, styles.largeWidth)}>
+          {imageURL && (
+            <img src={imageURL} alt={question} className={styles.image} />
+          )}
+        </div>
+      </div>
+      <div className={classNames(styles.row, styles.flexibleHeight)}>
+        <div className={styles.column}>WIP component for: {questionType}</div>
+      </div>
+    </div>
+  </Page>
+)
+
+export default HostQuestionState
