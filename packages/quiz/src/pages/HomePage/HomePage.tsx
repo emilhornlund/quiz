@@ -1,6 +1,11 @@
 import React, { FC, useMemo, useState } from 'react'
 
-import { Button, Page, RocketImage, TextField } from '../../components'
+import {
+  IconButtonArrowRight,
+  Page,
+  RocketImage,
+  TextField,
+} from '../../components'
 
 import styles from './HomePage.module.scss'
 
@@ -57,12 +62,11 @@ const HomePage: FC = () => {
               value={gamePIN ?? ''}
               onChange={handleGamePINChange}
             />
-            <Button
+            <IconButtonArrowRight
               id="join"
               type="submit"
               kind="secondary"
               value="Join the game"
-              arrow="right"
             />
           </form>
         </div>

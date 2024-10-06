@@ -2,7 +2,7 @@ import { GameEventLobbyHost } from '@quiz/common'
 import React, { FC } from 'react'
 import QRCode from 'react-qr-code'
 
-import { Button, NicknameChip, Page } from '../../components'
+import { IconButtonArrowRight, NicknameChip, Page } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import styles from './HostLobbyState.module.scss'
@@ -17,13 +17,12 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
   return (
     <Page
       header={
-        <Button
+        <IconButtonArrowRight
           id={'start-game-button'}
           type="button"
           kind="secondary"
           size="small"
           value="Start"
-          arrow="right"
         />
       }>
       <div className={styles.main}>

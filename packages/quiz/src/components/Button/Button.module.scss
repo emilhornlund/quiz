@@ -55,23 +55,6 @@ $outline-offset: pxToRem(2px);
         color: $gray-2;
       }
     }
-
-    .arrow {
-      border: solid black;
-      border-width: 0 $outline-offset $outline-offset 0;
-      display: inline-block;
-      padding: pxToRem(3px);
-    }
-
-    .right {
-      transform: rotate(-45deg);
-      -webkit-transform: rotate(-45deg);
-    }
-
-    .left {
-      transform: rotate(135deg);
-      -webkit-transform: rotate(135deg);
-    }
   }
 
   @include mobile {
@@ -89,6 +72,10 @@ $outline-offset: pxToRem(2px);
 
       button {
         @include fontSize(14px);
+
+        span {
+          margin-top: -2%;
+        }
       }
     }
   }
@@ -107,6 +94,10 @@ $outline-offset: pxToRem(2px);
 
       button {
         @include fontSize(15px);
+
+        span {
+          margin-top: -2%;
+        }
       }
     }
   }
@@ -125,6 +116,10 @@ $outline-offset: pxToRem(2px);
 
       button {
         @include fontSize(16px);
+
+        span {
+          margin-top: -2%;
+        }
       }
     }
   }

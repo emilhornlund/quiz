@@ -1,7 +1,7 @@
 import { GameEventLeaderboardHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Button, HostGameFooter, Page } from '../../components'
+import { HostGameFooter, IconButtonArrowRight, Page } from '../../components'
 
 import styles from './HostLeaderboardState.module.scss'
 
@@ -19,13 +19,12 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
   return (
     <Page
       header={
-        <Button
+        <IconButtonArrowRight
           id={'next-button'}
           type="button"
           kind="secondary"
           size="small"
           value="Next"
-          arrow="right"
         />
       }
       footer={

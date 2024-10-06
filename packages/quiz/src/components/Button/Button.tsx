@@ -1,3 +1,5 @@
+import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 import { classNames } from '../../utils/helpers'
@@ -10,9 +12,10 @@ export interface ButtonProps {
   type: 'submit' | 'reset' | 'button'
   kind?: 'primary' | 'secondary'
   size?: 'normal' | 'small'
-  value: React.ReactNode | string | undefined
+  value?: React.ReactNode | string | undefined
   disabled?: boolean
-  arrow?: 'left' | 'right'
+  icon?: IconDefinition
+  iconPosition?: 'leading' | 'trailing'
   onClick?: () => void
 }
 
@@ -24,7 +27,8 @@ const Button: React.FC<ButtonProps> = ({
   size = 'normal',
   value,
   disabled,
-  arrow,
+  icon,
+  iconPosition = 'leading',
   onClick,
 }) => {
   return (
@@ -44,12 +48,12 @@ const Button: React.FC<ButtonProps> = ({
           kind === 'secondary' ? styles.secondary : undefined,
         )}
         data-testid={`test-${id}-button`}>
-        {arrow == 'left' && (
-          <div className={classNames(styles.arrow, styles.left)} />
+        {icon && iconPosition === 'leading' && (
+          <FontAwesomeIcon icon={icon} className={styles.icon} />
         )}
-        {value}
-        {arrow == 'right' && (
-          <div className={classNames(styles.arrow, styles.right)} />
+        {!!value && <span>{value}</span>}
+        {icon && iconPosition === 'trailing' && (
+          <FontAwesomeIcon icon={icon} className={styles.icon} />
         )}
       </button>
     </div>

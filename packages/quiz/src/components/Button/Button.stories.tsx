@@ -1,3 +1,4 @@
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import Button from './Button.tsx'
@@ -68,22 +69,24 @@ export const SecondaryDisabled = {
   },
 } satisfies Story
 
-export const ArrowLeft = {
+export const ArrowIconLeft = {
   args: {
     id: 'my-button',
     type: 'button',
     kind: 'primary',
     value: 'Arrow Left Button',
-    arrow: 'left',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
   },
 } satisfies Story
 
-export const ArrowRight = {
+export const ArrowIconRight = {
   args: {
     id: 'my-button',
     type: 'button',
     kind: 'primary',
     value: 'Arrow Right Button',
-    arrow: 'right',
+    icon: faArrowRight,
+    iconPosition: 'trailing',
   },
 } satisfies Story

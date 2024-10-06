@@ -12,7 +12,9 @@ exports[`Button > should receive onClick event when button is clicked 1`] = `
       name="my-button"
       type="button"
     >
-      My Button
+      <span>
+        My Button
+      </span>
     </button>
   </div>
 </div>
@@ -30,7 +32,9 @@ exports[`Button > should render a Button with default props 1`] = `
       name="my-button"
       type="button"
     >
-      My Button
+      <span>
+        My Button
+      </span>
     </button>
   </div>
 </div>

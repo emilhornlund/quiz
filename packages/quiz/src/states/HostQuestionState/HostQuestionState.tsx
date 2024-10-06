@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameEventQuestionHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Button, HostGameFooter, Page } from '../../components'
+import { HostGameFooter, IconButtonArrowRight, Page } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import styles from './HostQuestionState.module.scss'
@@ -22,13 +22,12 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
 }) => (
   <Page
     header={
-      <Button
+      <IconButtonArrowRight
         id={'skip-button'}
         type="button"
         kind="secondary"
         size="small"
         value="Skip"
-        arrow="right"
       />
     }
     footer={

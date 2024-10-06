@@ -1,7 +1,12 @@
 import { GameEventLobbyPlayer } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { Button, NicknameChip, Page, RocketImage } from '../../components'
+import {
+  IconButtonArrowLeft,
+  NicknameChip,
+  Page,
+  RocketImage,
+} from '../../components'
 
 import styles from './PlayerLobbyState.module.scss'
 
@@ -26,13 +31,12 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
   return (
     <Page
       header={
-        <Button
+        <IconButtonArrowLeft
           id={'leave-game-button'}
           type="button"
           kind="secondary"
           size="small"
           value="Leave"
-          arrow="left"
         />
       }>
       <div className={styles.main}>

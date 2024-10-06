@@ -1,3 +1,5 @@
+import { faCircleQuestion, faLockOpen } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { FC } from 'react'
 
 import styles from './HostGameFooter.module.scss'
@@ -15,10 +17,14 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
 }) => (
   <div className={styles.main}>
     <div className={styles.questions}>
-      {currentQuestion} / {totalQuestions}
+      <FontAwesomeIcon icon={faCircleQuestion} />
+      <span>
+        {currentQuestion} / {totalQuestions}
+      </span>
     </div>
     <div className={styles.gamePIN}>
-      Game PIN: <span>{gamePIN}</span>
+      <FontAwesomeIcon icon={faLockOpen} />
+      <span>{gamePIN}</span>
     </div>
     <div className={styles.actions} />
   </div>
