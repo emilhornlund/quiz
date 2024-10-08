@@ -5,6 +5,7 @@ export enum GameEventType {
   LeaderboardHost = 'LEADERBOARD_HOST',
   ResultPlayer = 'RESULT_PLAYER',
   PodiumHost = 'PODIUM_HOST',
+  PodiumPlayer = 'PODIUM_PLAYER',
 }
 
 export type GameEventLobbyHost = {
@@ -112,6 +113,14 @@ export type GameEventPodiumHost = {
   leaderboard: { position: number; nickname: string; score: number }[]
 }
 
+export type GameEventPodiumPlayer = {
+  type: GameEventType.PodiumPlayer
+  title: string
+  nickname: string
+  position: number
+  score: number
+}
+
 export type GameEvent =
   | GameEventLobbyHost
   | GameEventLobbyPlayer
@@ -119,3 +128,4 @@ export type GameEvent =
   | GameEventLeaderboardHost
   | GameEventResultPlayer
   | GameEventPodiumHost
+  | GameEventPodiumPlayer

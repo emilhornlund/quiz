@@ -1,0 +1,143 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+
+    @include mobile {
+      @include fontSize(28px);
+    }
+
+    @include tablet {
+      @include fontSize(38px);
+    }
+
+    @include desktop {
+      @include fontSize(48px);
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    @include mobile {
+      row-gap: $layout-gutter;
+    }
+
+    @include tablet {
+      row-gap: $layout-gutter * 1.5;
+    }
+
+    @include desktop {
+      row-gap: $layout-gutter * 2;
+    }
+
+    .position {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-style: solid;
+      border-color: transparent;
+      border-radius: 50%;
+      outline-style: solid;
+      outline-color: $white;
+      aspect-ratio: 1 / 1;
+      background-color: $white;
+      color: $black-1-70;
+      font-weight: bold;
+      text-align: center;
+
+      &.gold {
+        background-color: $gold;
+        color: $white;
+      }
+
+      &.silver {
+        background-color: $silver;
+        color: $white;
+      }
+
+      &.bronze {
+        background-color: $bronze;
+        color: $white;
+      }
+
+      @include mobile {
+        margin: pxToRem(2px);
+        border-width: pxToRem(2px);
+        outline-width: pxToRem(2px);
+        outline-offset: pxToRem(2px);
+
+        @include fontSize(68px);
+      }
+
+      @include tablet {
+        margin: pxToRem(3px);
+        border-width: pxToRem(3px);
+        outline-width: pxToRem(3px);
+        outline-offset: pxToRem(3px);
+
+        @include fontSize(78px);
+      }
+
+      @include desktop {
+        margin: pxToRem(4px);
+        border-width: pxToRem(4px);
+        outline-width: pxToRem(4px);
+        outline-offset: pxToRem(4px);
+
+        @include fontSize(88px);
+      }
+    }
+
+    .score {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      @include mobile {
+        @include fontSize(28px);
+      }
+
+      @include tablet {
+        @include fontSize(38px);
+      }
+
+      @include desktop {
+        @include fontSize(48px);
+      }
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      @include mobile {
+        @include fontSize(16px);
+      }
+
+      @include tablet {
+        @include fontSize(22px);
+      }
+
+      @include desktop {
+        @include fontSize(28px);
+      }
+    }
+  }
+}
