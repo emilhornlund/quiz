@@ -1,0 +1,82 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+
+  @include mobile {
+    gap: $layout-gutter;
+    padding: $layout-gutter * 0.5 0;
+  }
+
+  @include tablet {
+    gap: $layout-gutter * 1.5;
+    padding: $layout-gutter * 1 0;
+  }
+
+  @include desktop {
+    gap: $layout-gutter * 2;
+    padding: $layout-gutter * 1.5 0;
+  }
+
+  .question {
+    font-weight: bold;
+    text-align: center;
+
+    @include mobile {
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      @include fontSize(46px);
+    }
+
+    @include desktop {
+      @include fontSize(56px);
+    }
+  }
+
+  .answer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .timer {
+    display: flex;
+    flex-direction: column;
+    background-color: $white-1-50;
+
+    span {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background-color: $white;
+    }
+
+    @mixin timer-dimensions($height) {
+      height: pxToRem($height);
+      border-radius: pxToRem($height / 2);
+
+      span {
+        border-radius: pxToRem($height / 2);
+      }
+    }
+
+    @include mobile {
+      @include timer-dimensions(4px);
+    }
+
+    @include tablet {
+      @include timer-dimensions(6px);
+    }
+
+    @include desktop {
+      @include timer-dimensions(8px);
+    }
+  }
+}
