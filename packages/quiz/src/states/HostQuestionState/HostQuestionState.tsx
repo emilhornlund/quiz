@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameEventQuestionHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { HostGameFooter, IconButtonArrowRight, Page } from '../../components'
+import QuestionAnswerPicker, {
+  HostGameFooter,
+  IconButtonArrowRight,
+  Page,
+} from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import styles from './HostQuestionState.module.scss'
@@ -15,7 +19,7 @@ export interface HostQuestionStateProps {
 const HostQuestionState: FC<HostQuestionStateProps> = ({
   event: {
     gamePIN,
-    question: { type: questionType, question, duration, imageURL },
+    question,
     submissions: { current: currentSubmission, total: totalSubmissions },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -41,7 +45,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
       <div className={classNames(styles.row, styles.flexibleHeight)}>
         <div className={styles.column}>
           <div className={classNames(styles.title, styles.large)}>
-            {question}
+            {question.question}
           </div>
         </div>
       </div>
@@ -49,7 +53,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
         <div className={styles.column}>
           <div className={classNames(styles.iconInfo)}>
             <FontAwesomeIcon icon={faHourglass} />
-            <span>{duration}</span>
+            <span>{question.duration}</span>
           </div>
         </div>
         <div className={styles.column}>
@@ -63,13 +67,17 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
       </div>
       <div className={classNames(styles.row, styles.fullHeight)}>
         <div className={classNames(styles.column, styles.largeWidth)}>
-          {imageURL && (
-            <img src={imageURL} alt={question} className={styles.image} />
+          {question.imageURL && (
+            <img
+              src={question.imageURL}
+              alt={question.question}
+              className={styles.image}
+            />
           )}
         </div>
       </div>
       <div className={classNames(styles.row, styles.flexibleHeight)}>
-        <div className={styles.column}>WIP component for: {questionType}</div>
+        <QuestionAnswerPicker question={question} interactive={false} />
       </div>
     </div>
   </Page>

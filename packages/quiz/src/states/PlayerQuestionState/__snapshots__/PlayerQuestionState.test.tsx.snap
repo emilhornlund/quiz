@@ -36,17 +36,55 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          MULTI
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="grid"
+            >
+              <button
+                class="item"
+                id="0_Vincent van Gogh"
+                type="button"
+              >
+                <div />
+                Vincent van Gogh
+              </button>
+              <button
+                class="item"
+                id="1_Pablo Picasso"
+                type="button"
+              >
+                <div />
+                Pablo Picasso
+              </button>
+              <button
+                class="item"
+                id="2_Leonardo da Vinci"
+                type="button"
+              >
+                <div />
+                Leonardo da Vinci
+              </button>
+              <button
+                class="item"
+                id="3_Claude Monet"
+                type="button"
+              >
+                <div />
+                Claude Monet
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -136,17 +174,71 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          MULTI
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="grid"
+            >
+              <button
+                class="item"
+                id="0_Vincent van Gogh"
+                type="button"
+              >
+                <div />
+                Vincent van Gogh
+              </button>
+              <button
+                class="item"
+                id="1_Pablo Picasso"
+                type="button"
+              >
+                <div />
+                Pablo Picasso
+              </button>
+              <button
+                class="item"
+                id="2_Leonardo da Vinci"
+                type="button"
+              >
+                <div />
+                Leonardo da Vinci
+              </button>
+              <button
+                class="item"
+                id="3_Claude Monet"
+                type="button"
+              >
+                <div />
+                Claude Monet
+              </button>
+              <button
+                class="item"
+                id="4_Michelangelo"
+                type="button"
+              >
+                <div />
+                Michelangelo
+              </button>
+              <button
+                class="item"
+                id="5_Rembrandt"
+                type="button"
+              >
+                <div />
+                Rembrandt
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -236,17 +328,39 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          MULTI
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="grid"
+            >
+              <button
+                class="item"
+                id="0_Vincent van Gogh"
+                type="button"
+              >
+                <div />
+                Vincent van Gogh
+              </button>
+              <button
+                class="item"
+                id="1_Pablo Picasso"
+                type="button"
+              >
+                <div />
+                Pablo Picasso
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -336,17 +450,65 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           What percentage of the earth's surface is covered by water?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          SLIDER
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="interactive"
+            >
+              <form>
+                <input
+                  id="slider-range"
+                  max="100"
+                  min="0"
+                  step="1"
+                  type="range"
+                  value="0"
+                />
+                <div
+                  class="inputGroup"
+                >
+                  <div
+                    class="main"
+                  >
+                    <input
+                      data-testid="test-slider-input-textfield"
+                      id="slider-input"
+                      max="100"
+                      min="0"
+                      name="slider-input"
+                      type="number"
+                      value="0"
+                    />
+                  </div>
+                  <div
+                    class="main"
+                  >
+                    <button
+                      class="primary"
+                      data-testid="test-submit-button-button"
+                      id="submit-button"
+                      name="submit-button"
+                      type="submit"
+                    >
+                      <span>
+                        Submit
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -436,17 +598,39 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Rabbits can't vomit?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          TRUE_FALSE
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="grid"
+            >
+              <button
+                class="item"
+                id="0_True"
+                type="button"
+              >
+                <div />
+                True
+              </button>
+              <button
+                class="item"
+                id="1_False"
+                type="button"
+              >
+                <div />
+                False
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -536,17 +720,52 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted the Mono Lisa?
         </div>
         <div
-          class="answer"
-        >
-          WIP component for: 
-          TYPE_ANSWER
-        </div>
-        <div
           class="timer"
         >
           <span
             style="width: 66.66666666666666%;"
           />
+        </div>
+        <div
+          class="main"
+        >
+          <div
+            class="main"
+          >
+            <div
+              class="interactive"
+            >
+              <form>
+                <div
+                  class="main"
+                >
+                  <input
+                    data-testid="test-answer-input-textfield"
+                    id="answer-input"
+                    name="answer-input"
+                    placeholder="Answer"
+                    type="text"
+                    value=""
+                  />
+                </div>
+                <div
+                  class="main"
+                >
+                  <button
+                    class="primary"
+                    data-testid="test-submit-button-button"
+                    id="submit-button"
+                    name="submit-button"
+                    type="submit"
+                  >
+                    <span>
+                      Submit
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

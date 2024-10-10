@@ -149,10 +149,52 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            MULTI
+            <div
+              class="main"
+            >
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  disabled=""
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="2_Leonardo da Vinci"
+                  type="button"
+                >
+                  <div />
+                  Leonardo da Vinci
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="3_Claude Monet"
+                  type="button"
+                >
+                  <div />
+                  Claude Monet
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -395,10 +437,70 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            MULTI
+            <div
+              class="main"
+            >
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  disabled=""
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="2_Leonardo da Vinci"
+                  type="button"
+                >
+                  <div />
+                  Leonardo da Vinci
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="3_Claude Monet"
+                  type="button"
+                >
+                  <div />
+                  Claude Monet
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="4_Michelangelo"
+                  type="button"
+                >
+                  <div />
+                  Michelangelo
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="5_Rembrandt"
+                  type="button"
+                >
+                  <div />
+                  Rembrandt
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -641,10 +743,34 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            MULTI
+            <div
+              class="main"
+            >
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  disabled=""
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -881,10 +1007,38 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            SLIDER
+            <div
+              class="main"
+            >
+              <div
+                class="nonInteractive"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-circle-info "
+                  data-icon="circle-info"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Pick an answer between 
+                  0
+                   and 
+                  100
+                   on your screen
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1121,10 +1275,34 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            TRUE_FALSE
+            <div
+              class="main"
+            >
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  disabled=""
+                  id="0_True"
+                  type="button"
+                >
+                  <div />
+                  True
+                </button>
+                <button
+                  class="item"
+                  disabled=""
+                  id="1_False"
+                  type="button"
+                >
+                  <div />
+                  False
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1361,10 +1539,34 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           class="row flexibleHeight"
         >
           <div
-            class="column"
+            class="main"
           >
-            WIP component for: 
-            TYPE_ANSWER
+            <div
+              class="main"
+            >
+              <div
+                class="nonInteractive"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-circle-info "
+                  data-icon="circle-info"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Type an answer on your screen
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

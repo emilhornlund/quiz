@@ -1,0 +1,110 @@
+@import '../../../../styles/colors';
+@import '../../../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .interactive {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+
+    form {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+
+      @include mobile {
+        flex-direction: column;
+        gap: $layout-gutter;
+      }
+
+      @include tablet {
+        flex-direction: row;
+        align-items: center;
+        gap: $layout-gutter * 1.5;
+
+        div:first-child {
+          flex: 1;
+        }
+      }
+
+      @include desktop {
+        flex-direction: row;
+        align-items: center;
+        gap: $layout-gutter * 2;
+
+        div:first-child {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  .nonInteractive {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: $turquoise-2;
+    flex: 1;
+
+    @include mobile {
+      column-gap: $layout-gutter;
+      padding: $layout-gutter;
+      border-radius: pxToRem(8px);
+    }
+
+    @include tablet {
+      column-gap: $layout-gutter * 1.5;
+      padding: $layout-gutter * 1.5;
+      border-radius: pxToRem(12px);
+    }
+
+    @include desktop {
+      column-gap: $layout-gutter * 2;
+      padding: $layout-gutter * 2;
+      border-radius: pxToRem(16px);
+    }
+
+    svg {
+      display: flex;
+      flex-direction: column;
+
+      @include mobile {
+        @include fontSize(28px);
+      }
+
+      @include tablet {
+        @include fontSize(38px);
+      }
+
+      @include desktop {
+        @include fontSize(48px);
+      }
+    }
+
+    span {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+      width: 100%;
+      flex: 1;
+
+      @include mobile {
+        @include fontSize(18px);
+      }
+
+      @include tablet {
+        @include fontSize(28px);
+      }
+
+      @include desktop {
+        @include fontSize(38px);
+      }
+    }
+  }
+}

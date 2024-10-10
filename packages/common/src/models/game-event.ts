@@ -60,14 +60,16 @@ export type GameEventQuestionTypeAnswer = {
   duration: number
 }
 
+export type GameEventQuestion =
+  | GameEventQuestionMulti
+  | GameEventQuestionSlider
+  | GameEventQuestionTrueFalse
+  | GameEventQuestionTypeAnswer
+
 export type GameEventQuestionHost = {
   type: GameEventType.QuestionHost
   gamePIN: string
-  question:
-    | GameEventQuestionMulti
-    | GameEventQuestionSlider
-    | GameEventQuestionTrueFalse
-    | GameEventQuestionTypeAnswer
+  question: GameEventQuestion
   submissions: {
     current: number
     total: number
@@ -81,11 +83,7 @@ export type GameEventQuestionHost = {
 export type GameEventQuestionPlayer = {
   type: GameEventType.QuestionPlayer
   nickname: string
-  question:
-    | GameEventQuestionMulti
-    | GameEventQuestionSlider
-    | GameEventQuestionTrueFalse
-    | GameEventQuestionTypeAnswer
+  question: GameEventQuestion
   time: number
   score: {
     total: number
