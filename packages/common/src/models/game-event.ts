@@ -3,6 +3,7 @@ export enum GameEventType {
   LobbyPlayer = 'LOBBY_PLAYER',
   QuestionHost = 'QUESTION_HOST',
   QuestionPlayer = 'QUESTION_PLAYER',
+  AwaitingResultPlayer = 'AWAITING_RESULT_PLAYER',
   LeaderboardHost = 'LEADERBOARD_HOST',
   ResultPlayer = 'RESULT_PLAYER',
   PodiumHost = 'PODIUM_HOST',
@@ -94,6 +95,18 @@ export type GameEventQuestionPlayer = {
   }
 }
 
+export type GameEventAwaitingResultPlayer = {
+  type: GameEventType.AwaitingResultPlayer
+  nickname: string
+  score: {
+    total: number
+  }
+  pagination: {
+    current: number
+    total: number
+  }
+}
+
 export type GameEventLeaderboardHost = {
   type: GameEventType.LeaderboardHost
   gamePIN: string
@@ -143,6 +156,7 @@ export type GameEvent =
   | GameEventLobbyPlayer
   | GameEventQuestionHost
   | GameEventQuestionPlayer
+  | GameEventAwaitingResultPlayer
   | GameEventLeaderboardHost
   | GameEventResultPlayer
   | GameEventPodiumHost
