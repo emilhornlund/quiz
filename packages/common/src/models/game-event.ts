@@ -9,6 +9,7 @@ export enum GameEventType {
   QuestionPlayer = 'QUESTION_PLAYER',
   AwaitingResultPlayer = 'AWAITING_RESULT_PLAYER',
   LeaderboardHost = 'LEADERBOARD_HOST',
+  ResultHost = 'RESULT_HOST',
   ResultPlayer = 'RESULT_PLAYER',
   PodiumHost = 'PODIUM_HOST',
   PodiumPlayer = 'PODIUM_PLAYER',
@@ -172,6 +173,48 @@ export type GameEventLeaderboardHost = {
   }
 }
 
+export type GameEventQuestionResultsMulti = {
+  type: GameEventQuestionType.Multi
+  distribution: { value: string; count: number; correct: boolean }[]
+}
+
+export type GameEventQuestionResultsSlider = {
+  type: GameEventQuestionType.Slider
+  distribution: { value: number; count: number; correct: boolean }[]
+}
+
+export type GameEventQuestionResultsTrueFalse = {
+  type: GameEventQuestionType.TrueFalse
+  distribution: { value: boolean; count: number; correct: boolean }[]
+}
+
+export type GameEventQuestionResultsTypeAnswer = {
+  type: GameEventQuestionType.TypeAnswer
+  distribution: { value: string; count: number; correct: boolean }[]
+}
+
+export type GameEventQuestionResults =
+  | GameEventQuestionResultsMulti
+  | GameEventQuestionResultsSlider
+  | GameEventQuestionResultsTrueFalse
+  | GameEventQuestionResultsTypeAnswer
+
+export type GameEventResultHost = {
+  type: GameEventType.ResultHost
+  game: {
+    pin: string
+  }
+  question: {
+    type: GameEventQuestionType
+    question: string
+  }
+  results: GameEventQuestionResults
+  pagination: {
+    current: number
+    total: number
+  }
+}
+
 export type GameEventResultPlayer = {
   type: GameEventType.ResultPlayer
   nickname: string
@@ -212,6 +255,7 @@ export type GameEvent =
   | GameEventQuestionPlayer
   | GameEventAwaitingResultPlayer
   | GameEventLeaderboardHost
+  | GameEventResultHost
   | GameEventResultPlayer
   | GameEventPodiumHost
   | GameEventPodiumPlayer

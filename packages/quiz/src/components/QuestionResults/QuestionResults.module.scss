@@ -1,0 +1,105 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.questionResults {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+
+  .chips {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    @include mobile {
+      gap: $layout-gutter * 0.5;
+    }
+
+    @include tablet {
+      gap: $layout-gutter * 0.75;
+    }
+
+    @include desktop {
+      gap: $layout-gutter;
+    }
+
+    .chip {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+
+      @include mobile {
+        padding: $layout-gutter * 0.5;
+        column-gap: $layout-gutter * 0.5;
+        border-radius: $layout-gutter * 0.5;
+
+        @include fontSize(18px);
+      }
+
+      @include tablet {
+        padding: $layout-gutter * 0.75;
+        column-gap: $layout-gutter * 0.75;
+        border-radius: $layout-gutter * 0.75;
+
+        @include fontSize(23px);
+      }
+
+      @include desktop {
+        padding: $layout-gutter;
+        column-gap: $layout-gutter;
+        border-radius: $layout-gutter;
+
+        @include fontSize(28px);
+      }
+
+      &.correct {
+        background-color: $green-1;
+      }
+
+      &.incorrect {
+        background-color: $red-2;
+      }
+
+      span {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1 / 1;
+        background-color: $white;
+        color: $gray-4;
+        font-weight: bold;
+
+        @include mobile {
+          height: pxToRem(30px);
+          border-radius: pxToRem(calc(30px / 2));
+          padding: $layout-gutter * 0.5;
+
+          @include fontSize(18px);
+        }
+
+        @include tablet {
+          height: pxToRem(40px);
+          border-radius: pxToRem(calc(40px / 2));
+          padding: $layout-gutter * 0.75;
+
+          @include fontSize(23px);
+        }
+
+        @include desktop {
+          height: pxToRem(50px);
+          border-radius: pxToRem(calc(50px / 2));
+          padding: $layout-gutter;
+
+          @include fontSize(28px);
+        }
+      }
+    }
+  }
+}
