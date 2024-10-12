@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameEventQuestionHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import QuestionAnswerPicker, {
+import {
   HostGameFooter,
   IconButtonArrowRight,
   Page,
+  QuestionAnswerPicker,
 } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 

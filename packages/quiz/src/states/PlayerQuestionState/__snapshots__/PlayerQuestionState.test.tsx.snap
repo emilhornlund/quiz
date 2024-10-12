@@ -36,7 +36,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"
@@ -174,7 +174,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"
@@ -328,7 +328,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted The Starry Night?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"
@@ -450,7 +450,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           What percentage of the earth's surface is covered by water?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"
@@ -598,7 +598,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Rabbits can't vomit?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"
@@ -720,7 +720,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           Who painted the Mono Lisa?
         </div>
         <div
-          class="timer"
+          class="progressBar"
         >
           <span
             style="width: 66.66666666666666%;"

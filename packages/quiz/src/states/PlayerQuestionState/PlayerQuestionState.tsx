@@ -1,7 +1,12 @@
 import { GameEventQuestionPlayer } from '@quiz/common'
 import React, { FC } from 'react'
 
-import QuestionAnswerPicker, { Page, PlayerGameFooter } from '../../components'
+import {
+  Page,
+  PlayerGameFooter,
+  ProgressBar,
+  QuestionAnswerPicker,
+} from '../../components'
 
 import styles from './PlayerQuestionState.module.scss'
 
@@ -29,9 +34,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
     }>
     <div className={styles.main}>
       <div className={styles.question}>{question.question}</div>
-      <div className={styles.timer}>
-        <span style={{ width: `${(time / question.duration) * 100}%` }} />
-      </div>
+      <ProgressBar value={time / question.duration} />
       <QuestionAnswerPicker question={question} />
     </div>
   </Page>

@@ -1,0 +1,36 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.progressBar {
+  display: flex;
+  flex-direction: column;
+  background-color: $white-1-50;
+
+  span {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $white;
+  }
+
+  @mixin timer-dimensions($height) {
+    height: pxToRem($height);
+    border-radius: pxToRem(calc($height / 2));
+
+    span {
+      border-radius: pxToRem(calc($height / 2));
+    }
+  }
+
+  @include mobile {
+    @include timer-dimensions(4px);
+  }
+
+  @include tablet {
+    @include timer-dimensions(6px);
+  }
+
+  @include desktop {
+    @include timer-dimensions(8px);
+  }
+}
