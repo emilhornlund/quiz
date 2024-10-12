@@ -1,0 +1,42 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: bolder;
+    text-align: center;
+    color: white;
+
+    @include mobile {
+      width: 100%;
+      line-height: 3.5rem;
+
+      @include fontSize(46px);
+    }
+
+    @include tablet {
+      width: $mobile-width;
+      line-height: 5rem;
+
+      @include fontSize(66px);
+    }
+
+    @include desktop {
+      width: $tablet-width;
+      line-height: 6rem;
+
+      @include fontSize(76px);
+    }
+  }
+}
