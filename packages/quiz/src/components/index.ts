@@ -14,6 +14,7 @@ export {
 } from './Button'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'
+export { default as LoadingSpinner } from './LoadingSpinner'
 export { default as NicknameChip } from './NicknameChip'
 export { default as Page } from './Page'
 export { default as PlayerGameFooter } from './PlayerGameFooter'

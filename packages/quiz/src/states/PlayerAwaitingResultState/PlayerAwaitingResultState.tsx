@@ -1,7 +1,12 @@
 import { GameEventAwaitingResultPlayer } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Page, PlayerGameFooter, RocketImage } from '../../components'
+import {
+  LoadingSpinner,
+  Page,
+  PlayerGameFooter,
+  RocketImage,
+} from '../../components'
 
 import styles from './PlayerAwaitingResultState.module.scss'
 
@@ -28,11 +33,7 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
     <div className={styles.main}>
       <RocketImage />
       <div className={styles.title}>Waiting for other players</div>
-      <div className={styles.loadingSpinner}>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+      <LoadingSpinner />
     </div>
   </Page>
 )
