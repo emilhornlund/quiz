@@ -101,7 +101,7 @@
           column-gap: $size * 0.4;
           height: $size;
           padding: 0 $size * 0.5;
-          border-radius: $size / 2;
+          border-radius: calc($size / 2);
 
           svg {
             @include fontSize($size * 0.5);

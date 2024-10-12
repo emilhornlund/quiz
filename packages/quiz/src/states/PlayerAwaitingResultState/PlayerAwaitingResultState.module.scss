@@ -44,8 +44,8 @@
     width: $size;
     height: $size;
 
-    $--loading-spinner-bar-left: $size / 10;
-    $--loading-spinner-bar-width: $size / 5;
+    $--loading-spinner-bar-left: calc($size / 10);
+    $--loading-spinner-bar-width: calc($size / 5);
 
     div {
       left: $--loading-spinner-bar-left;

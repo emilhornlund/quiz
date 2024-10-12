@@ -60,10 +60,10 @@
 
     @mixin timer-dimensions($height) {
       height: pxToRem($height);
-      border-radius: pxToRem($height / 2);
+      border-radius: pxToRem(calc($height / 2));
 
       span {
-        border-radius: pxToRem($height / 2);
+        border-radius: pxToRem(calc($height / 2));
       }
     }
 

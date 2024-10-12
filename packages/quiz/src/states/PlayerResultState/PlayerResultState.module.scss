@@ -66,8 +66,8 @@
         height: $size;
 
         svg {
-          width: $size / 2;
-          height: $size / 2;
+          width: calc($size / 2);
+          height: calc($size / 2);
         }
       }
 
