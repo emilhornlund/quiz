@@ -11,6 +11,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default = {
   args: {
+    currentQuestion: 1,
+    totalQuestions: 20,
     nickname: 'FrostyBear',
     totalScore: 10361,
   },
