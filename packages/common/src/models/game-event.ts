@@ -2,6 +2,7 @@ export enum GameEventType {
   LobbyHost = 'LOBBY_HOST',
   LobbyPlayer = 'LOBBY_PLAYER',
   GameBeginPlayer = 'GAME_BEGIN_PLAYER',
+  GameQuestionPreviewHost = 'GAME_QUESTION_PREVIEW_HOST',
   GameQuestionPreviewPlayer = 'GAME_QUESTION_PREVIEW_PLAYER',
   QuestionHost = 'QUESTION_HOST',
   QuestionPlayer = 'QUESTION_PLAYER',
@@ -27,6 +28,24 @@ export type GameEventLobbyPlayer = {
 export type GameEventGameBeginPlayer = {
   type: GameEventType.GameBeginPlayer
   nickname: string
+}
+
+export type GameEventGameQuestionPreviewHost = {
+  type: GameEventType.GameQuestionPreviewHost
+  game: {
+    pin: string
+  }
+  question: {
+    type: GameEventQuestionType
+    question: string
+  }
+  progress: {
+    value: number
+  }
+  pagination: {
+    current: number
+    total: number
+  }
 }
 
 export type GameEventGameQuestionPreviewPlayer = {
@@ -181,6 +200,8 @@ export type GameEvent =
   | GameEventLobbyHost
   | GameEventLobbyPlayer
   | GameEventGameBeginPlayer
+  | GameEventGameQuestionPreviewHost
+  | GameEventGameQuestionPreviewPlayer
   | GameEventQuestionHost
   | GameEventQuestionPlayer
   | GameEventAwaitingResultPlayer
