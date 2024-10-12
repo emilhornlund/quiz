@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <div
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </div>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content center"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="title"
+        >
+          Loading Game
+        </div>
+        <div
+          class="message"
+        >
+          The game starts any second
+        </div>
+        <div
+          class="loadingSpinner"
+        >
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
