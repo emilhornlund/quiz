@@ -1,6 +1,7 @@
 export enum GameEventType {
   LobbyHost = 'LOBBY_HOST',
   LobbyPlayer = 'LOBBY_PLAYER',
+  GameBeginPlayer = 'GAME_BEGIN_PLAYER',
   QuestionHost = 'QUESTION_HOST',
   QuestionPlayer = 'QUESTION_PLAYER',
   AwaitingResultPlayer = 'AWAITING_RESULT_PLAYER',
@@ -19,6 +20,11 @@ export type GameEventLobbyHost = {
 
 export type GameEventLobbyPlayer = {
   type: GameEventType.LobbyPlayer
+  nickname: string
+}
+
+export type GameEventGameBeginPlayer = {
+  type: GameEventType.GameBeginPlayer
   nickname: string
 }
 
@@ -154,6 +160,7 @@ export type GameEventPodiumPlayer = {
 export type GameEvent =
   | GameEventLobbyHost
   | GameEventLobbyPlayer
+  | GameEventGameBeginPlayer
   | GameEventQuestionHost
   | GameEventQuestionPlayer
   | GameEventAwaitingResultPlayer
