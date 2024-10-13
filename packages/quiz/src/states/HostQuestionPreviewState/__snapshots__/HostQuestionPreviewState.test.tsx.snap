@@ -25,26 +25,22 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
       />
     </div>
     <div
-      class="content center"
+      class="content fullWidth spaceBetweenAlign"
     >
+      <div>
+        MULTI
+      </div>
       <div
-        class="main"
+        class="typography title medium"
       >
-        <div>
-          MULTI
-        </div>
-        <div
-          class="typography title medium"
-        >
-          Who painted The Starry Night?
-        </div>
-        <div
-          class="progressBar"
-        >
-          <span
-            style="width: 75%;"
-          />
-        </div>
+        Who painted The Starry Night?
+      </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 75%;"
+        />
       </div>
     </div>
     <div

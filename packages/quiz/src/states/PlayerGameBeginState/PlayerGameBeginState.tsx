@@ -8,8 +8,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './PlayerGameBeginState.module.scss'
-
 export interface PlayerGameBeginStateProps {
   event: GameEventGameBeginPlayer
 }
@@ -18,16 +16,14 @@ const PlayerGameBeginState: FC<PlayerGameBeginStateProps> = ({
   event: { nickname },
 }) => (
   <Page>
-    <div className={styles.main}>
-      <Typography variant="title" size="medium">
-        Get ready!
-      </Typography>
-      <Typography variant="text" size="small">
-        The game starts any second
-      </Typography>
-      <NicknameChip value={nickname} />
-      <LoadingSpinner />
-    </div>
+    <Typography variant="title" size="medium">
+      Get ready!
+    </Typography>
+    <Typography variant="text" size="small">
+      The game starts any second
+    </Typography>
+    <NicknameChip value={nickname} />
+    <LoadingSpinner />
   </Page>
 )
 

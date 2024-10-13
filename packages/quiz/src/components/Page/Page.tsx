@@ -5,8 +5,9 @@ import { classNames } from '../../utils/helpers'
 import styles from './Page.module.scss'
 
 export interface PageProps {
-  fullWidth?: boolean
-  center?: boolean
+  width?: 'small' | 'medium' | 'full'
+  height?: 'normal' | 'full'
+  align?: 'start' | 'center' | 'space-between'
   noPadding?: boolean
   header?: React.ReactNode
   footer?: React.ReactNode
@@ -14,8 +15,9 @@ export interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({
-  fullWidth = false,
-  center = true,
+  width = 'full',
+  height = 'normal',
+  align = 'center',
   noPadding = false,
   header,
   footer,
@@ -23,11 +25,7 @@ const Page: React.FC<PageProps> = ({
 }) => {
   return (
     <div className={styles.main}>
-      <div
-        className={classNames(
-          styles.header,
-          fullWidth ? styles.fullWidth : undefined,
-        )}>
+      <div className={classNames(styles.header)}>
         <div className={styles.logo}>
           <span className={styles.icon} />
           <span className={styles.text}>Quiz</span>
@@ -37,21 +35,18 @@ const Page: React.FC<PageProps> = ({
       <div
         className={classNames(
           styles.content,
-          fullWidth ? styles.fullWidth : undefined,
-          center ? styles.center : undefined,
+          width === 'small' ? styles.smallWidth : undefined,
+          width === 'medium' ? styles.mediumWidth : undefined,
+          width === 'full' ? styles.fullWidth : undefined,
+          height === 'full' ? styles.fullHeight : undefined,
+          align === 'start' ? styles.startAlign : undefined,
+          align === 'center' ? styles.centerAlign : undefined,
+          align === 'space-between' ? styles.spaceBetweenAlign : undefined,
           noPadding ? styles.noPadding : undefined,
         )}>
         {children}
       </div>
-      {footer && (
-        <div
-          className={classNames(
-            styles.footer,
-            fullWidth ? styles.fullWidth : undefined,
-          )}>
-          {footer}
-        </div>
-      )}
+      {footer && <div className={classNames(styles.footer)}>{footer}</div>}
     </div>
   )
 }

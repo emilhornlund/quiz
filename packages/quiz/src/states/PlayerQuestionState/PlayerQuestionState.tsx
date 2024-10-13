@@ -9,8 +9,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './PlayerQuestionState.module.scss'
-
 export interface PlayerQuestionStateProps {
   event: GameEventQuestionPlayer
 }
@@ -25,6 +23,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
   },
 }) => (
   <Page
+    height="full"
     footer={
       <PlayerGameFooter
         currentQuestion={currentQuestion}
@@ -33,13 +32,11 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
         totalScore={totalScore}
       />
     }>
-    <div className={styles.main}>
-      <Typography variant="subtitle" size="medium">
-        {question.question}
-      </Typography>
-      <ProgressBar value={time / question.duration} />
-      <QuestionAnswerPicker question={question} />
-    </div>
+    <Typography variant="subtitle" size="medium">
+      {question.question}
+    </Typography>
+    <ProgressBar value={time / question.duration} />
+    <QuestionAnswerPicker question={question} />
   </Page>
 )
 

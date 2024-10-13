@@ -1,41 +1,21 @@
 @import '../../styles/helpers';
 
-.main {
+.joinForm {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
   @include mobile {
-    row-gap: $layout-gutter * 0.5;
+    row-gap: $mobile-layout-gutter;
+    width: 100%;
   }
 
   @include tablet {
-    row-gap: $layout-gutter;
+    row-gap: $tablet-layout-gutter;
+    width: $mobile-width;
   }
 
   @include desktop {
-    row-gap: $layout-gutter * 1.5;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    row-gap: $layout-gutter;
-
-    @include mobile {
-      width: 100%;
-      padding: $layout-gutter 0;
-    }
-
-    @include tablet {
-      width: $mobile-width;
-      padding: $layout-gutter * 1.5 0;
-    }
-
-    @include desktop {
-      width: $mobile-width;
-      padding: $layout-gutter * 2 0;
-    }
+    row-gap: $desktop-layout-gutter;
+    width: $mobile-width;
   }
 }

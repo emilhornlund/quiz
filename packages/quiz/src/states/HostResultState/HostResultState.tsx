@@ -9,8 +9,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './HostResultState.module.scss'
-
 export interface HostResultStateProps {
   event: GameEventResultHost
 }
@@ -24,6 +22,8 @@ const HostResultState: FC<HostResultStateProps> = ({
   },
 }) => (
   <Page
+    height="full"
+    align="start"
     header={
       <IconButtonArrowRight
         id={'next-button'}
@@ -40,10 +40,8 @@ const HostResultState: FC<HostResultStateProps> = ({
         totalQuestions={totalQuestions}
       />
     }>
-    <div className={styles.main}>
-      <Typography variant="subtitle">{questionValue}</Typography>
-      <QuestionResults results={results} />
-    </div>
+    <Typography variant="subtitle">{questionValue}</Typography>
+    <QuestionResults results={results} />
   </Page>
 )
 

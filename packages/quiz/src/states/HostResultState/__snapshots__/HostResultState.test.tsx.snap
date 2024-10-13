@@ -56,54 +56,50 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        Who painted The Starry Night?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          Who painted The Starry Night?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip correct"
           >
-            <div
-              class="chip correct"
-            >
-              Vincent van Gogh
-              <span>
-                3
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Pablo Picasso
-              <span>
-                2
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Leonardo da Vinci
-              <span>
-                0
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Claude Monet
-              <span>
-                5
-              </span>
-            </div>
+            Vincent van Gogh
+            <span>
+              3
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Pablo Picasso
+            <span>
+              2
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Leonardo da Vinci
+            <span>
+              0
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Claude Monet
+            <span>
+              5
+            </span>
           </div>
         </div>
       </div>
@@ -253,70 +249,66 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        Who painted The Starry Night?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          Who painted The Starry Night?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip correct"
           >
-            <div
-              class="chip correct"
-            >
-              Vincent van Gogh
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Pablo Picasso
-              <span>
-                2
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Leonardo da Vinci
-              <span>
-                4
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Claude Monet
-              <span>
-                0
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Michelangelo
-              <span>
-                0
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Rembrandt
-              <span>
-                3
-              </span>
-            </div>
+            Vincent van Gogh
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Pablo Picasso
+            <span>
+              2
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Leonardo da Vinci
+            <span>
+              4
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Claude Monet
+            <span>
+              0
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Michelangelo
+            <span>
+              0
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Rembrandt
+            <span>
+              3
+            </span>
           </div>
         </div>
       </div>
@@ -466,38 +458,34 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        Who painted The Starry Night?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          Who painted The Starry Night?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip correct"
           >
-            <div
-              class="chip correct"
-            >
-              Vincent van Gogh
-              <span>
-                3
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              Pablo Picasso
-              <span>
-                7
-              </span>
-            </div>
+            Vincent van Gogh
+            <span>
+              3
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Pablo Picasso
+            <span>
+              7
+            </span>
           </div>
         </div>
       </div>
@@ -647,94 +635,90 @@ exports[`HostResultState > should render HostResultState with question type slid
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        What percentage of the earth's surface is covered by water?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          What percentage of the earth's surface is covered by water?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip incorrect"
           >
-            <div
-              class="chip incorrect"
-            >
-              59
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              61
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              64
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              65
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip correct"
-            >
-              71
-              <span>
-                2
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              72
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              73
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              79
-              <span>
-                1
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              83
-              <span>
-                1
-              </span>
-            </div>
+            59
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            61
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            64
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            65
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip correct"
+          >
+            71
+            <span>
+              2
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            72
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            73
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            79
+            <span>
+              1
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            83
+            <span>
+              1
+            </span>
           </div>
         </div>
       </div>
@@ -884,38 +868,34 @@ exports[`HostResultState > should render HostResultState with question type true
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        Rabbits can't vomit?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          Rabbits can't vomit?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip correct"
           >
-            <div
-              class="chip correct"
-            >
-              True
-              <span>
-                4
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              False
-              <span>
-                6
-              </span>
-            </div>
+            True
+            <span>
+              4
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            False
+            <span>
+              6
+            </span>
           </div>
         </div>
       </div>
@@ -1065,54 +1045,50 @@ exports[`HostResultState > should render HostResultState with question type type
       </div>
     </div>
     <div
-      class="content center"
+      class="content fullWidth fullHeight startAlign"
     >
       <div
-        class="main"
+        class="typography subtitle full"
+      >
+        Who painted the Mono Lisa?
+      </div>
+      <div
+        class="questionResults"
       >
         <div
-          class="typography subtitle full"
-        >
-          Who painted the Mono Lisa?
-        </div>
-        <div
-          class="questionResults"
+          class="chips"
         >
           <div
-            class="chips"
+            class="chip correct"
           >
-            <div
-              class="chip correct"
-            >
-              leonardo da vinci
-              <span>
-                2
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              leonardo
-              <span>
-                4
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              picasso
-              <span>
-                3
-              </span>
-            </div>
-            <div
-              class="chip incorrect"
-            >
-              rembrandt
-              <span>
-                1
-              </span>
-            </div>
+            leonardo da vinci
+            <span>
+              2
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            leonardo
+            <span>
+              4
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            picasso
+            <span>
+              3
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            rembrandt
+            <span>
+              1
+            </span>
           </div>
         </div>
       </div>

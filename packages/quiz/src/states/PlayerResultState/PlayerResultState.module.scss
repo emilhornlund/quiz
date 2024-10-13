@@ -1,85 +1,80 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
-.main {
+.icon {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: pxToRem(2px);
+  border: pxToRem(2px) solid transparent;
+  border-radius: 50%;
+  outline-offset: pxToRem(2px);
+  outline: pxToRem(2px) solid $white;
+  background-color: $white;
 
-  @include mobile {
-    row-gap: $layout-gutter * 1.5;
-    width: 100%;
+  &.correct {
+    background-color: $green-2;
   }
 
-  @include tablet {
-    row-gap: $layout-gutter * 2;
-    width: $mobile-width;
+  &.incorrect {
+    background-color: $red-2;
   }
 
-  @include desktop {
-    row-gap: $layout-gutter * 2.5;
-    width: $tablet-width;
-  }
+  @mixin icon-dimensions($size) {
+    width: $size;
+    height: $size;
 
-  .result {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-weight: bold;
-    row-gap: $layout-gutter;
-
-    .icon {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: pxToRem(2px);
-      border: pxToRem(2px) solid transparent;
-      border-radius: 50%;
-      outline-offset: pxToRem(2px);
-      outline: pxToRem(2px) solid $white;
-      background-color: $white;
-
-      &.correct {
-        background-color: $green-2;
-      }
-
-      &.incorrect {
-        background-color: $red-2;
-      }
-
-      @mixin icon-dimensions($size) {
-        width: $size;
-        height: $size;
-
-        svg {
-          width: calc($size / 2);
-          height: calc($size / 2);
-        }
-      }
-
-      @include mobile {
-        @include icon-dimensions(pxToRem(76px));
-      }
-
-      @include tablet {
-        @include icon-dimensions(pxToRem(96px));
-      }
-
-      @include desktop {
-        @include icon-dimensions(pxToRem(116px));
-      }
+    svg {
+      width: calc($size / 2);
+      height: calc($size / 2);
     }
   }
 
-  .streak {
+  @include mobile {
+    @include icon-dimensions(pxToRem(76px));
+  }
+
+  @include tablet {
+    @include icon-dimensions(pxToRem(96px));
+  }
+
+  @include desktop {
+    @include icon-dimensions(pxToRem(116px));
+  }
+}
+
+.streak {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  column-gap: $layout-gutter;
+  width: 100%;
+
+  @include mobile {
+    @include fontSize($mobile-text-font-size);
+  }
+
+  @include tablet {
+    @include fontSize($tablet-text-font-size);
+  }
+
+  @include desktop {
+    @include fontSize($desktop-text-font-size);
+  }
+
+  span {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    column-gap: $layout-gutter;
-    width: 100%;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    border: pxToRem(2px) solid $white;
+    border-radius: 50%;
+    background-color: $orange-2;
+    color: $white;
+    font-weight: bold;
 
     @include mobile {
       @include fontSize($mobile-text-font-size);
@@ -92,60 +87,35 @@
     @include desktop {
       @include fontSize($desktop-text-font-size);
     }
+  }
+}
 
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      aspect-ratio: 1 / 1;
-      height: 100%;
-      border: pxToRem(2px) solid $white;
-      border-radius: 50%;
-      background-color: $orange-2;
-      color: $white;
-      font-weight: bold;
+.score {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-weight: bold;
 
-      @include mobile {
-        @include fontSize($mobile-text-font-size);
-      }
+  @mixin score-dimensions($size, $padding-ratio) {
+    padding: 0 $layout-gutter * $padding-ratio;
+    border-radius: calc($size / 2);
+    line-height: $size;
 
-      @include tablet {
-        @include fontSize($tablet-text-font-size);
-      }
-
-      @include desktop {
-        @include fontSize($desktop-text-font-size);
-      }
-    }
+    @include fontSize($size * 0.7);
   }
 
-  .score {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    background-color: rgba(255, 255, 255, 0.5);
-    font-weight: bold;
+  @include mobile {
+    @include score-dimensions(42px, 2);
+  }
 
-    @mixin score-dimensions($size, $padding-ratio) {
-      padding: 0 $layout-gutter * $padding-ratio;
-      border-radius: calc($size / 2);
-      line-height: $size;
+  @include tablet {
+    @include score-dimensions(52px, 2);
+  }
 
-      @include fontSize($size * 0.7);
-    }
-
-    @include mobile {
-      @include score-dimensions(42px, 2);
-    }
-
-    @include tablet {
-      @include score-dimensions(52px, 2);
-    }
-
-    @include desktop {
-      @include score-dimensions(62px, 2);
-    }
+  @include desktop {
+    @include score-dimensions(62px, 2);
   }
 }

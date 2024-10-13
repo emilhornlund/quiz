@@ -9,8 +9,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './HostLeaderboardState.module.scss'
-
 export interface HostLeaderboardStateProps {
   event: GameEventLeaderboardHost
 }
@@ -24,6 +22,9 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
 }) => {
   return (
     <Page
+      width="medium"
+      height="full"
+      align="start"
       header={
         <IconButtonArrowRight
           id={'next-button'}
@@ -40,10 +41,8 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
           totalQuestions={totalQuestions}
         />
       }>
-      <div className={styles.main}>
-        <Typography variant="subtitle">Leaderboard</Typography>
-        <Leaderboard values={leaderboard} />
-      </div>
+      <Typography variant="subtitle">Leaderboard</Typography>
+      <Leaderboard values={leaderboard} />
     </Page>
   )
 }

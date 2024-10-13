@@ -35,29 +35,25 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
           totalScore={totalScore}
         />
       }>
-      <div className={styles.main}>
-        <div className={styles.result}>
-          <Typography variant="subtitle">
-            {correct ? 'Correct' : 'Incorrect'}
-          </Typography>
-          <span
-            className={classNames(
-              styles.icon,
-              correct ? styles.correct : styles.incorrect,
-            )}>
-            <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
-          </span>
+      <Typography variant="subtitle">
+        {correct ? 'Correct' : 'Incorrect'}
+      </Typography>
+      <span
+        className={classNames(
+          styles.icon,
+          correct ? styles.correct : styles.incorrect,
+        )}>
+        <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
+      </span>
+      {!!streak && (
+        <div className={styles.streak}>
+          Answer streak <span>{streak}</span>
         </div>
-        {!!streak && (
-          <div className={styles.streak}>
-            Answer streak <span>{streak}</span>
-          </div>
-        )}
-        <div className={styles.score}>{lastScore}</div>
-        <Typography variant="text" size="small">
-          {message}
-        </Typography>
-      </div>
+      )}
+      <div className={styles.score}>{lastScore}</div>
+      <Typography variant="text" size="small">
+        {message}
+      </Typography>
     </Page>
   )
 }

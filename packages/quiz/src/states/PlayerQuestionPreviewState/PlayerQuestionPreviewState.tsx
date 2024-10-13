@@ -8,8 +8,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './PlayerQuestionPreviewState.module.scss'
-
 export interface PlayerQuestionPreviewStateProps {
   event: GameEventGameQuestionPreviewPlayer
 }
@@ -23,6 +21,7 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
   },
 }) => (
   <Page
+    align="space-between"
     footer={
       <PlayerGameFooter
         currentQuestion={currentQuestion}
@@ -31,13 +30,11 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
         totalScore={playerTotalScore}
       />
     }>
-    <div className={styles.main}>
-      <div>{questionType}</div>
-      <Typography variant="subtitle" size="medium">
-        {questionValue}
-      </Typography>
-      <ProgressBar value={progressValue} />
-    </div>
+    <div>{questionType}</div>
+    <Typography variant="subtitle" size="medium">
+      {questionValue}
+    </Typography>
+    <ProgressBar value={progressValue} />
   </Page>
 )
 

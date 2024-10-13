@@ -9,8 +9,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './PlayerLobbyState.module.scss'
-
 const MESSAGES = [
   'Get ready, the questions are coming! Sharpen your mind.',
   'Hold tight! The challenge awaits. Are you ready to ace it?',
@@ -40,16 +38,14 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
           value="Leave"
         />
       }>
-      <div className={styles.main}>
-        <RocketImage />
-        <NicknameChip value={nickname} />
-        <Typography variant="title" size="medium">
-          You’re in the waiting room
-        </Typography>
-        <Typography variant="text" size="small">
-          {message}
-        </Typography>
-      </div>
+      <RocketImage />
+      <NicknameChip value={nickname} />
+      <Typography variant="title" size="medium">
+        You’re in the waiting room
+      </Typography>
+      <Typography variant="text" size="small">
+        {message}
+      </Typography>
     </Page>
   )
 }

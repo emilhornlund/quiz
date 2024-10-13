@@ -9,8 +9,6 @@ import {
   Typography,
 } from '../../components'
 
-import styles from './PlayerAwaitingResultState.module.scss'
-
 export interface PlayerAwaitingResultStateProps {
   event: GameEventAwaitingResultPlayer
 }
@@ -31,13 +29,11 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
         totalScore={totalScore}
       />
     }>
-    <div className={styles.main}>
-      <RocketImage />
-      <Typography variant="title" size="medium">
-        Waiting for other players
-      </Typography>
-      <LoadingSpinner />
-    </div>
+    <RocketImage />
+    <Typography variant="title" size="medium">
+      Waiting for other players
+    </Typography>
+    <LoadingSpinner />
   </Page>
 )
 

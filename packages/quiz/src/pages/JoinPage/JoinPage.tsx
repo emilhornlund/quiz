@@ -36,29 +36,27 @@ const JoinPage: FC = () => {
           onClick={() => navigate(-1)}
         />
       }>
-      <div className={styles.main}>
-        <Typography variant="title" size="medium">
-          {title}
-        </Typography>
-        <Typography variant="text" size="small">
-          {message}
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            id="nickname"
-            type="text"
-            placeholder="Nickname"
-            value={nickname ?? ''}
-            onChange={setNickname}
-          />
-          <IconButtonArrowRight
-            id="join"
-            type="submit"
-            kind="secondary"
-            value="OK, Go!"
-          />
-        </form>
-      </div>
+      <Typography variant="title" size="medium">
+        {title}
+      </Typography>
+      <Typography variant="text" size="small">
+        {message}
+      </Typography>
+      <form className={styles.joinForm} onSubmit={handleSubmit}>
+        <TextField
+          id="nickname"
+          type="text"
+          placeholder="Nickname"
+          value={nickname ?? ''}
+          onChange={setNickname}
+        />
+        <IconButtonArrowRight
+          id="join"
+          type="submit"
+          kind="secondary"
+          value="OK, Go!"
+        />
+      </form>
     </Page>
   )
 }

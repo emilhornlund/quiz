@@ -25,28 +25,24 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
       />
     </div>
     <div
-      class="content center"
+      class="content fullWidth centerAlign"
     >
       <div
-        class="main"
+        class="typography title medium"
       >
-        <div
-          class="typography title medium"
-        >
-          Loading Game
-        </div>
-        <div
-          class="typography text small"
-        >
-          The game starts any second
-        </div>
-        <div
-          class="loadingSpinner"
-        >
-          <div />
-          <div />
-          <div />
-        </div>
+        Loading Game
+      </div>
+      <div
+        class="typography text small"
+      >
+        The game starts any second
+      </div>
+      <div
+        class="loadingSpinner"
+      >
+        <div />
+        <div />
+        <div />
       </div>
     </div>
   </div>

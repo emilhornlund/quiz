@@ -16,6 +16,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
 }) => {
   return (
     <Page
+      width="medium"
       header={
         <IconButtonArrowRight
           id={'start-game-button'}
@@ -25,25 +26,23 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
           value="Start"
         />
       }>
-      <div className={styles.main}>
-        <div className={styles.header}>
-          <div className={classNames(styles.box, styles.info)}>
-            Join at <strong>quiz.emilhornlund.com</strong>
-          </div>
-          <div className={classNames(styles.box, styles.pin)}>
-            <div>Game PIN</div>
-            <div>{pin}</div>
-          </div>
-          <div className={classNames(styles.box, styles.qr)}>
-            <QRCode value={url} />
-          </div>
+      <div className={styles.header}>
+        <div className={classNames(styles.box, styles.info)}>
+          Join at <strong>quiz.emilhornlund.com</strong>
         </div>
-        <div className={styles.content}>
-          <div className={styles.players}>
-            {players.map((nickname) => (
-              <NicknameChip key={nickname} value={nickname} />
-            ))}
-          </div>
+        <div className={classNames(styles.box, styles.pin)}>
+          <div>Game PIN</div>
+          <div>{pin}</div>
+        </div>
+        <div className={classNames(styles.box, styles.qr)}>
+          <QRCode value={url} />
+        </div>
+      </div>
+      <div className={styles.content}>
+        <div className={styles.players}>
+          {players.map((nickname) => (
+            <NicknameChip key={nickname} value={nickname} />
+          ))}
         </div>
       </div>
     </Page>

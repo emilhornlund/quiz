@@ -22,27 +22,25 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
   }, [position])
 
   return (
-    <Page>
-      <div className={styles.main}>
-        <Typography variant="title" size="medium">
-          {title}
-        </Typography>
-        <div className={styles.content}>
-          <div
-            className={classNames(
-              styles.position,
-              getPositionClassName(position),
-            )}>
-            {position}
-          </div>
-          <NicknameChip value={nickname} />
-          <Typography variant="subtitle" size="small">
-            {score}
-          </Typography>
-          <Typography variant="text" size="small">
-            {message}
-          </Typography>
+    <Page height="full" align="start">
+      <Typography variant="subtitle" size="medium">
+        {title}
+      </Typography>
+      <div className={styles.content}>
+        <div
+          className={classNames(
+            styles.position,
+            getPositionClassName(position),
+          )}>
+          {position}
         </div>
+        <NicknameChip value={nickname} />
+        <Typography variant="subtitle" size="small">
+          {score}
+        </Typography>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
       </div>
     </Page>
   )

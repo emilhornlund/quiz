@@ -1,176 +1,181 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
-.main {
+.header {
   display: flex;
   flex-direction: column;
-  row-gap: $layout-gutter;
-  width: 100%;
-  height: 100%;
+  justify-content: center;
 
   @include mobile {
-    padding: $layout-gutter 0;
-    margin-bottom: 4rem;
+    gap: $mobile-layout-gutter;
+    padding: pxToRem(2px);
   }
 
   @include tablet {
-    padding: $layout-gutter * 1.5 0;
+    gap: $tablet-layout-gutter;
+    flex-direction: row;
   }
 
   @include desktop {
-    padding: $layout-gutter * 2 0;
+    gap: $desktop-layout-gutter;
+    flex-direction: row;
   }
 
-  .header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: $layout-gutter;
+  .box {
+    outline-style: solid;
+    outline-color: $white;
+
+    border-style: solid;
+    border-color: transparent;
+
+    background-color: $white;
+    color: $gray-4;
 
     @include mobile {
-      padding: pxToRem(2px);
+      height: 98px;
+      margin: pxToRem(4px) 0;
+      outline-width: pxToRem(2px);
+      outline-offset: pxToRem(2px);
+      border-width: pxToRem(2px);
+      border-radius: pxToRem(6px);
     }
 
     @include tablet {
-      flex-direction: row;
+      height: 118px;
+      margin: pxToRem(6px) 0;
+      outline-width: pxToRem(3px);
+      outline-offset: pxToRem(3px);
+      border-width: pxToRem(3px);
+      border-radius: pxToRem(8px);
     }
 
     @include desktop {
-      flex-direction: row;
+      height: 138px;
+      margin: pxToRem(8px) 0;
+      outline-width: pxToRem(4px);
+      outline-offset: pxToRem(4px);
+      border-width: pxToRem(4px);
+      border-radius: pxToRem(10px);
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    @include mobile {
+      padding: $mobile-layout-gutter;
+
+      @include fontSize(16px);
     }
 
-    .box {
-      margin: pxToRem(2px);
-      background-color: $white;
-      border-radius: pxToRem(8px);
-      outline: pxToRem(2px) solid $white;
-      outline-offset: pxToRem(2px);
-      border: pxToRem(2px) solid transparent;
-      color: $gray-4;
+    @include tablet {
+      padding: $layout-gutter $layout-gutter * 1.5;
 
-      @include mobile {
-        height: 98px;
-        border-radius: pxToRem(6px);
-      }
-
-      @include tablet {
-        height: 118px;
-        border-radius: pxToRem(8px);
-      }
-
-      @include desktop {
-        height: 138px;
-        border-radius: pxToRem(10px);
-      }
+      @include fontSize(20px);
     }
 
-    .info {
+    @include desktop {
+      padding: $layout-gutter $layout-gutter * 2;
+
+      @include fontSize(24px);
+    }
+  }
+
+  .pin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include mobile {
+      padding: $layout-gutter $layout-gutter;
+    }
+
+    @include tablet {
+      padding: $layout-gutter $layout-gutter * 1.5;
+    }
+
+    @include desktop {
+      padding: $layout-gutter $layout-gutter * 2;
+    }
+
+    div {
       display: flex;
       flex-direction: column;
-      flex-wrap: nowrap;
-      justify-content: center;
-      align-items: flex-start;
+    }
+
+    div:nth-child(1) {
+      font-weight: normal;
 
       @include mobile {
-        padding: $layout-gutter $layout-gutter;
-
         @include fontSize(16px);
       }
 
       @include tablet {
-        padding: $layout-gutter $layout-gutter * 1.5;
-
         @include fontSize(20px);
       }
 
       @include desktop {
-        padding: $layout-gutter $layout-gutter * 2;
-
         @include fontSize(24px);
       }
     }
 
-    .pin {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    div:nth-child(2) {
+      font-weight: bold;
 
       @include mobile {
-        padding: $layout-gutter $layout-gutter;
+        @include fontSize(28px);
       }
 
       @include tablet {
-        padding: $layout-gutter $layout-gutter * 1.5;
+        @include fontSize(38px);
       }
 
       @include desktop {
-        padding: $layout-gutter $layout-gutter * 2;
-      }
-
-      div {
-        display: flex;
-        flex-direction: column;
-      }
-
-      div:nth-child(1) {
-        font-weight: normal;
-
-        @include mobile {
-          @include fontSize(16px);
-        }
-
-        @include tablet {
-          @include fontSize(20px);
-        }
-
-        @include desktop {
-          @include fontSize(24px);
-        }
-      }
-
-      div:nth-child(2) {
-        font-weight: bold;
-
-        @include mobile {
-          @include fontSize(28px);
-        }
-
-        @include tablet {
-          @include fontSize(38px);
-        }
-
-        @include desktop {
-          @include fontSize(48px);
-        }
-      }
-    }
-
-    .qr {
-      display: flex;
-      flex-direction: column;
-
-      svg {
-        width: auto;
-        max-height: 100%;
-        height: 100%;
-        padding: pxToRem(4px);
+        @include fontSize(48px);
       }
     }
   }
 
-  .content {
+  .qr {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    flex: 1;
 
-    .players {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: $layout-gutter;
+    svg {
+      width: auto;
+      max-height: 100%;
+      height: 100%;
+      padding: pxToRem(4px);
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+
+  .players {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    @include mobile {
+      gap: $mobile-layout-gutter;
+    }
+
+    @include tablet {
+      gap: $tablet-layout-gutter;
+    }
+
+    @include desktop {
+      gap: $desktop-layout-gutter;
     }
   }
 }

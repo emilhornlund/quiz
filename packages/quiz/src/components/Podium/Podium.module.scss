@@ -6,6 +6,7 @@
   flex-direction: row;
   column-gap: 0;
   border-bottom: pxToRem(4px) solid $white;
+  width: 100%;
 
   .column {
     display: flex;

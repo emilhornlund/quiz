@@ -25,31 +25,27 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
       />
     </div>
     <div
-      class="content center"
+      class="content fullWidth centerAlign"
     >
       <div
         class="main"
       >
-        <div
-          class="main"
-        >
-          <img
-            alt="rocket"
-            src="/src/assets/images/rocket.svg"
-          />
-        </div>
-        <div
-          class="typography title medium"
-        >
-          Waiting for other players
-        </div>
-        <div
-          class="loadingSpinner"
-        >
-          <div />
-          <div />
-          <div />
-        </div>
+        <img
+          alt="rocket"
+          src="/src/assets/images/rocket.svg"
+        />
+      </div>
+      <div
+        class="typography title medium"
+      >
+        Waiting for other players
+      </div>
+      <div
+        class="loadingSpinner"
+      >
+        <div />
+        <div />
+        <div />
       </div>
     </div>
     <div

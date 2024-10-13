@@ -145,8 +145,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 0 $layout-gutter;
-    width: 100%;
     flex: 1;
     overflow-y: scroll;
 
@@ -160,18 +158,64 @@
       padding-bottom: 0;
     }
 
-    &.center {
+    &.startAlign {
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    &.centerAlign {
       justify-content: center;
       align-items: center;
     }
 
+    &.spaceBetweenAlign {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &.fullHeight {
+      height: 100%;
+    }
+
+    @include mobile {
+      row-gap: $mobile-layout-gutter * 0.5;
+      padding: 0 $mobile-layout-gutter;
+
+      &.fullWidth {
+        width: 100%;
+      }
+    }
+
     @include tablet {
-      &:not(&.fullWidth) {
+      row-gap: $tablet-layout-gutter;
+      padding: 0 $tablet-layout-gutter;
+
+      &.mediumWidth {
+        width: $tablet-width;
+      }
+
+      &.smallWidth {
+        width: $mobile-width;
+      }
+
+      &.fullWidth {
         width: $tablet-width;
       }
     }
+
     @include desktop {
-      &:not(&.fullWidth) {
+      row-gap: $desktop-layout-gutter;
+      padding: 0 $desktop-layout-gutter;
+
+      &.mediumWidth {
+        width: $tablet-width;
+      }
+
+      &.smallWidth {
+        width: $mobile-width;
+      }
+
+      &.fullWidth {
         width: $desktop-width;
       }
     }
