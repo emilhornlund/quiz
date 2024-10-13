@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Correct = {
   args: {
     event: {
-      type: GameEventType.ResultPlayer,
+      type: GameEventType.GameResultPlayer,
       nickname: 'FrostyBear',
       correct: true,
       score: {
@@ -36,7 +36,7 @@ export const Correct = {
 export const Incorrect = {
   args: {
     event: {
-      type: GameEventType.ResultPlayer,
+      type: GameEventType.GameResultPlayer,
       nickname: 'FrostyBear',
       correct: false,
       score: {

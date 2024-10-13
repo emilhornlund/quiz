@@ -10,7 +10,7 @@ describe('HostLeaderboardState', () => {
     const { container } = render(
       <HostLeaderboardState
         event={{
-          type: GameEventType.LeaderboardHost,
+          type: GameEventType.GameLeaderboardHost,
           gamePIN: '123456',
           leaderboard: [
             { position: 1, nickname: 'ShadowCyborg', score: 18456, streaks: 0 },

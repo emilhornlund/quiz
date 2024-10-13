@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.LobbyPlayer,
+      type: GameEventType.GameLobbyPlayer,
       nickname: 'FrostyBear',
     },
   },

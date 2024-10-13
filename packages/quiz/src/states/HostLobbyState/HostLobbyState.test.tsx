@@ -10,7 +10,7 @@ describe('HostLobbyState', () => {
     const { container } = render(
       <HostLobbyState
         event={{
-          type: GameEventType.LobbyHost,
+          type: GameEventType.GameLobbyHost,
           url: 'http://localhost:3000/join',
           pin: '123456',
           players: [

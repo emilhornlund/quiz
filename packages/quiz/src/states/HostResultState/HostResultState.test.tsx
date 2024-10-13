@@ -10,7 +10,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },
@@ -40,7 +40,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },
@@ -72,7 +72,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },
@@ -106,7 +106,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },
@@ -144,7 +144,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },
@@ -174,7 +174,7 @@ describe('HostResultState', () => {
     const { container } = render(
       <HostResultState
         event={{
-          type: GameEventType.ResultHost,
+          type: GameEventType.GameResultHost,
           game: {
             pin: '123456',
           },

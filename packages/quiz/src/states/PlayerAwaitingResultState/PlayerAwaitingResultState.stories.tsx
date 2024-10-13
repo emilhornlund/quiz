@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.AwaitingResultPlayer,
+      type: GameEventType.GameAwaitingResultPlayer,
       nickname: 'FrostyBear',
       score: {
         total: 10458,

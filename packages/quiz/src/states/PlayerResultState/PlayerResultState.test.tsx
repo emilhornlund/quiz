@@ -10,7 +10,7 @@ describe('PlayerResultState', () => {
     render(
       <PlayerResultState
         event={{
-          type: GameEventType.ResultPlayer,
+          type: GameEventType.GameResultPlayer,
           nickname: 'FrostyBear',
           correct: true,
           score: {

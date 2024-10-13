@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.LeaderboardHost,
+      type: GameEventType.GameLeaderboardHost,
       gamePIN: '123456',
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456, streaks: 2 },

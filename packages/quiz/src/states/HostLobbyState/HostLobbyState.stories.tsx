@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.LobbyHost,
+      type: GameEventType.GameLobbyHost,
       url: 'http://localhost:3000/join',
       pin: '123456',
       players: [

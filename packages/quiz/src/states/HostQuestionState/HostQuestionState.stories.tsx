@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const QuestionMultiTwoAnswers = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.Multi,
@@ -35,7 +35,7 @@ export const QuestionMultiTwoAnswers = {
 export const QuestionMultiFourAnswers = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.Multi,
@@ -58,7 +58,7 @@ export const QuestionMultiFourAnswers = {
 export const QuestionMultiSixAnswers = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.Multi,
@@ -83,7 +83,7 @@ export const QuestionMultiSixAnswers = {
 export const QuestionSlider = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.Slider,
@@ -102,7 +102,7 @@ export const QuestionSlider = {
 export const QuestionTrueFalse = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.TrueFalse,
@@ -118,7 +118,7 @@ export const QuestionTrueFalse = {
 export const QuestionTypeAnswer = {
   args: {
     event: {
-      type: GameEventType.QuestionHost,
+      type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
         type: GameEventQuestionType.TypeAnswer,

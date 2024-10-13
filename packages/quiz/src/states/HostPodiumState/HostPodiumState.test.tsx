@@ -10,7 +10,7 @@ describe('HostPodiumState', () => {
     const { container } = render(
       <HostPodiumState
         event={{
-          type: GameEventType.PodiumHost,
+          type: GameEventType.GamePodiumHost,
           leaderboard: [
             { position: 1, nickname: 'ShadowCyborg', score: 18456 },
             { position: 2, nickname: 'Radar', score: 18398 },
@@ -34,7 +34,7 @@ describe('HostPodiumState', () => {
     const { container } = render(
       <HostPodiumState
         event={{
-          type: GameEventType.PodiumHost,
+          type: GameEventType.GamePodiumHost,
           leaderboard: [
             { position: 1, nickname: 'ShadowCyborg', score: 18456 },
             { position: 2, nickname: 'Radar', score: 18398 },

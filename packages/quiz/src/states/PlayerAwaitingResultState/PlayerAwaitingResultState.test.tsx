@@ -10,7 +10,7 @@ describe('PlayerAwaitingResultState', () => {
     const { container } = render(
       <PlayerAwaitingResultState
         event={{
-          type: GameEventType.AwaitingResultPlayer,
+          type: GameEventType.GameAwaitingResultPlayer,
           nickname: 'FrostyBear',
           score: {
             total: 10458,

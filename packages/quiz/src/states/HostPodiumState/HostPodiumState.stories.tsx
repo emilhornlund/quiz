@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     event: {
-      type: GameEventType.PodiumHost,
+      type: GameEventType.GamePodiumHost,
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456 },
         { position: 2, nickname: 'Radar', score: 18398 },
@@ -36,7 +36,7 @@ export const Default = {
 export const ThreePlayers = {
   args: {
     event: {
-      type: GameEventType.PodiumHost,
+      type: GameEventType.GamePodiumHost,
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456 },
         { position: 2, nickname: 'Radar', score: 18398 },

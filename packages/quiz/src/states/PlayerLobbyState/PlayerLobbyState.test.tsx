@@ -10,7 +10,7 @@ describe('PlayerLobbyState', () => {
     render(
       <PlayerLobbyState
         event={{
-          type: GameEventType.LobbyPlayer,
+          type: GameEventType.GameLobbyPlayer,
           nickname: 'FrostyBear',
         }}
       />,

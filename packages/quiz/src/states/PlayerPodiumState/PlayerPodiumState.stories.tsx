@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const FirstPlace = {
   args: {
     event: {
-      type: GameEventType.PodiumPlayer,
+      type: GameEventType.GamePodiumPlayer,
       title: 'Friday Office Quiz',
       nickname: 'ShadowCyborg',
       position: 1,
@@ -28,7 +28,7 @@ export const FirstPlace = {
 export const SecondPlace = {
   args: {
     event: {
-      type: GameEventType.PodiumPlayer,
+      type: GameEventType.GamePodiumPlayer,
       title: 'Friday Office Quiz',
       nickname: 'Radar',
       position: 2,
@@ -40,7 +40,7 @@ export const SecondPlace = {
 export const ThirdPlace = {
   args: {
     event: {
-      type: GameEventType.PodiumPlayer,
+      type: GameEventType.GamePodiumPlayer,
       title: 'Friday Office Quiz',
       nickname: 'ShadowWhirlwind',
       position: 3,
@@ -52,7 +52,7 @@ export const ThirdPlace = {
 export const FourthPlace = {
   args: {
     event: {
-      type: GameEventType.PodiumPlayer,
+      type: GameEventType.GamePodiumPlayer,
       title: 'Friday Office Quiz',
       nickname: 'WhiskerFox',
       position: 4,

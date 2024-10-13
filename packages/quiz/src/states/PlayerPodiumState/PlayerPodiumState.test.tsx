@@ -10,7 +10,7 @@ describe('PlayerPodiumState', () => {
     render(
       <PlayerPodiumState
         event={{
-          type: GameEventType.PodiumPlayer,
+          type: GameEventType.GamePodiumPlayer,
           title: 'Friday Office Quiz',
           nickname: 'ShadowCyborg',
           position: 1,

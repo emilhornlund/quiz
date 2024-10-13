@@ -10,7 +10,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.Multi,
@@ -36,7 +36,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.Multi,
@@ -63,7 +63,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.Multi,
@@ -92,7 +92,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.Slider,
@@ -116,7 +116,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.TrueFalse,
@@ -136,7 +136,7 @@ describe('HostQuestionState', () => {
     const { container } = render(
       <HostQuestionState
         event={{
-          type: GameEventType.QuestionHost,
+          type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
             type: GameEventQuestionType.TypeAnswer,

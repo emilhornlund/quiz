@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const QuestionMultiTwoAnswers = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },
@@ -42,7 +42,7 @@ export const QuestionMultiTwoAnswers = {
 export const QuestionMultiFourAnswers = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },
@@ -70,7 +70,7 @@ export const QuestionMultiFourAnswers = {
 export const QuestionMultiSixAnswers = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },
@@ -100,7 +100,7 @@ export const QuestionMultiSixAnswers = {
 export const QuestionSlider = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },
@@ -133,7 +133,7 @@ export const QuestionSlider = {
 export const QuestionTrueFalse = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },
@@ -159,7 +159,7 @@ export const QuestionTrueFalse = {
 export const QuestionTypeAnswer = {
   args: {
     event: {
-      type: GameEventType.ResultHost,
+      type: GameEventType.GameResultHost,
       game: {
         pin: '123456',
       },

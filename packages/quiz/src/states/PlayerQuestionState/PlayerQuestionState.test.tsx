@@ -10,7 +10,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.Multi,
@@ -37,7 +37,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.Multi,
@@ -65,7 +65,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.Multi,
@@ -95,7 +95,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.Slider,
@@ -120,7 +120,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.TrueFalse,
@@ -141,7 +141,7 @@ describe('PlayerQuestionState', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
-          type: GameEventType.QuestionPlayer,
+          type: GameEventType.GameQuestionPlayer,
           nickname: 'FrostyBear',
           question: {
             type: GameEventQuestionType.TypeAnswer,
