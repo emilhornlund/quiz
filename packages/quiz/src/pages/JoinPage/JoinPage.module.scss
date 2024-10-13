@@ -1,0 +1,96 @@
+@import '../../styles/helpers';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+
+  @include mobile {
+    row-gap: $layout-gutter * 1.5;
+  }
+
+  @include tablet {
+    row-gap: $layout-gutter * 1.5;
+  }
+
+  @include desktop {
+    row-gap: $layout-gutter * 1.5;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: 900;
+    text-align: center;
+    color: white;
+
+    @include mobile {
+      width: 100%;
+
+      @include fontSize(56px);}
+
+    @include tablet {
+      width: $mobile-width;
+
+      @include fontSize(76px);}
+
+    @include desktop {
+      width: $tablet-width;
+
+      @include fontSize(86px);
+    }
+  }
+
+  .message {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    color: white;
+
+    @include mobile {
+      width: 100%;
+
+      @include fontSize(18px);
+    }
+
+    @include tablet {
+      width: $mobile-width;
+
+      @include fontSize(24px);
+    }
+
+    @include desktop {
+      width: $mobile-width;
+
+      @include fontSize(28px);
+    }
+
+  }
+
+  .form > form {
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      row-gap: $layout-gutter * 0.5;
+      width: 100%;
+      padding: $layout-gutter 0;
+    }
+
+    @include tablet {
+      row-gap: $layout-gutter * 0.75;
+      width: $mobile-width;
+      padding: $layout-gutter * 1.5 0;
+    }
+
+    @include desktop {
+      row-gap: $layout-gutter;
+      width: $mobile-width;
+      padding: $layout-gutter * 2 0;
+    }
+  }
+}

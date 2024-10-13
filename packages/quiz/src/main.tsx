@@ -2,7 +2,7 @@ import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import { HomePage } from './pages'
+import { HomePage, JoinPage } from './pages'
 
 import './styles/fonts.scss'
 import './styles/index.css'
@@ -11,6 +11,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+  },
+  {
+    path: '/join',
+    element: <JoinPage />,
   },
 ])
 
