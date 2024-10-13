@@ -1,4 +1,5 @@
 export type { ButtonProps } from './Button'
+export type { ConnectionStatusBannerProps } from './ConnectionStatusBanner'
 export type { HostGameFooterProps } from './HostGameFooter'
 export type { LeaderboardProps } from './Leaderboard'
 export type { NicknameChipProps } from './NicknameChip'
@@ -17,6 +18,7 @@ export {
   IconButtonArrowLeft,
   IconButtonArrowRight,
 } from './Button'
+export { default as ConnectionStatusBanner } from './ConnectionStatusBanner'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'
 export { default as LoadingSpinner } from './LoadingSpinner'

@@ -2,7 +2,7 @@ import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import { CreateGamePage, HomePage, JoinPage } from './pages'
+import { CreateGamePage, GamePage, HomePage, JoinPage } from './pages'
 
 import './styles/fonts.scss'
 import './styles/index.css'
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/join',
     element: <JoinPage />,
+  },
+  {
+    path: '/game',
+    element: <GamePage />,
   },
 ])
 

@@ -1,0 +1,52 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GamePage > should render GamePage 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <div
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </div>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="loadingSpinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+  <div
+    class="connectionStatusBanner"
+  >
+    <button
+      class="banner success"
+      id="status"
+      name="status"
+      type="button"
+    >
+      Connected
+    </button>
+  </div>
+</div>
+`;

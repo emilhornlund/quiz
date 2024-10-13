@@ -1,0 +1,67 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.connectionStatusBanner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  @include mobile {
+    top: $mobile-layout-gutter;
+  }
+
+  @include tablet {
+    top: $tablet-layout-gutter;
+  }
+
+  @include desktop {
+    top: $desktop-layout-gutter;
+  }
+
+  .banner {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    color: $white;
+    font-weight: bold;
+    appearance: none;
+    outline: none;
+    border: none;
+
+    @include mobile {
+      padding: $mobile-layout-gutter * 0.5 $mobile-layout-gutter;
+      border-radius: $layout-gutter * 0.5;
+
+      @include fontSize($mobile-text-font-size);
+    }
+
+    @include tablet {
+      padding: $tablet-layout-gutter * 0.5 $tablet-layout-gutter;
+      border-radius: $layout-gutter * 0.75;
+
+      @include fontSize($tablet-text-font-size);
+    }
+
+    @include desktop {
+      padding: $desktop-layout-gutter * 0.5 $desktop-layout-gutter;
+      border-radius: $layout-gutter;
+
+      @include fontSize($desktop-text-font-size);
+    }
+
+    &.success {
+      background-color: $green-2;
+    }
+
+    &.warning {
+      background-color: $orange-2;
+    }
+
+    &.error {
+      background-color: $red-2;
+    }
+  }
+}
