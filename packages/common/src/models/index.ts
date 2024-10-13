@@ -1,2 +1,5 @@
+export * from './create-game-request.dto'
 export * from './game-event'
+export * from './game-mode.enum'
 export * from './message.dto'
+export * from './question-type.enum'
