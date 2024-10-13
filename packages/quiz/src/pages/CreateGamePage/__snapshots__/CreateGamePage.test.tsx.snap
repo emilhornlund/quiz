@@ -1,0 +1,166 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CreateGamePage > should render CreateGamePage 1`] = `
+<div>
+  <form>
+    <div
+      class="main"
+    >
+      <div
+        class="header"
+      >
+        <div
+          class="logo"
+        >
+          <span
+            class="icon"
+          />
+          <span
+            class="text"
+          >
+            Quiz
+          </span>
+        </div>
+        <div
+          class="side"
+        >
+          <div
+            class="main small"
+          >
+            <button
+              class="secondary"
+              data-testid="test-create-game-button-button"
+              disabled=""
+              id="create-game-button"
+              name="create-game-button"
+              type="submit"
+            >
+              <span>
+                Create Game
+              </span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-arrow-right "
+                data-icon="arrow-right"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="content fullWidth centerAlign"
+      >
+        <div
+          class="details"
+        >
+          <div
+            class="main"
+          >
+            <input
+              data-testid="test-name-textfield-textfield"
+              id="name-textfield"
+              name="name-textfield"
+              placeholder="Name"
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            class="select"
+          >
+            <select
+              data-testid="test-game-mode-select-select"
+              id="game-mode-select"
+              name="game-mode-select"
+            >
+              <option
+                value="CLASSIC"
+              >
+                Classic
+              </option>
+              <option
+                value="ZERO_TO_ONE_HUNDRED"
+              >
+                0 - 100
+              </option>
+            </select>
+          </div>
+        </div>
+        <div
+          class="editor"
+        >
+          <div
+            class="container"
+          >
+            <textarea
+              data-testid="test-json-textarea"
+              id="json"
+              name="json"
+            >
+              [
+  {
+    "type": "MULTI",
+    "question": "",
+    "imageURL": "",
+    "answers": [
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      }
+    ],
+    "duration": 30
+  },
+  {
+    "type": "TRUE_FALSE",
+    "question": "",
+    "imageURL": "",
+    "correct": false,
+    "duration": 30
+  },
+  {
+    "type": "SLIDER",
+    "question": "",
+    "imageURL": "",
+    "min": 0,
+    "max": 100,
+    "correct": 0,
+    "duration": 30
+  },
+  {
+    "type": "TYPE_ANSWER",
+    "question": "",
+    "imageURL": "",
+    "correct": "",
+    "duration": 30
+  }
+]
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+`;
