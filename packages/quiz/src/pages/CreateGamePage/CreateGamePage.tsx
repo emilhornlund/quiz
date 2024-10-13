@@ -1,5 +1,12 @@
 import { CreateGameRequestDto, GameMode, QuestionType } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import {
   IconButtonArrowRight,
@@ -30,8 +37,6 @@ const CreateGamePage: FC = () => {
   const [questionsJson, setQuestionsJson] = useState<string>('[]')
   const [jsonError, setJsonError] = useState<string>()
 
-  useEffect(() => handleChangeMode(GameMode.Classic), [])
-
   const isValid = useMemo(() => {
     const isNameValid = !!name
     const isModeValid = !!mode
@@ -44,7 +49,7 @@ const CreateGamePage: FC = () => {
     return isNameValid && isModeValid && isQuestionsValid
   }, [name, mode, classicModeQuestions, zeroToOneHundredModeQuestions])
 
-  const handleChangeMode = (newMode: GameMode) => {
+  const handleChangeMode = useCallback((newMode: GameMode) => {
     setMode(newMode)
     if (newMode === GameMode.Classic) {
       handleParseQuestionJson(
@@ -110,7 +115,11 @@ const CreateGamePage: FC = () => {
         newMode,
       )
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    handleChangeMode(GameMode.Classic)
+  }, [handleChangeMode])
 
   const handleChangeJSON = (value: string) => {
     handleParseQuestionJson(value, mode)
