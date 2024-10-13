@@ -179,7 +179,7 @@
 
     @include mobile {
       row-gap: $mobile-layout-gutter * 0.5;
-      padding: 0 $mobile-layout-gutter;
+      padding: $mobile-layout-gutter;
 
       &.fullWidth {
         width: 100%;
@@ -188,7 +188,7 @@
 
     @include tablet {
       row-gap: $tablet-layout-gutter;
-      padding: 0 $tablet-layout-gutter;
+      padding: $tablet-layout-gutter;
 
       &.mediumWidth {
         width: $tablet-width;
@@ -205,7 +205,7 @@
 
     @include desktop {
       row-gap: $desktop-layout-gutter;
-      padding: 0 $desktop-layout-gutter;
+      padding: $desktop-layout-gutter;
 
       &.mediumWidth {
         width: $tablet-width;
