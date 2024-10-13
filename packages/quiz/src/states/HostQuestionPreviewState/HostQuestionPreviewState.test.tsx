@@ -1,4 +1,4 @@
-import { GameEventQuestionType, GameEventType } from '@quiz/common'
+import { GameEventType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -15,7 +15,7 @@ describe('HostQuestionPreviewState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
           },
           progress: {

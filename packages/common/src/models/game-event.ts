@@ -1,3 +1,5 @@
+import { QuestionType } from './question-type.enum'
+
 export enum GameEventType {
   GameLobbyHost = 'GAME_LOBBY_HOST',
   GameLobbyPlayer = 'GAME_LOBBY_PLAYER',
@@ -42,7 +44,7 @@ export type GameQuestionPreviewHostEvent = {
     pin: string
   }
   question: {
-    type: GameEventQuestionType
+    type: QuestionType
     question: string
   }
   progress: {
@@ -61,7 +63,7 @@ export type GameQuestionPreviewPlayerEvent = {
     score: number
   }
   question: {
-    type: GameEventQuestionType
+    type: QuestionType
     question: string
   }
   progress: {
@@ -73,15 +75,8 @@ export type GameQuestionPreviewPlayerEvent = {
   }
 }
 
-export enum GameEventQuestionType {
-  Multi = 'MULTI',
-  Slider = 'SLIDER',
-  TrueFalse = 'TRUE_FALSE',
-  TypeAnswer = 'TYPE_ANSWER',
-}
-
 export type GameEventQuestionMulti = {
-  type: GameEventQuestionType.Multi
+  type: QuestionType.Multi
   question: string
   imageURL?: string
   answers: { value: string }[]
@@ -89,7 +84,7 @@ export type GameEventQuestionMulti = {
 }
 
 export type GameEventQuestionSlider = {
-  type: GameEventQuestionType.Slider
+  type: QuestionType.Slider
   question: string
   imageURL?: string
   min: number
@@ -99,14 +94,14 @@ export type GameEventQuestionSlider = {
 }
 
 export type GameEventQuestionTrueFalse = {
-  type: GameEventQuestionType.TrueFalse
+  type: QuestionType.TrueFalse
   question: string
   imageURL?: string
   duration: number
 }
 
 export type GameEventQuestionTypeAnswer = {
-  type: GameEventQuestionType.TypeAnswer
+  type: QuestionType.TypeAnswer
   question: string
   imageURL?: string
   duration: number
@@ -174,22 +169,22 @@ export type GameLeaderboardHostEvent = {
 }
 
 export type GameEventQuestionResultsMulti = {
-  type: GameEventQuestionType.Multi
+  type: QuestionType.Multi
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
 export type GameEventQuestionResultsSlider = {
-  type: GameEventQuestionType.Slider
+  type: QuestionType.Slider
   distribution: { value: number; count: number; correct: boolean }[]
 }
 
 export type GameEventQuestionResultsTrueFalse = {
-  type: GameEventQuestionType.TrueFalse
+  type: QuestionType.TrueFalse
   distribution: { value: boolean; count: number; correct: boolean }[]
 }
 
 export type GameEventQuestionResultsTypeAnswer = {
-  type: GameEventQuestionType.TypeAnswer
+  type: QuestionType.TypeAnswer
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
@@ -205,7 +200,7 @@ export type GameResultHostEvent = {
     pin: string
   }
   question: {
-    type: GameEventQuestionType
+    type: QuestionType
     question: string
   }
   results: GameEventQuestionResults

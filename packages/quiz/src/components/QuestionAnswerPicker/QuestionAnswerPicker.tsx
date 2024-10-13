@@ -1,4 +1,4 @@
-import { GameEventQuestion, GameEventQuestionType } from '@quiz/common'
+import { GameEventQuestion, QuestionType } from '@quiz/common'
 import React, { FC } from 'react'
 
 import AnswerInput from './components/AnswerInput'
@@ -7,10 +7,10 @@ import AnswerSlider from './components/AnswerSlider'
 import styles from './QuestionAnswerPicker.module.scss'
 
 export type Answer =
-  | { type: GameEventQuestionType.Multi; index: number }
-  | { type: GameEventQuestionType.TrueFalse; value: boolean }
-  | { type: GameEventQuestionType.Slider; value: number }
-  | { type: GameEventQuestionType.TypeAnswer; value: string }
+  | { type: QuestionType.Multi; index: number }
+  | { type: QuestionType.TrueFalse; value: boolean }
+  | { type: QuestionType.Slider; value: number }
+  | { type: QuestionType.TypeAnswer; value: string }
 
 export interface QuestionAnswerPickerProps {
   question: GameEventQuestion
@@ -25,46 +25,44 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
 }) => {
   return (
     <div className={styles.main}>
-      {question.type === GameEventQuestionType.Multi && (
+      {question.type === QuestionType.Multi && (
         <AnswerPicker
           answers={question.answers.map(({ value }) => value)}
           interactive={interactive}
           onClick={(index) =>
             onChange?.({
-              type: GameEventQuestionType.Multi,
+              type: QuestionType.Multi,
               index,
             })
           }
         />
       )}
-      {question.type === GameEventQuestionType.TrueFalse && (
+      {question.type === QuestionType.TrueFalse && (
         <AnswerPicker
           answers={['True', 'False']}
           interactive={interactive}
           onClick={(index) =>
             onChange?.({
-              type: GameEventQuestionType.TrueFalse,
+              type: QuestionType.TrueFalse,
               value: index === 0,
             })
           }
         />
       )}
-      {question.type === GameEventQuestionType.Slider && (
+      {question.type === QuestionType.Slider && (
         <AnswerSlider
           min={question.min}
           max={question.max}
           step={question.step}
           interactive={interactive}
-          onSubmit={(value) =>
-            onChange?.({ type: GameEventQuestionType.Slider, value })
-          }
+          onSubmit={(value) => onChange?.({ type: QuestionType.Slider, value })}
         />
       )}
-      {question.type === GameEventQuestionType.TypeAnswer && (
+      {question.type === QuestionType.TypeAnswer && (
         <AnswerInput
           interactive={interactive}
           onSubmit={(value) =>
-            onChange?.({ type: GameEventQuestionType.TypeAnswer, value })
+            onChange?.({ type: QuestionType.TypeAnswer, value })
           }
         />
       )}

@@ -1,4 +1,4 @@
-import { GameEventQuestionType, GameEventType } from '@quiz/common'
+import { GameEventType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -15,11 +15,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             distribution: [
               { value: 'Vincent van Gogh', count: 3, correct: true },
               { value: 'Pablo Picasso', count: 7, correct: false },
@@ -45,11 +45,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             distribution: [
               { value: 'Vincent van Gogh', count: 3, correct: true },
               { value: 'Pablo Picasso', count: 2, correct: false },
@@ -77,11 +77,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             distribution: [
               { value: 'Vincent van Gogh', count: 1, correct: true },
               { value: 'Pablo Picasso', count: 2, correct: false },
@@ -111,12 +111,12 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.Slider,
+            type: QuestionType.Slider,
             question:
               "What percentage of the earth's surface is covered by water?",
           },
           results: {
-            type: GameEventQuestionType.Slider,
+            type: QuestionType.Slider,
             distribution: [
               { value: 59, count: 1, correct: false },
               { value: 61, count: 1, correct: false },
@@ -149,11 +149,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.TrueFalse,
+            type: QuestionType.TrueFalse,
             question: "Rabbits can't vomit?",
           },
           results: {
-            type: GameEventQuestionType.TrueFalse,
+            type: QuestionType.TrueFalse,
             distribution: [
               { value: true, count: 4, correct: true },
               { value: false, count: 6, correct: false },
@@ -179,11 +179,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: GameEventQuestionType.TypeAnswer,
+            type: QuestionType.TypeAnswer,
             question: 'Who painted the Mono Lisa?',
           },
           results: {
-            type: GameEventQuestionType.TypeAnswer,
+            type: QuestionType.TypeAnswer,
             distribution: [
               { value: 'leonardo da vinci', count: 2, correct: true },
               { value: 'leonardo', count: 4, correct: false },

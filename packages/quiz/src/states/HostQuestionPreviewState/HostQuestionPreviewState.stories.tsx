@@ -1,4 +1,4 @@
-import { GameEventQuestionType, GameEventType } from '@quiz/common'
+import { GameEventType, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import HostQuestionPreviewState from './HostQuestionPreviewState'
@@ -21,7 +21,7 @@ export const Default = {
         pin: '123456',
       },
       question: {
-        type: GameEventQuestionType.Multi,
+        type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
       },
       progress: {

@@ -1,4 +1,4 @@
-import { GameEventQuestionResults, GameEventQuestionType } from '@quiz/common'
+import { GameEventQuestionResults, QuestionType } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
@@ -29,7 +29,7 @@ export interface QuestionResultsProps {
 const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
   <div className={styles.questionResults}>
     <div className={styles.chips}>
-      {results.type === GameEventQuestionType.Multi &&
+      {results.type === QuestionType.Multi &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}
@@ -39,7 +39,7 @@ const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
           />
         ))}
 
-      {results.type === GameEventQuestionType.TrueFalse &&
+      {results.type === QuestionType.TrueFalse &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}
@@ -49,7 +49,7 @@ const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
           />
         ))}
 
-      {results.type === GameEventQuestionType.Slider &&
+      {results.type === QuestionType.Slider &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}
@@ -59,7 +59,7 @@ const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
           />
         ))}
 
-      {results.type === GameEventQuestionType.TypeAnswer &&
+      {results.type === QuestionType.TypeAnswer &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}

@@ -1,4 +1,4 @@
-import { GameEventQuestionType, GameEventType } from '@quiz/common'
+import { GameEventType, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import HostQuestionState from './HostQuestionState'
@@ -19,7 +19,7 @@ export const QuestionMultiTwoAnswers = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.Multi,
+        type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
         imageURL:
           'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -38,7 +38,7 @@ export const QuestionMultiFourAnswers = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.Multi,
+        type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
         answers: [
@@ -61,7 +61,7 @@ export const QuestionMultiSixAnswers = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.Multi,
+        type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
         answers: [
@@ -86,7 +86,7 @@ export const QuestionSlider = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.Slider,
+        type: QuestionType.Slider,
         question: "What percentage of the earth's surface is covered by water?",
         min: 0,
         max: 100,
@@ -105,7 +105,7 @@ export const QuestionTrueFalse = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.TrueFalse,
+        type: QuestionType.TrueFalse,
         question: "Rabbits can't vomit?",
         duration: 30,
       },
@@ -121,7 +121,7 @@ export const QuestionTypeAnswer = {
       type: GameEventType.GameQuestionHost,
       gamePIN: '123456',
       question: {
-        type: GameEventQuestionType.TypeAnswer,
+        type: QuestionType.TypeAnswer,
         question: 'Who painted the Mono Lisa?',
         duration: 30,
       },

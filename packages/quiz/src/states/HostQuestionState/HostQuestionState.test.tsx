@@ -1,4 +1,4 @@
-import { GameEventQuestionType, GameEventType } from '@quiz/common'
+import { GameEventType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -13,7 +13,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
             imageURL:
               'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -39,7 +39,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
             answers: [
@@ -66,7 +66,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.Multi,
+            type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
             answers: [
@@ -95,7 +95,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.Slider,
+            type: QuestionType.Slider,
             question:
               "What percentage of the earth's surface is covered by water?",
             min: 0,
@@ -119,7 +119,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.TrueFalse,
+            type: QuestionType.TrueFalse,
             question: "Rabbits can't vomit?",
             duration: 30,
           },
@@ -139,7 +139,7 @@ describe('HostQuestionState', () => {
           type: GameEventType.GameQuestionHost,
           gamePIN: '123456',
           question: {
-            type: GameEventQuestionType.TypeAnswer,
+            type: QuestionType.TypeAnswer,
             question: 'Who painted the Mono Lisa?',
             duration: 30,
           },
