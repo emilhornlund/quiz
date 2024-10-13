@@ -61,6 +61,22 @@
     }
   }
 
+  &.link {
+    font-weight: 400;
+
+    @include mobile {
+      @include fontSize($mobile-link-font-size);
+    }
+
+    @include tablet {
+      @include fontSize($tablet-link-font-size);
+    }
+
+    @include desktop {
+      @include fontSize($desktop-link-font-size);
+    }
+  }
+
   &.small {
     @include mobile {
       width: 100%;
