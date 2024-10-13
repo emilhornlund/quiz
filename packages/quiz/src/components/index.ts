@@ -9,6 +9,7 @@ export type { ProgressBarProps } from './ProgressBar'
 export type { QuestionAnswerPickerProps } from './QuestionAnswerPicker'
 export type { QuestionResultsProps } from './QuestionResults'
 export type { TextFieldProps } from './TextField'
+export type { TypographyProps } from './Typography'
 export {
   default as Button,
   IconButtonArrowLeft,
@@ -26,3 +27,4 @@ export { default as QuestionAnswerPicker } from './QuestionAnswerPicker'
 export { default as QuestionResults } from './QuestionResults'
 export { default as RocketImage } from './RocketImage'
 export { default as TextField } from './TextField'
+export { default as Typography } from './Typography'

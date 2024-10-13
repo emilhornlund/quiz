@@ -1,7 +1,7 @@
 import { GameEventPodiumHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Leaderboard, Page, Podium } from '../../components'
+import { Leaderboard, Page, Podium, Typography } from '../../components'
 
 import styles from './HostPodiumState.module.scss'
 
@@ -14,7 +14,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
 }) => (
   <Page>
     <div className={styles.main}>
-      <div className={styles.title}>Podium</div>
+      <Typography variant="subtitle">Podium</Typography>
       <Podium values={leaderboard} />
       <Leaderboard values={leaderboard} includePodium={false} />
     </div>

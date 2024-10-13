@@ -4,6 +4,8 @@
 .main {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   flex: 1;
@@ -21,23 +23,6 @@
   @include desktop {
     gap: $layout-gutter * 2;
     padding: $layout-gutter * 1.5 0;
-  }
-
-  .question {
-    font-weight: bold;
-    text-align: center;
-
-    @include mobile {
-      @include fontSize(16px);
-    }
-
-    @include tablet {
-      @include fontSize(46px);
-    }
-
-    @include desktop {
-      @include fontSize(56px);
-    }
   }
 
   .answer {

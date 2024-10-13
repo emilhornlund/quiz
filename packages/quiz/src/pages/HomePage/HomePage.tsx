@@ -5,6 +5,7 @@ import {
   Page,
   RocketImage,
   TextField,
+  Typography,
 } from '../../components'
 
 import styles from './HomePage.module.scss'
@@ -51,25 +52,27 @@ const HomePage: FC = () => {
       }>
       <div className={styles.main}>
         <RocketImage />
-        <div className={styles.title}>Let’s play</div>
-        <div className={styles.message}>{message}</div>
-        <div className={styles.form}>
-          <form onSubmit={handleJoinSubmit}>
-            <TextField
-              id="game-pin"
-              type="text"
-              placeholder="Game PIN"
-              value={gamePIN ?? ''}
-              onChange={handleGamePINChange}
-            />
-            <IconButtonArrowRight
-              id="join"
-              type="submit"
-              kind="secondary"
-              value="Join the game"
-            />
-          </form>
-        </div>
+        <Typography variant="title" size="medium">
+          Let’s play
+        </Typography>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
+        <form onSubmit={handleJoinSubmit}>
+          <TextField
+            id="game-pin"
+            type="text"
+            placeholder="Game PIN"
+            value={gamePIN ?? ''}
+            onChange={handleGamePINChange}
+          />
+          <IconButtonArrowRight
+            id="join"
+            type="submit"
+            kind="secondary"
+            value="Join the game"
+          />
+        </form>
       </div>
     </Page>
   )

@@ -6,6 +6,7 @@ import {
   IconButtonArrowRight,
   Page,
   TextField,
+  Typography,
 } from '../../components'
 
 import { getMessage, getTitle } from './helpers.ts'
@@ -36,25 +37,27 @@ const JoinPage: FC = () => {
         />
       }>
       <div className={styles.main}>
-        <div className={styles.title}>{title}</div>
-        <div className={styles.message}>{message}</div>
-        <div className={styles.form}>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              id="nickname"
-              type="text"
-              placeholder="Nickname"
-              value={nickname ?? ''}
-              onChange={setNickname}
-            />
-            <IconButtonArrowRight
-              id="join"
-              type="submit"
-              kind="secondary"
-              value="OK, Go!"
-            />
-          </form>
-        </div>
+        <Typography variant="title" size="medium">
+          {title}
+        </Typography>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            id="nickname"
+            type="text"
+            placeholder="Nickname"
+            value={nickname ?? ''}
+            onChange={setNickname}
+          />
+          <IconButtonArrowRight
+            id="join"
+            type="submit"
+            kind="secondary"
+            value="OK, Go!"
+          />
+        </form>
       </div>
     </Page>
   )

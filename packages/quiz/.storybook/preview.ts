@@ -1,5 +1,6 @@
 import { Preview } from '@storybook/react'
 
+import '../src/styles/fonts.scss'
 import '../src/styles/index.css'
 
 /** @type { import('@storybook/react').Preview } */

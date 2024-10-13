@@ -6,6 +6,7 @@ import {
   IconButtonArrowRight,
   Page,
   QuestionResults,
+  Typography,
 } from '../../components'
 
 import styles from './HostResultState.module.scss'
@@ -40,7 +41,7 @@ const HostResultState: FC<HostResultStateProps> = ({
       />
     }>
     <div className={styles.main}>
-      <div className={styles.title}>{questionValue}</div>
+      <Typography variant="subtitle">{questionValue}</Typography>
       <QuestionResults results={results} />
     </div>
   </Page>

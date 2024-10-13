@@ -68,7 +68,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               Who painted The Starry Night?
             </div>
@@ -356,7 +356,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               Who painted The Starry Night?
             </div>
@@ -662,7 +662,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               Who painted The Starry Night?
             </div>
@@ -932,7 +932,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               What percentage of the earth's surface is covered by water?
             </div>
@@ -1200,7 +1200,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               Rabbits can't vomit?
             </div>
@@ -1464,7 +1464,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="column"
           >
             <div
-              class="title large"
+              class="typography subtitle full"
             >
               Who painted the Mono Lisa?
             </div>

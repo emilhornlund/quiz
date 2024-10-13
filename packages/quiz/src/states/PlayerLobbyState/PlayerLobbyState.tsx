@@ -6,6 +6,7 @@ import {
   NicknameChip,
   Page,
   RocketImage,
+  Typography,
 } from '../../components'
 
 import styles from './PlayerLobbyState.module.scss'
@@ -42,8 +43,12 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
       <div className={styles.main}>
         <RocketImage />
         <NicknameChip value={nickname} />
-        <div className={styles.title}>You’re in the waiting room</div>
-        <div className={styles.message}>{message}</div>
+        <Typography variant="title" size="medium">
+          You’re in the waiting room
+        </Typography>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
       </div>
     </Page>
   )

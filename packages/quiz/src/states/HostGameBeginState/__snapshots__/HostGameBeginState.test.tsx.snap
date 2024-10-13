@@ -31,12 +31,12 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
         class="main"
       >
         <div
-          class="title"
+          class="typography title medium"
         >
           Loading Game
         </div>
         <div
-          class="message"
+          class="typography text small"
         >
           The game starts any second
         </div>

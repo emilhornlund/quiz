@@ -1,7 +1,7 @@
 import { GameEventGameQuestionPreviewHost } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { HostGameFooter, Page, ProgressBar } from '../../components'
+import { HostGameFooter, Page, ProgressBar, Typography } from '../../components'
 
 import styles from './HostQuestionPreviewState.module.scss'
 
@@ -27,7 +27,9 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
     }>
     <div className={styles.main}>
       <div>{questionType}</div>
-      <div className={styles.title}>{questionValue}</div>
+      <Typography variant="title" size="medium">
+        {questionValue}
+      </Typography>
       <ProgressBar value={progressValue} />
     </div>
   </Page>

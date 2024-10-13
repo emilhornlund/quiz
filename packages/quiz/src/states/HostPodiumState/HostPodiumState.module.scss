@@ -20,26 +20,4 @@
     row-gap: $layout-gutter * 2;
     width: $tablet-width;
   }
-
-  .title {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    font-weight: bold;
-    text-align: center;
-    color: white;
-    width: 100%;
-
-    @include mobile {
-      @include fontSize(18px);
-    }
-
-    @include tablet {
-      @include fontSize(28px);
-    }
-
-    @include desktop {
-      @include fontSize(38px);
-    }
-  }
 }

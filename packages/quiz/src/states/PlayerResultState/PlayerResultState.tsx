@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameEventResultPlayer } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { Page, PlayerGameFooter } from '../../components'
+import { Page, PlayerGameFooter, Typography } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import { getPositionMessage } from './messages.ts'
@@ -37,7 +37,9 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
       }>
       <div className={styles.main}>
         <div className={styles.result}>
-          {correct ? 'Correct' : 'Incorrect'}
+          <Typography variant="subtitle">
+            {correct ? 'Correct' : 'Incorrect'}
+          </Typography>
           <span
             className={classNames(
               styles.icon,
@@ -52,7 +54,9 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
           </div>
         )}
         <div className={styles.score}>{lastScore}</div>
-        <div className={styles.message}>{message}</div>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
       </div>
     </Page>
   )

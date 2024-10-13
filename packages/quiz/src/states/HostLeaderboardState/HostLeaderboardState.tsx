@@ -6,6 +6,7 @@ import {
   IconButtonArrowRight,
   Leaderboard,
   Page,
+  Typography,
 } from '../../components'
 
 import styles from './HostLeaderboardState.module.scss'
@@ -40,7 +41,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
         />
       }>
       <div className={styles.main}>
-        <div className={styles.title}>Leaderboard</div>
+        <Typography variant="subtitle">Leaderboard</Typography>
         <Leaderboard values={leaderboard} />
       </div>
     </Page>

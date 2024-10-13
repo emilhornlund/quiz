@@ -1,7 +1,12 @@
 import { GameEventGameQuestionPreviewPlayer } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Page, PlayerGameFooter, ProgressBar } from '../../components'
+import {
+  Page,
+  PlayerGameFooter,
+  ProgressBar,
+  Typography,
+} from '../../components'
 
 import styles from './PlayerQuestionPreviewState.module.scss'
 
@@ -28,7 +33,9 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
     }>
     <div className={styles.main}>
       <div>{questionType}</div>
-      <div className={styles.title}>{questionValue}</div>
+      <Typography variant="subtitle" size="medium">
+        {questionValue}
+      </Typography>
       <ProgressBar value={progressValue} />
     </div>
   </Page>

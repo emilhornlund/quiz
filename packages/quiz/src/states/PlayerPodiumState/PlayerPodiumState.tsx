@@ -1,7 +1,7 @@
 import { GameEventPodiumPlayer } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { NicknameChip, Page } from '../../components'
+import { NicknameChip, Page, Typography } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
 import { getPodiumPositionMessage } from './messages.ts'
@@ -24,7 +24,9 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
   return (
     <Page>
       <div className={styles.main}>
-        <div className={styles.title}>{title}</div>
+        <Typography variant="title" size="medium">
+          {title}
+        </Typography>
         <div className={styles.content}>
           <div
             className={classNames(
@@ -34,8 +36,12 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
             {position}
           </div>
           <NicknameChip value={nickname} />
-          <div className={styles.score}>{score}</div>
-          <div className={styles.message}>{message}</div>
+          <Typography variant="subtitle" size="small">
+            {score}
+          </Typography>
+          <Typography variant="text" size="small">
+            {message}
+          </Typography>
         </div>
       </div>
     </Page>

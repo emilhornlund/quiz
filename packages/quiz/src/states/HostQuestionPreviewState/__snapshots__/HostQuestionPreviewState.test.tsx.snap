@@ -34,7 +34,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
           MULTI
         </div>
         <div
-          class="title"
+          class="typography title medium"
         >
           Who painted The Starry Night?
         </div>

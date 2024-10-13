@@ -39,7 +39,7 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
           />
         </div>
         <div
-          class="title"
+          class="typography title medium"
         >
           Waiting for other players
         </div>

@@ -4,66 +4,37 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  row-gap: $layout-gutter * 1.5;
-  width: 100%;
-  height: 100%;
-  flex: 1;
+  align-items: center;
 
-  .title {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    font-weight: bolder;
-    color: white;
-
-    @include fontSize(56px);
-  }
-
-  .message {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
-    color: white;
-
-    @include fontSize(18px);
-  }
-
-  .form > form {
-    display: flex;
-    flex-direction: column;
-    row-gap: $layout-gutter;
-    padding: $layout-gutter 0;
+  @include mobile {
+    row-gap: $layout-gutter * 0.5;
   }
 
   @include tablet {
-    width: $mobile-width;
-
-    .title {
-      @include fontSize(76px);
-    }
-
-    .message {
-      @include fontSize(24px);
-    }
-
-    .form > form {
-      padding: $layout-gutter * 1.5 0;
-    }
+    row-gap: $layout-gutter;
   }
 
   @include desktop {
-    width: $mobile-width;
+    row-gap: $layout-gutter * 1.5;
+  }
 
-    .title {
-      @include fontSize(86px);
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: $layout-gutter;
+
+    @include mobile {
+      width: 100%;
+      padding: $layout-gutter 0;
     }
 
-    .message {
-      @include fontSize(28px);
+    @include tablet {
+      width: $mobile-width;
+      padding: $layout-gutter * 1.5 0;
     }
 
-    .form > form {
+    @include desktop {
+      width: $mobile-width;
       padding: $layout-gutter * 2 0;
     }
   }

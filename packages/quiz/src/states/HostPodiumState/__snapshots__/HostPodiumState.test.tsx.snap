@@ -31,7 +31,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Podium
         </div>
@@ -387,7 +387,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Podium
         </div>

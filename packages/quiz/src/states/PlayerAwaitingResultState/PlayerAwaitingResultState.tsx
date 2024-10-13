@@ -6,6 +6,7 @@ import {
   Page,
   PlayerGameFooter,
   RocketImage,
+  Typography,
 } from '../../components'
 
 import styles from './PlayerAwaitingResultState.module.scss'
@@ -32,7 +33,9 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
     }>
     <div className={styles.main}>
       <RocketImage />
-      <div className={styles.title}>Waiting for other players</div>
+      <Typography variant="title" size="medium">
+        Waiting for other players
+      </Typography>
       <LoadingSpinner />
     </div>
   </Page>

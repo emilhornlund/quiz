@@ -166,38 +166,6 @@
           }
         }
       }
-
-      .title {
-        text-align: center;
-
-        @include mobile {
-          @include fontSize(8px);
-        }
-
-        @include tablet {
-          @include fontSize(26px);
-        }
-
-        @include desktop {
-          @include fontSize(36px);
-        }
-
-        &.large {
-          font-weight: bold;
-
-          @include mobile {
-            @include fontSize(16px);
-          }
-
-          @include tablet {
-            @include fontSize(46px);
-          }
-
-          @include desktop {
-            @include fontSize(56px);
-          }
-        }
-      }
     }
   }
 }

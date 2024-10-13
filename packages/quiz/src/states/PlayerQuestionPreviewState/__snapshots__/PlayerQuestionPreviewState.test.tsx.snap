@@ -34,7 +34,7 @@ exports[`PlayerQuestionPreviewState > should render PlayerQuestionPreviewState 1
           MULTI
         </div>
         <div
-          class="title"
+          class="typography subtitle medium"
         >
           Who painted The Starry Night?
         </div>

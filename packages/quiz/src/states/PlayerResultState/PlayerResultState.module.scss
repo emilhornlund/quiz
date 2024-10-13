@@ -29,18 +29,6 @@
     font-weight: bold;
     row-gap: $layout-gutter;
 
-    @include mobile {
-      @include fontSize(28px);
-    }
-
-    @include tablet {
-      @include fontSize(38px);
-    }
-
-    @include desktop {
-      @include fontSize(48px);
-    }
-
     .icon {
       display: flex;
       flex-direction: column;
@@ -94,15 +82,15 @@
     width: 100%;
 
     @include mobile {
-      @include fontSize(18px);
+      @include fontSize($mobile-text-font-size);
     }
 
     @include tablet {
-      @include fontSize(28px);
+      @include fontSize($tablet-text-font-size);
     }
 
     @include desktop {
-      @include fontSize(38px);
+      @include fontSize($desktop-text-font-size);
     }
 
     span {
@@ -118,15 +106,15 @@
       font-weight: bold;
 
       @include mobile {
-        @include fontSize(18px);
+        @include fontSize($mobile-text-font-size);
       }
 
       @include tablet {
-        @include fontSize(22px);
+        @include fontSize($tablet-text-font-size);
       }
 
       @include desktop {
-        @include fontSize(28px);
+        @include fontSize($desktop-text-font-size);
       }
     }
   }
@@ -158,30 +146,6 @@
 
     @include desktop {
       @include score-dimensions(62px, 2);
-    }
-  }
-
-  .message {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-
-    @include mobile {
-      width: 100%;
-
-      @include fontSize(18px);
-    }
-
-    @include tablet {
-      width: $tablet-width;
-
-      @include fontSize(22px);
-    }
-
-    @include desktop {
-      width: $desktop-width;
-
-      @include fontSize(28px);
     }
   }
 }

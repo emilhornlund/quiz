@@ -8,6 +8,7 @@ import {
   IconButtonArrowRight,
   Page,
   QuestionAnswerPicker,
+  Typography,
 } from '../../components'
 import { classNames } from '../../utils/helpers.ts'
 
@@ -45,9 +46,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
     <div className={styles.main}>
       <div className={classNames(styles.row, styles.flexibleHeight)}>
         <div className={styles.column}>
-          <div className={classNames(styles.title, styles.large)}>
-            {question.question}
-          </div>
+          <Typography variant="subtitle">{question.question}</Typography>
         </div>
       </div>
       <div className={classNames(styles.row, styles.flexibleHeight)}>

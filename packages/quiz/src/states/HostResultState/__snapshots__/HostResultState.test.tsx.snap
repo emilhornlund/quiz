@@ -62,7 +62,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Who painted The Starry Night?
         </div>
@@ -259,7 +259,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Who painted The Starry Night?
         </div>
@@ -472,7 +472,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Who painted The Starry Night?
         </div>
@@ -653,7 +653,7 @@ exports[`HostResultState > should render HostResultState with question type slid
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           What percentage of the earth's surface is covered by water?
         </div>
@@ -890,7 +890,7 @@ exports[`HostResultState > should render HostResultState with question type true
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Rabbits can't vomit?
         </div>
@@ -1071,7 +1071,7 @@ exports[`HostResultState > should render HostResultState with question type type
         class="main"
       >
         <div
-          class="title"
+          class="typography subtitle full"
         >
           Who painted the Mono Lisa?
         </div>

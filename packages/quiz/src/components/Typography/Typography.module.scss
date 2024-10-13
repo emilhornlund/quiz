@@ -1,0 +1,95 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+@import '../../styles/variables';
+
+.typography {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  color: white;
+
+  &.title {
+    font-weight: 900;
+
+    @include mobile {
+      line-height: 4rem;
+
+      @include fontSize($mobile-title-font-size);}
+
+    @include tablet {
+      line-height: 6rem;
+
+      @include fontSize($tablet-title-font-size);}
+
+    @include desktop {
+      line-height: 8rem;
+
+      @include fontSize($desktop-title-font-size);
+    }
+  }
+
+  &.subtitle {
+    font-weight: 700;
+
+    @include mobile {
+      @include fontSize($mobile-subtitle-font-size);
+    }
+
+    @include tablet {
+      @include fontSize($tablet-subtitle-font-size);
+    }
+
+    @include desktop {
+      @include fontSize($desktop-subtitle-font-size);
+    }
+  }
+
+  &.text {
+    font-weight: 400;
+
+    @include mobile {
+      @include fontSize($mobile-text-font-size);
+    }
+
+    @include tablet {
+      @include fontSize($tablet-text-font-size);
+    }
+
+    @include desktop {
+      @include fontSize($desktop-text-font-size);
+    }
+  }
+
+  &.small {
+    @include mobile {
+      width: 100%;
+    }
+
+    @include tablet {
+      width: $mobile-width;
+    }
+
+    @include desktop {
+      width: $mobile-width;
+    }
+  }
+
+  &.medium {
+    @include mobile {
+      width: 100%;
+    }
+
+    @include tablet {
+      width: $tablet-width;
+    }
+
+    @include desktop {
+      width: $tablet-width;
+    }
+  }
+
+  &.full {
+    width: 100%;
+  }
+}

@@ -6,6 +6,7 @@ import {
   PlayerGameFooter,
   ProgressBar,
   QuestionAnswerPicker,
+  Typography,
 } from '../../components'
 
 import styles from './PlayerQuestionState.module.scss'
@@ -33,7 +34,9 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       />
     }>
     <div className={styles.main}>
-      <div className={styles.question}>{question.question}</div>
+      <Typography variant="subtitle" size="medium">
+        {question.question}
+      </Typography>
       <ProgressBar value={time / question.duration} />
       <QuestionAnswerPicker question={question} />
     </div>
