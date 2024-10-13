@@ -1,4 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import {
   IconButtonArrowRight,
@@ -72,6 +73,9 @@ const HomePage: FC = () => {
           value="Join the game"
         />
       </form>
+      <Link to={'/create'}>
+        <Typography variant="link">Create your own quiz</Typography>
+      </Link>
     </Page>
   )
 }
