@@ -1,4 +1,4 @@
-import { GameEventAwaitingResultPlayer } from '@quiz/common'
+import { GameAwaitingResultPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../components'
 
 export interface PlayerAwaitingResultStateProps {
-  event: GameEventAwaitingResultPlayer
+  event: GameAwaitingResultPlayerEvent
 }
 
 const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({

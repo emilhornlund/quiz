@@ -1,4 +1,4 @@
-import { GameEventLeaderboardHost } from '@quiz/common'
+import { GameLeaderboardHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../components'
 
 export interface HostLeaderboardStateProps {
-  event: GameEventLeaderboardHost
+  event: GameLeaderboardHostEvent
 }
 
 const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({

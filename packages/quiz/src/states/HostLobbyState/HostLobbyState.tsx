@@ -1,4 +1,4 @@
-import { GameEventLobbyHost } from '@quiz/common'
+import { GameLobbyHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 import QRCode from 'react-qr-code'
 
@@ -8,7 +8,7 @@ import { classNames } from '../../utils/helpers.ts'
 import styles from './HostLobbyState.module.scss'
 
 export interface HostLobbyStateProps {
-  event: GameEventLobbyHost
+  event: GameLobbyHostEvent
 }
 
 const HostLobbyState: FC<HostLobbyStateProps> = ({

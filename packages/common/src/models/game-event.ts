@@ -15,28 +15,28 @@ export enum GameEventType {
   GamePodiumPlayer = 'GAME_PODIUM_PLAYER',
 }
 
-export type GameEventLobbyHost = {
+export type GameLobbyHostEvent = {
   type: GameEventType.GameLobbyHost
   url: string
   pin: string
   players: string[]
 }
 
-export type GameEventLobbyPlayer = {
+export type GameLobbyPlayerEvent = {
   type: GameEventType.GameLobbyPlayer
   nickname: string
 }
 
-export type GameEventGameBeginHost = {
+export type GameGameBeginHostEvent = {
   type: GameEventType.GameBeginHost
 }
 
-export type GameEventGameBeginPlayer = {
+export type GameGameBeginPlayerEvent = {
   type: GameEventType.GameBeginPlayer
   nickname: string
 }
 
-export type GameEventGameQuestionPreviewHost = {
+export type GameQuestionPreviewHostEvent = {
   type: GameEventType.GameQuestionPreviewHost
   game: {
     pin: string
@@ -54,7 +54,7 @@ export type GameEventGameQuestionPreviewHost = {
   }
 }
 
-export type GameEventGameQuestionPreviewPlayer = {
+export type GameQuestionPreviewPlayerEvent = {
   type: GameEventType.GameQuestionPreviewPlayer
   player: {
     nickname: string
@@ -118,7 +118,7 @@ export type GameEventQuestion =
   | GameEventQuestionTrueFalse
   | GameEventQuestionTypeAnswer
 
-export type GameEventQuestionHost = {
+export type GameQuestionHostEvent = {
   type: GameEventType.GameQuestionHost
   gamePIN: string
   question: GameEventQuestion
@@ -132,7 +132,7 @@ export type GameEventQuestionHost = {
   }
 }
 
-export type GameEventQuestionPlayer = {
+export type GameQuestionPlayerEvent = {
   type: GameEventType.GameQuestionPlayer
   nickname: string
   question: GameEventQuestion
@@ -146,7 +146,7 @@ export type GameEventQuestionPlayer = {
   }
 }
 
-export type GameEventAwaitingResultPlayer = {
+export type GameAwaitingResultPlayerEvent = {
   type: GameEventType.GameAwaitingResultPlayer
   nickname: string
   score: {
@@ -158,7 +158,7 @@ export type GameEventAwaitingResultPlayer = {
   }
 }
 
-export type GameEventLeaderboardHost = {
+export type GameLeaderboardHostEvent = {
   type: GameEventType.GameLeaderboardHost
   gamePIN: string
   leaderboard: {
@@ -199,7 +199,7 @@ export type GameEventQuestionResults =
   | GameEventQuestionResultsTrueFalse
   | GameEventQuestionResultsTypeAnswer
 
-export type GameEventResultHost = {
+export type GameResultHostEvent = {
   type: GameEventType.GameResultHost
   game: {
     pin: string
@@ -215,7 +215,7 @@ export type GameEventResultHost = {
   }
 }
 
-export type GameEventResultPlayer = {
+export type GameResultPlayerEvent = {
   type: GameEventType.GameResultPlayer
   nickname: string
   correct: boolean
@@ -231,12 +231,12 @@ export type GameEventResultPlayer = {
   }
 }
 
-export type GameEventPodiumHost = {
+export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
   leaderboard: { position: number; nickname: string; score: number }[]
 }
 
-export type GameEventPodiumPlayer = {
+export type GamePodiumPlayerEvent = {
   type: GameEventType.GamePodiumPlayer
   title: string
   nickname: string
@@ -245,17 +245,17 @@ export type GameEventPodiumPlayer = {
 }
 
 export type GameEvent =
-  | GameEventLobbyHost
-  | GameEventLobbyPlayer
-  | GameEventGameBeginHost
-  | GameEventGameBeginPlayer
-  | GameEventGameQuestionPreviewHost
-  | GameEventGameQuestionPreviewPlayer
-  | GameEventQuestionHost
-  | GameEventQuestionPlayer
-  | GameEventAwaitingResultPlayer
-  | GameEventLeaderboardHost
-  | GameEventResultHost
-  | GameEventResultPlayer
-  | GameEventPodiumHost
-  | GameEventPodiumPlayer
+  | GameLobbyHostEvent
+  | GameLobbyPlayerEvent
+  | GameGameBeginHostEvent
+  | GameGameBeginPlayerEvent
+  | GameQuestionPreviewHostEvent
+  | GameQuestionPreviewPlayerEvent
+  | GameQuestionHostEvent
+  | GameQuestionPlayerEvent
+  | GameAwaitingResultPlayerEvent
+  | GameLeaderboardHostEvent
+  | GameResultHostEvent
+  | GameResultPlayerEvent
+  | GamePodiumHostEvent
+  | GamePodiumPlayerEvent

@@ -1,4 +1,4 @@
-import { GameEventPodiumPlayer } from '@quiz/common'
+import { GamePodiumPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
 import { NicknameChip, Page, Typography } from '../../components'
@@ -11,7 +11,7 @@ const getPositionClassName = (position: number): string | undefined =>
   [styles.gold, styles.silver, styles.bronze][position - 1]
 
 export interface PlayerPodiumStateProps {
-  event: GameEventPodiumPlayer
+  event: GamePodiumPlayerEvent
 }
 
 const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({

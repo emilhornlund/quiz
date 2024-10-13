@@ -1,10 +1,10 @@
-import { GameEventGameQuestionPreviewHost } from '@quiz/common'
+import { GameQuestionPreviewHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { HostGameFooter, Page, ProgressBar, Typography } from '../../components'
 
 export interface HostQuestionPreviewStateProps {
-  event: GameEventGameQuestionPreviewHost
+  event: GameQuestionPreviewHostEvent
 }
 
 const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({

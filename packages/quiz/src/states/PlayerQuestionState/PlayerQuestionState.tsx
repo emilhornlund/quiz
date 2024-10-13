@@ -1,4 +1,4 @@
-import { GameEventQuestionPlayer } from '@quiz/common'
+import { GameQuestionPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../components'
 
 export interface PlayerQuestionStateProps {
-  event: GameEventQuestionPlayer
+  event: GameQuestionPlayerEvent
 }
 
 const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({

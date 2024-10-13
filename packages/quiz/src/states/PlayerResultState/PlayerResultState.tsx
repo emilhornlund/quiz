@@ -1,6 +1,6 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameEventResultPlayer } from '@quiz/common'
+import { GameResultPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
 import { Page, PlayerGameFooter, Typography } from '../../components'
@@ -10,7 +10,7 @@ import { getPositionMessage } from './messages.ts'
 import styles from './PlayerResultState.module.scss'
 
 export interface PlayerResultStateProps {
-  event: GameEventResultPlayer
+  event: GameResultPlayerEvent
 }
 
 const PlayerResultState: FC<PlayerResultStateProps> = ({

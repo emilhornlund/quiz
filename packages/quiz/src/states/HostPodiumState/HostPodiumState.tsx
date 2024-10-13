@@ -1,10 +1,10 @@
-import { GameEventPodiumHost } from '@quiz/common'
+import { GamePodiumHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { Leaderboard, Page, Podium, Typography } from '../../components'
 
 export interface HostPodiumStateProps {
-  event: GameEventPodiumHost
+  event: GamePodiumHostEvent
 }
 
 const HostPodiumState: FC<HostPodiumStateProps> = ({

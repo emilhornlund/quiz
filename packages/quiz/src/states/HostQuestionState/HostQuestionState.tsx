@@ -1,6 +1,6 @@
 import { faComment, faHourglass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameEventQuestionHost } from '@quiz/common'
+import { GameQuestionHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -15,7 +15,7 @@ import { classNames } from '../../utils/helpers.ts'
 import styles from './HostQuestionState.module.scss'
 
 export interface HostQuestionStateProps {
-  event: GameEventQuestionHost
+  event: GameQuestionHostEvent
 }
 
 const HostQuestionState: FC<HostQuestionStateProps> = ({

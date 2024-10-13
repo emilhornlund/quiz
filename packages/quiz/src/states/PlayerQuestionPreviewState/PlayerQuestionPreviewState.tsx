@@ -1,4 +1,4 @@
-import { GameEventGameQuestionPreviewPlayer } from '@quiz/common'
+import { GameQuestionPreviewPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '../../components'
 
 export interface PlayerQuestionPreviewStateProps {
-  event: GameEventGameQuestionPreviewPlayer
+  event: GameQuestionPreviewPlayerEvent
 }
 
 const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({

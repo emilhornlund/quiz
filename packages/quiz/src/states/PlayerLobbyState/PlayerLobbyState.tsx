@@ -1,4 +1,4 @@
-import { GameEventLobbyPlayer } from '@quiz/common'
+import { GameLobbyPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
 import {
@@ -16,7 +16,7 @@ const MESSAGES = [
 ]
 
 export interface PlayerLobbyStateProps {
-  event: GameEventLobbyPlayer
+  event: GameLobbyPlayerEvent
 }
 
 const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({

@@ -1,4 +1,4 @@
-import { GameEventResultHost } from '@quiz/common'
+import { GameResultHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../components'
 
 export interface HostResultStateProps {
-  event: GameEventResultHost
+  event: GameResultHostEvent
 }
 
 const HostResultState: FC<HostResultStateProps> = ({
