@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Select > should fire Select when Select option 1`] = `
+<div>
+  <div
+    class="select"
+  >
+    <select
+      data-testid="test-my-select-select"
+      id="my-select"
+      name="my-select"
+    >
+      <option
+        value="option-1"
+      >
+        Option 1
+      </option>
+      <option
+        value="option-2"
+      >
+        Option 2
+      </option>
+      <option
+        value="option-3"
+      >
+        Option 3
+      </option>
+    </select>
+  </div>
+</div>
+`;
+
+exports[`Select > should render a Select with default props 1`] = `
+<div>
+  <div
+    class="select"
+  >
+    <select
+      data-testid="test-my-select-select"
+      id="my-select"
+      name="my-select"
+    />
+  </div>
+</div>
+`;
+
+exports[`Select > should render a Select with disabled props 1`] = `
+<div>
+  <div
+    class="select"
+  >
+    <select
+      data-testid="test-my-select-select"
+      disabled=""
+      id="my-select"
+      name="my-select"
+    />
+  </div>
+</div>
+`;

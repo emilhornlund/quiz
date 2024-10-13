@@ -1,0 +1,53 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+$outline-offset: pxToRem(2px);
+
+.select {
+  display: flex;
+  flex-direction: column;
+  margin: $outline-offset;
+
+  select {
+    display: flex;
+    flex-direction: column;
+    appearance: none;
+    height: 100%;
+    outline-offset: $outline-offset;
+    border: none;
+    outline: $outline-offset solid $white;
+    background-color: $white;
+    color: $gray-4;
+
+    @include mobile {
+      height: pxToRem(42px);
+      padding: 0 $layout-gutter * 0.8;
+      border-radius: $layout-gutter * 0.5;
+
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      height: pxToRem(44px);
+      padding: 0 $layout-gutter * 0.9;
+      border-radius: $layout-gutter * 0.6;
+
+      @include fontSize(17px);
+    }
+
+    @include desktop {
+      height: pxToRem(46px);
+      padding: 0 $layout-gutter;
+      border-radius: $layout-gutter * 0.7;
+
+      @include fontSize(18px);
+    }
+
+    &:disabled {
+      background-color: $gray-3;
+      outline-color: $gray-3;
+      color: $gray-4;
+    }
+  }
+
+}
