@@ -3,8 +3,8 @@
 action=$1
 env=$2
 
-if [ "$action" != "build" ] && [ "$action" != "deploy" ]; then
-  echo "Error: Invalid action. Please specify either 'build' or 'deploy'."
+if [ "$action" != "build" ] && [ "$action" != "deploy" ] && [ "$action" != "deps" ]; then
+  echo "Error: Invalid action. Please specify either 'build', 'deploy' or 'deps'."
   exit 1
 fi
 
@@ -15,6 +15,10 @@ fi
 
 if [ "$action" = "build" ]; then
   docker-compose build quiz-service quiz
+fi
+
+if [ "$action" = "deps" ]; then
+    docker-compose up -d redis
 fi
 
 if [ "$action" = "deploy" ]; then

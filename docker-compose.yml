@@ -9,17 +9,14 @@ services:
     build:
       context: .
       dockerfile: ./packages/quiz/Dockerfile
+    env_file:
+      - ./packages/quiz/.env.development
     ports:
-      - '80:80'
+      - '3000:80'
     depends_on:
       - quiz-service
     networks:
       - quiz-network
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:80/ || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   quiz-service:
     image: emilhornlund/quiz-service:latest
@@ -29,16 +26,31 @@ services:
     build:
       context: .
       dockerfile: ./packages/quiz-service/Dockerfile
+    env_file:
+      - ./packages/quiz-service/.env.development
     ports:
       - '8080:8080'
+    depends_on:
+      - redis
     networks:
       - quiz-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    hostname: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - quiz-network
+    volumes:
+      - redis:/data
 
 networks:
   quiz-network:
     driver: bridge
+
+volumes:
+  redis:
+    driver: local
