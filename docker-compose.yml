@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  quiz:
+    image: emilhornlund/quiz:latest
+    container_name: quiz
+    hostname: quiz
+    restart: always
+    build:
+      context: .
+      dockerfile: ./packages/quiz/Dockerfile
+    ports:
+      - '80:80'
+    depends_on:
+      - quiz-service
+    networks:
+      - quiz-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:80/ || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  quiz-service:
+    image: emilhornlund/quiz-service:latest
+    container_name: quiz-service
+    hostname: quiz-service
+    restart: always
+    build:
+      context: .
+      dockerfile: ./packages/quiz-service/Dockerfile
+    ports:
+      - '8080:8080'
+    networks:
+      - quiz-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  quiz-network:
+    driver: bridge

@@ -7,15 +7,16 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       open: true,
-      port: parseInt(env.SERVER_PORT ?? '8080', 10),
+      port: parseInt(env.SERVER_PORT ?? '80', 10),
       proxy: {
-        '/quiz-service/api': {
-          target: env.VITE_QUIZ_SERVICE_PROXY,
+        [env.VITE_QUIZ_SERVICE_URL]: {
+          target: env.QUIZ_SERVICE_PROXY,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/quiz-service\/api/, ''),
+          rewrite: (path) => path.replace(env.VITE_QUIZ_SERVICE_URL, ''),
         },
       },
     },
+    base: env.VITE_BASE_URL,
     test: {
       environment: 'jsdom',
       globals: true,

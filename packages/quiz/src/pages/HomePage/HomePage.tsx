@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from '../../components'
+import config from '../../config'
 
 import styles from './HomePage.module.scss'
 
@@ -39,7 +40,14 @@ const HomePage: FC = () => {
     }
   }
 
-  const handleJoinSubmit = () => undefined
+  const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    fetch(`${config.quizServiceUrl}/hello`)
+      .then((response) => response.json())
+      .then(console.log)
+      .catch(console.error)
+  }
 
   return (
     <Page

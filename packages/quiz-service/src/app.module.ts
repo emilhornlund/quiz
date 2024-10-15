@@ -8,13 +8,14 @@ import { AppService } from './app.service'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.local'],
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
-          .valid('local', 'development', 'production', 'test')
-          .default('local'),
+          .valid('development', 'production', 'test')
+          .default('development'),
         SERVER_PORT: Joi.number().port().default(8080),
       }),
+      isGlobal: true,
     }),
   ],
   controllers: [AppController],
