@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { APP_FILTER } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
 
 import { EnvironmentVariables } from './config'
+import { AllExceptionsFilter } from './filters/all-exceptions.filter'
 
 @Module({
   imports: [
@@ -42,6 +44,12 @@ import { EnvironmentVariables } from './config'
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    Logger,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class CommonModule {}
