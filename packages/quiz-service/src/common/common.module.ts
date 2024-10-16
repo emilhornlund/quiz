@@ -1,12 +1,13 @@
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { APP_FILTER } from '@nestjs/core'
+import { APP_FILTER, APP_PIPE } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
 
 import { EnvironmentVariables } from './config'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
+import { ValidationPipe } from './pipes'
 
 @Module({
   imports: [
@@ -49,6 +50,10 @@ import { AllExceptionsFilter } from './filters/all-exceptions.filter'
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
     },
   ],
 })
