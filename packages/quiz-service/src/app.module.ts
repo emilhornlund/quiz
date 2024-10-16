@@ -1,7 +1,9 @@
-import { Module, OnModuleDestroy } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MongooseModule } from '@nestjs/mongoose'
 import { RedisModule } from '@nestjs-modules/ioredis'
-import * as Joi from 'joi'
+import Joi from 'joi'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -18,6 +20,9 @@ import { AppService } from './app.service'
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().port().required(),
         REDIS_DB: Joi.number().default(0),
+        MONGODB_HOST: Joi.string().required(),
+        MONGODB_PORT: Joi.number().port().required(),
+        MONGODB_DB: Joi.string().default('quiz_service'),
       }),
       isGlobal: true,
     }),
@@ -30,12 +35,27 @@ import { AppService } from './app.service'
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => {
+        if (process.env.NODE_ENV === 'test') {
+          const mongod = await MongoMemoryServer.create({
+            binary: {
+              downloadDir: 'node_modules/.cache/mongodb-memory-server',
+            },
+          })
+          console.log(mongod.getUri())
+
+          return { uri: mongod.getUri() }
+        }
+        return {
+          uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
+        }
+      },
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements OnModuleDestroy {
-  onModuleDestroy() {
-    // throw new Error('Method not implemented.')
-  }
-}
+export class AppModule {}

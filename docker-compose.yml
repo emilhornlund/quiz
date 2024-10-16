@@ -32,11 +32,12 @@ services:
       - '8080:8080'
     depends_on:
       - redis
+      - mongodb
     networks:
       - quiz-network
 
   redis:
-    image: redis:6.2-alpine
+    image: redis:7.4-alpine
     container_name: redis
     hostname: redis
     restart: always
@@ -47,10 +48,24 @@ services:
     volumes:
       - redis:/data
 
+  mongodb:
+    image: mongo:8.0.1-noble
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    networks:
+      - quiz-network
+    volumes:
+      - mongodb:/data/db
+
 networks:
   quiz-network:
     driver: bridge
 
 volumes:
   redis:
+    driver: local
+  mongodb:
     driver: local

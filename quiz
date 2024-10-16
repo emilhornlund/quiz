@@ -18,7 +18,7 @@ if [ "$action" = "build" ]; then
 fi
 
 if [ "$action" = "deps" ]; then
-    docker-compose up -d redis
+    docker-compose up -d redis mongodb
 fi
 
 if [ "$action" = "deploy" ]; then
