@@ -1,8 +1,9 @@
 import { Controller, Get } from '@nestjs/common'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
-import { AppService } from './app.service'
-import { MessageResponse } from './message.response'
+import { AppService } from '../services'
+
+import { MessageResponse } from './models'
 
 @ApiTags('hello')
 @Controller()

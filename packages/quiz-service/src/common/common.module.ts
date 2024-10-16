@@ -3,10 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
-import { MongoMemoryServer } from 'mongodb-memory-server'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { EnvironmentVariables } from './config'
 
 @Module({
   imports: [
@@ -28,7 +26,7 @@ import { AppService } from './app.service'
     }),
     RedisModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (config: ConfigService) => ({
+      useFactory: (config: ConfigService<EnvironmentVariables>) => ({
         type: 'single',
         url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
         options: { db: Number(config.get('REDIS_DB')) },
@@ -37,25 +35,13 @@ import { AppService } from './app.service'
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => {
-        if (process.env.NODE_ENV === 'test') {
-          const mongod = await MongoMemoryServer.create({
-            binary: {
-              downloadDir: 'node_modules/.cache/mongodb-memory-server',
-            },
-          })
-          console.log(mongod.getUri())
-
-          return { uri: mongod.getUri() }
-        }
-        return {
-          uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
-        }
-      },
+      useFactory: async (config: ConfigService<EnvironmentVariables>) => ({
+        uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
+      }),
       inject: [ConfigService],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
-export class AppModule {}
+export class CommonModule {}
