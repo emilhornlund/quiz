@@ -9,6 +9,7 @@ import {
 import { HttpAdapterHost } from '@nestjs/core'
 
 import { ValidationException } from '../exceptions'
+import { reduceNestedValidationErrors } from '../utils'
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -42,12 +43,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const validationErrors =
       exception instanceof ValidationException
-        ? exception.validationErrors.map(
-            ({ property: field, constraints }) => ({
-              field,
-              constraints,
-            }),
-          )
+        ? reduceNestedValidationErrors(exception.validationErrors)
         : undefined
 
     const timestamp = new Date().toISOString()

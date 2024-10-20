@@ -71,7 +71,7 @@ describe('AllExceptionsFilter', () => {
       status: HttpStatus.BAD_REQUEST,
       timestamp: expect.any(String),
       validationErrors: [
-        { field: 'foo', constraints: { isEmpty: 'should not be empty' } },
+        { property: 'foo', constraints: { isEmpty: 'should not be empty' } },
       ],
     }
 
