@@ -5,16 +5,14 @@ import 'reflect-metadata'
 import { GameMode, QuestionType } from '@quiz/common'
 import { validate } from 'class-validator'
 
-import { reduceNestedValidationErrors } from '../../../common/utils'
+import { reduceNestedValidationErrors } from '../../../../common/utils'
 
-import {
-  CreateClassicModeGameRequest,
-  CreateClassicModeQuestionMultiAnswerRequest,
-  CreateClassicModeQuestionMultiRequest,
-  CreateClassicModeQuestionSliderRequest,
-  CreateClassicModeQuestionTrueFalseRequest,
-  CreateClassicModeQuestionTypeAnswerRequest,
-} from './create-game.request'
+import { CreateClassicModeGameRequest } from './create-classic-mode-game.request'
+import { CreateClassicModeQuestionMultiAnswerRequest } from './create-classic-mode-question-multi-answer.request'
+import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
+import { CreateClassicModeQuestionSliderRequest } from './create-classic-mode-question-slider.request'
+import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
+import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
 
 function buildCreateClassicModeQuestionMultiAnswerRequest(
   value: string,

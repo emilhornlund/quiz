@@ -5,12 +5,10 @@ import 'reflect-metadata'
 import { GameMode, QuestionType } from '@quiz/common'
 import { validate } from 'class-validator'
 
-import { reduceNestedValidationErrors } from '../../../common/utils'
+import { reduceNestedValidationErrors } from '../../../../common/utils'
 
-import {
-  CreateZeroToOneHundredModeGameRequest,
-  CreateZeroToOneHundredModeQuestionSliderRequest,
-} from './create-game.request'
+import { CreateZeroToOneHundredModeGameRequest } from './create-zero-to-one-hundred-mode-game.request'
+import { CreateZeroToOneHundredModeQuestionSliderRequest } from './create-zero-to-one-hundred-mode-question-slider.request'
 
 function buildCreateZeroToOneHundredModeQuestionSliderRequest(): CreateZeroToOneHundredModeQuestionSliderRequest {
   const question = new CreateZeroToOneHundredModeQuestionSliderRequest()

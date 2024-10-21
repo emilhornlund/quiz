@@ -4,7 +4,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator'
 
-import { CreateClassicModeQuestionMultiAnswerRequest } from '../models'
+import { CreateClassicModeQuestionMultiAnswerRequest } from '../models/requests/create-classic-mode-question-multi-answer.request'
 
 @ValidatorConstraint({ name: 'atLeastOneCorrectAnswer', async: false })
 export class AtLeastOneCorrectAnswerValidator

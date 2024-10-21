@@ -13,6 +13,7 @@ export async function initializeMongoMemoryServer(): Promise<MongoMemoryServer> 
   if (!mongod) {
     mongod = await MongoMemoryServer.create({
       binary: {
+        version: '4.2.8',
         downloadDir: 'node_modules/.cache/mongodb-memory-server',
       },
     })
