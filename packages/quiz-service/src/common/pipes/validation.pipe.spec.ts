@@ -1,7 +1,9 @@
 import { ArgumentMetadata } from '@nestjs/common'
 import { validate } from 'class-validator'
 
-import { ValidationException, ValidationPipe } from './validation.pipe'
+import { ValidationException } from '../exceptions'
+
+import { ValidationPipe } from './validation.pipe'
 
 jest.mock('class-validator')
 
@@ -66,7 +68,7 @@ describe('ValidationPipe', () => {
     } catch (e) {
       const exception = e as ValidationException
       expect(exception).toBeInstanceOf(ValidationException)
-      expect(exception.errors).toEqual(validationErrors)
+      expect(exception.validationErrors).toEqual(validationErrors)
     }
   })
 

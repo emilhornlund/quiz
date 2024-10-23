@@ -9,8 +9,8 @@ export interface ValidationConstraintError {
 
 export class ValidationException extends BadRequestException {
   validationErrors: ValidationError[]
-  constructor(errors: ValidationError[]) {
+  constructor(validationErrors: ValidationError[]) {
     super('Validation failed')
-    this.validationErrors = errors
+    this.validationErrors = validationErrors
   }
 }

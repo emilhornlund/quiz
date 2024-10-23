@@ -1,0 +1,154 @@
+import { INestApplication } from '@nestjs/common'
+import { GameMode } from '@quiz/common'
+import supertest from 'supertest'
+
+import {
+  createTestApp,
+  initializeMongoMemoryServer,
+  stopMongoMemoryServer,
+} from '../../app/utils/test'
+
+describe('GameController (e2e)', () => {
+  let app: INestApplication
+
+  beforeAll(async () => {
+    await initializeMongoMemoryServer()
+  })
+
+  afterAll(async () => {
+    await stopMongoMemoryServer()
+  })
+
+  beforeEach(async () => {
+    app = await createTestApp()
+  })
+
+  afterEach(async () => {
+    await app.close()
+  })
+
+  describe('/api/games (GET)', () => {
+    it('should succeed in creating a new classic mode game', () => {
+      return supertest(app.getHttpServer())
+        .post('/api/games')
+        .send({
+          name: 'Classic Mode Game',
+          mode: GameMode.Classic,
+          questions: [
+            {
+              type: 'MULTI',
+              question: 'What is the capital of Sweden?',
+              imageURL: 'https://example.com/question-image.png',
+              answers: [
+                {
+                  value: 'Stockholm',
+                  correct: true,
+                },
+                {
+                  value: 'Paris',
+                  correct: false,
+                },
+                {
+                  value: 'London',
+                  correct: false,
+                },
+                {
+                  value: 'Berlin',
+                  correct: false,
+                },
+              ],
+              points: 1000,
+              duration: 30,
+            },
+            {
+              type: 'TRUE_FALSE',
+              question: 'The earth is flat.',
+              imageURL: 'https://example.com/question-image.png',
+              correct: true,
+              points: 1000,
+              duration: 30,
+            },
+            {
+              type: 'SLIDER',
+              question:
+                'Guess the temperature of the hottest day ever recorded.',
+              imageURL: 'https://example.com/question-image.png',
+              min: 0,
+              max: 100,
+              correct: 50,
+              points: 1000,
+              duration: 30,
+            },
+            {
+              type: 'TYPE_ANSWER',
+              question: 'What is the capital of Sweden?',
+              imageURL: 'https://example.com/question-image.png',
+              correct: 'Stockholm',
+              points: 1000,
+              duration: 30,
+            },
+          ],
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('id')
+        })
+    })
+
+    it('should succeed in creating a new zero to one hundred mode game', () => {
+      return supertest(app.getHttpServer())
+        .post('/api/games')
+        .send({
+          name: '0 to 100 Mode Game',
+          mode: GameMode.ZeroToOneHundred,
+          questions: [
+            {
+              type: 'SLIDER',
+              question:
+                'Guess the temperature of the hottest day ever recorded.',
+              imageURL: 'https://example.com/question-image.png',
+              correct: 50,
+              points: 1000,
+              duration: 30,
+            },
+          ],
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('id')
+        })
+    })
+
+    it('should fail in creating a new game', () => {
+      return supertest(app.getHttpServer())
+        .post('/api/games')
+        .send({
+          mode: GameMode.Classic,
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Validation failed')
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+          expect(res.body).toHaveProperty('validationErrors', [
+            {
+              property: 'name',
+              constraints: {
+                isString: 'name must be a string',
+                minLength: 'name must be longer than or equal to 3 characters',
+                maxLength:
+                  'name must be shorter than or equal to 25 characters',
+              },
+            },
+            {
+              property: 'questions',
+              constraints: {
+                isArray: 'questions must be an array',
+                arrayMinSize: 'questions must contain at least 1 elements',
+              },
+            },
+          ])
+        })
+    })
+  })
+})

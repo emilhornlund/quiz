@@ -1,22 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-function-type */
-import {
-  ArgumentMetadata,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  PipeTransform,
-  ValidationError,
-} from '@nestjs/common'
+import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common'
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
-export class ValidationException extends HttpException {
-  errors: ValidationError[]
-  constructor(errors: ValidationError[]) {
-    super('Validation failed', HttpStatus.BAD_REQUEST)
-    this.errors = errors
-  }
-}
+import { ValidationException } from '../exceptions'
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {

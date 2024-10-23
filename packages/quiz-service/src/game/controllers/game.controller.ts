@@ -8,6 +8,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger'
 
+import { ParseCreateGameRequestPipe } from '../pipes'
 import { GameService } from '../services'
 
 import {
@@ -45,7 +46,7 @@ export class GameController {
     type: CreateGameResponse,
   })
   async createGame(
-    @Body()
+    @Body(new ParseCreateGameRequestPipe())
     createGameRequest:
       | CreateClassicModeGameRequest
       | CreateZeroToOneHundredModeGameRequest,
