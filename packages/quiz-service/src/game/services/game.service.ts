@@ -4,6 +4,7 @@ import {
   CreateClassicModeGameRequestDto,
   CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
+  FindGameResponseDto,
   isCreateClassicModeQuestionMultiRequestDto,
   isCreateClassicModeQuestionSliderRequestDto,
   isCreateClassicModeQuestionTrueFalseRequestDto,
@@ -12,6 +13,8 @@ import {
   QuestionType,
 } from '@quiz/common'
 import { Model } from 'mongoose'
+
+import { ActiveGameNotFoundException } from '../exceptions'
 
 import {
   Game,
@@ -53,6 +56,34 @@ export class GameService {
     ).save()
 
     return { id: savedGame._id }
+  }
+
+  /**
+   * Finds an active game by its unique 6-digit game PIN.
+   *
+   * This method searches for a game with the specified `gamePIN` that has been
+   * created within the last 6 hours. If an active game with the given PIN is
+   * found, its ID is returned. Otherwise, an `ActiveGameNotFoundException` is thrown.
+   *
+   * @param gamePIN - The unique 6-digit game PIN used to identify the game.
+   * @returns A Promise that resolves to a `FindGameResponseDto` containing the ID
+   * of the active game if found.
+   * @throws ActiveGameNotFoundException if no active game with the specified
+   * `gamePIN` is found within the last 6 hours.
+   */
+  public async findActiveGameByGamePIN(
+    gamePIN: string,
+  ): Promise<FindGameResponseDto> {
+    const existingGame = await this.gameModel.findOne({
+      pin: gamePIN,
+      created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) },
+    })
+
+    if (!existingGame) {
+      throw new ActiveGameNotFoundException(gamePIN)
+    }
+
+    return { id: existingGame._id }
   }
 
   /**

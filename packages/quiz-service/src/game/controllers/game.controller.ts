@@ -1,21 +1,24 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import {
   ApiBody,
   ApiCreatedResponse,
   ApiExtraModels,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger'
 
-import { ParseCreateGameRequestPipe } from '../pipes'
+import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
 import { GameService } from '../services'
 
 import {
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
 } from './models/requests'
-import { CreateGameResponse } from './models/response'
+import { CreateGameResponse, FindGameResponse } from './models/response'
 
 @ApiExtraModels(
   CreateClassicModeGameRequest,
@@ -52,5 +55,31 @@ export class GameController {
       | CreateZeroToOneHundredModeGameRequest,
   ): Promise<CreateGameResponse> {
     return await this.gameService.createGame(createGameRequest)
+  }
+
+  @Get()
+  @ApiOperation({
+    summary: 'Retrieve an active game by its PIN',
+    description:
+      'Fetches an active game using the provided unique 6-digit game PIN. The game must have been created within the last 6 hours to be considered active.',
+  })
+  @ApiQuery({
+    name: 'gamePIN',
+    type: String,
+    description: 'The unique 6-digit PIN for the game to be retrieved.',
+    required: true,
+    example: '123456',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved the active game.',
+    type: FindGameResponse,
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game PIN.',
+  })
+  async findGame(
+    @Query('gamePIN', new ParseGamePINPipe()) gamePIN: string,
+  ): Promise<FindGameResponse> {
+    return this.gameService.findActiveGameByGamePIN(gamePIN)
   }
 }

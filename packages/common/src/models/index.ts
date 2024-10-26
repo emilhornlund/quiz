@@ -1,5 +1,6 @@
 export * from './create-game-request.dto'
 export * from './create-game-response.dto'
+export * from './find-game-response.dto'
 export * from './game-event'
 export * from './game-event-type.enum'
 export * from './game-mode.enum'

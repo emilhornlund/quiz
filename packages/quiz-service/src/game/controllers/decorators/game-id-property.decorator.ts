@@ -1,10 +1,10 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 
-export function GameIdProperty() {
+export function GameIdProperty(options?: { description: string }) {
   return applyDecorators(
     ApiProperty({
-      description: 'The unique identifier for the created game.',
+      description: options?.description,
       required: true,
       format: 'uuid',
       type: String,
