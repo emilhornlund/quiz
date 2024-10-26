@@ -33,7 +33,7 @@ export function ClassicModeGameQuestionMultiAnswersArrayProperty() {
     ArrayMinSize(2),
     ArrayMaxSize(6),
     ValidateNested({ each: true }),
-    Type(() => Object),
+    Type(() => CreateClassicModeQuestionMultiAnswerRequest),
     Validate(AtLeastOneCorrectAnswerValidator),
   )
 }

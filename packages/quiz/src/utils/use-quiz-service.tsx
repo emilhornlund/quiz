@@ -1,4 +1,5 @@
 import { CreateGameRequestDto, CreateGameResponseDto } from '@quiz/common'
+import { Bounce, toast } from 'react-toastify'
 
 import config from '../config.ts'
 
@@ -29,12 +30,23 @@ export const useQuizService = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
-    }).then((response) => {
+    }).then(async (response) => {
       if (response.ok) {
-        return response.json() as T
+        return (await response.json()) as T
       } else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { message } = response.json() as Record<string, any>
+        const { message } = (await response.json()) as Record<string, any>
+        toast.error(message ?? 'Unknown error', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Bounce,
+        })
         throw new ApiError(message)
       }
     })

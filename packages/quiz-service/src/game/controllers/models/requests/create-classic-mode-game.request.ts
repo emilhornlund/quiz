@@ -1,16 +1,41 @@
-import { ApiExtraModels } from '@nestjs/swagger'
-import { CreateClassicModeGameRequestDto, GameMode } from '@quiz/common'
-
+import { BadRequestException } from '@nestjs/common'
+import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import {
-  GameModeProperty,
-  GameNameProperty,
-  GameQuestionsArrayProperty,
-} from '../../decorators'
+  CreateClassicModeGameRequestDto,
+  GameMode,
+  QuestionType,
+} from '@quiz/common'
+import { plainToInstance, Transform } from 'class-transformer'
+import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
+
+import { GameModeProperty, GameNameProperty } from '../../decorators'
 
 import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
 import { CreateClassicModeQuestionSliderRequest } from './create-classic-mode-question-slider.request'
 import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
 import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformQuestionBasedOnType(question: any) {
+  switch (question?.type) {
+    case QuestionType.Multi:
+      return plainToInstance(CreateClassicModeQuestionMultiRequest, question)
+    case QuestionType.TrueFalse:
+      return plainToInstance(
+        CreateClassicModeQuestionTrueFalseRequest,
+        question,
+      )
+    case QuestionType.Slider:
+      return plainToInstance(CreateClassicModeQuestionSliderRequest, question)
+    case QuestionType.TypeAnswer:
+      return plainToInstance(
+        CreateClassicModeQuestionTypeAnswerRequest,
+        question,
+      )
+    default:
+      throw new BadRequestException('Validation failed')
+  }
+}
 
 @ApiExtraModels(
   CreateClassicModeQuestionMultiRequest,
@@ -27,13 +52,23 @@ export class CreateClassicModeGameRequest
   @GameModeProperty(GameMode.Classic)
   mode: GameMode.Classic
 
-  @GameQuestionsArrayProperty({
+  @ApiProperty({
+    description:
+      'The list of questions to be included in the game. Must include at least one question.',
+    required: true,
+    minimum: 1,
     oneOf: [
-      CreateClassicModeQuestionMultiRequest,
-      CreateClassicModeQuestionTrueFalseRequest,
-      CreateClassicModeQuestionSliderRequest,
-      CreateClassicModeQuestionTypeAnswerRequest,
+      { $ref: getSchemaPath(CreateClassicModeQuestionMultiRequest) },
+      { $ref: getSchemaPath(CreateClassicModeQuestionTrueFalseRequest) },
+      { $ref: getSchemaPath(CreateClassicModeQuestionSliderRequest) },
+      { $ref: getSchemaPath(CreateClassicModeQuestionTypeAnswerRequest) },
     ],
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Transform(({ value }) => value.map(transformQuestionBasedOnType), {
+    toClassOnly: true,
   })
   questions: (
     | CreateClassicModeQuestionMultiRequest
