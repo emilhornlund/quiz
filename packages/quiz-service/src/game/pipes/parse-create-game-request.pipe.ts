@@ -8,7 +8,7 @@ import { GameMode } from '@quiz/common'
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { ValidationException } from '../../common/exceptions'
+import { ValidationException } from '../../app/exceptions'
 import {
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,

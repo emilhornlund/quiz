@@ -5,7 +5,7 @@ import 'reflect-metadata'
 import { GameMode, QuestionType } from '@quiz/common'
 import { validate } from 'class-validator'
 
-import { reduceNestedValidationErrors } from '../../../../common/utils'
+import { reduceNestedValidationErrors } from '../../../../app/utils'
 
 import { CreateClassicModeGameRequest } from './create-classic-mode-game.request'
 import { CreateClassicModeQuestionMultiAnswerRequest } from './create-classic-mode-question-multi-answer.request'
