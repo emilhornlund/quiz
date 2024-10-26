@@ -4,6 +4,7 @@ import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
 import { BaseQuestionSchema } from './base-question.schema'
+import { Player, PlayerSchema } from './player.schema'
 import {
   QuestionMultiChoice,
   QuestionMultiChoiceSchema,
@@ -44,6 +45,9 @@ export class Game {
     | QuestionTrueFalse
     | QuestionTypeAnswer
   )[]
+
+  @Prop({ type: [PlayerSchema], default: [] })
+  players: Player[]
 
   @Prop({ type: Date, default: () => new Date() })
   created: Date
