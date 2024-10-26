@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
@@ -12,6 +11,7 @@ let mongod: MongoMemoryServer
 export async function initializeMongoMemoryServer(): Promise<MongoMemoryServer> {
   if (!mongod) {
     mongod = await MongoMemoryServer.create({
+      instance: { port: parseInt(process.env.MONGODB_PORT, 10) },
       binary: {
         downloadDir: 'node_modules/.cache/mongodb-memory-server',
       },
@@ -21,20 +21,11 @@ export async function initializeMongoMemoryServer(): Promise<MongoMemoryServer> 
 }
 
 export async function createTestApp(): Promise<INestApplication> {
-  const mongod = await initializeMongoMemoryServer()
+  await initializeMongoMemoryServer()
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
-  })
-    .overrideModule(MongooseModule)
-    .useModule(
-      MongooseModule.forRootAsync({
-        useFactory: async () => ({
-          uri: mongod.getUri(),
-        }),
-      }),
-    )
-    .compile()
+  }).compile()
 
   const app = moduleFixture.createNestApplication()
   configureApp(app)

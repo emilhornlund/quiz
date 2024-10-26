@@ -38,9 +38,11 @@ import { ValidationPipe } from './pipes'
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (config: ConfigService<EnvironmentVariables>) => ({
-        uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
-      }),
+      useFactory: async (config: ConfigService<EnvironmentVariables>) => {
+        return {
+          uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
+        }
+      },
       inject: [ConfigService],
     }),
   ],
