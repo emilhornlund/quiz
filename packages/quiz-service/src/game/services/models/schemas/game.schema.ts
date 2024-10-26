@@ -3,92 +3,21 @@ import { GameMode, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-/* Base */
-@Schema({ _id: false, discriminatorKey: 'type' })
-export class BaseQuestion {
-  @Prop({
-    enum: [QuestionType.Multi, QuestionType.Slider],
-    required: true,
-  })
-  type!: QuestionType.Multi | QuestionType.Slider
+import { BaseQuestionSchema } from './base-question.schema'
+import {
+  QuestionMultiChoice,
+  QuestionMultiChoiceSchema,
+} from './question-multi-choice.schema'
+import { QuestionRange, QuestionRangeSchema } from './question-range.schema'
+import {
+  QuestionTrueFalse,
+  QuestionTrueFalseSchema,
+} from './question-true-false.schema'
+import {
+  QuestionTypeAnswer,
+  QuestionTypeAnswerSchema,
+} from './question-type-answer.schema'
 
-  @Prop({ type: String, required: true })
-  question: string
-
-  @Prop({ type: String, required: false })
-  imageURL?: string
-
-  @Prop({ type: Number, required: true })
-  points: number
-
-  @Prop({ type: Number, required: true })
-  duration: number
-}
-export const BaseQuestionSchema = SchemaFactory.createForClass(BaseQuestion)
-
-/* Multi Choice Option */
-@Schema({ _id: false })
-export class QuestionMultiChoiceOption {
-  @Prop({ type: String, required: true })
-  value: string
-
-  @Prop({ type: Boolean, required: true })
-  correct: boolean
-}
-export const QuestionMultiChoiceOptionSchema = SchemaFactory.createForClass(
-  QuestionMultiChoiceOption,
-)
-
-/* Multi Choice */
-@Schema({ _id: false })
-export class QuestionMultiChoice {
-  type!: QuestionType.Multi
-
-  @Prop({ type: [QuestionMultiChoiceOptionSchema], required: true })
-  options: QuestionMultiChoiceOption[]
-}
-export const QuestionMultiChoiceSchema =
-  SchemaFactory.createForClass(QuestionMultiChoice)
-
-/* Range */
-@Schema({ _id: false })
-export class QuestionRange {
-  type!: QuestionType.Slider
-
-  @Prop({ type: Number, required: true })
-  min: number
-
-  @Prop({ type: Number, required: true })
-  max: number
-
-  @Prop({ type: Number, required: true })
-  correct: number
-}
-export const QuestionRangeSchema = SchemaFactory.createForClass(QuestionRange)
-
-/* True False */
-@Schema({ _id: false })
-export class QuestionTrueFalse {
-  type!: QuestionType.TrueFalse
-
-  @Prop({ type: Boolean, required: true })
-  correct: boolean
-}
-export const QuestionTrueFalseSchema =
-  SchemaFactory.createForClass(QuestionTrueFalse)
-
-/* True False */
-@Schema({ _id: false })
-export class QuestionTypeAnswer {
-  type!: QuestionType.TypeAnswer
-
-  @Prop({ type: String, required: true })
-  correct: string
-}
-export const QuestionTypeAnswerSchema =
-  SchemaFactory.createForClass(QuestionTypeAnswer)
-
-/* Game */
 export type GameDocument = HydratedDocument<Game>
 
 @Schema({ collection: 'games' })

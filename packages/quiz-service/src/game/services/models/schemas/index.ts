@@ -1,1 +1,7 @@
+export * from './base-question.schema'
 export * from './game.schema'
+export * from './question-multi-choice.schema'
+export * from './question-multi-choice-option.schema'
+export * from './question-range.schema'
+export * from './question-true-false.schema'
+export * from './question-type-answer.schema'
