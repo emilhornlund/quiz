@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import {
   IconButtonArrowRight,
@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from '../../components'
-import config from '../../config'
+import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 import styles from './HomePage.module.scss'
 
@@ -22,7 +22,11 @@ const MESSAGES = [
 ]
 
 const HomePage: FC = () => {
-  const [gamePIN, setGamePIN] = useState<number>()
+  const navigate = useNavigate()
+
+  const { findGame } = useQuizService()
+
+  const [gamePIN, setGamePIN] = useState<string>()
 
   const message = useMemo(
     () =>
@@ -33,20 +37,17 @@ const HomePage: FC = () => {
   const handleGamePINChange = (newGamePIN: string) => {
     if (newGamePIN.length == 0) {
       setGamePIN(undefined)
-    }
-    const parsedGamePIN = parseInt(newGamePIN, 10)
-    if (parsedGamePIN) {
-      setGamePIN(parsedGamePIN)
+    } else {
+      setGamePIN(newGamePIN)
     }
   }
 
   const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    fetch(`${config.quizServiceUrl}/hello`)
-      .then((response) => response.json())
-      .then(console.log)
-      .catch(console.error)
+    if (gamePIN) {
+      findGame(gamePIN).then(({ id }) => navigate(`/join?gameID=${id}`))
+    }
   }
 
   return (
