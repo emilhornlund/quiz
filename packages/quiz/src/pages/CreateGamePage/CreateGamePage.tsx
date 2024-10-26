@@ -68,6 +68,7 @@ const CreateGamePage: FC = () => {
                 { value: '', correct: false },
                 { value: '', correct: false },
               ],
+              points: 1000,
               duration: 30,
             },
             {
@@ -75,6 +76,7 @@ const CreateGamePage: FC = () => {
               question: '',
               imageURL: '',
               correct: false,
+              points: 1000,
               duration: 30,
             },
             {
@@ -84,6 +86,7 @@ const CreateGamePage: FC = () => {
               min: 0,
               max: 100,
               correct: 0,
+              points: 1000,
               duration: 30,
             },
             {
@@ -91,6 +94,7 @@ const CreateGamePage: FC = () => {
               question: '',
               imageURL: '',
               correct: '',
+              points: 1000,
               duration: 30,
             },
           ],
@@ -109,6 +113,7 @@ const CreateGamePage: FC = () => {
               question: '',
               imageURL: '',
               correct: 0,
+              points: 1000,
               duration: 30,
             },
           ],

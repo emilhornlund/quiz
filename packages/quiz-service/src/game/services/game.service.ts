@@ -151,6 +151,7 @@ export class GameService {
               type: QuestionType.Multi,
               question: question.question,
               imageURL: question.imageURL,
+              points: question.points,
               duration: question.duration,
               options: question.answers.map((option) => ({
                 value: option.value,
@@ -169,6 +170,7 @@ export class GameService {
               min: question.min,
               max: question.max,
               correct: question.correct,
+              points: question.points,
               duration: question.duration,
             } as QuestionRange
           }
@@ -186,6 +188,7 @@ export class GameService {
               min: 0,
               max: 100,
               correct: question.correct,
+              points: question.points,
               duration: question.duration,
             } as QuestionRange
           }
@@ -201,6 +204,7 @@ export class GameService {
               question: question.question,
               imageURL: question.imageURL,
               correct: question.correct,
+              points: question.points,
               duration: question.duration,
             } as QuestionTrueFalse
           }
@@ -216,6 +220,7 @@ export class GameService {
               question: question.question,
               imageURL: question.imageURL,
               correct: question.correct,
+              points: question.points,
               duration: question.duration,
             } as QuestionTypeAnswer
           }

@@ -11,6 +11,7 @@ export interface CreateClassicModeQuestionMultiRequestDto {
   question: string
   imageURL?: string
   answers: CreateClassicModeQuestionMultiAnswerRequestDto[]
+  points: number
   duration: number
 }
 
@@ -19,6 +20,7 @@ export interface CreateClassicModeQuestionTrueFalseRequestDto {
   question: string
   imageURL?: string
   correct: boolean
+  points: number
   duration: number
 }
 
@@ -29,6 +31,7 @@ export interface CreateClassicModeQuestionSliderRequestDto {
   min: number
   max: number
   correct: number
+  points: number
   duration: number
 }
 
@@ -37,6 +40,7 @@ export interface CreateZeroToOneHundredModeQuestionSliderRequestDto {
   question: string
   imageURL?: string
   correct: number
+  points: number
   duration: number
 }
 
@@ -45,6 +49,7 @@ export interface CreateClassicModeQuestionTypeAnswerRequestDto {
   question: string
   imageURL?: string
   correct: string
+  points: number
   duration: number
 }
 

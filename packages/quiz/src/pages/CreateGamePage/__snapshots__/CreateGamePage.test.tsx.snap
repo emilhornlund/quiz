@@ -130,6 +130,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
         "correct": false
       }
     ],
+    "points": 1000,
     "duration": 30
   },
   {
@@ -137,6 +138,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
     "question": "",
     "imageURL": "",
     "correct": false,
+    "points": 1000,
     "duration": 30
   },
   {
@@ -146,6 +148,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
     "min": 0,
     "max": 100,
     "correct": 0,
+    "points": 1000,
     "duration": 30
   },
   {
@@ -153,6 +156,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
     "question": "",
     "imageURL": "",
     "correct": "",
+    "points": 1000,
     "duration": 30
   }
 ]

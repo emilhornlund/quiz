@@ -19,6 +19,9 @@ export class BaseQuestion {
   imageURL?: string
 
   @Prop({ type: Number, required: true })
+  points: number
+
+  @Prop({ type: Number, required: true })
   duration: number
 }
 export const BaseQuestionSchema = SchemaFactory.createForClass(BaseQuestion)

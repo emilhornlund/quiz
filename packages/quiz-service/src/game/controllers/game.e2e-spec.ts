@@ -228,6 +228,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
           correct: false,
         },
       ],
+      points: 1000,
       duration: 30,
     },
     {
@@ -235,6 +236,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       question: 'The earth is flat.',
       imageURL: 'https://example.com/question-image.png',
       correct: true,
+      points: 1000,
       duration: 30,
     },
     {
@@ -244,6 +246,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       min: 0,
       max: 100,
       correct: 50,
+      points: 1000,
       duration: 30,
     },
     {
@@ -251,6 +254,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       question: 'What is the capital of Sweden?',
       imageURL: 'https://example.com/question-image.png',
       correct: 'Stockholm',
+      points: 1000,
       duration: 30,
     },
   ],
@@ -266,6 +270,7 @@ const CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST: CreateZeroToOneHundredModeGa
         question: 'Guess the temperature of the hottest day ever recorded.',
         imageURL: 'https://example.com/question-image.png',
         correct: 50,
+        points: 1000,
         duration: 30,
       },
     ],

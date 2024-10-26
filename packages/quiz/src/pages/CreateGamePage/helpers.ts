@@ -47,6 +47,7 @@ export const parseQuestionsJson = <T extends GameMode>(
               'answers.correct',
             ),
           })),
+          points: assertType<number>(question.points, 'number', 'points'),
           duration: assertType<number>(question.duration, 'number', 'duration'),
         } as ClassicModeQuestions[number]
       } else if (question.type === QuestionType.TrueFalse) {
@@ -55,6 +56,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           question: assertType<string>(question.question, 'string', 'question'),
           imageURL: assertType<string>(question.imageURL, 'string', 'imageURL'),
           correct: assertType<boolean>(question.correct, 'boolean', 'correct'),
+          points: assertType<number>(question.points, 'number', 'points'),
           duration: assertType<number>(question.duration, 'number', 'duration'),
         } as ClassicModeQuestions[number]
       } else if (question.type === QuestionType.Slider) {
@@ -65,6 +67,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           min: assertType<number>(question.min, 'number', 'min'),
           max: assertType<number>(question.max, 'number', 'max'),
           correct: assertType<number>(question.correct, 'number', 'correct'),
+          points: assertType<number>(question.points, 'number', 'points'),
           duration: assertType<number>(question.duration, 'number', 'duration'),
         } as ClassicModeQuestions[number]
       } else if (question.type === QuestionType.TypeAnswer) {
@@ -73,6 +76,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           question: assertType<string>(question.question, 'string', 'question'),
           imageURL: assertType<string>(question.imageURL, 'string', 'imageURL'),
           correct: assertType<string>(question.correct, 'string', 'correct'),
+          points: assertType<number>(question.points, 'number', 'points'),
           duration: assertType<number>(question.duration, 'number', 'duration'),
         } as ClassicModeQuestions[number]
       } else {
@@ -87,6 +91,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           question: assertType<string>(question.question, 'string', 'question'),
           imageURL: assertType<string>(question.imageURL, 'string', 'imageURL'),
           correct: assertType<number>(question.correct, 'number', 'correct'),
+          points: assertType<number>(question.points, 'number', 'points'),
           duration: assertType<number>(question.duration, 'number', 'duration'),
         } as ZeroToOneHundredModeQuestions[number]
       } else {
