@@ -46,6 +46,9 @@ export class Game {
     | QuestionTypeAnswer
   )[]
 
+  @Prop({ type: String, default: uuidv4 })
+  hostClientId: string
+
   @Prop({ type: [PlayerSchema], default: [] })
   players: Player[]
 

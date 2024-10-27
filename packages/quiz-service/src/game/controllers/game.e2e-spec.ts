@@ -48,6 +48,7 @@ describe('GameController (e2e)', () => {
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
+          expect(res.body).toHaveProperty('token')
         })
     })
 
@@ -58,6 +59,7 @@ describe('GameController (e2e)', () => {
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
+          expect(res.body).toHaveProperty('token')
         })
     })
 

@@ -5,6 +5,7 @@ import {
   CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
+  GameParticipantType,
   isCreateClassicModeQuestionMultiRequestDto,
   isCreateClassicModeQuestionSliderRequestDto,
   isCreateClassicModeQuestionTrueFalseRequestDto,
@@ -14,6 +15,7 @@ import {
 } from '@quiz/common'
 import { Model } from 'mongoose'
 
+import { AuthService } from '../../auth/services'
 import { ActiveGameNotFoundException } from '../exceptions'
 
 import {
@@ -34,15 +36,19 @@ export class GameService {
    * Creates an instance of GameService.
    *
    * @param gameModel The Mongoose model representing the Game schema.
+   * @param authService - The authentication service for managing game tokens.
    */
-  constructor(@InjectModel(Game.name) private gameModel: Model<Game>) {}
+  constructor(
+    @InjectModel(Game.name) private gameModel: Model<Game>,
+    private authService: AuthService,
+  ) {}
 
   /**
-   * Creates a new game based on the provided request. It generates a unique 6-digit game PIN
-   * and saves the game in the database.
+   * Creates a new game based on the provided request. It generates a unique 6-digit game PIN,
+   * saves the game, and returns a response containing the game ID and JWT token for the host.
    *
-   * @param request The DTO containing the details of the game to be created.
-   * @returns A Promise that resolves with a CreateGameResponseDto containing the new game ID.
+   * @param request - The details of the game to be created.
+   * @returns A Promise containing the ID and token of the created game.
    */
   public async createGame(
     request:
@@ -55,7 +61,14 @@ export class GameService {
       GameService.toGameModel(request, gamePIN),
     ).save()
 
-    return { id: savedGame._id }
+    const token = await this.authService.signGameToken(
+      savedGame._id,
+      savedGame.hostClientId,
+      GameParticipantType.HOST,
+      Math.floor(savedGame.created.getTime() / 1000) + 6 * 60 * 60,
+    )
+
+    return { id: savedGame._id, token }
   }
 
   /**

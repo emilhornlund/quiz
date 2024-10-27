@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { AuthModule } from '../auth'
+
 import { GameController } from './controllers/game.controller'
 import { GameService } from './services'
 import { Game, GameSchema } from './services/models/schemas'
@@ -13,6 +15,7 @@ import { Game, GameSchema } from './services/models/schemas'
         schema: GameSchema,
       },
     ]),
+    AuthModule,
   ],
   controllers: [GameController],
   providers: [GameService],

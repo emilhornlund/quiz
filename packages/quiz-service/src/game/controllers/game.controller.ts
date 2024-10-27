@@ -11,6 +11,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger'
 
+import { Public } from '../../app/decorators'
 import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
 import { GameService } from '../services'
 
@@ -29,6 +30,7 @@ import { CreateGameResponse, FindGameResponse } from './models/response'
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
+  @Public()
   @Post()
   @ApiOperation({
     summary: 'Create a new game',
@@ -57,6 +59,7 @@ export class GameController {
     return await this.gameService.createGame(createGameRequest)
   }
 
+  @Public()
   @Get()
   @ApiOperation({
     summary: 'Retrieve an active game by its PIN',
