@@ -1,9 +1,15 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
-import { CreateGamePage, GamePage, HomePage, JoinPage } from './pages'
+import {
+  CreateGamePage,
+  ErrorPage,
+  GamePage,
+  HomePage,
+  JoinPage,
+} from './pages'
 import { GameProvider } from './pages/GamePage'
 
 import './styles/fonts.scss'
@@ -14,23 +20,31 @@ import 'react-toastify/dist/ReactToastify.css'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
-  },
-  {
-    path: '/create',
-    element: <CreateGamePage />,
-  },
-  {
-    path: '/join',
-    element: <JoinPage />,
-  },
-  {
-    path: '/game',
-    element: (
-      <GameProvider>
-        <GamePage />
-      </GameProvider>
-    ),
+    element: <Outlet />,
+    children: [
+      {
+        path: '/',
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: '/create',
+        element: <CreateGamePage />,
+      },
+      {
+        path: '/join',
+        element: <JoinPage />,
+      },
+      {
+        path: '/game',
+        element: (
+          <GameProvider>
+            <GamePage />
+          </GameProvider>
+        ),
+      },
+    ],
+    errorElement: <ErrorPage />,
   },
 ])
 

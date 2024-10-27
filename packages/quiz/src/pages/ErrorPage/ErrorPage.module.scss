@@ -1,0 +1,8 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.errorIcon {
+  @include fontSize(148px);
+
+  color: $red-1;
+}
