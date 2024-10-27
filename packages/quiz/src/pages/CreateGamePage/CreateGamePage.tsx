@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   IconButtonArrowRight,
@@ -15,6 +16,7 @@ import {
   Textarea,
   TextField,
 } from '../../components'
+import { useGameStorage } from '../../utils/use-game-storage'
 import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 import styles from './CreateGamePage.module.scss'
@@ -26,7 +28,10 @@ const GameModeLabels: { [key in GameMode]: string } = {
 }
 
 const CreateGamePage: FC = () => {
+  const navigate = useNavigate()
+
   const { createGame } = useQuizService()
+  const [, persistGameData] = useGameStorage()
 
   const [name, setName] = useState<string>('')
   const [mode, setMode] = useState<GameMode>(GameMode.Classic)
@@ -196,7 +201,12 @@ const CreateGamePage: FC = () => {
         request.questions = zeroToOneHundredModeQuestions
       }
 
-      createGame(request).then(console.log).catch(console.error)
+      createGame(request)
+        .then((response) => {
+          persistGameData(response.id, response.token)
+          navigate(`/game?gameID=${response.id}`)
+        })
+        .catch(console.error)
     }
   }
 

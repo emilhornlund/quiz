@@ -4,9 +4,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
 import { CreateGamePage, GamePage, HomePage, JoinPage } from './pages'
+import { GameProvider } from './pages/GamePage'
 
 import './styles/fonts.scss'
 import './styles/index.css'
+
 import 'react-toastify/dist/ReactToastify.css'
 
 const router = createBrowserRouter([
@@ -24,7 +26,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/game',
-    element: <GamePage />,
+    element: (
+      <GameProvider>
+        <GamePage />
+      </GameProvider>
+    ),
   },
 ])
 

@@ -1,8 +1,8 @@
 import { GameEventType } from '@quiz/common'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import React, { useEffect, useMemo } from 'react'
+import { Bounce, toast, ToastOptions } from 'react-toastify'
 
-import { ConnectionStatusBanner, LoadingSpinner, Page } from '../../components'
+import { LeaveButton, LoadingSpinner, Page } from '../../components'
 import {
   HostGameBeginState,
   HostLeaderboardState,
@@ -19,18 +19,45 @@ import {
   PlayerQuestionState,
   PlayerResultState,
 } from '../../states'
-import { useEventSource } from '../../utils/use-event-source.tsx'
+import {
+  ConnectionStatus,
+  useEventSource,
+} from '../../utils/use-event-source.tsx'
+import { useGameContext } from '../../utils/use-game-context'
 
 const GamePage = () => {
-  const [searchParams] = useSearchParams()
-
-  const [gameID, setGameID] = useState<string>()
+  const { gameID } = useGameContext()
 
   const [event, connectionStatus] = useEventSource(gameID)
 
   useEffect(() => {
-    setGameID(searchParams.get('gameID') ?? undefined)
-  }, [searchParams])
+    if (connectionStatus !== ConnectionStatus.INITIALIZED) {
+      const options: ToastOptions = {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Bounce,
+      }
+      switch (connectionStatus) {
+        case 'CONNECTED':
+          toast.success('Connected', options)
+          break
+        case 'RECONNECTING':
+          toast.warning('Reconnecting', options)
+          break
+        case 'RECONNECTING_FAILED':
+          toast.error('Reconnecting failed', options)
+          break
+        default:
+          break
+      }
+    }
+  }, [connectionStatus])
 
   const stateComponent = useMemo(() => {
     switch (event?.type) {
@@ -64,19 +91,14 @@ const GamePage = () => {
         return <PlayerPodiumState event={event} />
       default:
         return (
-          <Page>
+          <Page header={<LeaveButton />}>
             <LoadingSpinner />
           </Page>
         )
     }
   }, [event])
 
-  return (
-    <>
-      {stateComponent}
-      <ConnectionStatusBanner status={connectionStatus} />
-    </>
-  )
+  return <>{stateComponent}</>
 }
 
 export default GamePage

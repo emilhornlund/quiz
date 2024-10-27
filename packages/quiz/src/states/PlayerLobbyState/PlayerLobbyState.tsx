@@ -2,7 +2,7 @@ import { GameLobbyPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
 import {
-  IconButtonArrowLeft,
+  LeaveButton,
   NicknameChip,
   Page,
   RocketImage,
@@ -28,16 +28,7 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
   )
 
   return (
-    <Page
-      header={
-        <IconButtonArrowLeft
-          id={'leave-game-button'}
-          type="button"
-          kind="secondary"
-          size="small"
-          value="Leave"
-        />
-      }>
+    <Page header={<LeaveButton />}>
       <RocketImage />
       <NicknameChip value={nickname} />
       <Typography variant="title" size="medium">

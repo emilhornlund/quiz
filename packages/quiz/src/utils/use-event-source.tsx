@@ -2,6 +2,7 @@ import { GameEvent } from '@quiz/common'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 export enum ConnectionStatus {
+  INITIALIZED = 'INITIALIZED',
   CONNECTED = 'CONNECTED',
   RECONNECTING = 'RECONNECTING',
   RECONNECTING_FAILED = 'RECONNECTING_FAILED',
@@ -15,7 +16,7 @@ export const useEventSource = (
   const [gameEvent, setGameEvent] = useState<GameEvent>()
 
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.CONNECTED,
+    ConnectionStatus.INITIALIZED,
   )
 
   const MAX_RETRIES = 10
