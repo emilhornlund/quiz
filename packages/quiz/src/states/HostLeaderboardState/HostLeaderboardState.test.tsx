@@ -11,7 +11,9 @@ describe('HostLeaderboardState', () => {
       <HostLeaderboardState
         event={{
           type: GameEventType.GameLeaderboardHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           leaderboard: [
             { position: 1, nickname: 'ShadowCyborg', score: 18456, streaks: 0 },
             { position: 2, nickname: 'Radar', score: 18398, streaks: 0 },

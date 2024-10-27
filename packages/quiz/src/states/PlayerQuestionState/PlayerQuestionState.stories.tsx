@@ -17,7 +17,10 @@ export const QuestionMultiTwoAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
@@ -26,8 +29,9 @@ export const QuestionMultiTwoAnswers = {
         answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },
@@ -37,7 +41,10 @@ export const QuestionMultiFourAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
@@ -50,8 +57,9 @@ export const QuestionMultiFourAnswers = {
         ],
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },
@@ -61,7 +69,10 @@ export const QuestionMultiSixAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.Multi,
         question: 'Who painted The Starry Night?',
@@ -76,8 +87,9 @@ export const QuestionMultiSixAnswers = {
         ],
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },
@@ -87,7 +99,10 @@ export const QuestionSlider = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.Slider,
         question: "What percentage of the earth's surface is covered by water?",
@@ -96,8 +111,9 @@ export const QuestionSlider = {
         step: 1,
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },
@@ -107,14 +123,18 @@ export const QuestionTrueFalse = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.TrueFalse,
         question: "Rabbits can't vomit?",
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },
@@ -124,14 +144,18 @@ export const QuestionTypeAnswer = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
-      nickname: 'FrostyBear',
+      player: {
+        nickname: 'FrostyBear',
+        score: { total: 10458 },
+      },
       question: {
         type: QuestionType.TypeAnswer,
         question: 'Who painted the Mono Lisa?',
         duration: 30,
       },
-      time: 20,
-      score: { total: 10458 },
+      progress: {
+        value: 20,
+      },
       pagination: { current: 1, total: 20 },
     },
   },

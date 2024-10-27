@@ -11,7 +11,10 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -23,8 +26,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,
@@ -38,7 +42,10 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -51,8 +58,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,
@@ -66,7 +74,10 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -81,8 +92,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,
@@ -96,7 +108,10 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.Slider,
             question:
@@ -106,8 +121,9 @@ describe('PlayerQuestionState', () => {
             step: 1,
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,
@@ -121,14 +137,18 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.TrueFalse,
             question: "Rabbits can't vomit?",
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,
@@ -142,14 +162,18 @@ describe('PlayerQuestionState', () => {
       <PlayerQuestionState
         event={{
           type: GameEventType.GameQuestionPlayer,
-          nickname: 'FrostyBear',
+          player: {
+            nickname: 'FrostyBear',
+            score: { total: 10458 },
+          },
           question: {
             type: QuestionType.TypeAnswer,
             question: 'Who painted the Mono Lisa?',
             duration: 30,
           },
-          time: 20,
-          score: { total: 10458 },
+          progress: {
+            value: 20,
+          },
           pagination: { current: 1, total: 20 },
         }}
       />,

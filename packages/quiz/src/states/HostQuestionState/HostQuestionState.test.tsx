@@ -11,7 +11,9 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -22,6 +24,9 @@ describe('HostQuestionState', () => {
               { value: 'Pablo Picasso' },
             ],
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -37,7 +42,9 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -49,6 +56,9 @@ describe('HostQuestionState', () => {
               { value: 'Claude Monet' },
             ],
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -64,7 +74,9 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.Multi,
             question: 'Who painted The Starry Night?',
@@ -78,6 +90,9 @@ describe('HostQuestionState', () => {
               { value: 'Rembrandt' },
             ],
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -93,7 +108,9 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.Slider,
             question:
@@ -102,6 +119,9 @@ describe('HostQuestionState', () => {
             max: 100,
             step: 1,
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -117,11 +137,16 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.TrueFalse,
             question: "Rabbits can't vomit?",
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -137,11 +162,16 @@ describe('HostQuestionState', () => {
       <HostQuestionState
         event={{
           type: GameEventType.GameQuestionHost,
-          gamePIN: '123456',
+          game: {
+            pin: '123456',
+          },
           question: {
             type: QuestionType.TypeAnswer,
             question: 'Who painted the Mono Lisa?',
             duration: 30,
+          },
+          progress: {
+            value: 25,
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },

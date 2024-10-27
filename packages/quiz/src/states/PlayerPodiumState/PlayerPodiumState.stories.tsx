@@ -17,10 +17,16 @@ export const FirstPlace = {
   args: {
     event: {
       type: GameEventType.GamePodiumPlayer,
-      title: 'Friday Office Quiz',
-      nickname: 'ShadowCyborg',
-      position: 1,
-      score: 18456,
+      game: {
+        name: 'Friday Office Quiz',
+      },
+      player: {
+        nickname: 'ShadowCyborg',
+        score: {
+          total: 18456,
+          position: 1,
+        },
+      },
     },
   },
 } satisfies Story
@@ -29,10 +35,16 @@ export const SecondPlace = {
   args: {
     event: {
       type: GameEventType.GamePodiumPlayer,
-      title: 'Friday Office Quiz',
-      nickname: 'Radar',
-      position: 2,
-      score: 18398,
+      game: {
+        name: 'Friday Office Quiz',
+      },
+      player: {
+        nickname: 'Radar',
+        score: {
+          total: 18398,
+          position: 2,
+        },
+      },
     },
   },
 } satisfies Story
@@ -41,10 +53,16 @@ export const ThirdPlace = {
   args: {
     event: {
       type: GameEventType.GamePodiumPlayer,
-      title: 'Friday Office Quiz',
-      nickname: 'ShadowWhirlwind',
-      position: 3,
-      score: 15492,
+      game: {
+        name: 'Friday Office Quiz',
+      },
+      player: {
+        nickname: 'ShadowWhirlwind',
+        score: {
+          total: 15492,
+          position: 3,
+        },
+      },
     },
   },
 } satisfies Story
@@ -53,10 +71,16 @@ export const FourthPlace = {
   args: {
     event: {
       type: GameEventType.GamePodiumPlayer,
-      title: 'Friday Office Quiz',
-      nickname: 'WhiskerFox',
-      position: 4,
-      score: 14118,
+      game: {
+        name: 'Friday Office Quiz',
+      },
+      player: {
+        nickname: 'WhiskerFox',
+        score: {
+          total: 14118,
+          position: 4,
+        },
+      },
     },
   },
 } satisfies Story

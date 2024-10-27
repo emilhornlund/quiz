@@ -20,7 +20,7 @@ export interface HostQuestionStateProps {
 
 const HostQuestionState: FC<HostQuestionStateProps> = ({
   event: {
-    gamePIN,
+    game: { pin },
     question,
     submissions: { current: currentSubmission, total: totalSubmissions },
     pagination: { current: currentQuestion, total: totalQuestions },
@@ -40,7 +40,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
     }
     footer={
       <HostGameFooter
-        gamePIN={gamePIN}
+        gamePIN={pin}
         currentQuestion={currentQuestion}
         totalQuestions={totalQuestions}
       />

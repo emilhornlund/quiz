@@ -13,7 +13,9 @@ export interface PlayerGameBeginStateProps {
 }
 
 const PlayerGameBeginState: FC<PlayerGameBeginStateProps> = ({
-  event: { nickname },
+  event: {
+    player: { nickname },
+  },
 }) => (
   <Page>
     <Typography variant="title" size="medium">

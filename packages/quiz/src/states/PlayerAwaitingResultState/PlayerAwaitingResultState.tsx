@@ -15,8 +15,10 @@ export interface PlayerAwaitingResultStateProps {
 
 const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
   event: {
-    nickname,
-    score: { total: totalScore },
+    player: {
+      nickname,
+      score: { total: totalScore },
+    },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (

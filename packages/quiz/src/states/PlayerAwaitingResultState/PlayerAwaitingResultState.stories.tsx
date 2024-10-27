@@ -17,9 +17,11 @@ export const Default = {
   args: {
     event: {
       type: GameEventType.GameAwaitingResultPlayer,
-      nickname: 'FrostyBear',
-      score: {
-        total: 10458,
+      player: {
+        nickname: 'FrostyBear',
+        score: {
+          total: 10458,
+        },
       },
       pagination: {
         current: 1,

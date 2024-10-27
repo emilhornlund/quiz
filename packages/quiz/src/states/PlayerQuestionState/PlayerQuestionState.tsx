@@ -15,10 +15,12 @@ export interface PlayerQuestionStateProps {
 
 const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
   event: {
-    nickname,
+    player: {
+      nickname,
+      score: { total: totalScore },
+    },
     question,
-    time,
-    score: { total: totalScore },
+    progress: { value: time },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (

@@ -17,7 +17,7 @@ export const Default = {
   args: {
     event: {
       type: GameEventType.GameBeginPlayer,
-      nickname: 'FrostyBear',
+      player: { nickname: 'FrostyBear' },
     },
   },
 } satisfies Story

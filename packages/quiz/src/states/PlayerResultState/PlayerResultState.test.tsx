@@ -11,13 +11,15 @@ describe('PlayerResultState', () => {
       <PlayerResultState
         event={{
           type: GameEventType.GameResultPlayer,
-          nickname: 'FrostyBear',
-          correct: true,
-          score: {
-            last: 634,
-            total: 10458,
-            position: 1,
-            streak: 3,
+          player: {
+            nickname: 'FrostyBear',
+            score: {
+              correct: true,
+              last: 634,
+              total: 10458,
+              position: 1,
+              streak: 3,
+            },
           },
           pagination: {
             current: 1,

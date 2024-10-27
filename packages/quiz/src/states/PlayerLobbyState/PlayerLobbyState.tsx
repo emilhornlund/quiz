@@ -20,7 +20,9 @@ export interface PlayerLobbyStateProps {
 }
 
 const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
-  event: { nickname },
+  event: {
+    player: { nickname },
+  },
 }) => {
   const message = useMemo(
     () => MESSAGES[Math.floor(Math.random() * MESSAGES.length)],

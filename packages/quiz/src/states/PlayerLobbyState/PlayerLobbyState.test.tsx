@@ -13,7 +13,7 @@ describe('PlayerLobbyState', () => {
         <PlayerLobbyState
           event={{
             type: GameEventType.GameLobbyPlayer,
-            nickname: 'FrostyBear',
+            player: { nickname: 'FrostyBear' },
           }}
         />
       </MemoryRouter>,

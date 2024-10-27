@@ -15,7 +15,7 @@ export interface HostLeaderboardStateProps {
 
 const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
   event: {
-    gamePIN,
+    game: { pin },
     leaderboard,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -36,7 +36,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
       }
       footer={
         <HostGameFooter
-          gamePIN={gamePIN}
+          gamePIN={pin}
           currentQuestion={currentQuestion}
           totalQuestions={totalQuestions}
         />

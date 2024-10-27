@@ -17,7 +17,9 @@ export const Default = {
   args: {
     event: {
       type: GameEventType.GameLeaderboardHost,
-      gamePIN: '123456',
+      game: {
+        pin: '123456',
+      },
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456, streaks: 2 },
         { position: 2, nickname: 'Radar', score: 18398, streaks: 0 },

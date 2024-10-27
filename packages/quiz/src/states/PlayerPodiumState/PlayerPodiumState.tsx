@@ -15,7 +15,13 @@ export interface PlayerPodiumStateProps {
 }
 
 const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
-  event: { title, nickname, position, score },
+  event: {
+    game: { name },
+    player: {
+      nickname,
+      score: { total, position },
+    },
+  },
 }) => {
   const message = useMemo(() => {
     return getPodiumPositionMessage(position)
@@ -24,7 +30,7 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
   return (
     <Page height="full" align="start">
       <Typography variant="subtitle" size="medium">
-        {title}
+        {name}
       </Typography>
       <div className={styles.content}>
         <div
@@ -36,7 +42,7 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
         </div>
         <NicknameChip value={nickname} />
         <Typography variant="subtitle" size="small">
-          {score}
+          {total}
         </Typography>
         <Typography variant="text" size="small">
           {message}

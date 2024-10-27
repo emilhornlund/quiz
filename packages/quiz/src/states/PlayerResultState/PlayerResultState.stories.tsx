@@ -17,13 +17,15 @@ export const Correct = {
   args: {
     event: {
       type: GameEventType.GameResultPlayer,
-      nickname: 'FrostyBear',
-      correct: true,
-      score: {
-        last: 634,
-        total: 10458,
-        position: 1,
-        streak: 3,
+      player: {
+        nickname: 'FrostyBear',
+        score: {
+          correct: true,
+          last: 634,
+          total: 10458,
+          position: 1,
+          streak: 3,
+        },
       },
       pagination: {
         current: 1,
@@ -37,13 +39,15 @@ export const Incorrect = {
   args: {
     event: {
       type: GameEventType.GameResultPlayer,
-      nickname: 'FrostyBear',
-      correct: false,
-      score: {
-        last: 0,
-        total: 10458,
-        position: 1,
-        streak: 0,
+      player: {
+        nickname: 'FrostyBear',
+        score: {
+          correct: false,
+          last: 0,
+          total: 10458,
+          position: 1,
+          streak: 0,
+        },
       },
       pagination: {
         current: 1,

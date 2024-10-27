@@ -1,10 +1,12 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import PlayerLobbyState from './PlayerLobbyState'
 
 const meta = {
   component: PlayerLobbyState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },
@@ -17,7 +19,7 @@ export const Default = {
   args: {
     event: {
       type: GameEventType.GameLobbyPlayer,
-      nickname: 'FrostyBear',
+      player: { nickname: 'FrostyBear' },
     },
   },
 } satisfies Story

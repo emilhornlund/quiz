@@ -15,9 +15,10 @@ export interface PlayerResultStateProps {
 
 const PlayerResultState: FC<PlayerResultStateProps> = ({
   event: {
-    nickname,
-    correct,
-    score: { last: lastScore, total: totalScore, position, streak },
+    player: {
+      nickname,
+      score: { correct, last: lastScore, total: totalScore, position, streak },
+    },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {

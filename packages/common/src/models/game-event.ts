@@ -3,14 +3,18 @@ import { QuestionType } from './question-type.enum'
 
 export type GameLobbyHostEvent = {
   type: GameEventType.GameLobbyHost
-  url: string
-  pin: string
-  players: string[]
+  game: {
+    id: string
+    pin: string
+  }
+  players: { nickname: string }[]
 }
 
 export type GameLobbyPlayerEvent = {
   type: GameEventType.GameLobbyPlayer
-  nickname: string
+  player: {
+    nickname: string
+  }
 }
 
 export type GameGameBeginHostEvent = {
@@ -19,7 +23,9 @@ export type GameGameBeginHostEvent = {
 
 export type GameGameBeginPlayerEvent = {
   type: GameEventType.GameBeginPlayer
-  nickname: string
+  player: {
+    nickname: string
+  }
 }
 
 export type GameQuestionPreviewHostEvent = {
@@ -99,8 +105,13 @@ export type GameEventQuestion =
 
 export type GameQuestionHostEvent = {
   type: GameEventType.GameQuestionHost
-  gamePIN: string
+  game: {
+    pin: string
+  }
   question: GameEventQuestion
+  progress: {
+    value: number
+  }
   submissions: {
     current: number
     total: number
@@ -113,11 +124,15 @@ export type GameQuestionHostEvent = {
 
 export type GameQuestionPlayerEvent = {
   type: GameEventType.GameQuestionPlayer
-  nickname: string
+  player: {
+    nickname: string
+    score: {
+      total: number
+    }
+  }
   question: GameEventQuestion
-  time: number
-  score: {
-    total: number
+  progress: {
+    value: number
   }
   pagination: {
     current: number
@@ -127,9 +142,11 @@ export type GameQuestionPlayerEvent = {
 
 export type GameAwaitingResultPlayerEvent = {
   type: GameEventType.GameAwaitingResultPlayer
-  nickname: string
-  score: {
-    total: number
+  player: {
+    nickname: string
+    score: {
+      total: number
+    }
   }
   pagination: {
     current: number
@@ -139,7 +156,9 @@ export type GameAwaitingResultPlayerEvent = {
 
 export type GameLeaderboardHostEvent = {
   type: GameEventType.GameLeaderboardHost
-  gamePIN: string
+  game: {
+    pin: string
+  }
   leaderboard: {
     position: number
     nickname: string
@@ -196,13 +215,15 @@ export type GameResultHostEvent = {
 
 export type GameResultPlayerEvent = {
   type: GameEventType.GameResultPlayer
-  nickname: string
-  correct: boolean
-  score: {
-    last: number
-    total: number
-    position: number
-    streak: number
+  player: {
+    nickname: string
+    score: {
+      correct: boolean
+      last: number
+      total: number
+      position: number
+      streak: number
+    }
   }
   pagination: {
     current: number
@@ -217,10 +238,16 @@ export type GamePodiumHostEvent = {
 
 export type GamePodiumPlayerEvent = {
   type: GameEventType.GamePodiumPlayer
-  title: string
-  nickname: string
-  position: number
-  score: number
+  game: {
+    name: string
+  }
+  player: {
+    nickname: string
+    score: {
+      total: number
+      position: number
+    }
+  }
 }
 
 export type GameEvent =
