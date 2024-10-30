@@ -8,6 +8,7 @@ import {
 } from '@quiz/common'
 import { Model } from 'mongoose'
 import supertest from 'supertest'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   createTestApp,
@@ -197,6 +198,110 @@ describe('GameController (e2e)', () => {
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Validation failed')
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
+
+  describe('/api/games/players (POST)', () => {
+    it('should succeed in joining an existing active classic mode game', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${createdGame.id}/players`)
+        .send({ nickname: 'FrostyBear' })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('id')
+          expect(res.body).toHaveProperty('token')
+        })
+    })
+
+    it('should fail in joining when nickname already taken', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      await gameModel
+        .findByIdAndUpdate(createdGame.id, {
+          players: [
+            {
+              _id: uuidv4(),
+              nickname: 'FrostyBear',
+              joined: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${createdGame.id}/players`)
+        .send({ nickname: 'FrostyBear' })
+        .expect(409)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Nickname "FrostyBear" is already taken in this game.',
+          )
+          expect(res.body).toHaveProperty('status', 409)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should fail in joining an expired game', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const outdatedDate = new Date(Date.now() - 7 * 60 * 60 * 1000) // 7 hours ago
+      await gameModel
+        .findByIdAndUpdate(createdGame.id, { created: outdatedDate })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${createdGame.id}/players`)
+        .send({ nickname: 'FrostyBear' })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            `Active game not found by id ${createdGame.id}`,
+          )
+          expect(res.body).toHaveProperty('status', 404)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should fail in joining with a non existing game ID', async () => {
+      const gameID = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/players`)
+        .send({ nickname: 'FrostyBear' })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            `Active game not found by id ${gameID}`,
+          )
+          expect(res.body).toHaveProperty('status', 404)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should fail in joining with an invalid game ID', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/games/non-uuid/players')
+        .send({ nickname: 'FrostyBear' })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Validation failed (uuid is expected)',
+          )
           expect(res.body).toHaveProperty('status', 400)
           expect(res.body).toHaveProperty('timestamp')
         })

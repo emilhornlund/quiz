@@ -11,12 +11,18 @@ import {
   isCreateClassicModeQuestionTrueFalseRequestDto,
   isCreateClassicModeQuestionTypeAnswerRequestDto,
   isCreateZeroToOneHundredModeQuestionSliderRequestDto,
+  JoinGameResponseDto,
   QuestionType,
 } from '@quiz/common'
 import { Model } from 'mongoose'
+import { v4 as uuidv4 } from 'uuid'
 
 import { AuthService } from '../../auth/services'
-import { ActiveGameNotFoundException } from '../exceptions'
+import {
+  ActiveGameNotFoundByGamePINException,
+  ActiveGameNotFoundByIDException,
+  NicknameAlreadyTakenException,
+} from '../exceptions'
 
 import {
   Game,
@@ -81,7 +87,7 @@ export class GameService {
    * @param gamePIN - The unique 6-digit game PIN used to identify the game.
    * @returns A Promise that resolves to a `FindGameResponseDto` containing the ID
    * of the active game if found.
-   * @throws ActiveGameNotFoundException if no active game with the specified
+   * @throws ActiveGameNotFoundByGamePINException if no active game with the specified
    * `gamePIN` is found within the last 6 hours.
    */
   public async findActiveGameByGamePIN(
@@ -93,10 +99,62 @@ export class GameService {
     })
 
     if (!existingGame) {
-      throw new ActiveGameNotFoundException(gamePIN)
+      throw new ActiveGameNotFoundByGamePINException(gamePIN)
     }
 
     return { id: existingGame._id }
+  }
+
+  /**
+   * Adds a player to an active game if the game is found within the last 6 hours and
+   * the nickname is not already taken. Generates a unique token for the joined player.
+   *
+   * @param {string} gameID - The unique identifier of the game the player wants to join.
+   * @param {string} nickname - The nickname chosen by the player. Must be unique within the game.
+   *
+   * @returns {Promise<JoinGameResponseDto>} A Promise that resolves to a `JoinGameResponseDto`
+   * object containing the player's unique ID and authentication token for game access.
+   *
+   * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID`
+   * was created in the last 6 hours.
+   * @throws {NicknameAlreadyTakenException} If the provided `nickname` is already in use by another
+   * player in the game.
+   */
+  public async joinGame(
+    gameID: string,
+    nickname: string,
+  ): Promise<JoinGameResponseDto> {
+    const existingGame = await this.gameModel.findOne({
+      _id: gameID,
+      created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) },
+    })
+
+    if (!existingGame) {
+      throw new ActiveGameNotFoundByIDException(gameID)
+    }
+
+    if (existingGame.players.some((player) => player.nickname === nickname)) {
+      throw new NicknameAlreadyTakenException(nickname)
+    }
+
+    const newPlayer = {
+      _id: uuidv4(),
+      nickname,
+      joined: new Date(),
+    }
+
+    existingGame.players.push(newPlayer)
+
+    await existingGame.save()
+
+    const token = await this.authService.signGameToken(
+      gameID,
+      newPlayer._id,
+      GameParticipantType.PLAYER,
+      Math.floor(existingGame.created.getTime() / 1000) + 6 * 60 * 60,
+    )
+
+    return { id: newPlayer._id, token }
   }
 
   /**

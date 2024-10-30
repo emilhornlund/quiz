@@ -1,5 +1,16 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common'
+import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiExtraModels,
@@ -15,11 +26,17 @@ import { Public } from '../../app/decorators'
 import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
 import { GameService } from '../services'
 
+import { GameIdParam } from './decorators'
 import {
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
 } from './models/requests'
-import { CreateGameResponse, FindGameResponse } from './models/response'
+import { JoinGameRequest } from './models/requests/join-game.request'
+import {
+  CreateGameResponse,
+  FindGameResponse,
+  JoinGameResponse,
+} from './models/response'
 
 @ApiExtraModels(
   CreateClassicModeGameRequest,
@@ -32,6 +49,7 @@ export class GameController {
 
   @Public()
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Create a new game',
     description:
@@ -61,6 +79,7 @@ export class GameController {
 
   @Public()
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Retrieve an active game by its PIN',
     description:
@@ -84,5 +103,36 @@ export class GameController {
     @Query('gamePIN', new ParseGamePINPipe()) gamePIN: string,
   ): Promise<FindGameResponse> {
     return this.gameService.findActiveGameByGamePIN(gamePIN)
+  }
+
+  @Public()
+  @Post('/:gameID/players')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Join a game',
+    description:
+      'Allows a player to join an existing game by providing the game ID. Returns a unique player identifier and a token for the player.',
+  })
+  @ApiBody({
+    description: 'Request body for joining an existing game.',
+    type: JoinGameRequest,
+  })
+  @ApiCreatedResponse({
+    description: 'The game has been successfully joined.',
+    type: JoinGameResponse,
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Invalid request, possibly due to malformed game ID or validation error.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No game found with the specified unique identifier.',
+  })
+  @GameIdParam()
+  async joinGame(
+    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @Body() request: JoinGameRequest,
+  ): Promise<JoinGameResponse> {
+    return this.gameService.joinGame(gameID, request.nickname)
   }
 }
