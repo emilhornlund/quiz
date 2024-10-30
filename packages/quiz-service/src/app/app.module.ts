@@ -4,6 +4,7 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
+import { MurLockModule } from 'murlock'
 
 import { GameModule } from '../game'
 
@@ -38,6 +39,19 @@ import { ValidationPipe } from './pipes'
         type: 'single',
         url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
         options: { db: Number(config.get('REDIS_DB')) },
+      }),
+      inject: [ConfigService],
+    }),
+    MurLockModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService<EnvironmentVariables>) => ({
+        redisOptions: {
+          url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+        },
+        wait: 1000,
+        maxAttempts: 3,
+        logLevel: 'log',
+        ignoreUnlockFail: false,
       }),
       inject: [ConfigService],
     }),

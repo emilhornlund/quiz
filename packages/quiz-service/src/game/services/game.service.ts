@@ -15,6 +15,7 @@ import {
   QuestionType,
 } from '@quiz/common'
 import { Model } from 'mongoose'
+import { MurLock } from 'murlock'
 import { v4 as uuidv4 } from 'uuid'
 
 import { AuthService } from '../../auth/services'
@@ -120,6 +121,7 @@ export class GameService {
    * @throws {NicknameAlreadyTakenException} If the provided `nickname` is already in use by another
    * player in the game.
    */
+  @MurLock(5000, 'gameID')
   public async joinGame(
     gameID: string,
     nickname: string,
