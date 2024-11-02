@@ -18,6 +18,7 @@ import {
   QuestionTypeAnswer,
   QuestionTypeAnswerSchema,
 } from './question-type-answer.schema'
+import { BaseTask, TaskLobby, TaskLobbySchema, TaskType } from './task.schema'
 
 export type GameDocument = HydratedDocument<Game>
 
@@ -46,19 +47,31 @@ export class Game {
     | QuestionTypeAnswer
   )[]
 
+  @Prop({ type: Number, default: 0, required: true })
+  nextQuestion: number
+
   @Prop({ type: String, default: uuidv4 })
   hostClientId: string
 
   @Prop({ type: [PlayerSchema], default: [] })
   players: Player[]
 
+  @Prop({
+    type: [BaseTask],
+    default: [{ _id: uuidv4(), type: TaskType.Lobby, created: new Date() }],
+  })
+  tasks: TaskLobby[]
+
   @Prop({ type: Date, default: () => new Date() })
   created: Date
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game)
-const gameSchema = GameSchema.path<MongooseSchema.Types.Array>('questions')
-gameSchema.discriminator(QuestionType.Multi, QuestionMultiChoiceSchema)
-gameSchema.discriminator(QuestionType.Slider, QuestionRangeSchema)
-gameSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
-gameSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
+const questionsSchema = GameSchema.path<MongooseSchema.Types.Array>('questions')
+questionsSchema.discriminator(QuestionType.Multi, QuestionMultiChoiceSchema)
+questionsSchema.discriminator(QuestionType.Slider, QuestionRangeSchema)
+questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
+questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
+
+const tasksSchema = GameSchema.path<MongooseSchema.Types.Array>('tasks')
+tasksSchema.discriminator(TaskType.Lobby, TaskLobbySchema)

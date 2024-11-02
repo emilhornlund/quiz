@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import {
   IconButtonArrowLeft,
@@ -8,12 +8,21 @@ import {
   TextField,
   Typography,
 } from '../../components'
+import { useGameStorage } from '../../utils/use-game-storage.tsx'
+import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 import { getMessage, getTitle } from './helpers.ts'
 import styles from './JoinPage.module.scss'
 
 const JoinPage: FC = () => {
   const navigate = useNavigate()
+
+  const [searchParams] = useSearchParams()
+
+  const { joinGame } = useQuizService()
+  const [, persistGameData] = useGameStorage()
+
+  const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 
   const [nickname, setNickname] = useState<string>()
 
@@ -22,6 +31,15 @@ const JoinPage: FC = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
+
+    if (gameID && nickname) {
+      joinGame(gameID, nickname)
+        .then((response) => {
+          persistGameData(response.id, response.token)
+          navigate(`/game?gameID=${response.id}`)
+        })
+        .catch(console.error)
+    }
   }
 
   return (

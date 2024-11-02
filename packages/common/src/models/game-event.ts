@@ -1,6 +1,10 @@
 import { GameEventType } from './game-event-type.enum'
 import { QuestionType } from './question-type.enum'
 
+export type GameHeartbeatEvent = {
+  type: GameEventType.GameHeartbeat
+}
+
 export type GameLobbyHostEvent = {
   type: GameEventType.GameLobbyHost
   game: {
@@ -251,6 +255,7 @@ export type GamePodiumPlayerEvent = {
 }
 
 export type GameEvent =
+  | GameHeartbeatEvent
   | GameLobbyHostEvent
   | GameLobbyPlayerEvent
   | GameGameBeginHostEvent

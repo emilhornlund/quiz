@@ -2,6 +2,7 @@ import {
   CreateGameRequestDto,
   CreateGameResponseDto,
   FindGameResponseDto,
+  JoinGameResponseDto,
 } from '@quiz/common'
 import { Bounce, toast } from 'react-toastify'
 
@@ -76,5 +77,11 @@ export const useQuizService = () => {
   const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
     apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
 
-  return { createGame, findGame }
+  const joinGame = (
+    gameID: string,
+    nickname: string,
+  ): Promise<JoinGameResponseDto> =>
+    apiPost<JoinGameResponseDto>(`/games/${gameID}/players`, { nickname })
+
+  return { createGame, findGame, joinGame }
 }

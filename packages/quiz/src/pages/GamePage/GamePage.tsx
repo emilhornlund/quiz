@@ -26,9 +26,9 @@ import {
 import { useGameContext } from '../../utils/use-game-context'
 
 const GamePage = () => {
-  const { gameID } = useGameContext()
+  const { gameID, token } = useGameContext()
 
-  const [event, connectionStatus] = useEventSource(gameID)
+  const [event, connectionStatus] = useEventSource(gameID, token)
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {

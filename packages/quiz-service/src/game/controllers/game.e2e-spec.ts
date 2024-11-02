@@ -4,6 +4,7 @@ import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
+  GameParticipantType,
   QuestionType,
 } from '@quiz/common'
 import { Model } from 'mongoose'
@@ -15,6 +16,7 @@ import {
   initializeMongoMemoryServer,
   stopMongoMemoryServer,
 } from '../../app/utils/test'
+import { AuthService } from '../../auth/services'
 import { GameService } from '../services'
 import { Game } from '../services/models/schemas'
 
@@ -22,6 +24,7 @@ describe('GameController (e2e)', () => {
   let app: INestApplication
   let gameService: GameService
   let gameModel: Model<Game>
+  let authService: AuthService
 
   beforeAll(async () => {
     await initializeMongoMemoryServer()
@@ -35,6 +38,7 @@ describe('GameController (e2e)', () => {
     app = await createTestApp()
     gameService = app.get(GameService)
     gameModel = app.get<Model<Game>>(getModelToken(Game.name))
+    authService = app.get(AuthService)
   }, 30000)
 
   afterEach(async () => {
@@ -204,7 +208,7 @@ describe('GameController (e2e)', () => {
     })
   })
 
-  describe('/api/games/players (POST)', () => {
+  describe('/api/games/:gameID/players (POST)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
       const createdGame = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
@@ -303,6 +307,106 @@ describe('GameController (e2e)', () => {
             'Validation failed (uuid is expected)',
           )
           expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
+
+  describe('/api/games/:gameID/events (GET)', () => {
+    it('should allow event subscription after game creation with a valid token', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const response = supertest(app.getHttpServer())
+        .get(`/api/games/${createdGame.id}/events`)
+        .set('Authorization', `Bearer ${createdGame.token}`)
+        .expect(200)
+        .expect('Content-Type', /text\/event-stream/)
+
+      await new Promise<void>((resolve) => {
+        response.abort()
+        resolve()
+      })
+    })
+
+    it('should allow event subscription for a player who joined the game', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const joinedGame = await gameService.joinGame(
+        createdGame.id,
+        'FrostyBear',
+      )
+
+      const response = supertest(app.getHttpServer())
+        .get(`/api/games/${joinedGame.id}/events`)
+        .set('Authorization', `Bearer ${joinedGame.token}`)
+        .expect(200)
+        .expect('Content-Type', /text\/event-stream/)
+
+      await new Promise<void>((resolve) => {
+        response.abort()
+        resolve()
+      })
+    })
+
+    it('should deny event subscription without an authorization token', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${createdGame.id}/events`)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Unauthorized')
+          expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return 404 when subscribing to events for a non-existent game ID', async () => {
+      const unknownGameID = uuidv4()
+
+      const token = await authService.signGameToken(
+        unknownGameID,
+        uuidv4(),
+        GameParticipantType.HOST,
+        Math.floor(new Date().getTime() / 1000) + 6 * 60 * 60,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${unknownGameID}/events`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            `Active game not found by id ${unknownGameID}`,
+          )
+          expect(res.body).toHaveProperty('status', 404)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return 401 when subscribing to events with a token for a different game', async () => {
+      const firstCreatedGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const secondCreatedGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${firstCreatedGame.id}/events`)
+        .set('Authorization', `Bearer ${secondCreatedGame.token}`)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Unauthorized game access')
+          expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
         })
     })

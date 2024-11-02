@@ -1,4 +1,5 @@
 export enum GameEventType {
+  GameHeartbeat = 'GAME_HEARTBEAT',
   GameLobbyHost = 'GAME_LOBBY_HOST',
   GameLobbyPlayer = 'GAME_LOBBY_PLAYER',
   GameBeginHost = 'GAME_BEGIN_HOST',

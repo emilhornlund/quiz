@@ -25,6 +25,7 @@ import {
   NicknameAlreadyTakenException,
 } from '../exceptions'
 
+import { GameEventService } from './game-event.service'
 import {
   Game,
   QuestionMultiChoice,
@@ -43,10 +44,12 @@ export class GameService {
    * Creates an instance of GameService.
    *
    * @param gameModel The Mongoose model representing the Game schema.
+   * @param gameEventService Service responsible for managing and publishing game events to clients.
    * @param authService - The authentication service for managing game tokens.
    */
   constructor(
     @InjectModel(Game.name) private gameModel: Model<Game>,
+    private gameEventService: GameEventService,
     private authService: AuthService,
   ) {}
 
@@ -156,7 +159,9 @@ export class GameService {
       Math.floor(existingGame.created.getTime() / 1000) + 6 * 60 * 60,
     )
 
-    return { id: newPlayer._id, token }
+    await this.gameEventService.publish(existingGame)
+
+    return { id: gameID, token }
   }
 
   /**

@@ -4,10 +4,13 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  MessageEvent,
   Param,
   ParseUUIDPipe,
   Post,
   Query,
+  Sse,
+  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
@@ -21,10 +24,12 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { Observable } from 'rxjs'
 
 import { Public } from '../../app/decorators'
+import { AuthorizedClientID, AuthorizedGameID } from '../../auth/decorators'
 import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
-import { GameService } from '../services'
+import { GameEventService, GameService } from '../services'
 
 import { GameIdParam } from './decorators'
 import {
@@ -45,7 +50,10 @@ import {
 @ApiTags('game')
 @Controller('games')
 export class GameController {
-  constructor(private readonly gameService: GameService) {}
+  constructor(
+    private readonly gameService: GameService,
+    private readonly gameEventService: GameEventService,
+  ) {}
 
   @Public()
   @Post()
@@ -134,5 +142,55 @@ export class GameController {
     @Body() request: JoinGameRequest,
   ): Promise<JoinGameResponse> {
     return this.gameService.joinGame(gameID, request.nickname)
+  }
+
+  /**
+   * Subscribes a client to receive real-time game events through Server-Sent Events (SSE).
+   *
+   * Clients receive both general and client-specific game events, including
+   * heartbeat events for connection monitoring and game updates relevant to the subscribed game.
+   *
+   * @param gameID - The unique identifier of the game to subscribe to.
+   * @param authorizedGameID - The unique identifier of the game to subscribe to, extracted from the authenticated token.
+   * @param clientId - The unique identifier of the client, extracted from the authenticated token.
+   * @returns An Observable stream of MessageEvent objects for SSE, where each event contains data in JSON format.
+   */
+  @Sse('/:gameID/events')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Subscribe to game events',
+    description:
+      'Provides a stream of real-time game events for the specified game ID. Requires an active game subscription and a valid client token for access. Events are sent in Server-Sent Events (SSE) format, allowing clients to receive continuous updates.',
+  })
+  @ApiOkResponse({
+    description:
+      'Successfully subscribed to game events. Returns a continuous stream of events.',
+    content: {
+      'text/event-stream': {
+        schema: {
+          type: 'object',
+          properties: {
+            data: { type: 'string', description: 'Event data in JSON format' },
+          },
+        },
+      },
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game ID.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid game ID format or missing authorization token.',
+  })
+  @GameIdParam()
+  public async subscribeEvents(
+    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @AuthorizedGameID() authorizedGameID: string,
+    @AuthorizedClientID() clientId: string,
+  ): Promise<Observable<MessageEvent>> {
+    if (gameID !== authorizedGameID) {
+      throw new UnauthorizedException('Unauthorized game access')
+    }
+    return this.gameEventService.subscribe(gameID, clientId)
   }
 }
