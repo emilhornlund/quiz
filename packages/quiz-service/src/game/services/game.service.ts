@@ -6,10 +6,10 @@ import {
   GameAuthResponseDto,
   GameParticipantType,
 } from '@quiz/common'
-import { MurLock } from 'murlock'
 
 import { AuthService } from '../../auth/services'
 
+import { GameScheduler } from './game-scheduler'
 import { GameRepository } from './game.repository'
 import { buildPartialGameModel } from './utils'
 
@@ -23,10 +23,12 @@ export class GameService {
    * Creates an instance of GameService.
    *
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
+   * @param {GameScheduler} gameScheduler -
    * @param {AuthService} authService - The authentication service for managing game tokens.
    */
   constructor(
     private gameRepository: GameRepository,
+    private gameScheduler: GameScheduler,
     private authService: AuthService,
   ) {}
 
@@ -46,6 +48,10 @@ export class GameService {
   ): Promise<GameAuthResponseDto> {
     const gameDocument = await this.gameRepository.createGame(
       buildPartialGameModel(request),
+    )
+
+    await this.gameScheduler.schedulePendingActiveTransitionLobbyTask(
+      gameDocument,
     )
 
     const token = await this.authService.signGameToken(
@@ -96,7 +102,6 @@ export class GameService {
    * @throws {NicknameAlreadyTakenException} If the provided `nickname` is already in use by another
    * player in the game.
    */
-  @MurLock(5000, 'gameID')
   public async joinGame(
     gameID: string,
     nickname: string,

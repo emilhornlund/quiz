@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
+import { MurLock } from 'murlock'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -112,6 +113,30 @@ export class GameRepository {
   }
 
   /**
+   * Finds a game by its ID, updates it using the provided callback, and saves the changes.
+   *
+   * @param {string} gameID - The ID of the game to find and update.
+   * @param {Function} callback - A callback function to modify the game document.
+   *
+   * @returns {Promise<GameDocument>} A promise that resolves to the updated `GameDocument`.
+   *
+   * @throws {ActiveGameNotFoundByIDException} If no active game is found.
+   */
+  @MurLock(5000, 'game', 'gameID')
+  public async findAndSave(
+    gameID: string,
+    callback: (gameDocument: GameDocument) => GameDocument,
+  ): Promise<GameDocument> {
+    const gameDocument = await this.findGameByIDOrThrow(gameID)
+
+    const savedGameDocument = await callback(gameDocument).save()
+
+    await this.gameEventPublisher.publish(savedGameDocument)
+
+    return savedGameDocument
+  }
+
+  /**
    * Generates a unique 6-digit game PIN. It checks the database to ensure that no other game
    * with the same PIN was created within the last 6 hours. If such a game exists, it keeps generating
    * new PINs until a unique one is found.
@@ -164,23 +189,26 @@ export class GameRepository {
     gameID: string,
     nickname: string,
   ): Promise<[GameDocument, Player]> {
-    const gameDocument = await this.findGameByIDOrThrow(gameID)
-
-    if (gameDocument.players.some((player) => player.nickname === nickname)) {
-      throw new NicknameAlreadyTakenException(nickname)
-    }
-
     const newPlayer: Player = {
       _id: uuidv4(),
       nickname,
       joined: new Date(),
     }
 
-    gameDocument.players.push(newPlayer)
+    const savedGameDocument = await this.findAndSave(
+      gameID,
+      (currentDocument) => {
+        if (
+          currentDocument.players.some((player) => player.nickname === nickname)
+        ) {
+          throw new NicknameAlreadyTakenException(nickname)
+        }
 
-    const savedGameDocument = await gameDocument.save()
+        currentDocument.players.push(newPlayer)
 
-    await this.gameEventPublisher.publish(gameDocument)
+        return currentDocument
+      },
+    )
 
     return [savedGameDocument, newPlayer]
   }

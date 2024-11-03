@@ -5,6 +5,10 @@ export type GameHeartbeatEvent = {
   type: GameEventType.GameHeartbeat
 }
 
+export type GameLoadingEvent = {
+  type: GameEventType.GameLoading
+}
+
 export type GameLobbyHostEvent = {
   type: GameEventType.GameLobbyHost
   game: {
@@ -256,6 +260,7 @@ export type GamePodiumPlayerEvent = {
 
 export type GameEvent =
   | GameHeartbeatEvent
+  | GameLoadingEvent
   | GameLobbyHostEvent
   | GameLobbyPlayerEvent
   | GameBeginHostEvent

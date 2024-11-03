@@ -41,7 +41,7 @@ export function buildGameModel(game: PartialGameModel, gamePIN: string): Game {
     currentTask: {
       _id: uuidv4(),
       type: TaskType.Lobby,
-      status: 'active',
+      status: 'pending',
       created: new Date(now),
     },
     previousTasks: [],

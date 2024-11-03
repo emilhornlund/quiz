@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
+import { ScheduleModule } from '@nestjs/schedule'
 
 import { AuthModule } from '../auth'
 
@@ -9,6 +10,7 @@ import {
   GameEventPublisher,
   GameEventSubscriber,
   GameRepository,
+  GameScheduler,
   GameService,
 } from './services'
 import { Game, GameSchema } from './services/models/schemas'
@@ -26,14 +28,16 @@ import { Game, GameSchema } from './services/models/schemas'
         schema: GameSchema,
       },
     ]),
+    ScheduleModule.forRoot(),
     AuthModule,
   ],
   controllers: [GameController],
   providers: [
-    GameEventPublisher,
-    GameEventSubscriber,
     GameRepository,
     GameService,
+    GameEventPublisher,
+    GameEventSubscriber,
+    GameScheduler,
   ],
 })
 export class GameModule {}

@@ -51,6 +51,7 @@ import { ValidationPipe } from './pipes'
         wait: 1000,
         maxAttempts: 3,
         logLevel: 'log',
+        lockKeyPrefix: 'custom',
         ignoreUnlockFail: false,
       }),
       inject: [ConfigService],
