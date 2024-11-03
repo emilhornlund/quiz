@@ -183,7 +183,7 @@ export class GameController {
     description: 'Invalid game ID format or missing authorization token.',
   })
   @GameIdParam()
-  public async subscribeEvents(
+  public async getEventStream(
     @Param('gameID', ParseUUIDPipe) gameID: string,
     @AuthorizedGameID() authorizedGameID: string,
     @AuthorizedClientID() clientId: string,
@@ -191,6 +191,6 @@ export class GameController {
     if (gameID !== authorizedGameID) {
       throw new UnauthorizedException('Unauthorized game access')
     }
-    return this.gameEventService.subscribe(gameID, clientId)
+    return this.gameEventService.getEventStream(gameID, clientId)
   }
 }

@@ -1,38 +1,19 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
 import {
   CreateClassicModeGameRequestDto,
   CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
   GameParticipantType,
-  isCreateClassicModeQuestionMultiChoiceRequestDto,
-  isCreateClassicModeQuestionSliderRequestDto,
-  isCreateClassicModeQuestionTrueFalseRequestDto,
-  isCreateClassicModeQuestionTypeAnswerRequestDto,
-  isCreateZeroToOneHundredModeQuestionRangeRequestDto,
   JoinGameResponseDto,
-  QuestionType,
 } from '@quiz/common'
-import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
-import { v4 as uuidv4 } from 'uuid'
 
 import { AuthService } from '../../auth/services'
-import {
-  ActiveGameNotFoundByGamePINException,
-  ActiveGameNotFoundByIDException,
-  NicknameAlreadyTakenException,
-} from '../exceptions'
 
 import { GameEventService } from './game-event.service'
-import {
-  Game,
-  QuestionMultiChoice,
-  QuestionRange,
-  QuestionTrueFalse,
-  QuestionTypeAnswer,
-} from './models/schemas'
+import { GameRepository } from './game.repository'
+import { buildPartialGameModel } from './utils'
 
 /**
  * GameService is responsible for managing game creation and handling
@@ -43,12 +24,12 @@ export class GameService {
   /**
    * Creates an instance of GameService.
    *
-   * @param gameModel The Mongoose model representing the Game schema.
-   * @param gameEventService Service responsible for managing and publishing game events to clients.
-   * @param authService - The authentication service for managing game tokens.
+   * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
+   * @param {GameEventService} gameEventService - Service responsible for managing and publishing game events to clients.
+   * @param {AuthService} authService - The authentication service for managing game tokens.
    */
   constructor(
-    @InjectModel(Game.name) private gameModel: Model<Game>,
+    private gameRepository: GameRepository,
     private gameEventService: GameEventService,
     private authService: AuthService,
   ) {}
@@ -57,28 +38,27 @@ export class GameService {
    * Creates a new game based on the provided request. It generates a unique 6-digit game PIN,
    * saves the game, and returns a response containing the game ID and JWT token for the host.
    *
-   * @param request - The details of the game to be created.
-   * @returns A Promise containing the ID and token of the created game.
+   * @param {CreateClassicModeGameRequestDto | CreateZeroToOneHundredModeGameRequestDto} request - The details of the game to be created.
+   *
+   * @returns {Promise<CreateGameResponseDto>} A Promise containing the ID and token of the created game.
    */
   public async createGame(
     request:
       | CreateClassicModeGameRequestDto
       | CreateZeroToOneHundredModeGameRequestDto,
   ): Promise<CreateGameResponseDto> {
-    const gamePIN = await this.generateUniqueGamePIN()
-
-    const savedGame = await new this.gameModel(
-      GameService.toGameModel(request, gamePIN),
-    ).save()
-
-    const token = await this.authService.signGameToken(
-      savedGame._id,
-      savedGame.hostClientId,
-      GameParticipantType.HOST,
-      Math.floor(savedGame.created.getTime() / 1000) + 6 * 60 * 60,
+    const gameDocument = await this.gameRepository.createGame(
+      buildPartialGameModel(request),
     )
 
-    return { id: savedGame._id, token }
+    const token = await this.authService.signGameToken(
+      gameDocument._id,
+      gameDocument.hostClientId,
+      GameParticipantType.HOST,
+      Math.floor(gameDocument.expires.getTime() / 1000),
+    )
+
+    return { id: gameDocument._id, token }
   }
 
   /**
@@ -88,25 +68,20 @@ export class GameService {
    * created within the last 6 hours. If an active game with the given PIN is
    * found, its ID is returned. Otherwise, an `ActiveGameNotFoundException` is thrown.
    *
-   * @param gamePIN - The unique 6-digit game PIN used to identify the game.
-   * @returns A Promise that resolves to a `FindGameResponseDto` containing the ID
+   * @param {string} gamePIN - The unique 6-digit game PIN used to identify the game.
+   *
+   * @returns {Promise<FindGameResponseDto>} A Promise that resolves to a `FindGameResponseDto` containing the ID
    * of the active game if found.
-   * @throws ActiveGameNotFoundByGamePINException if no active game with the specified
+   *
+   * @throws {ActiveGameNotFoundByGamePINException} if no active game with the specified
    * `gamePIN` is found within the last 6 hours.
    */
   public async findActiveGameByGamePIN(
     gamePIN: string,
   ): Promise<FindGameResponseDto> {
-    const existingGame = await this.gameModel.findOne({
-      pin: gamePIN,
-      created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) },
-    })
+    const gameDocument = await this.gameRepository.findGameByPINOrThrow(gamePIN)
 
-    if (!existingGame) {
-      throw new ActiveGameNotFoundByGamePINException(gamePIN)
-    }
-
-    return { id: existingGame._id }
+    return { id: gameDocument._id }
   }
 
   /**
@@ -129,185 +104,20 @@ export class GameService {
     gameID: string,
     nickname: string,
   ): Promise<JoinGameResponseDto> {
-    const existingGame = await this.gameModel.findOne({
-      _id: gameID,
-      created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) },
-    })
-
-    if (!existingGame) {
-      throw new ActiveGameNotFoundByIDException(gameID)
-    }
-
-    if (existingGame.players.some((player) => player.nickname === nickname)) {
-      throw new NicknameAlreadyTakenException(nickname)
-    }
-
-    const newPlayer = {
-      _id: uuidv4(),
+    const [gameDocument, newPlayer] = await this.gameRepository.addPlayer(
+      gameID,
       nickname,
-      joined: new Date(),
-    }
-
-    existingGame.players.push(newPlayer)
-
-    await existingGame.save()
+    )
 
     const token = await this.authService.signGameToken(
       gameID,
       newPlayer._id,
       GameParticipantType.PLAYER,
-      Math.floor(existingGame.created.getTime() / 1000) + 6 * 60 * 60,
+      Math.floor(gameDocument.expires.getTime() / 1000),
     )
 
-    await this.gameEventService.publish(existingGame)
+    await this.gameEventService.publish(gameDocument)
 
     return { id: gameID, token }
-  }
-
-  /**
-   * Generates a unique 6-digit game PIN. It checks the database to ensure that no other game
-   * with the same PIN was created within the last 6 hours. If such a game exists, it keeps generating
-   * new PINs until a unique one is found.
-   *
-   * @private
-   * @returns A Promise that resolves with a unique 6-digit game PIN.
-   */
-  private async generateUniqueGamePIN(): Promise<string> {
-    let isUnique = false
-    let gamePIN: string
-
-    while (!isUnique) {
-      gamePIN = GameService.generateRandomGamePIN()
-
-      // Find a game with the same PIN and created within the last 6 hours
-      const existingGame = await this.gameModel.findOne({
-        pin: gamePIN,
-        created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) }, // 6 hours ago
-      })
-
-      if (!existingGame) {
-        isUnique = true
-      }
-    }
-
-    return gamePIN
-  }
-
-  /**
-   * Generates a random 6-digit game PIN.
-   *
-   * @private
-   * @returns A 6-digit random PIN as a string.
-   */
-  private static generateRandomGamePIN(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString()
-  }
-
-  /**
-   * Converts the incoming request DTO into a partial Game model object for saving in the database.
-   *
-   * @param request The request DTO containing the game details.
-   * @param pin The unique 6-digit game PIN.
-   * @private
-   * @returns A partial Game model object ready for saving.
-   */
-  private static toGameModel(
-    request:
-      | CreateClassicModeGameRequestDto
-      | CreateZeroToOneHundredModeGameRequestDto,
-    pin: string,
-  ): Partial<Game> {
-    return {
-      name: request.name,
-      mode: request.mode,
-      questions: request.questions
-        .map((question) => {
-          if (
-            isCreateClassicModeQuestionMultiChoiceRequestDto(
-              request.mode,
-              question,
-            )
-          ) {
-            return {
-              type: QuestionType.MultiChoice,
-              question: question.question,
-              imageURL: question.imageURL,
-              points: question.points,
-              duration: question.duration,
-              options: question.answers.map((option) => ({
-                value: option.value,
-                correct: option.correct,
-              })),
-            } as QuestionMultiChoice
-          }
-
-          if (
-            isCreateClassicModeQuestionSliderRequestDto(request.mode, question)
-          ) {
-            return {
-              type: QuestionType.Range,
-              question: question.question,
-              imageURL: question.imageURL,
-              min: question.min,
-              max: question.max,
-              correct: question.correct,
-              points: question.points,
-              duration: question.duration,
-            } as QuestionRange
-          }
-
-          if (
-            isCreateZeroToOneHundredModeQuestionRangeRequestDto(
-              request.mode,
-              question,
-            )
-          ) {
-            return {
-              type: QuestionType.Range,
-              question: question.question,
-              imageURL: question.imageURL,
-              min: 0,
-              max: 100,
-              correct: question.correct,
-              points: question.points,
-              duration: question.duration,
-            } as QuestionRange
-          }
-
-          if (
-            isCreateClassicModeQuestionTrueFalseRequestDto(
-              request.mode,
-              question,
-            )
-          ) {
-            return {
-              type: QuestionType.TrueFalse,
-              question: question.question,
-              imageURL: question.imageURL,
-              correct: question.correct,
-              points: question.points,
-              duration: question.duration,
-            } as QuestionTrueFalse
-          }
-
-          if (
-            isCreateClassicModeQuestionTypeAnswerRequestDto(
-              request.mode,
-              question,
-            )
-          ) {
-            return {
-              type: QuestionType.TypeAnswer,
-              question: question.question,
-              imageURL: question.imageURL,
-              correct: question.correct,
-              points: question.points,
-              duration: question.duration,
-            } as QuestionTypeAnswer
-          }
-        })
-        .filter((obj) => !!obj),
-      pin,
-    }
   }
 }

@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { GameMode, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
 
 import { Player, PlayerSchema } from './player.schema'
 import {
@@ -17,11 +16,13 @@ import {
 } from './question.schema'
 import { BaseTask, LobbyTask, LobbyTaskSchema, TaskType } from './task.schema'
 
+export type PartialGameModel = Pick<Game, 'name' | 'mode' | 'questions'>
+
 export type GameDocument = HydratedDocument<Game>
 
 @Schema({ collection: 'games' })
 export class Game {
-  @Prop({ type: String, default: uuidv4 })
+  @Prop({ type: String, required: true })
   _id: string
 
   @Prop({ type: String, required: true })
@@ -33,10 +34,7 @@ export class Game {
   @Prop({ type: String, required: true })
   pin: string
 
-  @Prop({
-    type: [BaseQuestionSchema],
-    default: [],
-  })
+  @Prop({ type: [BaseQuestionSchema], required: true })
   questions: (
     | QuestionMultiChoice
     | QuestionRange
@@ -44,23 +42,22 @@ export class Game {
     | QuestionTypeAnswer
   )[]
 
-  @Prop({ type: Number, default: 0, required: true })
+  @Prop({ type: Number, required: true })
   nextQuestion: number
 
-  @Prop({ type: String, default: uuidv4 })
+  @Prop({ type: String, required: true })
   hostClientId: string
 
-  @Prop({ type: [PlayerSchema], default: [] })
+  @Prop({ type: [PlayerSchema], required: true })
   players: Player[]
 
-  @Prop({
-    type: [BaseTask],
-    required: true,
-    default: { _id: uuidv4(), type: TaskType.Lobby, created: new Date() },
-  })
+  @Prop({ type: [BaseTask], required: true })
   currentTask: LobbyTask
 
-  @Prop({ type: Date, default: () => new Date() })
+  @Prop({ type: Date, required: true })
+  expires: Date
+
+  @Prop({ type: Date, required: true })
   created: Date
 }
 

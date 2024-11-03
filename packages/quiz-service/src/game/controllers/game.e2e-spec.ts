@@ -137,9 +137,9 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
-      const outdatedDate = new Date(Date.now() - 7 * 60 * 60 * 1000) // 7 hours ago
+      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { created: outdatedDate })
+        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
         .exec()
 
       const game = await gameModel.findById(createdGame.id).exec()
@@ -162,9 +162,9 @@ describe('GameController (e2e)', () => {
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
       )
 
-      const outdatedDate = new Date(Date.now() - 7 * 60 * 60 * 1000) // 7 hours ago
+      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { created: outdatedDate })
+        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
         .exec()
 
       const game = await gameModel.findById(createdGame.id).exec()
@@ -260,9 +260,9 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
-      const outdatedDate = new Date(Date.now() - 7 * 60 * 60 * 1000) // 7 hours ago
+      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { created: outdatedDate })
+        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
         .exec()
 
       return supertest(app.getHttpServer())

@@ -6,8 +6,13 @@ import { AuthModule } from '../auth'
 
 import { GameController } from './controllers/game.controller'
 import { GameEventService, GameService } from './services'
+import { GameRepository } from './services/game.repository'
 import { Game, GameSchema } from './services/models/schemas'
 
+/**
+ * GameModule sets up the dependencies for the Game feature, including controllers,
+ * services, and Mongoose schemas.
+ */
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
@@ -20,6 +25,6 @@ import { Game, GameSchema } from './services/models/schemas'
     AuthModule,
   ],
   controllers: [GameController],
-  providers: [GameService, GameEventService],
+  providers: [GameService, GameEventService, GameRepository],
 })
 export class GameModule {}

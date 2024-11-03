@@ -6,32 +6,25 @@ import {
   OnModuleInit,
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { InjectModel } from '@nestjs/mongoose'
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEventType } from '@quiz/common'
 import { Redis } from 'ioredis'
-import { Model } from 'mongoose'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
-import {
-  ActiveGameNotFoundByIDException,
-  PlayerNotFoundException,
-} from '../exceptions'
+import { PlayerNotFoundException } from '../exceptions'
 
+import { GameRepository } from './game.repository'
 import { DistributedEvent } from './models/event'
-import { Game, GameDocument } from './models/schemas'
+import { GameDocument } from './models/schemas'
 import { buildHostGameEvent, buildPlayerGameEvent } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
 
 /**
- * The `GameEventService` manages event-based messaging between clients
- * using Redis Pub/Sub for distributed communication and EventEmitter for local
- * Server-Sent Events (SSE) broadcasting. This service emits periodic heartbeat
- * events and specific game events to connected clients, supporting both
- * individual client-targeted events and broadcast events.
+ * GameEventService is responsible for managing event streams for game clients and
+ * broadcasting relevant events using Redis and EventEmitter.
  */
 @Injectable()
 export class GameEventService implements OnModuleInit, OnModuleDestroy {
@@ -44,13 +37,13 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
    * Initializes the service by setting up a Redis subscriber for event broadcasting
    * and a heartbeat emitter for periodic connection monitoring.
    *
-   * @param redis - Redis instance for Pub/Sub operations.
-   * @param gameModel - Mongoose model representing the Game schema.
-   * @param eventEmitter - EventEmitter2 instance for in-app event broadcasting.
+   * @param {Redis} redis - Redis instance for Pub/Sub operations.
+   * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
+   * @param {EventEmitter2} eventEmitter - EventEmitter2 instance for in-app event broadcasting.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
-    @InjectModel(Game.name) private gameModel: Model<Game>,
+    private gameRepository: GameRepository,
     private eventEmitter: EventEmitter2,
   ) {
     this.redisSubscriber = redis.duplicate()
@@ -99,7 +92,8 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
    * Emits a distributed event to the local event channel for consumption within the application.
    * This is used internally to broadcast events to active SSE subscriptions.
    *
-   * @param event - The event to emit, which can be a heartbeat or specific game event.
+   * @param {DistributedEvent} event - The event to emit, which can be a heartbeat or specific game event.
+   *
    * @private
    */
   private emitEvent(event: DistributedEvent) {
@@ -107,25 +101,22 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Subscribes a client to receive SSE events, filtering messages based on the client ID.
-   * Heartbeat events are sent to all clients, while game events target specific clients.
+   * Retrieves the observable stream of events for a game by its ID and client ID,
+   * ensuring that only events relevant to the client are provided.
    *
-   * @param gameID - The ID of the game to subscribe to.
-   * @param clientId - Unique identifier of the subscribing client.
-   * @returns An Observable of `MessageEvent` objects for SSE consumption.
+   * @param {string} gameID - The unique identifier of the game.
+   * @param {string} clientId - The client ID requesting the stream.
+   *
+   * @returns {Promise<Observable<MessageEvent>>} An observable of MessageEvent for the client.
+   *
+   * @throws {ActiveGameNotFoundByIDException} if no active game is found.
+   * @throws {PlayerNotFoundException} if the client is not the host or a player in the game.
    */
-  public async subscribe(
+  public async getEventStream(
     gameID: string,
     clientId: string,
   ): Promise<Observable<MessageEvent>> {
-    const document = await this.gameModel.findOne({
-      _id: gameID,
-      created: { $gt: new Date(Date.now() - 6 * 60 * 60 * 1000) },
-    })
-
-    if (!document) {
-      throw new ActiveGameNotFoundByIDException(gameID)
-    }
+    const document = await this.gameRepository.findGameByIDOrThrow(gameID)
 
     const player = document.players.find((player) => player._id === clientId)
 
@@ -162,10 +153,9 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Publishes a game event to all relevant clients via Redis and internal event handling,
-   * including host and player-specific events.
+   * Publishes events to all relevant clients for a given game document.
    *
-   * @param document - Mongoose document of the game to publish events for.
+   * @param {GameDocument} document - Mongoose document of the game to publish events for.
    */
   public async publish(document: GameDocument): Promise<void> {
     await Promise.all([
@@ -181,11 +171,10 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Publishes a distributed event via Redis, logging its status.
-   * If `clientId` is specified, the event targets a specific client; otherwise,
-   * it is broadcasted to all subscribed clients.
+   * Emits a distributed event to the local event channel for consumption within the application.
    *
-   * @param event - The distributed event to be published to Redis.
+   * @param {DistributedEvent} event - The distributed event to be published to Redis.
+   *
    * @private
    */
   private async publishDistributedEvent(
