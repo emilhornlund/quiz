@@ -579,7 +579,7 @@ exports[`HostResultState > should render HostResultState with question type mult
 </div>
 `;
 
-exports[`HostResultState > should render HostResultState with question type slider 1`] = `
+exports[`HostResultState > should render HostResultState with question type range 1`] = `
 <div>
   <div
     class="main"

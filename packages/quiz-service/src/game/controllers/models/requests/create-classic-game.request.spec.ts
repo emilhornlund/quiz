@@ -10,7 +10,7 @@ import { reduceNestedValidationErrors } from '../../../../app/utils'
 import { CreateClassicModeGameRequest } from './create-classic-mode-game.request'
 import { CreateClassicModeQuestionMultiAnswerRequest } from './create-classic-mode-question-multi-answer.request'
 import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
-import { CreateClassicModeQuestionSliderRequest } from './create-classic-mode-question-slider.request'
+import { CreateClassicModeQuestionRangeRequest } from './create-classic-mode-question-range.request'
 import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
 import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
 
@@ -49,10 +49,10 @@ function buildCreateClassicModeQuestionTrueFalseRequest(): CreateClassicModeQues
   return question
 }
 
-function buildCreateClassicModeQuestionSliderRequest(): CreateClassicModeQuestionSliderRequest {
-  const question = new CreateClassicModeQuestionSliderRequest()
-  question.type = QuestionType.Slider
-  question.question = 'Sample slider question'
+function buildCreateClassicModeQuestionSliderRequest(): CreateClassicModeQuestionRangeRequest {
+  const question = new CreateClassicModeQuestionRangeRequest()
+  question.type = QuestionType.Range
+  question.question = 'Sample range question'
   question.imageURL = 'http://example.com/image.png'
   question.min = 0
   question.max = 100
@@ -961,7 +961,7 @@ describe('CreateClassicModeGameRequest', () => {
 
     describe('Min Field Validation', () => {
       it('should fail if min is not a number', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .min as any) = '123' // Invalid, should be a number
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(3)
@@ -993,7 +993,7 @@ describe('CreateClassicModeGameRequest', () => {
       })
 
       it('should fail if min is less than -10000', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .min as any) = -10000 - 1 // Invalid, should be greater than or equal to -10000
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1008,14 +1008,14 @@ describe('CreateClassicModeGameRequest', () => {
       })
 
       it('should succeed if min is equal to -10000', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .min as any) = -10000 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
       })
 
       it('should fail if min is greater than 10000', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .min as any) = 10000 + 1 // Invalid, should be less than or equal to 10000
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(3)
@@ -1044,7 +1044,7 @@ describe('CreateClassicModeGameRequest', () => {
       })
 
       it('should fail if min is greater than max', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .min as any) = 101
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(3)
@@ -1059,7 +1059,7 @@ describe('CreateClassicModeGameRequest', () => {
 
     describe('Max Field Validation', () => {
       it('should fail if max is not a number', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .max as any) = '123' // Invalid, should be a number
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1077,7 +1077,7 @@ describe('CreateClassicModeGameRequest', () => {
       })
 
       it('should fail if max is greater than 10000', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .max as any) = 10000 + 1 // Invalid, should be less than or equal to 10000
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1090,14 +1090,14 @@ describe('CreateClassicModeGameRequest', () => {
       })
 
       it('should succeed if max is equal to 10000', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .max as any) = 10000 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
       })
 
       it('should fail if max is less than min', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .max as any) = -1
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(3)
@@ -1112,7 +1112,7 @@ describe('CreateClassicModeGameRequest', () => {
 
     describe('Correct Field Validation', () => {
       it('should fail if correct is not a number', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest)
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
           .correct as any) = '123' // Invalid, should be a number
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1133,7 +1133,7 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should fail if correct is less than min', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest
+          gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest
         ).correct = -1 // Invalid, should be greater than or equal 0
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1150,7 +1150,7 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should succeed if correct is equal to min', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest
+          gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest
         ).correct = 0 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
@@ -1158,7 +1158,7 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should fail if correct is less than max', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest
+          gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest
         ).correct = 101 // Invalid, should be less than or equal 100
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -1175,7 +1175,7 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should succeed if correct is equal to max', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionSliderRequest
+          gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest
         ).correct = 100 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)

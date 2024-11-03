@@ -77,8 +77,8 @@ export type GameEventQuestionMulti = {
   duration: number
 }
 
-export type GameEventQuestionSlider = {
-  type: QuestionType.Slider
+export type GameEventQuestionRange = {
+  type: QuestionType.Range
   question: string
   imageURL?: string
   min: number
@@ -103,7 +103,7 @@ export type GameEventQuestionTypeAnswer = {
 
 export type GameEventQuestion =
   | GameEventQuestionMulti
-  | GameEventQuestionSlider
+  | GameEventQuestionRange
   | GameEventQuestionTrueFalse
   | GameEventQuestionTypeAnswer
 
@@ -180,8 +180,8 @@ export type GameEventQuestionResultsMulti = {
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
-export type GameEventQuestionResultsSlider = {
-  type: QuestionType.Slider
+export type GameEventQuestionResultsRange = {
+  type: QuestionType.Range
   distribution: { value: number; count: number; correct: boolean }[]
 }
 
@@ -197,7 +197,7 @@ export type GameEventQuestionResultsTypeAnswer = {
 
 export type GameEventQuestionResults =
   | GameEventQuestionResultsMulti
-  | GameEventQuestionResultsSlider
+  | GameEventQuestionResultsRange
   | GameEventQuestionResultsTrueFalse
   | GameEventQuestionResultsTypeAnswer
 

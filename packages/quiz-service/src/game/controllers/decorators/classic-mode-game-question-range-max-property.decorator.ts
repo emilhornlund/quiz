@@ -4,11 +4,11 @@ import { IsNumber, Max, Min, Validate } from 'class-validator'
 
 import { MinMaxValidator } from './min-max-validator.dectorator'
 
-export function ClassicModeGameQuestionSliderMinProperty() {
+export function ClassicModeGameQuestionRangeMaxProperty() {
   return applyDecorators(
     ApiProperty({
-      description: 'The minimum possible value for the slider.',
-      example: 0,
+      description: 'The maximum possible value for the range.',
+      example: 100,
       required: true,
       minimum: -10000,
       maximum: 10000,

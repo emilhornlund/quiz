@@ -852,7 +852,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
 </div>
 `;
 
-exports[`HostQuestionState > should render HostQuestionState with question type slider 1`] = `
+exports[`HostQuestionState > should render HostQuestionState with question type range 1`] = `
 <div>
   <div
     class="main"

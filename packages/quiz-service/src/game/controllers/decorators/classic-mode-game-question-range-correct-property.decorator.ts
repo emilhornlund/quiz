@@ -4,11 +4,11 @@ import { IsNumber, Max, Min, Validate } from 'class-validator'
 
 import { InRangeValidator } from './in-range-validator.decorator'
 
-export function ClassicModeGameQuestionSliderCorrectProperty() {
+export function ClassicModeGameQuestionRangeCorrectProperty() {
   return applyDecorators(
     ApiProperty({
       description:
-        'The correct value for the slider question, which must be within the range of min and max.',
+        'The correct value for the range question, which must be within the range of min and max.',
       example: 50,
       required: true,
       minimum: -10000,

@@ -451,7 +451,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       duration: 30,
     },
     {
-      type: QuestionType.Slider,
+      type: QuestionType.Range,
       question: 'Guess the temperature of the hottest day ever recorded.',
       imageURL: 'https://example.com/question-image.png',
       min: 0,
@@ -477,7 +477,7 @@ const CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST: CreateZeroToOneHundredModeGa
     mode: GameMode.ZeroToOneHundred,
     questions: [
       {
-        type: QuestionType.Slider,
+        type: QuestionType.Range,
         question: 'Guess the temperature of the hottest day ever recorded.',
         imageURL: 'https://example.com/question-image.png',
         correct: 50,

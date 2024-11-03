@@ -142,7 +142,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
     "duration": 30
   },
   {
-    "type": "SLIDER",
+    "type": "RANGE",
     "question": "",
     "imageURL": "",
     "min": 0,

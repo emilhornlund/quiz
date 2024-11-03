@@ -10,14 +10,14 @@ import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
 
 import { GameModeProperty, GameNameProperty } from '../../decorators'
 
-import { CreateZeroToOneHundredModeQuestionSliderRequest } from './create-zero-to-one-hundred-mode-question-slider.request'
+import { CreateZeroToOneHundredModeQuestionRangeRequest } from './create-zero-to-one-hundred-mode-question-range.request'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformQuestionBasedOnType(question: any) {
   switch (question?.type) {
-    case QuestionType.Slider:
+    case QuestionType.Range:
       return plainToInstance(
-        CreateZeroToOneHundredModeQuestionSliderRequest,
+        CreateZeroToOneHundredModeQuestionRangeRequest,
         question,
       )
     default:
@@ -25,7 +25,7 @@ function transformQuestionBasedOnType(question: any) {
   }
 }
 
-@ApiExtraModels(CreateZeroToOneHundredModeQuestionSliderRequest)
+@ApiExtraModels(CreateZeroToOneHundredModeQuestionRangeRequest)
 export class CreateZeroToOneHundredModeGameRequest
   implements CreateZeroToOneHundredModeGameRequestDto
 {
@@ -42,7 +42,7 @@ export class CreateZeroToOneHundredModeGameRequest
     minimum: 1,
     oneOf: [
       {
-        $ref: getSchemaPath(CreateZeroToOneHundredModeQuestionSliderRequest),
+        $ref: getSchemaPath(CreateZeroToOneHundredModeQuestionRangeRequest),
       },
     ],
   })
@@ -52,5 +52,5 @@ export class CreateZeroToOneHundredModeGameRequest
   @Transform(({ value }) => value.map(transformQuestionBasedOnType), {
     toClassOnly: true,
   })
-  questions: CreateZeroToOneHundredModeQuestionSliderRequest[]
+  questions: CreateZeroToOneHundredModeQuestionRangeRequest[]
 }

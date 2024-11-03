@@ -2,11 +2,11 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min } from 'class-validator'
 
-export function ZeroToOneHundredModeGameQuestionSliderCorrectProperty() {
+export function ZeroToOneHundredModeGameQuestionRangeCorrectProperty() {
   return applyDecorators(
     ApiProperty({
       description:
-        'The correct value for the slider, which must be between 0 and 100.',
+        'The correct value for the range, which must be between 0 and 100.',
       example: 71,
       required: true,
       minimum: 0,

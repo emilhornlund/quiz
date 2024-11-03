@@ -103,7 +103,7 @@ describe('HostQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render HostQuestionState with question type slider', async () => {
+  it('should render HostQuestionState with question type range', async () => {
     const { container } = render(
       <HostQuestionState
         event={{
@@ -112,7 +112,7 @@ describe('HostQuestionState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Slider,
+            type: QuestionType.Range,
             question:
               "What percentage of the earth's surface is covered by water?",
             min: 0,

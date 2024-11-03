@@ -1,6 +1,6 @@
 export enum QuestionType {
   Multi = 'MULTI',
-  Slider = 'SLIDER',
+  Range = 'RANGE',
   TrueFalse = 'TRUE_FALSE',
   TypeAnswer = 'TYPE_ANSWER',
 }

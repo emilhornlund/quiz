@@ -105,11 +105,11 @@ export const QuestionSlider = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Slider,
+        type: QuestionType.Range,
         question: "What percentage of the earth's surface is covered by water?",
       },
       results: {
-        type: QuestionType.Slider,
+        type: QuestionType.Range,
         distribution: [
           { value: 59, count: 1, correct: false },
           { value: 61, count: 1, correct: false },

@@ -1,5 +1,5 @@
 import {
-  CreateZeroToOneHundredModeQuestionSliderRequestDto,
+  CreateZeroToOneHundredModeQuestionRangeRequestDto,
   QuestionType,
 } from '@quiz/common'
 
@@ -9,14 +9,14 @@ import {
   GameQuestionPointsProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
-  ZeroToOneHundredModeGameQuestionSliderCorrectProperty,
+  ZeroToOneHundredModeGameQuestionRangeCorrectProperty,
 } from '../../decorators'
 
-export class CreateZeroToOneHundredModeQuestionSliderRequest
-  implements CreateZeroToOneHundredModeQuestionSliderRequestDto
+export class CreateZeroToOneHundredModeQuestionRangeRequest
+  implements CreateZeroToOneHundredModeQuestionRangeRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.Slider)
-  type: QuestionType.Slider
+  @GameQuestionTypeProperty(QuestionType.Range)
+  type: QuestionType.Range
 
   @GameQuestionValueProperty({
     example: 'Estimate the percentage of water on the earth’s surface.',
@@ -26,7 +26,7 @@ export class CreateZeroToOneHundredModeQuestionSliderRequest
   @GameQuestionImageUrlProperty()
   imageURL?: string
 
-  @ZeroToOneHundredModeGameQuestionSliderCorrectProperty()
+  @ZeroToOneHundredModeGameQuestionRangeCorrectProperty()
   correct: number
 
   @GameQuestionPointsProperty()

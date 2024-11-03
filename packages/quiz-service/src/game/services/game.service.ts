@@ -10,7 +10,7 @@ import {
   isCreateClassicModeQuestionSliderRequestDto,
   isCreateClassicModeQuestionTrueFalseRequestDto,
   isCreateClassicModeQuestionTypeAnswerRequestDto,
-  isCreateZeroToOneHundredModeQuestionSliderRequestDto,
+  isCreateZeroToOneHundredModeQuestionRangeRequestDto,
   JoinGameResponseDto,
   QuestionType,
 } from '@quiz/common'
@@ -242,7 +242,7 @@ export class GameService {
             isCreateClassicModeQuestionSliderRequestDto(request.mode, question)
           ) {
             return {
-              type: QuestionType.Slider,
+              type: QuestionType.Range,
               question: question.question,
               imageURL: question.imageURL,
               min: question.min,
@@ -254,13 +254,13 @@ export class GameService {
           }
 
           if (
-            isCreateZeroToOneHundredModeQuestionSliderRequestDto(
+            isCreateZeroToOneHundredModeQuestionRangeRequestDto(
               request.mode,
               question,
             )
           ) {
             return {
-              type: QuestionType.Slider,
+              type: QuestionType.Range,
               question: question.question,
               imageURL: question.imageURL,
               min: 0,

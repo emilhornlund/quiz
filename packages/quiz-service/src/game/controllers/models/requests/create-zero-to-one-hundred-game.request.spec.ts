@@ -8,12 +8,12 @@ import { validate } from 'class-validator'
 import { reduceNestedValidationErrors } from '../../../../app/utils'
 
 import { CreateZeroToOneHundredModeGameRequest } from './create-zero-to-one-hundred-mode-game.request'
-import { CreateZeroToOneHundredModeQuestionSliderRequest } from './create-zero-to-one-hundred-mode-question-slider.request'
+import { CreateZeroToOneHundredModeQuestionRangeRequest } from './create-zero-to-one-hundred-mode-question-range.request'
 
-function buildCreateZeroToOneHundredModeQuestionSliderRequest(): CreateZeroToOneHundredModeQuestionSliderRequest {
-  const question = new CreateZeroToOneHundredModeQuestionSliderRequest()
-  question.type = QuestionType.Slider
-  question.question = 'Sample slider question'
+function buildCreateZeroToOneHundredModeQuestionRangeRequest(): CreateZeroToOneHundredModeQuestionRangeRequest {
+  const question = new CreateZeroToOneHundredModeQuestionRangeRequest()
+  question.type = QuestionType.Range
+  question.question = 'Sample range question'
   question.imageURL = 'http://example.com/image.png'
   question.correct = 50
   question.points = 1000
@@ -34,7 +34,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
     gameRequest.name = 'Sample Game'
     gameRequest.mode = GameMode.ZeroToOneHundred
     gameRequest.questions = [
-      buildCreateZeroToOneHundredModeQuestionSliderRequest(),
+      buildCreateZeroToOneHundredModeQuestionRangeRequest(),
     ]
   })
 
@@ -130,7 +130,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
   describe('Slider Question Validation', () => {
     beforeEach(() => {
       gameRequest.questions = [
-        buildCreateZeroToOneHundredModeQuestionSliderRequest(),
+        buildCreateZeroToOneHundredModeQuestionRangeRequest(),
       ]
     })
 
@@ -228,7 +228,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       it('should fail if correct is not a number', async () => {
         ;((
           gameRequest
-            .questions[0] as CreateZeroToOneHundredModeQuestionSliderRequest
+            .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct as any) = '123' // Invalid, should be a number
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -248,7 +248,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       it('should fail if correct is less than min', async () => {
         ;(
           gameRequest
-            .questions[0] as CreateZeroToOneHundredModeQuestionSliderRequest
+            .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct = -1 // Invalid, should be greater than or equal 0
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -265,7 +265,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       it('should succeed if correct is equal to min', async () => {
         ;(
           gameRequest
-            .questions[0] as CreateZeroToOneHundredModeQuestionSliderRequest
+            .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct = 0 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
@@ -274,7 +274,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       it('should fail if correct is less than max', async () => {
         ;(
           gameRequest
-            .questions[0] as CreateZeroToOneHundredModeQuestionSliderRequest
+            .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct = 101 // Invalid, should be less than or equal 100
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -291,7 +291,7 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       it('should succeed if correct is equal to max', async () => {
         ;(
           gameRequest
-            .questions[0] as CreateZeroToOneHundredModeQuestionSliderRequest
+            .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct = 100 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)

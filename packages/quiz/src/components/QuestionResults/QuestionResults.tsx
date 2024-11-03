@@ -49,7 +49,7 @@ const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
           />
         ))}
 
-      {results.type === QuestionType.Slider &&
+      {results.type === QuestionType.Range &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}

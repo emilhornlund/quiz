@@ -3,7 +3,7 @@ import {
   CreateClassicModeQuestionSliderRequestDto,
   CreateClassicModeQuestionTrueFalseRequestDto,
   CreateClassicModeQuestionTypeAnswerRequestDto,
-  CreateZeroToOneHundredModeQuestionSliderRequestDto,
+  CreateZeroToOneHundredModeQuestionRangeRequestDto,
   GameMode,
   QuestionType,
 } from '../models'
@@ -13,7 +13,7 @@ type QuestionRequest =
   | CreateClassicModeQuestionTrueFalseRequestDto
   | CreateClassicModeQuestionSliderRequestDto
   | CreateClassicModeQuestionTypeAnswerRequestDto
-  | CreateZeroToOneHundredModeQuestionSliderRequestDto
+  | CreateZeroToOneHundredModeQuestionRangeRequestDto
 
 export const isCreateClassicModeQuestionMultiRequestDto = (
   mode: GameMode,
@@ -26,7 +26,7 @@ export const isCreateClassicModeQuestionSliderRequestDto = (
   mode: GameMode,
   request: QuestionRequest,
 ): request is CreateClassicModeQuestionSliderRequestDto => {
-  return mode === GameMode.Classic && request.type === QuestionType.Slider
+  return mode === GameMode.Classic && request.type === QuestionType.Range
 }
 
 export const isCreateClassicModeQuestionTrueFalseRequestDto = (
@@ -43,11 +43,11 @@ export const isCreateClassicModeQuestionTypeAnswerRequestDto = (
   return mode === GameMode.Classic && request.type === QuestionType.TypeAnswer
 }
 
-export const isCreateZeroToOneHundredModeQuestionSliderRequestDto = (
+export const isCreateZeroToOneHundredModeQuestionRangeRequestDto = (
   mode: GameMode,
   request: QuestionRequest,
-): request is CreateZeroToOneHundredModeQuestionSliderRequestDto => {
+): request is CreateZeroToOneHundredModeQuestionRangeRequestDto => {
   return (
-    mode === GameMode.ZeroToOneHundred && request.type === QuestionType.Slider
+    mode === GameMode.ZeroToOneHundred && request.type === QuestionType.Range
   )
 }

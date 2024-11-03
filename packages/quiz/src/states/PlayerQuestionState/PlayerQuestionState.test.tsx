@@ -103,7 +103,7 @@ describe('PlayerQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render PlayerQuestionState with question type slider', () => {
+  it('should render PlayerQuestionState with question type range', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
@@ -113,7 +113,7 @@ describe('PlayerQuestionState', () => {
             score: { total: 10458 },
           },
           question: {
-            type: QuestionType.Slider,
+            type: QuestionType.Range,
             question:
               "What percentage of the earth's surface is covered by water?",
             min: 0,

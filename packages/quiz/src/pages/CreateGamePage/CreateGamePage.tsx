@@ -85,7 +85,7 @@ const CreateGamePage: FC = () => {
               duration: 30,
             },
             {
-              type: QuestionType.Slider,
+              type: QuestionType.Range,
               question: '',
               imageURL: '',
               min: 0,
@@ -114,7 +114,7 @@ const CreateGamePage: FC = () => {
         JSON.stringify(
           [
             {
-              type: QuestionType.Slider,
+              type: QuestionType.Range,
               question: '',
               imageURL: '',
               correct: 0,

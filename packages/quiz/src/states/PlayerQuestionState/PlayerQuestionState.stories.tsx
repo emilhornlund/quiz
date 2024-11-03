@@ -104,7 +104,7 @@ export const QuestionSlider = {
         score: { total: 10458 },
       },
       question: {
-        type: QuestionType.Slider,
+        type: QuestionType.Range,
         question: "What percentage of the earth's surface is covered by water?",
         min: 0,
         max: 100,

@@ -131,9 +131,9 @@ export const parseQuestionsJson = <T extends GameMode>(
             points: assertPointsType(question.points),
             duration: assertDurationType(question.duration),
           } as ClassicModeQuestions[number]
-        } else if (question.type === QuestionType.Slider) {
+        } else if (question.type === QuestionType.Range) {
           return {
-            type: QuestionType.Slider,
+            type: QuestionType.Range,
             question: assertQuestionType(question.question),
             imageURL: assertImageURLType(question.imageURL),
             min: assertType<number>(question.min, 'number', 'min'),
@@ -165,9 +165,9 @@ export const parseQuestionsJson = <T extends GameMode>(
   } else if (mode === GameMode.ZeroToOneHundred) {
     return assertType(
       parsedJson.map((question) => {
-        if (question.type === QuestionType.Slider) {
+        if (question.type === QuestionType.Range) {
           return {
-            type: QuestionType.Slider,
+            type: QuestionType.Range,
             question: assertQuestionType(question.question),
             imageURL: assertImageURLType(question.imageURL),
             correct: assertType<number>(question.correct, 'number', 'correct'),

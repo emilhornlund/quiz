@@ -2,14 +2,14 @@ import { GameEventQuestion, QuestionType } from '@quiz/common'
 import React, { FC } from 'react'
 
 import AnswerInput from './components/AnswerInput'
-import AnswerPicker from './components/AnswerPicker/AnswerPicker.tsx'
-import AnswerSlider from './components/AnswerSlider'
+import AnswerPicker from './components/AnswerPicker'
+import AnswerRange from './components/AnswerRange'
 import styles from './QuestionAnswerPicker.module.scss'
 
 export type Answer =
   | { type: QuestionType.Multi; index: number }
   | { type: QuestionType.TrueFalse; value: boolean }
-  | { type: QuestionType.Slider; value: number }
+  | { type: QuestionType.Range; value: number }
   | { type: QuestionType.TypeAnswer; value: string }
 
 export interface QuestionAnswerPickerProps {
@@ -49,13 +49,13 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
           }
         />
       )}
-      {question.type === QuestionType.Slider && (
-        <AnswerSlider
+      {question.type === QuestionType.Range && (
+        <AnswerRange
           min={question.min}
           max={question.max}
           step={question.step}
           interactive={interactive}
-          onSubmit={(value) => onChange?.({ type: QuestionType.Slider, value })}
+          onSubmit={(value) => onChange?.({ type: QuestionType.Range, value })}
         />
       )}
       {question.type === QuestionType.TypeAnswer && (

@@ -8,10 +8,10 @@ import { QuestionType } from '@quiz/common'
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class BaseQuestion {
   @Prop({
-    enum: [QuestionType.Multi, QuestionType.Slider],
+    enum: [QuestionType.Multi, QuestionType.Range],
     required: true,
   })
-  type!: QuestionType.Multi | QuestionType.Slider
+  type!: QuestionType.Multi | QuestionType.Range
 
   @Prop({ type: String, required: true })
   question: string
@@ -66,7 +66,7 @@ export const QuestionMultiChoiceSchema =
 
 @Schema({ _id: false })
 export class QuestionRange {
-  type!: QuestionType.Slider
+  type!: QuestionType.Range
 
   @Prop({ type: Number, required: true })
   min: number

@@ -4,9 +4,9 @@ import {
 } from '@quiz/common'
 
 import {
-  ClassicModeGameQuestionSliderCorrectProperty,
-  ClassicModeGameQuestionSliderMaxProperty,
-  ClassicModeGameQuestionSliderMinProperty,
+  ClassicModeGameQuestionRangeCorrectProperty,
+  ClassicModeGameQuestionRangeMaxProperty,
+  ClassicModeGameQuestionRangeMinProperty,
   GameQuestionDurationProperty,
   GameQuestionImageUrlProperty,
   GameQuestionPointsProperty,
@@ -14,11 +14,11 @@ import {
   GameQuestionValueProperty,
 } from '../../decorators'
 
-export class CreateClassicModeQuestionSliderRequest
+export class CreateClassicModeQuestionRangeRequest
   implements CreateClassicModeQuestionSliderRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.Slider)
-  type: QuestionType.Slider
+  @GameQuestionTypeProperty(QuestionType.Range)
+  type: QuestionType.Range
 
   @GameQuestionValueProperty({
     example: 'Guess the temperature of the hottest day ever recorded.',
@@ -28,13 +28,13 @@ export class CreateClassicModeQuestionSliderRequest
   @GameQuestionImageUrlProperty()
   imageURL?: string
 
-  @ClassicModeGameQuestionSliderMinProperty()
+  @ClassicModeGameQuestionRangeMinProperty()
   min: number
 
-  @ClassicModeGameQuestionSliderMaxProperty()
+  @ClassicModeGameQuestionRangeMaxProperty()
   max: number
 
-  @ClassicModeGameQuestionSliderCorrectProperty()
+  @ClassicModeGameQuestionRangeCorrectProperty()
   correct: number
 
   @GameQuestionPointsProperty()

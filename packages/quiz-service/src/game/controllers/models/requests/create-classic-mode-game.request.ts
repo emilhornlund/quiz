@@ -11,7 +11,7 @@ import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
 import { GameModeProperty, GameNameProperty } from '../../decorators'
 
 import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
-import { CreateClassicModeQuestionSliderRequest } from './create-classic-mode-question-slider.request'
+import { CreateClassicModeQuestionRangeRequest } from './create-classic-mode-question-range.request'
 import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
 import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
 
@@ -25,8 +25,8 @@ function transformQuestionBasedOnType(question: any) {
         CreateClassicModeQuestionTrueFalseRequest,
         question,
       )
-    case QuestionType.Slider:
-      return plainToInstance(CreateClassicModeQuestionSliderRequest, question)
+    case QuestionType.Range:
+      return plainToInstance(CreateClassicModeQuestionRangeRequest, question)
     case QuestionType.TypeAnswer:
       return plainToInstance(
         CreateClassicModeQuestionTypeAnswerRequest,
@@ -40,7 +40,7 @@ function transformQuestionBasedOnType(question: any) {
 @ApiExtraModels(
   CreateClassicModeQuestionMultiRequest,
   CreateClassicModeQuestionTrueFalseRequest,
-  CreateClassicModeQuestionSliderRequest,
+  CreateClassicModeQuestionRangeRequest,
   CreateClassicModeQuestionTypeAnswerRequest,
 )
 export class CreateClassicModeGameRequest
@@ -60,7 +60,7 @@ export class CreateClassicModeGameRequest
     oneOf: [
       { $ref: getSchemaPath(CreateClassicModeQuestionMultiRequest) },
       { $ref: getSchemaPath(CreateClassicModeQuestionTrueFalseRequest) },
-      { $ref: getSchemaPath(CreateClassicModeQuestionSliderRequest) },
+      { $ref: getSchemaPath(CreateClassicModeQuestionRangeRequest) },
       { $ref: getSchemaPath(CreateClassicModeQuestionTypeAnswerRequest) },
     ],
   })
@@ -73,7 +73,7 @@ export class CreateClassicModeGameRequest
   questions: (
     | CreateClassicModeQuestionMultiRequest
     | CreateClassicModeQuestionTrueFalseRequest
-    | CreateClassicModeQuestionSliderRequest
+    | CreateClassicModeQuestionRangeRequest
     | CreateClassicModeQuestionTypeAnswerRequest
   )[]
 }

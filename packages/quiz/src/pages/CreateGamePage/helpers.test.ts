@@ -93,10 +93,10 @@ describe('parseQuestionsJson', () => {
   })
 
   describe('ZeroToOneHundred Mode Questions', () => {
-    it('should parse a valid SLIDER question', () => {
+    it('should parse a valid RANGE question', () => {
       const parsedJson = [
         {
-          type: QuestionType.Slider,
+          type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
           imageURL: 'https://example.com/image.png',
           correct: 56,
@@ -108,10 +108,10 @@ describe('parseQuestionsJson', () => {
       expect(result[0]).toEqual(parsedJson[0])
     })
 
-    it('should throw error for SLIDER question with non-number correct value', () => {
+    it('should throw error for RANGE question with non-number correct value', () => {
       const parsedJson = [
         {
-          type: QuestionType.Slider,
+          type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
           imageURL: 'https://example.com/image.png',
           correct: 'fifty-six', // Invalid correct type
@@ -124,10 +124,10 @@ describe('parseQuestionsJson', () => {
       ).toThrow("Invalid type for field 'correct'. Expected number, got string")
     })
 
-    it('should throw error for SLIDER question with invalid points value', () => {
+    it('should throw error for RANGE question with invalid points value', () => {
       const parsedJson = [
         {
-          type: QuestionType.Slider,
+          type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
           imageURL: 'https://example.com/image.png',
           correct: 56,
@@ -142,10 +142,10 @@ describe('parseQuestionsJson', () => {
       )
     })
 
-    it('should throw error for SLIDER question with invalid duration value', () => {
+    it('should throw error for RANGE question with invalid duration value', () => {
       const parsedJson = [
         {
-          type: QuestionType.Slider,
+          type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
           imageURL: 'https://example.com/image.png',
           correct: 56,

@@ -25,7 +25,7 @@ export interface CreateClassicModeQuestionTrueFalseRequestDto {
 }
 
 export interface CreateClassicModeQuestionSliderRequestDto {
-  type: QuestionType.Slider
+  type: QuestionType.Range
   question: string
   imageURL?: string
   min: number
@@ -35,8 +35,8 @@ export interface CreateClassicModeQuestionSliderRequestDto {
   duration: number
 }
 
-export interface CreateZeroToOneHundredModeQuestionSliderRequestDto {
-  type: QuestionType.Slider
+export interface CreateZeroToOneHundredModeQuestionRangeRequestDto {
+  type: QuestionType.Range
   question: string
   imageURL?: string
   correct: number
@@ -67,7 +67,7 @@ export type CreateGameRequestDto = {
     }
   | {
       mode: GameMode.ZeroToOneHundred
-      questions: CreateZeroToOneHundredModeQuestionSliderRequestDto[]
+      questions: CreateZeroToOneHundredModeQuestionRangeRequestDto[]
     }
 )
 

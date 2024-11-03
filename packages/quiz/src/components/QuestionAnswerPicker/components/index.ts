@@ -1,2 +1,6 @@
+export type { AnswerInputProps } from './AnswerInput'
 export type { AnswerPickerProps } from './AnswerPicker'
+export type { AnswerRangeProps } from './AnswerRange'
+export { default as AnswerInput } from './AnswerInput'
 export { default as AnswerPicker } from './AnswerPicker'
+export { default as AnswerRange } from './AnswerRange'

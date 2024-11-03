@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { FC, FormEvent, useState } from 'react'
 
 import Button from '../../../Button'
-import { TextField } from '../../../index.ts'
+import TextField from '../../../TextField'
 
-import styles from './AnswerSlider.module.scss'
+import styles from './AnswerRange.module.scss'
 
-export interface AnswerSliderProps {
+export interface AnswerRangeProps {
   min: number
   max: number
   step: number
@@ -15,7 +15,7 @@ export interface AnswerSliderProps {
   onSubmit: (value: number) => void
 }
 
-const AnswerSlider: FC<AnswerSliderProps> = ({
+const AnswerRange: FC<AnswerRangeProps> = ({
   min,
   max,
   step,
@@ -68,4 +68,4 @@ const AnswerSlider: FC<AnswerSliderProps> = ({
   )
 }
 
-export default AnswerSlider
+export default AnswerRange
