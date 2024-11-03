@@ -29,7 +29,7 @@ import { Observable } from 'rxjs'
 import { Public } from '../../app/decorators'
 import { AuthorizedClientID, AuthorizedGameID } from '../../auth/decorators'
 import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
-import { GameEventService, GameService } from '../services'
+import { GameEventSubscriber, GameService } from '../services'
 
 import { GameIdParam } from './decorators'
 import {
@@ -43,6 +43,10 @@ import {
   JoinGameResponse,
 } from './models/response'
 
+/**
+ * GameController handles incoming HTTP requests related to game operations,
+ * such as creating games and subscribing to game events.
+ */
 @ApiExtraModels(
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
@@ -52,7 +56,7 @@ import {
 export class GameController {
   constructor(
     private readonly gameService: GameService,
-    private readonly gameEventService: GameEventService,
+    private readonly gameEventSubscriber: GameEventSubscriber,
   ) {}
 
   @Public()
@@ -145,7 +149,7 @@ export class GameController {
   }
 
   /**
-   * Subscribes a client to receive real-time game events through Server-Sent Events (SSE).
+   * Subscribes a client to game events via Server-Sent Events (SSE).
    *
    * Clients receive both general and client-specific game events, including
    * heartbeat events for connection monitoring and game updates relevant to the subscribed game.
@@ -191,6 +195,6 @@ export class GameController {
     if (gameID !== authorizedGameID) {
       throw new UnauthorizedException('Unauthorized game access')
     }
-    return this.gameEventService.getEventStream(gameID, clientId)
+    return this.gameEventSubscriber.subscribe(gameID, clientId)
   }
 }

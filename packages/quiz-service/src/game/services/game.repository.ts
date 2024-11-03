@@ -9,6 +9,7 @@ import {
   NicknameAlreadyTakenException,
 } from '../exceptions'
 
+import { GameEventPublisher } from './game-event.publisher'
 import { Game, GameDocument, PartialGameModel, Player } from './models/schemas'
 import { buildGameModel } from './utils'
 
@@ -21,8 +22,12 @@ export class GameRepository {
    * Constructs the GameRepository.
    *
    * @param {Model<Game>} gameModel - The Mongoose model representing the Game schema.
+   * @param {GameEventPublisher} gameEventPublisher - Service responsible for publishing game events to clients.
    */
-  constructor(@InjectModel(Game.name) private gameModel: Model<Game>) {}
+  constructor(
+    @InjectModel(Game.name) private gameModel: Model<Game>,
+    private gameEventPublisher: GameEventPublisher,
+  ) {}
 
   /**
    * Finds a game by its ID.
@@ -146,7 +151,7 @@ export class GameRepository {
   }
 
   /**
-   * Adds a new player to a game.
+   * Adds a new player to a game and publishes an event after the player is added.
    *
    * @param {string} gameID - The ID of the game to add the player to.
    * @param {string} nickname - The nickname of the player to add.
@@ -174,6 +179,8 @@ export class GameRepository {
     gameDocument.players.push(newPlayer)
 
     const savedGameDocument = await gameDocument.save()
+
+    await this.gameEventPublisher.publish(gameDocument)
 
     return [savedGameDocument, newPlayer]
   }

@@ -51,7 +51,7 @@ export class Game {
   @Prop({ type: [PlayerSchema], required: true })
   players: Player[]
 
-  @Prop({ type: [BaseTask], required: true })
+  @Prop({ type: BaseTask, required: true })
   currentTask: LobbyTask
 
   @Prop({ type: Date, required: true })

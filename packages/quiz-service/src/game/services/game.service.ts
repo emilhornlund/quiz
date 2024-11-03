@@ -11,7 +11,6 @@ import { MurLock } from 'murlock'
 
 import { AuthService } from '../../auth/services'
 
-import { GameEventService } from './game-event.service'
 import { GameRepository } from './game.repository'
 import { buildPartialGameModel } from './utils'
 
@@ -25,12 +24,10 @@ export class GameService {
    * Creates an instance of GameService.
    *
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
-   * @param {GameEventService} gameEventService - Service responsible for managing and publishing game events to clients.
    * @param {AuthService} authService - The authentication service for managing game tokens.
    */
   constructor(
     private gameRepository: GameRepository,
-    private gameEventService: GameEventService,
     private authService: AuthService,
   ) {}
 
@@ -115,8 +112,6 @@ export class GameService {
       GameParticipantType.PLAYER,
       Math.floor(gameDocument.expires.getTime() / 1000),
     )
-
-    await this.gameEventService.publish(gameDocument)
 
     return { id: gameID, token }
   }

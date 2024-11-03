@@ -16,30 +16,28 @@ import { PlayerNotFoundException } from '../exceptions'
 
 import { GameRepository } from './game.repository'
 import { DistributedEvent } from './models/event'
-import { GameDocument } from './models/schemas'
 import { buildHostGameEvent, buildPlayerGameEvent } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
 
 /**
- * GameEventService is responsible for managing event streams for game clients and
- * broadcasting relevant events using Redis and EventEmitter.
+ * GameEventSubscriber listens for game events from Redis and relays them
+ * to connected clients using EventEmitter for local broadcasting.
  */
 @Injectable()
-export class GameEventService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(GameEventService.name)
+export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(GameEventSubscriber.name)
   private readonly heartbeatIntervalId: NodeJS.Timeout
   private readonly redisSubscriber: Redis
   private activeClients = new Set<string>()
 
   /**
-   * Initializes the service by setting up a Redis subscriber for event broadcasting
-   * and a heartbeat emitter for periodic connection monitoring.
+   * Constructs an instance of GameEventSubscriber.
    *
    * @param {Redis} redis - Redis instance for Pub/Sub operations.
-   * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
-   * @param {EventEmitter2} eventEmitter - EventEmitter2 instance for in-app event broadcasting.
+   * @param {GameRepository} gameRepository - Repository for accessing game data.
+   * @param {EventEmitter2} eventEmitter - EventEmitter for broadcasting events locally.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
@@ -101,7 +99,7 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Retrieves the observable stream of events for a game by its ID and client ID,
+   * Subscribes to the observable stream of events for a game by its ID and client ID,
    * ensuring that only events relevant to the client are provided.
    *
    * @param {string} gameID - The unique identifier of the game.
@@ -112,7 +110,7 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
    * @throws {ActiveGameNotFoundByIDException} if no active game is found.
    * @throws {PlayerNotFoundException} if the client is not the host or a player in the game.
    */
-  public async getEventStream(
+  public async subscribe(
     gameID: string,
     clientId: string,
   ): Promise<Observable<MessageEvent>> {
@@ -133,63 +131,19 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
       LOCAL_EVENT_EMITTER_CHANNEL,
     ) as Observable<DistributedEvent>
 
-    return concat(
-      from([
-        {
-          clientId,
-          event: player
-            ? buildPlayerGameEvent(document, player)
-            : buildHostGameEvent(document),
-        },
-      ]),
-      source,
-    ).pipe(
+    const initialEvent: DistributedEvent = {
+      clientId,
+      event: player
+        ? buildPlayerGameEvent(document, player)
+        : buildHostGameEvent(document),
+    }
+
+    return concat(from([initialEvent]), source).pipe(
       filter(
         (event) => event.clientId === undefined || event.clientId === clientId,
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),
       finalize(() => this.activeClients.delete(clientId)),
     )
-  }
-
-  /**
-   * Publishes events to all relevant clients for a given game document.
-   *
-   * @param {GameDocument} document - Mongoose document of the game to publish events for.
-   */
-  public async publish(document: GameDocument): Promise<void> {
-    await Promise.all([
-      this.publishDistributedEvent({
-        clientId: document.hostClientId,
-        event: buildHostGameEvent(document),
-      }),
-      ...document.players.map((player) => ({
-        clientId: player._id,
-        event: buildPlayerGameEvent(document, player),
-      })),
-    ])
-  }
-
-  /**
-   * Emits a distributed event to the local event channel for consumption within the application.
-   *
-   * @param {DistributedEvent} event - The distributed event to be published to Redis.
-   *
-   * @private
-   */
-  private async publishDistributedEvent(
-    event: DistributedEvent,
-  ): Promise<void> {
-    try {
-      const message = JSON.stringify(event)
-      await this.redis.publish(REDIS_PUBSUB_CHANNEL, message)
-      if (event.clientId) {
-        this.logger.log(`Published event for clientId: ${event.clientId}`)
-      } else {
-        this.logger.log('Published event for all clients')
-      }
-    } catch (error) {
-      this.logger.error('Error publishing event:', error)
-    }
   }
 }

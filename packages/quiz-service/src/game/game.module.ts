@@ -5,13 +5,17 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { AuthModule } from '../auth'
 
 import { GameController } from './controllers/game.controller'
-import { GameEventService, GameService } from './services'
-import { GameRepository } from './services/game.repository'
+import {
+  GameEventPublisher,
+  GameEventSubscriber,
+  GameRepository,
+  GameService,
+} from './services'
 import { Game, GameSchema } from './services/models/schemas'
 
 /**
- * GameModule sets up the dependencies for the Game feature, including controllers,
- * services, and Mongoose schemas.
+ * GameModule sets up the necessary controllers, providers, and Mongoose schemas
+ * for handling game-related operations.
  */
 @Module({
   imports: [
@@ -25,6 +29,11 @@ import { Game, GameSchema } from './services/models/schemas'
     AuthModule,
   ],
   controllers: [GameController],
-  providers: [GameService, GameEventService, GameRepository],
+  providers: [
+    GameEventPublisher,
+    GameEventSubscriber,
+    GameRepository,
+    GameService,
+  ],
 })
 export class GameModule {}
