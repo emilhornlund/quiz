@@ -3,21 +3,18 @@ import { GameMode, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { BaseQuestionSchema } from './base-question.schema'
 import { Player, PlayerSchema } from './player.schema'
 import {
+  BaseQuestionSchema,
   QuestionMultiChoice,
   QuestionMultiChoiceSchema,
-} from './question-multi-choice.schema'
-import { QuestionRange, QuestionRangeSchema } from './question-range.schema'
-import {
+  QuestionRange,
+  QuestionRangeSchema,
   QuestionTrueFalse,
   QuestionTrueFalseSchema,
-} from './question-true-false.schema'
-import {
   QuestionTypeAnswer,
   QuestionTypeAnswerSchema,
-} from './question-type-answer.schema'
+} from './question.schema'
 import { BaseTask, TaskLobby, TaskLobbySchema, TaskType } from './task.schema'
 
 export type GameDocument = HydratedDocument<Game>

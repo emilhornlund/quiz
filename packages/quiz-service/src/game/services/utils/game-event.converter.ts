@@ -3,9 +3,7 @@ import { HydratedDocument } from 'mongoose'
 
 import { PlayerNotFoundException } from '../../exceptions'
 import { DistributedEvent } from '../models/event'
-import { Game } from '../models/schemas'
-import { Player } from '../models/schemas/player.schema'
-import { TaskType } from '../models/schemas/task.schema'
+import { Game, Player, TaskType } from '../models/schemas'
 
 export function toDistributedEvent(
   document: HydratedDocument<Game>,
