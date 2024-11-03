@@ -65,7 +65,10 @@ export class Game {
 
 export const GameSchema = SchemaFactory.createForClass(Game)
 const questionsSchema = GameSchema.path<MongooseSchema.Types.Array>('questions')
-questionsSchema.discriminator(QuestionType.Multi, QuestionMultiChoiceSchema)
+questionsSchema.discriminator(
+  QuestionType.MultiChoice,
+  QuestionMultiChoiceSchema,
+)
 questionsSchema.discriminator(QuestionType.Range, QuestionRangeSchema)
 questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
 questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)

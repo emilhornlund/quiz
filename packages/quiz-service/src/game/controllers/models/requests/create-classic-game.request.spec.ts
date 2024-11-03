@@ -8,30 +8,30 @@ import { validate } from 'class-validator'
 import { reduceNestedValidationErrors } from '../../../../app/utils'
 
 import { CreateClassicModeGameRequest } from './create-classic-mode-game.request'
-import { CreateClassicModeQuestionMultiAnswerRequest } from './create-classic-mode-question-multi-answer.request'
-import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
+import { CreateClassicModeQuestionMultiChoiceAnswerRequest } from './create-classic-mode-question-multi-choice-answer.request'
+import { CreateClassicModeQuestionMultiChoiceRequest } from './create-classic-mode-question-multi-choice.request'
 import { CreateClassicModeQuestionRangeRequest } from './create-classic-mode-question-range.request'
 import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
 import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
 
-function buildCreateClassicModeQuestionMultiAnswerRequest(
+function buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
   value: string,
   correct: boolean = false,
-): CreateClassicModeQuestionMultiAnswerRequest {
-  const request = new CreateClassicModeQuestionMultiAnswerRequest()
+): CreateClassicModeQuestionMultiChoiceAnswerRequest {
+  const request = new CreateClassicModeQuestionMultiChoiceAnswerRequest()
   request.value = value
   request.correct = correct
   return request
 }
 
-function buildCreateClassicModeQuestionMultiRequest(): CreateClassicModeQuestionMultiRequest {
-  const question = new CreateClassicModeQuestionMultiRequest()
-  question.type = QuestionType.Multi
+function buildCreateClassicModeQuestionMultiChoiceRequest(): CreateClassicModeQuestionMultiChoiceRequest {
+  const question = new CreateClassicModeQuestionMultiChoiceRequest()
+  question.type = QuestionType.MultiChoice
   question.question = 'Sample multi-choice question'
   question.imageURL = 'http://example.com/image.png'
   question.answers = [
-    buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
-    buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2'),
+    buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 1', true),
+    buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 2'),
   ]
   question.points = 1000
   question.duration = 30
@@ -85,7 +85,7 @@ describe('CreateClassicModeGameRequest', () => {
     gameRequest = new CreateClassicModeGameRequest()
     gameRequest.name = 'Sample Game'
     gameRequest.mode = GameMode.Classic
-    gameRequest.questions = [buildCreateClassicModeQuestionMultiRequest()]
+    gameRequest.questions = [buildCreateClassicModeQuestionMultiChoiceRequest()]
   })
 
   describe('Game Name Validation', () => {
@@ -177,9 +177,11 @@ describe('CreateClassicModeGameRequest', () => {
     })
   })
 
-  describe('Multi-Answer Question Validation', () => {
+  describe('Multi-Option Question Validation', () => {
     beforeEach(() => {
-      gameRequest.questions = [buildCreateClassicModeQuestionMultiRequest()]
+      gameRequest.questions = [
+        buildCreateClassicModeQuestionMultiChoiceRequest(),
+      ]
     })
 
     describe('Question Field Validation', () => {
@@ -274,8 +276,10 @@ describe('CreateClassicModeGameRequest', () => {
 
     describe('Answers Array Validation', () => {
       it('should fail if answers array is not an array', async () => {
-        ;((gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest)
-          .answers as any) = {} // Invalid, should be an array
+        ;((
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
+        ).answers as any) = {} // Invalid, should be an array
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
         expect(errors).toEqual([
@@ -294,7 +298,8 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should fail if answers array is empty', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
         ).answers = [] // Invalid, should be empty
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -312,9 +317,13 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should fail if answers array length is less than 2', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
         ).answers = [
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+            'Answer 1',
+            true,
+          ),
         ] // Invalid, should contain at least 2 answers
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -330,10 +339,14 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should succeeds if answers array length is equal to 2', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
         ).answers = [
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+            'Answer 1',
+            true,
+          ),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 2'),
         ] // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
@@ -341,15 +354,19 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should fail if answers array length is greater than 6', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
         ).answers = [
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 3'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 4'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 5'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 6'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 7'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+            'Answer 1',
+            true,
+          ),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 2'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 3'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 4'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 5'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 6'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 7'),
         ] // Invalid, should contain at most 6 answers
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
@@ -365,14 +382,18 @@ describe('CreateClassicModeGameRequest', () => {
 
       it('should succeed if answers array length is equal to 6', async () => {
         ;(
-          gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+          gameRequest
+            .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
         ).answers = [
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 3'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 4'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 5'),
-          buildCreateClassicModeQuestionMultiAnswerRequest('Answer 6'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+            'Answer 1',
+            true,
+          ),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 2'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 3'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 4'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 5'),
+          buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 6'),
         ] // Invalid, should contain at most 6 answers
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
@@ -380,8 +401,10 @@ describe('CreateClassicModeGameRequest', () => {
 
       describe('Value Field Validation', () => {
         it('should fail if answer value is not a string', async () => {
-          ;((gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest)
-            .answers[0].value as any) = 123 // Invalid, should be a string
+          ;((
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
+          ).answers[0].value as any) = 123 // Invalid, should be a string
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(1)
           expect(errors).toEqual([
@@ -399,7 +422,8 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should succeed if answer value length is equal to 1', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers[0].value = 'a' // Valid, length 1
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(0)
@@ -407,7 +431,8 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should fail if answer value length is less than 1', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers[0].value = '' // Invalid, length less than 1
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(1)
@@ -423,7 +448,8 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should succeed if answer value length is equal to 75', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers[0].value = 'a'.repeat(75) // Valid, length 75
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(0)
@@ -431,7 +457,8 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should fail if answer value length is greater than 75', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers[0].value = 'a'.repeat(76) // Invalid, length greater than 75
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(1)
@@ -449,8 +476,10 @@ describe('CreateClassicModeGameRequest', () => {
 
       describe('Correct Field Validation', () => {
         it('should fail if answer correct is undefined', async () => {
-          ;((gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest)
-            .answers[0].correct as any) = undefined // Invalid, should be a boolean
+          ;((
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
+          ).answers[0].correct as any) = undefined // Invalid, should be a boolean
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(2)
           expect(errors).toEqual([
@@ -471,8 +500,10 @@ describe('CreateClassicModeGameRequest', () => {
         })
 
         it('should fail if answer correct is not a boolean', async () => {
-          ;((gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest)
-            .answers[0].correct as any) = 123 // Invalid, should be a boolean
+          ;((
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
+          ).answers[0].correct as any) = 123 // Invalid, should be a boolean
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(2)
           expect(errors).toEqual([
@@ -494,10 +525,11 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should fail if no answers are marked correct', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers = [
-            buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1'),
-            buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2'),
+            buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 1'),
+            buildCreateClassicModeQuestionMultiChoiceAnswerRequest('Answer 2'),
           ] // Invalid, none are correct
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(1)
@@ -514,10 +546,17 @@ describe('CreateClassicModeGameRequest', () => {
 
         it('should succeed if all answers are marked correct', async () => {
           ;(
-            gameRequest.questions[0] as CreateClassicModeQuestionMultiRequest
+            gameRequest
+              .questions[0] as CreateClassicModeQuestionMultiChoiceRequest
           ).answers = [
-            buildCreateClassicModeQuestionMultiAnswerRequest('Answer 1', true),
-            buildCreateClassicModeQuestionMultiAnswerRequest('Answer 2', true),
+            buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+              'Answer 1',
+              true,
+            ),
+            buildCreateClassicModeQuestionMultiChoiceAnswerRequest(
+              'Answer 2',
+              true,
+            ),
           ] // Valid
           const errors = await validateReduceNestedValidationErrors(gameRequest)
           expect(errors.length).toBe(0)

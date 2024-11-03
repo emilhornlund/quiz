@@ -9,11 +9,11 @@ import {
   ValidateNested,
 } from 'class-validator'
 
-import { CreateClassicModeQuestionMultiAnswerRequest } from '../models/requests/create-classic-mode-question-multi-answer.request'
+import { CreateClassicModeQuestionMultiChoiceAnswerRequest } from '../models/requests/create-classic-mode-question-multi-choice-answer.request'
 
 import { AtLeastOneCorrectAnswerValidator } from './at-least-one-correct-answer-validator.decorator'
 
-export function ClassicModeGameQuestionMultiAnswersArrayProperty() {
+export function ClassicModeGameQuestionMultiChoiceAnswersArrayProperty() {
   return applyDecorators(
     ApiProperty({
       description:
@@ -27,13 +27,13 @@ export function ClassicModeGameQuestionMultiAnswersArrayProperty() {
       required: true,
       minimum: 2,
       maximum: 6,
-      type: [CreateClassicModeQuestionMultiAnswerRequest],
+      type: [CreateClassicModeQuestionMultiChoiceAnswerRequest],
     }),
     IsArray(),
     ArrayMinSize(2),
     ArrayMaxSize(6),
     ValidateNested({ each: true }),
-    Type(() => CreateClassicModeQuestionMultiAnswerRequest),
+    Type(() => CreateClassicModeQuestionMultiChoiceAnswerRequest),
     Validate(AtLeastOneCorrectAnswerValidator),
   )
 }

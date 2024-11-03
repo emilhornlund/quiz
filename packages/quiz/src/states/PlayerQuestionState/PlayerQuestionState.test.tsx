@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import PlayerQuestionState from './PlayerQuestionState'
 
 describe('PlayerQuestionState', () => {
-  it('should render PlayerQuestionState with question type multi and two answers', () => {
+  it('should render PlayerQuestionState with question type multi-choice and two answers', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
@@ -16,7 +16,7 @@ describe('PlayerQuestionState', () => {
             score: { total: 10458 },
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL:
               'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -37,7 +37,7 @@ describe('PlayerQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render PlayerQuestionState with question type multi and four answers', () => {
+  it('should render PlayerQuestionState with question type multi-choice and four answers', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
@@ -47,7 +47,7 @@ describe('PlayerQuestionState', () => {
             score: { total: 10458 },
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
             answers: [
@@ -69,7 +69,7 @@ describe('PlayerQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render PlayerQuestionState with question type multi and six answers', () => {
+  it('should render PlayerQuestionState with question type multi-choice and six answers', () => {
     const { container } = render(
       <PlayerQuestionState
         event={{
@@ -79,7 +79,7 @@ describe('PlayerQuestionState', () => {
             score: { total: 10458 },
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
             answers: [

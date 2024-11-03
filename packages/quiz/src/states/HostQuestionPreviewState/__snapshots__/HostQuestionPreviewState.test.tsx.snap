@@ -28,7 +28,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
       class="content fullWidth spaceBetweenAlign"
     >
       <div>
-        MULTI
+        MULTI_CHOICE
       </div>
       <div
         class="typography title medium"

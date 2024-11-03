@@ -7,7 +7,7 @@ import AnswerRange from './components/AnswerRange'
 import styles from './QuestionAnswerPicker.module.scss'
 
 export type Answer =
-  | { type: QuestionType.Multi; index: number }
+  | { type: QuestionType.MultiChoice; index: number }
   | { type: QuestionType.TrueFalse; value: boolean }
   | { type: QuestionType.Range; value: number }
   | { type: QuestionType.TypeAnswer; value: string }
@@ -25,13 +25,13 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
 }) => {
   return (
     <div className={styles.main}>
-      {question.type === QuestionType.Multi && (
+      {question.type === QuestionType.MultiChoice && (
         <AnswerPicker
           answers={question.answers.map(({ value }) => value)}
           interactive={interactive}
           onClick={(index) =>
             onChange?.({
-              type: QuestionType.Multi,
+              type: QuestionType.MultiChoice,
               index,
             })
           }

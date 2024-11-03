@@ -15,7 +15,7 @@ describe('HostQuestionPreviewState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
           },
           progress: {

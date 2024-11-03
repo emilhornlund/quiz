@@ -1,16 +1,16 @@
 import { GameMode } from './game-mode.enum'
 import { QuestionType } from './question-type.enum'
 
-export interface CreateClassicModeQuestionMultiAnswerRequestDto {
+export interface CreateClassicModeQuestionMultiChoiceAnswerRequestDto {
   value: string
   correct: boolean
 }
 
-export interface CreateClassicModeQuestionMultiRequestDto {
-  type: QuestionType.Multi
+export interface CreateClassicModeQuestionMultiChoiceRequestDto {
+  type: QuestionType.MultiChoice
   question: string
   imageURL?: string
-  answers: CreateClassicModeQuestionMultiAnswerRequestDto[]
+  answers: CreateClassicModeQuestionMultiChoiceAnswerRequestDto[]
   points: number
   duration: number
 }
@@ -59,7 +59,7 @@ export type CreateGameRequestDto = {
   | {
       mode: GameMode.Classic
       questions: (
-        | CreateClassicModeQuestionMultiRequestDto
+        | CreateClassicModeQuestionMultiChoiceRequestDto
         | CreateClassicModeQuestionTrueFalseRequestDto
         | CreateClassicModeQuestionSliderRequestDto
         | CreateClassicModeQuestionTypeAnswerRequestDto

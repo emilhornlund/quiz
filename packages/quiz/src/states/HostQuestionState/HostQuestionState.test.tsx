@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import HostQuestionState from './HostQuestionState'
 
 describe('HostQuestionState', () => {
-  it('should render HostQuestionState with question type multi and two answers', async () => {
+  it('should render HostQuestionState with question type multi-choice and two answers', async () => {
     const { container } = render(
       <HostQuestionState
         event={{
@@ -15,7 +15,7 @@ describe('HostQuestionState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL:
               'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -37,7 +37,7 @@ describe('HostQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render HostQuestionState with question type multi and four answers', async () => {
+  it('should render HostQuestionState with question type multi-choice and four answers', async () => {
     const { container } = render(
       <HostQuestionState
         event={{
@@ -46,7 +46,7 @@ describe('HostQuestionState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
             answers: [
@@ -69,7 +69,7 @@ describe('HostQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render HostQuestionState with question type multi and six answers', async () => {
+  it('should render HostQuestionState with question type multi-choice and six answers', async () => {
     const { container } = render(
       <HostQuestionState
         event={{
@@ -78,7 +78,7 @@ describe('HostQuestionState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
             imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
             answers: [

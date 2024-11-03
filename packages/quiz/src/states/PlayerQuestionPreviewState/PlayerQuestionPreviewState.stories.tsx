@@ -22,7 +22,7 @@ export const Default = {
         score: 10458,
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
       },
       progress: {

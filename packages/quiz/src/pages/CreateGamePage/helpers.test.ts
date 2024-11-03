@@ -4,10 +4,10 @@ import { parseQuestionsJson } from './helpers.ts'
 
 describe('parseQuestionsJson', () => {
   describe('Classic Mode Questions', () => {
-    it('should parse a valid MULTI question', () => {
+    it('should parse a valid multi-choice question', () => {
       const parsedJson = [
         {
-          type: QuestionType.Multi,
+          type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
           imageURL: 'https://example.com/image.png',
           answers: [
@@ -22,10 +22,10 @@ describe('parseQuestionsJson', () => {
       expect(result[0]).toEqual(parsedJson[0])
     })
 
-    it('should throw error for MULTI question with invalid points value', () => {
+    it('should throw error for multi-choice question with invalid points value', () => {
       const parsedJson = [
         {
-          type: QuestionType.Multi,
+          type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
           imageURL: 'https://example.com/image.png',
           answers: [
@@ -41,10 +41,10 @@ describe('parseQuestionsJson', () => {
       )
     })
 
-    it('should throw error for MULTI question with invalid duration value', () => {
+    it('should throw error for multi-choice question with invalid duration value', () => {
       const parsedJson = [
         {
-          type: QuestionType.Multi,
+          type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
           imageURL: 'https://example.com/image.png',
           answers: [
@@ -165,7 +165,7 @@ describe('parseQuestionsJson', () => {
     it('should throw an error for unsupported game mode', () => {
       const parsedJson = [
         {
-          type: QuestionType.Multi,
+          type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
           imageURL: 'https://example.com/image.png',
           points: 1000,

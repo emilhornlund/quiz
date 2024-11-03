@@ -10,7 +10,7 @@ import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
 
 import { GameModeProperty, GameNameProperty } from '../../decorators'
 
-import { CreateClassicModeQuestionMultiRequest } from './create-classic-mode-question-multi.request'
+import { CreateClassicModeQuestionMultiChoiceRequest } from './create-classic-mode-question-multi-choice.request'
 import { CreateClassicModeQuestionRangeRequest } from './create-classic-mode-question-range.request'
 import { CreateClassicModeQuestionTrueFalseRequest } from './create-classic-mode-question-true-false.request'
 import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mode-question-type-answer.request'
@@ -18,8 +18,11 @@ import { CreateClassicModeQuestionTypeAnswerRequest } from './create-classic-mod
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformQuestionBasedOnType(question: any) {
   switch (question?.type) {
-    case QuestionType.Multi:
-      return plainToInstance(CreateClassicModeQuestionMultiRequest, question)
+    case QuestionType.MultiChoice:
+      return plainToInstance(
+        CreateClassicModeQuestionMultiChoiceRequest,
+        question,
+      )
     case QuestionType.TrueFalse:
       return plainToInstance(
         CreateClassicModeQuestionTrueFalseRequest,
@@ -38,7 +41,7 @@ function transformQuestionBasedOnType(question: any) {
 }
 
 @ApiExtraModels(
-  CreateClassicModeQuestionMultiRequest,
+  CreateClassicModeQuestionMultiChoiceRequest,
   CreateClassicModeQuestionTrueFalseRequest,
   CreateClassicModeQuestionRangeRequest,
   CreateClassicModeQuestionTypeAnswerRequest,
@@ -58,7 +61,7 @@ export class CreateClassicModeGameRequest
     required: true,
     minimum: 1,
     oneOf: [
-      { $ref: getSchemaPath(CreateClassicModeQuestionMultiRequest) },
+      { $ref: getSchemaPath(CreateClassicModeQuestionMultiChoiceRequest) },
       { $ref: getSchemaPath(CreateClassicModeQuestionTrueFalseRequest) },
       { $ref: getSchemaPath(CreateClassicModeQuestionRangeRequest) },
       { $ref: getSchemaPath(CreateClassicModeQuestionTypeAnswerRequest) },
@@ -71,7 +74,7 @@ export class CreateClassicModeGameRequest
     toClassOnly: true,
   })
   questions: (
-    | CreateClassicModeQuestionMultiRequest
+    | CreateClassicModeQuestionMultiChoiceRequest
     | CreateClassicModeQuestionTrueFalseRequest
     | CreateClassicModeQuestionRangeRequest
     | CreateClassicModeQuestionTypeAnswerRequest

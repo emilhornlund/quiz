@@ -418,7 +418,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
   mode: GameMode.Classic,
   questions: [
     {
-      type: QuestionType.Multi,
+      type: QuestionType.MultiChoice,
       question: 'What is the capital of Sweden?',
       imageURL: 'https://example.com/question-image.png',
       answers: [

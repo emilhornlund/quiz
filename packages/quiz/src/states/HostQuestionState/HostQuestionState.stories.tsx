@@ -21,7 +21,7 @@ export const QuestionMultiTwoAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL:
           'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -45,7 +45,7 @@ export const QuestionMultiFourAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
         answers: [
@@ -73,7 +73,7 @@ export const QuestionMultiSixAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
         answers: [

@@ -4,14 +4,14 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator'
 
-import { CreateClassicModeQuestionMultiAnswerRequest } from '../models/requests/create-classic-mode-question-multi-answer.request'
+import { CreateClassicModeQuestionMultiChoiceAnswerRequest } from '../models/requests/create-classic-mode-question-multi-choice-answer.request'
 
 @ValidatorConstraint({ name: 'atLeastOneCorrectAnswer', async: false })
 export class AtLeastOneCorrectAnswerValidator
   implements ValidatorConstraintInterface
 {
   validate(
-    answers: CreateClassicModeQuestionMultiAnswerRequest[],
+    answers: CreateClassicModeQuestionMultiChoiceAnswerRequest[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     args: ValidationArguments,
   ) {

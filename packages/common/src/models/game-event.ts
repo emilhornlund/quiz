@@ -69,8 +69,8 @@ export type GameQuestionPreviewPlayerEvent = {
   }
 }
 
-export type GameEventQuestionMulti = {
-  type: QuestionType.Multi
+export type GameEventQuestionMultiChoice = {
+  type: QuestionType.MultiChoice
   question: string
   imageURL?: string
   answers: { value: string }[]
@@ -102,7 +102,7 @@ export type GameEventQuestionTypeAnswer = {
 }
 
 export type GameEventQuestion =
-  | GameEventQuestionMulti
+  | GameEventQuestionMultiChoice
   | GameEventQuestionRange
   | GameEventQuestionTrueFalse
   | GameEventQuestionTypeAnswer
@@ -175,8 +175,8 @@ export type GameLeaderboardHostEvent = {
   }
 }
 
-export type GameEventQuestionResultsMulti = {
-  type: QuestionType.Multi
+export type GameEventQuestionResultsMultiChoice = {
+  type: QuestionType.MultiChoice
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
@@ -196,7 +196,7 @@ export type GameEventQuestionResultsTypeAnswer = {
 }
 
 export type GameEventQuestionResults =
-  | GameEventQuestionResultsMulti
+  | GameEventQuestionResultsMultiChoice
   | GameEventQuestionResultsRange
   | GameEventQuestionResultsTrueFalse
   | GameEventQuestionResultsTypeAnswer

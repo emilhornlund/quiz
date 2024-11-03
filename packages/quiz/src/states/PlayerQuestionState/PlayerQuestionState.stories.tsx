@@ -13,7 +13,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const QuestionMultiTwoAnswers = {
+export const QuestionMultiChoiceTwoAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
@@ -22,7 +22,7 @@ export const QuestionMultiTwoAnswers = {
         score: { total: 10458 },
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL:
           'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
@@ -37,7 +37,7 @@ export const QuestionMultiTwoAnswers = {
   },
 } satisfies Story
 
-export const QuestionMultiFourAnswers = {
+export const QuestionMultiChoiceFourAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
@@ -46,7 +46,7 @@ export const QuestionMultiFourAnswers = {
         score: { total: 10458 },
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
         answers: [
@@ -65,7 +65,7 @@ export const QuestionMultiFourAnswers = {
   },
 } satisfies Story
 
-export const QuestionMultiSixAnswers = {
+export const QuestionMultiChoiceSixAnswers = {
   args: {
     event: {
       type: GameEventType.GameQuestionPlayer,
@@ -74,7 +74,7 @@ export const QuestionMultiSixAnswers = {
         score: { total: 10458 },
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
         imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
         answers: [

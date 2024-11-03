@@ -1,5 +1,5 @@
 import {
-  CreateClassicModeQuestionMultiRequestDto,
+  CreateClassicModeQuestionMultiChoiceRequestDto,
   CreateClassicModeQuestionSliderRequestDto,
   CreateClassicModeQuestionTrueFalseRequestDto,
   CreateClassicModeQuestionTypeAnswerRequestDto,
@@ -9,17 +9,17 @@ import {
 } from '../models'
 
 type QuestionRequest =
-  | CreateClassicModeQuestionMultiRequestDto
+  | CreateClassicModeQuestionMultiChoiceRequestDto
   | CreateClassicModeQuestionTrueFalseRequestDto
   | CreateClassicModeQuestionSliderRequestDto
   | CreateClassicModeQuestionTypeAnswerRequestDto
   | CreateZeroToOneHundredModeQuestionRangeRequestDto
 
-export const isCreateClassicModeQuestionMultiRequestDto = (
+export const isCreateClassicModeQuestionMultiChoiceRequestDto = (
   mode: GameMode,
   request: QuestionRequest,
-): request is CreateClassicModeQuestionMultiRequestDto => {
-  return mode === GameMode.Classic && request.type === QuestionType.Multi
+): request is CreateClassicModeQuestionMultiChoiceRequestDto => {
+  return mode === GameMode.Classic && request.type === QuestionType.MultiChoice
 }
 
 export const isCreateClassicModeQuestionSliderRequestDto = (

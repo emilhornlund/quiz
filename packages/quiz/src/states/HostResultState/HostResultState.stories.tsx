@@ -21,11 +21,11 @@ export const QuestionMultiTwoAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
       },
       results: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         distribution: [
           { value: 'Vincent van Gogh', count: 3, correct: true },
           { value: 'Pablo Picasso', count: 7, correct: false },
@@ -47,11 +47,11 @@ export const QuestionMultiFourAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
       },
       results: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         distribution: [
           { value: 'Vincent van Gogh', count: 3, correct: true },
           { value: 'Pablo Picasso', count: 2, correct: false },
@@ -75,11 +75,11 @@ export const QuestionMultiSixAnswers = {
         pin: '123456',
       },
       question: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
       },
       results: {
-        type: QuestionType.Multi,
+        type: QuestionType.MultiChoice,
         distribution: [
           { value: 'Vincent van Gogh', count: 1, correct: true },
           { value: 'Pablo Picasso', count: 2, correct: false },

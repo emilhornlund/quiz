@@ -109,7 +109,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
             >
               [
   {
-    "type": "MULTI",
+    "type": "MULTI_CHOICE",
     "question": "",
     "imageURL": "",
     "answers": [

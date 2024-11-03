@@ -64,7 +64,7 @@ const CreateGamePage: FC = () => {
         JSON.stringify(
           [
             {
-              type: QuestionType.Multi,
+              type: QuestionType.MultiChoice,
               question: '',
               imageURL: '',
               answers: [

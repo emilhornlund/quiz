@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`HostQuestionState > should render HostQuestionState with question type multi and four answers 1`] = `
+exports[`HostQuestionState > should render HostQuestionState with question type multi-choice and four answers 1`] = `
 <div>
   <div
     class="main"
@@ -284,7 +284,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
 </div>
 `;
 
-exports[`HostQuestionState > should render HostQuestionState with question type multi and six answers 1`] = `
+exports[`HostQuestionState > should render HostQuestionState with question type multi-choice and six answers 1`] = `
 <div>
   <div
     class="main"
@@ -586,7 +586,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
 </div>
 `;
 
-exports[`HostQuestionState > should render HostQuestionState with question type multi and two answers 1`] = `
+exports[`HostQuestionState > should render HostQuestionState with question type multi-choice and two answers 1`] = `
 <div>
   <div
     class="main"

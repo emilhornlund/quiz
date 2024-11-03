@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import HostResultState from './HostResultState'
 
 describe('HostResultState', () => {
-  it('should render HostResultState with question type multi and two answers', () => {
+  it('should render HostResultState with question type multi-choice and two answers', () => {
     const { container } = render(
       <HostResultState
         event={{
@@ -15,11 +15,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             distribution: [
               { value: 'Vincent van Gogh', count: 3, correct: true },
               { value: 'Pablo Picasso', count: 7, correct: false },
@@ -36,7 +36,7 @@ describe('HostResultState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render HostResultState with question type multi and four answers', () => {
+  it('should render HostResultState with question type multi-choice and four answers', () => {
     const { container } = render(
       <HostResultState
         event={{
@@ -45,11 +45,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             distribution: [
               { value: 'Vincent van Gogh', count: 3, correct: true },
               { value: 'Pablo Picasso', count: 2, correct: false },
@@ -68,7 +68,7 @@ describe('HostResultState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render HostResultState with question type multi and six answers', () => {
+  it('should render HostResultState with question type multi-choice and six answers', () => {
     const { container } = render(
       <HostResultState
         event={{
@@ -77,11 +77,11 @@ describe('HostResultState', () => {
             pin: '123456',
           },
           question: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
           },
           results: {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             distribution: [
               { value: 'Vincent van Gogh', count: 1, correct: true },
               { value: 'Pablo Picasso', count: 2, correct: false },

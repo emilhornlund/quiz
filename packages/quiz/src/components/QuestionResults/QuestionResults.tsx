@@ -29,7 +29,7 @@ export interface QuestionResultsProps {
 const QuestionResults: FC<QuestionResultsProps> = ({ results }) => (
   <div className={styles.questionResults}>
     <div className={styles.chips}>
-      {results.type === QuestionType.Multi &&
+      {results.type === QuestionType.MultiChoice &&
         results.distribution.map(({ value, count, correct }, index) => (
           <ResultChip
             key={`${index}_${value}`}

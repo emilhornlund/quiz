@@ -28,7 +28,7 @@ exports[`PlayerQuestionPreviewState > should render PlayerQuestionPreviewState 1
       class="content fullWidth spaceBetweenAlign"
     >
       <div>
-        MULTI
+        MULTI_CHOICE
       </div>
       <div
         class="typography subtitle medium"

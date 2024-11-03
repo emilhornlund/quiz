@@ -89,9 +89,9 @@ export const parseQuestionsJson = <T extends GameMode>(
   if (mode === GameMode.Classic) {
     return assertType(
       parsedJson.map((question) => {
-        if (question.type === QuestionType.Multi) {
+        if (question.type === QuestionType.MultiChoice) {
           return {
-            type: QuestionType.Multi,
+            type: QuestionType.MultiChoice,
             question: assertQuestionType(question.question),
             imageURL: assertImageURLType(question.imageURL),
             answers: assertType(

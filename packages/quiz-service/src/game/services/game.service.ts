@@ -6,7 +6,7 @@ import {
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
   GameParticipantType,
-  isCreateClassicModeQuestionMultiRequestDto,
+  isCreateClassicModeQuestionMultiChoiceRequestDto,
   isCreateClassicModeQuestionSliderRequestDto,
   isCreateClassicModeQuestionTrueFalseRequestDto,
   isCreateClassicModeQuestionTypeAnswerRequestDto,
@@ -223,10 +223,13 @@ export class GameService {
       questions: request.questions
         .map((question) => {
           if (
-            isCreateClassicModeQuestionMultiRequestDto(request.mode, question)
+            isCreateClassicModeQuestionMultiChoiceRequestDto(
+              request.mode,
+              question,
+            )
           ) {
             return {
-              type: QuestionType.Multi,
+              type: QuestionType.MultiChoice,
               question: question.question,
               imageURL: question.imageURL,
               points: question.points,
