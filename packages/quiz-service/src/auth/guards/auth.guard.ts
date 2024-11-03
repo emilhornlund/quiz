@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
 
 import { IS_PUBLIC_KEY } from '../../app/decorators'
+import { AuthService } from '../services'
 
 /**
  * Guard to handle JWT-based authentication.
@@ -18,7 +18,7 @@ import { IS_PUBLIC_KEY } from '../../app/decorators'
 export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private jwtService: JwtService,
+    private authService: AuthService,
   ) {}
 
   /**
@@ -45,7 +45,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { sub, gameID } = await this.jwtService.verifyAsync(token)
+      const { sub, gameID } = await this.authService.verifyGameToken(token)
       request['gameID'] = gameID
       request['clientId'] = sub
     } catch {

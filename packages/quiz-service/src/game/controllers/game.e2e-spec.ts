@@ -52,7 +52,6 @@ describe('GameController (e2e)', () => {
         .send(CREATE_CLASSIC_MODE_GAME_REQUEST)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('id')
           expect(res.body).toHaveProperty('token')
         })
     })
@@ -63,7 +62,6 @@ describe('GameController (e2e)', () => {
         .send(CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('id')
           expect(res.body).toHaveProperty('token')
         })
     })
@@ -107,7 +105,9 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
-      const game = await gameModel.findById(createdGame.id).exec()
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
@@ -122,7 +122,9 @@ describe('GameController (e2e)', () => {
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
       )
 
-      const game = await gameModel.findById(createdGame.id).exec()
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
@@ -137,12 +139,14 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { expires: outdatedDate })
         .exec()
 
-      const game = await gameModel.findById(createdGame.id).exec()
+      const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
@@ -162,12 +166,14 @@ describe('GameController (e2e)', () => {
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { expires: outdatedDate })
         .exec()
 
-      const game = await gameModel.findById(createdGame.id).exec()
+      const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
@@ -214,12 +220,13 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${createdGame.id}/players`)
+        .post(`/api/games/${gameID}/players`)
         .send({ nickname: 'FrostyBear' })
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('id')
           expect(res.body).toHaveProperty('token')
         })
     })
@@ -229,8 +236,10 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       await gameModel
-        .findByIdAndUpdate(createdGame.id, {
+        .findByIdAndUpdate(gameID, {
           players: [
             {
               _id: uuidv4(),
@@ -242,7 +251,7 @@ describe('GameController (e2e)', () => {
         .exec()
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${createdGame.id}/players`)
+        .post(`/api/games/${gameID}/players`)
         .send({ nickname: 'FrostyBear' })
         .expect(409)
         .expect((res) => {
@@ -260,19 +269,21 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(createdGame.id, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { expires: outdatedDate })
         .exec()
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${createdGame.id}/players`)
+        .post(`/api/games/${gameID}/players`)
         .send({ nickname: 'FrostyBear' })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${createdGame.id}`,
+            `Active game not found by id ${gameID}`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -318,8 +329,10 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       const response = supertest(app.getHttpServer())
-        .get(`/api/games/${createdGame.id}/events`)
+        .get(`/api/games/${gameID}/events`)
         .set('Authorization', `Bearer ${createdGame.token}`)
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
@@ -335,13 +348,12 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
-      const joinedGame = await gameService.joinGame(
-        createdGame.id,
-        'FrostyBear',
-      )
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const joinedGame = await gameService.joinGame(gameID, 'FrostyBear')
 
       const response = supertest(app.getHttpServer())
-        .get(`/api/games/${joinedGame.id}/events`)
+        .get(`/api/games/${gameID}/events`)
         .set('Authorization', `Bearer ${joinedGame.token}`)
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
@@ -357,8 +369,10 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
       return supertest(app.getHttpServer())
-        .get(`/api/games/${createdGame.id}/events`)
+        .get(`/api/games/${gameID}/events`)
         .expect(401)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Unauthorized')
@@ -396,12 +410,16 @@ describe('GameController (e2e)', () => {
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
+      const { gameID } = await authService.verifyGameToken(
+        firstCreatedGame.token,
+      )
+
       const secondCreatedGame = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
       )
 
       return supertest(app.getHttpServer())
-        .get(`/api/games/${firstCreatedGame.id}/events`)
+        .get(`/api/games/${gameID}/events`)
         .set('Authorization', `Bearer ${secondCreatedGame.token}`)
         .expect(401)
         .expect((res) => {

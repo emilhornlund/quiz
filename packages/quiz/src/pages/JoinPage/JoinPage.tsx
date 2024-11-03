@@ -33,7 +33,7 @@ const JoinPage: FC = () => {
     if (gameID && nickname) {
       joinGame(gameID, nickname)
         .then((response) => {
-          navigate(`/game?gameID=${response.id}&token=${response.token}`)
+          navigate(`/game?token=${response.token}`)
         })
         .catch(console.error)
     }

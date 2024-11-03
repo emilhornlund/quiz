@@ -1,3 +1,5 @@
+import { GameTokenDto } from '@quiz/common'
+import { jwtDecode } from 'jwt-decode'
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
@@ -12,10 +14,13 @@ export const useGameTokenQueryParam = (): [
     [searchParams],
   )
 
-  const gameID = useMemo<string | undefined>(
-    () => searchParams.get('gameID') || undefined,
-    [searchParams],
-  )
+  const gameID = useMemo<string | undefined>(() => {
+    if (token) {
+      const { gameID } = jwtDecode<GameTokenDto>(token)
+      return gameID
+    }
+    return undefined
+  }, [token])
 
   return [token, gameID]
 }

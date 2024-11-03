@@ -201,7 +201,7 @@ const CreateGamePage: FC = () => {
 
       createGame(request)
         .then((response) => {
-          navigate(`/game?gameID=${response.id}&token=${response.token}`)
+          navigate(`/game?token=${response.token}`)
         })
         .catch(console.error)
     }

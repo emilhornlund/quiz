@@ -1,8 +1,7 @@
 import {
   CreateGameRequestDto,
-  CreateGameResponseDto,
   FindGameResponseDto,
-  JoinGameResponseDto,
+  GameAuthResponseDto,
 } from '@quiz/common'
 import { Bounce, toast } from 'react-toastify'
 
@@ -71,8 +70,8 @@ export const useQuizService = () => {
 
   const createGame = (
     request: CreateGameRequestDto,
-  ): Promise<CreateGameResponseDto> =>
-    apiPost<CreateGameResponseDto>('/games', request)
+  ): Promise<GameAuthResponseDto> =>
+    apiPost<GameAuthResponseDto>('/games', request)
 
   const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
     apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
@@ -80,8 +79,8 @@ export const useQuizService = () => {
   const joinGame = (
     gameID: string,
     nickname: string,
-  ): Promise<JoinGameResponseDto> =>
-    apiPost<JoinGameResponseDto>(`/games/${gameID}/players`, { nickname })
+  ): Promise<GameAuthResponseDto> =>
+    apiPost<GameAuthResponseDto>(`/games/${gameID}/players`, { nickname })
 
   return { createGame, findGame, joinGame }
 }

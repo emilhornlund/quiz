@@ -37,11 +37,7 @@ import {
   CreateZeroToOneHundredModeGameRequest,
 } from './models/requests'
 import { JoinGameRequest } from './models/requests/join-game.request'
-import {
-  CreateGameResponse,
-  FindGameResponse,
-  JoinGameResponse,
-} from './models/response'
+import { FindGameResponse, GameAuthResponse } from './models/response'
 
 /**
  * GameController handles incoming HTTP requests related to game operations,
@@ -78,14 +74,14 @@ export class GameController {
   })
   @ApiCreatedResponse({
     description: 'The game has been successfully created.',
-    type: CreateGameResponse,
+    type: GameAuthResponse,
   })
   async createGame(
     @Body(new ParseCreateGameRequestPipe())
     createGameRequest:
       | CreateClassicModeGameRequest
       | CreateZeroToOneHundredModeGameRequest,
-  ): Promise<CreateGameResponse> {
+  ): Promise<GameAuthResponse> {
     return await this.gameService.createGame(createGameRequest)
   }
 
@@ -131,7 +127,7 @@ export class GameController {
   })
   @ApiCreatedResponse({
     description: 'The game has been successfully joined.',
-    type: JoinGameResponse,
+    type: GameAuthResponse,
   })
   @ApiBadRequestResponse({
     description:
@@ -144,7 +140,7 @@ export class GameController {
   async joinGame(
     @Param('gameID', ParseUUIDPipe) gameID: string,
     @Body() request: JoinGameRequest,
-  ): Promise<JoinGameResponse> {
+  ): Promise<GameAuthResponse> {
     return this.gameService.joinGame(gameID, request.nickname)
   }
 

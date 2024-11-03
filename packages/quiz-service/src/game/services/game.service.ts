@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import {
   CreateClassicModeGameRequestDto,
-  CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
+  GameAuthResponseDto,
   GameParticipantType,
-  JoinGameResponseDto,
 } from '@quiz/common'
 import { MurLock } from 'murlock'
 
@@ -37,13 +36,14 @@ export class GameService {
    *
    * @param {CreateClassicModeGameRequestDto | CreateZeroToOneHundredModeGameRequestDto} request - The details of the game to be created.
    *
-   * @returns {Promise<CreateGameResponseDto>} A Promise containing the ID and token of the created game.
+   * @returns {Promise<GameAuthResponseDto>} A Promise that resolves to a `GameAuthResponseDto`
+   * object containing the host's authentication token for game access.
    */
   public async createGame(
     request:
       | CreateClassicModeGameRequestDto
       | CreateZeroToOneHundredModeGameRequestDto,
-  ): Promise<CreateGameResponseDto> {
+  ): Promise<GameAuthResponseDto> {
     const gameDocument = await this.gameRepository.createGame(
       buildPartialGameModel(request),
     )
@@ -55,7 +55,7 @@ export class GameService {
       Math.floor(gameDocument.expires.getTime() / 1000),
     )
 
-    return { id: gameDocument._id, token }
+    return { token }
   }
 
   /**
@@ -88,8 +88,8 @@ export class GameService {
    * @param {string} gameID - The unique identifier of the game the player wants to join.
    * @param {string} nickname - The nickname chosen by the player. Must be unique within the game.
    *
-   * @returns {Promise<JoinGameResponseDto>} A Promise that resolves to a `JoinGameResponseDto`
-   * object containing the player's unique ID and authentication token for game access.
+   * @returns {Promise<GameAuthResponseDto>} A Promise that resolves to a `GameAuthResponseDto`
+   * object containing the player's authentication token for game access.
    *
    * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID`
    * was created in the last 6 hours.
@@ -100,7 +100,7 @@ export class GameService {
   public async joinGame(
     gameID: string,
     nickname: string,
-  ): Promise<JoinGameResponseDto> {
+  ): Promise<GameAuthResponseDto> {
     const [gameDocument, newPlayer] = await this.gameRepository.addPlayer(
       gameID,
       nickname,
@@ -113,6 +113,6 @@ export class GameService {
       Math.floor(gameDocument.expires.getTime() / 1000),
     )
 
-    return { id: gameID, token }
+    return { token }
   }
 }
