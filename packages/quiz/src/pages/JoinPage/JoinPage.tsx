@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '../../components'
-import { useGameStorage } from '../../utils/use-game-storage.tsx'
 import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 import { getMessage, getTitle } from './helpers.ts'
@@ -20,7 +19,6 @@ const JoinPage: FC = () => {
   const [searchParams] = useSearchParams()
 
   const { joinGame } = useQuizService()
-  const [, persistGameData] = useGameStorage()
 
   const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 
@@ -35,8 +33,7 @@ const JoinPage: FC = () => {
     if (gameID && nickname) {
       joinGame(gameID, nickname)
         .then((response) => {
-          persistGameData(response.id, response.token)
-          navigate(`/game?gameID=${response.id}`)
+          navigate(`/game?gameID=${response.id}&token=${response.token}`)
         })
         .catch(console.error)
     }

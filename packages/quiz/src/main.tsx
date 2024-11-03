@@ -10,7 +10,6 @@ import {
   HomePage,
   JoinPage,
 } from './pages'
-import { GameProvider } from './pages/GamePage'
 
 import './styles/fonts.scss'
 import './styles/index.css'
@@ -37,11 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/game',
-        element: (
-          <GameProvider>
-            <GamePage />
-          </GameProvider>
-        ),
+        element: <GamePage />,
       },
     ],
     errorElement: <ErrorPage />,

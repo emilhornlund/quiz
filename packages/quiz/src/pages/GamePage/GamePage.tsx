@@ -23,10 +23,10 @@ import {
   ConnectionStatus,
   useEventSource,
 } from '../../utils/use-event-source.tsx'
-import { useGameContext } from '../../utils/use-game-context'
+import { useGameTokenQueryParam } from '../../utils/use-game-token-query-param.tsx'
 
 const GamePage = () => {
-  const { gameID, token } = useGameContext()
+  const [token, gameID] = useGameTokenQueryParam()
 
   const [event, connectionStatus] = useEventSource(gameID, token)
 
