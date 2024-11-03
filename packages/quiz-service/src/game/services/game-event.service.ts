@@ -10,19 +10,18 @@ import { InjectModel } from '@nestjs/mongoose'
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEventType } from '@quiz/common'
 import { Redis } from 'ioredis'
-import { HydratedDocument, Model } from 'mongoose'
+import { Model } from 'mongoose'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
-import { ActiveGameNotFoundByIDException } from '../exceptions'
+import {
+  ActiveGameNotFoundByIDException,
+  PlayerNotFoundException,
+} from '../exceptions'
 
 import { DistributedEvent } from './models/event'
-import { Game } from './models/schemas'
-import {
-  toDistributedEvent,
-  toDistributedHostGameEvent,
-  toDistributedPlayerGameEvent,
-} from './utils'
+import { Game, GameDocument } from './models/schemas'
+import { buildHostGameEvent, buildPlayerGameEvent } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
@@ -128,6 +127,12 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
       throw new ActiveGameNotFoundByIDException(gameID)
     }
 
+    const player = document.players.find((player) => player._id === clientId)
+
+    if (document.hostClientId !== clientId && !player) {
+      throw new PlayerNotFoundException(clientId)
+    }
+
     if (!this.activeClients.has(clientId)) {
       this.activeClients.add(clientId)
     }
@@ -137,7 +142,17 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
       LOCAL_EVENT_EMITTER_CHANNEL,
     ) as Observable<DistributedEvent>
 
-    return concat(from([toDistributedEvent(document, clientId)]), source).pipe(
+    return concat(
+      from([
+        {
+          clientId,
+          event: player
+            ? buildPlayerGameEvent(document, player)
+            : buildHostGameEvent(document),
+        },
+      ]),
+      source,
+    ).pipe(
       filter(
         (event) => event.clientId === undefined || event.clientId === clientId,
       ),
@@ -152,12 +167,16 @@ export class GameEventService implements OnModuleInit, OnModuleDestroy {
    *
    * @param document - Mongoose document of the game to publish events for.
    */
-  public async publish(document: HydratedDocument<Game>): Promise<void> {
+  public async publish(document: GameDocument): Promise<void> {
     await Promise.all([
-      this.publishDistributedEvent(toDistributedHostGameEvent(document)),
-      ...document.players.map((player) =>
-        toDistributedPlayerGameEvent(document, player),
-      ),
+      this.publishDistributedEvent({
+        clientId: document.hostClientId,
+        event: buildHostGameEvent(document),
+      }),
+      ...document.players.map((player) => ({
+        clientId: player._id,
+        event: buildPlayerGameEvent(document, player),
+      })),
     ])
   }
 

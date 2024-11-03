@@ -15,7 +15,7 @@ import {
   QuestionTypeAnswer,
   QuestionTypeAnswerSchema,
 } from './question.schema'
-import { BaseTask, TaskLobby, TaskLobbySchema, TaskType } from './task.schema'
+import { BaseTask, LobbyTask, LobbyTaskSchema, TaskType } from './task.schema'
 
 export type GameDocument = HydratedDocument<Game>
 
@@ -55,9 +55,10 @@ export class Game {
 
   @Prop({
     type: [BaseTask],
-    default: [{ _id: uuidv4(), type: TaskType.Lobby, created: new Date() }],
+    required: true,
+    default: { _id: uuidv4(), type: TaskType.Lobby, created: new Date() },
   })
-  tasks: TaskLobby[]
+  currentTask: LobbyTask
 
   @Prop({ type: Date, default: () => new Date() })
   created: Date
@@ -73,5 +74,6 @@ questionsSchema.discriminator(QuestionType.Range, QuestionRangeSchema)
 questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
 questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
 
-const tasksSchema = GameSchema.path<MongooseSchema.Types.Array>('tasks')
-tasksSchema.discriminator(TaskType.Lobby, TaskLobbySchema)
+const tasksSchema =
+  GameSchema.path<MongooseSchema.Types.Subdocument>('currentTask')
+tasksSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)

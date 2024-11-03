@@ -21,6 +21,9 @@ export class BaseTask {
   })
   type!: TaskType.Lobby
 
+  @Prop({ type: String, default: 'pending' })
+  status: 'pending' | 'active' | 'completed'
+
   @Prop({ type: Date, default: () => new Date() })
   created: Date
 }
@@ -28,12 +31,12 @@ export class BaseTask {
 export const BaseTaskSchema = SchemaFactory.createForClass(BaseTask)
 
 /**
- * TaskLobby
+ * LobbyTask
  */
 
 @Schema({ _id: false })
-export class TaskLobby {
+export class LobbyTask {
   type!: TaskType.Lobby
 }
 
-export const TaskLobbySchema = SchemaFactory.createForClass(TaskLobby)
+export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
