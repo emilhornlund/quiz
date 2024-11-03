@@ -38,7 +38,13 @@ export function buildGameModel(game: PartialGameModel, gamePIN: string): Game {
     nextQuestion: 0,
     hostClientId: uuidv4(),
     players: [],
-    currentTask: { type: TaskType.Lobby },
+    currentTask: {
+      _id: uuidv4(),
+      type: TaskType.Lobby,
+      status: 'active',
+      created: new Date(now),
+    },
+    previousTasks: [],
     expires: new Date(now + 6 * 60 * 60 * 1000),
     created: new Date(now),
   }

@@ -1,10 +1,10 @@
-import { GameGameBeginHostEvent } from '@quiz/common'
+import { GameBeginHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { LoadingSpinner, Page, Typography } from '../../components'
 
 export interface HostGameBeginStateProps {
-  event: GameGameBeginHostEvent
+  event: GameBeginHostEvent
 }
 
 const HostGameBeginState: FC<HostGameBeginStateProps> = () => (

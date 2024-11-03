@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export enum TaskType {
   Lobby = 'LOBBY',
+  Question = 'QUESTION',
 }
 
 /**
@@ -19,7 +20,7 @@ export class BaseTask {
     enum: Object.keys(TaskType),
     required: true,
   })
-  type!: TaskType.Lobby
+  type!: TaskType.Lobby | TaskType.Question
 
   @Prop({ type: String, default: 'pending' })
   status: 'pending' | 'active' | 'completed'
@@ -40,3 +41,14 @@ export class LobbyTask {
 }
 
 export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
+
+/**
+ * QuestionTask
+ */
+
+@Schema({ _id: false })
+export class QuestionTask {
+  type!: TaskType.Question
+}
+
+export const QuestionTaskSchema = SchemaFactory.createForClass(QuestionTask)

@@ -21,11 +21,11 @@ export type GameLobbyPlayerEvent = {
   }
 }
 
-export type GameGameBeginHostEvent = {
+export type GameBeginHostEvent = {
   type: GameEventType.GameBeginHost
 }
 
-export type GameGameBeginPlayerEvent = {
+export type GameBeginPlayerEvent = {
   type: GameEventType.GameBeginPlayer
   player: {
     nickname: string
@@ -258,8 +258,8 @@ export type GameEvent =
   | GameHeartbeatEvent
   | GameLobbyHostEvent
   | GameLobbyPlayerEvent
-  | GameGameBeginHostEvent
-  | GameGameBeginPlayerEvent
+  | GameBeginHostEvent
+  | GameBeginPlayerEvent
   | GameQuestionPreviewHostEvent
   | GameQuestionPreviewPlayerEvent
   | GameQuestionHostEvent

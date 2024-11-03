@@ -14,7 +14,14 @@ import {
   QuestionTypeAnswer,
   QuestionTypeAnswerSchema,
 } from './question.schema'
-import { BaseTask, LobbyTask, LobbyTaskSchema, TaskType } from './task.schema'
+import {
+  BaseTask,
+  LobbyTask,
+  LobbyTaskSchema,
+  QuestionTask,
+  QuestionTaskSchema,
+  TaskType,
+} from './task.schema'
 
 export type PartialGameModel = Pick<Game, 'name' | 'mode' | 'questions'>
 
@@ -52,7 +59,10 @@ export class Game {
   players: Player[]
 
   @Prop({ type: BaseTask, required: true })
-  currentTask: LobbyTask
+  currentTask: BaseTask & (LobbyTask | QuestionTask)
+
+  @Prop({ type: [BaseTask], required: true })
+  previousTasks: (BaseTask & (LobbyTask | QuestionTask))[]
 
   @Prop({ type: Date, required: true })
   expires: Date
@@ -71,6 +81,12 @@ questionsSchema.discriminator(QuestionType.Range, QuestionRangeSchema)
 questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
 questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
 
-const tasksSchema =
+const currentTaskSchema =
   GameSchema.path<MongooseSchema.Types.Subdocument>('currentTask')
-tasksSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)
+currentTaskSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)
+currentTaskSchema.discriminator(TaskType.Question, QuestionTaskSchema)
+
+const previousTasksSchema =
+  GameSchema.path<MongooseSchema.Types.Array>('previousTasks')
+previousTasksSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)
+previousTasksSchema.discriminator(TaskType.Question, QuestionTaskSchema)
