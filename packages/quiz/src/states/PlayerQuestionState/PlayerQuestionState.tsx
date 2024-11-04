@@ -20,7 +20,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       score: { total: totalScore },
     },
     question,
-    progress: { value: time },
+    countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
@@ -37,7 +37,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
     <Typography variant="subtitle" size="medium">
       {question.question}
     </Typography>
-    <ProgressBar value={time / question.duration} />
+    <ProgressBar countdown={countdown} />
     <QuestionAnswerPicker question={question} />
   </Page>
 )

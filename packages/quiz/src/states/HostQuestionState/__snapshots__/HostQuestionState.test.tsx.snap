@@ -194,6 +194,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           </div>
         </div>
       </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
+      </div>
     </div>
     <div
       class="footer"
@@ -496,6 +503,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           </div>
         </div>
       </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
+      </div>
     </div>
     <div
       class="footer"
@@ -762,6 +776,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           </div>
         </div>
       </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
+      </div>
     </div>
     <div
       class="footer"
@@ -1026,6 +1047,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           </div>
         </div>
       </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
+      </div>
     </div>
     <div
       class="footer"
@@ -1286,6 +1314,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
           </div>
         </div>
       </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
+      </div>
     </div>
     <div
       class="footer"
@@ -1545,6 +1580,13 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="progressBar"
+      >
+        <span
+          style="width: 100%; transition: width 0.1s linear;"
+        />
       </div>
     </div>
     <div

@@ -26,8 +26,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}
@@ -58,8 +59,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}
@@ -92,8 +94,9 @@ describe('PlayerQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}
@@ -121,8 +124,9 @@ describe('PlayerQuestionState', () => {
             step: 1,
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}
@@ -146,8 +150,9 @@ describe('PlayerQuestionState', () => {
             question: "Rabbits can't vomit?",
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}
@@ -171,8 +176,9 @@ describe('PlayerQuestionState', () => {
             question: 'Who painted the Mono Lisa?',
             duration: 30,
           },
-          progress: {
-            value: 20,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}

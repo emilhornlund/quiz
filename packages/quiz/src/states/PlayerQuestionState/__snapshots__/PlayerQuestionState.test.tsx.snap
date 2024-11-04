@@ -36,7 +36,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div
@@ -170,7 +170,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div
@@ -320,7 +320,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div
@@ -438,7 +438,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div
@@ -582,7 +582,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div
@@ -700,7 +700,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         class="progressBar"
       >
         <span
-          style="width: 66.66666666666666%;"
+          style="width: 100%; transition: width 0.1s linear;"
         />
       </div>
       <div

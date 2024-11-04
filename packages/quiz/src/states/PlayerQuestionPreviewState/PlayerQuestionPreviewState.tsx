@@ -16,7 +16,7 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
   event: {
     player: { nickname: playerNickname, score: playerTotalScore },
     question: { type: questionType, question: questionValue },
-    progress: { value: progressValue },
+    countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
@@ -34,7 +34,7 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
     <Typography variant="subtitle" size="medium">
       {questionValue}
     </Typography>
-    <ProgressBar value={progressValue} />
+    <ProgressBar countdown={countdown} />
   </Page>
 )
 

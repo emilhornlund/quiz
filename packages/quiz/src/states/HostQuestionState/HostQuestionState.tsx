@@ -7,6 +7,7 @@ import {
   HostGameFooter,
   IconButtonArrowRight,
   Page,
+  ProgressBar,
   QuestionAnswerPicker,
   Typography,
 } from '../../components'
@@ -22,6 +23,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
   event: {
     game: { pin },
     question,
+    countdown,
     submissions: { current: currentSubmission, total: totalSubmissions },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -80,6 +82,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
     <div className={classNames(styles.row, styles.flexibleHeight)}>
       <QuestionAnswerPicker question={question} interactive={false} />
     </div>
+    <ProgressBar countdown={countdown} />
   </Page>
 )
 

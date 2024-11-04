@@ -11,7 +11,7 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
   event: {
     game: { pin: gamePIN },
     question: { type: questionType, question: questionValue },
-    progress: { value: progressValue },
+    countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
@@ -28,7 +28,7 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
     <Typography variant="title" size="medium">
       {questionValue}
     </Typography>
-    <ProgressBar value={progressValue} />
+    <ProgressBar countdown={countdown} />
   </Page>
 )
 

@@ -28,8 +28,9 @@ export const QuestionMultiTwoAnswers = {
         answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
@@ -56,8 +57,9 @@ export const QuestionMultiFourAnswers = {
         ],
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
@@ -86,8 +88,9 @@ export const QuestionMultiSixAnswers = {
         ],
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
@@ -110,8 +113,9 @@ export const QuestionSlider = {
         step: 1,
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
@@ -131,8 +135,9 @@ export const QuestionTrueFalse = {
         question: "Rabbits can't vomit?",
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
@@ -152,8 +157,9 @@ export const QuestionTypeAnswer = {
         question: 'Who painted the Mono Lisa?',
         duration: 30,
       },
-      progress: {
-        value: 25,
+      countdown: {
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
       },
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },

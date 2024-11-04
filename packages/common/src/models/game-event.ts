@@ -1,6 +1,11 @@
 import { GameEventType } from './game-event-type.enum'
 import { QuestionType } from './question-type.enum'
 
+export type CountdownEvent = {
+  expiryTime: string
+  serverTime: string
+}
+
 export type GameHeartbeatEvent = {
   type: GameEventType.GameHeartbeat
 }
@@ -45,9 +50,7 @@ export type GameQuestionPreviewHostEvent = {
     type: QuestionType
     question: string
   }
-  progress: {
-    value: number
-  }
+  countdown: CountdownEvent
   pagination: {
     current: number
     total: number
@@ -64,9 +67,7 @@ export type GameQuestionPreviewPlayerEvent = {
     type: QuestionType
     question: string
   }
-  progress: {
-    value: number
-  }
+  countdown: CountdownEvent
   pagination: {
     current: number
     total: number
@@ -117,9 +118,7 @@ export type GameQuestionHostEvent = {
     pin: string
   }
   question: GameEventQuestion
-  progress: {
-    value: number
-  }
+  countdown: CountdownEvent
   submissions: {
     current: number
     total: number
@@ -139,9 +138,7 @@ export type GameQuestionPlayerEvent = {
     }
   }
   question: GameEventQuestion
-  progress: {
-    value: number
-  }
+  countdown: CountdownEvent
   pagination: {
     current: number
     total: number

@@ -19,8 +19,9 @@ describe('PlayerQuestionPreviewState', () => {
             type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
           },
-          progress: {
-            value: 0.75,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           pagination: { current: 1, total: 20 },
         }}

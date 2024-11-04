@@ -25,8 +25,9 @@ describe('HostQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -57,8 +58,9 @@ describe('HostQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -91,8 +93,9 @@ describe('HostQuestionState', () => {
             ],
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -120,8 +123,9 @@ describe('HostQuestionState', () => {
             step: 1,
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -145,8 +149,9 @@ describe('HostQuestionState', () => {
             question: "Rabbits can't vomit?",
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
@@ -170,8 +175,9 @@ describe('HostQuestionState', () => {
             question: 'Who painted the Mono Lisa?',
             duration: 30,
           },
-          progress: {
-            value: 25,
+          countdown: {
+            expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+            serverTime: new Date().toISOString(),
           },
           submissions: { current: 3, total: 10 },
           pagination: { current: 1, total: 20 },
