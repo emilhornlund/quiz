@@ -8,10 +8,19 @@ import { QuestionType } from '@quiz/common'
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class BaseQuestion {
   @Prop({
-    enum: [QuestionType.MultiChoice, QuestionType.Range],
+    enum: [
+      QuestionType.MultiChoice,
+      QuestionType.Range,
+      QuestionType.TrueFalse,
+      QuestionType.TypeAnswer,
+    ],
     required: true,
   })
-  type!: QuestionType.MultiChoice | QuestionType.Range
+  type!:
+    | QuestionType.MultiChoice
+    | QuestionType.Range
+    | QuestionType.TrueFalse
+    | QuestionType.TypeAnswer
 
   @Prop({ type: String, required: true })
   question: string
