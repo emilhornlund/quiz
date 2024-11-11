@@ -6,7 +6,6 @@ import {
 import {
   GameQuestionDurationProperty,
   GameQuestionImageUrlProperty,
-  GameQuestionPointsProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
   ZeroToOneHundredModeGameQuestionRangeCorrectProperty,
@@ -28,9 +27,6 @@ export class CreateZeroToOneHundredModeQuestionRangeRequest
 
   @ZeroToOneHundredModeGameQuestionRangeCorrectProperty()
   correct: number
-
-  @GameQuestionPointsProperty()
-  points: number
 
   @GameQuestionDurationProperty()
   duration: number

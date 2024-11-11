@@ -636,7 +636,6 @@ const CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST: CreateZeroToOneHundredModeGa
         question: 'Guess the temperature of the hottest day ever recorded.',
         imageURL: 'https://example.com/question-image.png',
         correct: 50,
-        points: 1000,
         duration: 30,
       },
     ],

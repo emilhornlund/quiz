@@ -116,7 +116,6 @@ const CreateGamePage: FC = () => {
               question: '',
               imageURL: '',
               correct: 0,
-              points: 1000,
               duration: 30,
             },
           ],

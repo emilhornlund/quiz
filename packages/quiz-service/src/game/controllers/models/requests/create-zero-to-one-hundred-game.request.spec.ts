@@ -16,7 +16,6 @@ function buildCreateZeroToOneHundredModeQuestionRangeRequest(): CreateZeroToOneH
   question.question = 'Sample range question'
   question.imageURL = 'http://example.com/image.png'
   question.correct = 50
-  question.points = 1000
   question.duration = 30
   return question
 }
@@ -293,56 +292,6 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
           gameRequest
             .questions[0] as CreateZeroToOneHundredModeQuestionRangeRequest
         ).correct = 100 // Valid
-        const errors = await validateReduceNestedValidationErrors(gameRequest)
-        expect(errors.length).toBe(0)
-      })
-    })
-
-    describe('Points Field Validation', () => {
-      it('should fail if points is not a number', async () => {
-        ;(gameRequest.questions[0].points as any) = '123' // Invalid, should be a number
-        const errors = await validateReduceNestedValidationErrors(gameRequest)
-        expect(errors.length).toBe(1)
-        expect(errors).toEqual([
-          {
-            property: 'questions.0.points',
-            constraints: {
-              isNumber:
-                'points must be a number conforming to the specified constraints',
-              isIn: 'points must be one of the following values: 0, 1000, 2000',
-            },
-          },
-        ])
-      })
-
-      it('should fail if points is not valid', async () => {
-        ;(gameRequest.questions[0].points as any) = 1 // Invalid, should be a either 0, 1000, 2000
-        const errors = await validateReduceNestedValidationErrors(gameRequest)
-        expect(errors.length).toBe(1)
-        expect(errors).toEqual([
-          {
-            property: 'questions.0.points',
-            constraints: {
-              isIn: 'points must be one of the following values: 0, 1000, 2000',
-            },
-          },
-        ])
-      })
-
-      it('should succeed if points is 0', async () => {
-        ;(gameRequest.questions[0].points as any) = 0 // Valid
-        const errors = await validateReduceNestedValidationErrors(gameRequest)
-        expect(errors.length).toBe(0)
-      })
-
-      it('should succeed if points is 1000', async () => {
-        ;(gameRequest.questions[0].points as any) = 1000 // Valid
-        const errors = await validateReduceNestedValidationErrors(gameRequest)
-        expect(errors.length).toBe(0)
-      })
-
-      it('should succeed if points is 2000', async () => {
-        ;(gameRequest.questions[0].points as any) = 2000 // Valid
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
       })

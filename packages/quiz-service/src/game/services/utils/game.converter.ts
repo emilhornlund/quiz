@@ -116,7 +116,7 @@ export function buildPartialGameModel(
             min: 0,
             max: 100,
             correct: question.correct,
-            points: question.points,
+            points: -1,
             duration: question.duration,
           } as QuestionRange
         }

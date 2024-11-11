@@ -40,7 +40,6 @@ export interface CreateZeroToOneHundredModeQuestionRangeRequestDto {
   question: string
   imageURL?: string
   correct: number
-  points: number
   duration: number
 }
 
