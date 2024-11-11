@@ -25,6 +25,7 @@ describe('HostLobbyState', () => {
             { nickname: 'ScarletFlame' },
           ],
         }}
+        onStart={() => undefined}
       />,
     )
 

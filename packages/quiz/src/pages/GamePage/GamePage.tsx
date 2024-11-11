@@ -24,11 +24,14 @@ import {
   useEventSource,
 } from '../../utils/use-event-source.tsx'
 import { useGameTokenQueryParam } from '../../utils/use-game-token-query-param.tsx'
+import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 const GamePage = () => {
   const [token, gameID] = useGameTokenQueryParam()
 
   const [event, connectionStatus] = useEventSource(gameID, token)
+
+  const { completeTask } = useQuizService()
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
@@ -62,7 +65,12 @@ const GamePage = () => {
   const stateComponent = useMemo(() => {
     switch (event?.type) {
       case GameEventType.GameLobbyHost:
-        return <HostLobbyState event={event} />
+        return (
+          <HostLobbyState
+            event={event}
+            onStart={() => completeTask(gameID!, token!)}
+          />
+        )
       case GameEventType.GameLobbyPlayer:
         return <PlayerLobbyState event={event} />
       case GameEventType.GameBeginHost:
@@ -96,7 +104,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event])
+  }, [event, gameID, token, completeTask])
 
   return <>{stateComponent}</>
 }

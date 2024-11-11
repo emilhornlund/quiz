@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       open: true,
+      host: true,
       port: parseInt(env.SERVER_PORT ?? '80', 10),
       proxy: {
         [env.VITE_QUIZ_SERVICE_URL]: {

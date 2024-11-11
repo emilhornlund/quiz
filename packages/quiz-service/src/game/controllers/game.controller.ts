@@ -22,12 +22,18 @@ import {
   ApiOperation,
   ApiQuery,
   ApiTags,
+  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { GameParticipantType } from '@quiz/common'
 import { Observable } from 'rxjs'
 
-import { Public } from '../../app/decorators'
-import { AuthorizedClientID, AuthorizedGameID } from '../../auth/decorators'
+import {
+  AuthorizedClientID,
+  AuthorizedGameID,
+  GameClientRoles,
+  Public,
+} from '../../auth/decorators'
 import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
@@ -192,5 +198,45 @@ export class GameController {
       throw new UnauthorizedException('Unauthorized game access')
     }
     return this.gameEventSubscriber.subscribe(gameID, clientId)
+  }
+
+  /**
+   * Completes the current active task for the specified game.
+   *
+   * Requires the caller to be the host and the current task status to be 'active'.
+   *
+   * @param {string} gameID - The ID of the game.
+   * @param {string} authorizedGameID - The ID of the game verified by the guard.
+   *
+   * @throws {UnauthorizedException} if the caller does not have host privileges
+   *                                 or the game ID does not match the authorized game ID.
+   * @throws {BadRequestException} if the current task is not in 'active' status.
+   */
+  @Post('/:gameID/tasks/current/complete')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Marks the current task as complete for the active game session.',
+    description:
+      'This endpoint allows a game host to mark the active task as complete when all players have responded or the task has otherwise been concluded.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game ID.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid game ID format or task not in active status.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access or invalid client role.',
+  })
+  @GameClientRoles(GameParticipantType.HOST)
+  @GameIdParam()
+  public async completeTask(
+    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @AuthorizedGameID() authorizedGameID: string,
+  ): Promise<void> {
+    if (gameID !== authorizedGameID) {
+      throw new UnauthorizedException('Unauthorized game access')
+    }
+    await this.gameService.completeCurrentTask(gameID)
   }
 }

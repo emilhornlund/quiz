@@ -10,8 +10,8 @@ import {
   GameEventPublisher,
   GameEventSubscriber,
   GameRepository,
-  GameScheduler,
   GameService,
+  GameTaskTransitionScheduler,
 } from './services'
 import { Game, GameSchema } from './services/models/schemas'
 
@@ -37,7 +37,7 @@ import { Game, GameSchema } from './services/models/schemas'
     GameService,
     GameEventPublisher,
     GameEventSubscriber,
-    GameScheduler,
+    GameTaskTransitionScheduler,
   ],
 })
 export class GameModule {}

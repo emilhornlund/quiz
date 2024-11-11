@@ -10,6 +10,7 @@ import styles from './HostLobbyState.module.scss'
 
 export interface HostLobbyStateProps {
   event: GameLobbyHostEvent
+  onStart: () => void
 }
 
 const HostLobbyState: FC<HostLobbyStateProps> = ({
@@ -17,6 +18,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
     game: { id, pin },
     players,
   },
+  onStart,
 }) => {
   return (
     <Page
@@ -28,6 +30,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
           kind="secondary"
           size="small"
           value="Start"
+          onClick={onStart}
         />
       }>
       <div className={styles.header}>

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
@@ -9,13 +9,15 @@ import {
 
 import { AuthService } from '../../auth/services'
 
-import { GameScheduler } from './game-scheduler'
+import { GameTaskTransitionScheduler } from './game-task-transition-scheduler.service'
 import { GameRepository } from './game.repository'
 import { buildPartialGameModel } from './utils'
 
 /**
- * GameService is responsible for managing game creation and handling
- * business logic related to game sessions, including generating unique game PINs.
+ * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
+ *
+ * This service coordinates with the game repository for data persistence and
+ * uses the GameTaskTransitionScheduler to manage task transitions.
  */
 @Injectable()
 export class GameService {
@@ -23,12 +25,12 @@ export class GameService {
    * Creates an instance of GameService.
    *
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
-   * @param {GameScheduler} gameScheduler -
+   * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
    * @param {AuthService} authService - The authentication service for managing game tokens.
    */
   constructor(
     private gameRepository: GameRepository,
-    private gameScheduler: GameScheduler,
+    private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private authService: AuthService,
   ) {}
 
@@ -50,9 +52,7 @@ export class GameService {
       buildPartialGameModel(request),
     )
 
-    await this.gameScheduler.schedulePendingActiveTransitionLobbyTask(
-      gameDocument,
-    )
+    await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
 
     const token = await this.authService.signGameToken(
       gameDocument._id,
@@ -119,5 +119,24 @@ export class GameService {
     )
 
     return { token }
+  }
+
+  /**
+   * Completes the current active task for a specified game.
+   *
+   * @param {string} gameID - The unique identifier of the game.
+   *
+   * @throws {BadRequestException} if the current task is not in an 'active' status.
+   *
+   * @returns {Promise<void>} A promise that resolves when the task is completed and further transition scheduling is triggered.
+   */
+  public async completeCurrentTask(gameID: string): Promise<void> {
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
+
+    if (gameDocument.currentTask.status !== 'active') {
+      throw new BadRequestException('Current task not in active status')
+    }
+
+    await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
   }
 }

@@ -429,6 +429,143 @@ describe('GameController (e2e)', () => {
         })
     })
   })
+
+  describe('/api/games/:gameID/tasks/current/complete (POST)', () => {
+    it('should succeed in completing the current task', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, { 'currentTask.status': 'active' })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set('Authorization', `Bearer ${createdGame.token}`)
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toStrictEqual({})
+        })
+    })
+
+    it('should fail in completing the current task if its current status is pending', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, { 'currentTask.status': 'pending' })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set('Authorization', `Bearer ${createdGame.token}`)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Current task not in active status',
+          )
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should fail in completing the current task if its current status is already completed', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, { 'currentTask.status': 'completed' })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set('Authorization', `Bearer ${createdGame.token}`)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Current task not in active status',
+          )
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should deny completing the current task without an authorization token', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Unauthorized')
+          expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return 404 when completing the current task for a non-existent game ID', async () => {
+      const unknownGameID = uuidv4()
+
+      const token = await authService.signGameToken(
+        unknownGameID,
+        uuidv4(),
+        GameParticipantType.HOST,
+        Math.floor(new Date().getTime() / 1000) + 6 * 60 * 60,
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${unknownGameID}/tasks/current/complete`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            `Active game not found by id ${unknownGameID}`,
+          )
+          expect(res.body).toHaveProperty('status', 404)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return 401 when completing the current task with a token for a different game', async () => {
+      const firstCreatedGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(
+        firstCreatedGame.token,
+      )
+
+      const secondCreatedGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set('Authorization', `Bearer ${secondCreatedGame.token}`)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Unauthorized game access')
+          expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
 })
 
 const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {

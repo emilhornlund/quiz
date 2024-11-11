@@ -7,12 +7,12 @@ import {
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
-import { IS_PUBLIC_KEY } from '../../app/decorators'
+import { IS_PUBLIC_KEY } from '../decorators'
 import { AuthService } from '../services'
 
 /**
- * Guard to handle JWT-based authentication.
- * Verifies the token from the Authorization header and grants access if valid.
+ * Custom authorization guard that checks if the request has a valid game token and,
+ * if present, extracts the client ID, game ID, and client role.
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -22,9 +22,13 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   /**
-   * Determines if the current request is authorized.
+   * Validates the game token and extracts essential parameters like client ID,
+   * game ID, and client role for further authorization checks.
+   *
    * @param context - The execution context of the current request.
+   *
    * @returns True if the request is authorized, otherwise false.
+   *
    * @throws UnauthorizedException if the token is missing or invalid.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -45,9 +49,11 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { sub, gameID } = await this.authService.verifyGameToken(token)
+      const { sub, gameID, role } =
+        await this.authService.verifyGameToken(token)
       request['gameID'] = gameID
       request['clientId'] = sub
+      request['clientRole'] = role
     } catch {
       throw new UnauthorizedException()
     }

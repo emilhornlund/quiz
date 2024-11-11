@@ -7,6 +7,8 @@ import { Bounce, toast } from 'react-toastify'
 
 import config from '../config.ts'
 
+type ApiPostBody = { [key: string]: unknown }
+
 export class ApiError extends Error {
   constructor(message: string) {
     super(message)
@@ -28,7 +30,9 @@ export const useQuizService = () => {
   const parseResponseAndHandleError = async <T extends object>(
     response: Response,
   ): Promise<T> => {
-    if (response.ok) {
+    if (response.status === 204) {
+      return Promise.resolve({} as T)
+    } else if (response.ok) {
       return (await response.json()) as T
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,22 +52,27 @@ export const useQuizService = () => {
     }
   }
 
-  const apiGet = <T extends object>(path: string) =>
+  const apiGet = <T extends object>(path: string, token?: string) =>
     fetch(resolveUrl(path), {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     }).then(parseResponseAndHandleError<T>)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const apiPost = <T extends object>(path: string, requestBody: any) =>
+  const apiPost = <T extends object>(
+    path: string,
+    requestBody: ApiPostBody,
+    token?: string,
+  ) =>
     fetch(resolveUrl(path), {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(requestBody),
     }).then(parseResponseAndHandleError<T>)
@@ -82,5 +91,8 @@ export const useQuizService = () => {
   ): Promise<GameAuthResponseDto> =>
     apiPost<GameAuthResponseDto>(`/games/${gameID}/players`, { nickname })
 
-  return { createGame, findGame, joinGame }
+  const completeTask = (gameID: string, token: string) =>
+    apiPost(`/games/${gameID}/tasks/current/complete`, {}, token).then(() => {})
+
+  return { createGame, findGame, joinGame, completeTask }
 }
