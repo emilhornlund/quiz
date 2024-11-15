@@ -19,6 +19,11 @@ import {
 
 import { GameDocument, Player, TaskType } from '../models/schemas'
 
+import {
+  getQuestionTaskActiveDuration,
+  getQuestionTaskPendingDuration,
+} from './gameplay.utils'
+
 /**
  * Constructs an event for the host based on the current state of the game document.
  *
@@ -204,17 +209,41 @@ function isQuestionTask(
 }
 
 /**
- * Builds a countdown event for the current question task.
+ * Builds a countdown event for the current question preview event.
  *
  * @param {GameDocument} document - The game document containing the current question task.
  *
  * @returns {CountdownEvent} A countdown event with expiry time and server time.
  */
-function buildCountdownEvent(document: GameDocument): CountdownEvent {
+function buildGameQuestionPreviewCountdownEvent(
+  document: GameDocument & {
+    currentTask: { type: TaskType.Question }
+  },
+): CountdownEvent {
+  const pendingDuration = Math.max(0, getQuestionTaskPendingDuration(document))
+
   return {
-    expiryTime: new Date(
-      document.currentTask.created.getTime() + 5 * 1000,
-    ).toISOString(), //TODO: calculate expiry based on question length
+    expiryTime: new Date(Date.now() + pendingDuration).toISOString(),
+    serverTime: new Date().toISOString(),
+  }
+}
+
+/**
+ * Builds a countdown event for the current question event.
+ *
+ * @param {GameDocument} document - The game document containing the current question task.
+ *
+ * @returns {CountdownEvent} A countdown event with expiry time and server time.
+ */
+function buildGameQuestionCountdownEvent(
+  document: GameDocument & {
+    currentTask: { type: TaskType.Question }
+  },
+): CountdownEvent {
+  const activeDuration = Math.max(0, getQuestionTaskActiveDuration(document))
+
+  return {
+    expiryTime: new Date(Date.now() + activeDuration).toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
@@ -256,7 +285,7 @@ function buildGameQuestionPreviewHostEvent(
       type,
       question,
     },
-    countdown: buildCountdownEvent(document),
+    countdown: buildGameQuestionPreviewCountdownEvent(document),
     pagination: buildPaginationEvent(document),
   }
 }
@@ -285,7 +314,7 @@ function buildGameQuestionPreviewPlayerEvent(
       type,
       question,
     },
-    countdown: buildCountdownEvent(document),
+    countdown: buildGameQuestionPreviewCountdownEvent(document),
     pagination: buildPaginationEvent(document),
   }
 }
@@ -350,7 +379,7 @@ function buildGameQuestionHostEvent(
       pin: document.pin,
     },
     question: buildGameEventQuestion(currentQuestion),
-    countdown: buildCountdownEvent(document),
+    countdown: buildGameQuestionCountdownEvent(document),
     submissions: {
       current: document.currentTask.answers.length,
       total: document.players.length,
@@ -381,7 +410,7 @@ function buildGameQuestionPlayerEvent(
       },
     },
     question: buildGameEventQuestion(currentQuestion),
-    countdown: buildCountdownEvent(document),
+    countdown: buildGameQuestionCountdownEvent(document),
     pagination: buildPaginationEvent(document),
   }
 }

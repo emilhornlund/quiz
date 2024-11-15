@@ -9,7 +9,7 @@ import {
 
 import { AuthService } from '../../auth/services'
 
-import { GameTaskTransitionScheduler } from './game-task-transition-scheduler.service'
+import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
 import { buildPartialGameModel } from './utils'
 
