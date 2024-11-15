@@ -4,6 +4,7 @@ import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 
 import { Player, PlayerSchema } from './player.schema'
 import {
+  BaseQuestion,
   BaseQuestionSchema,
   QuestionMultiChoice,
   QuestionMultiChoiceSchema,
@@ -42,12 +43,13 @@ export class Game {
   pin: string
 
   @Prop({ type: [BaseQuestionSchema], required: true })
-  questions: (
-    | QuestionMultiChoice
-    | QuestionRange
-    | QuestionTrueFalse
-    | QuestionTypeAnswer
-  )[]
+  questions: (BaseQuestion &
+    (
+      | QuestionMultiChoice
+      | QuestionRange
+      | QuestionTrueFalse
+      | QuestionTypeAnswer
+    ))[]
 
   @Prop({ type: Number, required: true })
   nextQuestion: number

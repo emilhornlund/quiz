@@ -36,10 +36,12 @@ export class GameEventPublisher {
         clientId: document.hostClientId,
         event: buildHostGameEvent(document),
       }),
-      ...document.players.map((player) => ({
-        clientId: player._id,
-        event: buildPlayerGameEvent(document, player),
-      })),
+      ...document.players.map((player) =>
+        this.publishDistributedEvent({
+          clientId: player._id,
+          event: buildPlayerGameEvent(document, player),
+        } as DistributedEvent),
+      ),
     ])
   }
 

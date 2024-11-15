@@ -11,14 +11,16 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  BaseQuestion,
   Game,
   PartialGameModel,
   QuestionMultiChoice,
   QuestionRange,
   QuestionTrueFalse,
   QuestionTypeAnswer,
-  TaskType,
 } from '../models/schemas'
+
+import { buildLobbyTask } from './task.converter'
 
 /**
  * Constructs a complete Game model from a partial game input and a game PIN.
@@ -38,12 +40,7 @@ export function buildGameModel(game: PartialGameModel, gamePIN: string): Game {
     nextQuestion: 0,
     hostClientId: uuidv4(),
     players: [],
-    currentTask: {
-      _id: uuidv4(),
-      type: TaskType.Lobby,
-      status: 'pending',
-      created: new Date(now),
-    },
+    currentTask: buildLobbyTask(),
     previousTasks: [],
     expires: new Date(now + 6 * 60 * 60 * 1000),
     created: new Date(now),
@@ -85,7 +82,7 @@ export function buildPartialGameModel(
               value: option.value,
               correct: option.correct,
             })),
-          } as QuestionMultiChoice
+          } as BaseQuestion & QuestionMultiChoice
         }
 
         if (
@@ -100,7 +97,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: question.points,
             duration: question.duration,
-          } as QuestionRange
+          } as BaseQuestion & QuestionRange
         }
 
         if (
@@ -118,7 +115,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: -1,
             duration: question.duration,
-          } as QuestionRange
+          } as BaseQuestion & QuestionRange
         }
 
         if (
@@ -131,7 +128,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: question.points,
             duration: question.duration,
-          } as QuestionTrueFalse
+          } as BaseQuestion & QuestionTrueFalse
         }
 
         if (
@@ -147,7 +144,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: question.points,
             duration: question.duration,
-          } as QuestionTypeAnswer
+          } as BaseQuestion & QuestionTypeAnswer
         }
       })
       .filter((obj) => !!obj),

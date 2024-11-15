@@ -6,6 +6,11 @@ export type CountdownEvent = {
   serverTime: string
 }
 
+export type PaginationEvent = {
+  current: number
+  total: number
+}
+
 export type GameHeartbeatEvent = {
   type: GameEventType.GameHeartbeat
 }
@@ -51,10 +56,7 @@ export type GameQuestionPreviewHostEvent = {
     question: string
   }
   countdown: CountdownEvent
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameQuestionPreviewPlayerEvent = {
@@ -68,10 +70,7 @@ export type GameQuestionPreviewPlayerEvent = {
     question: string
   }
   countdown: CountdownEvent
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameEventQuestionMultiChoice = {
@@ -123,10 +122,7 @@ export type GameQuestionHostEvent = {
     current: number
     total: number
   }
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameQuestionPlayerEvent = {
@@ -139,10 +135,7 @@ export type GameQuestionPlayerEvent = {
   }
   question: GameEventQuestion
   countdown: CountdownEvent
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameAwaitingResultPlayerEvent = {
@@ -153,10 +146,7 @@ export type GameAwaitingResultPlayerEvent = {
       total: number
     }
   }
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameLeaderboardHostEvent = {
@@ -170,10 +160,7 @@ export type GameLeaderboardHostEvent = {
     score: number
     streaks: number
   }[]
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameEventQuestionResultsMultiChoice = {
@@ -212,10 +199,7 @@ export type GameResultHostEvent = {
     question: string
   }
   results: GameEventQuestionResults
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GameResultPlayerEvent = {
@@ -230,10 +214,7 @@ export type GameResultPlayerEvent = {
       streak: number
     }
   }
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: PaginationEvent
 }
 
 export type GamePodiumHostEvent = {
