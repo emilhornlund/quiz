@@ -9,6 +9,7 @@ import * as jwt from 'jsonwebtoken'
 import { EnvironmentVariables } from '../app/config'
 
 import { AuthGuard } from './guards'
+import { GameClientRolesGuard } from './guards/game-client-roles.guard'
 import { AuthService } from './services'
 
 const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
@@ -49,6 +50,10 @@ const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: GameClientRolesGuard,
     },
   ],
   exports: [AuthService],

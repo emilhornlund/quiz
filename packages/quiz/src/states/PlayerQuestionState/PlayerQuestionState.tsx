@@ -1,4 +1,7 @@
-import { GameQuestionPlayerEvent } from '@quiz/common'
+import {
+  GameQuestionPlayerEvent,
+  SubmitQuestionAnswerRequestDto,
+} from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -11,6 +14,7 @@ import {
 
 export interface PlayerQuestionStateProps {
   event: GameQuestionPlayerEvent
+  onSubmitQuestionAnswer: (request: SubmitQuestionAnswerRequestDto) => void
 }
 
 const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
@@ -23,6 +27,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
     countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
+  onSubmitQuestionAnswer,
 }) => (
   <Page
     height="full"
@@ -38,7 +43,10 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       {question.question}
     </Typography>
     <ProgressBar countdown={countdown} />
-    <QuestionAnswerPicker question={question} />
+    <QuestionAnswerPicker
+      question={question}
+      onChange={onSubmitQuestionAnswer}
+    />
   </Page>
 )
 

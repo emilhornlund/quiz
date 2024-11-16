@@ -5,12 +5,15 @@ import {
   FindGameResponseDto,
   GameAuthResponseDto,
   GameParticipantType,
+  QuestionType,
+  SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 
 import { AuthService } from '../../auth/services'
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
+import { TaskType } from './models/schemas'
 import { buildPartialGameModel } from './utils'
 
 /**
@@ -138,5 +141,97 @@ export class GameService {
     }
 
     await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
+  }
+
+  /**
+   * Handles the submission of an answer for the current active question.
+   *
+   * @param {string} gameID - The unique identifier of the game.
+   * @param {string} playerId - The ID of the player submitting the answer.
+   * @param {SubmitQuestionAnswerRequestDto} submitQuestionAnswerRequest - The answer request payload.
+   */
+  public async submitQuestionAnswer(
+    gameID: string,
+    playerId: string,
+    submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
+  ): Promise<void> {
+    await this.gameRepository.findAndSave(gameID, (gameDocument) => {
+      if (
+        gameDocument.currentTask.type !== TaskType.Question ||
+        gameDocument.currentTask.status !== 'active'
+      ) {
+        throw new BadRequestException(
+          'Current task is either not of question type or not in active status',
+        )
+      }
+
+      if (
+        gameDocument.currentTask.answers.find(
+          (answer) => answer.playerId === playerId,
+        )
+      ) {
+        throw new BadRequestException('Answer already provided')
+      }
+
+      if (submitQuestionAnswerRequest.type === QuestionType.MultiChoice) {
+        const { type, optionIndex: answer } = submitQuestionAnswerRequest
+        gameDocument.currentTask.answers.push({
+          type,
+          playerId,
+          answer,
+          created: new Date(),
+        })
+      }
+
+      if (submitQuestionAnswerRequest.type === QuestionType.Range) {
+        const { type, value: answer } = submitQuestionAnswerRequest
+        gameDocument.currentTask.answers.push({
+          type,
+          playerId,
+          answer,
+          created: new Date(),
+        })
+      }
+
+      if (submitQuestionAnswerRequest.type === QuestionType.TrueFalse) {
+        const { type, value: answer } = submitQuestionAnswerRequest
+        gameDocument.currentTask.answers.push({
+          type,
+          playerId,
+          answer,
+          created: new Date(),
+        })
+      }
+
+      if (submitQuestionAnswerRequest.type === QuestionType.TypeAnswer) {
+        const { type, value: answer } = submitQuestionAnswerRequest
+        gameDocument.currentTask.answers.push({
+          type,
+          playerId,
+          answer,
+          created: new Date(),
+        })
+      }
+      return gameDocument
+    })
+
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
+
+    if (
+      gameDocument.currentTask.type === TaskType.Question &&
+      gameDocument.currentTask.status === 'active'
+    ) {
+      const allAnswers = gameDocument.currentTask.answers
+
+      const hasAllPlayersAnswered = gameDocument.players.every((player) => {
+        return allAnswers.find((answer) => answer.playerId === player._id)
+      })
+
+      if (hasAllPlayersAnswered) {
+        await this.gameTaskTransitionScheduler.scheduleTaskTransition(
+          gameDocument,
+        )
+      }
+    }
   }
 }

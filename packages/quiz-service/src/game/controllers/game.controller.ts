@@ -17,6 +17,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiExtraModels,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -34,15 +35,23 @@ import {
   GameClientRoles,
   Public,
 } from '../../auth/decorators'
-import { ParseCreateGameRequestPipe, ParseGamePINPipe } from '../pipes'
+import {
+  ParseCreateGameRequestPipe,
+  ParseGamePINPipe,
+  ParseSubmitQuestionAnswerRequestPipe,
+} from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
 import { GameIdParam } from './decorators'
 import {
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
+  JoinGameRequest,
+  SubmitMultiChoiceQuestionAnswerRequest,
+  SubmitRangeQuestionAnswerRequest,
+  SubmitTrueFalseQuestionAnswerRequest,
+  SubmitTypeAnswerQuestionAnswerRequest,
 } from './models/requests'
-import { JoinGameRequest } from './models/requests/join-game.request'
 import { FindGameResponse, GameAuthResponse } from './models/response'
 
 /**
@@ -52,6 +61,10 @@ import { FindGameResponse, GameAuthResponse } from './models/response'
 @ApiExtraModels(
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
+  SubmitMultiChoiceQuestionAnswerRequest,
+  SubmitRangeQuestionAnswerRequest,
+  SubmitTrueFalseQuestionAnswerRequest,
+  SubmitTypeAnswerQuestionAnswerRequest,
 )
 @ApiTags('game')
 @Controller('games')
@@ -238,5 +251,57 @@ export class GameController {
       throw new UnauthorizedException('Unauthorized game access')
     }
     await this.gameService.completeCurrentTask(gameID)
+  }
+
+  /**
+   * Handles the submission of an answer for the current question in a game.
+   *
+   * @param {string} gameID - The ID of the game.
+   * @param {string} authorizedGameID - The ID of the game verified by the guard.
+   * @param {string} clientId - The ID of the client submitting the answer.
+   * @param {object} submitQuestionAnswerRequest - The request body containing the answer details.
+   */
+  @Post('/:gameID/answers')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Submit an answer for the current question',
+    description:
+      'Allows a player to submit their answer for the current active question in the game.',
+  })
+  @ApiBody({
+    description: 'Request body for submitting an answer.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(SubmitMultiChoiceQuestionAnswerRequest) },
+        { $ref: getSchemaPath(SubmitRangeQuestionAnswerRequest) },
+        { $ref: getSchemaPath(SubmitTrueFalseQuestionAnswerRequest) },
+        { $ref: getSchemaPath(SubmitTypeAnswerQuestionAnswerRequest) },
+      ],
+    },
+  })
+  @ApiNoContentResponse({
+    description: 'The answer has been successfully submitted.',
+  })
+  @GameClientRoles(GameParticipantType.PLAYER)
+  @GameIdParam()
+  public async submitQuestionAnswer(
+    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @AuthorizedGameID() authorizedGameID: string,
+    @AuthorizedClientID() clientId: string,
+    @Body(new ParseSubmitQuestionAnswerRequestPipe())
+    submitQuestionAnswerRequest:
+      | SubmitMultiChoiceQuestionAnswerRequest
+      | SubmitRangeQuestionAnswerRequest
+      | SubmitTrueFalseQuestionAnswerRequest
+      | SubmitTypeAnswerQuestionAnswerRequest,
+  ): Promise<void> {
+    if (gameID !== authorizedGameID) {
+      throw new UnauthorizedException('Unauthorized game access')
+    }
+    return this.gameService.submitQuestionAnswer(
+      gameID,
+      clientId,
+      submitQuestionAnswerRequest,
+    )
   }
 }

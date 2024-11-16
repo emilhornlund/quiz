@@ -35,6 +35,7 @@ export const QuestionMultiChoiceTwoAnswers = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story
 
@@ -64,6 +65,7 @@ export const QuestionMultiChoiceFourAnswers = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story
 
@@ -95,6 +97,7 @@ export const QuestionMultiChoiceSixAnswers = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story
 
@@ -120,6 +123,7 @@ export const QuestionSlider = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story
 
@@ -142,6 +146,7 @@ export const QuestionTrueFalse = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story
 
@@ -164,5 +169,6 @@ export const QuestionTypeAnswer = {
       },
       pagination: { current: 1, total: 20 },
     },
+    onSubmitQuestionAnswer: () => undefined,
   },
 } satisfies Story

@@ -31,7 +31,7 @@ const GamePage = () => {
 
   const [event, connectionStatus] = useEventSource(gameID, token)
 
-  const { completeTask } = useQuizService()
+  const { completeTask, submitQuestionAnswer } = useQuizService()
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
@@ -84,7 +84,14 @@ const GamePage = () => {
       case GameEventType.GameQuestionHost:
         return <HostQuestionState event={event} />
       case GameEventType.GameQuestionPlayer:
-        return <PlayerQuestionState event={event} />
+        return (
+          <PlayerQuestionState
+            event={event}
+            onSubmitQuestionAnswer={(request) =>
+              submitQuestionAnswer(gameID!, token!, request)
+            }
+          />
+        )
       case GameEventType.GameAwaitingResultPlayer:
         return <PlayerAwaitingResultState event={event} />
       case GameEventType.GameLeaderboardHost:
@@ -104,7 +111,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event, gameID, token, completeTask])
+  }, [event, gameID, token, completeTask, submitQuestionAnswer])
 
   return <>{stateComponent}</>
 }

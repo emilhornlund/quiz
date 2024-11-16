@@ -5,20 +5,24 @@ import styles from './AnswerPicker.module.scss'
 export interface AnswerPickerProps {
   answers: string[]
   interactive: boolean
-  onClick: (index: number) => void
+  onClick: (optionIndex: number) => void
 }
 
-const AnswerPicker: FC<AnswerPickerProps> = ({ answers, interactive }) => (
+const AnswerPicker: FC<AnswerPickerProps> = ({
+  answers,
+  interactive,
+  onClick,
+}) => (
   <div className={styles.main}>
     <div className={styles.grid}>
-      {answers.map((value, index) => (
+      {answers.map((value, optionIndex) => (
         <button
-          key={`${index}_${value}`}
-          id={`${index}_${value}`}
+          key={`${optionIndex}_${value}`}
+          id={`${optionIndex}_${value}`}
           type="button"
           className={styles.item}
           disabled={!interactive}
-          onClick={() => undefined}>
+          onClick={() => onClick(optionIndex)}>
           <div />
           {value}
         </button>

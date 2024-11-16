@@ -2,6 +2,8 @@ import {
   CreateGameRequestDto,
   FindGameResponseDto,
   GameAuthResponseDto,
+  QuestionType,
+  SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 import { Bounce, toast } from 'react-toastify'
 
@@ -94,5 +96,36 @@ export const useQuizService = () => {
   const completeTask = (gameID: string, token: string) =>
     apiPost(`/games/${gameID}/tasks/current/complete`, {}, token).then(() => {})
 
-  return { createGame, findGame, joinGame, completeTask }
+  /**
+   *
+   * @param gameID
+   * @param token
+   * @param submitQuestionAnswerRequest
+   */
+  const submitQuestionAnswer = async (
+    gameID: string,
+    token: string,
+    submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
+  ) => {
+    let requestBody: ApiPostBody = {}
+    if (submitQuestionAnswerRequest.type === QuestionType.MultiChoice) {
+      const { type, optionIndex } = submitQuestionAnswerRequest
+      requestBody = { type, optionIndex }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.Range) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.TrueFalse) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.TypeAnswer) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    await apiPost(`/games/${gameID}/answers`, requestBody, token)
+  }
+
+  return { createGame, findGame, joinGame, completeTask, submitQuestionAnswer }
 }

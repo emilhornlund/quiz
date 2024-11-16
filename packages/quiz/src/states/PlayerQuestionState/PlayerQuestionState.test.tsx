@@ -32,6 +32,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 
@@ -65,6 +66,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 
@@ -100,6 +102,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 
@@ -130,6 +133,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 
@@ -156,6 +160,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 
@@ -182,6 +187,7 @@ describe('PlayerQuestionState', () => {
           },
           pagination: { current: 1, total: 20 },
         }}
+        onSubmitQuestionAnswer={() => undefined}
       />,
     )
 

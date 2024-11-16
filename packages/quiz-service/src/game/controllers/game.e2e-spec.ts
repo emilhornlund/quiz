@@ -19,6 +19,7 @@ import {
 import { AuthService } from '../../auth/services'
 import { GameService } from '../services'
 import { Game } from '../services/models/schemas'
+import { buildLobbyTask, buildQuestionTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {
   let app: INestApplication
@@ -562,6 +563,154 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Unauthorized game access')
           expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
+
+  describe('/api/games/:gameID/answers (POST)', () => {
+    it('should submit a valid multi-choice answer successfully', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: { ...buildQuestionTask(), status: 'active' },
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toStrictEqual({})
+        })
+    })
+
+    it('should return Forbidden when a non-player tries to submit an answer', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: { ...buildQuestionTask(), status: 'active' },
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/answers`)
+        .set('Authorization', `Bearer ${createdGame.token}`)
+        .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Forbidden resource')
+          expect(res.body).toHaveProperty('status', 403)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return BadRequest for invalid task status', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+
+      await gameModel
+        .findByIdAndUpdate(gameID, { currentTask: buildQuestionTask() })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Current task is either not of question type or not in active status',
+          )
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return BadRequest for non-question task type', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+
+      await gameModel
+        .findByIdAndUpdate(gameID, { currentTask: buildLobbyTask() })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty(
+            'message',
+            'Current task is either not of question type or not in active status',
+          )
+          expect(res.body).toHaveProperty('status', 400)
+          expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should return BadRequest when the player has already submitted an answer', async () => {
+      const createdGame = await gameService.createGame(
+        CREATE_CLASSIC_MODE_GAME_REQUEST,
+      )
+
+      const { gameID } = await authService.verifyGameToken(createdGame.token)
+
+      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+
+      const { sub: playerId } = await authService.verifyGameToken(token)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: {
+            ...buildQuestionTask(),
+            status: 'active',
+            answers: [
+              {
+                type: QuestionType.MultiChoice,
+                playerId,
+                answer: 0,
+                created: new Date(),
+              },
+            ],
+          },
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('message', 'Answer already provided')
+          expect(res.body).toHaveProperty('status', 400)
           expect(res.body).toHaveProperty('timestamp')
         })
     })
