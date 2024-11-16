@@ -192,7 +192,7 @@ export class GameTaskTransitionScheduler {
     )
 
     try {
-      const updatedGameDocument = await this.gameRepository.findAndSave(
+      const updatedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameDocument._id,
         (doc) => {
           this.logger.log(

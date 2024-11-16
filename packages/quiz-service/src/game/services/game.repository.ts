@@ -123,7 +123,7 @@ export class GameRepository {
    * @throws {ActiveGameNotFoundByIDException} If no active game is found.
    */
   @MurLock(5000, 'game', 'gameID')
-  public async findAndSave(
+  public async findAndSaveWithLock(
     gameID: string,
     callback: (gameDocument: GameDocument) => GameDocument,
   ): Promise<GameDocument> {
@@ -195,7 +195,7 @@ export class GameRepository {
       joined: new Date(),
     }
 
-    const savedGameDocument = await this.findAndSave(
+    const savedGameDocument = await this.findAndSaveWithLock(
       gameID,
       (currentDocument) => {
         if (

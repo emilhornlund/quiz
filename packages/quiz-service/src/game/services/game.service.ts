@@ -155,7 +155,7 @@ export class GameService {
     playerId: string,
     submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
   ): Promise<void> {
-    await this.gameRepository.findAndSave(gameID, (gameDocument) => {
+    await this.gameRepository.findAndSaveWithLock(gameID, (gameDocument) => {
       if (
         gameDocument.currentTask.type !== TaskType.Question ||
         gameDocument.currentTask.status !== 'active'
