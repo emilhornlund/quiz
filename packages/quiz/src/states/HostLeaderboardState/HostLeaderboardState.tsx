@@ -11,6 +11,7 @@ import {
 
 export interface HostLeaderboardStateProps {
   event: GameLeaderboardHostEvent
+  onNext: () => void
 }
 
 const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
@@ -19,6 +20,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
     leaderboard,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
+  onNext,
 }) => {
   return (
     <Page
@@ -32,6 +34,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
           kind="secondary"
           size="small"
           value="Next"
+          onClick={onNext}
         />
       }
       footer={

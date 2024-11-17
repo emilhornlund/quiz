@@ -11,6 +11,7 @@ import {
 
 export interface HostResultStateProps {
   event: GameResultHostEvent
+  onNext: () => void
 }
 
 const HostResultState: FC<HostResultStateProps> = ({
@@ -20,6 +21,7 @@ const HostResultState: FC<HostResultStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
     results,
   },
+  onNext,
 }) => (
   <Page
     height="full"
@@ -31,6 +33,7 @@ const HostResultState: FC<HostResultStateProps> = ({
         kind="secondary"
         size="small"
         value="Next"
+        onClick={onNext}
       />
     }
     footer={

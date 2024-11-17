@@ -17,6 +17,7 @@ import styles from './HostQuestionState.module.scss'
 
 export interface HostQuestionStateProps {
   event: GameQuestionHostEvent
+  onSkip: () => void
 }
 
 const HostQuestionState: FC<HostQuestionStateProps> = ({
@@ -27,6 +28,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
     submissions: { current: currentSubmission, total: totalSubmissions },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
+  onSkip,
 }) => (
   <Page
     height="full"
@@ -38,6 +40,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
         kind="secondary"
         size="small"
         value="Skip"
+        onClick={onSkip}
       />
     }
     footer={

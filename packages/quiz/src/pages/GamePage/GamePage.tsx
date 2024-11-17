@@ -82,7 +82,12 @@ const GamePage = () => {
       case GameEventType.GameQuestionPreviewPlayer:
         return <PlayerQuestionPreviewState event={event} />
       case GameEventType.GameQuestionHost:
-        return <HostQuestionState event={event} />
+        return (
+          <HostQuestionState
+            event={event}
+            onSkip={() => completeTask(gameID!, token!)}
+          />
+        )
       case GameEventType.GameQuestionPlayer:
         return (
           <PlayerQuestionState
@@ -95,9 +100,19 @@ const GamePage = () => {
       case GameEventType.GameAwaitingResultPlayer:
         return <PlayerAwaitingResultState event={event} />
       case GameEventType.GameLeaderboardHost:
-        return <HostLeaderboardState event={event} />
+        return (
+          <HostLeaderboardState
+            event={event}
+            onNext={() => completeTask(gameID!, token!)}
+          />
+        )
       case GameEventType.GameResultHost:
-        return <HostResultState event={event} />
+        return (
+          <HostResultState
+            event={event}
+            onNext={() => completeTask(gameID!, token!)}
+          />
+        )
       case GameEventType.GameResultPlayer:
         return <PlayerResultState event={event} />
       case GameEventType.GamePodiumHost:
