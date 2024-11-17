@@ -9,6 +9,9 @@ export class Player {
   @Prop({ type: String, required: true })
   nickname: string
 
+  @Prop({ type: Number, required: true })
+  totalScore: number
+
   @Prop({ type: Date, default: () => new Date() })
   joined: Date
 }

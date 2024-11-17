@@ -18,8 +18,8 @@ import {
 } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { GameService } from '../services'
-import { Game } from '../services/models/schemas'
-import { buildLobbyTask, buildQuestionTask } from '../services/utils'
+import { Game, TaskType } from '../services/models/schemas'
+import { buildLobbyTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {
   let app: INestApplication
@@ -580,7 +580,14 @@ describe('GameController (e2e)', () => {
 
       await gameModel
         .findByIdAndUpdate(gameID, {
-          currentTask: { ...buildQuestionTask(), status: 'active' },
+          currentTask: {
+            _id: uuidv4(),
+            type: TaskType.Question,
+            status: 'active',
+            questionIndex: 0,
+            answers: [],
+            created: new Date(),
+          },
         })
         .exec()
 
@@ -603,7 +610,14 @@ describe('GameController (e2e)', () => {
 
       await gameModel
         .findByIdAndUpdate(gameID, {
-          currentTask: { ...buildQuestionTask(), status: 'active' },
+          currentTask: {
+            _id: uuidv4(),
+            type: TaskType.Question,
+            status: 'active',
+            questionIndex: 0,
+            answers: [],
+            created: new Date(),
+          },
         })
         .exec()
 
@@ -629,7 +643,16 @@ describe('GameController (e2e)', () => {
       const { token } = await gameService.joinGame(gameID, 'FrostyBear')
 
       await gameModel
-        .findByIdAndUpdate(gameID, { currentTask: buildQuestionTask() })
+        .findByIdAndUpdate(gameID, {
+          currentTask: {
+            _id: uuidv4(),
+            type: TaskType.Question,
+            status: 'pending',
+            questionIndex: 0,
+            answers: [],
+            created: new Date(),
+          },
+        })
         .exec()
 
       return supertest(app.getHttpServer())
@@ -689,8 +712,10 @@ describe('GameController (e2e)', () => {
       await gameModel
         .findByIdAndUpdate(gameID, {
           currentTask: {
-            ...buildQuestionTask(),
+            _id: uuidv4(),
+            type: TaskType.Question,
             status: 'active',
+            questionIndex: 0,
             answers: [
               {
                 type: QuestionType.MultiChoice,
@@ -699,6 +724,7 @@ describe('GameController (e2e)', () => {
                 created: new Date(),
               },
             ],
+            created: new Date(),
           },
         })
         .exec()

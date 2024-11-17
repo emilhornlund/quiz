@@ -6,7 +6,9 @@ import { GameDocument, TaskType } from './models/schemas'
 import {
   getQuestionTaskActiveDuration,
   getQuestionTaskPendingDuration,
+  leaderboardTaskCompletedCallback,
   lobbyTaskCompletedCallback,
+  questionResultTaskCompletedCallback,
   questionTaskCompletedCallback,
 } from './utils'
 
@@ -45,12 +47,16 @@ const TransitionHandlers: {
   [TaskType.QuestionResult]: {
     pending: {},
     active: {},
-    completed: {},
+    completed: {
+      callback: questionResultTaskCompletedCallback,
+    },
   },
   [TaskType.Leaderboard]: {
     pending: {},
     active: {},
-    completed: {},
+    completed: {
+      callback: leaderboardTaskCompletedCallback,
+    },
   },
   [TaskType.Podium]: {
     pending: {},
@@ -158,7 +164,7 @@ export class GameTaskTransitionScheduler {
     )
 
     this.logger.debug(
-      `Scheduling deferred transition (delay: ${delay}ms) for Game ID: ${gameDocument._id}`,
+      `Scheduling deferred ${gameDocument.currentTask.type} task transition (delay: ${delay}ms) for Game ID: ${gameDocument._id}`,
     )
 
     const transitionName = `transition-${gameDocument._id}-${Date.now()}`
@@ -169,7 +175,7 @@ export class GameTaskTransitionScheduler {
           await this.performTransition(gameDocument, nextStatus, callback)
         } catch (error) {
           this.logger.error(
-            `Error during deferred transition for Game ID: ${gameDocument._id}`,
+            `Error during deferred ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
             error,
           )
           throw error
@@ -181,7 +187,7 @@ export class GameTaskTransitionScheduler {
       this.schedulerRegistry.addTimeout(transitionName, timeout)
     } catch (error) {
       this.logger.error(
-        `Failed to schedule deferred transition for Game ID: ${gameDocument._id}`,
+        `Failed to schedule deferred ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
         error,
       )
       throw error
@@ -203,7 +209,7 @@ export class GameTaskTransitionScheduler {
     callback?: (gameDocument: GameDocument) => void,
   ): Promise<void> {
     this.logger.debug(
-      `Performing transition for Game ID: ${gameDocument._id}, next status: ${nextStatus}`,
+      `Performing ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}, next status: ${nextStatus}`,
     )
 
     try {
@@ -211,7 +217,7 @@ export class GameTaskTransitionScheduler {
         gameDocument._id,
         (doc) => {
           this.logger.log(
-            `Transitioning task from ${doc.currentTask.status} to ${nextStatus} (Game ID: ${doc._id})`,
+            `Transitioning ${doc.currentTask.type} task from ${doc.currentTask.status} to ${nextStatus} (Game ID: ${doc._id})`,
           )
 
           if (nextStatus) {
@@ -229,7 +235,7 @@ export class GameTaskTransitionScheduler {
       await this.handlePostTransition(updatedGameDocument)
     } catch (error) {
       this.logger.error(
-        `Failed to perform task transition for Game ID: ${gameDocument._id}`,
+        `Failed to perform ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
         error,
       )
       throw error
@@ -246,17 +252,17 @@ export class GameTaskTransitionScheduler {
   private async handlePostTransition(
     gameDocument: GameDocument,
   ): Promise<void> {
-    this.logger.debug(
-      `Handling post-transition for Game ID: ${gameDocument._id}`,
-    )
-
     const { currentTask } = gameDocument
-    const { status } = currentTask
+    const { type, status } = currentTask
+
+    this.logger.debug(
+      `Handling ${type} task post-transition for Game ID: ${gameDocument._id}`,
+    )
 
     try {
       if (status === 'pending' || status === 'completed') {
         this.logger.log(
-          `Scheduling next transition for Game ID: ${gameDocument._id}`,
+          `Scheduling next ${type} task transition for Game ID: ${gameDocument._id}`,
         )
         await this.scheduleTaskTransition(gameDocument)
       } else if (status === 'active') {
@@ -270,14 +276,14 @@ export class GameTaskTransitionScheduler {
 
         if (delay > 0) {
           this.logger.log(
-            `Scheduling transition for active task with delay for Game ID: ${gameDocument._id}`,
+            `Scheduling transition for active ${type} task with delay for Game ID: ${gameDocument._id}`,
           )
           await this.scheduleTaskTransition(gameDocument)
         }
       }
     } catch (error) {
       this.logger.error(
-        `Error during post-transition handling for Game ID: ${gameDocument._id}`,
+        `Error during ${type} task post-transition handling for Game ID: ${gameDocument._id}`,
         error,
       )
       throw error

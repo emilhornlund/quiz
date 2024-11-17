@@ -192,6 +192,7 @@ export class GameRepository {
     const newPlayer: Player = {
       _id: uuidv4(),
       nickname,
+      totalScore: 0,
       joined: new Date(),
     }
 

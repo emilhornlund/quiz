@@ -1,6 +1,11 @@
 import { GameDocument, TaskType } from '../models/schemas'
 
-import { buildQuestionTask } from './task.converter'
+import {
+  buildLeaderboardTask,
+  buildPodiumTask,
+  buildQuestionResultTask,
+  buildQuestionTask,
+} from './task.converter'
 
 /**
  * Callback for completing the Lobby task.
@@ -13,7 +18,8 @@ import { buildQuestionTask } from './task.converter'
  */
 export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
   gameDocument.previousTasks.push(gameDocument.currentTask)
-  gameDocument.currentTask = buildQuestionTask()
+  gameDocument.currentTask = buildQuestionTask(gameDocument)
+  gameDocument.nextQuestion = gameDocument.nextQuestion + 1
 }
 
 /**
@@ -21,7 +27,7 @@ export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
  *
  * This function transitions the current task from a question task to the next task.
  * It moves the current question task to the `previousTasks` array and updates `currentTask`
- * with a newly created question task.
+ * with a newly created question result task.
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
  */
@@ -29,7 +35,7 @@ export function questionTaskCompletedCallback(
   gameDocument: GameDocument,
 ): void {
   gameDocument.previousTasks.push(gameDocument.currentTask)
-  gameDocument.currentTask = buildQuestionTask()
+  gameDocument.currentTask = buildQuestionResultTask(gameDocument)
 }
 
 const AVERAGE_WPM = 220 // Average reading speed in words per minute
@@ -94,4 +100,42 @@ export function getQuestionTaskActiveDuration(
 
   const durationInSeconds = gameDocument.questions[questionIndex].duration
   return durationInSeconds * 1000
+}
+
+/**
+ * Callback for completing the current question result task.
+ *
+ * This function transitions the current task from a question result task to the next task.
+ * It moves the current question task to the `previousTasks` array and updates `currentTask`
+ * with an either newly created leaderboard or a podium task.
+ *
+ * @param {GameDocument} gameDocument - The game document containing the current task.
+ */
+export function questionResultTaskCompletedCallback(
+  gameDocument: GameDocument,
+): void {
+  gameDocument.previousTasks.push(gameDocument.currentTask)
+
+  if (gameDocument.nextQuestion < gameDocument.questions.length) {
+    gameDocument.currentTask = buildLeaderboardTask(gameDocument)
+  } else {
+    gameDocument.currentTask = buildPodiumTask(gameDocument)
+  }
+}
+
+/**
+ * Callback for completing the current leaderboard task.
+ *
+ * This function transitions the current task from a leaderboard task to the next task.
+ * It moves the current question task to the `previousTasks` array and updates `currentTask`
+ * with a newly created question task.
+ *
+ * @param {GameDocument} gameDocument - The game document containing the current task.
+ */
+export function leaderboardTaskCompletedCallback(
+  gameDocument: GameDocument,
+): void {
+  gameDocument.previousTasks.push(gameDocument.currentTask)
+  gameDocument.currentTask = buildQuestionTask(gameDocument)
+  gameDocument.nextQuestion = gameDocument.nextQuestion + 1
 }
