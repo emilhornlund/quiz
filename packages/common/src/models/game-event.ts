@@ -149,20 +149,6 @@ export type GameAwaitingResultPlayerEvent = {
   pagination: PaginationEvent
 }
 
-export type GameLeaderboardHostEvent = {
-  type: GameEventType.GameLeaderboardHost
-  game: {
-    pin: string
-  }
-  leaderboard: {
-    position: number
-    nickname: string
-    score: number
-    streaks: number
-  }[]
-  pagination: PaginationEvent
-}
-
 export type GameEventQuestionResultsMultiChoice = {
   type: QuestionType.MultiChoice
   distribution: { value: string; count: number; correct: boolean }[]
@@ -217,6 +203,20 @@ export type GameResultPlayerEvent = {
   pagination: PaginationEvent
 }
 
+export type GameLeaderboardHostEvent = {
+  type: GameEventType.GameLeaderboardHost
+  game: {
+    pin: string
+  }
+  leaderboard: {
+    position: number
+    nickname: string
+    score: number
+    streaks: number
+  }[]
+  pagination: PaginationEvent
+}
+
 export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
   leaderboard: { position: number; nickname: string; score: number }[]
@@ -248,8 +248,8 @@ export type GameEvent =
   | GameQuestionHostEvent
   | GameQuestionPlayerEvent
   | GameAwaitingResultPlayerEvent
-  | GameLeaderboardHostEvent
   | GameResultHostEvent
   | GameResultPlayerEvent
+  | GameLeaderboardHostEvent
   | GamePodiumHostEvent
   | GamePodiumPlayerEvent

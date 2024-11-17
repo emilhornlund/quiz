@@ -17,8 +17,14 @@ import {
 } from './question.schema'
 import {
   BaseTask,
+  LeaderboardTask,
+  LeaderboardTaskSchema,
   LobbyTask,
   LobbyTaskSchema,
+  PodiumTask,
+  PodiumTaskSchema,
+  QuestionResultTask,
+  QuestionResultTaskSchema,
   QuestionTask,
   QuestionTaskSchema,
   TaskType,
@@ -61,10 +67,24 @@ export class Game {
   players: Player[]
 
   @Prop({ type: BaseTask, required: true })
-  currentTask: BaseTask & (LobbyTask | QuestionTask)
+  currentTask: BaseTask &
+    (
+      | LobbyTask
+      | QuestionTask
+      | QuestionResultTask
+      | LeaderboardTask
+      | PodiumTask
+    )
 
   @Prop({ type: [BaseTask], required: true })
-  previousTasks: (BaseTask & (LobbyTask | QuestionTask))[]
+  previousTasks: (BaseTask &
+    (
+      | LobbyTask
+      | QuestionTask
+      | QuestionResultTask
+      | LeaderboardTask
+      | PodiumTask
+    ))[]
 
   @Prop({ type: Date, required: true })
   expires: Date
@@ -87,8 +107,20 @@ const currentTaskSchema =
   GameSchema.path<MongooseSchema.Types.Subdocument>('currentTask')
 currentTaskSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)
 currentTaskSchema.discriminator(TaskType.Question, QuestionTaskSchema)
+currentTaskSchema.discriminator(
+  TaskType.QuestionResult,
+  QuestionResultTaskSchema,
+)
+currentTaskSchema.discriminator(TaskType.Leaderboard, LeaderboardTaskSchema)
+currentTaskSchema.discriminator(TaskType.Podium, PodiumTaskSchema)
 
 const previousTasksSchema =
   GameSchema.path<MongooseSchema.Types.Array>('previousTasks')
 previousTasksSchema.discriminator(TaskType.Lobby, LobbyTaskSchema)
 previousTasksSchema.discriminator(TaskType.Question, QuestionTaskSchema)
+previousTasksSchema.discriminator(
+  TaskType.QuestionResult,
+  QuestionResultTaskSchema,
+)
+previousTasksSchema.discriminator(TaskType.Leaderboard, LeaderboardTaskSchema)
+previousTasksSchema.discriminator(TaskType.Podium, PodiumTaskSchema)

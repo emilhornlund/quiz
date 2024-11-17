@@ -42,6 +42,21 @@ const TransitionHandlers: {
       callback: questionTaskCompletedCallback,
     },
   },
+  [TaskType.QuestionResult]: {
+    pending: {},
+    active: {},
+    completed: {},
+  },
+  [TaskType.Leaderboard]: {
+    pending: {},
+    active: {},
+    completed: {},
+  },
+  [TaskType.Podium]: {
+    pending: {},
+    active: {},
+    completed: {},
+  },
 }
 
 /**

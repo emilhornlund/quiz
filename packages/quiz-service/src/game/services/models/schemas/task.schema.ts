@@ -6,6 +6,9 @@ import { v4 as uuidv4 } from 'uuid'
 export enum TaskType {
   Lobby = 'LOBBY',
   Question = 'QUESTION',
+  QuestionResult = 'QUESTION_RESULT',
+  Leaderboard = 'LEADERBOARD',
+  Podium = 'PODIUM',
 }
 
 /**
@@ -22,7 +25,12 @@ export class BaseTask {
     enum: Object.keys(TaskType),
     required: true,
   })
-  type!: TaskType.Lobby | TaskType.Question
+  type!:
+    | TaskType.Lobby
+    | TaskType.Question
+    | TaskType.QuestionResult
+    | TaskType.Leaderboard
+    | TaskType.Podium
 
   @Prop({ type: String, default: 'pending' })
   status: 'pending' | 'active' | 'completed'
@@ -173,3 +181,147 @@ questionTaskSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionTaskTypeAnswerAnswerSchema,
 )
+
+/**
+ * QuestionTaskBaseAnswer
+ */
+
+@Schema({ _id: true, discriminatorKey: 'type' })
+export class QuestionResultTaskItem {
+  @Prop({
+    enum: [
+      QuestionType.MultiChoice,
+      QuestionType.Range,
+      QuestionType.TrueFalse,
+      QuestionType.TypeAnswer,
+    ],
+    required: true,
+  })
+  type!:
+    | QuestionType.MultiChoice
+    | QuestionType.Range
+    | QuestionType.TrueFalse
+    | QuestionType.TypeAnswer
+
+  @Prop({ type: String, required: true })
+  playerId: string
+
+  @Prop({ type: QuestionTaskBaseAnswer, required: true })
+  answer: QuestionTaskBaseAnswer &
+    (
+      | QuestionTaskMultiChoiceAnswer
+      | QuestionTaskRangeAnswer
+      | QuestionTaskTrueFalseAnswer
+      | QuestionTaskTypeAnswerAnswer
+    )
+
+  @Prop({ type: Boolean, required: true })
+  correct: boolean
+
+  @Prop({ type: Number, required: true })
+  lastScore: number
+
+  @Prop({ type: Number, required: true })
+  totalScore: number
+
+  @Prop({ type: Number, required: true })
+  position: number
+
+  @Prop({ type: Number, required: true })
+  streak: number
+}
+
+export const QuestionResultTaskItemSchema = SchemaFactory.createForClass(
+  QuestionResultTaskItem,
+)
+
+const questionResultTaskItemSchema =
+  QuestionResultTaskItemSchema.path<MongooseSchema.Types.Subdocument>('answer')
+questionResultTaskItemSchema.discriminator(
+  QuestionType.MultiChoice,
+  QuestionTaskMultiChoiceAnswerSchema,
+)
+questionResultTaskItemSchema.discriminator(
+  QuestionType.Range,
+  QuestionTaskRangeAnswerSchema,
+)
+questionResultTaskItemSchema.discriminator(
+  QuestionType.TrueFalse,
+  QuestionTaskTrueFalseAnswerSchema,
+)
+questionResultTaskItemSchema.discriminator(
+  QuestionType.TypeAnswer,
+  QuestionTaskTypeAnswerAnswerSchema,
+)
+
+/**
+ * QuestionResultTask
+ */
+
+@Schema({ _id: false })
+export class QuestionResultTask {
+  type!: TaskType.QuestionResult
+
+  @Prop({ type: Number, required: true })
+  questionIndex: number
+
+  @Prop({ type: [QuestionResultTaskItem], required: true })
+  results: QuestionResultTaskItem[]
+}
+
+export const QuestionResultTaskSchema =
+  SchemaFactory.createForClass(QuestionResultTask)
+
+/**
+ * LeaderboardTaskItem
+ */
+
+@Schema({ _id: false })
+export class LeaderboardTaskItem {
+  @Prop({ type: String, required: true })
+  playerId: string
+
+  @Prop({ type: Number, required: true })
+  position: number
+
+  @Prop({ type: String, required: true })
+  nickname: string
+
+  @Prop({ type: Number, required: true })
+  score: number
+
+  @Prop({ type: Number, required: true })
+  streaks: number
+}
+
+/**
+ * LeaderboardTask
+ */
+
+@Schema({ _id: false })
+export class LeaderboardTask {
+  type!: TaskType.Leaderboard
+
+  @Prop({ type: Number, required: true })
+  questionIndex: number
+
+  @Prop({ type: [LeaderboardTaskItem], required: true })
+  leaderboard: LeaderboardTaskItem[]
+}
+
+export const LeaderboardTaskSchema =
+  SchemaFactory.createForClass(LeaderboardTask)
+
+/**
+ * PodiumTask
+ */
+
+@Schema({ _id: false })
+export class PodiumTask {
+  type!: TaskType.Podium
+
+  @Prop({ type: [LeaderboardTaskItem], required: true })
+  leaderboard: LeaderboardTaskItem[]
+}
+
+export const PodiumTaskSchema = SchemaFactory.createForClass(PodiumTask)

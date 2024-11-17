@@ -5,14 +5,20 @@ import {
   GameBeginPlayerEvent,
   GameEvent,
   GameEventQuestion,
+  GameEventQuestionResults,
   GameEventType,
+  GameLeaderboardHostEvent,
   GameLoadingEvent,
   GameLobbyHostEvent,
   GameLobbyPlayerEvent,
+  GamePodiumHostEvent,
+  GamePodiumPlayerEvent,
   GameQuestionHostEvent,
   GameQuestionPlayerEvent,
   GameQuestionPreviewHostEvent,
   GameQuestionPreviewPlayerEvent,
+  GameResultHostEvent,
+  GameResultPlayerEvent,
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
@@ -37,7 +43,7 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
   if (isLobbyTask(document)) {
     switch (document.currentTask.status) {
       case 'pending':
-        return buildGameLoadingEvent(document)
+        return buildGameLoadingEvent()
       case 'active':
         return buildGameLobbyHostEvent(document)
       case 'completed':
@@ -50,8 +56,42 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
       case 'pending':
         return buildGameQuestionPreviewHostEvent(document)
       case 'active':
-      case 'completed':
         return buildGameQuestionHostEvent(document)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
+  }
+
+  if (isQuestionResultTask(document)) {
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGameResultHostEvent(document)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
+  }
+
+  if (isLeaderboardTask(document)) {
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGameLeaderboardHostEvent(document)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
+  }
+
+  if (isPodiumTask(document)) {
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGamePodiumHostEvent(document)
+      case 'completed':
+        return buildGameLoadingEvent()
     }
   }
 
@@ -75,7 +115,7 @@ export function buildPlayerGameEvent(
   if (isLobbyTask(document)) {
     switch (document.currentTask.status) {
       case 'pending':
-        return buildGameLoadingEvent(document)
+        return buildGameLoadingEvent()
       case 'active':
         return buildGameLobbyPlayerEvent(document, player)
       case 'completed':
@@ -98,6 +138,32 @@ export function buildPlayerGameEvent(
     }
   }
 
+  if (isQuestionResultTask(document)) {
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGameResultPlayerEvent(document, player)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
+  }
+
+  if (isLeaderboardTask(document)) {
+    return buildGameLoadingEvent()
+  }
+
+  if (isPodiumTask(document)) {
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGamePodiumPlayerEvent(document, player)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
+  }
+
   throw new Error('Unknown task')
 }
 
@@ -117,14 +183,9 @@ function isLobbyTask(
 /**
  * Builds a loading event for the game.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
- *
  * @returns {GameLoadingEvent} A loading event for the game, indicating that the game is in a loading state.
  */
-function buildGameLoadingEvent(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  document: GameDocument & { currentTask: { type: TaskType.Lobby } },
-): GameLoadingEvent {
+function buildGameLoadingEvent(): GameLoadingEvent {
   return { type: GameEventType.GameLoading }
 }
 
@@ -251,12 +312,12 @@ function buildGameQuestionCountdownEvent(
 /**
  * Builds a pagination event for the current question task.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
+ * @param {GameDocument & { currentTask: { questionIndex: number } }} document - The game document containing the current question index.
  *
  * @returns {PaginationEvent} A pagination event with current question index and total questions.
  */
 function buildPaginationEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Question } },
+  document: GameDocument & { currentTask: { questionIndex: number } },
 ): PaginationEvent {
   return {
     current: document.currentTask.questionIndex + 1,
@@ -436,5 +497,255 @@ function buildGameAwaitingResultPlayerEvent(
       },
     },
     pagination: buildPaginationEvent(document),
+  }
+}
+
+/**
+ * Checks if the current task of the game document is a question result task.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document with a question result task type.
+ *
+ * @returns {boolean} Returns `true` if the current task type is `QuestionResult`, otherwise `false`.
+ */
+function isQuestionResultTask(
+  document: GameDocument,
+): document is GameDocument & {
+  currentTask: { type: TaskType.QuestionResult }
+} {
+  return document.currentTask.type === TaskType.QuestionResult
+}
+
+function buildGameEventQuestionResults(
+  document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
+): GameEventQuestionResults {
+  const type = document.questions[document.currentTask.questionIndex].type
+
+  const distribution =
+    type === QuestionType.MultiChoice || type === QuestionType.TypeAnswer
+      ? document.currentTask.results.reduce(
+          (prev, current) => {
+            if (current.answer.type === type) {
+              const index = prev.findIndex(
+                ({ value }) => value === current.answer.answer,
+              )
+              if (index >= 0) {
+                prev[index] = { ...prev[index], count: prev[index].count + 1 }
+              } else {
+                prev.push({
+                  value: current.answer.answer as string,
+                  count: 1,
+                  correct: current.correct,
+                })
+              }
+            }
+            return prev
+          },
+          [] as { value: string; count: number; correct: boolean }[],
+        )
+      : type === QuestionType.Range
+        ? document.currentTask.results.reduce(
+            (prev, current) => {
+              if (current.answer.type === type) {
+                const index = prev.findIndex(
+                  ({ value }) => value === current.answer.answer,
+                )
+                if (index >= 0) {
+                  prev[index] = { ...prev[index], count: prev[index].count + 1 }
+                } else {
+                  prev.push({
+                    value: current.answer.answer as number,
+                    count: 1,
+                    correct: current.correct,
+                  })
+                }
+              }
+              return prev
+            },
+            [] as { value: number; count: number; correct: boolean }[],
+          )
+        : document.currentTask.results.reduce(
+            (prev, current) => {
+              if (current.answer.type === type) {
+                const index = prev.findIndex(
+                  ({ value }) => value === current.answer.answer,
+                )
+                if (index >= 0) {
+                  prev[index] = { ...prev[index], count: prev[index].count + 1 }
+                } else {
+                  prev.push({
+                    value: current.answer.answer as boolean,
+                    count: 1,
+                    correct: current.correct,
+                  })
+                }
+              }
+              return prev
+            },
+            [] as { value: boolean; count: number; correct: boolean }[],
+          )
+
+  return { type, distribution } as GameEventQuestionResults
+}
+
+/**
+ * Builds a question result event for the host.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document containing the current question result task.
+ */
+function buildGameResultHostEvent(
+  document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
+): GameResultHostEvent {
+  const { type, question } =
+    document.questions[document.currentTask.questionIndex]
+  return {
+    type: GameEventType.GameResultHost,
+    game: {
+      pin: document.pin,
+    },
+    question: {
+      type,
+      question,
+    },
+    results: buildGameEventQuestionResults(document),
+    pagination: buildPaginationEvent(document),
+  }
+}
+
+/**
+ * Builds a question result event for the player.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document containing the current question result task.
+ * @param {Player} player - The `Player` object representing the participant for whom the event is being built.
+ */
+function buildGameResultPlayerEvent(
+  document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
+  player: Player,
+): GameResultPlayerEvent {
+  const {
+    correct,
+    lastScore: last,
+    totalScore: total,
+    position,
+    streak,
+  } = document.currentTask.results.find(
+    ({ playerId }) => playerId === player._id,
+  )
+  return {
+    type: GameEventType.GameResultPlayer,
+    player: {
+      nickname: player.nickname,
+      score: {
+        correct,
+        last,
+        total,
+        position,
+        streak,
+      },
+    },
+    pagination: buildPaginationEvent(document),
+  }
+}
+
+/**
+ * Checks if the current task of the game document is a leaderboard task.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document with a leaderboard task type.
+ *
+ * @returns {boolean} Returns `true` if the current task type is `Leaderboard`, otherwise `false`.
+ */
+function isLeaderboardTask(document: GameDocument): document is GameDocument & {
+  currentTask: { type: TaskType.Leaderboard }
+} {
+  return document.currentTask.type === TaskType.Leaderboard
+}
+
+/**
+ * Builds a leaderboard event for the host.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
+ */
+function buildGameLeaderboardHostEvent(
+  document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
+): GameLeaderboardHostEvent {
+  return {
+    type: GameEventType.GameLeaderboardHost,
+    game: {
+      pin: document.pin,
+    },
+    leaderboard: document.currentTask.leaderboard.map(
+      ({ position, nickname, score, streaks }) => ({
+        position,
+        nickname,
+        score,
+        streaks,
+      }),
+    ),
+    pagination: buildPaginationEvent(document),
+  }
+}
+
+/**
+ * Checks if the current task of the game document is a podium task.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document with a podium task type.
+ *
+ * @returns {boolean} Returns `true` if the current task type is `Podium`, otherwise `false`.
+ */
+function isPodiumTask(document: GameDocument): document is GameDocument & {
+  currentTask: { type: TaskType.Podium }
+} {
+  return document.currentTask.type === TaskType.Podium
+}
+
+/**
+ * Builds a podium event for the host.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document containing the current podium task.
+ */
+function buildGamePodiumHostEvent(
+  document: GameDocument & { currentTask: { type: TaskType.Podium } },
+): GamePodiumHostEvent {
+  return {
+    type: GameEventType.GamePodiumHost,
+    leaderboard: document.currentTask.leaderboard.map(
+      ({ position, nickname, score }) => ({
+        position,
+        nickname,
+        score,
+      }),
+    ),
+  }
+}
+
+/**
+ * Builds a podium event for the player.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document containing the current podium task.
+ * @param {Player} player - The `Player` object representing the participant for whom the event is being built.
+ */
+function buildGamePodiumPlayerEvent(
+  document: GameDocument & { currentTask: { type: TaskType.Podium } },
+  player: Player,
+): GamePodiumPlayerEvent {
+  const leaderboardEntry = document.currentTask.leaderboard.find(
+    ({ playerId }) => playerId === player._id,
+  )
+  if (!leaderboardEntry) {
+    throw new Error(`Player not found in leaderboard: ${player._id}`)
+  }
+  const { score: total, position } = leaderboardEntry
+
+  return {
+    type: GameEventType.GamePodiumPlayer,
+    game: {
+      name: document.name,
+    },
+    player: {
+      nickname: player.nickname,
+      score: {
+        total,
+        position,
+      },
+    },
   }
 }
