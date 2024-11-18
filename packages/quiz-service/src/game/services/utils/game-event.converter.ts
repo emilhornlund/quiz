@@ -493,70 +493,49 @@ function buildGameAwaitingResultPlayerEvent(
 function buildGameEventQuestionResults(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
 ): GameEventQuestionResults {
-  const type = document.questions[document.currentTask.questionIndex].type
+  const type = document.questions[document.currentTask.questionIndex]?.type
+
+  if (!type) {
+    throw new Error('Question type is undefined or invalid.')
+  }
+
+  type DistributionItem<T> = { value: T; count: number; correct: boolean }
+
+  const reduceResults = <T>(
+    initial: DistributionItem<T>[],
+    castValue: (value: unknown) => T | null,
+  ): DistributionItem<T>[] => {
+    return document.currentTask.results.reduce((prev, current) => {
+      if (current.answer?.type === type) {
+        const value = castValue(current.answer.answer)
+        if (value === null) return prev
+
+        const index = prev.findIndex(({ value: v }) => v === value)
+        if (index >= 0) {
+          prev[index] = { ...prev[index], count: prev[index].count + 1 }
+        } else {
+          prev.push({
+            value,
+            count: 1,
+            correct: current.correct,
+          })
+        }
+      }
+      return prev
+    }, initial)
+  }
 
   const distribution =
-    type === QuestionType.MultiChoice || type === QuestionType.TypeAnswer
-      ? document.currentTask.results.reduce(
-          (prev, current) => {
-            if (current.answer.type === type) {
-              const index = prev.findIndex(
-                ({ value }) => value === current.answer.answer,
-              )
-              if (index >= 0) {
-                prev[index] = { ...prev[index], count: prev[index].count + 1 }
-              } else {
-                prev.push({
-                  value: current.answer.answer as string,
-                  count: 1,
-                  correct: current.correct,
-                })
-              }
-            }
-            return prev
-          },
-          [] as { value: string; count: number; correct: boolean }[],
+    type === QuestionType.TypeAnswer
+      ? reduceResults<string>([], (value) =>
+          typeof value === 'string' ? value : null,
         )
-      : type === QuestionType.Range
-        ? document.currentTask.results.reduce(
-            (prev, current) => {
-              if (current.answer.type === type) {
-                const index = prev.findIndex(
-                  ({ value }) => value === current.answer.answer,
-                )
-                if (index >= 0) {
-                  prev[index] = { ...prev[index], count: prev[index].count + 1 }
-                } else {
-                  prev.push({
-                    value: current.answer.answer as number,
-                    count: 1,
-                    correct: current.correct,
-                  })
-                }
-              }
-              return prev
-            },
-            [] as { value: number; count: number; correct: boolean }[],
+      : type === QuestionType.MultiChoice || type === QuestionType.Range
+        ? reduceResults<number>([], (value) =>
+            typeof value === 'number' ? value : null,
           )
-        : document.currentTask.results.reduce(
-            (prev, current) => {
-              if (current.answer.type === type) {
-                const index = prev.findIndex(
-                  ({ value }) => value === current.answer.answer,
-                )
-                if (index >= 0) {
-                  prev[index] = { ...prev[index], count: prev[index].count + 1 }
-                } else {
-                  prev.push({
-                    value: current.answer.answer as boolean,
-                    count: 1,
-                    correct: current.correct,
-                  })
-                }
-              }
-              return prev
-            },
-            [] as { value: boolean; count: number; correct: boolean }[],
+        : reduceResults<boolean>([], (value) =>
+            typeof value === 'boolean' ? value : null,
           )
 
   return { type, distribution } as GameEventQuestionResults
