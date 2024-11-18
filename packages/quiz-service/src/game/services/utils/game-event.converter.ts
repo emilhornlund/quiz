@@ -6,6 +6,9 @@ import {
   GameEvent,
   GameEventQuestion,
   GameEventQuestionResults,
+  GameEventQuestionResultsRange,
+  GameEventQuestionResultsTrueFalse,
+  GameEventQuestionResultsTypeAnswer,
   GameEventType,
   GameLeaderboardHostEvent,
   GameLoadingEvent,
@@ -22,6 +25,7 @@ import {
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
+import { GameEventQuestionResultsMultiChoice } from '@quiz/common/dist/cjs/models/game-event'
 
 import { GameDocument, Player, TaskType } from '../models/schemas'
 
@@ -29,6 +33,16 @@ import {
   getQuestionTaskActiveDuration,
   getQuestionTaskPendingDuration,
 } from './gameplay.utils'
+import {
+  isMultiChoiceAnswer,
+  isMultiChoiceQuestion,
+  isRangeAnswer,
+  isRangeQuestion,
+  isTrueFalseAnswer,
+  isTrueFalseQuestion,
+  isTypeAnswerAnswer,
+  isTypeAnswerQuestion,
+} from './question.utils'
 import {
   isLeaderboardTask,
   isLobbyTask,
@@ -493,52 +507,152 @@ function buildGameAwaitingResultPlayerEvent(
 function buildGameEventQuestionResults(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
 ): GameEventQuestionResults {
-  const type = document.questions[document.currentTask.questionIndex]?.type
+  const question = document.questions[document.currentTask.questionIndex]
 
-  if (!type) {
-    throw new Error('Question type is undefined or invalid.')
-  }
+  if (isMultiChoiceQuestion(question)) {
+    const type = question.type
 
-  type DistributionItem<T> = { value: T; count: number; correct: boolean }
+    type Distribution = GameEventQuestionResultsMultiChoice['distribution']
+    type DistributionItem = Distribution[number]
 
-  const reduceResults = <T>(
-    initial: DistributionItem<T>[],
-    castValue: (value: unknown) => T | null,
-  ): DistributionItem<T>[] => {
-    return document.currentTask.results.reduce((prev, current) => {
-      if (current.answer?.type === type) {
-        const value = castValue(current.answer.answer)
-        if (value === null) return prev
+    const initial: DistributionItem[] = question.options
+      .filter(({ correct }) => correct)
+      .map(({ value, correct }) => ({
+        value,
+        count: 0,
+        correct,
+      }))
 
-        const index = prev.findIndex(({ value: v }) => v === value)
-        if (index >= 0) {
-          prev[index] = { ...prev[index], count: prev[index].count + 1 }
-        } else {
-          prev.push({
-            value,
-            count: 1,
-            correct: current.correct,
-          })
+    const distribution: Distribution = document.currentTask.results.reduce(
+      (prev, current) => {
+        if (isMultiChoiceAnswer(current.answer)) {
+          const optionIndex = current.answer.answer
+          if (optionIndex >= 0 && optionIndex < question.options.length) {
+            const optionsValue = question.options[optionIndex].value
+            const index = prev.findIndex(({ value }) => value === optionsValue)
+            if (index >= 0) {
+              prev[index] = { ...prev[index], count: prev[index].count + 1 }
+            } else {
+              prev.push({
+                value: optionsValue,
+                count: 1,
+                correct: current.correct,
+              })
+            }
+          }
         }
-      }
-      return prev
-    }, initial)
+        return prev
+      },
+      initial,
+    )
+
+    return { type, distribution }
   }
 
-  const distribution =
-    type === QuestionType.TypeAnswer
-      ? reduceResults<string>([], (value) =>
-          typeof value === 'string' ? value : null,
-        )
-      : type === QuestionType.MultiChoice || type === QuestionType.Range
-        ? reduceResults<number>([], (value) =>
-            typeof value === 'number' ? value : null,
-          )
-        : reduceResults<boolean>([], (value) =>
-            typeof value === 'boolean' ? value : null,
-          )
+  if (isRangeQuestion(question)) {
+    const type = question.type
 
-  return { type, distribution } as GameEventQuestionResults
+    type Distribution = GameEventQuestionResultsRange['distribution']
+    type DistributionItem = Distribution[number]
+
+    const initial: DistributionItem[] = [
+      { value: question.correct, count: 0, correct: true },
+    ]
+
+    const distribution: Distribution = document.currentTask.results.reduce(
+      (prev, current) => {
+        if (isRangeAnswer(current.answer)) {
+          const index = prev.findIndex(
+            ({ value }) => value === current.answer.answer,
+          )
+          if (index >= 0) {
+            prev[index] = { ...prev[index], count: prev[index].count + 1 }
+          } else {
+            prev.push({
+              value: current.answer.answer,
+              count: 1,
+              correct: current.correct,
+            })
+          }
+        }
+        return prev
+      },
+      initial,
+    )
+
+    return { type, distribution }
+  }
+
+  if (isTrueFalseQuestion(question)) {
+    const type = question.type
+
+    type Distribution = GameEventQuestionResultsTrueFalse['distribution']
+    type DistributionItem = Distribution[number]
+
+    const initial: DistributionItem[] = [
+      { value: question.correct, count: 0, correct: true },
+    ]
+
+    const distribution: Distribution = document.currentTask.results.reduce(
+      (prev, current) => {
+        if (isTrueFalseAnswer(current.answer)) {
+          const index = prev.findIndex(
+            ({ value }) => value === current.answer.answer,
+          )
+          if (index >= 0) {
+            prev[index] = { ...prev[index], count: prev[index].count + 1 }
+          } else {
+            prev.push({
+              value: current.answer.answer,
+              count: 1,
+              correct: current.correct,
+            })
+          }
+        }
+        return prev
+      },
+      initial,
+    )
+
+    return { type, distribution }
+  }
+
+  if (isTypeAnswerQuestion(question)) {
+    const type = question.type
+
+    type Distribution = GameEventQuestionResultsTypeAnswer['distribution']
+    type DistributionItem = Distribution[number]
+
+    const initial: DistributionItem[] = [
+      { value: question.correct.toLowerCase(), count: 0, correct: true },
+    ]
+
+    const distribution: Distribution = document.currentTask.results.reduce(
+      (prev, current) => {
+        if (isTypeAnswerAnswer(current.answer)) {
+          const answer = current.answer?.answer?.toLowerCase()
+          const index = prev.findIndex(
+            ({ value }) => value.toLowerCase() === answer,
+          )
+          if (index >= 0) {
+            prev[index] = { ...prev[index], count: prev[index].count + 1 }
+          } else {
+            prev.push({
+              value: answer,
+              count: 1,
+              correct: current.correct,
+            })
+          }
+        }
+        return prev
+      },
+      initial,
+    )
+
+    return { type, distribution }
+  }
+
+  throw new Error('Question type is undefined or invalid.')
 }
 
 /**
