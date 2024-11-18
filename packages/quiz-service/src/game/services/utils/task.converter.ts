@@ -1,6 +1,7 @@
 import { GameMode } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import { IllegalTaskTypeException } from '../../exceptions'
 import {
   BaseTask,
   GameDocument,
@@ -13,6 +14,8 @@ import {
   QuestionTask,
   TaskType,
 } from '../models/schemas'
+
+import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
 /**
  * Constructs a new lobby task with a unique ID, setting its initial status and creation timestamp.
@@ -29,9 +32,9 @@ export function buildLobbyTask(): BaseTask & LobbyTask {
 }
 
 /**
- * Constructs a new question task with a unique ID, setting its initial status, creation timestamp, and question index.
+ * Constructs a new question task based on the provided game document.
  *
- * @param {GameDocument} gameDocument -
+ * @param {GameDocument} gameDocument - The current game document.
  *
  * @returns {BaseTask & QuestionTask} A new question task object.
  */
@@ -48,9 +51,24 @@ export function buildQuestionTask(
   }
 }
 
+/**
+ * Constructs a new question result task based on the provided game document.
+ *
+ * @param {GameDocument} gameDocument - The current game document.
+ *
+ * @throws {IllegalTaskTypeException} If the current task type is not a question.
+ *
+ * @returns {BaseTask & QuestionResultTask} A new question result task object.
+ */
 export function buildQuestionResultTask(
   gameDocument: GameDocument,
 ): BaseTask & QuestionResultTask {
+  if (!isQuestionTask(gameDocument)) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Question,
+    )
+  }
   return {
     _id: uuidv4(),
     type: TaskType.QuestionResult,
@@ -61,6 +79,14 @@ export function buildQuestionResultTask(
   }
 }
 
+/**
+ * Compares two players based on their total score in Classic mode.
+ *
+ * @param {Player} lhs - The left-hand side player.
+ * @param {Player} rhs - The right-hand side player.
+ *
+ * @returns {number} The comparison result for sorting.
+ */
 function compareSortClassicModePlayersByScore(
   lhs: Player,
   rhs: Player,
@@ -74,19 +100,28 @@ function compareSortClassicModePlayersByScore(
   return 0
 }
 
+/**
+ * Compares two players based on their total score in ZeroToOneHundred mode.
+ *
+ * @param {Player} lhs - The left-hand side player.
+ * @param {Player} rhs - The right-hand side player.
+ *
+ * @returns {number} The comparison result for sorting.
+ */
 function compareZeroToOneHundredModePlayersByScore(
   lhs: Player,
   rhs: Player,
 ): number {
-  if (lhs.totalScore < rhs.totalScore) {
-    return -1
-  }
-  if (lhs.totalScore > rhs.totalScore) {
-    return 1
-  }
-  return 0
+  return compareSortClassicModePlayersByScore(lhs, rhs) * -1 //sort scores from lowest to highest
 }
 
+/**
+ * Builds leaderboard items for the current game document, sorting players by score based on the game mode.
+ *
+ * @param {GameDocument} gameDocument - The current game document.
+ *
+ * @returns {LeaderboardTaskItem[]} An array of leaderboard task items.
+ */
 function buildLeaderboardItems(
   gameDocument: GameDocument,
 ): LeaderboardTaskItem[] {
@@ -105,9 +140,24 @@ function buildLeaderboardItems(
     }))
 }
 
+/**
+ * Constructs a new leaderboard task based on the provided game document.
+ *
+ * @param {GameDocument} gameDocument - The current game document.
+ *
+ * @throws {IllegalTaskTypeException} If the current task type is not a question result.
+ *
+ * @returns {BaseTask & LeaderboardTask} A new leaderboard task object.
+ */
 export function buildLeaderboardTask(
   gameDocument: GameDocument,
 ): BaseTask & LeaderboardTask {
+  if (!isQuestionResultTask(gameDocument)) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.QuestionResult,
+    )
+  }
   return {
     _id: uuidv4(),
     type: TaskType.Leaderboard,
@@ -118,9 +168,24 @@ export function buildLeaderboardTask(
   }
 }
 
+/**
+ * Constructs a new podium task based on the provided game document.
+ *
+ * @param {GameDocument} gameDocument - The current game document.
+ *
+ * @throws {IllegalTaskTypeException} If the current task type is not a question result.
+ *
+ * @returns {BaseTask & PodiumTask} A new podium task object.
+ */
 export function buildPodiumTask(
   gameDocument: GameDocument,
 ): BaseTask & PodiumTask {
+  if (!isQuestionResultTask(gameDocument)) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.QuestionResult,
+    )
+  }
   return {
     _id: uuidv4(),
     type: TaskType.Podium,

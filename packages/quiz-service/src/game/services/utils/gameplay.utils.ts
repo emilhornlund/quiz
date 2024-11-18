@@ -1,3 +1,4 @@
+import { IllegalTaskTypeException } from '../../exceptions'
 import { GameDocument, TaskType } from '../models/schemas'
 
 import {
@@ -17,6 +18,12 @@ import {
  * @param {GameDocument} gameDocument - The game document containing the current task.
  */
 export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
+  if (gameDocument.currentTask.type !== TaskType.Lobby) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Lobby,
+    )
+  }
   gameDocument.previousTasks.push(gameDocument.currentTask)
   gameDocument.currentTask = buildQuestionTask(gameDocument)
   gameDocument.nextQuestion = gameDocument.nextQuestion + 1
@@ -34,6 +41,12 @@ export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
 export function questionTaskCompletedCallback(
   gameDocument: GameDocument,
 ): void {
+  if (gameDocument.currentTask.type !== TaskType.Question) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Question,
+    )
+  }
   gameDocument.previousTasks.push(gameDocument.currentTask)
   gameDocument.currentTask = buildQuestionResultTask(gameDocument)
 }
@@ -114,6 +127,13 @@ export function getQuestionTaskActiveDuration(
 export function questionResultTaskCompletedCallback(
   gameDocument: GameDocument,
 ): void {
+  if (gameDocument.currentTask.type !== TaskType.QuestionResult) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.QuestionResult,
+    )
+  }
+
   gameDocument.previousTasks.push(gameDocument.currentTask)
 
   if (gameDocument.nextQuestion < gameDocument.questions.length) {
@@ -135,6 +155,13 @@ export function questionResultTaskCompletedCallback(
 export function leaderboardTaskCompletedCallback(
   gameDocument: GameDocument,
 ): void {
+  if (gameDocument.currentTask.type !== TaskType.Leaderboard) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Leaderboard,
+    )
+  }
+
   gameDocument.previousTasks.push(gameDocument.currentTask)
   gameDocument.currentTask = buildQuestionTask(gameDocument)
   gameDocument.nextQuestion = gameDocument.nextQuestion + 1

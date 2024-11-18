@@ -29,6 +29,13 @@ import {
   getQuestionTaskActiveDuration,
   getQuestionTaskPendingDuration,
 } from './gameplay.utils'
+import {
+  isLeaderboardTask,
+  isLobbyTask,
+  isPodiumTask,
+  isQuestionResultTask,
+  isQuestionTask,
+} from './task.utils'
 
 /**
  * Constructs an event for the host based on the current state of the game document.
@@ -168,19 +175,6 @@ export function buildPlayerGameEvent(
 }
 
 /**
- * Checks if the current task of the game document is a lobby task.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
- *
- * @returns {boolean} Returns `true` if the current task type is `Lobby`, otherwise `false`.
- */
-function isLobbyTask(
-  document: GameDocument,
-): document is GameDocument & { currentTask: { type: TaskType.Lobby } } {
-  return document.currentTask.type === TaskType.Lobby
-}
-
-/**
  * Builds a loading event for the game.
  *
  * @returns {GameLoadingEvent} A loading event for the game, indicating that the game is in a loading state.
@@ -254,19 +248,6 @@ function buildGameBeginPlayerEvent(
     type: GameEventType.GameBeginPlayer,
     player: { nickname: player.nickname },
   }
-}
-
-/**
- * Checks if the current task of the game document is a question task.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document with a question task type.
- *
- * @returns {boolean} Returns `true` if the current task type is `Question`, otherwise `false`.
- */
-function isQuestionTask(
-  document: GameDocument,
-): document is GameDocument & { currentTask: { type: TaskType.Question } } {
-  return document.currentTask.type === TaskType.Question
 }
 
 /**
@@ -501,20 +482,14 @@ function buildGameAwaitingResultPlayerEvent(
 }
 
 /**
- * Checks if the current task of the game document is a question result task.
+ * Constructs the question results event based on the current question type and aggregates the answer distribution.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document with a question result task type.
+ * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document containing the current question result task.
  *
- * @returns {boolean} Returns `true` if the current task type is `QuestionResult`, otherwise `false`.
+ * @returns {GameEventQuestionResults} An object representing the results of the question, including the answer distribution.
+ *
+ * @throws {Error} Throws an error if the question type is not recognized.
  */
-function isQuestionResultTask(
-  document: GameDocument,
-): document is GameDocument & {
-  currentTask: { type: TaskType.QuestionResult }
-} {
-  return document.currentTask.type === TaskType.QuestionResult
-}
-
 function buildGameEventQuestionResults(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
 ): GameEventQuestionResults {
@@ -667,19 +642,6 @@ function buildGameResultPlayerEvent(
 }
 
 /**
- * Checks if the current task of the game document is a leaderboard task.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document with a leaderboard task type.
- *
- * @returns {boolean} Returns `true` if the current task type is `Leaderboard`, otherwise `false`.
- */
-function isLeaderboardTask(document: GameDocument): document is GameDocument & {
-  currentTask: { type: TaskType.Leaderboard }
-} {
-  return document.currentTask.type === TaskType.Leaderboard
-}
-
-/**
  * Builds a leaderboard event for the host.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
@@ -702,19 +664,6 @@ function buildGameLeaderboardHostEvent(
     ),
     pagination: buildPaginationEvent(document),
   }
-}
-
-/**
- * Checks if the current task of the game document is a podium task.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document with a podium task type.
- *
- * @returns {boolean} Returns `true` if the current task type is `Podium`, otherwise `false`.
- */
-function isPodiumTask(document: GameDocument): document is GameDocument & {
-  currentTask: { type: TaskType.Podium }
-} {
-  return document.currentTask.type === TaskType.Podium
 }
 
 /**
