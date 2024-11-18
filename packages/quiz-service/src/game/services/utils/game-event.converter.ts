@@ -621,15 +621,35 @@ function buildGameResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
   player: Player,
 ): GameResultPlayerEvent {
+  const resultsEntry = document.currentTask.results.find(
+    ({ playerId }) => playerId === player._id,
+  )
+
+  if (!resultsEntry) {
+    return {
+      type: GameEventType.GameResultPlayer,
+      player: {
+        nickname: player.nickname,
+        score: {
+          correct: false,
+          last: 0,
+          total: player.totalScore,
+          position: document.players.length,
+          streak: 0,
+        },
+      },
+      pagination: buildPaginationEvent(document),
+    }
+  }
+
   const {
     correct,
     lastScore: last,
     totalScore: total,
     position,
     streak,
-  } = document.currentTask.results.find(
-    ({ playerId }) => playerId === player._id,
-  )
+  } = resultsEntry
+
   return {
     type: GameEventType.GameResultPlayer,
     player: {

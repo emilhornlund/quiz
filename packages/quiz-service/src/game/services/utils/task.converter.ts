@@ -1,10 +1,13 @@
+import { GameMode } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
   BaseTask,
   GameDocument,
   LeaderboardTask,
+  LeaderboardTaskItem,
   LobbyTask,
+  Player,
   PodiumTask,
   QuestionResultTask,
   QuestionTask,
@@ -58,6 +61,50 @@ export function buildQuestionResultTask(
   }
 }
 
+function compareSortClassicModePlayersByScore(
+  lhs: Player,
+  rhs: Player,
+): number {
+  if (lhs.totalScore < rhs.totalScore) {
+    return 1
+  }
+  if (lhs.totalScore > rhs.totalScore) {
+    return -1
+  }
+  return 0
+}
+
+function compareZeroToOneHundredModePlayersByScore(
+  lhs: Player,
+  rhs: Player,
+): number {
+  if (lhs.totalScore < rhs.totalScore) {
+    return -1
+  }
+  if (lhs.totalScore > rhs.totalScore) {
+    return 1
+  }
+  return 0
+}
+
+function buildLeaderboardItems(
+  gameDocument: GameDocument,
+): LeaderboardTaskItem[] {
+  return gameDocument.players
+    .sort((a, b) =>
+      gameDocument.mode === GameMode.Classic
+        ? compareSortClassicModePlayersByScore(a, b)
+        : compareZeroToOneHundredModePlayersByScore(a, b),
+    )
+    .map((player, index) => ({
+      playerId: player._id,
+      nickname: player.nickname,
+      position: index + 1,
+      score: player.totalScore,
+      streaks: player.currentStreak,
+    }))
+}
+
 export function buildLeaderboardTask(
   gameDocument: GameDocument,
 ): BaseTask & LeaderboardTask {
@@ -66,20 +113,19 @@ export function buildLeaderboardTask(
     type: TaskType.Leaderboard,
     status: 'pending',
     questionIndex: gameDocument.nextQuestion - 1,
-    leaderboard: [],
+    leaderboard: buildLeaderboardItems(gameDocument),
     created: new Date(),
   }
 }
 
 export function buildPodiumTask(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gameDocument: GameDocument,
 ): BaseTask & PodiumTask {
   return {
     _id: uuidv4(),
     type: TaskType.Podium,
     status: 'pending',
-    leaderboard: [],
+    leaderboard: buildLeaderboardItems(gameDocument),
     created: new Date(),
   }
 }

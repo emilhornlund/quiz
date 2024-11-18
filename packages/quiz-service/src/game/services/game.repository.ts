@@ -193,6 +193,7 @@ export class GameRepository {
       _id: uuidv4(),
       nickname,
       totalScore: 0,
+      currentStreak: 0,
       joined: new Date(),
     }
 
