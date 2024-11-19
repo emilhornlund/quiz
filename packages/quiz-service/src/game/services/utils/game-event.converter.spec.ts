@@ -409,16 +409,23 @@ function buildQuestionResultTaskItem(
   return {
     type,
     playerId: player._id,
-    answer: {
+    answer: mockMongooseDocument({
       type,
       playerId: player._id,
       answer,
       created: new Date(),
-    },
+    }),
     correct,
     lastScore: correct ? 1000 : 0,
     totalScore: player.totalScore,
     position: position,
     streak: player.currentStreak,
+  }
+}
+
+function mockMongooseDocument<T>(doc: T): T & { toObject: () => T } {
+  return {
+    ...doc,
+    toObject: () => doc,
   }
 }

@@ -183,7 +183,7 @@ questionTaskSchema.discriminator(
 )
 
 /**
- * QuestionTaskBaseAnswer
+ * QuestionResultTaskItem
  */
 
 @Schema({ _id: true, discriminatorKey: 'type' })

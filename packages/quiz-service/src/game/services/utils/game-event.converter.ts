@@ -526,9 +526,10 @@ function buildGameEventQuestionResults(
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
         if (isMultiChoiceAnswer(current.answer)) {
-          const optionIndex = current.answer.answer
-          if (optionIndex >= 0 && optionIndex < question.options.length) {
-            const optionsValue = question.options[optionIndex].value
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const answer = (current.answer as any).toObject().answer
+          if (answer >= 0 && answer < question.options.length) {
+            const optionsValue = question.options[answer].value
             const index = prev.findIndex(({ value }) => value === optionsValue)
             if (index >= 0) {
               prev[index] = { ...prev[index], count: prev[index].count + 1 }
@@ -562,14 +563,14 @@ function buildGameEventQuestionResults(
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
         if (isRangeAnswer(current.answer)) {
-          const index = prev.findIndex(
-            ({ value }) => value === current.answer.answer,
-          )
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const answer = (current.answer as any).toObject().answer
+          const index = prev.findIndex(({ value }) => value === answer)
           if (index >= 0) {
             prev[index] = { ...prev[index], count: prev[index].count + 1 }
           } else {
             prev.push({
-              value: current.answer.answer,
+              value: answer,
               count: 1,
               correct: current.correct,
             })
@@ -596,14 +597,14 @@ function buildGameEventQuestionResults(
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
         if (isTrueFalseAnswer(current.answer)) {
-          const index = prev.findIndex(
-            ({ value }) => value === current.answer.answer,
-          )
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const answer = (current.answer as any).toObject().answer
+          const index = prev.findIndex(({ value }) => value === answer)
           if (index >= 0) {
             prev[index] = { ...prev[index], count: prev[index].count + 1 }
           } else {
             prev.push({
-              value: current.answer.answer,
+              value: answer,
               count: 1,
               correct: current.correct,
             })
@@ -630,7 +631,8 @@ function buildGameEventQuestionResults(
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
         if (isTypeAnswerAnswer(current.answer)) {
-          const answer = current.answer?.answer?.toLowerCase()
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const answer = (current.answer as any).toObject().answer.toLowerCase()
           const index = prev.findIndex(
             ({ value }) => value.toLowerCase() === answer,
           )
