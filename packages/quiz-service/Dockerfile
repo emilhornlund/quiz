@@ -15,16 +15,20 @@ FROM node:22-alpine AS optimize
 
 WORKDIR /app
 
+# Copy only necessary files
 COPY --from=build /app/package.json /app/yarn.lock ./
 
-COPY --from=build /app/packages/common/package.json ./packages/common/package.json
-COPY --from=build /app/packages/common/dist ./packages/common/dist
+# Copy node_modules directly, bypassing workspace issues
+COPY --from=build /app/node_modules ./node_modules
 
+# Replace symlink with the actual files for @quiz/common
+RUN rm -rf ./node_modules/@quiz/common
+COPY --from=build /app/packages/common ./node_modules/@quiz/common
+
+# Copy quiz-service files
 COPY --from=build /app/packages/quiz-service/package.json ./packages/quiz-service/package.json
 COPY --from=build /app/packages/quiz-service/.env.production ./packages/quiz-service/.env.production
 COPY --from=build /app/packages/quiz-service/dist ./packages/quiz-service/dist
-
-RUN yarn install --production --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
 
 # Production Stage
 FROM node:20-alpine

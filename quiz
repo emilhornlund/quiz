@@ -14,20 +14,20 @@ if [ "$action" = "deploy" ] && [ "$env" != "local" ] && [ "$env" != "production"
 fi
 
 if [ "$action" = "build" ]; then
-  docker-compose build quiz-service quiz
+  docker compose build quiz-service quiz
 fi
 
 if [ "$action" = "deps" ]; then
-    docker-compose up -d redis mongodb
+    docker compose up -d redis mongodb
 fi
 
 if [ "$action" = "deploy" ]; then
   if [ "$env" = "local" ]; then
-    docker-compose up -d --build
+    docker compose up -d --build
   fi
 
   if [ "$env" = "production" ]; then
-    docker-compose build quiz-service quiz
+    docker compose build --parallel quiz-service quiz
 
     docker image tag emilhornlund/quiz:latest 192.168.0.65:9500/emilhornlund/quiz:latest
     docker image push 192.168.0.65:9500/emilhornlund/quiz:latest
