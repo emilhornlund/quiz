@@ -33,6 +33,7 @@ describe('HostLeaderboardState', () => {
           ],
           pagination: { current: 1, total: 20 },
         }}
+        onNext={() => undefined}
       />,
     )
 

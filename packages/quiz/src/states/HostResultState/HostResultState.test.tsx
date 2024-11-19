@@ -30,6 +30,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 
@@ -62,6 +63,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 
@@ -96,6 +98,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 
@@ -134,6 +137,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 
@@ -164,6 +168,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 
@@ -196,6 +201,7 @@ describe('HostResultState', () => {
             total: 20,
           },
         }}
+        onNext={() => undefined}
       />,
     )
 

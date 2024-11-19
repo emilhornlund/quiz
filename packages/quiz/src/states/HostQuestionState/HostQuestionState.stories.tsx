@@ -35,6 +35,7 @@ export const QuestionMultiTwoAnswers = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
 
@@ -64,6 +65,7 @@ export const QuestionMultiFourAnswers = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
 
@@ -95,6 +97,7 @@ export const QuestionMultiSixAnswers = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
 
@@ -120,6 +123,7 @@ export const QuestionSlider = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
 
@@ -142,6 +146,7 @@ export const QuestionTrueFalse = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
 
@@ -164,5 +169,6 @@ export const QuestionTypeAnswer = {
       submissions: { current: 3, total: 10 },
       pagination: { current: 1, total: 20 },
     },
+    onSkip: () => undefined,
   },
 } satisfies Story
