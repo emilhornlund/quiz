@@ -5,6 +5,7 @@ import { GameRepository } from './game.repository'
 import { GameDocument, TaskType } from './models/schemas'
 import {
   getQuestionTaskActiveDuration,
+  getQuestionTaskPendingCallback,
   getQuestionTaskPendingDuration,
   leaderboardTaskCompletedCallback,
   lobbyTaskCompletedCallback,
@@ -36,6 +37,7 @@ const TransitionHandlers: {
   [TaskType.Question]: {
     pending: {
       delay: getQuestionTaskPendingDuration,
+      callback: getQuestionTaskPendingCallback,
     },
     active: {
       delay: getQuestionTaskActiveDuration,

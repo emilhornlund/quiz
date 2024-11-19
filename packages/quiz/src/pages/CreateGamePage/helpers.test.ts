@@ -100,7 +100,6 @@ describe('parseQuestionsJson', () => {
           question: 'What is the hottest temperature recorded on earth?',
           imageURL: 'https://example.com/image.png',
           correct: 56,
-          points: 1000,
           duration: 5,
         },
       ]
@@ -122,24 +121,6 @@ describe('parseQuestionsJson', () => {
       expect(() =>
         parseQuestionsJson(parsedJson, GameMode.ZeroToOneHundred),
       ).toThrow("Invalid type for field 'correct'. Expected number, got string")
-    })
-
-    it('should throw error for RANGE question with invalid points value', () => {
-      const parsedJson = [
-        {
-          type: QuestionType.Range,
-          question: 'What is the hottest temperature recorded on earth?',
-          imageURL: 'https://example.com/image.png',
-          correct: 56,
-          points: 3000, // Invalid points
-          duration: 5,
-        },
-      ]
-      expect(() =>
-        parseQuestionsJson(parsedJson, GameMode.ZeroToOneHundred),
-      ).toThrow(
-        "Invalid value for field 'points'. Value did not pass custom validation.",
-      )
     })
 
     it('should throw error for RANGE question with invalid duration value', () => {

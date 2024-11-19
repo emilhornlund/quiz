@@ -115,6 +115,65 @@ function isQuestionAnswerCorrect(
 }
 
 /**
+ * Calculates the player's score for Classic mode based on their response time.
+ *
+ * @param {Date} presented - The timestamp when the question was presented.
+ * @param {Date} answered - The timestamp when the player submitted their answer.
+ * @param {number} duration - The maximum time allowed to answer the question (in seconds).
+ * @param {number} points - The maximum points for answering correctly.
+ * @returns {number} The player's calculated score, rounded to the nearest whole number.
+ *
+ * @remarks
+ * - The score decreases proportionally as the response time approaches the duration limit.
+ * - If the response time exceeds the duration, the score is calculated as if the player answered at the last second.
+ */
+function calculateClassicModeScore(
+  presented: Date,
+  answered: Date,
+  duration: number,
+  points: number,
+): number {
+  // Calculate the response time in seconds
+  const responseTime = (answered.getTime() - presented.getTime()) / 1000
+
+  // Ensure response time doesn't exceed the duration
+  const normalizedTime = Math.min(responseTime, duration)
+
+  // Step 1: Divide response time by the question timer
+  const responseRatio = normalizedTime / duration
+
+  // Step 2: Divide that value by 2
+  const adjustment = responseRatio / 2
+
+  // Step 3: Subtract that value from 1
+  const scoreMultiplier = 1 - adjustment
+
+  // Step 4: Multiply points possible by that value
+  const rawScore = points * scoreMultiplier
+
+  // Step 5: Round to the nearest whole number
+  return Math.round(rawScore)
+}
+
+/**
+ * Calculates the player's score for ZeroToOneHundred mode.
+ *
+ * @param {number} correct - The correct answer for the question.
+ * @param {number} [answer] - The player's submitted answer.
+ * @returns {number} The score adjustment based on the proximity of the answer to the correct value.
+ *
+ * @remarks
+ * - Returns a negative penalty (-10) for incorrect answers.
+ * - Calculates the absolute difference for mismatched answers.
+ */
+function calculateZeroToOneHundredModeScore(correct: number, answer?: number) {
+  if (correct !== answer) {
+    return Math.abs(answer - correct)
+  }
+  return -10
+}
+
+/**
  * Constructs a new question result task based on the provided game document.
  *
  * @param {GameDocument} gameDocument - The current game document.
@@ -137,15 +196,34 @@ export function buildQuestionResultTask(
 
   const question = gameDocument.questions[questionIndex]
 
-  const results: QuestionResultTaskItem[] = gameDocument.players.map(
-    (player) => {
+  const results: QuestionResultTaskItem[] = gameDocument.players
+    .map((player) => {
       const answer = gameDocument.currentTask.answers.find(
         ({ playerId }) => playerId === player._id,
       )
 
       const correct = isQuestionAnswerCorrect(question, answer)
 
-      const lastScore = correct ? question.points : 0
+      const presented = gameDocument.currentTask.presented
+
+      const lastScore =
+        gameDocument.mode === GameMode.Classic
+          ? correct
+            ? calculateClassicModeScore(
+                presented,
+                answer.created,
+                question.duration,
+                question.points,
+              )
+            : 0
+          : (answer !== undefined &&
+              isRangeQuestion(question) &&
+              isRangeAnswer(answer) &&
+              calculateZeroToOneHundredModeScore(
+                question.correct,
+                answer.answer,
+              )) ||
+            100
 
       return {
         type: question.type,
@@ -157,8 +235,13 @@ export function buildQuestionResultTask(
         position: 0,
         streak: correct ? player.currentStreak + 1 : 0,
       }
-    },
-  )
+    })
+    .sort((a, b) =>
+      gameDocument.mode === GameMode.Classic
+        ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
+        : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
+    )
+    .map((item, index) => ({ ...item, position: index }))
 
   return {
     _id: uuidv4(),
@@ -171,33 +254,81 @@ export function buildQuestionResultTask(
 }
 
 /**
- * Compares two players based on their total score in Classic mode.
+ * Compares two scores in Classic mode for sorting in descending order.
  *
- * @param {Player} lhs - The left-hand side player.
- * @param {Player} rhs - The right-hand side player.
+ * @param {number} lhs - The left-hand score.
+ * @param {number} rhs - The right-hand score.
  *
- * @returns {number} The comparison result for sorting.
+ * @returns {number} A positive value if `lhs` is less than `rhs`, a negative value if greater, or 0 if they are equal.
  */
-function compareSortClassicModePlayersByScore(
-  lhs: Player,
-  rhs: Player,
-): number {
-  if (lhs.totalScore < rhs.totalScore) {
+function compareSortClassicModeScores(lhs: number, rhs: number): number {
+  if (lhs < rhs) {
     return 1
   }
-  if (lhs.totalScore > rhs.totalScore) {
+  if (lhs > rhs) {
     return -1
   }
   return 0
 }
 
 /**
- * Compares two players based on their total score in ZeroToOneHundred mode.
+ * Compares two question result task items by their total scores in Classic mode.
  *
- * @param {Player} lhs - The left-hand side player.
- * @param {Player} rhs - The right-hand side player.
+ * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
+ * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
  *
- * @returns {number} The comparison result for sorting.
+ * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
+ */
+function compareSortClassicModeQuestionResultTaskItemByScore(
+  lhs: QuestionResultTaskItem,
+  rhs: QuestionResultTaskItem,
+): number {
+  return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
+}
+
+/**
+ * Compares two players by their total scores in Classic mode.
+ *
+ * @param {Player} lhs - The first player to compare.
+ * @param {Player} rhs - The second player to compare.
+ *
+ * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
+ */
+function compareSortClassicModePlayersByScore(
+  lhs: Player,
+  rhs: Player,
+): number {
+  return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
+}
+
+/**
+ * Compares two question result task items by their total scores in ZeroToOneHundred mode.
+ *
+ * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
+ * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
+ *
+ * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
+ *
+ * @remarks
+ * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
+ */
+function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
+  lhs: QuestionResultTaskItem,
+  rhs: QuestionResultTaskItem,
+): number {
+  return compareSortClassicModeQuestionResultTaskItemByScore(lhs, rhs) * -1 //sort scores from lowest to highest
+}
+
+/**
+ * Compares two players by their total scores in ZeroToOneHundred mode.
+ *
+ * @param {Player} lhs - The first player to compare.
+ * @param {Player} rhs - The second player to compare.
+ *
+ * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
+ *
+ * @remarks
+ * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
  */
 function compareZeroToOneHundredModePlayersByScore(
   lhs: Player,

@@ -171,7 +171,6 @@ export const parseQuestionsJson = <T extends GameMode>(
             question: assertQuestionType(question.question),
             imageURL: assertImageURLType(question.imageURL),
             correct: assertType<number>(question.correct, 'number', 'correct'),
-            points: assertPointsType(question.points),
             duration: assertDurationType(question.duration),
           } as ZeroToOneHundredModeQuestions[number]
         } else {

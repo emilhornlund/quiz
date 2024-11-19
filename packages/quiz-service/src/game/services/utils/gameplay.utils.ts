@@ -91,6 +91,24 @@ export function getQuestionTaskPendingDuration(
 }
 
 /**
+ * Sets the `presented` timestamp for a question task during its pending state.
+ *
+ * @param {GameDocument} gameDocument - The game document containing the current task.
+ * @throws {IllegalTaskTypeException} If the current task type is not a question.
+ */
+export function getQuestionTaskPendingCallback(
+  gameDocument: GameDocument,
+): void {
+  if (gameDocument.currentTask.type !== TaskType.Question) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.QuestionResult,
+    )
+  }
+  gameDocument.currentTask.presented = new Date()
+}
+
+/**
  * Retrieves the active duration for the current question task in milliseconds.
  *
  * @param gameDocument - The game document containing the current task and questions.

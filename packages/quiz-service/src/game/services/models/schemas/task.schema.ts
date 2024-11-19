@@ -159,6 +159,9 @@ export class QuestionTask {
       | QuestionTaskTrueFalseAnswer
       | QuestionTaskTypeAnswerAnswer
     ))[]
+
+  @Prop({ type: Date, default: () => new Date() })
+  presented?: Date
 }
 
 export const QuestionTaskSchema = SchemaFactory.createForClass(QuestionTask)
