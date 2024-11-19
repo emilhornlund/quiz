@@ -12,7 +12,7 @@ import {
   questionTaskCompletedCallback,
 } from './utils'
 
-type DelayHandler = { (gameDocument: GameDocument): number } | number
+type DelayHandler = ((gameDocument: GameDocument) => number) | number
 
 // Transition handlers configuration for each task type and status
 const TransitionHandlers: {
@@ -66,8 +66,9 @@ const TransitionHandlers: {
 }
 
 /**
- * Service to handle task transitions in a game. Manages scheduling
- * and performing task transitions based on the current task type and status.
+ * Service responsible for managing task transitions within a game.
+ * It schedules and performs transitions based on the current task type and status,
+ * using configured handlers and delays for each transition.
  */
 @Injectable()
 export class GameTaskTransitionScheduler {
@@ -76,8 +77,8 @@ export class GameTaskTransitionScheduler {
   /**
    * Constructs an instance of GameTaskTransitionScheduler.
    *
-   * @param {SchedulerRegistry} schedulerRegistry - The registry for scheduling and managing timeouts and intervals.
-   * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
+   * @param schedulerRegistry - The registry for scheduling and managing timeouts and intervals.
+   * @param gameRepository - Repository for accessing and modifying game data.
    */
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -85,25 +86,22 @@ export class GameTaskTransitionScheduler {
   ) {}
 
   /**
-   * Schedules the transition of the current task based on its type and status.
+   * Initiates the scheduling process for transitioning the current task
+   * of the provided game document based on its type and status.
+   * Handles existing scheduled transitions appropriately.
    *
-   * @param gameDocument - The current game document to be transitioned.
+   * @param gameDocument - The game document containing the current task to transition.
    */
   public async scheduleTaskTransition(
     gameDocument: GameDocument,
   ): Promise<void> {
-    this.logger.debug(
-      `Scheduling task transition for Game ID: ${gameDocument._id}`,
-    )
-
     const { currentTask } = gameDocument
     const { type, status } = currentTask
 
     const transitionConfig = TransitionHandlers[type]?.[status]
-
     if (!transitionConfig) {
       this.logger.error(
-        `No transition configuration found for task type: ${type}, status: ${status}`,
+        `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${gameDocument._id}`,
       )
       return
     }
@@ -111,83 +109,112 @@ export class GameTaskTransitionScheduler {
     const { delay: delayHandler, callback } = transitionConfig
     const nextStatus = GameTaskTransitionScheduler.getNextTaskStatus(status)
 
-    const delay = GameTaskTransitionScheduler.getDelay(
-      gameDocument,
-      delayHandler,
+    this.logger.log(
+      `Scheduling ${type} task transition from ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,
     )
 
-    try {
-      if (delay && delay > 0) {
-        this.logger.log(
-          `Scheduling deferred transition for Game ID: ${gameDocument._id}, delay: ${delay}ms`,
+    const transitionName =
+      GameTaskTransitionScheduler.getTransitionTimeoutName(gameDocument)
+
+    if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
+      if (status === 'active') {
+        this.logger.debug(
+          `Deleting existing timeout for task type ${type} and status ${status} for Game ID: ${gameDocument._id}`,
         )
-        this.scheduleDeferredTransition(
+        this.schedulerRegistry.deleteTimeout(transitionName)
+        await this.performTransition(gameDocument, nextStatus, callback)
+      } else {
+        this.logger.warn(
+          `Skipping scheduling task transition for task type: ${type}, status: ${status} for Game ID: ${gameDocument._id} since timeout exists`,
+        )
+        return
+      }
+    } else {
+      const delay = GameTaskTransitionScheduler.getDelay(
+        gameDocument,
+        delayHandler,
+      )
+
+      if (delay > 0) {
+        await this.scheduleDeferredTransition(
           gameDocument,
-          delay,
+          delayHandler,
           nextStatus,
           callback,
         )
       } else {
-        this.logger.log(
-          `Performing immediate transition for Game ID: ${gameDocument._id}`,
-        )
         await this.performTransition(gameDocument, nextStatus, callback)
       }
-    } catch (error) {
-      this.logger.error(
-        `Failed to schedule task transition for Game ID: ${gameDocument._id}`,
-        error,
-      )
-      throw error
     }
   }
 
   /**
-   * Schedules a deferred task transition after a specified delay.
+   * Schedules a task transition to occur after a specified delay.
+   * It sets up a timeout that will trigger the transition after the delay.
    *
    * @param gameDocument - The current game document.
-   * @param delayHandler - The delay in milliseconds before the transition occurs.
+   * @param delayHandler - The delay in milliseconds or a function to compute the delay.
    * @param nextStatus - The status to transition to.
-   * @param callback - An optional callback to be executed during the transition.
+   * @param callback - An optional callback to execute during the transition.
    *
    * @private
    */
-  private scheduleDeferredTransition(
+  private async scheduleDeferredTransition(
     gameDocument: GameDocument,
     delayHandler: DelayHandler,
-    nextStatus: 'pending' | 'active' | 'completed' | null,
+    nextStatus: 'active' | 'completed',
     callback?: (gameDocument: GameDocument) => void,
-  ): void {
+  ): Promise<void> {
+    const { _id, currentTask } = gameDocument
+    const { type, status } = currentTask
+
     const delay = GameTaskTransitionScheduler.getDelay(
       gameDocument,
       delayHandler,
     )
 
     this.logger.debug(
-      `Scheduling deferred ${gameDocument.currentTask.type} task transition (delay: ${delay}ms) for Game ID: ${gameDocument._id}`,
+      `Scheduling deferred transition for task ${type} from status ${status} to ${nextStatus} with delay: ${delay}ms for Game ID: ${_id}`,
     )
 
-    const transitionName = `transition-${gameDocument._id}-${Date.now()}`
+    const transitionName =
+      GameTaskTransitionScheduler.getTransitionTimeoutName(gameDocument)
 
     try {
       const timeout = setTimeout(async () => {
         try {
-          await this.performTransition(gameDocument, nextStatus, callback)
+          this.logger.debug(
+            `Executing timeout handler for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
+          )
+
+          const latestGameDocument =
+            await this.gameRepository.findGameByIDOrThrow(_id)
+
+          if (
+            latestGameDocument.currentTask.type === type &&
+            latestGameDocument.currentTask.status === status
+          ) {
+            this.schedulerRegistry.deleteTimeout(transitionName)
+            await this.performTransition(gameDocument, nextStatus, callback)
+          } else {
+            this.logger.warn(
+              `Skipping timeout handler since task type or status has changed for Game ID: ${_id}`,
+            )
+          }
         } catch (error) {
+          this.schedulerRegistry.deleteTimeout(transitionName)
           this.logger.error(
-            `Error during deferred ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
+            `Error during scheduled deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
             error,
           )
           throw error
-        } finally {
-          this.schedulerRegistry.deleteTimeout(transitionName)
         }
       }, delay)
 
       this.schedulerRegistry.addTimeout(transitionName, timeout)
     } catch (error) {
       this.logger.error(
-        `Failed to schedule deferred ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
+        `Failed to schedule deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
         error,
       )
       throw error
@@ -195,95 +222,113 @@ export class GameTaskTransitionScheduler {
   }
 
   /**
-   * Performs the task transition, updating the game document with the new status.
+   * Executes the task transition by updating the game document to the next status,
+   * and invoking the optional callback. It then triggers any post-transition logic.
    *
-   * @param gameDocument - The current game document.
+   * @param gameDocument - The game document to update.
    * @param nextStatus - The status to transition to.
-   * @param callback - An optional callback to be executed during the transition.
+   * @param callback - An optional callback function to execute during the transition.
    *
    * @private
    */
   private async performTransition(
     gameDocument: GameDocument,
-    nextStatus: 'pending' | 'active' | 'completed' | null,
+    nextStatus: 'active' | 'completed' | undefined,
     callback?: (gameDocument: GameDocument) => void,
   ): Promise<void> {
+    const { _id, currentTask } = gameDocument
+    const { type, status } = currentTask
+
     this.logger.debug(
-      `Performing ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}, next status: ${nextStatus}`,
+      `Performing transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
     )
 
-    try {
-      const updatedGameDocument = await this.gameRepository.findAndSaveWithLock(
-        gameDocument._id,
-        (doc) => {
-          this.logger.log(
-            `Transitioning ${doc.currentTask.type} task from ${doc.currentTask.status} to ${nextStatus} (Game ID: ${doc._id})`,
-          )
+    let updatedGameDocument: GameDocument | null = null
 
+    try {
+      updatedGameDocument = await this.gameRepository.findAndSaveWithLock(
+        _id,
+        (doc) => {
           if (nextStatus) {
             doc.currentTask.status = nextStatus
           }
-
           if (callback) {
             callback(doc)
           }
-
           return doc
         },
       )
 
-      await this.handlePostTransition(updatedGameDocument)
+      this.logger.debug(
+        `Successfully performed transition for task ${type} to status ${nextStatus} for Game ID: ${_id}`,
+      )
     } catch (error) {
       this.logger.error(
-        `Failed to perform ${gameDocument.currentTask.type} task transition for Game ID: ${gameDocument._id}`,
+        `Failed to perform transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
         error,
       )
       throw error
     }
+
+    if (updatedGameDocument) {
+      if (
+        nextStatus !== undefined &&
+        updatedGameDocument.currentTask.status !== nextStatus
+      ) {
+        this.logger.warn(
+          `Skipping post-transition actions since current status ${updatedGameDocument.currentTask.status} does not match expected status ${nextStatus} for Game ID: ${_id}`,
+        )
+        return
+      }
+      await this.performPostTransition(updatedGameDocument)
+    }
   }
 
   /**
-   * Handles post-transition logic, scheduling the next task transition if needed.
+   * Handles any logic that needs to occur after a task transition,
+   * such as scheduling the next transition if required.
    *
    * @param gameDocument - The updated game document after the transition.
    *
    * @private
    */
-  private async handlePostTransition(
+  private async performPostTransition(
     gameDocument: GameDocument,
   ): Promise<void> {
-    const { currentTask } = gameDocument
+    const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
 
     this.logger.debug(
-      `Handling ${type} task post-transition for Game ID: ${gameDocument._id}`,
+      `Performing post-transition actions for task ${type} with status ${status} for Game ID: ${_id}`,
+    )
+
+    const transitionConfig = TransitionHandlers[type]?.[status]
+    if (!transitionConfig) {
+      this.logger.error(
+        `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${_id}`,
+      )
+      return
+    }
+
+    const delay = GameTaskTransitionScheduler.getDelay(
+      gameDocument,
+      transitionConfig.delay,
     )
 
     try {
-      if (status === 'pending' || status === 'completed') {
-        this.logger.log(
-          `Scheduling next ${type} task transition for Game ID: ${gameDocument._id}`,
+      if (
+        (status === 'active' && delay > 0) ||
+        status === 'pending' ||
+        status === 'completed'
+      ) {
+        this.logger.debug(
+          `Scheduling next task transition for task ${type} with status ${status} for Game ID: ${_id}`,
         )
         await this.scheduleTaskTransition(gameDocument)
-      } else if (status === 'active') {
-        const { type } = currentTask
-        const transitionConfig = TransitionHandlers[type]?.[status]
-
-        const delay = GameTaskTransitionScheduler.getDelay(
-          gameDocument,
-          transitionConfig.delay,
-        )
-
-        if (delay > 0) {
-          this.logger.log(
-            `Scheduling transition for active ${type} task with delay for Game ID: ${gameDocument._id}`,
-          )
-          await this.scheduleTaskTransition(gameDocument)
-        }
       }
     } catch (error) {
       this.logger.error(
-        `Error during ${type} task post-transition handling for Game ID: ${gameDocument._id}`,
+        `Failed to perform post-transition actions for task ${type} with status ${status} for Game ID: ${_id}`,
         error,
       )
       throw error
@@ -291,48 +336,61 @@ export class GameTaskTransitionScheduler {
   }
 
   /**
-   * Determines the next status for the current task based on its current status.
+   * Generates a unique name for the transition timeout based on the game ID.
+   *
+   * @param gameDocument - The game document to generate the timeout name for.
+   *
+   * @returns The unique timeout name string.
+   *
+   * @private
+   */
+  private static getTransitionTimeoutName(gameDocument: GameDocument): string {
+    const { _id } = gameDocument
+    return `transition-${_id}`
+  }
+
+  /**
+   * Determines the next status for a task based on its current status.
    *
    * @param status - The current status of the task.
    *
-   * @returns The next status ('active', 'completed', or null if no further transitions).
+   * @returns The next status ('active', 'completed', or undefined if no further transitions).
    *
    * @private
    */
   private static getNextTaskStatus(
     status: 'pending' | 'active' | 'completed',
-  ): 'active' | 'completed' | null {
+  ): 'active' | 'completed' | undefined {
     switch (status) {
       case 'pending':
         return 'active'
       case 'active':
         return 'completed'
       case 'completed':
-        return null
+        return undefined
     }
   }
 
   /**
-   * Resolves the delay value based on the provided handler.
+   * Calculates the delay value based on the provided delay handler.
    *
-   * If the delay is a number, it is returned directly. If the delay is a function,
-   * it is called with the game document to compute the delay.
+   * If the delay handler is a number, it returns the number directly.
+   * If it's a function, it calls the function with the game document to compute the delay.
    *
-   * @param gameDocument - The game document used when evaluating the delay handler.
-   * @param delayHandler - Either a numeric delay in milliseconds or a function that calculates the delay.
+   * @param gameDocument - The game document to be used when computing the delay.
+   * @param delayHandler - A number or a function that returns a number.
    *
-   * @returns {number} The resolved delay in milliseconds.
+   * @returns The calculated delay in milliseconds.
+   *
+   * @private
    */
   private static getDelay(
     gameDocument: GameDocument,
     delayHandler?: DelayHandler,
-  ): number | null {
+  ): number {
     if (typeof delayHandler === 'function') {
-      return delayHandler(gameDocument)
+      return Math.max(delayHandler(gameDocument) || 0, 0)
     }
-    if (!!delayHandler && delayHandler > 0) {
-      return delayHandler
-    }
-    return null
+    return Math.max(delayHandler || 0, 0)
   }
 }
