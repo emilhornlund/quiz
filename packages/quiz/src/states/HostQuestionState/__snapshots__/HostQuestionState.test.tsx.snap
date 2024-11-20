@@ -117,7 +117,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         </div>
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"
@@ -382,7 +382,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         </div>
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"
@@ -665,7 +665,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         </div>
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"
@@ -906,7 +906,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         />
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"
@@ -1151,7 +1151,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         />
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"
@@ -1392,7 +1392,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         />
       </div>
       <div
-        class="row flexibleHeight"
+        class="row fullWidth flexibleHeight"
       >
         <div
           class="main"

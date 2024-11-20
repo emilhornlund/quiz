@@ -87,35 +87,35 @@
         }
 
         @include mobile {
-          width: pxToRem(30px);
-          height: pxToRem(30px);
+          min-width: pxToRem(30px);
+          min-height: pxToRem(30px);
 
           @include fontSize(16px);
 
           &:after {
-            top: 4px;
+            top: 5px;
           }
         }
 
         @include tablet {
-          width: pxToRem(40px);
-          height: pxToRem(40px);
+          min-width: pxToRem(40px);
+          min-height: pxToRem(40px);
 
           @include fontSize(20px);
 
           &:after {
-            top: 6px;
+            top: 8px;
           }
         }
 
         @include desktop {
-          width: pxToRem(50px);
-          height: pxToRem(50px);
+          min-width: pxToRem(50px);
+          min-height: pxToRem(50px);
 
           @include fontSize(24px);
 
           &:after {
-            top: 7px;
+            top: 10px;
           }
         }
       }

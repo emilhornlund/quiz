@@ -23,6 +23,10 @@
     flex: 0 0 auto;
   }
 
+  &.fullWidth {
+    width: 100%;
+  }
+
   &.fullHeight {
     flex: 1;
     min-height: 0;

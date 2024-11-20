@@ -69,7 +69,12 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
     <div className={classNames(styles.row, styles.fullHeight)}>
       <ResponsiveImage imageURL={question.imageURL} alt={question.question} />
     </div>
-    <div className={classNames(styles.row, styles.flexibleHeight)}>
+    <div
+      className={classNames(
+        styles.row,
+        styles.fullWidth,
+        styles.flexibleHeight,
+      )}>
       <QuestionAnswerPicker question={question} interactive={false} />
     </div>
     <ProgressBar countdown={countdown} />
