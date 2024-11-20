@@ -208,14 +208,15 @@ export function buildQuestionResultTask(
 
       const lastScore =
         gameDocument.mode === GameMode.Classic
-          ? correct
-            ? calculateClassicModeScore(
+          ? (correct &&
+              answer !== undefined &&
+              calculateClassicModeScore(
                 presented,
                 answer.created,
                 question.duration,
                 question.points,
-              )
-            : 0
+              )) ||
+            0
           : (answer !== undefined &&
               isRangeQuestion(question) &&
               isRangeAnswer(answer) &&

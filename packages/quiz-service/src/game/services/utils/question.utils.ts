@@ -32,10 +32,10 @@ type Answer = QuestionTaskBaseAnswer &
  * @returns {boolean} Returns `true` if the question is of type `MultiChoice`, otherwise `false`.
  */
 export function isMultiChoiceQuestion(
-  question: Question,
+  question?: Question,
 ): question is BaseQuestion &
   QuestionMultiChoice & { type: QuestionType.MultiChoice } {
-  return question.type === QuestionType.MultiChoice
+  return question?.type === QuestionType.MultiChoice
 }
 
 /**
@@ -46,9 +46,9 @@ export function isMultiChoiceQuestion(
  * @returns {boolean} Returns `true` if the question is of type `Range`, otherwise `false`.
  */
 export function isRangeQuestion(
-  question: Question,
+  question?: Question,
 ): question is BaseQuestion & QuestionRange & { type: QuestionType.Range } {
-  return question.type === QuestionType.Range
+  return question?.type === QuestionType.Range
 }
 
 /**
@@ -59,10 +59,10 @@ export function isRangeQuestion(
  * @returns {boolean} Returns `true` if the question is of type `TrueFalse`, otherwise `false`.
  */
 export function isTrueFalseQuestion(
-  question: Question,
+  question?: Question,
 ): question is BaseQuestion &
   QuestionTrueFalse & { type: QuestionType.TrueFalse } {
-  return question.type === QuestionType.TrueFalse
+  return question?.type === QuestionType.TrueFalse
 }
 
 /**
@@ -73,10 +73,10 @@ export function isTrueFalseQuestion(
  * @returns {boolean} Returns `true` if the question is of type `TypeAnswer`, otherwise `false`.
  */
 export function isTypeAnswerQuestion(
-  question: Question,
+  question?: Question,
 ): question is BaseQuestion &
   QuestionTypeAnswer & { type: QuestionType.TypeAnswer } {
-  return question.type === QuestionType.TypeAnswer
+  return question?.type === QuestionType.TypeAnswer
 }
 
 /**
@@ -87,12 +87,12 @@ export function isTypeAnswerQuestion(
  * @returns {boolean} Returns `true` if the answer is of type `MultiChoice`, otherwise `false`.
  */
 export function isMultiChoiceAnswer(
-  answer: Answer,
+  answer?: Answer,
 ): answer is QuestionTaskBaseAnswer &
   QuestionTaskMultiChoiceAnswer & {
     type: QuestionType.MultiChoice
   } {
-  return answer.type === QuestionType.MultiChoice
+  return answer?.type === QuestionType.MultiChoice
 }
 
 /**
@@ -103,12 +103,12 @@ export function isMultiChoiceAnswer(
  * @returns {boolean} Returns `true` if the answer is of type `Range`, otherwise `false`.
  */
 export function isRangeAnswer(
-  answer: Answer,
+  answer?: Answer,
 ): answer is QuestionTaskBaseAnswer &
   QuestionTaskRangeAnswer & {
     type: QuestionType.Range
   } {
-  return answer.type === QuestionType.Range
+  return answer?.type === QuestionType.Range
 }
 
 /**
@@ -119,12 +119,12 @@ export function isRangeAnswer(
  * @returns {boolean} Returns `true` if the answer is of type `TrueFalse`, otherwise `false`.
  */
 export function isTrueFalseAnswer(
-  answer: Answer,
+  answer?: Answer,
 ): answer is QuestionTaskBaseAnswer &
   QuestionTaskTrueFalseAnswer & {
     type: QuestionType.TrueFalse
   } {
-  return answer.type === QuestionType.TrueFalse
+  return answer?.type === QuestionType.TrueFalse
 }
 
 /**
@@ -135,10 +135,10 @@ export function isTrueFalseAnswer(
  * @returns {boolean} Returns `true` if the answer is of type `TypeAnswer`, otherwise `false`.
  */
 export function isTypeAnswerAnswer(
-  answer: Answer,
+  answer?: Answer,
 ): answer is QuestionTaskBaseAnswer &
   QuestionTaskTypeAnswerAnswer & {
     type: QuestionType.TypeAnswer
   } {
-  return answer.type === QuestionType.TypeAnswer
+  return answer?.type === QuestionType.TypeAnswer
 }

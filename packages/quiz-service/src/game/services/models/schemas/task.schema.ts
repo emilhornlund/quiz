@@ -209,7 +209,7 @@ export class QuestionResultTaskItem {
   @Prop({ type: String, required: true })
   playerId: string
 
-  @Prop({ type: QuestionTaskBaseAnswer, required: true })
+  @Prop({ type: QuestionTaskBaseAnswer, required: false })
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer

@@ -196,7 +196,9 @@ export class GameTaskTransitionScheduler {
             latestGameDocument.currentTask.type === type &&
             latestGameDocument.currentTask.status === status
           ) {
-            this.schedulerRegistry.deleteTimeout(transitionName)
+            if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
+              this.schedulerRegistry.deleteTimeout(transitionName)
+            }
             await this.performTransition(gameDocument, nextStatus, callback)
           } else {
             this.logger.warn(
@@ -204,12 +206,13 @@ export class GameTaskTransitionScheduler {
             )
           }
         } catch (error) {
-          this.schedulerRegistry.deleteTimeout(transitionName)
+          if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
+            this.schedulerRegistry.deleteTimeout(transitionName)
+          }
           this.logger.error(
             `Error during scheduled deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
             error,
           )
-          throw error
         }
       }, delay)
 
@@ -219,7 +222,6 @@ export class GameTaskTransitionScheduler {
         `Failed to schedule deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
         error,
       )
-      throw error
     }
   }
 
@@ -269,7 +271,6 @@ export class GameTaskTransitionScheduler {
         `Failed to perform transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
         error,
       )
-      throw error
     }
 
     if (updatedGameDocument) {
