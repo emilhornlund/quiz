@@ -66,7 +66,7 @@ const GamePage = () => {
           break
       }
     }
-  }, [connectionStatus])
+  }, [connectionStatus, hasReconnected])
 
   const stateComponent = useMemo(() => {
     switch (event?.type) {
