@@ -364,7 +364,7 @@ function buildGameQuestionPreviewPlayerEvent(
     type: GameEventType.GameQuestionPreviewPlayer,
     player: {
       nickname: player.nickname,
-      score: 0, //TODO: save the total player score
+      score: player.totalScore,
     },
     question: {
       type,
@@ -462,7 +462,7 @@ function buildGameQuestionPlayerEvent(
     player: {
       nickname: player.nickname,
       score: {
-        total: 0, //TODO: save the total player score
+        total: player.totalScore,
       },
     },
     question: buildGameEventQuestion(currentQuestion),
@@ -488,7 +488,7 @@ function buildGameAwaitingResultPlayerEvent(
     player: {
       nickname: player.nickname,
       score: {
-        total: 0, //TODO: save the total player score
+        total: player.totalScore,
       },
     },
     pagination: buildPaginationEvent(document),
