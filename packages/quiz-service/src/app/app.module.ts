@@ -1,7 +1,9 @@
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { APP_FILTER, APP_PIPE } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
 import { MurLockModule } from 'murlock'
@@ -11,6 +13,8 @@ import { GameModule } from '../game'
 import { EnvironmentVariables } from './config'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
 import { ValidationPipe } from './pipes'
+
+const isTestEnv = process.env.NODE_ENV === 'test'
 
 @Module({
   imports: [
@@ -65,6 +69,36 @@ import { ValidationPipe } from './pipes'
       },
       inject: [ConfigService],
     }),
+    ...(isTestEnv
+      ? []
+      : [
+          ThrottlerModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService<EnvironmentVariables>) => ({
+              throttlers: [
+                {
+                  name: 'short',
+                  ttl: 1000,
+                  limit: 3,
+                },
+                {
+                  name: 'medium',
+                  ttl: 10000,
+                  limit: 20,
+                },
+                {
+                  name: 'long',
+                  ttl: 60000,
+                  limit: 100,
+                },
+              ],
+              storage: new ThrottlerStorageRedisService(
+                `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+              ),
+            }),
+          }),
+        ]),
     GameModule,
   ],
   controllers: [],
@@ -78,6 +112,14 @@ import { ValidationPipe } from './pipes'
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    ...(isTestEnv
+      ? []
+      : [
+          {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+          },
+        ]),
   ],
 })
 export class AppModule {}
