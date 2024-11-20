@@ -1,5 +1,5 @@
 import { GameEventType } from '@quiz/common'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Bounce, toast, ToastOptions } from 'react-toastify'
 
 import { LeaveButton, LoadingSpinner, Page } from '../../components'
@@ -30,6 +30,7 @@ const GamePage = () => {
   const [token, gameID] = useGameTokenQueryParam()
 
   const [event, connectionStatus] = useEventSource(gameID, token)
+  const [hasReconnected, setHasReconnected] = useState(false)
 
   const { completeTask, submitQuestionAnswer } = useQuizService()
 
@@ -48,12 +49,17 @@ const GamePage = () => {
       }
       switch (connectionStatus) {
         case 'CONNECTED':
-          toast.success('Connected', options)
+          if (hasReconnected) {
+            toast.success('Connected', options)
+            setHasReconnected(false)
+          }
           break
         case 'RECONNECTING':
+          setHasReconnected(true)
           toast.warning('Reconnecting', options)
           break
         case 'RECONNECTING_FAILED':
+          setHasReconnected(true)
           toast.error('Reconnecting failed', options)
           break
         default:
