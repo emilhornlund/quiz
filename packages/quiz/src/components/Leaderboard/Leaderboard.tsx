@@ -42,7 +42,7 @@ const Leaderboard: FC<LeaderboardProps> = ({
           )}>
           <div className={styles.row}>
             <span>{nickname}</span>
-            {!!streaks && (
+            {!!streaks && streaks > 1 && (
               <div className={styles.streaks}>
                 <span>{streaks}</span>
               </div>

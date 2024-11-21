@@ -46,7 +46,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
         )}>
         <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
       </span>
-      {!!streak && (
+      {!!streak && streak > 1 && (
         <div className={styles.streak}>
           Answer streak <span>{streak}</span>
         </div>

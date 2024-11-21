@@ -30,7 +30,6 @@
     border-radius: 50%;
     outline-style: solid;
     outline-color: $white;
-    aspect-ratio: 1 / 1;
     background-color: $white;
     color: $black-1-70;
     font-weight: bold;
@@ -56,6 +55,8 @@
       border-width: pxToRem(2px);
       outline-width: pxToRem(2px);
       outline-offset: pxToRem(2px);
+      width: pxToRem(100px);
+      height: pxToRem(100px);
 
       @include fontSize(68px);
     }
@@ -65,6 +66,8 @@
       border-width: pxToRem(3px);
       outline-width: pxToRem(3px);
       outline-offset: pxToRem(3px);
+      width: pxToRem(120px);
+      height: pxToRem(120px);
 
       @include fontSize(78px);
     }
@@ -74,6 +77,8 @@
       border-width: pxToRem(4px);
       outline-width: pxToRem(4px);
       outline-offset: pxToRem(4px);
+      width: pxToRem(140px);
+      height: pxToRem(140px);
 
       @include fontSize(88px);
     }

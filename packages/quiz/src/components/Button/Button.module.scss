@@ -20,6 +20,7 @@ $outline-offset: pxToRem(2px);
     width: 100%;
     height: 100%;
     outline-offset: $outline-offset;
+    cursor: pointer;
 
     &.primary {
       border: $outline-offset solid transparent;

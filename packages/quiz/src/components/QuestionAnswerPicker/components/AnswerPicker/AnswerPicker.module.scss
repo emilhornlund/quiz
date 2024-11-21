@@ -34,10 +34,12 @@
       background-color: $white;
       color: $gray-4;
       overflow: hidden;
+      cursor: pointer;
 
       @include mobile {
         gap: $layout-gutter * 0.5;
         padding: $layout-gutter * 0.5;
+        border-radius: pxToRem(8px);
 
         @include fontSize(12px);
       }
@@ -45,6 +47,7 @@
       @include tablet {
         gap: $layout-gutter * 0.75;
         padding: $layout-gutter * 0.75;
+        border-radius: pxToRem(12px);
 
         @include fontSize(18px);
       }
@@ -52,6 +55,7 @@
       @include desktop {
         gap: $layout-gutter;
         padding: $layout-gutter;
+        border-radius: pxToRem(16px);
 
         @include fontSize(24px);
       }
@@ -60,12 +64,14 @@
         cursor: auto;
       }
 
-      &:hover {
-        &:not(:disabled) {
-          border: none;
-          outline: none;
-          background-color: $gray-1;
-          color: $gray-4;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          &:not(:disabled) {
+            border: none;
+            outline: none;
+            background-color: $gray-1;
+            color: $gray-4;
+          }
         }
       }
 
