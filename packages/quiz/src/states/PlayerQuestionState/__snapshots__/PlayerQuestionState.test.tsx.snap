@@ -457,7 +457,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                 min="0"
                 step="1"
                 type="range"
-                value="0"
+                value="50"
               />
               <div
                 class="inputGroup"
@@ -472,7 +472,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     min="0"
                     name="slider-input"
                     type="number"
-                    value="0"
+                    value="50"
                   />
                 </div>
                 <div
@@ -731,6 +731,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                 <button
                   class="primary"
                   data-testid="test-submit-button-button"
+                  disabled=""
                   id="submit-button"
                   name="submit-button"
                   type="submit"

@@ -1,3 +1,4 @@
+import { GAME_PIN_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -27,20 +28,13 @@ const HomePage: FC = () => {
   const { findGame } = useQuizService()
 
   const [gamePIN, setGamePIN] = useState<string>()
+  const [gamePINValid, setGamePINValid] = useState<boolean>(false)
 
   const message = useMemo(
     () =>
       `Do you feel confident? ${MESSAGES[Math.floor(Math.random() * MESSAGES.length)]}`,
     [],
   )
-
-  const handleGamePINChange = (newGamePIN: string) => {
-    if (newGamePIN.length == 0) {
-      setGamePIN(undefined)
-    } else {
-      setGamePIN(newGamePIN)
-    }
-  }
 
   const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -73,13 +67,17 @@ const HomePage: FC = () => {
           type="text"
           placeholder="Game PIN"
           value={gamePIN ?? ''}
-          onChange={handleGamePINChange}
+          regex={GAME_PIN_REGEX}
+          onChange={(value) => setGamePIN(value as string)}
+          onValid={setGamePINValid}
+          required
         />
         <IconButtonArrowRight
           id="join"
           type="submit"
           kind="secondary"
           value="Join the game"
+          disabled={!gamePINValid}
         />
       </form>
       <Link to={'/create'}>

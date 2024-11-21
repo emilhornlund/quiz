@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString, MaxLength, MinLength } from 'class-validator'
+import { GAME_NAME_REGEX } from '@quiz/common'
+import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 export function GameNameProperty(options?: { example: string }) {
   return applyDecorators(
@@ -15,5 +16,9 @@ export function GameNameProperty(options?: { example: string }) {
     IsString(),
     MinLength(3),
     MaxLength(25),
+    Matches(GAME_NAME_REGEX, {
+      message:
+        'The name of the game can only contain letters, numbers, and underscores.',
+    }),
   )
 }

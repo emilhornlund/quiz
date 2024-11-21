@@ -1,7 +1,8 @@
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FC, FormEvent, useCallback, useState } from 'react'
 
+import { isValidNumber } from '../../../../utils/helpers.ts'
 import Button from '../../../Button'
 import TextField from '../../../TextField'
 
@@ -22,12 +23,27 @@ const AnswerRange: FC<AnswerRangeProps> = ({
   interactive = true,
   onSubmit,
 }) => {
-  const [value, setValue] = useState<number>(min)
+  const [value, setValue] = useState<number>(Math.floor(min + (max - min) / 2))
+  const [valid, setValid] = useState<boolean>(true)
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
-    onSubmit(value)
-  }
+  const handleSliderChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = parseInt(event.target.value, 10)
+      setValue(newValue)
+      setValid(isValidNumber(newValue, min, max))
+    },
+    [min, max],
+  )
+
+  const handleSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault()
+      if (valid) {
+        onSubmit(value)
+      }
+    },
+    [onSubmit, valid, value],
+  )
 
   return (
     <div className={styles.main}>
@@ -41,7 +57,7 @@ const AnswerRange: FC<AnswerRangeProps> = ({
               max={max}
               step={step}
               value={value}
-              onChange={(e) => setValue(parseInt(e.target.value, 10))}
+              onChange={handleSliderChange}
             />
             <div className={styles.inputGroup}>
               <TextField
@@ -50,9 +66,16 @@ const AnswerRange: FC<AnswerRangeProps> = ({
                 min={min}
                 max={max}
                 value={value}
-                onChange={(newValue) => setValue(parseInt(newValue, 10))}
+                onChange={(newValue) => setValue(newValue as number)}
+                onValid={setValid}
+                required
               />
-              <Button id="submit-button" type="submit" value="Submit" />
+              <Button
+                id="submit-button"
+                type="submit"
+                value="Submit"
+                disabled={!valid}
+              />
             </div>
           </form>
         </div>

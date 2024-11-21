@@ -86,6 +86,8 @@ describe('GameController (e2e)', () => {
                 minLength: 'name must be longer than or equal to 3 characters',
                 maxLength:
                   'name must be shorter than or equal to 25 characters',
+                matches:
+                  'The name of the game can only contain letters, numbers, and underscores.',
               },
             },
             {

@@ -1,4 +1,6 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+
+import { isValidNumber } from '../../utils/helpers.ts'
 
 import styles from './TextField.module.scss'
 
@@ -10,37 +12,64 @@ export interface TextFieldProps {
   value?: string | number
   min?: number
   max?: number
+  regex?: RegExp
+  required?: boolean
   disabled?: boolean
-  onChange?: (value: string) => void
+  onChange?: (value?: string | number) => void
+  onValid?: (valid: boolean) => void
 }
 
 const TextField: React.FC<TextFieldProps> = ({
   id,
   name,
   type,
+  placeholder,
   value,
   min,
   max,
-  placeholder,
+  regex,
+  required,
   disabled,
   onChange,
+  onValid,
 }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const [internalValue, setInternalValue] = useState<string | number>(
+    value ?? '',
+  )
+
+  useEffect(() => {
+    setInternalValue(value ?? '')
+  }, [value])
+
+  useEffect(() => {
     let valid = true
-    if (type == 'number') {
-      const value = parseInt(event.target.value, 10)
-      if (Number.isNaN(value)) {
-        valid = false
-      } else if (
-        (min !== undefined && !Number.isNaN(min) && value < min) ||
-        (max !== undefined && !Number.isNaN(max) && value > max)
+    if (type === 'number') {
+      if (
+        typeof internalValue !== 'number' ||
+        !isValidNumber(internalValue, min, max)
       ) {
         valid = false
       }
+    } else if (type === 'text') {
+      if (typeof internalValue !== 'string') {
+        valid = false
+      } else if (required && !internalValue) {
+        valid = false
+      } else if (regex && !regex.test(internalValue)) {
+        valid = false
+      }
     }
-    if (valid) {
-      onChange?.(event.target.value)
+    onValid?.(valid)
+  }, [internalValue, type, min, max, regex, required, onValid])
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    let newValue: string | number = event.target.value
+    if (type === 'number') {
+      const parsedValue = parseInt(newValue, 10)
+      newValue = isNaN(parsedValue) ? '' : parsedValue
     }
+    setInternalValue(newValue)
+    onChange?.(newValue)
   }
 
   return (
@@ -49,7 +78,7 @@ const TextField: React.FC<TextFieldProps> = ({
         id={id}
         name={name ?? id}
         type={type}
-        value={value}
+        value={internalValue}
         min={min}
         max={max}
         placeholder={placeholder}

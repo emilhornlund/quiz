@@ -1,6 +1,7 @@
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, FormEvent, useState } from 'react'
+import { QUESTION_TYPE_ANSWER_REGEX } from '@quiz/common'
+import React, { FC, FormEvent, useCallback, useState } from 'react'
 
 import Button from '../../../Button'
 import TextField from '../../../TextField'
@@ -17,11 +18,17 @@ const AnswerInput: FC<AnswerInputProps> = ({
   onSubmit,
 }) => {
   const [value, setValue] = useState('')
+  const [valid, setValid] = useState<boolean>(true)
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    onSubmit(value)
-  }
+  const handleSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault()
+      if (valid) {
+        onSubmit(value)
+      }
+    },
+    [onSubmit, valid, value],
+  )
 
   return (
     <div className={styles.main}>
@@ -33,9 +40,17 @@ const AnswerInput: FC<AnswerInputProps> = ({
               type="text"
               placeholder="Answer"
               value={value}
-              onChange={(newValue) => setValue(newValue)}
+              regex={QUESTION_TYPE_ANSWER_REGEX}
+              onChange={(newValue) => setValue(newValue as string)}
+              onValid={setValid}
+              required
             />
-            <Button id="submit-button" type="submit" value="Submit" />
+            <Button
+              id="submit-button"
+              type="submit"
+              value="Submit"
+              disabled={!valid}
+            />
           </form>
         </div>
       ) : (

@@ -60,7 +60,7 @@ describe('TextField', () => {
     expect(input.value).toBe('1337')
 
     expect(onChange).toHaveBeenCalledTimes(1)
-    expect(onChange).toHaveBeenCalledWith('1337')
+    expect(onChange).toHaveBeenCalledWith(1337)
 
     expect(container).toMatchSnapshot()
   })
@@ -82,7 +82,7 @@ describe('TextField', () => {
     expect(input.value).toBe('0')
 
     expect(onChange).toHaveBeenCalledTimes(1)
-    expect(onChange).toHaveBeenCalledWith('0')
+    expect(onChange).toHaveBeenCalledWith(0)
 
     expect(container).toMatchSnapshot()
   })
@@ -109,7 +109,7 @@ describe('TextField', () => {
     expect(input.value).toBe('100')
 
     expect(onChange).toHaveBeenCalledTimes(1)
-    expect(onChange).toHaveBeenCalledWith('100')
+    expect(onChange).toHaveBeenCalledWith(100)
 
     expect(container).toMatchSnapshot()
   })
@@ -161,7 +161,7 @@ describe('TextField', () => {
     fireEvent.focus(input)
     fireEvent.change(input, { target: { value: '-1' } })
 
-    expect(onChange).not.toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
 
     expect(container).toMatchSnapshot()
   })
@@ -186,7 +186,7 @@ describe('TextField', () => {
     fireEvent.focus(input)
     fireEvent.change(input, { target: { value: '101' } })
 
-    expect(onChange).not.toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
 
     expect(container).toMatchSnapshot()
   })

@@ -1,3 +1,4 @@
+import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -23,6 +24,7 @@ const JoinPage: FC = () => {
   const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 
   const [nickname, setNickname] = useState<string>()
+  const [nicknameValid, setNicknameValid] = useState<boolean>(false)
 
   const title = useMemo<string>(() => getTitle(), [])
   const message = useMemo<string>(() => getMessage(), [])
@@ -63,13 +65,17 @@ const JoinPage: FC = () => {
           type="text"
           placeholder="Nickname"
           value={nickname ?? ''}
-          onChange={setNickname}
+          regex={PLAYER_NICKNAME_REGEX}
+          onChange={(value) => setNickname(value as string)}
+          onValid={setNicknameValid}
+          required
         />
         <IconButtonArrowRight
           id="join"
           type="submit"
           kind="secondary"
           value="OK, Go!"
+          disabled={!nicknameValid}
         />
       </form>
     </Page>

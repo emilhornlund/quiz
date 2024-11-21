@@ -1,4 +1,9 @@
-import { CreateGameRequestDto, GameMode, QuestionType } from '@quiz/common'
+import {
+  CreateGameRequestDto,
+  GAME_NAME_REGEX,
+  GameMode,
+  QuestionType,
+} from '@quiz/common'
 import React, {
   FC,
   FormEvent,
@@ -225,7 +230,9 @@ const CreateGamePage: FC = () => {
             type="text"
             value={name}
             placeholder="Name"
-            onChange={setName}
+            regex={GAME_NAME_REGEX}
+            onChange={(value) => setName(value as string)}
+            required
           />
           <Select
             id="game-mode-select"
