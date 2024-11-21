@@ -91,24 +91,28 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        aspect-ratio: 1 / 1;
-        height: 100%;
         border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: $black-1-10;
         color: $black-1-70;
         font-weight: bold;
 
         @include mobile {
+          width: pxToRem(30px);
+          height: pxToRem(30px);
           padding: 0.2rem;
           @include fontSize(16px);
         }
 
         @include tablet {
+          width: pxToRem(40px);
+          height: pxToRem(40px);
           padding: 0.2rem;
           @include fontSize(22px);
         }
 
         @include desktop {
+          width: pxToRem(50px);
+          height: pxToRem(50px);
           padding: 0.2rem;
           @include fontSize(28px);
         }
@@ -168,7 +172,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: $black-1-10;
       color: rgba(0, 0, 0, 0.8);
 
       @include mobile {

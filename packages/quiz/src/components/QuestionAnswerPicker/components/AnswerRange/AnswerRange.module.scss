@@ -70,24 +70,24 @@
         box-sizing: border-box;
 
         @include mobile {
-          width: pxToRem(20px);
-          height: pxToRem(20px);
-          border-radius: pxToRem(10px);
-          border-width: pxToRem(2px);
-        }
-
-        @include tablet {
           width: pxToRem(30px);
           height: pxToRem(30px);
           border-radius: pxToRem(15px);
           border-width: pxToRem(4px);
         }
 
-        @include desktop {
+        @include tablet {
           width: pxToRem(40px);
           height: pxToRem(40px);
           border-radius: pxToRem(20px);
           border-width: pxToRem(6px);
+        }
+
+        @include desktop {
+          width: pxToRem(50px);
+          height: pxToRem(50px);
+          border-radius: pxToRem(25px);
+          border-width: pxToRem(8px);
         }
       }
     }

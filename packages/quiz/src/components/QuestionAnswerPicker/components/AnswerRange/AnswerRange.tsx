@@ -24,7 +24,7 @@ const AnswerRange: FC<AnswerRangeProps> = ({
   onSubmit,
 }) => {
   const [value, setValue] = useState<number>(Math.floor(min + (max - min) / 2))
-  const [valid, setValid] = useState<boolean>(true)
+  const [valid, setValid] = useState<boolean>(false)
 
   const handleSliderChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {

@@ -2,7 +2,7 @@ import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Bounce, toast, ToastOptions } from 'react-toastify'
 
-import { LeaveButton, LoadingSpinner, Page } from '../../components'
+import { LoadingSpinner, Page } from '../../components'
 import {
   HostGameBeginState,
   HostLeaderboardState,
@@ -127,7 +127,7 @@ const GamePage = () => {
         return <PlayerPodiumState event={event} />
       default:
         return (
-          <Page header={<LeaveButton />}>
+          <Page>
             <LoadingSpinner />
           </Page>
         )
