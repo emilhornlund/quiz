@@ -277,9 +277,10 @@ function buildGameQuestionPreviewCountdownEvent(
   },
 ): CountdownEvent {
   const pendingDuration = Math.max(0, getQuestionTaskPendingDuration(document))
+  const createdTime = document.currentTask.created.getTime()
 
   return {
-    expiryTime: new Date(Date.now() + pendingDuration).toISOString(),
+    expiryTime: new Date(createdTime + pendingDuration).toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
@@ -297,9 +298,10 @@ function buildGameQuestionCountdownEvent(
   },
 ): CountdownEvent {
   const activeDuration = Math.max(0, getQuestionTaskActiveDuration(document))
+  const presentedTime = document.currentTask.presented.getTime()
 
   return {
-    expiryTime: new Date(Date.now() + activeDuration).toISOString(),
+    expiryTime: new Date(presentedTime + activeDuration).toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
