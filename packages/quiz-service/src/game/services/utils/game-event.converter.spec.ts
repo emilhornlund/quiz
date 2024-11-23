@@ -124,6 +124,7 @@ describe('Game Event Converter', () => {
                 imageURL: 'https://example.com/question-image.png',
                 min: 0,
                 max: 100,
+                step: 1,
                 correct: 50,
                 points: 1000,
                 duration: 30,

@@ -20,6 +20,7 @@ import {
   QuestionTypeAnswer,
 } from '../models/schemas'
 
+import { calculateRangeStep } from './question.utils'
 import { buildLobbyTask } from './task.converter'
 
 /**
@@ -94,6 +95,7 @@ export function buildPartialGameModel(
             imageURL: question.imageURL,
             min: question.min,
             max: question.max,
+            step: calculateRangeStep(question.min, question.max),
             correct: question.correct,
             points: question.points,
             duration: question.duration,
@@ -112,6 +114,7 @@ export function buildPartialGameModel(
             imageURL: question.imageURL,
             min: 0,
             max: 100,
+            step: 1,
             correct: question.correct,
             points: -1,
             duration: question.duration,

@@ -142,3 +142,45 @@ export function isTypeAnswerAnswer(
   } {
   return answer?.type === QuestionType.TypeAnswer
 }
+
+/**
+ * Calculates an appropriate step value for a slider given the range between `min` and `max`.
+ * The step is dynamically adjusted to ensure it is user-friendly and practical for interaction.
+ *
+ * @param {number} min - The minimum value of the slider range.
+ * @param {number} max - The maximum value of the slider range.
+ * @param {number} [targetSteps=50] - The approximate number of steps desired for the slider.
+ *                                    Defaults to 50 if not provided.
+ *
+ * @returns {number} - The calculated step size for the slider.
+ *
+ * @example
+ * calculateRangeStep(0, 10000); // Returns 200
+ * calculateRangeStep(0, 500);   // Returns 10
+ * calculateRangeStep(-50, 50);  // Returns 2
+ * calculateRangeStep(0, 100);   // Returns 2
+ */
+export function calculateRangeStep(
+  min: number,
+  max: number,
+  targetSteps: number = 50,
+): number {
+  const range = max - min
+
+  if (range <= 0) {
+    return 0
+  }
+
+  const rawStep = range / targetSteps
+
+  const minimumStep = 1
+
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)))
+
+  const refinedStep =
+    rawStep <= magnitude
+      ? magnitude
+      : Math.ceil(rawStep / magnitude) * magnitude
+
+  return Math.max(refinedStep, minimumStep)
+}

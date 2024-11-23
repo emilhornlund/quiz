@@ -404,7 +404,7 @@ function buildGameEventQuestion(
         type: QuestionType.Range,
         min: question.min,
         max: question.max,
-        step: 1, //TODO: calculate this
+        step: question.step,
         ...common,
       }
     case QuestionType.TrueFalse:

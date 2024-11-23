@@ -84,6 +84,9 @@ export class QuestionRange {
   max: number
 
   @Prop({ type: Number, required: true })
+  step: number
+
+  @Prop({ type: Number, required: true })
   correct: number
 }
 
