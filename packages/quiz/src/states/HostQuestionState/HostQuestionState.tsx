@@ -1,6 +1,6 @@
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameQuestionHostEvent } from '@quiz/common'
+import { GameQuestionHostEvent, MediaType } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -67,7 +67,12 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
       </div>
     </div>
     <div className={classNames(styles.row, styles.fullHeight)}>
-      <ResponsiveImage imageURL={question.imageURL} alt={question.question} />
+      {question.media?.type === MediaType.Image && (
+        <ResponsiveImage
+          imageURL={question.media.url}
+          alt={question.question}
+        />
+      )}
     </div>
     <div
       className={classNames(

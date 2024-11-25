@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, MediaType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -17,8 +17,10 @@ describe('HostQuestionState', () => {
           question: {
             type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
-            imageURL:
-              'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+            media: {
+              type: MediaType.Image,
+              url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+            },
             answers: [
               { value: 'Vincent van Gogh' },
               { value: 'Pablo Picasso' },
@@ -50,7 +52,10 @@ describe('HostQuestionState', () => {
           question: {
             type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
-            imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
+            media: {
+              type: MediaType.Image,
+              url: 'https://wallpapercave.com/wp/wp2824407.jpg',
+            },
             answers: [
               { value: 'Vincent van Gogh' },
               { value: 'Pablo Picasso' },
@@ -84,7 +89,10 @@ describe('HostQuestionState', () => {
           question: {
             type: QuestionType.MultiChoice,
             question: 'Who painted The Starry Night?',
-            imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
+            media: {
+              type: MediaType.Image,
+              url: 'https://wallpaperaccess.com/full/157316.jpg',
+            },
             answers: [
               { value: 'Vincent van Gogh' },
               { value: 'Pablo Picasso' },

@@ -389,7 +389,9 @@ function buildGameEventQuestion(
 ): GameEventQuestion {
   const common = {
     question: question.question,
-    imageURL: question.media ? question.media.url : null,
+    media: question.media
+      ? { type: question.media.type, url: question.media.url }
+      : null,
     duration: question.duration,
   }
   switch (question.type) {

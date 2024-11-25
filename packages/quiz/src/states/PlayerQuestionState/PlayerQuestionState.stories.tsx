@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, MediaType, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import PlayerQuestionState from './PlayerQuestionState'
@@ -24,8 +24,10 @@ export const QuestionMultiChoiceTwoAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
-        imageURL:
-          'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+        media: {
+          type: MediaType.Image,
+          url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+        },
         answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
         duration: 30,
       },
@@ -50,7 +52,10 @@ export const QuestionMultiChoiceFourAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
-        imageURL: 'https://wallpapercave.com/wp/wp2824407.jpg',
+        media: {
+          type: MediaType.Image,
+          url: 'https://wallpapercave.com/wp/wp2824407.jpg',
+        },
         answers: [
           { value: 'Vincent van Gogh' },
           { value: 'Pablo Picasso' },
@@ -80,7 +85,10 @@ export const QuestionMultiChoiceSixAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
-        imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
+        media: {
+          type: MediaType.Image,
+          url: 'https://wallpaperaccess.com/full/157316.jpg',
+        },
         answers: [
           { value: 'Vincent van Gogh' },
           { value: 'Pablo Picasso' },

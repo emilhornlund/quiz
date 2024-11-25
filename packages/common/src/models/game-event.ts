@@ -1,4 +1,5 @@
 import { GameEventType } from './game-event-type.enum'
+import { MediaType } from './media-type.enum'
 import { QuestionType } from './question-type.enum'
 
 export type CountdownEvent = {
@@ -9,6 +10,11 @@ export type CountdownEvent = {
 export type PaginationEvent = {
   current: number
   total: number
+}
+
+export type QuestionMediaEvent = {
+  type: MediaType
+  url: string
 }
 
 export type GameHeartbeatEvent = {
@@ -76,7 +82,7 @@ export type GameQuestionPreviewPlayerEvent = {
 export type GameEventQuestionMultiChoice = {
   type: QuestionType.MultiChoice
   question: string
-  imageURL?: string
+  media?: QuestionMediaEvent
   answers: { value: string }[]
   duration: number
 }
@@ -84,7 +90,7 @@ export type GameEventQuestionMultiChoice = {
 export type GameEventQuestionRange = {
   type: QuestionType.Range
   question: string
-  imageURL?: string
+  media?: QuestionMediaEvent
   min: number
   max: number
   step: number
@@ -94,14 +100,14 @@ export type GameEventQuestionRange = {
 export type GameEventQuestionTrueFalse = {
   type: QuestionType.TrueFalse
   question: string
-  imageURL?: string
+  media?: QuestionMediaEvent
   duration: number
 }
 
 export type GameEventQuestionTypeAnswer = {
   type: QuestionType.TypeAnswer
   question: string
-  imageURL?: string
+  media?: QuestionMediaEvent
   duration: number
 }
 

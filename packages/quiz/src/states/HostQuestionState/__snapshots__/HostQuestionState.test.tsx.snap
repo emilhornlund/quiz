@@ -900,11 +900,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       </div>
       <div
         class="row fullHeight"
-      >
-        <div
-          class="container"
-        />
-      </div>
+      />
       <div
         class="row fullWidth flexibleHeight"
       >
@@ -1145,11 +1141,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       </div>
       <div
         class="row fullHeight"
-      >
-        <div
-          class="container"
-        />
-      </div>
+      />
       <div
         class="row fullWidth flexibleHeight"
       >
@@ -1386,11 +1378,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       </div>
       <div
         class="row fullHeight"
-      >
-        <div
-          class="container"
-        />
-      </div>
+      />
       <div
         class="row fullWidth flexibleHeight"
       >
