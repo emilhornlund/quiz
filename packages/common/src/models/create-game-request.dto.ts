@@ -1,4 +1,5 @@
 import { GameMode } from './game-mode.enum'
+import { QuestionRangeAnswerMargin } from './question-range-answer-margin.enum'
 import { QuestionType } from './question-type.enum'
 
 export interface CreateClassicModeQuestionMultiChoiceAnswerRequestDto {
@@ -30,6 +31,7 @@ export interface CreateClassicModeQuestionSliderRequestDto {
   imageURL?: string
   min: number
   max: number
+  margin: QuestionRangeAnswerMargin
   correct: number
   points: number
   duration: number

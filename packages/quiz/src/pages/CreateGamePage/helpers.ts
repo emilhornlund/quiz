@@ -2,6 +2,7 @@ import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 
@@ -63,6 +64,12 @@ const assertImageURLType = (imageURL?: string) => {
   return imageURL
 }
 
+const assertQuestionMarginType = (margin: string) => {
+  return assertType<string>(margin, 'string', 'margin', {
+    validate: validateQuestionRangeAnswerMargin,
+  })
+}
+
 const assertPointsType = (points: number) => {
   return assertType<number>(points, 'number', 'points', {
     validate: validatePoints,
@@ -74,6 +81,9 @@ const assertDurationType = (duration: number) => {
     validate: validateDuration,
   })
 }
+
+const validateQuestionRangeAnswerMargin = (margin: string): boolean =>
+  ([...Object.values(QuestionRangeAnswerMargin)] as string[]).includes(margin)
 
 const validatePoints = (points: number): boolean =>
   [0, 1000, 2000].includes(points)
@@ -138,6 +148,7 @@ export const parseQuestionsJson = <T extends GameMode>(
             imageURL: assertImageURLType(question.imageURL),
             min: assertType<number>(question.min, 'number', 'min'),
             max: assertType<number>(question.max, 'number', 'max'),
+            margin: assertQuestionMarginType(question.margin),
             correct: assertType<number>(question.correct, 'number', 'correct'),
             points: assertPointsType(question.points),
             duration: assertDurationType(question.duration),

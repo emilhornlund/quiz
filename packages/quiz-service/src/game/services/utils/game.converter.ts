@@ -6,6 +6,7 @@ import {
   isCreateClassicModeQuestionTrueFalseRequestDto,
   isCreateClassicModeQuestionTypeAnswerRequestDto,
   isCreateZeroToOneHundredModeQuestionRangeRequestDto,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
@@ -96,6 +97,7 @@ export function buildPartialGameModel(
             min: question.min,
             max: question.max,
             step: calculateRangeStep(question.min, question.max),
+            margin: question.margin,
             correct: question.correct,
             points: question.points,
             duration: question.duration,
@@ -115,6 +117,7 @@ export function buildPartialGameModel(
             min: 0,
             max: 100,
             step: 1,
+            margin: QuestionRangeAnswerMargin.None,
             correct: question.correct,
             points: -1,
             duration: question.duration,

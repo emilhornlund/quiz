@@ -147,6 +147,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
     "imageURL": "",
     "min": 0,
     "max": 100,
+    "margin": "MEDIUM",
     "correct": 0,
     "points": 1000,
     "duration": 30

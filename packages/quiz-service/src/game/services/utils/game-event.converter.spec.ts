@@ -2,6 +2,7 @@ import {
   GameEventType,
   GameMode,
   GameResultHostEvent,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
@@ -124,6 +125,7 @@ describe('Game Event Converter', () => {
                 imageURL: 'https://example.com/question-image.png',
                 min: 0,
                 max: 100,
+                margin: QuestionRangeAnswerMargin.Medium,
                 step: 1,
                 correct: 50,
                 points: 1000,

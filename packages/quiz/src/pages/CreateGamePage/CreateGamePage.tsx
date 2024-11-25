@@ -2,6 +2,7 @@ import {
   CreateGameRequestDto,
   GAME_NAME_REGEX,
   GameMode,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import React, {
@@ -93,6 +94,7 @@ const CreateGamePage: FC = () => {
               imageURL: '',
               min: 0,
               max: 100,
+              margin: QuestionRangeAnswerMargin.Medium,
               correct: 0,
               points: 1000,
               duration: 30,

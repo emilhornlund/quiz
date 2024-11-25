@@ -1,4 +1,4 @@
-import { GameMode } from '@quiz/common'
+import { GameMode, QuestionRangeAnswerMargin } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { IllegalTaskTypeException } from '../../exceptions'
@@ -73,14 +73,54 @@ export function buildQuestionTask(
 }
 
 /**
+ * Calculates the acceptable margin value for a range question based on the given margin type.
+ * This determines the range around the correct answer that is considered valid.
+ *
+ * @param {QuestionRangeAnswerMargin} margin - The margin type (None, Low, Medium, High, Maximum).
+ * @param {number} correct - The correct answer value for the range question.
+ *
+ * @returns {number} - The calculated margin value. If the margin is Maximum, returns `Number.MAX_VALUE`.
+ *                     If the margin is None, returns `0`.
+ *
+ * @example
+ * calculateRangeMargin(QuestionRangeAnswerMargin.Low, 100) // Returns 5 (5% of 100)
+ * calculateRangeMargin(QuestionRangeAnswerMargin.Medium, 100) // Returns 10 (10% of 100)
+ * calculateRangeMargin(QuestionRangeAnswerMargin.High, 100) // Returns 20 (20% of 100)
+ * calculateRangeMargin(QuestionRangeAnswerMargin.Maximum, 100) // Returns Number.MAX_VALUE
+ * calculateRangeMargin(QuestionRangeAnswerMargin.None, 100) // Returns 0
+ */
+export function calculateRangeMargin(
+  margin: QuestionRangeAnswerMargin,
+  correct: number,
+): number {
+  switch (margin) {
+    case QuestionRangeAnswerMargin.Low:
+      return Math.abs(correct) * 0.05 // 5%
+    case QuestionRangeAnswerMargin.Medium:
+      return Math.abs(correct) * 0.1 // 10%
+    case QuestionRangeAnswerMargin.High:
+      return Math.abs(correct) * 0.2 // 20%
+    case QuestionRangeAnswerMargin.Maximum:
+      return Number.MAX_VALUE // Accept all answers
+    default:
+      return 0 // None or invalid margin type
+  }
+}
+
+/**
  * Determines if the provided answer is correct for the given question.
+ *
+ * - Multi-choice questions: Validates that the selected option is correct.
+ * - Range questions: Validates if the answer falls within the allowed margin.
+ * - True/False questions: Checks if the answer matches the correct boolean value.
+ * - Type answer questions: Compares the lowercased correct answer and provided answer.
  *
  * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
  * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
  *
  * @returns {boolean} Returns `true` if the answer is correct for the given question, otherwise `false`.
  */
-function isQuestionAnswerCorrect(
+export function isQuestionAnswerCorrect(
   question: BaseQuestion &
     (
       | QuestionMultiChoice
@@ -103,36 +143,73 @@ function isQuestionAnswerCorrect(
     }
   }
   if (isRangeQuestion(question) && isRangeAnswer(answer)) {
-    return question.correct === answer.answer
+    const { margin, correct } = question
+    const { answer: playerAnswer } = answer
+
+    if (margin === QuestionRangeAnswerMargin.None) {
+      return correct === playerAnswer
+    }
+
+    const rangeMargin = calculateRangeMargin(margin, correct)
+
+    return Math.abs(correct - playerAnswer) <= rangeMargin
   }
   if (isTrueFalseQuestion(question) && isTrueFalseAnswer(answer)) {
     return question.correct === answer.answer
   }
   if (isTypeAnswerQuestion(question) && isTypeAnswerAnswer(answer)) {
-    return question.correct.toLowerCase() === answer.answer.toLowerCase()
+    return !!(
+      question.correct?.length &&
+      answer?.answer?.length &&
+      question.correct.toLowerCase() === answer.answer.toLowerCase()
+    )
   }
   return false
 }
 
 /**
- * Calculates the player's score for Classic mode based on their response time.
+ * Calculates the raw score for a question in classic mode based on the response time.
  *
- * @param {Date} presented - The timestamp when the question was presented.
- * @param {Date} answered - The timestamp when the player submitted their answer.
- * @param {number} duration - The maximum time allowed to answer the question (in seconds).
- * @param {number} points - The maximum points for answering correctly.
- * @returns {number} The player's calculated score, rounded to the nearest whole number.
+ * The faster the response, the higher the score. The score is reduced based on the
+ * time taken relative to the question's duration, with a minimum multiplier of 0
+ * for responses that exceed the question's duration.
  *
- * @remarks
- * - The score decreases proportionally as the response time approaches the duration limit.
- * - If the response time exceeds the duration, the score is calculated as if the player answered at the last second.
+ * @param {Date} presented - The time when the question was presented.
+ * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object containing duration and points.
+ * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The user's answer, including the time it was created.
+ *
+ * @returns {number} - The raw score calculated based on response time and the maximum points for the question.
  */
-function calculateClassicModeScore(
+export function calculateClassicModeRawScore(
   presented: Date,
-  answered: Date,
-  duration: number,
-  points: number,
+  question: BaseQuestion &
+    (
+      | QuestionMultiChoice
+      | QuestionRange
+      | QuestionTrueFalse
+      | QuestionTypeAnswer
+    ),
+  answer?: QuestionTaskBaseAnswer &
+    (
+      | QuestionTaskMultiChoiceAnswer
+      | QuestionTaskRangeAnswer
+      | QuestionTaskTrueFalseAnswer
+      | QuestionTaskTypeAnswerAnswer
+    ),
 ): number {
+  const { duration, points } = question
+  const { created: answered } = answer || {}
+
+  if (
+    !answered ||
+    !duration ||
+    !points ||
+    answered.getTime() < presented.getTime() ||
+    answered.getTime() > presented.getTime() + duration * 1000
+  ) {
+    return 0
+  }
+
   // Calculate the response time in seconds
   const responseTime = (answered.getTime() - presented.getTime()) / 1000
 
@@ -149,28 +226,154 @@ function calculateClassicModeScore(
   const scoreMultiplier = 1 - adjustment
 
   // Step 4: Multiply points possible by that value
-  const rawScore = points * scoreMultiplier
+  return points * scoreMultiplier
+}
 
-  // Step 5: Round to the nearest whole number
+/**
+ * Calculates the total score for a range question in classic mode.
+ *
+ * The score is determined by two factors:
+ * 1. **Speed-based score (20%)**: A portion of the score is derived from the speed of the user's response,
+ *    as calculated by `calculateClassicModeRawScore`.
+ * 2. **Precision-based score (80%)**: A portion of the score is based on how close the user's answer is
+ *    to the correct answer, within the allowed margin.
+ *
+ * @param {Date} presented - The time when the question was presented.
+ * @param {BaseQuestion & QuestionRange} question - The range question object, including the correct answer, margin, and points.
+ * @param {QuestionTaskBaseAnswer & QuestionTaskRangeAnswer} answer - The user's range answer, including the provided answer value.
+ *
+ * @returns {number} - The calculated total score for the range question.
+ */
+export function calculateClassicModeRangeQuestionScore(
+  presented: Date,
+  question: BaseQuestion & QuestionRange,
+  answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
+): number {
+  const { correct, margin, points } = question
+  const { answer: userAnswer } = answer
+
+  // If the answer is not correct based on the question logic, return 0
+  if (!isQuestionAnswerCorrect(question, answer)) {
+    return 0
+  }
+
+  // Calculate speed-based score (20%)
+  const speedScore =
+    calculateClassicModeRawScore(presented, question, answer) * 0.2
+
+  // Special handling for None margin (exact match required)
+  if (margin === QuestionRangeAnswerMargin.None) {
+    return Math.round(speedScore + points * 0.8) // Full precision score for exact matches
+  }
+
+  // For other margins, calculate precision-based score (80%)
+  const difference = Math.abs(correct - userAnswer)
+  const rangeMargin = calculateRangeMargin(margin, correct)
+
+  const precisionMultiplier =
+    difference > rangeMargin ? 0 : 1 - difference / rangeMargin
+
+  const precisionScore = points * precisionMultiplier * 0.8
+
+  // Total score: sum of speed and precision scores
+  return Math.round(speedScore + precisionScore)
+}
+
+/**
+ * Calculates the player's score for Classic mode based on their response time and question type.
+ *
+ * - For range questions, the score is calculated using `calculateClassicModeRangeQuestionScore`,
+ *   which considers both speed and precision.
+ * - For other question types, the score is calculated using `calculateClassicModeRawScore`,
+ *   which only considers speed.
+ *
+ * @param {Date} presented - The timestamp when the question was presented.
+ * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
+ * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
+ *
+ * @returns {number} - The player's calculated score, rounded to the nearest whole number.
+ *
+ * @remarks
+ * - For range questions, the calculation includes a precision component.
+ * - For other types, only response time affects the score.
+ */
+export function calculateClassicModeScore(
+  presented: Date,
+  question: BaseQuestion &
+    (
+      | QuestionMultiChoice
+      | QuestionRange
+      | QuestionTrueFalse
+      | QuestionTypeAnswer
+    ),
+  answer?: QuestionTaskBaseAnswer &
+    (
+      | QuestionTaskMultiChoiceAnswer
+      | QuestionTaskRangeAnswer
+      | QuestionTaskTrueFalseAnswer
+      | QuestionTaskTypeAnswerAnswer
+    ),
+): number {
+  if (isRangeQuestion(question) && isRangeAnswer(answer)) {
+    return calculateClassicModeRangeQuestionScore(presented, question, answer)
+  }
+
+  const rawScore = calculateClassicModeRawScore(presented, question, answer)
   return Math.round(rawScore)
 }
 
 /**
  * Calculates the player's score for ZeroToOneHundred mode.
  *
- * @param {number} correct - The correct answer for the question.
- * @param {number} [answer] - The player's submitted answer.
- * @returns {number} The score adjustment based on the proximity of the answer to the correct value.
+ * - A correct answer gives a score of `-10` (lower score is better).
+ * - For incorrect answers within the range [0, 100], the score is the absolute difference
+ *   between the correct answer and the player's answer.
+ * - Answers outside the range [0, 100] or invalid answers default to a score of `100`.
  *
- * @remarks
- * - Returns a negative penalty (-10) for incorrect answers.
- * - Calculates the absolute difference for mismatched answers.
+ * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
+ * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
+ *
+ * @returns {number} - The player's score:
+ *   - `-10` for correct answers.
+ *   - Absolute difference for incorrect answers within [0, 100].
+ *   - `100` for invalid or out-of-range answers.
  */
-function calculateZeroToOneHundredModeScore(correct: number, answer?: number) {
-  if (correct !== answer) {
-    return Math.abs(answer - correct)
+export function calculateZeroToOneHundredModeScore(
+  question: BaseQuestion &
+    (
+      | QuestionMultiChoice
+      | QuestionRange
+      | QuestionTrueFalse
+      | QuestionTypeAnswer
+    ),
+  answer?: QuestionTaskBaseAnswer &
+    (
+      | QuestionTaskMultiChoiceAnswer
+      | QuestionTaskRangeAnswer
+      | QuestionTaskTrueFalseAnswer
+      | QuestionTaskTypeAnswerAnswer
+    ),
+): number {
+  // Return max penalty if question or answer is invalid
+  if (!isRangeQuestion(question) || !isRangeAnswer(answer)) {
+    return 100
   }
-  return -10
+
+  const { correct } = question
+  const { answer: playerAnswer } = answer
+
+  // Return max penalty if out of range
+  if (playerAnswer < 0 || playerAnswer > 100) {
+    return 100
+  }
+
+  // Return -10 for correct answers
+  if (playerAnswer === correct) {
+    return -10
+  }
+
+  // Return absolute difference for incorrect answers within range
+  return Math.abs(playerAnswer - correct)
 }
 
 /**
@@ -208,23 +411,8 @@ export function buildQuestionResultTask(
 
       const lastScore =
         gameDocument.mode === GameMode.Classic
-          ? (correct &&
-              answer !== undefined &&
-              calculateClassicModeScore(
-                presented,
-                answer.created,
-                question.duration,
-                question.points,
-              )) ||
-            0
-          : (answer !== undefined &&
-              isRangeQuestion(question) &&
-              isRangeAnswer(answer) &&
-              calculateZeroToOneHundredModeScore(
-                question.correct,
-                answer.answer,
-              )) ||
-            100
+          ? calculateClassicModeScore(presented, question, answer)
+          : calculateZeroToOneHundredModeScore(question, answer)
 
       return {
         type: question.type,

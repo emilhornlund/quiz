@@ -1,5 +1,6 @@
 import {
   CreateClassicModeQuestionSliderRequestDto,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 
@@ -10,6 +11,7 @@ import {
   GameQuestionDurationProperty,
   GameQuestionImageUrlProperty,
   GameQuestionPointsProperty,
+  GameQuestionRangeAnswerMarginProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
 } from '../../decorators'
@@ -33,6 +35,9 @@ export class CreateClassicModeQuestionRangeRequest
 
   @ClassicModeGameQuestionRangeMaxProperty()
   max: number
+
+  @GameQuestionRangeAnswerMarginProperty()
+  margin: QuestionRangeAnswerMargin
 
   @ClassicModeGameQuestionRangeCorrectProperty()
   correct: number

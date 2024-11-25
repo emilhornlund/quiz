@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { QuestionType } from '@quiz/common'
+import { QuestionRangeAnswerMargin, QuestionType } from '@quiz/common'
 
 /**
  * BaseQuestion
@@ -85,6 +85,12 @@ export class QuestionRange {
 
   @Prop({ type: Number, required: true })
   step: number
+
+  @Prop({
+    enum: QuestionRangeAnswerMargin,
+    required: true,
+  })
+  margin: QuestionRangeAnswerMargin
 
   @Prop({ type: Number, required: true })
   correct: number

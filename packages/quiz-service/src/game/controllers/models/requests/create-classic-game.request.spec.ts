@@ -2,7 +2,7 @@
 
 import 'reflect-metadata'
 
-import { GameMode, QuestionType } from '@quiz/common'
+import { GameMode, QuestionRangeAnswerMargin, QuestionType } from '@quiz/common'
 import { validate } from 'class-validator'
 
 import { reduceNestedValidationErrors } from '../../../../app/utils'
@@ -56,6 +56,7 @@ function buildCreateClassicModeQuestionSliderRequest(): CreateClassicModeQuestio
   question.imageURL = 'http://example.com/image.png'
   question.min = 0
   question.max = 100
+  question.margin = QuestionRangeAnswerMargin.Medium
   question.correct = 50
   question.points = 1000
   question.duration = 30
@@ -1152,6 +1153,24 @@ describe('CreateClassicModeGameRequest', () => {
             minMaxValidator: 'min should not be greater than max',
           },
         })
+      })
+    })
+
+    describe('Margin Validation', () => {
+      it('should fail if margin is not a valid', async () => {
+        ;((gameRequest.questions[0] as CreateClassicModeQuestionRangeRequest)
+          .margin as any) = '' // Invalid, should be a valid margin
+        const errors = await validateReduceNestedValidationErrors(gameRequest)
+        expect(errors.length).toBe(1)
+        expect(errors).toEqual([
+          {
+            property: 'questions.0.margin',
+            constraints: {
+              isEnum:
+                'margin must be one of the following values: NONE, LOW, MEDIUM, HIGH, MAXIMUM',
+            },
+          },
+        ])
       })
     })
 

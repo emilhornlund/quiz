@@ -5,6 +5,7 @@ import {
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
   GameParticipantType,
+  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { Model } from 'mongoose'
@@ -788,6 +789,7 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       imageURL: 'https://example.com/question-image.png',
       min: 0,
       max: 100,
+      margin: QuestionRangeAnswerMargin.Medium,
       correct: 50,
       points: 1000,
       duration: 30,
