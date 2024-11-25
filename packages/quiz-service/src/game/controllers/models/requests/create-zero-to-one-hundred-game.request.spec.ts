@@ -2,19 +2,32 @@
 
 import 'reflect-metadata'
 
-import { GameMode, QuestionType } from '@quiz/common'
+import { GameMode, MediaType, QuestionType } from '@quiz/common'
 import { validate } from 'class-validator'
 
 import { reduceNestedValidationErrors } from '../../../../app/utils'
 
+import { CreateCommonMediaRequest } from './create-common-media.request'
 import { CreateZeroToOneHundredModeGameRequest } from './create-zero-to-one-hundred-mode-game.request'
 import { CreateZeroToOneHundredModeQuestionRangeRequest } from './create-zero-to-one-hundred-mode-question-range.request'
+
+function buildCreateCommonMediaRequest(
+  url: string | undefined = 'https://example.com/question-image.png',
+): CreateCommonMediaRequest {
+  const request = new CreateCommonMediaRequest()
+  request.type = MediaType.Image
+  request.url = url
+  return request
+}
 
 function buildCreateZeroToOneHundredModeQuestionRangeRequest(): CreateZeroToOneHundredModeQuestionRangeRequest {
   const question = new CreateZeroToOneHundredModeQuestionRangeRequest()
   question.type = QuestionType.Range
   question.question = 'Sample range question'
-  question.imageURL = 'http://example.com/image.png'
+  question.media = {
+    type: MediaType.Image,
+    url: 'https://example.com/question-image.png',
+  }
   question.correct = 50
   question.duration = 30
   return question
@@ -201,29 +214,30 @@ describe('CreateZeroToOneHundredModeGameRequest', () => {
       })
     })
 
-    describe('ImageURL Field Validation', () => {
-      it('should fail if imageURL is not a valid URL', async () => {
-        gameRequest.questions[0].imageURL = 'invalid-url' // Invalid URL
+    describe('Media Field Validation', () => {
+      it('should fail if media.url is not a valid URL', async () => {
+        gameRequest.questions[0].media =
+          buildCreateCommonMediaRequest('invalid-url') // Invalid URL
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(1)
         expect(errors).toEqual([
           {
-            property: 'questions.0.imageURL',
+            property: 'questions.0.media.url',
             constraints: {
-              isUrl: 'imageURL must be a URL address',
+              isUrl: 'The media URL must be a valid URL.',
             },
           },
         ])
       })
 
-      it('should succeed if imageURL is a valid URL', async () => {
-        gameRequest.questions[0].imageURL = 'http://example.com/image.png' // Valid URL
+      it('should succeed if media.url is a valid URL', async () => {
+        gameRequest.questions[0].media = buildCreateCommonMediaRequest() // Valid URL
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
       })
 
-      it('should succeed if imageURL is not provided (optional field)', async () => {
-        gameRequest.questions[0].imageURL = undefined // imageURL is optional
+      it('should succeed if media is not provided (optional field)', async () => {
+        gameRequest.questions[0].media = undefined // media is optional
         const errors = await validateReduceNestedValidationErrors(gameRequest)
         expect(errors.length).toBe(0)
       })

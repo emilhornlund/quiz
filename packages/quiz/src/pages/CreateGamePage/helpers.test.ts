@@ -1,4 +1,4 @@
-import { GameMode, QuestionType } from '@quiz/common'
+import { GameMode, MediaType, QuestionType } from '@quiz/common'
 
 import { parseQuestionsJson } from './helpers.ts'
 
@@ -9,7 +9,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           answers: [
             { value: 'Paris', correct: true },
             { value: 'Berlin', correct: false },
@@ -27,7 +30,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           answers: [
             { value: 'Paris', correct: true },
             { value: 'Berlin', correct: false },
@@ -46,7 +52,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           answers: [
             { value: 'Paris', correct: true },
             { value: 'Berlin', correct: false },
@@ -65,7 +74,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.TrueFalse,
           question: 'The earth is flat.',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           correct: false,
           points: 2000,
           duration: 60,
@@ -80,7 +92,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.TrueFalse,
           question: 'The earth is flat.',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           correct: 'nope', // Invalid correct type
           points: 2000,
           duration: 60,
@@ -98,7 +113,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           correct: 56,
           duration: 5,
         },
@@ -112,7 +130,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           correct: 'fifty-six', // Invalid correct type
           points: 1000,
           duration: 5,
@@ -128,7 +149,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.Range,
           question: 'What is the hottest temperature recorded on earth?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           correct: 56,
           points: 1000,
           duration: 10, // Invalid duration
@@ -148,7 +172,10 @@ describe('parseQuestionsJson', () => {
         {
           type: QuestionType.MultiChoice,
           question: 'What is the capital of France?',
-          imageURL: 'https://example.com/image.png',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/image.png',
+          },
           points: 1000,
           duration: 30,
         },

@@ -2,6 +2,7 @@ import {
   CreateGameRequestDto,
   GAME_NAME_REGEX,
   GameMode,
+  MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -70,7 +71,10 @@ const CreateGamePage: FC = () => {
             {
               type: QuestionType.MultiChoice,
               question: '',
-              imageURL: '',
+              media: {
+                type: MediaType.Image,
+                url: '',
+              },
               answers: [
                 { value: '', correct: false },
                 { value: '', correct: false },
@@ -83,7 +87,10 @@ const CreateGamePage: FC = () => {
             {
               type: QuestionType.TrueFalse,
               question: '',
-              imageURL: '',
+              media: {
+                type: MediaType.Image,
+                url: '',
+              },
               correct: false,
               points: 1000,
               duration: 30,
@@ -91,7 +98,10 @@ const CreateGamePage: FC = () => {
             {
               type: QuestionType.Range,
               question: '',
-              imageURL: '',
+              media: {
+                type: MediaType.Image,
+                url: '',
+              },
               min: 0,
               max: 100,
               margin: QuestionRangeAnswerMargin.Medium,
@@ -102,7 +112,10 @@ const CreateGamePage: FC = () => {
             {
               type: QuestionType.TypeAnswer,
               question: '',
-              imageURL: '',
+              media: {
+                type: MediaType.Image,
+                url: '',
+              },
               correct: '',
               points: 1000,
               duration: 30,
@@ -121,7 +134,10 @@ const CreateGamePage: FC = () => {
             {
               type: QuestionType.Range,
               question: '',
-              imageURL: '',
+              media: {
+                type: MediaType.Image,
+                url: '',
+              },
               correct: 0,
               duration: 30,
             },

@@ -2,8 +2,10 @@ import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
+  MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
+  URL_REGEX,
 } from '@quiz/common'
 
 type ClassicModeQuestions = CreateClassicModeGameRequestDto['questions']
@@ -57,11 +59,22 @@ const assertQuestionType = (question: string) => {
   return assertType<string>(question, 'string', 'question')
 }
 
-const assertImageURLType = (imageURL?: string) => {
-  if (imageURL) {
-    return assertType<string>(imageURL, 'string', 'imageURL')
+const assertMediaType = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media: Record<string, any> | undefined,
+): // eslint-disable-next-line @typescript-eslint/no-explicit-any
+Record<string, any> | undefined => {
+  if (media) {
+    return {
+      type: assertType<string>(media.type, 'string', 'type', {
+        validate: validateMediaType,
+      }),
+      url: assertType<string>(media.url, 'string', 'url', {
+        validate: (url: string) => URL_REGEX.test(url),
+      }),
+    }
   }
-  return imageURL
+  return undefined
 }
 
 const assertQuestionMarginType = (margin: string) => {
@@ -85,6 +98,9 @@ const assertDurationType = (duration: number) => {
 const validateQuestionRangeAnswerMargin = (margin: string): boolean =>
   ([...Object.values(QuestionRangeAnswerMargin)] as string[]).includes(margin)
 
+const validateMediaType = (mediaType: string): boolean =>
+  ([...Object.values(MediaType)] as string[]).includes(mediaType)
+
 const validatePoints = (points: number): boolean =>
   [0, 1000, 2000].includes(points)
 
@@ -103,7 +119,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           return {
             type: QuestionType.MultiChoice,
             question: assertQuestionType(question.question),
-            imageURL: assertImageURLType(question.imageURL),
+            media: assertMediaType(question.media),
             answers: assertType(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               question.answers.map((answer: any) => ({
@@ -132,7 +148,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           return {
             type: QuestionType.TrueFalse,
             question: assertQuestionType(question.question),
-            imageURL: assertImageURLType(question.imageURL),
+            media: assertMediaType(question.media),
             correct: assertType<boolean>(
               question.correct,
               'boolean',
@@ -145,7 +161,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           return {
             type: QuestionType.Range,
             question: assertQuestionType(question.question),
-            imageURL: assertImageURLType(question.imageURL),
+            media: assertMediaType(question.media),
             min: assertType<number>(question.min, 'number', 'min'),
             max: assertType<number>(question.max, 'number', 'max'),
             margin: assertQuestionMarginType(question.margin),
@@ -157,7 +173,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           return {
             type: QuestionType.TypeAnswer,
             question: assertQuestionType(question.question),
-            imageURL: assertImageURLType(question.imageURL),
+            media: assertMediaType(question.media),
             correct: assertType<string>(question.correct, 'string', 'correct'),
             points: assertPointsType(question.points),
             duration: assertDurationType(question.duration),
@@ -180,7 +196,7 @@ export const parseQuestionsJson = <T extends GameMode>(
           return {
             type: QuestionType.Range,
             question: assertQuestionType(question.question),
-            imageURL: assertImageURLType(question.imageURL),
+            media: assertMediaType(question.media),
             correct: assertType<number>(question.correct, 'number', 'correct'),
             duration: assertDurationType(question.duration),
           } as ZeroToOneHundredModeQuestions[number]

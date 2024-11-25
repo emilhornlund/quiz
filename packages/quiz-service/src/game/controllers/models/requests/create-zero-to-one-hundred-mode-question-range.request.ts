@@ -5,11 +5,13 @@ import {
 
 import {
   GameQuestionDurationProperty,
-  GameQuestionImageUrlProperty,
+  GameQuestionMediaProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
   ZeroToOneHundredModeGameQuestionRangeCorrectProperty,
 } from '../../decorators'
+
+import { CreateCommonMediaRequest } from './create-common-media.request'
 
 export class CreateZeroToOneHundredModeQuestionRangeRequest
   implements CreateZeroToOneHundredModeQuestionRangeRequestDto
@@ -22,8 +24,8 @@ export class CreateZeroToOneHundredModeQuestionRangeRequest
   })
   question: string
 
-  @GameQuestionImageUrlProperty()
-  imageURL?: string
+  @GameQuestionMediaProperty()
+  media?: CreateCommonMediaRequest
 
   @ZeroToOneHundredModeGameQuestionRangeCorrectProperty()
   correct: number

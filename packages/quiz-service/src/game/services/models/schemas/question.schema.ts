@@ -1,5 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { QuestionRangeAnswerMargin, QuestionType } from '@quiz/common'
+import {
+  MediaType,
+  QuestionRangeAnswerMargin,
+  QuestionType,
+} from '@quiz/common'
+
+/**
+ * Media
+ */
+
+@Schema({ _id: false })
+export class Media {
+  @Prop({
+    enum: MediaType,
+    required: true,
+  })
+  type: MediaType
+
+  @Prop({ type: String, required: true })
+  url: string
+}
+
+export const MediaSchema = SchemaFactory.createForClass(Media)
 
 /**
  * BaseQuestion
@@ -25,8 +47,8 @@ export class BaseQuestion {
   @Prop({ type: String, required: true })
   question: string
 
-  @Prop({ type: String, required: false })
-  imageURL?: string
+  @Prop({ type: Media, required: false })
+  media?: Media
 
   @Prop({ type: Number, required: true })
   points: number

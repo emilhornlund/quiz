@@ -111,7 +111,10 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
   {
     "type": "MULTI_CHOICE",
     "question": "",
-    "imageURL": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
     "answers": [
       {
         "value": "",
@@ -136,7 +139,10 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
   {
     "type": "TRUE_FALSE",
     "question": "",
-    "imageURL": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
     "correct": false,
     "points": 1000,
     "duration": 30
@@ -144,7 +150,10 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
   {
     "type": "RANGE",
     "question": "",
-    "imageURL": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
     "min": 0,
     "max": 100,
     "margin": "MEDIUM",
@@ -155,13 +164,21 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
   {
     "type": "TYPE_ANSWER",
     "question": "",
-    "imageURL": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
     "correct": "",
     "points": 1000,
     "duration": 30
   }
 ]
             </textarea>
+          </div>
+          <div
+            class="error"
+          >
+            Invalid value for field 'url'. Value did not pass custom validation.
           </div>
         </div>
       </div>

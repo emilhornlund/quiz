@@ -5,6 +5,7 @@ import {
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
   GameParticipantType,
+  MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -753,7 +754,10 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
     {
       type: QuestionType.MultiChoice,
       question: 'What is the capital of Sweden?',
-      imageURL: 'https://example.com/question-image.png',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
+      },
       answers: [
         {
           value: 'Stockholm',
@@ -778,7 +782,10 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
     {
       type: QuestionType.TrueFalse,
       question: 'The earth is flat.',
-      imageURL: 'https://example.com/question-image.png',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
+      },
       correct: true,
       points: 1000,
       duration: 30,
@@ -786,7 +793,10 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
     {
       type: QuestionType.Range,
       question: 'Guess the temperature of the hottest day ever recorded.',
-      imageURL: 'https://example.com/question-image.png',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
+      },
       min: 0,
       max: 100,
       margin: QuestionRangeAnswerMargin.Medium,
@@ -797,7 +807,10 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
     {
       type: QuestionType.TypeAnswer,
       question: 'What is the capital of Sweden?',
-      imageURL: 'https://example.com/question-image.png',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
+      },
       correct: 'Stockholm',
       points: 1000,
       duration: 30,
@@ -813,7 +826,10 @@ const CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST: CreateZeroToOneHundredModeGa
       {
         type: QuestionType.Range,
         question: 'Guess the temperature of the hottest day ever recorded.',
-        imageURL: 'https://example.com/question-image.png',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
         correct: 50,
         duration: 30,
       },

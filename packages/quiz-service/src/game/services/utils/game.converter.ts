@@ -1,5 +1,6 @@
 import {
   CreateClassicModeGameRequestDto,
+  CreateCommonMediaRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   isCreateClassicModeQuestionMultiChoiceRequestDto,
   isCreateClassicModeQuestionSliderRequestDto,
@@ -14,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   BaseQuestion,
   Game,
+  Media,
   PartialGameModel,
   QuestionMultiChoice,
   QuestionRange,
@@ -77,7 +79,7 @@ export function buildPartialGameModel(
           return {
             type: QuestionType.MultiChoice,
             question: question.question,
-            imageURL: question.imageURL,
+            media: buildMedia(question.media),
             points: question.points,
             duration: question.duration,
             options: question.answers.map((option) => ({
@@ -93,7 +95,7 @@ export function buildPartialGameModel(
           return {
             type: QuestionType.Range,
             question: question.question,
-            imageURL: question.imageURL,
+            media: buildMedia(question.media),
             min: question.min,
             max: question.max,
             step: calculateRangeStep(question.min, question.max),
@@ -113,7 +115,7 @@ export function buildPartialGameModel(
           return {
             type: QuestionType.Range,
             question: question.question,
-            imageURL: question.imageURL,
+            media: buildMedia(question.media),
             min: 0,
             max: 100,
             step: 1,
@@ -130,7 +132,7 @@ export function buildPartialGameModel(
           return {
             type: QuestionType.TrueFalse,
             question: question.question,
-            imageURL: question.imageURL,
+            media: buildMedia(question.media),
             correct: question.correct,
             points: question.points,
             duration: question.duration,
@@ -146,7 +148,7 @@ export function buildPartialGameModel(
           return {
             type: QuestionType.TypeAnswer,
             question: question.question,
-            imageURL: question.imageURL,
+            media: buildMedia(question.media),
             correct: question.correct,
             points: question.points,
             duration: question.duration,
@@ -155,4 +157,11 @@ export function buildPartialGameModel(
       })
       .filter((obj) => !!obj),
   }
+}
+
+function buildMedia(media?: CreateCommonMediaRequestDto): Media {
+  if (!media) {
+    return undefined
+  }
+  return { type: media.type, url: media.url }
 }

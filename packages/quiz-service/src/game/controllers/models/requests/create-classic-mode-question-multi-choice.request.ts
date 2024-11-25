@@ -6,13 +6,14 @@ import {
 import {
   ClassicModeGameQuestionMultiChoiceAnswersArrayProperty,
   GameQuestionDurationProperty,
-  GameQuestionImageUrlProperty,
+  GameQuestionMediaProperty,
   GameQuestionPointsProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
 } from '../../decorators'
 
 import { CreateClassicModeQuestionMultiChoiceAnswerRequest } from './create-classic-mode-question-multi-choice-answer.request'
+import { CreateCommonMediaRequest } from './create-common-media.request'
 
 export class CreateClassicModeQuestionMultiChoiceRequest
   implements CreateClassicModeQuestionMultiChoiceRequestDto
@@ -23,8 +24,8 @@ export class CreateClassicModeQuestionMultiChoiceRequest
   @GameQuestionValueProperty({ example: 'What is the capital of Sweden?' })
   question: string
 
-  @GameQuestionImageUrlProperty()
-  imageURL?: string
+  @GameQuestionMediaProperty()
+  media?: CreateCommonMediaRequest
 
   @ClassicModeGameQuestionMultiChoiceAnswersArrayProperty()
   answers: CreateClassicModeQuestionMultiChoiceAnswerRequest[]

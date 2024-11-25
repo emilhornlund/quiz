@@ -6,11 +6,13 @@ import {
 import {
   ClassicModeGameQuestionTypeAnswerCorrectProperty,
   GameQuestionDurationProperty,
-  GameQuestionImageUrlProperty,
+  GameQuestionMediaProperty,
   GameQuestionPointsProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
 } from '../../decorators'
+
+import { CreateCommonMediaRequest } from './create-common-media.request'
 
 export class CreateClassicModeQuestionTypeAnswerRequest
   implements CreateClassicModeQuestionTypeAnswerRequestDto
@@ -23,8 +25,8 @@ export class CreateClassicModeQuestionTypeAnswerRequest
   })
   question: string
 
-  @GameQuestionImageUrlProperty()
-  imageURL?: string
+  @GameQuestionMediaProperty()
+  media?: CreateCommonMediaRequest
 
   @ClassicModeGameQuestionTypeAnswerCorrectProperty()
   correct: string

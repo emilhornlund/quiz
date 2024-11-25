@@ -9,12 +9,14 @@ import {
   ClassicModeGameQuestionRangeMaxProperty,
   ClassicModeGameQuestionRangeMinProperty,
   GameQuestionDurationProperty,
-  GameQuestionImageUrlProperty,
+  GameQuestionMediaProperty,
   GameQuestionPointsProperty,
   GameQuestionRangeAnswerMarginProperty,
   GameQuestionTypeProperty,
   GameQuestionValueProperty,
 } from '../../decorators'
+
+import { CreateCommonMediaRequest } from './create-common-media.request'
 
 export class CreateClassicModeQuestionRangeRequest
   implements CreateClassicModeQuestionSliderRequestDto
@@ -27,8 +29,8 @@ export class CreateClassicModeQuestionRangeRequest
   })
   question: string
 
-  @GameQuestionImageUrlProperty()
-  imageURL?: string
+  @GameQuestionMediaProperty()
+  media?: CreateCommonMediaRequest
 
   @ClassicModeGameQuestionRangeMinProperty()
   min: number

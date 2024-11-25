@@ -1,6 +1,12 @@
 import { GameMode } from './game-mode.enum'
+import { MediaType } from './media-type.enum'
 import { QuestionRangeAnswerMargin } from './question-range-answer-margin.enum'
 import { QuestionType } from './question-type.enum'
+
+export interface CreateCommonMediaRequestDto {
+  type: MediaType
+  url: string
+}
 
 export interface CreateClassicModeQuestionMultiChoiceAnswerRequestDto {
   value: string
@@ -10,7 +16,7 @@ export interface CreateClassicModeQuestionMultiChoiceAnswerRequestDto {
 export interface CreateClassicModeQuestionMultiChoiceRequestDto {
   type: QuestionType.MultiChoice
   question: string
-  imageURL?: string
+  media?: CreateCommonMediaRequestDto
   answers: CreateClassicModeQuestionMultiChoiceAnswerRequestDto[]
   points: number
   duration: number
@@ -19,7 +25,7 @@ export interface CreateClassicModeQuestionMultiChoiceRequestDto {
 export interface CreateClassicModeQuestionTrueFalseRequestDto {
   type: QuestionType.TrueFalse
   question: string
-  imageURL?: string
+  media?: CreateCommonMediaRequestDto
   correct: boolean
   points: number
   duration: number
@@ -28,7 +34,7 @@ export interface CreateClassicModeQuestionTrueFalseRequestDto {
 export interface CreateClassicModeQuestionSliderRequestDto {
   type: QuestionType.Range
   question: string
-  imageURL?: string
+  media?: CreateCommonMediaRequestDto
   min: number
   max: number
   margin: QuestionRangeAnswerMargin
@@ -40,7 +46,7 @@ export interface CreateClassicModeQuestionSliderRequestDto {
 export interface CreateZeroToOneHundredModeQuestionRangeRequestDto {
   type: QuestionType.Range
   question: string
-  imageURL?: string
+  media?: CreateCommonMediaRequestDto
   correct: number
   duration: number
 }
@@ -48,7 +54,7 @@ export interface CreateZeroToOneHundredModeQuestionRangeRequestDto {
 export interface CreateClassicModeQuestionTypeAnswerRequestDto {
   type: QuestionType.TypeAnswer
   question: string
-  imageURL?: string
+  media?: CreateCommonMediaRequestDto
   correct: string
   points: number
   duration: number

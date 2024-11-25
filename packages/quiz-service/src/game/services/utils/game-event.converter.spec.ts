@@ -2,6 +2,7 @@ import {
   GameEventType,
   GameMode,
   GameResultHostEvent,
+  MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -32,7 +33,10 @@ describe('Game Event Converter', () => {
               {
                 type: QuestionType.MultiChoice,
                 question: 'What is the capital of Sweden?',
-                imageURL: 'https://example.com/question-image.png',
+                media: {
+                  type: MediaType.Image,
+                  url: 'https://example.com/question-image.png',
+                },
                 options: [
                   {
                     value: 'Stockholm',
@@ -122,7 +126,10 @@ describe('Game Event Converter', () => {
                 type: QuestionType.Range,
                 question:
                   'Guess the temperature of the hottest day ever recorded.',
-                imageURL: 'https://example.com/question-image.png',
+                media: {
+                  type: MediaType.Image,
+                  url: 'https://example.com/question-image.png',
+                },
                 min: 0,
                 max: 100,
                 margin: QuestionRangeAnswerMargin.Medium,
@@ -198,7 +205,10 @@ describe('Game Event Converter', () => {
               {
                 type: QuestionType.TrueFalse,
                 question: 'The earth is flat.',
-                imageURL: 'https://example.com/question-image.png',
+                media: {
+                  type: MediaType.Image,
+                  url: 'https://example.com/question-image.png',
+                },
                 correct: false,
                 points: 1000,
                 duration: 30,
@@ -270,7 +280,10 @@ describe('Game Event Converter', () => {
               {
                 type: QuestionType.TypeAnswer,
                 question: 'What is the capital of Sweden?',
-                imageURL: 'https://example.com/question-image.png',
+                media: {
+                  type: MediaType.Image,
+                  url: 'https://example.com/question-image.png',
+                },
                 correct: 'Stockholm',
                 points: 1000,
                 duration: 30,
