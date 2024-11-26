@@ -430,7 +430,7 @@ export function buildQuestionResultTask(
         ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
         : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
     )
-    .map((item, index) => ({ ...item, position: index }))
+    .map((item, index) => ({ ...item, position: index + 1 }))
 
   return {
     _id: uuidv4(),
