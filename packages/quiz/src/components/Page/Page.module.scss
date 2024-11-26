@@ -6,6 +6,8 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  max-height: 100dvh;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
   background: $blue-1;
   background: linear-gradient(180deg, $blue-1 25%, 75%, $blue-2);
   row-gap: $layout-gutter;
