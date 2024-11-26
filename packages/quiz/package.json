@@ -27,6 +27,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-player": "^2.16.0",
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.2",
     "react-toastify": "^10.0.6"

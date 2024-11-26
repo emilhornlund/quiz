@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
+<div>
+  <div
+    class="playerWrapper"
+  >
+    <div
+      style="width: 100%; height: 100%;"
+    />
+  </div>
+</div>
+`;

@@ -119,6 +119,10 @@ export const QuestionSlider = {
       question: {
         type: QuestionType.Range,
         question: "What percentage of the earth's surface is covered by water?",
+        media: {
+          type: MediaType.Video,
+          url: 'https://www.youtube.com/watch?v=LXb3EKWsInQ',
+        },
         min: 0,
         max: 100,
         step: 1,
