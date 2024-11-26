@@ -1,5 +1,5 @@
 import { CountdownEvent } from '@quiz/common/src'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import styles from './ProgressBar.module.scss'
 
@@ -7,47 +7,91 @@ export interface ProgressBarProps {
   countdown: CountdownEvent
 }
 
-function getClientToServerOffset(serverTime: string) {
-  const serverDate = new Date(serverTime)
-  const initialClientDate = new Date()
-  return serverDate.getTime() - initialClientDate.getTime()
+const calculateClientToServerOffset = (
+  serverTime: string,
+  clientReceiveTime: number,
+): number => {
+  const serverTimestamp = new Date(serverTime).getTime()
+  return serverTimestamp - clientReceiveTime
 }
 
-function calculateTimeRemaining(
-  expiryTime: string,
-  clientToServerOffset: number,
-) {
-  const expiryDate = new Date(expiryTime)
-  const currentClientDate = new Date()
-  const adjustedClientTime = currentClientDate.getTime() + clientToServerOffset
-  return expiryDate.getTime() - adjustedClientTime
+const calculateRemainingTime = (expiryTime: number, offset: number): number => {
+  const adjustedClientTime = Date.now() + offset
+  return expiryTime - adjustedClientTime
 }
 
 const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
   const [progress, setProgress] = useState<number>(1)
 
+  const clientToServerOffsetRef = useRef<number>(0)
+  const expiryTimeRef = useRef<number>(0)
+  const totalDurationRef = useRef<number>(0)
+  const isFirstEventRef = useRef<boolean>(true)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
-    const clientToServerOffset = getClientToServerOffset(countdown.serverTime)
+    const clientReceiveTime = Date.now()
+    const serverTimeDate = new Date(countdown.serverTime)
+    const expiryTimeDate = new Date(countdown.expiryTime)
 
-    const totalDuration =
-      new Date(countdown.expiryTime).getTime() -
-      new Date(countdown.serverTime).getTime()
+    if (isNaN(serverTimeDate.getTime()) || isNaN(expiryTimeDate.getTime())) {
+      setProgress(0)
+      return
+    }
 
-    const interval = setInterval(() => {
-      const remainingTime = calculateTimeRemaining(
-        countdown.expiryTime,
-        clientToServerOffset,
+    const serverTime = serverTimeDate.getTime()
+    const expiryTime = expiryTimeDate.getTime()
+
+    clientToServerOffsetRef.current = calculateClientToServerOffset(
+      countdown.serverTime,
+      clientReceiveTime,
+    )
+
+    expiryTimeRef.current = expiryTime
+
+    if (isFirstEventRef.current) {
+      totalDurationRef.current = expiryTime - serverTime
+      isFirstEventRef.current = false
+    }
+  }, [countdown])
+
+  useEffect(() => {
+    if (intervalRef.current !== null) {
+      return
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (expiryTimeRef.current === 0 || totalDurationRef.current === 0) {
+        setProgress(0)
+        return
+      }
+
+      const remainingTime = calculateRemainingTime(
+        expiryTimeRef.current,
+        clientToServerOffsetRef.current,
       )
-      const newProgress = Math.max(remainingTime / totalDuration, 0)
+      const newProgress =
+        totalDurationRef.current > 0
+          ? Math.max(remainingTime / totalDurationRef.current, 0)
+          : 0
       setProgress(newProgress)
 
       if (remainingTime <= 0) {
-        clearInterval(interval)
+        setProgress(0)
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
+        }
       }
     }, 100)
 
-    return () => clearInterval(interval)
-  }, [countdown])
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [])
 
   return (
     <div className={styles.progressBar}>
