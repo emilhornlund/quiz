@@ -1,92 +1,26 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
-.icon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: pxToRem(2px);
-  border: pxToRem(2px) solid transparent;
-  border-radius: 50%;
-  outline-offset: pxToRem(2px);
-  outline: pxToRem(2px) solid $white;
-  background-color: $white;
-
-  &.correct {
-    background-color: $green-2;
-  }
-
-  &.incorrect {
-    background-color: $red-2;
-  }
-
-  @mixin icon-dimensions($size) {
-    width: $size;
-    height: $size;
-
-    svg {
-      width: calc($size / 2);
-      height: calc($size / 2);
-    }
-  }
-
-  @include mobile {
-    @include icon-dimensions(pxToRem(76px));
-  }
-
-  @include tablet {
-    @include icon-dimensions(pxToRem(96px));
-  }
-
-  @include desktop {
-    @include icon-dimensions(pxToRem(116px));
-  }
-}
-
 .streak {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  column-gap: $layout-gutter;
   width: 100%;
 
   @include mobile {
+    column-gap: $layout-gutter * 0.5;
     @include fontSize($mobile-text-font-size);
   }
 
   @include tablet {
+    column-gap: $layout-gutter * 0.75;
     @include fontSize($tablet-text-font-size);
   }
 
   @include desktop {
+    column-gap: $layout-gutter;
     @include fontSize($desktop-text-font-size);
-  }
-
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    height: 100%;
-    border: pxToRem(2px) solid $white;
-    border-radius: 50%;
-    background-color: $orange-2;
-    color: $white;
-    font-weight: bold;
-
-    @include mobile {
-      @include fontSize($mobile-text-font-size);
-    }
-
-    @include tablet {
-      @include fontSize($tablet-text-font-size);
-    }
-
-    @include desktop {
-      @include fontSize($desktop-text-font-size);
-    }
   }
 }
 

@@ -1,14 +1,29 @@
 import { GamePodiumPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { NicknameChip, Page, Typography } from '../../components'
-import { classNames } from '../../utils/helpers.ts'
+import {
+  Badge,
+  BadgeBackgroundColor,
+  NicknameChip,
+  Page,
+  Typography,
+} from '../../components'
 
 import { getPodiumPositionMessage } from './messages.ts'
 import styles from './PlayerPodiumState.module.scss'
 
-const getPositionClassName = (position: number): string | undefined =>
-  [styles.gold, styles.silver, styles.bronze][position - 1]
+function getBadgeBackgroundColor(position: number): BadgeBackgroundColor {
+  switch (Math.max(position, 1)) {
+    case 1:
+      return 'gold'
+    case 2:
+      return 'silver'
+    case 3:
+      return 'bronze'
+    default:
+      return 'white'
+  }
+}
 
 export interface PlayerPodiumStateProps {
   event: GamePodiumPlayerEvent
@@ -33,13 +48,9 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
         {name}
       </Typography>
       <div className={styles.content}>
-        <div
-          className={classNames(
-            styles.position,
-            getPositionClassName(position),
-          )}>
+        <Badge size="large" backgroundColor={getBadgeBackgroundColor(position)}>
           {position}
-        </div>
+        </Badge>
         <NicknameChip value={nickname} />
         <Typography variant="subtitle" size="small">
           {total}

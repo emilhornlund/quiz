@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
+import { Badge } from '../index.ts'
 
 import styles from './Leaderboard.module.scss'
 
@@ -43,9 +44,9 @@ const Leaderboard: FC<LeaderboardProps> = ({
           <div className={styles.row}>
             <span>{nickname}</span>
             {!!streaks && streaks > 1 && (
-              <div className={styles.streaks}>
-                <span>{streaks}</span>
-              </div>
+              <Badge size="small" backgroundColor="orange">
+                {streaks}
+              </Badge>
             )}
           </div>
         </div>

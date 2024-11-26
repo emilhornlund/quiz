@@ -1,3 +1,4 @@
+export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
 export type { ButtonProps } from './Button'
 export type { HostGameFooterProps } from './HostGameFooter'
 export type { LeaderboardProps } from './Leaderboard'
@@ -18,6 +19,7 @@ export {
   IconButtonArrowLeft,
   IconButtonArrowRight,
 } from './Button'
+export { default as Badge } from './Badge'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'
 export { default as LeaveButton } from './LeaveButton'

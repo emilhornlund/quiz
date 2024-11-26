@@ -1,0 +1,100 @@
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 50%;
+  outline-style: solid;
+  font-weight: bold;
+  text-align: center;
+
+  @mixin badge-size($size, $border-size) {
+    margin: pxToRem($border-size);
+    border-width: pxToRem($border-size);
+    outline-width: pxToRem($border-size);
+    outline-offset: pxToRem($border-size);
+    width: pxToRem($size);
+    height: pxToRem($size);
+  }
+
+  &.small {
+    @include mobile {
+      @include badge-size(20px, 1px);
+      @include fontSize($mobile-text-font-size);
+    }
+
+    @include tablet {
+      @include badge-size(30px, 2px);
+      @include fontSize($tablet-text-font-size);
+    }
+
+    @include desktop {
+      @include badge-size(40px, 3px);
+      @include fontSize($desktop-text-font-size);
+    }
+  }
+
+  &.large {
+    @include mobile {
+      @include badge-size(100px, 2px);
+      @include fontSize(68px);
+    }
+
+    @include tablet {
+      @include badge-size(120px, 3px);
+      @include fontSize(78px);
+    }
+
+    @include desktop {
+      @include badge-size(140px, 4px);
+      @include fontSize(88px);
+    }
+  }
+
+  &.green {
+    outline-color: $white;
+    background-color: $green-2;
+    color: $white;
+  }
+
+  &.red {
+    outline-color: $white;
+    background-color: $red-2;
+    color: $white;
+  }
+
+  &.orange {
+    outline-color: $white;
+    background-color: $orange-2;
+    color: $white;
+  }
+
+  &.gold {
+    outline-color: $white;
+    background-color: $gold;
+    color: $white;
+  }
+
+  &.silver {
+    outline-color: $white;
+    background-color: $silver;
+    color: $white;
+  }
+
+  &.bronze {
+    outline-color: $white;
+    background-color: $bronze;
+    color: $white;
+  }
+
+  &.white {
+    outline-color: $white;
+    background-color: $white;
+    color: $black-1-70;
+  }
+}
