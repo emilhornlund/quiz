@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { PlayerModule } from '../player'
+
 import { ClientService } from './services'
 import { Client, ClientSchema } from './services/models/schemas'
 
+/**
+ * Module for managing client-related operations.
+ *
+ * This module imports the PlayerModule to handle the association between clients and players.
+ * It also provides the ClientService and defines the schema for the Client collection.
+ */
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -12,6 +20,7 @@ import { Client, ClientSchema } from './services/models/schemas'
         schema: ClientSchema,
       },
     ]),
+    PlayerModule,
   ],
   providers: [ClientService],
   exports: [ClientService],

@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
+
+import { Player } from '../../../../player/services/models/schemas'
 
 /**
  * Mongoose schema for the Client collection.
@@ -19,6 +22,14 @@ export class Client {
    */
   @Prop({ type: String, required: true })
   clientIdHash: string
+
+  /**
+   * The player document associated with the client.
+   *
+   * Stores a reference to a Player document to link clients with their player profiles.
+   */
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Player' })
+  player: Player
 
   /**
    * The date and time when the client was created.
