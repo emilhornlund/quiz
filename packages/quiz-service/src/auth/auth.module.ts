@@ -7,7 +7,9 @@ import { JwtModule } from '@nestjs/jwt'
 import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
+import { ClientModule } from '../client'
 
+import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
 import { GameClientRolesGuard } from './guards/game-client-roles.guard'
 import { AuthService } from './services'
@@ -44,7 +46,9 @@ const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
         }
       },
     }),
+    ClientModule,
   ],
+  controllers: [AuthController],
   providers: [
     AuthService,
     {
