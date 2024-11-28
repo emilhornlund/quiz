@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { PlayerService } from './services'
@@ -19,7 +19,7 @@ import { Player, PlayerSchema } from './services/models/schemas'
       },
     ]),
   ],
-  providers: [PlayerService],
+  providers: [Logger, PlayerService],
   exports: [PlayerService],
 })
 export class PlayerModule {}

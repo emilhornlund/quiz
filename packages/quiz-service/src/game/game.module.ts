@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
@@ -33,6 +33,7 @@ import { Game, GameSchema } from './services/models/schemas'
   ],
   controllers: [GameController],
   providers: [
+    Logger,
     GameRepository,
     GameService,
     GameEventPublisher,

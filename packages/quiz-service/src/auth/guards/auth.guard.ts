@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
-import { IS_PUBLIC_KEY } from '../decorators'
+import { IS_PUBLIC_KEY, JwtUserDetails } from '../decorators'
 import { AuthService } from '../services'
 
 /**
@@ -51,6 +51,7 @@ export class AuthGuard implements CanActivate {
     try {
       const { sub, gameID, role } =
         await this.authService.verifyGameToken(token)
+      request['jwtUserDetails'] = { clientIdHash: sub } as JwtUserDetails
       request['gameID'] = gameID
       request['clientId'] = sub
       request['clientRole'] = role

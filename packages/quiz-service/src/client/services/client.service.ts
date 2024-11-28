@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcrypt'
 
 import { PlayerService } from '../../player/services'
+import { ClientByIdHashNotFoundException } from '../exceptions'
 
 import { Client, ClientModel } from './models/schemas'
 
@@ -16,10 +17,12 @@ export class ClientService {
    *
    * @param {ClientModel} clientModel - The Mongoose model for the Client schema.
    * @param {PlayerService} playerService - Service to handle player-related operations such as creating and managing players associated with a client.
+   * @param {Logger} logger - Logger instance for logging operations.
    */
   constructor(
     @InjectModel(Client.name) private clientModel: ClientModel,
     private playerService: PlayerService,
+    private readonly logger: Logger = new Logger(ClientService.name),
   ) {}
 
   /**
@@ -30,7 +33,7 @@ export class ClientService {
    * @returns {Promise<Client>} The existing or newly created client document.
    */
   public async findOrCreateClient(clientId: string): Promise<Client> {
-    const client = await this.clientModel.findById(clientId)
+    let client = await this.clientModel.findById(clientId)
 
     if (!client) {
       const salt = await bcrypt.genSalt()
@@ -40,13 +43,39 @@ export class ClientService {
 
       const created = new Date()
 
-      return new this.clientModel({
+      client = await new this.clientModel({
         _id: clientId,
         clientIdHash,
         player,
         created,
         modified: created,
       }).save()
+
+      this.logger.log(`Created client with id '${client._id}.'`)
+    }
+
+    return client
+  }
+
+  /**
+   * Finds a client by their hashed ID or throws an exception if not found.
+   *
+   * @param {string} clientIdHash - The hashed ID of the client.
+   *
+   * @returns {Promise<Client>} The client document.
+   *
+   * @throws {ClientByIdHashNotFoundException} If the client is not found.
+   */
+  public async findByClientIdHashOrThrow(
+    clientIdHash: string,
+  ): Promise<Client> {
+    const client = await this.clientModel
+      .findOne({ clientIdHash })
+      .populate('player')
+
+    if (!client) {
+      this.logger.warn(`Client was not found by hashed id '${clientIdHash}.`)
+      throw new ClientByIdHashNotFoundException(clientIdHash)
     }
 
     return client

@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
+import { Document, Model } from 'mongoose'
 
 /**
  * Mongoose schema for the Player collection.
  */
 @Schema({ collection: 'players' })
-export class Player {
+export class Player extends Document {
   /**
    * The unique identifier of the player.
    * Acts as the primary key in the database.
