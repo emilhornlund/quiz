@@ -7,7 +7,9 @@ import {
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
-import { IS_PUBLIC_KEY, JwtUserDetails } from '../decorators'
+import { ClientService } from '../../client/services'
+import { IS_PUBLIC_KEY } from '../decorators'
+import { IS_LEGACY_AUTH_KEY } from '../decorators/legacy-auth.decorator'
 import { AuthService } from '../services'
 
 /**
@@ -19,6 +21,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private authService: AuthService,
+    private clientService: ClientService,
   ) {}
 
   /**
@@ -51,10 +54,20 @@ export class AuthGuard implements CanActivate {
     try {
       const { sub, gameID, role } =
         await this.authService.verifyGameToken(token)
-      request['jwtUserDetails'] = { clientIdHash: sub } as JwtUserDetails
-      request['gameID'] = gameID
-      request['clientId'] = sub
-      request['clientRole'] = role
+
+      const isLegacyAuth = this.reflector.getAllAndOverride<boolean>(
+        IS_LEGACY_AUTH_KEY,
+        [context.getHandler(), context.getClass()],
+      )
+
+      if (isLegacyAuth) {
+        request['gameID'] = gameID
+        request['clientId'] = sub
+        request['clientRole'] = role
+      } else {
+        request['client'] =
+          await this.clientService.findByClientIdHashOrThrow(sub)
+      }
     } catch {
       throw new UnauthorizedException()
     }

@@ -35,6 +35,7 @@ import {
   GameClientRoles,
   Public,
 } from '../../auth/decorators'
+import { LegacyAuth } from '../../auth/decorators/legacy-auth.decorator'
 import {
   ParseCreateGameRequestPipe,
   ParseGamePINPipe,
@@ -57,6 +58,8 @@ import { FindGameResponse, GameAuthResponse } from './models/response'
 /**
  * GameController handles incoming HTTP requests related to game operations,
  * such as creating games and subscribing to game events.
+ *
+ * - Uses the `LegacyAuth` decorator to indicate legacy authentication logic is used.
  */
 @ApiExtraModels(
   CreateClassicModeGameRequest,
@@ -66,6 +69,7 @@ import { FindGameResponse, GameAuthResponse } from './models/response'
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
 )
+@LegacyAuth()
 @ApiTags('game')
 @Controller('games')
 export class GameController {
