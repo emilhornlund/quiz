@@ -82,3 +82,28 @@ export interface QuizResponseDto {
    */
   updated: Date
 }
+
+/**
+ * Represents a paginated response for quizzes.
+ */
+export interface PaginatedQuizResponseDto {
+  /**
+   * The list of quiz results for the current page.
+   */
+  results: QuizResponseDto[]
+
+  /**
+   * The total number of quizzes available.
+   */
+  total: number
+
+  /**
+   * The maximum number of quizzes returned per page.
+   */
+  limit: number
+
+  /**
+   * The offset from the start of the total quizzes.
+   */
+  offset: number
+}

@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { QuizRequestDto, QuizResponseDto } from '@quiz/common'
+import {
+  PaginatedQuizResponseDto,
+  QuizRequestDto,
+  QuizResponseDto,
+} from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Player } from '../../player/services/models/schemas'
@@ -71,6 +75,36 @@ export class QuizService {
   public async findOwnerByQuizId(quizId: string): Promise<Player> {
     const quiz = await this.findQuizDocumentByIdOrThrow(quizId)
     return quiz.owner
+  }
+
+  /**
+   * Retrieves quizzes owned by a specific owner with pagination.
+   *
+   * @param {string} ownerId - The ID of the owner whose quizzes are to be retrieved.
+   * @param {number} limit - The maximum number of quizzes to retrieve per page.
+   * @param {number} offset - The number of quizzes to skip before starting retrieval.
+   *
+   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the quizzes and metadata.
+   */
+  public async findQuizzesByOwnerId(
+    ownerId: string,
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<PaginatedQuizResponseDto> {
+    const total = await this.quizModel.countDocuments({ owner: ownerId })
+
+    const quizzes = await this.quizModel
+      .find({ owner: ownerId })
+      .skip(offset)
+      .limit(limit)
+      .populate('owner')
+
+    return {
+      results: quizzes.map(QuizService.buildQuizResponseDto),
+      total,
+      limit,
+      offset,
+    }
   }
 
   /**
