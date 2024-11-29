@@ -1,3 +1,9 @@
+export const QUIZ_NAME_MIN_LENGTH = 3
+export const QUIZ_NAME_MAX_LENGTH = 95
+export const QUIZ_NAME_REGEX = /^[a-zA-Z0-9_\-!?@#$%&|,.*\\/ ]{3,95}$/
+
+export const QUIZ_DESCRIPTION_MAX_LENGTH = 500
+
 export const GAME_NAME_REGEX = /^[a-zA-Z0-9_ ]{3,25}$/
 export const GAME_PIN_REGEX = /^[1-9]\d{5}$/
 export const PLAYER_NICKNAME_REGEX = /^[a-zA-Z0-9_]{2,20}$/
