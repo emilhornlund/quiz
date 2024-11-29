@@ -12,6 +12,7 @@ import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
 import { GameModule } from '../game'
 import { PlayerModule } from '../player'
+import { QuizModule } from '../quiz'
 
 import { EnvironmentVariables } from './config'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
@@ -113,6 +114,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     ClientModule,
     GameModule,
     PlayerModule,
+    QuizModule,
   ],
   controllers: [],
   providers: [
