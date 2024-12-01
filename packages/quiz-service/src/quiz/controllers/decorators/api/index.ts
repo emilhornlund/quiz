@@ -1,5 +1,6 @@
 export * from './api-question-created-property.decorator'
 export * from './api-question-duration-property.decorator'
+export * from './api-question-id-param.decorator'
 export * from './api-question-id-property.decorator'
 export * from './api-question-media-property.decorator'
 export * from './api-question-media-type-property.decorator'
