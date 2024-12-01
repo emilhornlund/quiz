@@ -31,8 +31,8 @@ import { QuizRequest, QuizResponse } from './models'
 /**
  * Controller for managing quiz-related operations.
  */
-@ApiTags('quiz')
 @ApiBearerAuth()
+@ApiTags('quiz')
 @Controller('quizzes')
 export class QuizController {
   /**

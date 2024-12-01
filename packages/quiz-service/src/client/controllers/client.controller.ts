@@ -8,6 +8,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common'
 import {
+  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -28,6 +29,7 @@ import { AuthorizedClientParam } from './decorators/auth'
 /**
  * Controller for managing client-related operations.
  */
+@ApiBearerAuth()
 @ApiTags('client')
 @Controller('client')
 export class ClientController {
