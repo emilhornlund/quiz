@@ -3,6 +3,7 @@ import {
   CreateGameRequestDto,
   FindGameResponseDto,
   GameAuthResponseDto,
+  PaginatedQuizResponseDto,
   PlayerResponseDto,
   QuestionType,
   SubmitQuestionAnswerRequestDto,
@@ -35,7 +36,7 @@ export class ApiError extends Error {
  * Provides utility functions to interact with the Quiz Service API.
  */
 export const useQuizService = () => {
-  const { authenticate } = useClientContext()
+  const { token, authenticate } = useClientContext()
 
   /**
    * Resolves a relative API path to an absolute URL based on the base service URL.
@@ -166,6 +167,14 @@ export const useQuizService = () => {
   const getCurrentPlayer = (token: string): Promise<PlayerResponseDto> =>
     apiGet<PlayerResponseDto>('/client/player', token)
 
+  /**
+   * Retrieves current player's quizzes.
+   *
+   * @returns A promise resolving to the player's quizzes'.
+   */
+  const getCurrentPlayerQuizzes = (): Promise<PaginatedQuizResponseDto> =>
+    apiGet<PaginatedQuizResponseDto>('/client/quizzes', token)
+
   const createGame = (
     request: CreateGameRequestDto,
   ): Promise<GameAuthResponseDto> =>
@@ -211,6 +220,7 @@ export const useQuizService = () => {
   return {
     authenticateClient,
     getCurrentPlayer,
+    getCurrentPlayerQuizzes,
     createGame,
     findGame,
     joinGame,

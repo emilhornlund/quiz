@@ -1,0 +1,98 @@
+@import '../../../../styles/colors';
+@import '../../../../styles/helpers';
+
+.quizSubpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include mobile {
+    row-gap: $mobile-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    row-gap: $tablet-layout-gutter;
+    width: $mobile-width;
+  }
+
+  @include desktop {
+    row-gap: $desktop-layout-gutter;
+    width: $mobile-width;
+  }
+
+  .quizTable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @include mobile {
+      row-gap: $mobile-layout-gutter;
+    }
+
+    @include tablet {
+      row-gap: $tablet-layout-gutter;
+    }
+
+    @include desktop {
+      row-gap: $desktop-layout-gutter;
+    }
+
+    .quizItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: $white;
+      color: $gray-4;
+
+      img.thumbnail {
+        width: 89px;
+        height: 89px;
+        filter: invert(30%) sepia(10%) saturate(910%) hue-rotate(169deg) brightness(95%) contrast(84%);
+      }
+
+      .title {
+        display: flex;
+        flex: 1;
+        font-weight: bold;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: row;
+      }
+
+      @include mobile {
+        column-gap: $mobile-layout-gutter;
+        border-radius: $layout-gutter * 0.5;
+
+        .title {
+          @include fontSize($mobile-text-font-size)
+        }
+      }
+
+      @include tablet {
+        column-gap: $tablet-layout-gutter;
+        border-radius: $layout-gutter * 0.75;
+
+        .title {
+          @include fontSize($tablet-text-font-size)
+        }
+      }
+
+      @include desktop {
+        column-gap: $desktop-layout-gutter;
+        border-radius: $layout-gutter;
+        padding: $layout-gutter $layout-gutter * 1.5;
+
+        .title {
+          @include fontSize($desktop-text-font-size)
+        }
+
+        .actions {
+          column-gap: $layout-gutter * 1.5;
+        }
+      }
+    }
+  }
+}

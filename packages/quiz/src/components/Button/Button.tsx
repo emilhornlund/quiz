@@ -16,6 +16,7 @@ export interface ButtonProps {
   disabled?: boolean
   icon?: IconDefinition
   iconPosition?: 'leading' | 'trailing'
+  iconColor?: string
   onClick?: () => void
 }
 
@@ -29,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   icon,
   iconPosition = 'leading',
+  iconColor,
   onClick,
 }) => {
   return (
@@ -49,9 +51,13 @@ const Button: React.FC<ButtonProps> = ({
           kind === 'plain' ? styles.plain : undefined,
         )}
         data-testid={`test-${id}-button`}>
-        {icon && iconPosition === 'leading' && <FontAwesomeIcon icon={icon} />}
+        {icon && iconPosition === 'leading' && (
+          <FontAwesomeIcon icon={icon} color={iconColor} />
+        )}
         {!!value && <span>{value}</span>}
-        {icon && iconPosition === 'trailing' && <FontAwesomeIcon icon={icon} />}
+        {icon && iconPosition === 'trailing' && (
+          <FontAwesomeIcon icon={icon} color={iconColor} />
+        )}
       </button>
     </div>
   )
