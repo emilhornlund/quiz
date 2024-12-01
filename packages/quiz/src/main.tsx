@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
+import { ClientContextProvider } from './context/client'
 import {
   CreateGamePage,
   ErrorPage,
@@ -45,7 +46,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ClientContextProvider>
+      <RouterProvider router={router} />
+    </ClientContextProvider>
     <ToastContainer
       position="top-right"
       autoClose={5000}
