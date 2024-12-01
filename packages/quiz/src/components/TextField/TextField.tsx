@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
-import { isValidNumber } from '../../utils/helpers.ts'
+import { classNames, isValidNumber } from '../../utils/helpers.ts'
 
 import styles from './TextField.module.scss'
 
@@ -8,6 +8,7 @@ export interface TextFieldProps {
   id: string
   name?: string
   type: 'text' | 'number'
+  size?: 'normal' | 'small'
   placeholder?: string
   value?: string | number
   min?: number
@@ -23,6 +24,7 @@ const TextField: React.FC<TextFieldProps> = ({
   id,
   name,
   type,
+  size = 'normal',
   placeholder,
   value,
   min,
@@ -73,7 +75,11 @@ const TextField: React.FC<TextFieldProps> = ({
   }
 
   return (
-    <div className={styles.main}>
+    <div
+      className={classNames(
+        styles.main,
+        size === 'small' ? styles.small : undefined,
+      )}>
       <input
         id={id}
         name={name ?? id}

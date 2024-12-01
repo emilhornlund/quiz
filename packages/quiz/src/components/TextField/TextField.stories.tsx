@@ -36,3 +36,12 @@ export const Disabled = {
     disabled: true,
   },
 } satisfies Story
+
+export const Small = {
+  args: {
+    id: 'my-small-text-field',
+    type: 'text',
+    size: 'small',
+    placeholder: 'Placeholder',
+  },
+} satisfies Story

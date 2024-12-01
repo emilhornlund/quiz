@@ -29,14 +29,33 @@ $outline-offset: pxToRem(2px);
   @include mobile {
     height: pxToRem(42px);
 
+    &.small {
+      height: pxToRem(32px);
+
+      input {
+        padding: 0 $layout-gutter * 0.5;
+        @include fontSize(14px);
+      }
+    }
+
     input {
       padding: 0 $layout-gutter * 0.8;
       border-radius: $layout-gutter * 0.5;
       @include fontSize(16px);
     }
   }
+
   @include tablet {
     height: pxToRem(44px);
+
+    &.small {
+      height: pxToRem(34px);
+
+      input {
+        padding: 0 $layout-gutter * 0.6;
+        @include fontSize(15px);
+      }
+    }
 
     input {
       padding: 0 $layout-gutter * 0.9;
@@ -44,8 +63,18 @@ $outline-offset: pxToRem(2px);
       @include fontSize(17px);
     }
   }
+
   @include desktop {
     height: pxToRem(46px);
+
+    &.small {
+      height: pxToRem(36px);
+
+      input {
+        padding: 0 $layout-gutter * 0.7;
+        @include fontSize(16px);
+      }
+    }
 
     input {
       padding: 0 $layout-gutter;
