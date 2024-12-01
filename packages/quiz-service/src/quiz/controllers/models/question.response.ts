@@ -1,9 +1,6 @@
 import {
-  MediaType,
   QuestionCommonDto,
-  QuestionMediaDto,
   QuestionMultiChoiceDto,
-  QuestionOptionDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -16,9 +13,6 @@ import {
   ApiQuestionDurationProperty,
   ApiQuestionIdProperty,
   ApiQuestionMediaProperty,
-  ApiQuestionMediaTypeProperty,
-  ApiQuestionMediaUrlProperty,
-  ApiQuestionOptionCorrectProperty,
   ApiQuestionOptionsProperty,
   ApiQuestionPointsProperty,
   ApiQuestionProperty,
@@ -29,30 +23,14 @@ import {
   ApiQuestionTrueFalseCorrectProperty,
   ApiQuestionTypeProperty,
   ApiQuestionUpdatedProperty,
-  QuestionOptionValueProperty,
 } from '../decorators/api'
 
-/**
- * Represents media associated with a question, such as images or videos.
- */
-export class QuestionMedia implements QuestionMediaDto {
-  /**
-   * The type of media (e.g., image, audio, video).
-   */
-  @ApiQuestionMediaTypeProperty()
-  type: MediaType
-
-  /**
-   * The URL of the media.
-   */
-  @ApiQuestionMediaUrlProperty()
-  url: string
-}
+import { QuestionMedia, QuestionOption } from './question.request'
 
 /**
- * Common properties shared across all question types.
+ * Common properties shared across all question response types.
  */
-export class QuestionCommon implements QuestionCommonDto {
+export class QuestionCommonResponse implements QuestionCommonDto {
   /**
    * The unique identifier for the question.
    */
@@ -97,27 +75,10 @@ export class QuestionCommon implements QuestionCommonDto {
 }
 
 /**
- * Represents an option for multiple-choice or type-answer questions.
- */
-export class QuestionOptionRequest implements QuestionOptionDto {
-  /**
-   * The text or value of the option.
-   */
-  @QuestionOptionValueProperty()
-  value: string
-
-  /**
-   * Indicates whether this option is correct.
-   */
-  @ApiQuestionOptionCorrectProperty()
-  correct: boolean
-}
-
-/**
  * Represents the response for a multiple-choice question.
  */
 export class QuestionMultiChoiceResponse
-  extends QuestionCommon
+  extends QuestionCommonResponse
   implements QuestionMultiChoiceDto
 {
   /**
@@ -130,21 +91,14 @@ export class QuestionMultiChoiceResponse
    * The list of options for the question.
    */
   @ApiQuestionOptionsProperty()
-  options: QuestionOptionRequest[]
+  options: QuestionOption[]
 }
-
-/**
- * Represents a request to create or update a multiple-choice question.
- */
-export class QuestionMultiChoiceRequest
-  extends QuestionMultiChoiceResponse
-  implements Omit<QuestionMultiChoiceDto, 'id' | 'created' | 'updated'> {}
 
 /**
  * Represents the response for a range-based question.
  */
 export class QuestionRangeResponse
-  extends QuestionCommon
+  extends QuestionCommonResponse
   implements QuestionRangeDto
 {
   /**
@@ -179,17 +133,10 @@ export class QuestionRangeResponse
 }
 
 /**
- * Represents a request to create or update a range-based question.
- */
-export class QuestionRangeRequest
-  extends QuestionRangeResponse
-  implements Omit<QuestionRangeDto, 'id' | 'created' | 'updated'> {}
-
-/**
  * Represents the response for a true-or-false question.
  */
 export class QuestionTrueFalseResponse
-  extends QuestionCommon
+  extends QuestionCommonResponse
   implements QuestionTrueFalseDto
 {
   /**
@@ -206,17 +153,10 @@ export class QuestionTrueFalseResponse
 }
 
 /**
- * Represents a request to create or update a true-or-false question.
- */
-export class QuestionTrueFalseRequest
-  extends QuestionTrueFalseResponse
-  implements Omit<QuestionTrueFalseDto, 'id' | 'created' | 'updated'> {}
-
-/**
  * Represents the response for a type-answer question.
  */
 export class QuestionTypeAnswerResponse
-  extends QuestionCommon
+  extends QuestionCommonResponse
   implements QuestionTypeAnswerDto
 {
   /**
@@ -229,24 +169,8 @@ export class QuestionTypeAnswerResponse
    * The list of acceptable answers for the question.
    */
   @ApiQuestionOptionsProperty()
-  options: QuestionOptionRequest[]
+  options: QuestionOption[]
 }
-
-/**
- * Represents a request to create or update a type-answer question.
- */
-export class QuestionTypeAnswerRequest
-  extends QuestionTypeAnswerResponse
-  implements Omit<QuestionTypeAnswerDto, 'id' | 'created' | 'updated'> {}
-
-/**
- * Represents a request for any supported question type.
- */
-export type QuestionRequest =
-  | QuestionMultiChoiceRequest
-  | QuestionRangeRequest
-  | QuestionTrueFalseRequest
-  | QuestionTypeAnswerRequest
 
 /**
  * Represents a response for any supported question type.

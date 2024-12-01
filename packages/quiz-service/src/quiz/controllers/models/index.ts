@@ -1,4 +1,5 @@
 export * from './paginated-quiz.response'
-export * from './question.request.response'
+export * from './question.request'
+export * from './question.response'
 export * from './quiz.request'
 export * from './quiz.response'

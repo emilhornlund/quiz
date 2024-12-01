@@ -88,6 +88,14 @@ export interface QuestionMultiChoiceDto extends QuestionCommonDto {
 }
 
 /**
+ * Represents a multiple-choice question request.
+ */
+export type QuestionMultiChoiceRequestDto = Omit<
+  QuestionMultiChoiceDto,
+  'id' | 'created' | 'updated'
+>
+
+/**
  * Represents a range-based question where the answer lies within a range.
  */
 export interface QuestionRangeDto extends QuestionCommonDto {
@@ -118,6 +126,14 @@ export interface QuestionRangeDto extends QuestionCommonDto {
 }
 
 /**
+ * Represents a range-based question request where the answer lies within a range.
+ */
+export type QuestionRangeRequestDto = Omit<
+  QuestionRangeDto,
+  'id' | 'created' | 'updated'
+>
+
+/**
  * Represents a true-or-false question.
  */
 export interface QuestionTrueFalseDto extends QuestionCommonDto {
@@ -131,6 +147,14 @@ export interface QuestionTrueFalseDto extends QuestionCommonDto {
    */
   correct: boolean
 }
+
+/**
+ * Represents a true-or-false question request.
+ */
+export type QuestionTrueFalseRequestDto = Omit<
+  QuestionTrueFalseDto,
+  'id' | 'created' | 'updated'
+>
 
 /**
  * Represents a question where the user types an answer.
@@ -148,6 +172,14 @@ export interface QuestionTypeAnswerDto extends QuestionCommonDto {
 }
 
 /**
+ * Represents a question request where the user types an answer.
+ */
+export type QuestionTypeAnswerRequestDto = Omit<
+  QuestionTypeAnswerDto,
+  'id' | 'created' | 'updated'
+>
+
+/**
  * Represents any question type supported in the system.
  */
 export type QuestionDto =
@@ -155,3 +187,12 @@ export type QuestionDto =
   | QuestionRangeDto
   | QuestionTrueFalseDto
   | QuestionTypeAnswerDto
+
+/**
+ * Represents a request for any question type supported in the system.
+ */
+export type QuestionRequestDto =
+  | QuestionMultiChoiceRequestDto
+  | QuestionRangeRequestDto
+  | QuestionTrueFalseRequestDto
+  | QuestionTypeAnswerRequestDto
