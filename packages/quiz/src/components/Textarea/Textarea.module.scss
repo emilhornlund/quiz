@@ -25,6 +25,12 @@ $outline-offset: pxToRem(2px);
     background-color: $white;
     color: $gray-4;
 
+    &:disabled {
+      background-color: $gray-1;
+      outline-color: $gray-1;
+      color: $gray-2;
+    }
+
     @include mobile {
       padding: $layout-gutter * 0.8;
       border-radius: $layout-gutter * 0.5;
