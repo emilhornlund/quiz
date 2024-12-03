@@ -33,7 +33,7 @@ export class ClientService {
    * @returns {Promise<Client>} The existing or newly created client document.
    */
   public async findOrCreateClient(clientId: string): Promise<Client> {
-    let client = await this.clientModel.findById(clientId)
+    let client = await this.clientModel.findById(clientId).populate('player')
 
     if (!client) {
       const salt = await bcrypt.genSalt()

@@ -1,29 +1,28 @@
 import { faPen, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { QuizResponseDto } from '@quiz/common'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
 import { Typography } from '../../../../components'
 import Button from '../../../../components/Button'
-import { useQuizService } from '../../../../utils/use-quiz-service.tsx'
+import useOnMount from '../../../../utils/use-on-mount.hook.tsx'
 
 import styles from './QuizSubpage.module.scss'
 
 const QuizSubpage: FC = () => {
   const mounted = useRef<boolean>(false)
 
-  const { getCurrentPlayerQuizzes } = useQuizService()
+  const { getCurrentPlayerQuizzes } = useQuizServiceClient()
   const [quizzes, setQuizzes] = useState<QuizResponseDto[]>([])
 
-  useEffect(() => {
-    if (!mounted.current) {
-      getCurrentPlayerQuizzes()
-        .then(({ results }) => setQuizzes(results))
-        .finally(() => {
-          mounted.current = true
-        })
-    }
-  }, [getCurrentPlayerQuizzes])
+  useOnMount(() => {
+    getCurrentPlayerQuizzes()
+      .then(({ results }) => setQuizzes(results))
+      .finally(() => {
+        mounted.current = true
+      })
+  })
 
   return (
     <div className={styles.quizSubpage}>

@@ -31,21 +31,28 @@ export class AuthService {
    *
    * @param {AuthRequestDto} authRequest - The request containing the client's unique identifier.
    *
-   * @returns {Promise<AuthResponseDto>} The response containing the generated JWT token.
+   * @returns {Promise<AuthResponseDto>} A promise resolving to an `AuthResponseDto`, which includes
+   *          the generated JWT token, client information, and player information.
    */
   public async authenticate(
     authRequest: AuthRequestDto,
   ): Promise<AuthResponseDto> {
-    const client = await this.clientService.findOrCreateClient(
-      authRequest.clientId,
-    )
+    const {
+      id: clientId,
+      clientIdHash,
+      player: { id: playerId, nickname },
+    } = await this.clientService.findOrCreateClient(authRequest.clientId)
 
     const token = await this.jwtService.signAsync(
       {},
-      { subject: client.clientIdHash, expiresIn: '1h' },
+      { subject: clientIdHash, expiresIn: '1h' },
     )
 
-    return { token }
+    return {
+      token,
+      client: { id: clientId, name: '' },
+      player: { id: playerId, nickname },
+    }
   }
 
   /**

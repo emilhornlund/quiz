@@ -2,6 +2,7 @@ import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
 import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
@@ -9,7 +10,6 @@ import {
   TextField,
   Typography,
 } from '../../components'
-import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 import { getMessage, getTitle } from './helpers.ts'
 import styles from './JoinPage.module.scss'
@@ -19,7 +19,7 @@ const JoinPage: FC = () => {
 
   const [searchParams] = useSearchParams()
 
-  const { joinGame } = useQuizService()
+  const { joinGame } = useQuizServiceClientLegacy()
 
   const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 

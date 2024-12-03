@@ -1,24 +1,17 @@
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
+import React, { FC, FormEvent, useMemo, useState } from 'react'
 
 import { Button, TextField } from '../../../../components'
-import { useClientContext } from '../../../../context/client'
 
 import styles from './ProfileSubpage.module.scss'
 
 const ProfileSubpage: FC = () => {
-  const { player } = useClientContext()
-
   const [nickname, setNickname] = useState<string>('')
   const [nicknameValid, setNicknameValid] = useState<boolean>(false)
 
   const isValid = useMemo<boolean>(() => nicknameValid, [nicknameValid])
-
-  useEffect(() => {
-    setNickname(player?.nickname ?? '')
-  }, [player])
 
   const handlePlayerSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

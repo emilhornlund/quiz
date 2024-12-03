@@ -43,7 +43,11 @@ describe('AuthController (e2e)', () => {
         .send({ clientId })
         .expect(200)
         .expect((res) => {
-          expect(res.body).toHaveProperty('token')
+          expect(res.body).toEqual({
+            token: expect.anything(),
+            client: { id: clientId, name: '' },
+            player: { id: expect.anything(), nickname: '' },
+          })
           const { sub } = jwtService.verify(res.body.token)
           const isMatch = bcrypt.compareSync(clientId, sub)
           expect(isMatch).toBe(true)
@@ -62,7 +66,11 @@ describe('AuthController (e2e)', () => {
         .send({ clientId })
         .expect(200)
         .expect((res) => {
-          expect(res.body).toHaveProperty('token')
+          expect(res.body).toEqual({
+            token: expect.anything(),
+            client: { id: clientId, name: '' },
+            player: { id: expect.anything(), nickname: '' },
+          })
           const { sub } = jwtService.verify(res.body.token)
           const isMatch = bcrypt.compareSync(_id, sub)
           expect(isMatch).toBe(true)

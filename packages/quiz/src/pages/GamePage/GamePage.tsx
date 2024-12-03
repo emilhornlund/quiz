@@ -2,6 +2,7 @@ import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Bounce, toast, ToastOptions } from 'react-toastify'
 
+import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
 import { LoadingSpinner, Page } from '../../components'
 import {
   HostGameBeginState,
@@ -24,7 +25,6 @@ import {
   useEventSource,
 } from '../../utils/use-event-source.tsx'
 import { useGameTokenQueryParam } from '../../utils/use-game-token-query-param.tsx'
-import { useQuizService } from '../../utils/use-quiz-service.tsx'
 
 const GamePage = () => {
   const [token, gameID] = useGameTokenQueryParam()
@@ -32,7 +32,7 @@ const GamePage = () => {
   const [event, connectionStatus] = useEventSource(gameID, token)
   const [hasReconnected, setHasReconnected] = useState(false)
 
-  const { completeTask, submitQuestionAnswer } = useQuizService()
+  const { completeTask, submitQuestionAnswer } = useQuizServiceClientLegacy()
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
