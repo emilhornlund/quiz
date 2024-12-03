@@ -45,15 +45,7 @@ const HomePage: FC = () => {
   }
 
   return (
-    <Page
-      header={
-        <a
-          href="https://github.com/emilhornlund/quiz"
-          target="_blank"
-          rel="noreferrer">
-          GitHub
-        </a>
-      }>
+    <Page>
       <RocketImage />
       <Typography variant="title" size="medium">
         Let’s play
