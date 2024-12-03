@@ -3,6 +3,7 @@ import {
   PaginatedQuizResponseDto,
   PlayerResponseDto,
 } from '@quiz/common'
+import { v4 as uuidv4 } from 'uuid'
 
 import { useAuthContext } from '../context/auth'
 import { Client } from '../models'
@@ -42,7 +43,7 @@ export const useQuizServiceClient = () => {
     if (client) {
       return (JSON.parse(client) as Client).id
     }
-    const id = '85585f4b-35ec-45fc-abd5-c60bb94b2313' // uuidv4()
+    const id = uuidv4()
     setClient({ id })
     return id
   }
