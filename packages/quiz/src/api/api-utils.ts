@@ -47,7 +47,7 @@ export const resolveUrl = (path: string): string => {
  * @returns A promise resolving to the parsed JSON response as type `T`.
  * @throws {ApiError} If the response status is not OK, with an error message extracted from the server response.
  */
-export const parseResponseAndHandleError = async <T extends object>(
+export const parseResponseAndHandleError = async <T extends object | void>(
   response: Response,
 ): Promise<T> => {
   if (response.status === 204) {

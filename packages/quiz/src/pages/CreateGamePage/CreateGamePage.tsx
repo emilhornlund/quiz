@@ -16,7 +16,7 @@ import React, {
 } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
+import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import {
   IconButtonArrowRight,
   Page,
@@ -36,7 +36,7 @@ const GameModeLabels: { [key in GameMode]: string } = {
 const CreateGamePage: FC = () => {
   const navigate = useNavigate()
 
-  const { createGame } = useQuizServiceClientLegacy()
+  const { createGame } = useQuizServiceClient()
 
   const [name, setName] = useState<string>('')
   const [mode, setMode] = useState<GameMode>(GameMode.Classic)
@@ -223,7 +223,7 @@ const CreateGamePage: FC = () => {
 
       createGame(request)
         .then((response) => {
-          navigate(`/game?token=${response.token}`)
+          navigate(`/game?gameID=${response.id}`)
         })
         .catch(console.error)
     }

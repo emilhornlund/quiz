@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import {
   CreateClassicModeGameRequestDto,
+  CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
-  GameAuthResponseDto,
-  GameParticipantType,
   QuestionType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 
 import { AuthService } from '../../auth/services'
+import { PlayerService } from '../../player/services'
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
@@ -30,11 +30,13 @@ export class GameService {
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
    * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
    * @param {AuthService} authService - The authentication service for managing game tokens.
+   * @param {PlayerService} playerService - The service responsible for managing player information.
    */
   constructor(
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private authService: AuthService,
+    private playerService: PlayerService,
   ) {}
 
   /**
@@ -42,29 +44,24 @@ export class GameService {
    * saves the game, and returns a response containing the game ID and JWT token for the host.
    *
    * @param {CreateClassicModeGameRequestDto | CreateZeroToOneHundredModeGameRequestDto} request - The details of the game to be created.
+   * @param {string} playerId - The ID of the player creating the game.
    *
-   * @returns {Promise<GameAuthResponseDto>} A Promise that resolves to a `GameAuthResponseDto`
-   * object containing the host's authentication token for game access.
+   * @returns {Promise<CreateGameResponseDto>} A Promise that resolves to the response object containing the created game details.
    */
   public async createGame(
     request:
       | CreateClassicModeGameRequestDto
       | CreateZeroToOneHundredModeGameRequestDto,
-  ): Promise<GameAuthResponseDto> {
+    playerId: string,
+  ): Promise<CreateGameResponseDto> {
     const gameDocument = await this.gameRepository.createGame(
       buildPartialGameModel(request),
+      playerId,
     )
 
     await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
 
-    const token = await this.authService.signGameToken(
-      gameDocument._id,
-      gameDocument.hostClientId,
-      GameParticipantType.HOST,
-      Math.floor(gameDocument.expires.getTime() / 1000),
-    )
-
-    return { token }
+    return { id: gameDocument._id }
   }
 
   /**
@@ -96,9 +93,9 @@ export class GameService {
    *
    * @param {string} gameID - The unique identifier of the game the player wants to join.
    * @param {string} nickname - The nickname chosen by the player. Must be unique within the game.
+   * @param {string} playerId - The ID of the player joining the game.
    *
-   * @returns {Promise<GameAuthResponseDto>} A Promise that resolves to a `GameAuthResponseDto`
-   * object containing the player's authentication token for game access.
+   * @returns {Promise<void>} A Promise that resolves when the player is successfully added to the game.
    *
    * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID`
    * was created in the last 6 hours.
@@ -108,20 +105,11 @@ export class GameService {
   public async joinGame(
     gameID: string,
     nickname: string,
-  ): Promise<GameAuthResponseDto> {
-    const [gameDocument, newPlayer] = await this.gameRepository.addPlayer(
-      gameID,
-      nickname,
-    )
+    playerId: string,
+  ): Promise<void> {
+    const player = await this.playerService.updatePlayer(playerId, nickname)
 
-    const token = await this.authService.signGameToken(
-      gameID,
-      newPlayer._id,
-      GameParticipantType.PLAYER,
-      Math.floor(gameDocument.expires.getTime() / 1000),
-    )
-
-    return { token }
+    await this.gameRepository.addPlayer(gameID, player._id, nickname)
   }
 
   /**
@@ -144,11 +132,13 @@ export class GameService {
   }
 
   /**
-   * Handles the submission of an answer for the current active question.
+   * Submits an answer for the current question in a game.
    *
-   * @param {string} gameID - The unique identifier of the game.
    * @param {string} playerId - The ID of the player submitting the answer.
-   * @param {SubmitQuestionAnswerRequestDto} submitQuestionAnswerRequest - The answer request payload.
+   * @param {string} gameID - The ID of the game where the answer is being submitted.
+   * @param {object} submitQuestionAnswerRequest - The request containing the answer details.
+   *
+   * @returns {Promise<void>} Resolves when the answer submission is successful.
    */
   public async submitQuestionAnswer(
     gameID: string,

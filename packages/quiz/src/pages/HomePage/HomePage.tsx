@@ -2,7 +2,7 @@ import { GAME_PIN_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
+import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import {
   IconButtonArrowRight,
   Page,
@@ -25,7 +25,7 @@ const MESSAGES = [
 const HomePage: FC = () => {
   const navigate = useNavigate()
 
-  const { findGame } = useQuizServiceClientLegacy()
+  const { findGame } = useQuizServiceClient()
 
   const [gamePIN, setGamePIN] = useState<string>()
   const [gamePINValid, setGamePINValid] = useState<boolean>(false)

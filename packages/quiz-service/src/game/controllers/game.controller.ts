@@ -10,7 +10,6 @@ import {
   Post,
   Query,
   Sse,
-  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
@@ -29,13 +28,7 @@ import {
 import { GameParticipantType } from '@quiz/common'
 import { Observable } from 'rxjs'
 
-import {
-  AuthorizedClientID,
-  AuthorizedGameID,
-  GameClientRoles,
-  Public,
-} from '../../auth/decorators'
-import { LegacyAuth } from '../../auth/decorators/legacy-auth.decorator'
+import { AuthorizedPlayerIdParam } from '../../client/controllers/decorators/auth'
 import {
   ParseCreateGameRequestPipe,
   ParseGamePINPipe,
@@ -44,6 +37,7 @@ import {
 import { GameEventSubscriber, GameService } from '../services'
 
 import { GameIdParam } from './decorators'
+import { AuthorizedGame } from './decorators/auth'
 import {
   CreateClassicModeGameRequest,
   CreateZeroToOneHundredModeGameRequest,
@@ -53,7 +47,8 @@ import {
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
 } from './models/requests'
-import { FindGameResponse, GameAuthResponse } from './models/response'
+import { FindGameResponse } from './models/response'
+import { CreateGameResponse } from './models/response/create-game.response'
 
 /**
  * GameController handles incoming HTTP requests related to game operations,
@@ -69,16 +64,28 @@ import { FindGameResponse, GameAuthResponse } from './models/response'
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
 )
-@LegacyAuth()
 @ApiTags('game')
 @Controller('games')
 export class GameController {
+  /**
+   * Initializes a new instance of the GameController class.
+   *
+   * @param {GameService} gameService - The service responsible for handling game logic.
+   * @param {GameEventSubscriber} gameEventSubscriber - The service responsible for managing game event streams.
+   */
   constructor(
     private readonly gameService: GameService,
     private readonly gameEventSubscriber: GameEventSubscriber,
   ) {}
 
-  @Public()
+  /**
+   * Creates a new game and assigns it to the authorized player.
+   *
+   * @param {string} playerId - The ID of the player creating the game.
+   * @param {CreateClassicModeGameRequest | CreateZeroToOneHundredModeGameRequest} createGameRequest - The details of the game to be created.
+   *
+   * @returns {CreateGameResponse} A response containing the details of the created game.
+   */
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
@@ -97,18 +104,25 @@ export class GameController {
   })
   @ApiCreatedResponse({
     description: 'The game has been successfully created.',
-    type: GameAuthResponse,
+    type: CreateGameResponse,
   })
   async createGame(
+    @AuthorizedPlayerIdParam() playerId: string,
     @Body(new ParseCreateGameRequestPipe())
     createGameRequest:
       | CreateClassicModeGameRequest
       | CreateZeroToOneHundredModeGameRequest,
-  ): Promise<GameAuthResponse> {
-    return await this.gameService.createGame(createGameRequest)
+  ): Promise<CreateGameResponse> {
+    return await this.gameService.createGame(createGameRequest, playerId)
   }
 
-  @Public()
+  /**
+   * Finds an active game by its game PIN.
+   *
+   * @param {string} gamePIN - The unique 6-digit game PIN used to identify the game.
+   *
+   * @returns {FindGameResponse} A response object containing details of the active game.
+   */
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -136,9 +150,17 @@ export class GameController {
     return this.gameService.findActiveGameByGamePIN(gamePIN)
   }
 
-  @Public()
+  /**
+   * Allows a player to join an existing game.
+   *
+   * @param {string} playerId - The ID of the player joining the game.
+   * @param {string} gameID - The unique identifier of the game.
+   * @param {JoinGameRequest} request - The request body containing the player's nickname.
+   *
+   * @returns {Promise<void>} A Promise that resolves when the player has successfully joined the game.
+   */
   @Post('/:gameID/players')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Join a game',
     description:
@@ -148,9 +170,8 @@ export class GameController {
     description: 'Request body for joining an existing game.',
     type: JoinGameRequest,
   })
-  @ApiCreatedResponse({
+  @ApiNoContentResponse({
     description: 'The game has been successfully joined.',
-    type: GameAuthResponse,
   })
   @ApiBadRequestResponse({
     description:
@@ -161,22 +182,23 @@ export class GameController {
   })
   @GameIdParam()
   async joinGame(
+    @AuthorizedPlayerIdParam() playerId: string,
     @Param('gameID', ParseUUIDPipe) gameID: string,
     @Body() request: JoinGameRequest,
-  ): Promise<GameAuthResponse> {
-    return this.gameService.joinGame(gameID, request.nickname)
+  ): Promise<void> {
+    return this.gameService.joinGame(gameID, request.nickname, playerId)
   }
 
   /**
-   * Subscribes a client to game events via Server-Sent Events (SSE).
+   * Retrieves a stream of game-related events for a specific game.
    *
    * Clients receive both general and client-specific game events, including
    * heartbeat events for connection monitoring and game updates relevant to the subscribed game.
    *
-   * @param gameID - The unique identifier of the game to subscribe to.
-   * @param authorizedGameID - The unique identifier of the game to subscribe to, extracted from the authenticated token.
-   * @param clientId - The unique identifier of the client, extracted from the authenticated token.
-   * @returns An Observable stream of MessageEvent objects for SSE, where each event contains data in JSON format.
+   * @param {string} playerId - The ID of the player requesting the stream.
+   * @param {string} gameID - The unique identifier of the game to subscribe to.
+   *
+   * @returns {Observable<MessageEvent>} A stream of events for SSE, each containing data in JSON format.
    */
   @Sse('/:gameID/events')
   @HttpCode(HttpStatus.OK)
@@ -205,16 +227,13 @@ export class GameController {
   @ApiBadRequestResponse({
     description: 'Invalid game ID format or missing authorization token.',
   })
+  @AuthorizedGame()
   @GameIdParam()
   public async getEventStream(
+    @AuthorizedPlayerIdParam() playerId: string,
     @Param('gameID', ParseUUIDPipe) gameID: string,
-    @AuthorizedGameID() authorizedGameID: string,
-    @AuthorizedClientID() clientId: string,
   ): Promise<Observable<MessageEvent>> {
-    if (gameID !== authorizedGameID) {
-      throw new UnauthorizedException('Unauthorized game access')
-    }
-    return this.gameEventSubscriber.subscribe(gameID, clientId)
+    return this.gameEventSubscriber.subscribe(gameID, playerId)
   }
 
   /**
@@ -223,11 +242,8 @@ export class GameController {
    * Requires the caller to be the host and the current task status to be 'active'.
    *
    * @param {string} gameID - The ID of the game.
-   * @param {string} authorizedGameID - The ID of the game verified by the guard.
    *
-   * @throws {UnauthorizedException} if the caller does not have host privileges
-   *                                 or the game ID does not match the authorized game ID.
-   * @throws {BadRequestException} if the current task is not in 'active' status.
+   * @returns {Promise<void>} A Promise that resolves when the task is successfully marked as completed.
    */
   @Post('/:gameID/tasks/current/complete')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -245,25 +261,22 @@ export class GameController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized access or invalid client role.',
   })
-  @GameClientRoles(GameParticipantType.HOST)
+  @AuthorizedGame(GameParticipantType.HOST)
   @GameIdParam()
   public async completeTask(
     @Param('gameID', ParseUUIDPipe) gameID: string,
-    @AuthorizedGameID() authorizedGameID: string,
   ): Promise<void> {
-    if (gameID !== authorizedGameID) {
-      throw new UnauthorizedException('Unauthorized game access')
-    }
     await this.gameService.completeCurrentTask(gameID)
   }
 
   /**
-   * Handles the submission of an answer for the current question in a game.
+   * Submits an answer for the current question in a game.
    *
-   * @param {string} gameID - The ID of the game.
-   * @param {string} authorizedGameID - The ID of the game verified by the guard.
-   * @param {string} clientId - The ID of the client submitting the answer.
-   * @param {object} submitQuestionAnswerRequest - The request body containing the answer details.
+   * @param {string} playerId - The ID of the player submitting the answer.
+   * @param {string} gameID - The ID of the game where the answer is being submitted.
+   * @param {object} submitQuestionAnswerRequest - The request containing the answer details.
+   *
+   * @returns {Promise<void>} A Promise that resolves when the answer submission is successful.
    */
   @Post('/:gameID/answers')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -286,12 +299,11 @@ export class GameController {
   @ApiNoContentResponse({
     description: 'The answer has been successfully submitted.',
   })
-  @GameClientRoles(GameParticipantType.PLAYER)
+  @AuthorizedGame(GameParticipantType.PLAYER)
   @GameIdParam()
   public async submitQuestionAnswer(
+    @AuthorizedPlayerIdParam() playerId: string,
     @Param('gameID', ParseUUIDPipe) gameID: string,
-    @AuthorizedGameID() authorizedGameID: string,
-    @AuthorizedClientID() clientId: string,
     @Body(new ParseSubmitQuestionAnswerRequestPipe())
     submitQuestionAnswerRequest:
       | SubmitMultiChoiceQuestionAnswerRequest
@@ -299,12 +311,9 @@ export class GameController {
       | SubmitTrueFalseQuestionAnswerRequest
       | SubmitTypeAnswerQuestionAnswerRequest,
   ): Promise<void> {
-    if (gameID !== authorizedGameID) {
-      throw new UnauthorizedException('Unauthorized game access')
-    }
     return this.gameService.submitQuestionAnswer(
       gameID,
-      clientId,
+      playerId,
       submitQuestionAnswerRequest,
     )
   }

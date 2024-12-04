@@ -64,6 +64,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * @param newToken - The new authentication token to set.
    */
   const handleSetToken = (newToken: string) => {
+    setToken(newToken)
     localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, newToken)
   }
 
@@ -73,6 +74,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * @param newClient - The new client object to set.
    */
   const handleSetClient = (newClient: Client) => {
+    setClient(newClient)
     localStorage.setItem(CLIENT_LOCAL_STORAGE_KEY, JSON.stringify(newClient))
   }
 
@@ -82,6 +84,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * @param newPlayer - The new player object to set.
    */
   const handleSetPlayer = (newPlayer: Player) => {
+    setPlayer(newPlayer)
     localStorage.setItem(PLAYER_LOCAL_STORAGE_KEY, JSON.stringify(newPlayer))
   }
 

@@ -2,7 +2,7 @@ import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
+import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
@@ -19,7 +19,7 @@ const JoinPage: FC = () => {
 
   const [searchParams] = useSearchParams()
 
-  const { joinGame } = useQuizServiceClientLegacy()
+  const { joinGame } = useQuizServiceClient()
 
   const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 
@@ -34,8 +34,8 @@ const JoinPage: FC = () => {
 
     if (gameID && nickname) {
       joinGame(gameID, nickname)
-        .then((response) => {
-          navigate(`/game?token=${response.token}`)
+        .then(() => {
+          navigate(`/game?gameID=${gameID}`)
         })
         .catch(console.error)
     }

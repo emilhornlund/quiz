@@ -95,7 +95,7 @@ export class ClientController {
    *
    * @param {Client} client - The authenticated client making the request.
    *
-   * @param {ApiQuizPageQuery} queryParams - description here
+   * @param {ApiQuizPageQuery} queryParams - The pagination and filtering query parameters for retrieving quizzes.
    *
    * @returns {Promise<PaginatedQuizResponse>} A paginated response containing the client's associated quizzes.
    */

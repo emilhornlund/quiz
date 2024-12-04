@@ -9,15 +9,25 @@ import { Request } from 'express'
 
 import { ClientService } from '../../client/services'
 import { IS_PUBLIC_KEY } from '../decorators'
-import { IS_LEGACY_AUTH_KEY } from '../decorators/legacy-auth.decorator'
 import { AuthService } from '../services'
 
 /**
- * Custom authorization guard that checks if the request has a valid game token and,
- * if present, extracts the client ID, game ID, and client role.
+ * Custom authorization guard that ensures requests are authenticated.
+ *
+ * This guard checks if the request contains a valid JWT token in the
+ * Authorization header. For public routes marked with the `@Public`
+ * decorator, the guard allows access without requiring authentication.
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
+  /**
+   * Creates a new instance of the AuthGuard.
+   *
+   * @param reflector - Used to retrieve metadata such as the `IS_PUBLIC_KEY`
+   *                    to determine if the route is public.
+   * @param authService - Service for validating and decoding game tokens.
+   * @param clientService - Service for retrieving client information.
+   */
   constructor(
     private reflector: Reflector,
     private authService: AuthService,
@@ -25,14 +35,17 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   /**
-   * Validates the game token and extracts essential parameters like client ID,
-   * game ID, and client role for further authorization checks.
+   * Determines whether the current request is authorized.
+   *
+   * If the route is public, the method allows access without further checks.
+   * Otherwise, it verifies the JWT token and ensures the client exists in the system.
    *
    * @param context - The execution context of the current request.
+   * @returns A promise that resolves to `true` if the request is authorized,
+   *          otherwise throws an `UnauthorizedException`.
    *
-   * @returns True if the request is authorized, otherwise false.
-   *
-   * @throws UnauthorizedException if the token is missing or invalid.
+   * @throws UnauthorizedException if the token is missing, invalid, or
+   *         if the associated client cannot be found.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -52,22 +65,10 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { sub, gameID, role } =
-        await this.authService.verifyGameToken(token)
+      const { sub } = await this.authService.verifyGameToken(token)
 
-      const isLegacyAuth = this.reflector.getAllAndOverride<boolean>(
-        IS_LEGACY_AUTH_KEY,
-        [context.getHandler(), context.getClass()],
-      )
-
-      if (isLegacyAuth) {
-        request['gameID'] = gameID
-        request['clientId'] = sub
-        request['clientRole'] = role
-      } else {
-        request['client'] =
-          await this.clientService.findByClientIdHashOrThrow(sub)
-      }
+      request['client'] =
+        await this.clientService.findByClientIdHashOrThrow(sub)
     } catch {
       throw new UnauthorizedException()
     }
@@ -76,9 +77,11 @@ export class AuthGuard implements CanActivate {
   }
 
   /**
-   * Extracts the JWT token from the Authorization header.
-   * @param request - The HTTP request.
-   * @returns The token if present and valid, undefined otherwise.
+   * Extracts the JWT token from the Authorization header of the HTTP request.
+   *
+   * @param request - The incoming HTTP request.
+   * @returns The extracted token as a string if the header is present and valid;
+   *          otherwise, `undefined`.
    */
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? []

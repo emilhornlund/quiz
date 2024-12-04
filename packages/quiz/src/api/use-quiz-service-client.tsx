@@ -1,7 +1,13 @@
 import {
   AuthResponseDto,
+  CreateGameRequestDto,
+  CreateGameResponseDto,
+  FindGameResponseDto,
+  GameAuthResponseDto,
   PaginatedQuizResponseDto,
   PlayerResponseDto,
+  QuestionType,
+  SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -101,7 +107,7 @@ export const useQuizServiceClient = () => {
    * @param token - The optional authentication token. If not provided, it will be retrieved automatically.
    * @returns A promise resolving to the API response as type `T`.
    */
-  const apiFetch = async <T extends object>(
+  const apiFetch = async <T extends object | void>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
     requestBody?: ApiPostBody,
@@ -131,7 +137,7 @@ export const useQuizServiceClient = () => {
    * @param path - The relative path to the API endpoint.
    * @returns A promise resolving to the API response as type `T`.
    */
-  const apiGet = <T extends object>(path: string) =>
+  const apiGet = <T extends object | void>(path: string) =>
     apiFetch<T>('GET', path, undefined)
 
   /**
@@ -142,9 +148,11 @@ export const useQuizServiceClient = () => {
    * @param requestBody - The request body to be sent in the POST request.
    * @returns A promise resolving to the API response as type `T`.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const apiPost = <T extends object>(path: string, requestBody: ApiPostBody) =>
-    apiFetch<T>('POST', path, requestBody)
+
+  const apiPost = <T extends object | void>(
+    path: string,
+    requestBody: ApiPostBody,
+  ) => apiFetch<T>('POST', path, requestBody)
 
   /**
    * Makes a PUT request to the specified API endpoint.
@@ -155,8 +163,10 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the API response as type `T`.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const apiPut = <T extends object>(path: string, requestBody: ApiPostBody) =>
-    apiFetch<T>('PUT', path, requestBody)
+  const apiPut = <T extends object | void>(
+    path: string,
+    requestBody: ApiPostBody,
+  ) => apiFetch<T>('PUT', path, requestBody)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -166,7 +176,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the API response as type `T`.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const apiDelete = <T extends object>(path: string) =>
+  const apiDelete = <T extends object | void>(path: string) =>
     apiFetch<T>('DELETE', path, undefined)
 
   /**
@@ -185,5 +195,76 @@ export const useQuizServiceClient = () => {
   const getCurrentPlayerQuizzes = (): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>('/client/quizzes')
 
-  return { getCurrentPlayer, getCurrentPlayerQuizzes }
+  /**
+   *
+   * @param gamePIN
+   */
+  const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
+    apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
+
+  /**
+   *
+   * @param request
+   */
+  const createGame = (
+    request: CreateGameRequestDto,
+  ): Promise<CreateGameResponseDto> =>
+    apiPost<CreateGameResponseDto>('/games', request)
+
+  /**
+   *
+   * @param gameID
+   * @param nickname
+   */
+  const joinGame = (
+    gameID: string,
+    nickname: string,
+  ): Promise<GameAuthResponseDto> =>
+    apiPost<GameAuthResponseDto>(`/games/${gameID}/players`, { nickname })
+
+  /**
+   *
+   * @param gameID
+   */
+  const completeTask = (gameID: string) =>
+    apiPost(`/games/${gameID}/tasks/current/complete`, {}).then(() => {})
+
+  /**
+   *
+   * @param gameID
+   * @param submitQuestionAnswerRequest
+   */
+  const submitQuestionAnswer = async (
+    gameID: string,
+    submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
+  ) => {
+    let requestBody: ApiPostBody = {}
+    if (submitQuestionAnswerRequest.type === QuestionType.MultiChoice) {
+      const { type, optionIndex } = submitQuestionAnswerRequest
+      requestBody = { type, optionIndex }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.Range) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.TrueFalse) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    if (submitQuestionAnswerRequest.type === QuestionType.TypeAnswer) {
+      const { type, value } = submitQuestionAnswerRequest
+      requestBody = { type, value }
+    }
+    await apiPost(`/games/${gameID}/answers`, requestBody)
+  }
+
+  return {
+    getCurrentPlayer,
+    getCurrentPlayerQuizzes,
+    findGame,
+    createGame,
+    joinGame,
+    completeTask,
+    submitQuestionAnswer,
+  }
 }

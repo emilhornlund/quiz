@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
-import { v4 as uuidv4 } from 'uuid'
 
 import {
   ActiveGameNotFoundByGamePINException,
@@ -166,52 +165,55 @@ export class GameRepository {
    * Creates and saves a new game.
    *
    * @param {PartialGameModel} game - The partial game data to create the game document.
+   * @param {string} hostPlayerId - The unique ID of the player creating the game.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the saved GameDocument.
    */
-  public async createGame(game: PartialGameModel): Promise<GameDocument> {
+  public async createGame(
+    game: PartialGameModel,
+    hostPlayerId: string,
+  ): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    return new this.gameModel(buildGameModel(game, gamePIN)).save()
+    return new this.gameModel(
+      buildGameModel(game, gamePIN, hostPlayerId),
+    ).save()
   }
 
   /**
    * Adds a new player to a game and publishes an event after the player is added.
    *
    * @param {string} gameID - The ID of the game to add the player to.
+   * @param {string} playerId - The ID of the player joining the game.
    * @param {string} nickname - The nickname of the player to add.
    *
-   * @returns {Promise<[GameDocument, Player]>} A promise that resolves to a tuple of the updated GameDocument and the new Player.
+   * @returns {Promise<GameDocument>} A promise that resolves to the updated GameDocument.
    *
    * @throws {NicknameAlreadyTakenException} if the nickname is already used by another player.
    */
   public async addPlayer(
     gameID: string,
+    playerId: string,
     nickname: string,
-  ): Promise<[GameDocument, Player]> {
+  ): Promise<GameDocument> {
     const newPlayer: Player = {
-      _id: uuidv4(),
+      _id: playerId,
       nickname,
       totalScore: 0,
       currentStreak: 0,
       joined: new Date(),
     }
 
-    const savedGameDocument = await this.findAndSaveWithLock(
-      gameID,
-      (currentDocument) => {
-        if (
-          currentDocument.players.some((player) => player.nickname === nickname)
-        ) {
-          throw new NicknameAlreadyTakenException(nickname)
-        }
+    return this.findAndSaveWithLock(gameID, (currentDocument) => {
+      if (
+        currentDocument.players.some((player) => player.nickname === nickname)
+      ) {
+        throw new NicknameAlreadyTakenException(nickname)
+      }
 
-        currentDocument.players.push(newPlayer)
+      currentDocument.players.push(newPlayer)
 
-        return currentDocument
-      },
-    )
-
-    return [savedGameDocument, newPlayer]
+      return currentDocument
+    })
   }
 }

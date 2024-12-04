@@ -103,7 +103,7 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    * ensuring that only events relevant to the client are provided.
    *
    * @param {string} gameID - The unique identifier of the game.
-   * @param {string} clientId - The client ID requesting the stream.
+   * @param {string} playerId - The ID of the player subscribing to the game events.
    *
    * @returns {Promise<Observable<MessageEvent>>} An observable of MessageEvent for the client.
    *
@@ -112,18 +112,18 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    */
   public async subscribe(
     gameID: string,
-    clientId: string,
+    playerId: string,
   ): Promise<Observable<MessageEvent>> {
     const document = await this.gameRepository.findGameByIDOrThrow(gameID)
 
-    const player = document.players.find((player) => player._id === clientId)
+    const player = document.players.find((player) => player._id === playerId)
 
-    if (document.hostClientId !== clientId && !player) {
-      throw new PlayerNotFoundException(clientId)
+    if (document.hostClientId !== playerId && !player) {
+      throw new PlayerNotFoundException(playerId)
     }
 
-    if (!this.activeClients.has(clientId)) {
-      this.activeClients.add(clientId)
+    if (!this.activeClients.has(playerId)) {
+      this.activeClients.add(playerId)
     }
 
     const source = fromEvent(
@@ -132,7 +132,7 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
     ) as Observable<DistributedEvent>
 
     const initialEvent: DistributedEvent = {
-      clientId,
+      clientId: playerId,
       event: player
         ? buildPlayerGameEvent(document, player)
         : buildHostGameEvent(document),
@@ -140,10 +140,10 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     return concat(from([initialEvent]), source).pipe(
       filter(
-        (event) => event.clientId === undefined || event.clientId === clientId,
+        (event) => event.clientId === undefined || event.clientId === playerId,
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),
-      finalize(() => this.activeClients.delete(clientId)),
+      finalize(() => this.activeClients.delete(playerId)),
     )
   }
 }

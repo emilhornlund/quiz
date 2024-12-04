@@ -65,4 +65,30 @@ export class PlayerService {
 
     return player
   }
+
+  /**
+   * Updates the nickname of an existing player.
+   *
+   * @param playerId - The unique ID of the player to update.
+   * @param nickname - The new nickname to assign to the player.
+   *
+   * @returns A promise resolving to the updated player document.
+   *
+   * @throws {PlayerNotFoundException} If no player exists with the specified ID.
+   */
+  public async updatePlayer(
+    playerId: string,
+    nickname: string,
+  ): Promise<Player> {
+    const player = await this.playerModel.findById(playerId)
+
+    if (!player) {
+      this.logger.warn(`Player was not found by id '${playerId}.`)
+      throw new PlayerNotFoundException(playerId)
+    }
+
+    player.nickname = nickname
+
+    return player.save()
+  }
 }

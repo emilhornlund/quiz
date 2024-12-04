@@ -2,8 +2,9 @@ import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Bounce, toast, ToastOptions } from 'react-toastify'
 
-import { useQuizServiceClientLegacy } from '../../api/use-quiz-service-client-legacy.tsx'
+import { useQuizServiceClient } from '../../api/use-quiz-service-client'
 import { LoadingSpinner, Page } from '../../components'
+import { useAuthContext } from '../../context/auth'
 import {
   HostGameBeginState,
   HostLeaderboardState,
@@ -24,15 +25,16 @@ import {
   ConnectionStatus,
   useEventSource,
 } from '../../utils/use-event-source.tsx'
-import { useGameTokenQueryParam } from '../../utils/use-game-token-query-param.tsx'
+import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
 
 const GamePage = () => {
-  const [token, gameID] = useGameTokenQueryParam()
+  const [gameID] = useGameIDQueryParam()
+  const { token } = useAuthContext()
 
   const [event, connectionStatus] = useEventSource(gameID, token)
   const [hasReconnected, setHasReconnected] = useState(false)
 
-  const { completeTask, submitQuestionAnswer } = useQuizServiceClientLegacy()
+  const { completeTask, submitQuestionAnswer } = useQuizServiceClient()
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
@@ -72,10 +74,7 @@ const GamePage = () => {
     switch (event?.type) {
       case GameEventType.GameLobbyHost:
         return (
-          <HostLobbyState
-            event={event}
-            onStart={() => completeTask(gameID!, token!)}
-          />
+          <HostLobbyState event={event} onStart={() => completeTask(gameID!)} />
         )
       case GameEventType.GameLobbyPlayer:
         return <PlayerLobbyState event={event} />
@@ -91,7 +90,7 @@ const GamePage = () => {
         return (
           <HostQuestionState
             event={event}
-            onSkip={() => completeTask(gameID!, token!)}
+            onSkip={() => completeTask(gameID!)}
           />
         )
       case GameEventType.GameQuestionPlayer:
@@ -99,7 +98,7 @@ const GamePage = () => {
           <PlayerQuestionState
             event={event}
             onSubmitQuestionAnswer={(request) =>
-              submitQuestionAnswer(gameID!, token!, request)
+              submitQuestionAnswer(gameID!, request)
             }
           />
         )
@@ -109,15 +108,12 @@ const GamePage = () => {
         return (
           <HostLeaderboardState
             event={event}
-            onNext={() => completeTask(gameID!, token!)}
+            onNext={() => completeTask(gameID!)}
           />
         )
       case GameEventType.GameResultHost:
         return (
-          <HostResultState
-            event={event}
-            onNext={() => completeTask(gameID!, token!)}
-          />
+          <HostResultState event={event} onNext={() => completeTask(gameID!)} />
         )
       case GameEventType.GameResultPlayer:
         return <PlayerResultState event={event} />
@@ -132,7 +128,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event, gameID, token, completeTask, submitQuestionAnswer])
+  }, [event, gameID, completeTask, submitQuestionAnswer])
 
   return <>{stateComponent}</>
 }

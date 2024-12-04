@@ -31,10 +31,15 @@ import { buildLobbyTask } from './task.converter'
  *
  * @param {PartialGameModel} game - The partial game data to create the game document.
  * @param {string} gamePIN - The unique 6-digit game PIN of the game to create.
+ * @param {string} hostPlayerId - The playerId of the host creating the game.
  *
  * @returns {Game} A fully constructed Game document.
  */
-export function buildGameModel(game: PartialGameModel, gamePIN: string): Game {
+export function buildGameModel(
+  game: PartialGameModel,
+  gamePIN: string,
+  hostPlayerId: string,
+): Game {
   const now = Date.now()
 
   return {
@@ -42,7 +47,7 @@ export function buildGameModel(game: PartialGameModel, gamePIN: string): Game {
     _id: uuidv4(),
     pin: gamePIN,
     nextQuestion: 0,
-    hostClientId: uuidv4(),
+    hostClientId: hostPlayerId,
     players: [],
     currentTask: buildLobbyTask(),
     previousTasks: [],

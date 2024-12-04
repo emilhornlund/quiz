@@ -4,7 +4,6 @@ import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
-  GameParticipantType,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -19,6 +18,8 @@ import {
   stopMongoMemoryServer,
 } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
+import { ClientService } from '../../client/services'
+import { Client } from '../../client/services/models/schemas'
 import { GameService } from '../services'
 import { Game, TaskType } from '../services/models/schemas'
 import { buildLobbyTask } from '../services/utils'
@@ -28,6 +29,12 @@ describe('GameController (e2e)', () => {
   let gameService: GameService
   let gameModel: Model<Game>
   let authService: AuthService
+  let clientService: ClientService
+
+  let hostClient: Client
+  let hostClientToken: string
+  let playerClient: Client
+  let playerClientToken: string
 
   beforeAll(async () => {
     await initializeMongoMemoryServer()
@@ -42,6 +49,21 @@ describe('GameController (e2e)', () => {
     gameService = app.get(GameService)
     gameModel = app.get<Model<Game>>(getModelToken(Game.name))
     authService = app.get(AuthService)
+    clientService = app.get(ClientService)
+
+    const hostClientId = uuidv4()
+    hostClient = await clientService.findOrCreateClient(hostClientId)
+    const hostAuthResponse = await authService.authenticate({
+      clientId: hostClientId,
+    })
+    hostClientToken = hostAuthResponse.token
+
+    const playerClientId = uuidv4()
+    playerClient = await clientService.findOrCreateClient(playerClientId)
+    const playerAuthResponse = await authService.authenticate({
+      clientId: playerClientId,
+    })
+    playerClientToken = playerAuthResponse.token
   }, 30000)
 
   afterEach(async () => {
@@ -52,26 +74,29 @@ describe('GameController (e2e)', () => {
     it('should succeed in creating a new classic mode game', () => {
       return supertest(app.getHttpServer())
         .post('/api/games')
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .send(CREATE_CLASSIC_MODE_GAME_REQUEST)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('token')
+          expect(res.body).toHaveProperty('id')
         })
     })
 
     it('should succeed in creating a new zero to one hundred mode game', () => {
       return supertest(app.getHttpServer())
         .post('/api/games')
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .send(CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('token')
+          expect(res.body).toHaveProperty('id')
         })
     })
 
     it('should fail in creating a new game', () => {
       return supertest(app.getHttpServer())
         .post('/api/games')
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .send({
           mode: GameMode.Classic,
         })
@@ -106,16 +131,16 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games (GET)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
@@ -123,16 +148,16 @@ describe('GameController (e2e)', () => {
     })
 
     it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const game = await gameModel.findById(gameID).exec()
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
@@ -140,11 +165,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a classic mode game if it was created more than 6 hours ago', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -155,6 +179,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -167,11 +192,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a zero to one hundred mode game if it was created more than 6 hours ago', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -182,6 +206,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get(`/api/games?gamePIN=${game.pin}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -196,6 +221,7 @@ describe('GameController (e2e)', () => {
     it('should fail in retrieving a non existing active game', async () => {
       return supertest(app.getHttpServer())
         .get('/api/games?gamePIN=123456')
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -210,6 +236,7 @@ describe('GameController (e2e)', () => {
     it('should fail in retrieving an active game without a game PIN', async () => {
       return supertest(app.getHttpServer())
         .get('/api/games')
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Validation failed')
@@ -221,27 +248,26 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/players (POST)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ nickname: 'FrostyBear' })
-        .expect(201)
+        .expect(204)
         .expect((res) => {
-          expect(res.body).toHaveProperty('token')
+          expect(res.body).toEqual({})
         })
     })
 
     it('should fail in joining when nickname already taken', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -257,6 +283,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ nickname: 'FrostyBear' })
         .expect(409)
         .expect((res) => {
@@ -270,11 +297,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining an expired game', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -283,6 +309,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ nickname: 'FrostyBear' })
         .expect(404)
         .expect((res) => {
@@ -300,6 +327,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ nickname: 'FrostyBear' })
         .expect(404)
         .expect((res) => {
@@ -315,6 +343,7 @@ describe('GameController (e2e)', () => {
     it('should fail in joining with an invalid game ID', async () => {
       return supertest(app.getHttpServer())
         .post('/api/games/non-uuid/players')
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ nickname: 'FrostyBear' })
         .expect(400)
         .expect((res) => {
@@ -330,15 +359,14 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/events (GET)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       const response = supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
-        .set('Authorization', `Bearer ${createdGame.token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
 
@@ -349,17 +377,16 @@ describe('GameController (e2e)', () => {
     })
 
     it('should allow event subscription for a player who joined the game', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
-
-      const joinedGame = await gameService.joinGame(gameID, 'FrostyBear')
+      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
 
       const response = supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
-        .set('Authorization', `Bearer ${joinedGame.token}`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
 
@@ -370,11 +397,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny event subscription without an authorization token', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -389,16 +415,9 @@ describe('GameController (e2e)', () => {
     it('should return 404 when subscribing to events for a non-existent game ID', async () => {
       const unknownGameID = uuidv4()
 
-      const token = await authService.signGameToken(
-        unknownGameID,
-        uuidv4(),
-        GameParticipantType.HOST,
-        Math.floor(new Date().getTime() / 1000) + 6 * 60 * 60,
-      )
-
       return supertest(app.getHttpServer())
         .get(`/api/games/${unknownGameID}/events`)
-        .set('Authorization', `Bearer ${token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -410,26 +429,24 @@ describe('GameController (e2e)', () => {
         })
     })
 
-    it('should return 401 when subscribing to events with a token for a different game', async () => {
-      const firstCreatedGame = await gameService.createGame(
+    it('should return Forbidden when subscribing to events with a token for a different game', async () => {
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(
-        firstCreatedGame.token,
-      )
-
-      const secondCreatedGame = await gameService.createGame(
+      await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        playerClient.player._id,
       )
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
-        .set('Authorization', `Bearer ${secondCreatedGame.token}`)
-        .expect(401)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .expect(403)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized game access')
-          expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('message', 'Forbidden')
+          expect(res.body).toHaveProperty('status', 403)
           expect(res.body).toHaveProperty('timestamp')
         })
     })
@@ -437,11 +454,10 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/tasks/current/complete (POST)', () => {
     it('should succeed in completing the current task', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'active' })
@@ -449,7 +465,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set('Authorization', `Bearer ${createdGame.token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toStrictEqual({})
@@ -457,11 +473,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'pending' })
@@ -469,7 +484,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set('Authorization', `Bearer ${createdGame.token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -482,11 +497,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is already completed', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'completed' })
@@ -494,7 +508,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set('Authorization', `Bearer ${createdGame.token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -507,11 +521,10 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny completing the current task without an authorization token', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
@@ -526,16 +539,9 @@ describe('GameController (e2e)', () => {
     it('should return 404 when completing the current task for a non-existent game ID', async () => {
       const unknownGameID = uuidv4()
 
-      const token = await authService.signGameToken(
-        unknownGameID,
-        uuidv4(),
-        GameParticipantType.HOST,
-        Math.floor(new Date().getTime() / 1000) + 6 * 60 * 60,
-      )
-
       return supertest(app.getHttpServer())
         .post(`/api/games/${unknownGameID}/tasks/current/complete`)
-        .set('Authorization', `Bearer ${token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -548,25 +554,23 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return 401 when completing the current task with a token for a different game', async () => {
-      const firstCreatedGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(
-        firstCreatedGame.token,
-      )
-
-      const secondCreatedGame = await gameService.createGame(
+      await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        playerClient.player._id,
       )
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set('Authorization', `Bearer ${secondCreatedGame.token}`)
-        .expect(401)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .expect(403)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized game access')
-          expect(res.body).toHaveProperty('status', 401)
+          expect(res.body).toHaveProperty('message', 'Forbidden')
+          expect(res.body).toHaveProperty('status', 403)
           expect(res.body).toHaveProperty('timestamp')
         })
     })
@@ -574,13 +578,12 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/answers (POST)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
-
-      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -597,7 +600,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(204)
         .expect((res) => {
@@ -605,12 +608,11 @@ describe('GameController (e2e)', () => {
         })
     })
 
-    it('should return Forbidden when a non-player tries to submit an answer', async () => {
-      const createdGame = await gameService.createGame(
+    it('should return Forbidden when a host tries to submit an answer', async () => {
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
-
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -627,24 +629,23 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${createdGame.token}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(403)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Forbidden resource')
+          expect(res.body).toHaveProperty('message', 'Forbidden')
           expect(res.body).toHaveProperty('status', 403)
           expect(res.body).toHaveProperty('timestamp')
         })
     })
 
     it('should return BadRequest for invalid task status', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
-
-      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -661,7 +662,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${playerClientToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
@@ -675,13 +676,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest for non-question task type', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
-
-      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
+      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
 
       await gameModel
         .findByIdAndUpdate(gameID, { currentTask: buildLobbyTask() })
@@ -689,7 +689,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${playerClientToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
@@ -703,15 +703,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest when the player has already submitted an answer', async () => {
-      const createdGame = await gameService.createGame(
+      const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
+        hostClient.player._id,
       )
 
-      const { gameID } = await authService.verifyGameToken(createdGame.token)
-
-      const { token } = await gameService.joinGame(gameID, 'FrostyBear')
-
-      const { sub: playerId } = await authService.verifyGameToken(token)
+      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -723,7 +720,7 @@ describe('GameController (e2e)', () => {
             answers: [
               {
                 type: QuestionType.MultiChoice,
-                playerId,
+                playerId: playerClient.player._id,
                 answer: 0,
                 created: new Date(),
               },
@@ -735,7 +732,7 @@ describe('GameController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${playerClientToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
