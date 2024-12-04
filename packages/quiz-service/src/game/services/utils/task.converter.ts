@@ -318,6 +318,10 @@ export function calculateClassicModeScore(
     return calculateClassicModeRangeQuestionScore(presented, question, answer)
   }
 
+  if (!isQuestionAnswerCorrect(question, answer)) {
+    return 0
+  }
+
   const rawScore = calculateClassicModeRawScore(presented, question, answer)
   return Math.round(rawScore)
 }

@@ -718,21 +718,50 @@ describe('TaskConverter', () => {
   })
 
   describe('calculateClassicModeScore', () => {
-    it('should calculate score for a multi-choice question', () => {
+    it('should calculate score for a multi-choice question and correct answer', () => {
       const presented = new Date()
 
       const question = {
         type: QuestionType.MultiChoice,
+        options: [
+          { value: 'correct answer', correct: true },
+          { value: 'incorrect answer', correct: false },
+        ],
         duration: 30,
         points: 1000,
       } as BaseQuestion & QuestionMultiChoice
 
       const answer = {
+        type: QuestionType.MultiChoice,
+        answer: 0,
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
 
       const score = calculateClassicModeScore(presented, question, answer)
       expect(score).toEqual(983) // Speed-based calculation
+    })
+
+    it('should return 0 for a multi-choice question and incorrect answer', () => {
+      const presented = new Date()
+
+      const question = {
+        type: QuestionType.MultiChoice,
+        options: [
+          { value: 'correct answer', correct: true },
+          { value: 'incorrect answer', correct: false },
+        ],
+        duration: 30,
+        points: 1000,
+      } as BaseQuestion & QuestionMultiChoice
+
+      const answer = {
+        type: QuestionType.MultiChoice,
+        answer: 1,
+        created: new Date(presented.getTime() + 1000),
+      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
+
+      const score = calculateClassicModeScore(presented, question, answer)
+      expect(score).toEqual(0)
     })
 
     it('should calculate score for a range question', () => {
@@ -788,6 +817,86 @@ describe('TaskConverter', () => {
 
       const score = calculateClassicModeScore(presented, question, answer)
       expect(score).toEqual(0) // Outside margin
+    })
+
+    it('should calculate score for a true/false question and correct answer', () => {
+      const presented = new Date()
+
+      const question = {
+        type: QuestionType.TrueFalse,
+        correct: true,
+        duration: 30,
+        points: 1000,
+      } as BaseQuestion & QuestionTrueFalse
+
+      const answer = {
+        type: QuestionType.TrueFalse,
+        answer: true,
+        created: new Date(presented.getTime() + 1000),
+      } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer // 1 second
+
+      const score = calculateClassicModeScore(presented, question, answer)
+      expect(score).toEqual(983) // Speed-based calculation
+    })
+
+    it('should return 0 for a true/false question and incorrect answer', () => {
+      const presented = new Date()
+
+      const question = {
+        type: QuestionType.TrueFalse,
+        correct: true,
+        duration: 30,
+        points: 1000,
+      } as BaseQuestion & QuestionTrueFalse
+
+      const answer = {
+        type: QuestionType.TrueFalse,
+        answer: false,
+        created: new Date(presented.getTime() + 1000),
+      } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer // 1 second
+
+      const score = calculateClassicModeScore(presented, question, answer)
+      expect(score).toEqual(0)
+    })
+
+    it('should calculate score for a type-answer question and correct answer', () => {
+      const presented = new Date()
+
+      const question = {
+        type: QuestionType.TypeAnswer,
+        correct: 'correct answer',
+        duration: 30,
+        points: 1000,
+      } as BaseQuestion & QuestionTypeAnswer
+
+      const answer = {
+        type: QuestionType.TypeAnswer,
+        answer: 'correct answer',
+        created: new Date(presented.getTime() + 1000),
+      } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer // 1 second
+
+      const score = calculateClassicModeScore(presented, question, answer)
+      expect(score).toEqual(983) // Speed-based calculation
+    })
+
+    it('should return 0 for a type-answer question and incorrect answer', () => {
+      const presented = new Date()
+
+      const question = {
+        type: QuestionType.TypeAnswer,
+        correct: 'correct answer',
+        duration: 30,
+        points: 1000,
+      } as BaseQuestion & QuestionTypeAnswer
+
+      const answer = {
+        type: QuestionType.TypeAnswer,
+        answer: 'incorrect answer',
+        created: new Date(presented.getTime() + 1000),
+      } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer // 1 second
+
+      const score = calculateClassicModeScore(presented, question, answer)
+      expect(score).toEqual(0)
     })
   })
 
