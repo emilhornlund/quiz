@@ -1,11 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import {
-  AuthRequestDto,
-  AuthResponseDto,
-  GameParticipantType,
-  GameTokenDto,
-} from '@quiz/common'
+import { AuthRequestDto, AuthResponseDto, TokenDto } from '@quiz/common'
 
 import { ClientService } from '../../client/services'
 
@@ -56,41 +51,17 @@ export class AuthService {
   }
 
   /**
-   * Signs a JWT token for a game participant with specified parameters.
-   *
-   * @param {string} gameID - Unique identifier for the game.
-   * @param {string} hostClientId - Unique identifier for the host client.
-   * @param {GameParticipantType} gameParticipantType - The type of game participant (host or player).
-   * @param {number} expiration - Expiration time for the token in Unix timestamp.
-   *
-   * @returns A signed JWT token as a Promise.
-   */
-  public async signGameToken(
-    gameID: string,
-    hostClientId: string,
-    gameParticipantType: GameParticipantType,
-    expiration: number,
-  ): Promise<string> {
-    return this.jwtService.signAsync(
-      { gameID, role: gameParticipantType, exp: expiration },
-      {
-        subject: hostClientId,
-      },
-    )
-  }
-
-  /**
    * Verifies a JWT token and returns the decoded payload.
    *
    * @param {string} token - The JWT token to be verified.
    *
-   * @returns {Promise<GameTokenDto>} A Promise that resolves to the decoded payload as a `GameTokenDto`.
+   * @returns {Promise<TokenDto>} A Promise that resolves to the decoded payload as a `TokenDto`.
    *
    * @throws {UnauthorizedException} If the token is invalid or verification fails.
    */
-  public async verifyGameToken(token: string): Promise<GameTokenDto> {
+  public async verifyToken(token: string): Promise<TokenDto> {
     try {
-      return await this.jwtService.verifyAsync<GameTokenDto>(token)
+      return await this.jwtService.verifyAsync<TokenDto>(token)
     } catch {
       throw new UnauthorizedException()
     }

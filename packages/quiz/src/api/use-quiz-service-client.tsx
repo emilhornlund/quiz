@@ -3,7 +3,6 @@ import {
   CreateGameRequestDto,
   CreateGameResponseDto,
   FindGameResponseDto,
-  GameAuthResponseDto,
   PaginatedQuizResponseDto,
   PlayerResponseDto,
   QuestionType,
@@ -196,15 +195,21 @@ export const useQuizServiceClient = () => {
     apiGet<PaginatedQuizResponseDto>('/client/quizzes')
 
   /**
+   * Finds a game using the provided game PIN.
    *
-   * @param gamePIN
+   * @param gamePIN - The PIN of the game to find.
+   *
+   * @returns A promise resolving to the details of the found game as a `FindGameResponseDto`.
    */
   const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
     apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
 
   /**
+   * Creates a new game using the provided game request data.
    *
-   * @param request
+   * @param request - The request data to create a new game.
+   *
+   * @returns A promise resolving to the created game details as a `CreateGameResponseDto`.
    */
   const createGame = (
     request: CreateGameRequestDto,
@@ -212,27 +217,33 @@ export const useQuizServiceClient = () => {
     apiPost<CreateGameResponseDto>('/games', request)
 
   /**
+   * Joins an existing game using the provided game ID and player nickname.
    *
-   * @param gameID
-   * @param nickname
+   * @param gameID - The ID of the game to join.
+   * @param nickname - The nickname of the player joining the game.
+   *
+   * @returns A promise that resolves when the player has successfully joined the game.
    */
-  const joinGame = (
-    gameID: string,
-    nickname: string,
-  ): Promise<GameAuthResponseDto> =>
-    apiPost<GameAuthResponseDto>(`/games/${gameID}/players`, { nickname })
+  const joinGame = (gameID: string, nickname: string): Promise<void> =>
+    apiPost<void>(`/games/${gameID}/players`, { nickname })
 
   /**
+   * Marks the current task in the game as completed.
    *
-   * @param gameID
+   * @param gameID - The ID of the game whose current task should be completed.
+   *
+   * @returns A promise that resolves when the task has been successfully completed.
    */
   const completeTask = (gameID: string) =>
     apiPost(`/games/${gameID}/tasks/current/complete`, {}).then(() => {})
 
   /**
+   * Submits an answer to a question in the specified game.
    *
-   * @param gameID
-   * @param submitQuestionAnswerRequest
+   * @param gameID - The ID of the game where the answer is being submitted.
+   * @param submitQuestionAnswerRequest - The request containing the answer details.
+   *
+   * @returns A promise that resolves when the answer has been successfully submitted.
    */
   const submitQuestionAnswer = async (
     gameID: string,

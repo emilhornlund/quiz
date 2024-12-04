@@ -65,7 +65,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { sub } = await this.authService.verifyGameToken(token)
+      const { sub } = await this.authService.verifyToken(token)
 
       request['client'] =
         await this.clientService.findByClientIdHashOrThrow(sub)
