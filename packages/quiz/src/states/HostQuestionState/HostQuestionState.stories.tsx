@@ -149,6 +149,10 @@ export const QuestionTrueFalse = {
       question: {
         type: QuestionType.TrueFalse,
         question: "Rabbits can't vomit?",
+        media: {
+          type: MediaType.Audio,
+          url: 'https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3',
+        },
         duration: 30,
       },
       countdown: {

@@ -75,10 +75,10 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
           alt={question.question}
         />
       )}
-      {question.media?.type === MediaType.Audio ||
-        (question.media?.type === MediaType.Video && (
-          <ResponsivePlayer url={question.media.url} />
-        ))}
+      {(question.media?.type === MediaType.Audio ||
+        question.media?.type === MediaType.Video) && (
+        <ResponsivePlayer url={question.media.url} />
+      )}
     </div>
     <div
       className={classNames(

@@ -14,3 +14,9 @@ export const Video = {
     url: 'https://www.youtube.com/watch?v=LXb3EKWsInQ',
   },
 } satisfies Story
+
+export const Audio = {
+  args: {
+    url: 'https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3',
+  },
+} satisfies Story
