@@ -1,12 +1,10 @@
-@import '../../styles/colors';
 @import '../../styles/helpers';
 
-.streak {
+.streakBadge {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
 
   @include mobile {
     column-gap: $layout-gutter * 0.5;

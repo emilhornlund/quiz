@@ -1,36 +1,13 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
-.streak {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-
-  @include mobile {
-    column-gap: $layout-gutter * 0.5;
-    @include fontSize($mobile-text-font-size);
-  }
-
-  @include tablet {
-    column-gap: $layout-gutter * 0.75;
-    @include fontSize($tablet-text-font-size);
-  }
-
-  @include desktop {
-    column-gap: $layout-gutter;
-    @include fontSize($desktop-text-font-size);
-  }
-}
-
 .score {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: $white-1-50;
   font-weight: bold;
 
   @mixin score-dimensions($size, $padding-ratio) {

@@ -1,15 +1,13 @@
 import { GameLeaderboardPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import {
+import StreakBadge, {
   Badge,
   getBadgePositionBackgroundColor,
   NicknameChip,
   Page,
   PlayerGameFooter,
 } from '../../components'
-
-import styles from './PlayerLeaderboardState.module.scss'
 
 export interface PlayerLeaderboardStateProps {
   event: GameLeaderboardPlayerEvent
@@ -40,14 +38,7 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
         {position}
       </Badge>
       <NicknameChip value={nickname} />
-      {!!streaks && streaks > 1 && (
-        <div className={styles.streak}>
-          Streak{' '}
-          <Badge size="small" backgroundColor="orange">
-            {streaks}
-          </Badge>
-        </div>
-      )}
+      <StreakBadge streak={streaks}>Streak</StreakBadge>
     </Page>
   )
 }

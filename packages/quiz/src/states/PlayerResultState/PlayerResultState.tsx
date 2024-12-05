@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameResultPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { Badge, Page, PlayerGameFooter, Typography } from '../../components'
+import StreakBadge, {
+  Badge,
+  Page,
+  PlayerGameFooter,
+  Typography,
+} from '../../components'
 
 import { getPositionMessage } from './messages.ts'
 import styles from './PlayerResultState.module.scss'
@@ -41,14 +46,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
       <Badge size="large" backgroundColor={correct ? 'green' : 'red'}>
         <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
       </Badge>
-      {!!streak && streak > 1 && (
-        <div className={styles.streak}>
-          Streak{' '}
-          <Badge size="small" backgroundColor="orange">
-            {streak}
-          </Badge>
-        </div>
-      )}
+      <StreakBadge streak={streak}>Streak</StreakBadge>
       <div className={styles.score}>{lastScore}</div>
       <Typography variant="text" size="small">
         {message}

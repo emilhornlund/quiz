@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StreakBadge > should not render a StreakBadge 1`] = `<div />`;
+
+exports[`StreakBadge > should render a StreakBadge 1`] = `
+<div>
+  <div
+    class="streakBadge"
+  >
+    <div
+      class="badge small orange"
+    >
+      3
+    </div>
+  </div>
+</div>
+`;
+
+exports[`StreakBadge > should render a StreakBadge with label 1`] = `
+<div>
+  <div
+    class="streakBadge"
+  >
+    Label
+    <div
+      class="badge small orange"
+    >
+      3
+    </div>
+  </div>
+</div>
+`;
