@@ -62,7 +62,10 @@ export class GameAuthGuard implements CanActivate {
       (participant) => participant.client.player._id === playerId,
     )
 
-    if (!participant || participant.type !== requiredParticipantType) {
+    if (
+      !participant ||
+      (requiredParticipantType && participant.type !== requiredParticipantType)
+    ) {
       throw new ForbiddenException()
     }
 

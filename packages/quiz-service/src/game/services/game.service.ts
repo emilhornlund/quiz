@@ -214,15 +214,15 @@ export class GameService {
     ) {
       const allAnswers = gameDocument.currentTask.answers
 
-      const hasAllPlayersAnswered = gameDocument.participants.every(
-        (participant) => {
-          return allAnswers.find(
+      const hasAllPlayersAnswered = gameDocument.participants
+        .filter(({ type }) => type === GameParticipantType.PLAYER)
+        .every((participant) =>
+          allAnswers.find(
             (answer) =>
               participant.type === GameParticipantType.PLAYER &&
               answer.playerId === participant.client.player._id,
-          )
-        },
-      )
+          ),
+        )
 
       if (hasAllPlayersAnswered) {
         await this.gameTaskTransitionScheduler.scheduleTaskTransition(

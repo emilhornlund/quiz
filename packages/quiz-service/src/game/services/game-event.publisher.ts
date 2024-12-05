@@ -33,15 +33,14 @@ export class GameEventPublisher {
    */
   public async publish(document: GameDocument): Promise<void> {
     await Promise.all(
-      document.participants.map(
-        (participant) =>
-          ({
-            clientId: participant.client.player._id,
-            event:
-              participant.type === GameParticipantType.HOST
-                ? buildHostGameEvent(document)
-                : buildPlayerGameEvent(document, participant),
-          }) as DistributedEvent,
+      document.participants.map((participant) =>
+        this.publishDistributedEvent({
+          clientId: participant.client.player._id,
+          event:
+            participant.type === GameParticipantType.HOST
+              ? buildHostGameEvent(document)
+              : buildPlayerGameEvent(document, participant),
+        } as DistributedEvent),
       ),
     )
   }

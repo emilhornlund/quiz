@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { GameMode, QuestionType } from '@quiz/common'
+import { GameMode, GameParticipantType, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 
 import {
   Participant,
   ParticipantHost,
+  ParticipantHostSchema,
   ParticipantPlayer,
+  ParticipantPlayerSchema,
   ParticipantSchema,
 } from './participant.schema'
 import {
@@ -96,6 +98,18 @@ export class Game {
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game)
+
+const participantsSchema =
+  GameSchema.path<MongooseSchema.Types.Array>('participants')
+participantsSchema.discriminator(
+  GameParticipantType.HOST,
+  ParticipantHostSchema,
+)
+participantsSchema.discriminator(
+  GameParticipantType.PLAYER,
+  ParticipantPlayerSchema,
+)
+
 const questionsSchema = GameSchema.path<MongooseSchema.Types.Array>('questions')
 questionsSchema.discriminator(
   QuestionType.MultiChoice,

@@ -2,7 +2,6 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
-import { GameParticipantType } from '@quiz/common'
 
 import { AuthModule } from '../auth'
 import { PlayerModule } from '../player'
@@ -15,12 +14,7 @@ import {
   GameService,
   GameTaskTransitionScheduler,
 } from './services'
-import {
-  Game,
-  GameSchema,
-  ParticipantHostSchema,
-  ParticipantPlayerSchema,
-} from './services/models/schemas'
+import { Game, GameSchema } from './services/models/schemas'
 
 /**
  * GameModule sets up the necessary controllers, providers, and Mongoose schemas
@@ -33,10 +27,6 @@ import {
       {
         name: Game.name,
         schema: GameSchema,
-        discriminators: [
-          { name: GameParticipantType.HOST, schema: ParticipantHostSchema },
-          { name: GameParticipantType.PLAYER, schema: ParticipantPlayerSchema },
-        ],
       },
     ]),
     ScheduleModule.forRoot(),

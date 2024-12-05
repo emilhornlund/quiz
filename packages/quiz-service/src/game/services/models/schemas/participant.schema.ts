@@ -6,7 +6,7 @@ import { Client } from '../../../../client/services/models/schemas'
 /**
  * Represents a participant in a game, including host and player details.
  */
-@Schema({ id: false, discriminatorKey: 'type' })
+@Schema({ _id: false, discriminatorKey: 'type' })
 export class Participant {
   /**
    * The type of participant, either host or player.
@@ -44,7 +44,7 @@ export const ParticipantSchema = SchemaFactory.createForClass(Participant)
 /**
  * Represents the host of a game.
  */
-@Schema()
+@Schema({ _id: false })
 export class ParticipantHost {
   /**
    * The type of participant, set to 'HOST' for this class.
@@ -61,7 +61,7 @@ export const ParticipantHostSchema =
 /**
  * Represents a player in the game.
  */
-@Schema()
+@Schema({ _id: false })
 export class ParticipantPlayer {
   /**
    * The type of participant, set to 'PLAYER' for this class.
