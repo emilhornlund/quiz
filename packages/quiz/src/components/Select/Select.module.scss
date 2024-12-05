@@ -7,10 +7,14 @@ $outline-offset: pxToRem(2px);
   display: flex;
   flex-direction: column;
   margin: $outline-offset;
+  position: relative;
 
   select {
     display: flex;
     flex-direction: column;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
     appearance: none;
     height: 100%;
     outline-offset: $outline-offset;
@@ -18,6 +22,8 @@ $outline-offset: pxToRem(2px);
     outline: $outline-offset solid $white;
     background-color: $white;
     color: $gray-4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     @include mobile {
       height: pxToRem(42px);
@@ -47,6 +53,25 @@ $outline-offset: pxToRem(2px);
       background-color: $gray-1;
       outline-color: $gray-1;
       color: $gray-2;
+    }
+  }
+
+  svg {
+    position: absolute;
+
+    @include mobile {
+      top: calc(50% - #{pxToRem(16px) / 2});
+      right: $layout-gutter * 0.8;
+    }
+
+    @include tablet {
+      top: calc(50% - #{pxToRem(17px) / 2});
+      right: $layout-gutter * 0.9;
+    }
+
+    @include desktop {
+      top: calc(50% - #{pxToRem(18px) / 2});
+      right: $layout-gutter;
     }
   }
 

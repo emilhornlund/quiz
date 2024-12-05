@@ -1,3 +1,5 @@
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { FC } from 'react'
 
 import styles from './Select.module.scss'
@@ -33,6 +35,7 @@ const Select: FC<SelectProps> = ({
         </option>
       ))}
     </select>
+    <FontAwesomeIcon icon={faChevronDown} color="black" />
   </div>
 )
 
