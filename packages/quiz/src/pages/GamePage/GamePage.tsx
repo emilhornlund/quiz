@@ -15,6 +15,7 @@ import {
   HostResultState,
   PlayerAwaitingResultState,
   PlayerGameBeginState,
+  PlayerLeaderboardState,
   PlayerLobbyState,
   PlayerPodiumState,
   PlayerQuestionPreviewState,
@@ -117,6 +118,8 @@ const GamePage = () => {
         )
       case GameEventType.GameResultPlayer:
         return <PlayerResultState event={event} />
+      case GameEventType.GameLeaderboardPlayer:
+        return <PlayerLeaderboardState event={event} />
       case GameEventType.GamePodiumHost:
         return <HostPodiumState event={event} />
       case GameEventType.GamePodiumPlayer:

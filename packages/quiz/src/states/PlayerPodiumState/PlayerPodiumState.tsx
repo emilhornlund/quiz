@@ -3,7 +3,7 @@ import React, { FC, useMemo } from 'react'
 
 import {
   Badge,
-  BadgeBackgroundColor,
+  getBadgePositionBackgroundColor,
   NicknameChip,
   Page,
   Typography,
@@ -11,19 +11,6 @@ import {
 
 import { getPodiumPositionMessage } from './messages.ts'
 import styles from './PlayerPodiumState.module.scss'
-
-function getBadgeBackgroundColor(position: number): BadgeBackgroundColor {
-  switch (Math.max(position, 1)) {
-    case 1:
-      return 'gold'
-    case 2:
-      return 'silver'
-    case 3:
-      return 'bronze'
-    default:
-      return 'white'
-  }
-}
 
 export interface PlayerPodiumStateProps {
   event: GamePodiumPlayerEvent
@@ -48,7 +35,9 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
         {name}
       </Typography>
       <div className={styles.content}>
-        <Badge size="large" backgroundColor={getBadgeBackgroundColor(position)}>
+        <Badge
+          size="large"
+          backgroundColor={getBadgePositionBackgroundColor(position)}>
           {position}
         </Badge>
         <NicknameChip value={nickname} />

@@ -223,6 +223,19 @@ export type GameLeaderboardHostEvent = {
   pagination: PaginationEvent
 }
 
+export type GameLeaderboardPlayerEvent = {
+  type: GameEventType.GameLeaderboardPlayer
+  player: {
+    nickname: string
+    score: {
+      position: number
+      score: number
+      streaks: number
+    }
+  }
+  pagination: PaginationEvent
+}
+
 export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
   leaderboard: { position: number; nickname: string; score: number }[]
@@ -257,5 +270,6 @@ export type GameEvent =
   | GameResultHostEvent
   | GameResultPlayerEvent
   | GameLeaderboardHostEvent
+  | GameLeaderboardPlayerEvent
   | GamePodiumHostEvent
   | GamePodiumPlayerEvent

@@ -27,6 +27,7 @@ import {
   QuestionType,
 } from '@quiz/common'
 import { GameEventQuestionResultsMultiChoice } from '@quiz/common/dist/cjs/models/game-event'
+import { GameLeaderboardPlayerEvent } from '@quiz/common/src'
 
 import {
   GameDocument,
@@ -177,7 +178,14 @@ export function buildPlayerGameEvent(
   }
 
   if (isLeaderboardTask(document)) {
-    return buildGameLoadingEvent()
+    switch (document.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+        return buildGameLeaderboardPlayerEvent(document, participantPlayer)
+      case 'completed':
+        return buildGameLoadingEvent()
+    }
   }
 
   if (isPodiumTask(document)) {
@@ -797,6 +805,40 @@ function buildGameLeaderboardHostEvent(
         streaks,
       }),
     ),
+    pagination: buildPaginationEvent(document),
+  }
+}
+
+/**
+ * Builds a leaderboard event for the player.
+ *
+ * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
+ * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ */
+function buildGameLeaderboardPlayerEvent(
+  document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
+  participantPlayer: Participant & ParticipantPlayer,
+): GameLeaderboardPlayerEvent {
+  const player = participantPlayer.client.player
+
+  const leaderboardEntry = document.currentTask.leaderboard.find(
+    ({ playerId }) => playerId === player._id,
+  )
+  if (!leaderboardEntry) {
+    throw new Error(`Player not found in leaderboard: ${player._id}`)
+  }
+  const { position, score, streaks } = leaderboardEntry
+
+  return {
+    type: GameEventType.GameLeaderboardPlayer,
+    player: {
+      nickname: player.nickname,
+      score: {
+        position,
+        score,
+        streaks,
+      },
+    },
     pagination: buildPaginationEvent(document),
   }
 }
