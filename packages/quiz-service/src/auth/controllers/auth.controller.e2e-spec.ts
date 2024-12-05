@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 

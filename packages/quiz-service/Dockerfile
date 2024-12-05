@@ -31,7 +31,7 @@ COPY --from=build /app/packages/quiz-service/.env.production ./packages/quiz-ser
 COPY --from=build /app/packages/quiz-service/dist ./packages/quiz-service/dist
 
 # Production Stage
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
