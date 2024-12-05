@@ -3,7 +3,10 @@ import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcryptjs'
 
 import { PlayerService } from '../../player/services'
-import { ClientByIdHashNotFoundException } from '../exceptions'
+import {
+  ClientByIdHashNotFoundException,
+  ClientByIdNotFoundException,
+} from '../exceptions'
 
 import { Client, ClientModel } from './models/schemas'
 
@@ -52,6 +55,26 @@ export class ClientService {
       }).save()
 
       this.logger.log(`Created client with id '${client._id}.'`)
+    }
+
+    return client
+  }
+
+  /**
+   * Finds a client by its ID or throws an exception if not found.
+   *
+   * @param {string} clientId - The ID of the client to find.
+   *
+   * @returns {Promise<Client>} The client document.
+   *
+   * @throws {ClientByIdNotFoundException} If the client is not found.
+   */
+  public async findByClientIdOrThrow(clientId: string): Promise<Client> {
+    const client = await this.clientModel.findById(clientId).populate('player')
+
+    if (!client) {
+      this.logger.warn(`Client was not found by id '${clientId}.`)
+      throw new ClientByIdNotFoundException(clientId)
     }
 
     return client

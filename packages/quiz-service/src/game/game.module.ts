@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
 
 import { AuthModule } from '../auth'
+import { ClientModule } from '../client'
 import { PlayerModule } from '../player'
 
 import { GameController } from './controllers/game.controller'
@@ -32,6 +33,7 @@ import { Game, GameSchema } from './services/models/schemas'
     ScheduleModule.forRoot(),
     AuthModule,
     PlayerModule,
+    ClientModule,
   ],
   controllers: [GameController],
   providers: [

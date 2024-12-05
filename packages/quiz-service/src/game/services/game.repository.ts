@@ -203,7 +203,6 @@ export class GameRepository {
    *
    * @param {string} gameID - The ID of the game to add the player to.
    * @param {Client} client - The client object representing the player joining the game.
-   * @param {string} nickname - The nickname of the player to add.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the updated GameDocument.
    *
@@ -212,7 +211,6 @@ export class GameRepository {
   public async addPlayer(
     gameID: string,
     client: Client,
-    nickname: string,
   ): Promise<GameDocument> {
     const now = new Date()
 
@@ -228,10 +226,11 @@ export class GameRepository {
     return this.findAndSaveWithLock(gameID, (currentDocument) => {
       if (
         currentDocument.participants.some(
-          (participant) => participant.client.player.nickname === nickname,
+          (participant) =>
+            participant.client.player.nickname === client.player.nickname,
         )
       ) {
-        throw new NicknameAlreadyTakenException(nickname)
+        throw new NicknameAlreadyTakenException(client.player.nickname)
       }
 
       currentDocument.participants.push(newParticipant)

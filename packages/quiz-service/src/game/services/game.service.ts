@@ -9,7 +9,7 @@ import {
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 
-import { AuthService } from '../../auth/services'
+import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
 import { PlayerService } from '../../player/services'
 
@@ -31,14 +31,14 @@ export class GameService {
    *
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
    * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
-   * @param {AuthService} authService - The authentication service for managing game tokens.
    * @param {PlayerService} playerService - The service responsible for managing player information.
+   * @param {ClientService} clientService - Service for retrieving client information.
    */
   constructor(
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
-    private authService: AuthService,
     private playerService: PlayerService,
+    private clientService: ClientService,
   ) {}
 
   /**
@@ -110,7 +110,12 @@ export class GameService {
     nickname: string,
   ): Promise<void> {
     await this.playerService.updatePlayer(client.player._id, nickname)
-    await this.gameRepository.addPlayer(gameID, client, nickname)
+
+    const updatedClient = await this.clientService.findByClientIdOrThrow(
+      client._id,
+    )
+
+    await this.gameRepository.addPlayer(gameID, updatedClient)
   }
 
   /**
