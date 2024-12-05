@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRedis } from '@nestjs-modules/ioredis'
+import { GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { DistributedEvent } from './models/event'
@@ -31,18 +32,18 @@ export class GameEventPublisher {
    * @returns {Promise<void>} A promise that resolves once the events are published.
    */
   public async publish(document: GameDocument): Promise<void> {
-    await Promise.all([
-      this.publishDistributedEvent({
-        clientId: document.hostClientId,
-        event: buildHostGameEvent(document),
-      }),
-      ...document.players.map((player) =>
-        this.publishDistributedEvent({
-          clientId: player._id,
-          event: buildPlayerGameEvent(document, player),
-        } as DistributedEvent),
+    await Promise.all(
+      document.participants.map(
+        (participant) =>
+          ({
+            clientId: participant.client.player._id,
+            event:
+              participant.type === GameParticipantType.HOST
+                ? buildHostGameEvent(document)
+                : buildPlayerGameEvent(document, participant),
+          }) as DistributedEvent,
       ),
-    ])
+    )
   }
 
   /**

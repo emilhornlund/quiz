@@ -4,11 +4,13 @@ import {
   CreateGameResponseDto,
   CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
+  GameParticipantType,
   QuestionType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 
 import { AuthService } from '../../auth/services'
+import { Client } from '../../client/services/models/schemas'
 import { PlayerService } from '../../player/services'
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
@@ -44,7 +46,7 @@ export class GameService {
    * saves the game, and returns a response containing the game ID and JWT token for the host.
    *
    * @param {CreateClassicModeGameRequestDto | CreateZeroToOneHundredModeGameRequestDto} request - The details of the game to be created.
-   * @param {string} playerId - The ID of the player creating the game.
+   * @param {Client} client - The client object representing the host creating the game.
    *
    * @returns {Promise<CreateGameResponseDto>} A Promise that resolves to the response object containing the created game details.
    */
@@ -52,11 +54,11 @@ export class GameService {
     request:
       | CreateClassicModeGameRequestDto
       | CreateZeroToOneHundredModeGameRequestDto,
-    playerId: string,
+    client: Client,
   ): Promise<CreateGameResponseDto> {
     const gameDocument = await this.gameRepository.createGame(
       buildPartialGameModel(request),
-      playerId,
+      client,
     )
 
     await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
@@ -92,8 +94,8 @@ export class GameService {
    * the nickname is not already taken. Generates a unique token for the joined player.
    *
    * @param {string} gameID - The unique identifier of the game the player wants to join.
+   * @param {Client} client - The client object representing the player joining the game.
    * @param {string} nickname - The nickname chosen by the player. Must be unique within the game.
-   * @param {string} playerId - The ID of the player joining the game.
    *
    * @returns {Promise<void>} A Promise that resolves when the player is successfully added to the game.
    *
@@ -104,12 +106,11 @@ export class GameService {
    */
   public async joinGame(
     gameID: string,
+    client: Client,
     nickname: string,
-    playerId: string,
   ): Promise<void> {
-    const player = await this.playerService.updatePlayer(playerId, nickname)
-
-    await this.gameRepository.addPlayer(gameID, player._id, nickname)
+    await this.playerService.updatePlayer(client.player._id, nickname)
+    await this.gameRepository.addPlayer(gameID, client, nickname)
   }
 
   /**
@@ -213,9 +214,15 @@ export class GameService {
     ) {
       const allAnswers = gameDocument.currentTask.answers
 
-      const hasAllPlayersAnswered = gameDocument.players.every((player) => {
-        return allAnswers.find((answer) => answer.playerId === player._id)
-      })
+      const hasAllPlayersAnswered = gameDocument.participants.every(
+        (participant) => {
+          return allAnswers.find(
+            (answer) =>
+              participant.type === GameParticipantType.PLAYER &&
+              answer.playerId === participant.client.player._id,
+          )
+        },
+      )
 
       if (hasAllPlayersAnswered) {
         await this.gameTaskTransitionScheduler.scheduleTaskTransition(

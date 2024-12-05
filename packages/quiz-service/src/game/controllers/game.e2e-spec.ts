@@ -4,6 +4,7 @@ import {
   CreateClassicModeGameRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
+  GameParticipantType,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -133,7 +134,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const game = await gameModel.findById(gameID).exec()
@@ -150,7 +151,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const game = await gameModel.findById(gameID).exec()
@@ -167,7 +168,7 @@ describe('GameController (e2e)', () => {
     it('should fail to retrieve a classic mode game if it was created more than 6 hours ago', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
@@ -194,7 +195,7 @@ describe('GameController (e2e)', () => {
     it('should fail to retrieve a zero to one hundred mode game if it was created more than 6 hours ago', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
@@ -250,7 +251,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       return supertest(app.getHttpServer())
@@ -266,16 +267,19 @@ describe('GameController (e2e)', () => {
     it('should fail in joining when nickname already taken', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameModel
         .findByIdAndUpdate(gameID, {
-          players: [
+          participants: [
             {
-              _id: uuidv4(),
-              nickname: 'FrostyBear',
-              joined: new Date(),
+              type: GameParticipantType.PLAYER,
+              client: playerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
             },
           ],
         })
@@ -299,7 +303,7 @@ describe('GameController (e2e)', () => {
     it('should fail in joining an expired game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
@@ -361,7 +365,7 @@ describe('GameController (e2e)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       const response = supertest(app.getHttpServer())
@@ -379,10 +383,10 @@ describe('GameController (e2e)', () => {
     it('should allow event subscription for a player who joined the game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
-      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
+      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
       const response = supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -399,7 +403,7 @@ describe('GameController (e2e)', () => {
     it('should deny event subscription without an authorization token', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       return supertest(app.getHttpServer())
@@ -432,12 +436,12 @@ describe('GameController (e2e)', () => {
     it('should return Forbidden when subscribing to events with a token for a different game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        playerClient.player._id,
+        playerClient,
       )
 
       return supertest(app.getHttpServer())
@@ -456,7 +460,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in completing the current task', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameModel
@@ -475,7 +479,7 @@ describe('GameController (e2e)', () => {
     it('should fail in completing the current task if its current status is pending', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameModel
@@ -499,7 +503,7 @@ describe('GameController (e2e)', () => {
     it('should fail in completing the current task if its current status is already completed', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameModel
@@ -523,7 +527,7 @@ describe('GameController (e2e)', () => {
     it('should deny completing the current task without an authorization token', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       return supertest(app.getHttpServer())
@@ -556,12 +560,12 @@ describe('GameController (e2e)', () => {
     it('should return 401 when completing the current task with a token for a different game', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        playerClient.player._id,
+        playerClient,
       )
 
       return supertest(app.getHttpServer())
@@ -580,10 +584,10 @@ describe('GameController (e2e)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
-      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
+      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -611,7 +615,7 @@ describe('GameController (e2e)', () => {
     it('should return Forbidden when a host tries to submit an answer', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
       await gameModel
@@ -642,10 +646,10 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest for invalid task status', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
-      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
+      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -678,10 +682,10 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest for non-question task type', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
-      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
+      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
       await gameModel
         .findByIdAndUpdate(gameID, { currentTask: buildLobbyTask() })
@@ -705,10 +709,10 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest when the player has already submitted an answer', async () => {
       const { id: gameID } = await gameService.createGame(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient.player._id,
+        hostClient,
       )
 
-      await gameService.joinGame(gameID, 'FrostyBear', playerClient.player._id)
+      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
       await gameModel
         .findByIdAndUpdate(gameID, {

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { GameParticipantType } from '@quiz/common'
 import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
 
+import { Client } from '../../client/services/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
@@ -10,7 +12,13 @@ import {
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
-import { Game, GameDocument, PartialGameModel, Player } from './models/schemas'
+import {
+  Game,
+  GameDocument,
+  PartialGameModel,
+  Participant,
+  ParticipantPlayer,
+} from './models/schemas'
 import { buildGameModel } from './utils'
 
 /**
@@ -41,10 +49,22 @@ export class GameRepository {
     gameID: string,
     active: boolean = true,
   ): Promise<GameDocument | null> {
-    return this.gameModel.findOne({
-      _id: gameID,
-      ...(active ? { expires: { $gt: new Date(Date.now()) } } : {}),
-    })
+    return this.gameModel
+      .findOne({
+        _id: gameID,
+        ...(active ? { expires: { $gt: new Date(Date.now()) } } : {}),
+      })
+      .populate({
+        path: 'participants',
+        populate: {
+          path: 'client',
+          model: 'Client',
+          populate: {
+            path: 'player',
+            model: 'Player',
+          },
+        },
+      })
   }
 
   /**
@@ -165,26 +185,24 @@ export class GameRepository {
    * Creates and saves a new game.
    *
    * @param {PartialGameModel} game - The partial game data to create the game document.
-   * @param {string} hostPlayerId - The unique ID of the player creating the game.
+   * @param {Client} client - The client object representing the host creating the game.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the saved GameDocument.
    */
   public async createGame(
     game: PartialGameModel,
-    hostPlayerId: string,
+    client: Client,
   ): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    return new this.gameModel(
-      buildGameModel(game, gamePIN, hostPlayerId),
-    ).save()
+    return new this.gameModel(buildGameModel(game, gamePIN, client)).save()
   }
 
   /**
    * Adds a new player to a game and publishes an event after the player is added.
    *
    * @param {string} gameID - The ID of the game to add the player to.
-   * @param {string} playerId - The ID of the player joining the game.
+   * @param {Client} client - The client object representing the player joining the game.
    * @param {string} nickname - The nickname of the player to add.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the updated GameDocument.
@@ -193,25 +211,30 @@ export class GameRepository {
    */
   public async addPlayer(
     gameID: string,
-    playerId: string,
+    client: Client,
     nickname: string,
   ): Promise<GameDocument> {
-    const newPlayer: Player = {
-      _id: playerId,
-      nickname,
+    const now = new Date()
+
+    const newParticipant: Participant & ParticipantPlayer = {
+      type: GameParticipantType.PLAYER,
+      client,
       totalScore: 0,
       currentStreak: 0,
-      joined: new Date(),
+      created: now,
+      updated: now,
     }
 
     return this.findAndSaveWithLock(gameID, (currentDocument) => {
       if (
-        currentDocument.players.some((player) => player.nickname === nickname)
+        currentDocument.participants.some(
+          (participant) => participant.client.player.nickname === nickname,
+        )
       ) {
         throw new NicknameAlreadyTakenException(nickname)
       }
 
-      currentDocument.players.push(newPlayer)
+      currentDocument.participants.push(newParticipant)
 
       return currentDocument
     })

@@ -2,7 +2,12 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { GameMode, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 
-import { Player, PlayerSchema } from './player.schema'
+import {
+  Participant,
+  ParticipantHost,
+  ParticipantPlayer,
+  ParticipantSchema,
+} from './participant.schema'
 import {
   BaseQuestion,
   BaseQuestionSchema,
@@ -60,11 +65,8 @@ export class Game {
   @Prop({ type: Number, required: true })
   nextQuestion: number
 
-  @Prop({ type: String, required: true })
-  hostClientId: string
-
-  @Prop({ type: [PlayerSchema], required: true })
-  players: Player[]
+  @Prop({ type: [ParticipantSchema], required: true })
+  participants: (Participant & (ParticipantHost | ParticipantPlayer))[]
 
   @Prop({ type: BaseTask, required: true })
   currentTask: BaseTask &

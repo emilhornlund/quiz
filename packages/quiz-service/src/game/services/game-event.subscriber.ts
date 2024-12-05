@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRedis } from '@nestjs-modules/ioredis'
-import { GameEventType } from '@quiz/common'
+import { GameEventType, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
@@ -116,9 +116,11 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
   ): Promise<Observable<MessageEvent>> {
     const document = await this.gameRepository.findGameByIDOrThrow(gameID)
 
-    const player = document.players.find((player) => player._id === playerId)
+    const participant = document.participants.find(
+      (participant) => participant.client.player._id === playerId,
+    )
 
-    if (document.hostClientId !== playerId && !player) {
+    if (!participant) {
       throw new PlayerNotFoundException(playerId)
     }
 
@@ -133,9 +135,10 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     const initialEvent: DistributedEvent = {
       clientId: playerId,
-      event: player
-        ? buildPlayerGameEvent(document, player)
-        : buildHostGameEvent(document),
+      event:
+        participant.type === GameParticipantType.PLAYER
+          ? buildPlayerGameEvent(document, participant)
+          : buildHostGameEvent(document),
     }
 
     return concat(from([initialEvent]), source).pipe(

@@ -2,6 +2,7 @@ import {
   CreateClassicModeGameRequestDto,
   CreateCommonMediaRequestDto,
   CreateZeroToOneHundredModeGameRequestDto,
+  GameParticipantType,
   isCreateClassicModeQuestionMultiChoiceRequestDto,
   isCreateClassicModeQuestionSliderRequestDto,
   isCreateClassicModeQuestionTrueFalseRequestDto,
@@ -12,6 +13,7 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import { Client } from '../../../client/services/models/schemas'
 import {
   BaseQuestion,
   Game,
@@ -27,18 +29,18 @@ import { calculateRangeStep } from './question.utils'
 import { buildLobbyTask } from './task.converter'
 
 /**
- * Constructs a complete Game model from a partial game input and a game PIN.
+ * Builds a complete game document from the provided partial game model and other details.
  *
  * @param {PartialGameModel} game - The partial game data to create the game document.
  * @param {string} gamePIN - The unique 6-digit game PIN of the game to create.
- * @param {string} hostPlayerId - The playerId of the host creating the game.
+ * @param {Client} client - The client object representing the host creating the game.
  *
  * @returns {Game} A fully constructed Game document.
  */
 export function buildGameModel(
   game: PartialGameModel,
   gamePIN: string,
-  hostPlayerId: string,
+  client: Client,
 ): Game {
   const now = Date.now()
 
@@ -47,8 +49,14 @@ export function buildGameModel(
     _id: uuidv4(),
     pin: gamePIN,
     nextQuestion: 0,
-    hostClientId: hostPlayerId,
-    players: [],
+    participants: [
+      {
+        type: GameParticipantType.HOST,
+        client,
+        created: new Date(now),
+        updated: new Date(now),
+      },
+    ],
     currentTask: buildLobbyTask(),
     previousTasks: [],
     expires: new Date(now + 6 * 60 * 60 * 1000),

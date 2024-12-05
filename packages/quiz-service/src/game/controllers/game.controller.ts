@@ -28,7 +28,11 @@ import {
 import { GameParticipantType } from '@quiz/common'
 import { Observable } from 'rxjs'
 
-import { AuthorizedPlayerIdParam } from '../../client/controllers/decorators/auth'
+import {
+  AuthorizedClientParam,
+  AuthorizedPlayerIdParam,
+} from '../../client/controllers/decorators/auth'
+import { Client } from '../../client/services/models/schemas'
 import {
   ParseCreateGameRequestPipe,
   ParseGamePINPipe,
@@ -81,7 +85,7 @@ export class GameController {
   /**
    * Creates a new game and assigns it to the authorized player.
    *
-   * @param {string} playerId - The ID of the player creating the game.
+   * @param {Client} client - The client object containing details of the authorized client creating the game.
    * @param {CreateClassicModeGameRequest | CreateZeroToOneHundredModeGameRequest} createGameRequest - The details of the game to be created.
    *
    * @returns {CreateGameResponse} A response containing the details of the created game.
@@ -107,13 +111,13 @@ export class GameController {
     type: CreateGameResponse,
   })
   async createGame(
-    @AuthorizedPlayerIdParam() playerId: string,
+    @AuthorizedClientParam() client: Client,
     @Body(new ParseCreateGameRequestPipe())
     createGameRequest:
       | CreateClassicModeGameRequest
       | CreateZeroToOneHundredModeGameRequest,
   ): Promise<CreateGameResponse> {
-    return await this.gameService.createGame(createGameRequest, playerId)
+    return await this.gameService.createGame(createGameRequest, client)
   }
 
   /**
@@ -153,7 +157,7 @@ export class GameController {
   /**
    * Allows a player to join an existing game.
    *
-   * @param {string} playerId - The ID of the player joining the game.
+   * @param {Client} client - The client object containing details of the authorized client joining the game.
    * @param {string} gameID - The unique identifier of the game.
    * @param {JoinGameRequest} request - The request body containing the player's nickname.
    *
@@ -182,11 +186,11 @@ export class GameController {
   })
   @GameIdParam()
   async joinGame(
-    @AuthorizedPlayerIdParam() playerId: string,
+    @AuthorizedClientParam() client: Client,
     @Param('gameID', ParseUUIDPipe) gameID: string,
     @Body() request: JoinGameRequest,
   ): Promise<void> {
-    return this.gameService.joinGame(gameID, request.nickname, playerId)
+    return this.gameService.joinGame(gameID, client, request.nickname)
   }
 
   /**

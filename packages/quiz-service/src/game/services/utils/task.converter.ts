@@ -1,4 +1,8 @@
-import { GameMode, QuestionRangeAnswerMargin } from '@quiz/common'
+import {
+  GameMode,
+  GameParticipantType,
+  QuestionRangeAnswerMargin,
+} from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { IllegalTaskTypeException } from '../../exceptions'
@@ -9,7 +13,8 @@ import {
   LeaderboardTask,
   LeaderboardTaskItem,
   LobbyTask,
-  Player,
+  Participant,
+  ParticipantPlayer,
   PodiumTask,
   QuestionMultiChoice,
   QuestionRange,
@@ -403,8 +408,11 @@ export function buildQuestionResultTask(
 
   const question = gameDocument.questions[questionIndex]
 
-  const results: QuestionResultTaskItem[] = gameDocument.players
-    .map((player) => {
+  const results: QuestionResultTaskItem[] = gameDocument.participants
+    .filter((participant) => participant.type === GameParticipantType.PLAYER)
+    .map((participant) => {
+      const player = participant.client.player
+
       const answer = gameDocument.currentTask.answers.find(
         ({ playerId }) => playerId === player._id,
       )
@@ -424,9 +432,9 @@ export function buildQuestionResultTask(
         answer,
         correct,
         lastScore,
-        totalScore: player.totalScore + lastScore,
+        totalScore: participant.totalScore + lastScore,
         position: 0,
-        streak: correct ? player.currentStreak + 1 : 0,
+        streak: correct ? participant.currentStreak + 1 : 0,
       }
     })
     .sort((a, b) =>
@@ -482,14 +490,14 @@ function compareSortClassicModeQuestionResultTaskItemByScore(
 /**
  * Compares two players by their total scores in Classic mode.
  *
- * @param {Player} lhs - The first player to compare.
- * @param {Player} rhs - The second player to compare.
+ * @param {Participant & ParticipantPlayer} lhs - The first player participant to compare.
+ * @param {Participant & ParticipantPlayer} rhs - The second player participant to compare.
  *
  * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
  */
 function compareSortClassicModePlayersByScore(
-  lhs: Player,
-  rhs: Player,
+  lhs: Participant & ParticipantPlayer,
+  rhs: Participant & ParticipantPlayer,
 ): number {
   return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
 }
@@ -515,8 +523,8 @@ function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
 /**
  * Compares two players by their total scores in ZeroToOneHundred mode.
  *
- * @param {Player} lhs - The first player to compare.
- * @param {Player} rhs - The second player to compare.
+ * @param {Participant & ParticipantPlayer} lhs - The first player participant to compare.
+ * @param {Participant & ParticipantPlayer} rhs - The second player participant to compare.
  *
  * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
  *
@@ -524,8 +532,8 @@ function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
  * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
  */
 function compareZeroToOneHundredModePlayersByScore(
-  lhs: Player,
-  rhs: Player,
+  lhs: Participant & ParticipantPlayer,
+  rhs: Participant & ParticipantPlayer,
 ): number {
   return compareSortClassicModePlayersByScore(lhs, rhs) * -1 //sort scores from lowest to highest
 }
@@ -540,18 +548,19 @@ function compareZeroToOneHundredModePlayersByScore(
 function buildLeaderboardItems(
   gameDocument: GameDocument,
 ): LeaderboardTaskItem[] {
-  return gameDocument.players
+  return gameDocument.participants
+    .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .sort((a, b) =>
       gameDocument.mode === GameMode.Classic
         ? compareSortClassicModePlayersByScore(a, b)
         : compareZeroToOneHundredModePlayersByScore(a, b),
     )
-    .map((player, index) => ({
-      playerId: player._id,
-      nickname: player.nickname,
+    .map((participant, index) => ({
+      playerId: participant.client.player._id,
+      nickname: participant.client.player.nickname,
       position: index + 1,
-      score: player.totalScore,
-      streaks: player.currentStreak,
+      score: participant.totalScore,
+      streaks: participant.currentStreak,
     }))
 }
 
@@ -567,15 +576,17 @@ function applyLastScore(
     currentTask: { type: TaskType.QuestionResult }
   },
 ): void {
-  gameDocument.players.forEach((player) => {
-    const resultEntry = gameDocument.currentTask.results.find(
-      ({ playerId }) => playerId === player._id,
-    )
-    if (resultEntry) {
-      player.totalScore = resultEntry.totalScore
-      player.currentStreak = resultEntry.streak
-    }
-  })
+  gameDocument.participants
+    .filter((participant) => participant.type === GameParticipantType.PLAYER)
+    .forEach((participant) => {
+      const resultEntry = gameDocument.currentTask.results.find(
+        ({ playerId }) => playerId === participant.client.player._id,
+      )
+      if (resultEntry) {
+        participant.totalScore = resultEntry.totalScore
+        participant.currentStreak = resultEntry.streak
+      }
+    })
 }
 
 /**
