@@ -1,9 +1,9 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import {
-  QUIZ_NAME_MAX_LENGTH,
-  QUIZ_NAME_MIN_LENGTH,
-  QUIZ_NAME_REGEX,
+  QUIZ_TITLE_MAX_LENGTH,
+  QUIZ_TITLE_MIN_LENGTH,
+  QUIZ_TITLE_REGEX,
 } from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
@@ -34,9 +34,9 @@ import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
  * - `@Matches` to ensure the title matches the specified regex pattern.
  *
  * Constants used:
- * - `QUIZ_NAME_MIN_LENGTH`: The minimum allowed length for the title.
- * - `QUIZ_NAME_MAX_LENGTH`: The maximum allowed length for the title.
- * - `QUIZ_NAME_REGEX`: The regex pattern the title must match.
+ * - `QUIZ_TITLE_MIN_LENGTH`: The minimum allowed length for the title.
+ * - `QUIZ_TITLE_MAX_LENGTH`: The maximum allowed length for the title.
+ * - `QUIZ_TITLE_REGEX`: The regex pattern the title must match.
  *
  * @returns {PropertyDecorator} The combined property decorator.
  */
@@ -44,18 +44,18 @@ export function ApiQuizTitleProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
       description: 'The title of the quiz.',
-      minLength: QUIZ_NAME_MIN_LENGTH,
-      maxLength: QUIZ_NAME_MAX_LENGTH,
-      pattern: `${QUIZ_NAME_REGEX}`,
+      minLength: QUIZ_TITLE_MIN_LENGTH,
+      maxLength: QUIZ_TITLE_MAX_LENGTH,
+      pattern: `${QUIZ_TITLE_REGEX}`,
       required: true,
       type: String,
       example: 'Trivia Battle',
     }),
     IsString(),
-    MinLength(QUIZ_NAME_MIN_LENGTH),
-    MaxLength(QUIZ_NAME_MAX_LENGTH),
-    Matches(QUIZ_NAME_REGEX, {
-      message: `The title must match the pattern ${QUIZ_NAME_REGEX}.`,
+    MinLength(QUIZ_TITLE_MIN_LENGTH),
+    MaxLength(QUIZ_TITLE_MAX_LENGTH),
+    Matches(QUIZ_TITLE_REGEX, {
+      message: `The title must match the pattern ${QUIZ_TITLE_REGEX}.`,
     }),
   )
 }
