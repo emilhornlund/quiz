@@ -6,7 +6,7 @@ $outline-offset: pxToRem(2px);
 .select {
   display: flex;
   flex-direction: column;
-  margin: $outline-offset;
+  margin: $outline-offset * 2;
   position: relative;
 
   select {

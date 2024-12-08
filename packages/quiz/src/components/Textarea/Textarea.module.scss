@@ -6,10 +6,7 @@ $outline-offset: pxToRem(2px);
 .container {
   display: flex;
   flex-direction: column;
-  margin: $outline-offset;
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
+  margin: $outline-offset * 2;
   flex: 1;
 
   textarea {
@@ -24,6 +21,7 @@ $outline-offset: pxToRem(2px);
     resize: none;
     background-color: $white;
     color: $gray-4;
+    font-family: inherit;
 
     &:disabled {
       background-color: $gray-1;
@@ -50,6 +48,12 @@ $outline-offset: pxToRem(2px);
       border-radius: $layout-gutter * 0.7;
 
       @include fontSize(18px);
+    }
+  }
+
+  &.error {
+    textarea {
+      outline-color: $red-2;
     }
   }
 }

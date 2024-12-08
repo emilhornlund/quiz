@@ -6,9 +6,13 @@ $outline-offset: pxToRem(2px);
 .main {
   display: flex;
   flex-direction: column;
-  margin: $outline-offset;
+  margin: $outline-offset * 2;
+  flex-grow: 0;
+  flex-shrink: 1;
 
   input {
+    flex-grow: 0;
+    flex-shrink: 1;
     display: flex;
     flex-direction: column;
     appearance: none;
@@ -80,6 +84,12 @@ $outline-offset: pxToRem(2px);
       padding: 0 $layout-gutter;
       border-radius: $layout-gutter * 0.7;
       @include fontSize(18px);
+    }
+  }
+
+  &.error {
+    input {
+      outline-color: $red-2;
     }
   }
 }

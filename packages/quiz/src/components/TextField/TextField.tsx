@@ -43,25 +43,29 @@ const TextField: React.FC<TextFieldProps> = ({
     setInternalValue(value ?? '')
   }, [value])
 
+  const [valid, setValid] = useState<boolean>(false)
+  const [hasFocus, setHasFocus] = useState<boolean>(false)
+
   useEffect(() => {
-    let valid = true
+    let tmpValid = true
     if (type === 'number') {
       if (
         typeof internalValue !== 'number' ||
         !isValidNumber(internalValue, min, max)
       ) {
-        valid = false
+        tmpValid = false
       }
     } else if (type === 'text') {
       if (typeof internalValue !== 'string') {
-        valid = false
+        tmpValid = false
       } else if (required && !internalValue) {
-        valid = false
-      } else if (regex && !regex.test(internalValue)) {
-        valid = false
+        tmpValid = false
+      } else if (internalValue && regex && !regex.test(internalValue)) {
+        tmpValid = false
       }
     }
-    onValid?.(valid)
+    onValid?.(tmpValid)
+    setValid(tmpValid)
   }, [internalValue, type, min, max, regex, required, onValid])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +83,7 @@ const TextField: React.FC<TextFieldProps> = ({
       className={classNames(
         styles.main,
         size === 'small' ? styles.small : undefined,
+        !valid && hasFocus ? styles.error : undefined,
       )}>
       <input
         id={id}
@@ -90,6 +95,8 @@ const TextField: React.FC<TextFieldProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         onChange={handleChange}
+        onFocus={() => setHasFocus(true)}
+        onBlur={() => setHasFocus(false)}
         data-testid={`test-${id}-textfield`}
       />
     </div>

@@ -3,7 +3,7 @@
 exports[`TextField > should not receive onChange event when not a number changes 1`] = `
 <div>
   <div
-    class="main"
+    class="main error"
   >
     <input
       data-testid="test-my-textfield-textfield"
@@ -21,7 +21,7 @@ exports[`TextField > should not receive onChange event when not a number changes
 exports[`TextField > should not receive onChange event when number above max changes 1`] = `
 <div>
   <div
-    class="main"
+    class="main error"
   >
     <input
       data-testid="test-my-textfield-textfield"
@@ -39,7 +39,7 @@ exports[`TextField > should not receive onChange event when number above max cha
 exports[`TextField > should not receive onChange event when number bellow min changes 1`] = `
 <div>
   <div
-    class="main"
+    class="main error"
   >
     <input
       data-testid="test-my-textfield-textfield"
