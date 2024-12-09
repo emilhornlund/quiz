@@ -6,8 +6,6 @@ import {
 } from '@quiz/common'
 import { Model } from 'mongoose'
 
-import { Quiz } from './quiz.schema'
-
 /**
  * Mongoose schema for the Question Media.
  */
@@ -41,15 +39,8 @@ export const QuestionMediaSchema = SchemaFactory.createForClass(QuestionMedia)
  * This base schema includes common properties shared by all question types
  * and acts as a parent for discriminator-based subtypes.
  */
-@Schema({ collection: 'questions', discriminatorKey: 'type' })
+@Schema({ _id: false, discriminatorKey: 'type' })
 export class Question {
-  /**
-   * The unique identifier of the question.
-   * Acts as the primary key in the database.
-   */
-  @Prop({ type: String, required: true })
-  _id: string
-
   /**
    * The type of the question.
    */
@@ -82,24 +73,6 @@ export class Question {
    */
   @Prop({ type: Number, required: true })
   duration: number
-
-  /**
-   * The quiz document associated with the question.
-   */
-  @Prop({ type: String, ref: 'Quiz' })
-  quiz: Quiz
-
-  /**
-   * The date and time when the question was created.
-   */
-  @Prop({ type: Date, required: true })
-  created: Date
-
-  /**
-   * The date and time when the question's record was last updated.
-   */
-  @Prop({ type: Date, required: true })
-  updated: Date
 }
 
 /**

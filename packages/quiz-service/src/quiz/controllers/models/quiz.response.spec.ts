@@ -1,7 +1,6 @@
-import { LanguageCode, QuizVisibility } from '@quiz/common'
+import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
 import { validate } from 'class-validator'
 
-import { QuizRequest } from './quiz.request'
 import { QuizResponse } from './quiz.response'
 
 describe('QuizResponse', () => {
@@ -9,6 +8,7 @@ describe('QuizResponse', () => {
     id: 'eaf37189-7aa7-455e-9e47-73db2a7d0a03',
     title: 'Trivia Battle',
     description: 'A fun and engaging trivia quiz for all ages.',
+    mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
     imageCoverURL: 'https://example.com/question-cover-image.png',
     languageCode: LanguageCode.English,
@@ -86,7 +86,7 @@ describe('QuizResponse', () => {
   })
 
   it('should fail if `visibility` is not valid', async () => {
-    const response = Object.assign(new QuizRequest(), {
+    const response = Object.assign(new QuizResponse(), {
       ...validData,
       visibility: 'not-valid',
     })
@@ -96,7 +96,7 @@ describe('QuizResponse', () => {
   })
 
   it('should pass if `imageCoverURL` is optional', async () => {
-    const response = Object.assign(new QuizRequest(), {
+    const response = Object.assign(new QuizResponse(), {
       ...validData,
       imageCoverURL: undefined,
     })

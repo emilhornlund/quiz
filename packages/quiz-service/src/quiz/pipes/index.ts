@@ -1,1 +1,1 @@
-export * from './parse-question-request.pipe'
+export * from './parse-quiz-request.pipe'

@@ -1,6 +1,12 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import { LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  MediaType,
+  QuestionType,
+  QuizVisibility,
+} from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -126,9 +132,40 @@ describe('ClientController (e2e)', () => {
         {
           title: 'Trivia Battle',
           description: 'A fun and engaging trivia quiz for all ages.',
+          mode: GameMode.Classic,
           visibility: QuizVisibility.Public,
           imageCoverURL: 'https://example.com/question-cover-image.png',
           languageCode: LanguageCode.English,
+          questions: [
+            {
+              type: QuestionType.MultiChoice,
+              question: 'What is the capital of Sweden?',
+              media: {
+                type: MediaType.Image,
+                url: 'https://example.com/question-image.png',
+              },
+              options: [
+                {
+                  value: 'Stockholm',
+                  correct: true,
+                },
+                {
+                  value: 'Copenhagen',
+                  correct: false,
+                },
+                {
+                  value: 'London',
+                  correct: false,
+                },
+                {
+                  value: 'Berlin',
+                  correct: false,
+                },
+              ],
+              points: 1000,
+              duration: 30,
+            },
+          ],
         },
         client1.player,
       )
@@ -139,9 +176,23 @@ describe('ClientController (e2e)', () => {
           title: 'Geography Explorer',
           description:
             'Test your knowledge about countries, capitals, and landmarks.',
+          mode: GameMode.ZeroToOneHundred,
           visibility: QuizVisibility.Private,
           imageCoverURL: 'https://example.com/geography-cover-image.png',
           languageCode: LanguageCode.Swedish,
+          questions: [
+            {
+              type: QuestionType.Range,
+              question:
+                'Guess the temperature of the hottest day ever recorded.',
+              media: {
+                type: MediaType.Image,
+                url: 'https://example.com/question-image.png',
+              },
+              correct: 50,
+              duration: 30,
+            },
+          ],
         },
         client2.player,
       )

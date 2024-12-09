@@ -1,7 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import {
+  GameMode,
   PaginatedQuizResponseDto,
+  QuestionDto,
+  QuestionMultiChoiceDto,
+  QuestionRangeAnswerMargin,
+  QuestionRangeDto,
+  QuestionTrueFalseDto,
+  QuestionType,
+  QuestionTypeAnswerDto,
+  QuestionZeroToOneHundredRangeDto,
   QuizRequestDto,
   QuizResponseDto,
 } from '@quiz/common'
@@ -10,7 +19,16 @@ import { v4 as uuidv4 } from 'uuid'
 import { Player } from '../../player/services/models/schemas'
 import { QuizNotFoundException } from '../exceptions'
 
-import { Quiz, QuizModel } from './models/schemas'
+import {
+  Question,
+  QuestionMultiChoice,
+  QuestionRange,
+  QuestionTrueFalse,
+  QuestionTypeAnswer,
+  QuestionWithDiscriminatorVariant,
+  Quiz,
+  QuizModel,
+} from './models/schemas'
 
 /**
  * Service for managing quiz-related operations.
@@ -176,6 +194,28 @@ export class QuizService {
   }
 
   /**
+   * Retrieves all questions associated with a given quiz.
+   *
+   * @param {string} quizId - The unique identifier of the quiz.
+   *
+   * @returns {Promise<QuestionDto[]>} - A list of all questions associated with the specified quiz.
+   *
+   * @throws {QuizNotFoundException} - If the quiz with the given ID does not exist.
+   */
+  public async findAllQuestion(quizId: string): Promise<QuestionDto[]> {
+    const quiz = await this.quizModel.findById(quizId).populate('owner')
+
+    if (!quiz) {
+      this.logger.warn(`Quiz was not found by id '${quizId}.`)
+      throw new QuizNotFoundException(quizId)
+    }
+
+    return quiz.questions.map((question) =>
+      QuizService.buildQuestionDto(quiz.mode, question),
+    )
+  }
+
+  /**
    * Builds a new quiz document based on the request data and player.
    *
    * @param {QuizRequestDto} quizRequest - The data for the quiz to be created.
@@ -193,9 +233,11 @@ export class QuizService {
       _id: uuidv4(),
       title: quizRequest.title,
       description: quizRequest.description,
+      mode: quizRequest.mode,
       visibility: quizRequest.visibility,
       imageCoverURL: quizRequest.imageCoverURL,
       languageCode: quizRequest.languageCode,
+      questions: QuizService.buildQuizQuestions(quizRequest),
       owner: player,
       created,
       updated: created,
@@ -214,10 +256,165 @@ export class QuizService {
     return {
       title: quizRequest.title,
       description: quizRequest.description,
+      mode: quizRequest.mode,
       visibility: quizRequest.visibility,
       imageCoverURL: quizRequest.imageCoverURL,
       languageCode: quizRequest.languageCode,
+      questions: QuizService.buildQuizQuestions(quizRequest),
       updated: new Date(),
+    }
+  }
+
+  /**
+   * Builds the Mongoose-compatible documents for the questions.
+   *
+   * @param {QuizRequestDto} quizRequest - The data for the question.
+   *
+   * @returns {QuestionWithDiscriminatorVariant} - The constructed question documents.
+   * @private
+   */
+  private static buildQuizQuestions(
+    quizRequest: QuizRequestDto,
+  ): QuestionWithDiscriminatorVariant[] {
+    if (quizRequest.mode === GameMode.Classic) {
+      return quizRequest.questions.map((question) => {
+        const common: Partial<Question> = {
+          type: question.type,
+          text: question.question,
+          media: question.media,
+          points: question.points,
+          duration: question.duration,
+        }
+
+        switch (question.type) {
+          case QuestionType.MultiChoice:
+            return {
+              ...common,
+              ...({
+                type: QuestionType.MultiChoice,
+                options: question.options,
+              } as Question & QuestionMultiChoice),
+            }
+          case QuestionType.Range:
+            return {
+              ...common,
+              ...({
+                type: QuestionType.Range,
+                min: question.min,
+                max: question.max,
+                correct: question.correct,
+                margin: question.margin,
+              } as Question & QuestionRange),
+            }
+          case QuestionType.TrueFalse:
+            return {
+              ...common,
+              ...({
+                type: QuestionType.TrueFalse,
+                correct: question.correct,
+              } as Question & QuestionTrueFalse),
+            }
+          case QuestionType.TypeAnswer:
+            return {
+              ...common,
+              ...({
+                type: QuestionType.TypeAnswer,
+                options: question.options,
+              } as Question & QuestionTypeAnswer),
+            }
+        }
+      })
+    }
+
+    if (quizRequest.mode === GameMode.ZeroToOneHundred) {
+      return quizRequest.questions.map((question) => {
+        return {
+          type: QuestionType.Range,
+          text: question.question,
+          media: question.media,
+          min: 0,
+          max: 100,
+          correct: question.correct,
+          margin: QuestionRangeAnswerMargin.None,
+          points: 0,
+          duration: question.duration,
+        } as Question & QuestionRange
+      })
+    }
+  }
+
+  /**
+   * Constructs a `QuestionDto` object from a Mongoose `Question` document.
+   *
+   * @param {GameMode} mode - The game mode of the quiz.
+   * @param {Question} question - The Mongoose question document to transform.
+   *
+   * @returns {QuestionDto} - The constructed DTO representing the question details.
+   * @private
+   */
+  private static buildQuestionDto(
+    mode: GameMode,
+    question: Question,
+  ): QuestionDto {
+    const { type, text, media, points, duration } = question
+
+    if (mode === GameMode.Classic) {
+      const common: Partial<QuestionDto> = {
+        type,
+        question: text,
+        media,
+        points,
+        duration,
+      }
+
+      switch (type) {
+        case QuestionType.MultiChoice: {
+          const cast = question as Question & QuestionMultiChoice
+          return {
+            ...common,
+            type: QuestionType.MultiChoice,
+            options: cast.options,
+          } as QuestionMultiChoiceDto
+        }
+        case QuestionType.Range: {
+          const cast = question as Question & QuestionRange
+          return {
+            ...common,
+            type: QuestionType.Range,
+            min: cast.min,
+            max: cast.max,
+            correct: cast.correct,
+            margin: cast.margin,
+          } as QuestionRangeDto
+        }
+        case QuestionType.TrueFalse: {
+          const cast = question as Question & QuestionTrueFalse
+          return {
+            ...common,
+            type: QuestionType.TrueFalse,
+            correct: cast.correct,
+          } as QuestionTrueFalseDto
+        }
+        case QuestionType.TypeAnswer: {
+          const cast = question as Question & QuestionTypeAnswer
+          return {
+            ...common,
+            type: QuestionType.TypeAnswer,
+            options: cast.options,
+          } as QuestionTypeAnswerDto
+        }
+      }
+    }
+
+    if (mode === GameMode.ZeroToOneHundred) {
+      const cast = question as Question & QuestionRange
+      return {
+        type,
+        question: text,
+        media,
+        duration,
+        correct: cast.correct,
+      } as QuestionZeroToOneHundredRangeDto
     }
   }
 
@@ -234,6 +431,7 @@ export class QuizService {
       _id: id,
       title,
       description,
+      mode,
       visibility,
       imageCoverURL,
       languageCode,
@@ -244,6 +442,7 @@ export class QuizService {
       id,
       title,
       description,
+      mode,
       visibility,
       imageCoverURL,
       languageCode,

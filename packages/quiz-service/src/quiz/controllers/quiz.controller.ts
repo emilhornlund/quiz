@@ -10,23 +10,37 @@ import {
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
+  getSchemaPath,
 } from '@nestjs/swagger'
 
 import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
+import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
 import { ApiQuizIdParam } from './decorators/api'
 import { AuthorizedQuiz } from './decorators/auth'
 import { RouteQuizIdParam } from './decorators/route'
-import { QuizRequest, QuizResponse } from './models'
+import {
+  QuestionMultiChoice,
+  QuestionRange,
+  QuestionTrueFalse,
+  QuestionTypeAnswer,
+  QuestionZeroToOneHundredRange,
+  QuizClassicRequest,
+  QuizResponse,
+  QuizZeroToOneHundredRequest,
+} from './models'
+import { QuestionResponseMultiChoiceExample } from './utils/question-examples.utils'
 
 /**
  * Controller for managing quiz-related operations.
@@ -34,6 +48,15 @@ import { QuizRequest, QuizResponse } from './models'
 @ApiBearerAuth()
 @ApiTags('quiz')
 @Controller('quizzes')
+@ApiExtraModels(
+  QuestionMultiChoice,
+  QuestionRange,
+  QuestionTrueFalse,
+  QuestionTypeAnswer,
+  QuestionZeroToOneHundredRange,
+  QuizClassicRequest,
+  QuizZeroToOneHundredRequest,
+)
 export class QuizController {
   /**
    * Initializes the QuizController.
@@ -46,7 +69,7 @@ export class QuizController {
    * Creates a new quiz and associates it with the authenticated client.
    *
    * @param {Client} client - The client initiating the request.
-   * @param {QuizRequest} quizRequest - The details of the quiz to create.
+   * @param {QuizClassicRequest | QuizZeroToOneHundredRequest} quizRequest - The details of the quiz to create.
    *
    * @returns {Promise<QuizResponse>} The newly created quiz.
    */
@@ -55,6 +78,15 @@ export class QuizController {
     summary: 'Create a new quiz',
     description:
       'Creates a new quiz and associates it with the authenticated client.',
+  })
+  @ApiBody({
+    description: 'Request body for creating a new game.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(QuizClassicRequest) },
+        { $ref: getSchemaPath(QuizZeroToOneHundredRequest) },
+      ],
+    },
   })
   @ApiCreatedResponse({
     description: 'Successfully created the quiz.',
@@ -66,7 +98,8 @@ export class QuizController {
   @HttpCode(HttpStatus.CREATED)
   public async createQuiz(
     @AuthorizedClientParam() client: Client,
-    @Body() quizRequest: QuizRequest,
+    @Body(new ParseQuizRequestPipe())
+    quizRequest: QuizClassicRequest | QuizZeroToOneHundredRequest,
   ): Promise<QuizResponse> {
     return this.quizService.createQuiz(quizRequest, client.player)
   }
@@ -107,7 +140,7 @@ export class QuizController {
    * Updates an existing quiz by its unique ID with new details.
    *
    * @param {string} quizId - The ID of the quiz to update.
-   * @param {QuizRequest} quizRequest - The new details for the quiz.
+   * @param {QuizClassicRequest | QuizZeroToOneHundredRequest} quizRequest - The details of the quiz to update.
    *
    * @returns {Promise<QuizResponse>} The updated quiz.
    */
@@ -118,6 +151,15 @@ export class QuizController {
     description: 'Updates an existing quiz by its unique ID with new details.',
   })
   @ApiQuizIdParam()
+  @ApiBody({
+    description: 'Request body for creating a new game.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(QuizClassicRequest) },
+        { $ref: getSchemaPath(QuizZeroToOneHundredRequest) },
+      ],
+    },
+  })
   @ApiOkResponse({
     description: 'Successfully updated the quiz.',
     type: QuizResponse,
@@ -132,7 +174,8 @@ export class QuizController {
   @HttpCode(HttpStatus.OK)
   public async updateQuiz(
     @RouteQuizIdParam() quizId: string,
-    @Body() quizRequest: QuizRequest,
+    @Body(new ParseQuizRequestPipe())
+    quizRequest: QuizClassicRequest | QuizZeroToOneHundredRequest,
   ): Promise<QuizResponse> {
     return this.quizService.updateQuiz(quizId, quizRequest)
   }
@@ -165,5 +208,60 @@ export class QuizController {
   @HttpCode(HttpStatus.NO_CONTENT)
   public async deleteQuiz(@RouteQuizIdParam() quizId: string): Promise<void> {
     return this.quizService.deleteQuiz(quizId)
+  }
+
+  /**
+   * Retrieves all questions for a specific quiz.
+   *
+   * This endpoint fetches all the questions associated with the specified quiz.
+   * The response includes details for each question, including its type and specific properties.
+   *
+   * @param {string} quizId - The unique identifier of the quiz for which to retrieve questions.
+   *
+   * @returns {Promise<(QuestionMultiChoice | QuestionRange | QuestionZeroToOneHundredRange | QuestionTrueFalse | QuestionTypeAnswer)[]>} - An array of questions associated with the specified quiz.
+   */
+  @Get('/:quizId/questions')
+  @AuthorizedQuiz()
+  @ApiOperation({
+    summary: 'Retrieve all quiz questions',
+    description:
+      'Fetches all the questions associated with the specified quiz.',
+  })
+  @ApiQuizIdParam()
+  @ApiOkResponse({
+    description: 'Successfully retrieved the questions.',
+    schema: {
+      type: 'array',
+      items: {
+        oneOf: [
+          { $ref: getSchemaPath(QuestionMultiChoice) },
+          { $ref: getSchemaPath(QuestionRange) },
+          { $ref: getSchemaPath(QuestionZeroToOneHundredRange) },
+          { $ref: getSchemaPath(QuestionTrueFalse) },
+          { $ref: getSchemaPath(QuestionTypeAnswer) },
+        ],
+      },
+    },
+    example: [QuestionResponseMultiChoiceExample],
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access to the endpoint.',
+  })
+  @ApiForbiddenResponse({
+    description: 'The client does not have access to the quiz.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async findAllQuestion(
+    @RouteQuizIdParam() quizId: string,
+  ): Promise<
+    (
+      | QuestionMultiChoice
+      | QuestionRange
+      | QuestionZeroToOneHundredRange
+      | QuestionTrueFalse
+      | QuestionTypeAnswer
+    )[]
+  > {
+    return this.quizService.findAllQuestion(quizId)
   }
 }

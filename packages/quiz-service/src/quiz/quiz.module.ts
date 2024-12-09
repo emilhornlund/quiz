@@ -2,12 +2,8 @@ import { Logger, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { QuestionType } from '@quiz/common'
 
-import {
-  QuestionController,
-  QuizController,
-  QuizQuestionsController,
-} from './controllers'
-import { QuestionService, QuizService } from './services'
+import { QuizController } from './controllers'
+import { QuizService } from './services'
 import {
   Question,
   QuestionMedia,
@@ -50,8 +46,8 @@ import {
       },
     ]),
   ],
-  controllers: [QuizController, QuizQuestionsController, QuestionController],
-  providers: [Logger, QuizService, QuestionService],
+  controllers: [QuizController],
+  providers: [Logger, QuizService],
   exports: [QuizService],
 })
 export class QuizModule {}

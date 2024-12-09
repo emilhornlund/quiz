@@ -1,6 +1,12 @@
-import { LanguageCode, QuizResponseDto, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizResponseDto,
+  QuizVisibility,
+} from '@quiz/common'
 
 import {
+  ApiModeProperty,
   ApiQuizCreatedProperty,
   ApiQuizDescriptionProperty,
   ApiQuizIdProperty,
@@ -32,6 +38,12 @@ export class QuizResponse implements QuizResponseDto {
    */
   @ApiQuizDescriptionProperty()
   description?: string
+
+  /**
+   * description
+   */
+  @ApiModeProperty()
+  mode: GameMode
 
   /**
    * Whether the quiz is public or private.

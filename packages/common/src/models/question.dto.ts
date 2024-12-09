@@ -22,11 +22,6 @@ export interface QuestionMediaDto {
  */
 export interface QuestionCommonDto {
   /**
-   * The unique identifier of the question.
-   */
-  id: string
-
-  /**
    * The text of the question.
    */
   question: string
@@ -45,16 +40,6 @@ export interface QuestionCommonDto {
    * The duration in seconds allowed for answering the question.
    */
   duration: number
-
-  /**
-   * The date and time when the question was created.
-   */
-  created: Date
-
-  /**
-   * The date and time when the question was last updated.
-   */
-  updated: Date
 }
 
 /**
@@ -88,14 +73,6 @@ export interface QuestionMultiChoiceDto extends QuestionCommonDto {
 }
 
 /**
- * Represents a multiple-choice question request.
- */
-export type QuestionMultiChoiceRequestDto = Omit<
-  QuestionMultiChoiceDto,
-  'id' | 'created' | 'updated'
->
-
-/**
  * Represents a range-based question where the answer lies within a range.
  */
 export interface QuestionRangeDto extends QuestionCommonDto {
@@ -126,11 +103,11 @@ export interface QuestionRangeDto extends QuestionCommonDto {
 }
 
 /**
- * Represents a range-based question request where the answer lies within a range.
+ * Represents a range-based question where the answer lies within 0 to 100.
  */
-export type QuestionRangeRequestDto = Omit<
+export type QuestionZeroToOneHundredRangeDto = Omit<
   QuestionRangeDto,
-  'id' | 'created' | 'updated'
+  'min' | 'max' | 'points' | 'margin'
 >
 
 /**
@@ -149,14 +126,6 @@ export interface QuestionTrueFalseDto extends QuestionCommonDto {
 }
 
 /**
- * Represents a true-or-false question request.
- */
-export type QuestionTrueFalseRequestDto = Omit<
-  QuestionTrueFalseDto,
-  'id' | 'created' | 'updated'
->
-
-/**
  * Represents a question where the user types an answer.
  */
 export interface QuestionTypeAnswerDto extends QuestionCommonDto {
@@ -172,14 +141,6 @@ export interface QuestionTypeAnswerDto extends QuestionCommonDto {
 }
 
 /**
- * Represents a question request where the user types an answer.
- */
-export type QuestionTypeAnswerRequestDto = Omit<
-  QuestionTypeAnswerDto,
-  'id' | 'created' | 'updated'
->
-
-/**
  * Represents any question type supported in the system.
  */
 export type QuestionDto =
@@ -187,12 +148,4 @@ export type QuestionDto =
   | QuestionRangeDto
   | QuestionTrueFalseDto
   | QuestionTypeAnswerDto
-
-/**
- * Represents a request for any question type supported in the system.
- */
-export type QuestionRequestDto =
-  | QuestionMultiChoiceRequestDto
-  | QuestionRangeRequestDto
-  | QuestionTrueFalseRequestDto
-  | QuestionTypeAnswerRequestDto
+  | QuestionZeroToOneHundredRangeDto

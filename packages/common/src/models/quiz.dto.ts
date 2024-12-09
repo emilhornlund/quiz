@@ -1,4 +1,12 @@
+import { GameMode } from './game-mode.enum'
 import { LanguageCode } from './language-code.enum'
+import {
+  QuestionMultiChoiceDto,
+  QuestionRangeDto,
+  QuestionTrueFalseDto,
+  QuestionTypeAnswerDto,
+  QuestionZeroToOneHundredRangeDto,
+} from './question.dto'
 
 /**
  * Quiz visibility
@@ -11,7 +19,7 @@ export enum QuizVisibility {
 /**
  * Data transfer object for quiz creation and updating requests.
  */
-export interface QuizRequestDto {
+export type QuizRequestDto = {
   /**
    * The title of the quiz.
    */
@@ -36,7 +44,37 @@ export interface QuizRequestDto {
    * The language code of the quiz.
    */
   languageCode: LanguageCode
-}
+} & (
+  | {
+      mode: GameMode.Classic
+      questions: (
+        | QuestionMultiChoiceDto
+        | QuestionRangeDto
+        | QuestionTrueFalseDto
+        | QuestionTypeAnswerDto
+      )[]
+    }
+  | {
+      mode: GameMode.ZeroToOneHundred
+      questions: QuestionZeroToOneHundredRangeDto[]
+    }
+)
+
+/**
+ * Data transfer object for a classic mode quiz creation and updating requests.
+ */
+export type QuizClassicModeRequestDto = Extract<
+  QuizRequestDto,
+  { mode: GameMode.Classic }
+>
+
+/**
+ * Data transfer object for a zero to one hundred mode quiz creation and updating requests.
+ */
+export type QuizZeroToOneHundredModeRequestDto = Extract<
+  QuizRequestDto,
+  { mode: GameMode.ZeroToOneHundred }
+>
 
 /**
  * Data transfer object for quiz responses.
@@ -56,6 +94,11 @@ export interface QuizResponseDto {
    * A description of the quiz.
    */
   description?: string
+
+  /**
+   * The game mode of the quiz.
+   */
+  mode: GameMode
 
   /**
    * Whether the quiz's visibility is public or private.
