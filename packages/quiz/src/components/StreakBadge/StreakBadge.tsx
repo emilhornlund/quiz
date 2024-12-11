@@ -10,7 +10,7 @@ export interface StreakBadgeProps {
 }
 
 const StreakBadge: FC<StreakBadgeProps> = ({ streak, children }) => {
-  if (!streak || streak < 1) return null
+  if (!streak || streak < 2) return null
   return (
     <div className={styles.streakBadge}>
       {children}
