@@ -10,8 +10,6 @@ $outline-offset: pxToRem(2px);
   position: relative;
 
   select {
-    display: flex;
-    flex-direction: column;
     -webkit-appearance: none;
     -moz-appearance: none;
     -o-appearance: none;
@@ -24,6 +22,7 @@ $outline-offset: pxToRem(2px);
     color: $gray-4;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
 
     @include mobile {
       height: pxToRem(42px);
