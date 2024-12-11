@@ -1,0 +1,36 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.quizEditor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .details {
+    display: flex;
+    flex-direction: row;
+    column-gap: $layout-gutter;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      row-gap: $layout-gutter;
+    }
+  }
+
+  @include mobile {
+    row-gap: $mobile-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    row-gap: $tablet-layout-gutter;
+    width: $mobile-width;
+  }
+
+  @include desktop {
+    row-gap: $desktop-layout-gutter;
+    width: $tablet-width;
+  }
+}
