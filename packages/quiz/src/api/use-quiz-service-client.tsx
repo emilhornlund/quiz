@@ -6,6 +6,8 @@ import {
   PaginatedQuizResponseDto,
   PlayerResponseDto,
   QuestionType,
+  QuizRequestDto,
+  QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
@@ -147,7 +149,6 @@ export const useQuizServiceClient = () => {
    * @param requestBody - The request body to be sent in the POST request.
    * @returns A promise resolving to the API response as type `T`.
    */
-
   const apiPost = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
@@ -161,7 +162,6 @@ export const useQuizServiceClient = () => {
    * @param requestBody - The request body to be sent in the PUT request.
    * @returns A promise resolving to the API response as type `T`.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const apiPut = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
@@ -174,7 +174,6 @@ export const useQuizServiceClient = () => {
    * @param path - The relative path to the API endpoint.
    * @returns A promise resolving to the API response as type `T`.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const apiDelete = <T extends object | void>(path: string) =>
     apiFetch<T>('DELETE', path, undefined)
 
@@ -193,6 +192,60 @@ export const useQuizServiceClient = () => {
    */
   const getCurrentPlayerQuizzes = (): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>('/client/quizzes')
+
+  /**
+   * Creates a new quiz with the specified request data.
+   *
+   * @param request - The request data for creating a new quiz.
+   *
+   * @returns A promise resolving to the created quiz details as a `QuizResponseDto`.
+   */
+  const createQuiz = (request: QuizRequestDto): Promise<QuizResponseDto> =>
+    apiPost('/quizzes', request)
+
+  /**
+   * Retrieves the details of a specific quiz by its ID.
+   *
+   * @param quizId - The ID of the quiz to retrieve.
+   *
+   * @returns A promise resolving to the quiz details as a `QuizResponseDto`.
+   */
+  const getQuiz = (quizId: string): Promise<QuizResponseDto> =>
+    apiGet(`/quizzes/${quizId}`)
+
+  /**
+   * Updates an existing quiz with the specified request data.
+   *
+   * @param quizId - The ID of the quiz to update.
+   * @param request - The request data for updating the quiz.
+   *
+   * @returns A promise resolving to the updated quiz details as a `QuizResponseDto`.
+   */
+  const updateQuiz = (
+    quizId: string,
+    request: QuizRequestDto,
+  ): Promise<QuizResponseDto> => apiPut(`/quizzes/${quizId}`, request)
+
+  /**
+   * Deletes a quiz by its ID.
+   *
+   * @param quizId - The ID of the quiz to delete.
+   *
+   * @returns A promise that resolves when the quiz has been successfully deleted.
+   */
+  const deleteQuiz = (quizId: string): Promise<void> =>
+    apiDelete(`/quizzes/${quizId}`)
+
+  /**
+   * Retrieves the list of questions for a specific quiz.
+   *
+   * @param quizId - The ID of the quiz to retrieve questions for.
+   *
+   * @returns A promise resolving to the paginated list of questions as a `PaginatedQuizResponseDto`.
+   */
+  const getQuizQuestions = (
+    quizId: string,
+  ): Promise<PaginatedQuizResponseDto> => apiGet(`/quizzes/${quizId}/questions`)
 
   /**
    * Finds a game using the provided game PIN.
@@ -272,6 +325,11 @@ export const useQuizServiceClient = () => {
   return {
     getCurrentPlayer,
     getCurrentPlayerQuizzes,
+    createQuiz,
+    getQuiz,
+    updateQuiz,
+    deleteQuiz,
+    getQuizQuestions,
     findGame,
     createGame,
     joinGame,
