@@ -15,12 +15,14 @@
     @include mobile {
       line-height: 4rem;
 
-      @include fontSize($mobile-title-font-size);}
+      @include fontSize($mobile-title-font-size);
+    }
 
     @include tablet {
       line-height: 6rem;
 
-      @include fontSize($tablet-title-font-size);}
+      @include fontSize($tablet-title-font-size);
+    }
 
     @include desktop {
       line-height: 8rem;

@@ -1,12 +1,13 @@
 import { GameLeaderboardPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import StreakBadge, {
+import {
   Badge,
   getBadgePositionBackgroundColor,
   NicknameChip,
   Page,
   PlayerGameFooter,
+  StreakBadge,
 } from '../../components'
 
 export interface PlayerLeaderboardStateProps {

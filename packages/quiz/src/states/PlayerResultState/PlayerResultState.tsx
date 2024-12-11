@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameResultPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import StreakBadge, {
+import {
   Badge,
   Page,
   PlayerGameFooter,
+  StreakBadge,
   Typography,
 } from '../../components'
 
