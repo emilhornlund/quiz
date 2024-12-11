@@ -1,0 +1,146 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuestionEditor > should render QuestionEditor for classic mode 1`] = `
+<div>
+  <div
+    class="questionEditor"
+  >
+    <div
+      class="container"
+    >
+      <textarea
+        data-testid="test-quiz-question-editor-textarea-textarea"
+        id="quiz-question-editor-textarea"
+        name="quiz-question-editor-textarea"
+        placeholder="Questions"
+      >
+        [
+  {
+    "type": "MULTI_CHOICE",
+    "question": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
+    "options": [
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      },
+      {
+        "value": "",
+        "correct": false
+      }
+    ],
+    "points": 1000,
+    "duration": 30
+  },
+  {
+    "type": "RANGE",
+    "question": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
+    "min": 0,
+    "max": 100,
+    "margin": "MEDIUM",
+    "correct": 50,
+    "points": 1000,
+    "duration": 30
+  },
+  {
+    "type": "TRUE_FALSE",
+    "question": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
+    "correct": true,
+    "points": 1000,
+    "duration": 30
+  },
+  {
+    "type": "TYPE_ANSWER",
+    "question": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
+    "options": [
+      {
+        "value": "",
+        "correct": true
+      },
+      {
+        "value": "",
+        "correct": true
+      },
+      {
+        "value": "",
+        "correct": true
+      },
+      {
+        "value": "",
+        "correct": true
+      }
+    ],
+    "points": 1000,
+    "duration": 30
+  }
+]
+      </textarea>
+    </div>
+    <div
+      class="error"
+    >
+      Invalid value for field 'media.url'. Value did not pass custom validation.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionEditor > should render QuestionEditor for zero to one hundred mode 1`] = `
+<div>
+  <div
+    class="questionEditor"
+  >
+    <div
+      class="container"
+    >
+      <textarea
+        data-testid="test-quiz-question-editor-textarea-textarea"
+        id="quiz-question-editor-textarea"
+        name="quiz-question-editor-textarea"
+        placeholder="Questions"
+      >
+        [
+  {
+    "type": "RANGE",
+    "question": "",
+    "media": {
+      "type": "IMAGE",
+      "url": ""
+    },
+    "correct": 50,
+    "duration": 30
+  }
+]
+      </textarea>
+    </div>
+    <div
+      class="error"
+    >
+      Invalid value for field 'media.url'. Value did not pass custom validation.
+    </div>
+  </div>
+</div>
+`;
