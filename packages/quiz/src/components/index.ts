@@ -9,6 +9,11 @@ export type { PodiumProps } from './Podium'
 export type { ProgressBarProps } from './ProgressBar'
 export type { QuestionAnswerPickerProps } from './QuestionAnswerPicker'
 export type { QuestionEditorProps } from './QuestionEditor'
+export type {
+  QuizTableItem,
+  QuizTablePagination,
+  QuizTableProps,
+} from './QuizTable'
 export type { QuestionResultsProps } from './QuestionResults'
 export type { QuizEditorProps } from './QuizEditor'
 export type { ResponsiveImageProps } from './ResponsiveImage'
@@ -36,6 +41,7 @@ export { default as QuestionAnswerPicker } from './QuestionAnswerPicker'
 export { default as QuestionEditor } from './QuestionEditor'
 export { default as QuestionResults } from './QuestionResults'
 export { default as QuizEditor } from './QuizEditor'
+export { default as QuizTable } from './QuizTable'
 export { default as ResponsiveImage } from './ResponsiveImage'
 export { default as ResponsivePlayer } from './ResponsivePlayer'
 export { default as RocketImage } from './RocketImage'

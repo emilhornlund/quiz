@@ -1,0 +1,160 @@
+import {
+  faEye,
+  faGamepad,
+  faLanguage,
+  faPen,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import React, { FC, useMemo } from 'react'
+
+import Picture from '../../assets/images/picture.svg'
+import {
+  GameModeLabels,
+  LanguageLabels,
+  QuizVisibilityLabels,
+} from '../../models/labels.ts'
+import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import Button, { IconButtonArrowLeft, IconButtonArrowRight } from '../Button'
+
+import styles from './QuizTable.module.scss'
+
+export interface QuizTableItem {
+  id: string
+  title: string
+  description?: string
+  mode: GameMode
+  visibility: QuizVisibility
+  imageCoverURL?: string
+  languageCode: LanguageCode
+}
+
+export interface QuizTablePagination {
+  total: number
+  limit: number
+  offset: number
+}
+
+export interface QuizTableProps {
+  items: QuizTableItem[]
+  pagination: QuizTablePagination
+  onEdit?: (id: string) => void
+  onHostGame?: (id: string) => void
+  onPagination?: (limit: number, offset: number) => void
+}
+
+const QuizTable: FC<QuizTableProps> = ({
+  items,
+  pagination,
+  onEdit,
+  onHostGame,
+  onPagination,
+}) => {
+  const deviceType = useDeviceSizeType()
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(pagination.total / pagination.limit)),
+    [pagination],
+  )
+  const currentPage = useMemo(
+    () => Math.max(1, Math.floor(pagination.offset / pagination.limit) + 1),
+    [pagination],
+  )
+
+  return (
+    <div className={styles.quizTable}>
+      <div className={styles.rows}>
+        {items.map((item) => (
+          <div key={item.id} className={styles.row}>
+            <img
+              src={item.imageCoverURL ?? Picture}
+              className={item.imageCoverURL ? undefined : styles.svg}
+              alt="image"
+            />
+            <div className={styles.content}>
+              <div className={styles.title}>{item.title}</div>
+              {item.description && (
+                <div className={styles.description}>{item.description}</div>
+              )}
+              <div className={styles.details}>
+                <span>
+                  <FontAwesomeIcon icon={faEye} />
+                  {QuizVisibilityLabels[item.visibility]}
+                </span>
+                <span>
+                  <FontAwesomeIcon icon={faLanguage} />
+                  {LanguageLabels[item.languageCode]}
+                </span>
+                <span>
+                  <FontAwesomeIcon icon={faGamepad} />
+                  {GameModeLabels[item.mode]}
+                </span>
+              </div>
+            </div>
+            <div className={styles.actions}>
+              <Button
+                id="edit-quiz-button"
+                type="button"
+                kind="secondary"
+                size="small"
+                value={deviceType != DeviceType.Mobile && 'Edit'}
+                icon={faPen}
+                onClick={() => onEdit?.(item.id)}
+              />
+              <Button
+                id="host-game-button"
+                type="button"
+                kind="secondary"
+                size="small"
+                value={deviceType != DeviceType.Mobile && 'Host Game'}
+                icon={faPlay}
+                onClick={() => onHostGame?.(item.id)}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className={styles.pagination}>
+        <div className={styles.navigation}>
+          <IconButtonArrowLeft
+            id="prev-page-button"
+            type="button"
+            kind="primary"
+            size="normal"
+            disabled={currentPage === 1}
+            onClick={() =>
+              onPagination?.(
+                pagination.limit,
+                Math.max(0, pagination.offset - pagination.limit),
+              )
+            }
+          />
+        </div>
+        <div className={styles.page}>
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className={styles.navigation}>
+          <IconButtonArrowRight
+            id="next-page-button"
+            type="button"
+            kind="primary"
+            size="normal"
+            disabled={currentPage >= totalPages}
+            onClick={() =>
+              onPagination?.(
+                pagination.limit,
+                Math.min(
+                  pagination.total - pagination.limit,
+                  pagination.offset + pagination.limit,
+                ),
+              )
+            }
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default QuizTable

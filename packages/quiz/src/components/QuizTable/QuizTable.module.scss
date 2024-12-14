@@ -1,0 +1,274 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.quizTable {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-narrow-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-narrow-layout-gutter;
+  }
+
+  @include desktop {
+    row-gap: $desktop-narrow-layout-gutter;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      row-gap: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      row-gap: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      row-gap: $desktop-narrow-layout-gutter;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: white;
+      color: $gray-4;
+
+      @include mobile {
+        padding: $mobile-narrow-layout-gutter;
+        column-gap: $mobile-narrow-layout-gutter;
+        border-radius: $mobile-border-radius;
+      }
+
+      @include tablet {
+        padding: $tablet-narrow-layout-gutter;
+        column-gap: $tablet-narrow-layout-gutter;
+        border-radius: $tablet-border-radius;
+      }
+
+      @include desktop {
+        padding: $desktop-narrow-layout-gutter;
+        column-gap: $desktop-narrow-layout-gutter;
+        border-radius: $desktop-border-radius;
+      }
+
+      img {
+        object-fit: cover;
+
+        @mixin image-size($width) {
+          width: $width;
+          height: calc(#{$width} * 0.875);
+        }
+
+        @include mobile {
+          display: none;
+        }
+
+        @include tablet {
+          border-radius: $tablet-border-radius;
+
+          @include image-size(110px);
+        }
+
+        @include desktop {
+          border-radius: $desktop-border-radius;
+
+          @include image-size(118px);
+        }
+
+        &.svg {
+          filter: invert(54%) sepia(7%) saturate(725%) hue-rotate(167deg) brightness(102%) contrast(90%);
+        }
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+        max-width: 100%;
+
+        .title {
+          font-weight: bold;
+
+          @include mobile {
+            @include fontSize(16px);
+          }
+
+          @include tablet {
+            @include fontSize(20px);
+          }
+
+          @include desktop {
+            @include fontSize(24px);
+          }
+        }
+
+        .description {
+          font-weight: normal;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: $gray-3;
+
+          @include mobile {
+            @include fontSize(16px);
+          }
+
+          @include tablet {
+            @include fontSize(18px);
+          }
+
+          @include desktop {
+            @include fontSize(20px);
+          }
+        }
+
+        .details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          @include mobile {
+            column-gap: $mobile-narrow-layout-gutter;
+          }
+
+          @include tablet {
+            column-gap: $tablet-narrow-layout-gutter;
+          }
+
+          @include desktop {
+            column-gap: $desktop-narrow-layout-gutter;
+          }
+
+          span {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            @include mobile {
+              column-gap: calc($mobile-narrow-layout-gutter * 0.5);
+              @include fontSize(14px);
+            }
+
+            @include tablet {
+              column-gap: calc($tablet-narrow-layout-gutter * 0.5);
+              @include fontSize(16px);
+            }
+
+            @include desktop {
+              column-gap: calc($desktop-narrow-layout-gutter * 0.5);
+              @include fontSize(18px);
+            }
+
+            &:not(:last-child)::after {
+              content: '•';
+
+              @include mobile {
+                margin-left: calc($mobile-narrow-layout-gutter * 0.5);
+              }
+
+              @include tablet {
+                margin-left: calc($tablet-narrow-layout-gutter * 0.5);
+              }
+
+              @include desktop {
+                margin-left: calc($desktop-narrow-layout-gutter * 0.5);
+              }
+            }
+          }
+        }
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+
+        @include mobile {
+          .buttonTitle {
+            display: none;
+          }
+
+          row-gap: $mobile-narrow-layout-gutter;
+        }
+
+        @include tablet {
+          row-gap: $tablet-narrow-layout-gutter;
+        }
+
+        @include desktop {
+          row-gap: $desktop-narrow-layout-gutter;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter;
+    }
+
+    .navigation {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+
+      &:first-child {
+        justify-content: flex-start;
+      }
+      &:last-child {
+        justify-content: flex-end;
+      }
+
+      @include mobile {
+        column-gap: $mobile-narrow-layout-gutter;
+      }
+
+      @include tablet {
+        column-gap: $tablet-narrow-layout-gutter;
+      }
+
+      @include desktop {
+        column-gap: $desktop-narrow-layout-gutter;
+      }
+    }
+
+    .page {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex: 1;
+
+      @include mobile {
+        @include fontSize(16px);
+      }
+
+      @include tablet {
+        @include fontSize(18px);
+      }
+
+      @include desktop {
+        @include fontSize(20px);
+      }
+    }
+  }
+}
