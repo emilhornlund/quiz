@@ -6,7 +6,7 @@ exports[`QuestionEditor > should render QuestionEditor for classic mode 1`] = `
     class="questionEditor"
   >
     <div
-      class="container"
+      class="container code"
     >
       <textarea
         data-testid="test-quiz-question-editor-textarea-textarea"
@@ -114,7 +114,7 @@ exports[`QuestionEditor > should render QuestionEditor for zero to one hundred m
     class="questionEditor"
   >
     <div
-      class="container"
+      class="container code"
     >
       <textarea
         data-testid="test-quiz-question-editor-textarea-textarea"

@@ -1068,7 +1068,7 @@ exports[`QuizEditor > should render QuizEditor for classic mode 1`] = `
       class="questionEditor"
     >
       <div
-        class="container"
+        class="container code"
       >
         <textarea
           data-testid="test-quiz-question-editor-textarea-textarea"
@@ -2239,7 +2239,7 @@ exports[`QuizEditor > should render QuizEditor for zero to one hundred mode 1`] 
       class="questionEditor"
     >
       <div
-        class="container"
+        class="container code"
       >
         <textarea
           data-testid="test-quiz-question-editor-textarea-textarea"

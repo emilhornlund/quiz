@@ -7,6 +7,7 @@ import styles from './Textarea.module.scss'
 export interface TextareaProps {
   id: string
   name?: string
+  type?: 'text' | 'code'
   value?: string
   placeholder?: string
   regex?: RegExp
@@ -19,6 +20,7 @@ export interface TextareaProps {
 const Textarea: FC<TextareaProps> = ({
   id,
   name = id,
+  type = 'text',
   value,
   placeholder,
   regex,
@@ -58,6 +60,7 @@ const Textarea: FC<TextareaProps> = ({
       className={classNames(
         styles.container,
         !valid && hasFocus ? styles.error : undefined,
+        type === 'code' ? styles.code : undefined,
       )}>
       <textarea
         id={id}

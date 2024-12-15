@@ -51,6 +51,12 @@ $outline-offset: pxToRem(2px);
     }
   }
 
+  &.code {
+    textarea {
+      font-family: monospace, monospace;
+    }
+  }
+
   &.error {
     textarea {
       outline-color: $red-2;

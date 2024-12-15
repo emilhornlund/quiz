@@ -110,6 +110,7 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
     <div className={styles.questionEditor}>
       <Textarea
         id="quiz-question-editor-textarea"
+        type="code"
         placeholder="Questions"
         value={questionsJson}
         onChange={handleChangeJSON}
