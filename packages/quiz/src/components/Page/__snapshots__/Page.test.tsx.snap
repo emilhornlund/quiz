@@ -8,7 +8,7 @@ exports[`should render Page with default props 1`] = `
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -19,7 +19,7 @@ exports[`should render Page with default props 1`] = `
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       />
@@ -41,7 +41,7 @@ exports[`should render Page with header 1`] = `
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -52,7 +52,7 @@ exports[`should render Page with header 1`] = `
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >

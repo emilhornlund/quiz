@@ -8,7 +8,7 @@ exports[`ErrorPage > should match snapshot 1`] = `
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -19,7 +19,7 @@ exports[`ErrorPage > should match snapshot 1`] = `
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >

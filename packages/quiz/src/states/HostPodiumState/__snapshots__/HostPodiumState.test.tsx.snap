@@ -8,7 +8,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -19,7 +19,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       />
@@ -360,7 +360,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -371,7 +371,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       />

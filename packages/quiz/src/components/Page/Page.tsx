@@ -32,10 +32,10 @@ const Page: React.FC<PageProps> = ({
   return (
     <div className={styles.main}>
       <div className={classNames(styles.header)}>
-        <div className={styles.logo}>
+        <button className={styles.logo} onClick={() => navigate('/')}>
           <span className={styles.icon} />
           <span className={styles.text}>Quiz</span>
-        </div>
+        </button>
         <div className={styles.side}>
           {header}
           {profile && (

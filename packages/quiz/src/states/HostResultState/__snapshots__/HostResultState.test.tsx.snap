@@ -8,7 +8,7 @@ exports[`HostResultState > should render HostResultState with question type mult
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -19,7 +19,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >
@@ -201,7 +201,7 @@ exports[`HostResultState > should render HostResultState with question type mult
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -212,7 +212,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >
@@ -410,7 +410,7 @@ exports[`HostResultState > should render HostResultState with question type mult
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -421,7 +421,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >
@@ -587,7 +587,7 @@ exports[`HostResultState > should render HostResultState with question type rang
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -598,7 +598,7 @@ exports[`HostResultState > should render HostResultState with question type rang
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >
@@ -820,7 +820,7 @@ exports[`HostResultState > should render HostResultState with question type true
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -831,7 +831,7 @@ exports[`HostResultState > should render HostResultState with question type true
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >
@@ -997,7 +997,7 @@ exports[`HostResultState > should render HostResultState with question type type
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -1008,7 +1008,7 @@ exports[`HostResultState > should render HostResultState with question type type
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       >

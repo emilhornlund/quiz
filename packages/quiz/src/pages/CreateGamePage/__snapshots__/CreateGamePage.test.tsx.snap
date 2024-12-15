@@ -9,7 +9,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
       <div
         class="header"
       >
-        <div
+        <button
           class="logo"
         >
           <span
@@ -20,7 +20,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
           >
             Quiz
           </span>
-        </div>
+        </button>
         <div
           class="side"
         >

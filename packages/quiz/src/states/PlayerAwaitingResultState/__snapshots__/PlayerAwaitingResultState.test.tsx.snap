@@ -8,7 +8,7 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
     <div
       class="header"
     >
-      <div
+      <button
         class="logo"
       >
         <span
@@ -19,7 +19,7 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
         >
           Quiz
         </span>
-      </div>
+      </button>
       <div
         class="side"
       />
