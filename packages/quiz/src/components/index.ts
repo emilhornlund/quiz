@@ -1,5 +1,6 @@
 export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
 export type { ButtonProps } from './Button'
+export type { ConfirmDialogProps } from './ConfirmDialog'
 export type { HostGameFooterProps } from './HostGameFooter'
 export type { LeaderboardProps } from './Leaderboard'
 export type { NicknameChipProps } from './NicknameChip'

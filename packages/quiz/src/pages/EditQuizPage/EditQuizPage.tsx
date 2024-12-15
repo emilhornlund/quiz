@@ -170,6 +170,7 @@ const EditQuizPage: FC = () => {
         open={showConfirmDeleteDialog}
         onConfirm={handleDeleteQuiz}
         onClose={() => setShowConfirmDeleteDialog(false)}
+        destructive
       />
     </>
   )

@@ -2,10 +2,10 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
-import ConfirmDialog, { DialogProps } from './ConfirmDialog'
+import ConfirmDialog, { ConfirmDialogProps } from './ConfirmDialog'
 
 describe('ConfirmDialog', () => {
-  const defaultProps: DialogProps = {
+  const defaultProps: ConfirmDialogProps = {
     title: 'Confirm Deletion',
     message: 'Are you sure you want to delete this item?',
     open: true,

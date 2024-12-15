@@ -13,18 +13,20 @@ import { Button } from '../index.ts'
 
 import styles from './ConfirmDialog.module.scss'
 
-export interface DialogProps {
+export interface ConfirmDialogProps {
   title: string
   message: string
   open?: boolean
+  destructive?: boolean
   onConfirm?: () => void
   onClose?: () => void
 }
 
-const ConfirmDialog: FC<DialogProps> = ({
+const ConfirmDialog: FC<ConfirmDialogProps> = ({
   title,
   message,
-  open,
+  open = false,
+  destructive = false,
   onConfirm,
   onClose,
 }) => {
@@ -64,7 +66,7 @@ const ConfirmDialog: FC<DialogProps> = ({
                 <Button
                   id="confirm-button"
                   type="button"
-                  kind="destructive"
+                  kind={destructive ? 'destructive' : 'call-to-action'}
                   size="small"
                   value="Confirm"
                   onClick={() => onConfirm?.()}
@@ -72,7 +74,7 @@ const ConfirmDialog: FC<DialogProps> = ({
                 <Button
                   id="close-button"
                   type="button"
-                  kind="call-to-action"
+                  kind="secondary"
                   size="small"
                   value="Close"
                   onClick={() => onClose?.()}
