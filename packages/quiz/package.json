@@ -24,6 +24,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@quiz/common": "1.0.0",
+    "@tanstack/react-query": "4",
     "event-source-polyfill": "^1.0.31",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",

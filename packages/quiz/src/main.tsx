@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
@@ -6,10 +7,13 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import AuthContextProvider from './context/auth'
 import {
   CreateGamePage,
+  CreateQuizPage,
+  EditQuizPage,
   ErrorPage,
   GamePage,
   HomePage,
   JoinPage,
+  ProfilePage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -39,16 +43,32 @@ const router = createBrowserRouter([
         path: '/game',
         element: <GamePage />,
       },
+      {
+        path: '/player/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/quiz/create',
+        element: <CreateQuizPage />,
+      },
+      {
+        path: '/quiz/:quizId',
+        element: <EditQuizPage />,
+      },
     ],
     errorElement: <ErrorPage />,
   },
 ])
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
+    </QueryClientProvider>
     <ToastContainer
       position="top-right"
       autoClose={5000}

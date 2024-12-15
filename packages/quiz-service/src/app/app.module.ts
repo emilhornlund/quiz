@@ -91,7 +91,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
                 {
                   name: 'short',
                   ttl: 1000,
-                  limit: 3,
+                  limit: 10,
                 },
                 {
                   name: 'medium',

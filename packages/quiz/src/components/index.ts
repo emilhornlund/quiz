@@ -28,6 +28,7 @@ export {
   IconButtonArrowRight,
 } from './Button'
 export { default as Badge, getBadgePositionBackgroundColor } from './Badge'
+export { default as ConfirmDialog } from './ConfirmDialog'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'
 export { default as LeaveButton } from './LeaveButton'
