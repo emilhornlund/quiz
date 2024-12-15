@@ -45,7 +45,7 @@ const HomePage: FC = () => {
   }
 
   return (
-    <Page>
+    <Page profile>
       <RocketImage />
       <Typography variant="title" size="medium">
         Let’s play

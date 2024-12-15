@@ -53,6 +53,18 @@ exports[`ErrorPage > should match snapshot 1`] = `
             </span>
           </button>
         </div>
+        <div
+          class="avatar"
+        >
+          <button
+            type="button"
+          >
+            <img
+              alt="Profile"
+              src="/src/assets/images/avatar.svg"
+            />
+          </button>
+        </div>
       </div>
     </div>
     <div

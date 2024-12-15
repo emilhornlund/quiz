@@ -121,7 +121,7 @@ const EditQuizPage: FC = () => {
     isQuizQuestionsError
   ) {
     return (
-      <Page>
+      <Page profile>
         <LoadingSpinner />
       </Page>
     )
@@ -156,7 +156,8 @@ const EditQuizPage: FC = () => {
               onClick={handleSaveQuiz}
             />
           </div>
-        }>
+        }
+        profile>
         <QuizEditor
           quiz={editableData}
           onChange={setEditableData}

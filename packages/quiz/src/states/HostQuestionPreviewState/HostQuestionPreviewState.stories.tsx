@@ -1,10 +1,12 @@
 import { GameEventType, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import HostQuestionPreviewState from './HostQuestionPreviewState'
 
 const meta = {
   component: HostQuestionPreviewState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },

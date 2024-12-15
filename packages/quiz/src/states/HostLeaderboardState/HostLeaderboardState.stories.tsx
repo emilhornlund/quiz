@@ -1,10 +1,12 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import HostLeaderboardState from './HostLeaderboardState'
 
 const meta = {
   component: HostLeaderboardState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },

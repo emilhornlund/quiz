@@ -241,7 +241,8 @@ const CreateGamePage: FC = () => {
             value="Create Game"
             disabled={!isValid}
           />
-        }>
+        }
+        profile>
         <div className={styles.details}>
           <TextField
             id="name-textfield"

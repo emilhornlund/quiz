@@ -24,7 +24,8 @@ const ErrorPage: FC = () => {
             navigate(-1)
           }}
         />
-      }>
+      }
+      profile>
       <div className={styles.errorIcon}>
         <FontAwesomeIcon icon={faHeartCrack} />
       </div>

@@ -48,7 +48,8 @@ const CreateQuizPage: FC = () => {
           disabled={!isQuizValid}
           onClick={handleSave}
         />
-      }>
+      }
+      profile>
       <QuizEditor
         quiz={editableData}
         onChange={setEditableData}

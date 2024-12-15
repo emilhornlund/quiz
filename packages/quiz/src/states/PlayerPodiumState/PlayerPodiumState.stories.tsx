@@ -1,10 +1,12 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import PlayerPodiumState from './PlayerPodiumState.tsx'
 
 const meta = {
   component: PlayerPodiumState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },

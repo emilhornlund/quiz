@@ -1,10 +1,12 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import PlayerGameBeginState from './PlayerGameBeginState'
 
 const meta = {
   component: PlayerGameBeginState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },

@@ -100,13 +100,13 @@
       column-gap: $layout-gutter;
 
       @include mobile {
-        column-gap: $layout-gutter;
+        column-gap: $mobile-narrow-layout-gutter
       }
       @include tablet {
-        column-gap: $layout-gutter * 1.5;
+        column-gap: $tablet-narrow-layout-gutter
       }
       @include desktop {
-        column-gap: $layout-gutter * 2;
+        column-gap: $desktop-narrow-layout-gutter;
       }
 
       a {
@@ -127,6 +127,44 @@
 
       a:hover {
         text-decoration: underline;
+      }
+
+      .avatar {
+        display: flex;
+        flex-direction: column;
+
+        @include mobile {
+          width: pxToRem(36px);
+          height: pxToRem(36px);
+        }
+
+        @include tablet {
+          width: pxToRem(42px);
+          height: pxToRem(42px);
+        }
+
+        @include desktop {
+          width: pxToRem(48px);
+          height: pxToRem(48px);
+        }
+
+        button {
+          display: flex;
+          flex-direction: column;
+          appearance: none;
+          border: none;
+          outline: none;
+          background: none;
+          cursor: pointer;
+
+          img {
+            filter: brightness(0) saturate(100%) invert(92%) sepia(0%) saturate(7467%) hue-rotate(204deg) brightness(107%) contrast(107%);
+
+            &:hover {
+              filter: brightness(0) saturate(100%) invert(96%) sepia(72%) saturate(19%) hue-rotate(346deg) brightness(93%) contrast(87%);
+            }
+          }
+        }
       }
     }
 

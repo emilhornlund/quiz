@@ -1,14 +1,16 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
-import tState from './PlayerResultState'
+import PlayerResultState from './PlayerResultState'
 
 const meta = {
-  component: tState,
+  component: PlayerResultState,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof tState>
+} satisfies Meta<typeof PlayerResultState>
 
 export default meta
 type Story = StoryObj<typeof meta>

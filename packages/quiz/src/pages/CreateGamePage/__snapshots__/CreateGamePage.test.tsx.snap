@@ -55,6 +55,18 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
               </svg>
             </button>
           </div>
+          <div
+            class="avatar"
+          >
+            <button
+              type="button"
+            >
+              <img
+                alt="Profile"
+                src="/src/assets/images/avatar.svg"
+              />
+            </button>
+          </div>
         </div>
       </div>
       <div
