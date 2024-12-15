@@ -137,6 +137,7 @@
       .avatar {
         display: flex;
         flex-direction: column;
+        justify-content: center;
 
         @include mobile {
           width: pxToRem(36px);
