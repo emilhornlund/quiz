@@ -7,14 +7,17 @@
 
   @include mobile {
     row-gap: $mobile-narrow-layout-gutter;
+    width: 100%;
   }
 
   @include tablet {
     row-gap: $tablet-narrow-layout-gutter;
+    width: $tablet-width;
   }
 
   @include desktop {
     row-gap: $desktop-narrow-layout-gutter;
+    width: $tablet-width;
   }
 
   .rows {
