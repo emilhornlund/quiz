@@ -10,7 +10,7 @@ export interface ButtonProps {
   id: string
   name?: string
   type: 'submit' | 'reset' | 'button'
-  kind?: 'primary' | 'secondary' | 'plain' | 'destructive'
+  kind?: 'primary' | 'secondary' | 'call-to-action' | 'plain' | 'destructive'
   size?: 'normal' | 'small'
   value?: React.ReactNode | string | undefined
   disabled?: boolean
@@ -48,6 +48,7 @@ const Button: React.FC<ButtonProps> = ({
         className={classNames(
           kind === 'primary' ? styles.primary : undefined,
           kind === 'secondary' ? styles.secondary : undefined,
+          kind === 'call-to-action' ? styles.callToAction : undefined,
           kind === 'plain' ? styles.plain : undefined,
           kind === 'destructive' ? styles.destructive : undefined,
         )}

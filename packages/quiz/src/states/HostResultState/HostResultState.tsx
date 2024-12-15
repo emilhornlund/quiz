@@ -30,7 +30,7 @@ const HostResultState: FC<HostResultStateProps> = ({
       <IconButtonArrowRight
         id={'next-button'}
         type="button"
-        kind="secondary"
+        kind="call-to-action"
         size="small"
         value="Next"
         onClick={onNext}

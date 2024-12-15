@@ -59,7 +59,7 @@ const JoinPage: FC = () => {
         <IconButtonArrowLeft
           id="back-button"
           type="button"
-          kind="secondary"
+          kind="call-to-action"
           size="small"
           value="Back"
           onClick={() => navigate(-1)}
@@ -85,7 +85,7 @@ const JoinPage: FC = () => {
         <IconButtonArrowRight
           id="join"
           type="submit"
-          kind="secondary"
+          kind="call-to-action"
           value="OK, Go!"
           disabled={!nicknameValid}
         />

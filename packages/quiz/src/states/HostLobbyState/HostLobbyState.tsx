@@ -27,7 +27,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
         <IconButtonArrowRight
           id={'start-game-button'}
           type="button"
-          kind="secondary"
+          kind="call-to-action"
           size="small"
           value="Start"
           onClick={onStart}

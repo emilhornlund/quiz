@@ -6,6 +6,9 @@ import QuizTable, { QuizTableItem } from './QuizTable'
 
 const meta = {
   component: QuizTable,
+  parameters: {
+    layout: 'fullscreen',
+  },
 } satisfies Meta<typeof QuizTable>
 
 export default meta

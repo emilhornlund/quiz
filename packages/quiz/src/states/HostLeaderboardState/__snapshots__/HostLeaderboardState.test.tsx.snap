@@ -27,7 +27,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"

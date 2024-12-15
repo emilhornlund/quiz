@@ -96,7 +96,7 @@ const QuizTable: FC<QuizTableProps> = ({
               <Button
                 id="edit-quiz-button"
                 type="button"
-                kind="secondary"
+                kind="call-to-action"
                 size="small"
                 value={deviceType != DeviceType.Mobile && 'Edit'}
                 icon={faPen}
@@ -105,7 +105,7 @@ const QuizTable: FC<QuizTableProps> = ({
               <Button
                 id="host-game-button"
                 type="button"
-                kind="secondary"
+                kind="call-to-action"
                 size="small"
                 value={deviceType != DeviceType.Mobile && 'Host Game'}
                 icon={faPlay}

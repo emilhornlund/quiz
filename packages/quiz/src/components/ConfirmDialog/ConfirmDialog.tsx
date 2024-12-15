@@ -72,7 +72,7 @@ const ConfirmDialog: FC<DialogProps> = ({
                 <Button
                   id="close-button"
                   type="button"
-                  kind="secondary"
+                  kind="call-to-action"
                   size="small"
                   value="Close"
                   onClick={() => onClose?.()}

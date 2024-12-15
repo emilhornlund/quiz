@@ -39,7 +39,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
       <IconButtonArrowRight
         id={'skip-button'}
         type="button"
-        kind="secondary"
+        kind="call-to-action"
         size="small"
         value="Skip"
         onClick={onSkip}

@@ -6,7 +6,7 @@ $outline-offset: pxToRem(2px);
 .main {
   display: flex;
   flex-direction: column;
-  margin: $outline-offset;
+  margin: $outline-offset * 2;
 
   button {
     display: flex;
@@ -14,76 +14,52 @@ $outline-offset: pxToRem(2px);
     align-items: center;
     justify-content: center;
     appearance: none;
-    outline: none;
-    border: none;
+    border: $outline-offset solid transparent;
     font-weight: bold;
     width: 100%;
     height: 100%;
+    outline-width: $outline-offset;
+    outline-style: solid;
     outline-offset: $outline-offset;
     cursor: pointer;
 
-    &.primary {
-      border: $outline-offset solid transparent;
-      background-color: $white;
-      outline: $outline-offset solid $white;
-      color: $gray-4;
+    @mixin apply-colors($primary, $secondary) {
+      outline-color: $primary;
+      background-color: $primary;
+      color: $secondary;
 
       &:hover {
-        background-color: $gray-1;
+        background-color: lighten($primary, 20);
+        outline-color: lighten($primary, 20);
+        color: lighten($secondary, 20);
       }
+
+      &:disabled {
+        background-color: lighten($primary, 20);
+        outline-color: lighten($primary, 20);
+        color: lighten($secondary, 30);
+        cursor: default;
+      }
+    }
+
+    &.primary {
+      @include apply-colors($white, $gray-4);
     }
 
     &.secondary {
-      border: $outline-offset solid transparent;
-      background-color: $yellow-2;
-      outline: $outline-offset solid $yellow-2;
-      color: $gray-4;
+      @include apply-colors($gray-1, $gray-4);
+    }
 
-      &:hover {
-        background-color: $yellow-1;
-        outline-color: $yellow-1;
-      }
+    &.callToAction {
+      @include apply-colors($yellow-2, $gray-4);
     }
 
     &.plain {
-      border: none;
-      background-color: transparent;
-      outline: none;
-      outline-offset: 0;
-      color: $white;
-      border-radius: 0;
-      padding: 0;
-
-      &:hover {
-        color: $gray-1;
-      }
+      @include apply-colors(transparent, $white);
     }
 
     &.destructive {
-      border: $outline-offset solid transparent;
-      background-color: $red-2;
-      outline: $outline-offset solid $red-2;
-      color: $white;
-
-      &:hover {
-        background-color: $red-1;
-        outline-color: $red-1;
-      }
-    }
-
-    &:disabled {
-      &:not(&.plain) {
-        background-color: $gray-1;
-        outline-color: $gray-1;
-        color: $gray-2;
-        cursor: default;
-
-        &:hover {
-          background-color: $gray-1;
-          outline-color: $gray-1;
-          color: $gray-2;
-        }
-      }
+      @include apply-colors($red-2, $white);
     }
   }
 

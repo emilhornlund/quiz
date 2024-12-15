@@ -29,6 +29,24 @@ export const Secondary = {
   },
 } satisfies Story
 
+export const CallToAction = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    value: 'Call To Action Button',
+  },
+} satisfies Story
+
+export const Destructive = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'destructive',
+    value: 'Destructive',
+  },
+} satisfies Story
+
 export const PrimarySmall = {
   args: {
     id: 'my-button',
@@ -49,6 +67,26 @@ export const SecondarySmall = {
   },
 } satisfies Story
 
+export const CallToActionSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    size: 'small',
+    value: 'Call To Action Button',
+  },
+} satisfies Story
+
+export const DestructiveSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'destructive',
+    size: 'small',
+    value: 'Destructive',
+  },
+} satisfies Story
+
 export const PrimaryDisabled = {
   args: {
     id: 'my-button',
@@ -65,6 +103,26 @@ export const SecondaryDisabled = {
     type: 'button',
     kind: 'secondary',
     value: 'Secondary Disabled Button',
+    disabled: true,
+  },
+} satisfies Story
+
+export const CallToActionDisabled = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    value: 'Call To Action Button',
+    disabled: true,
+  },
+} satisfies Story
+
+export const DestructiveDisabled = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'destructive',
+    value: 'Destructive',
     disabled: true,
   },
 } satisfies Story

@@ -27,7 +27,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -220,7 +220,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -429,7 +429,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -606,7 +606,7 @@ exports[`HostResultState > should render HostResultState with question type rang
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -839,7 +839,7 @@ exports[`HostResultState > should render HostResultState with question type true
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -1016,7 +1016,7 @@ exports[`HostResultState > should render HostResultState with question type type
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"

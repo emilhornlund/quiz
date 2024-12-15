@@ -27,7 +27,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
           class="main small"
         >
           <button
-            class="secondary"
+            class="callToAction"
             data-testid="test-start-game-button-button"
             id="start-game-button"
             name="start-game-button"

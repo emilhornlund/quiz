@@ -67,7 +67,7 @@ const HomePage: FC = () => {
         <IconButtonArrowRight
           id="join"
           type="submit"
-          kind="secondary"
+          kind="call-to-action"
           value="Join the game"
           disabled={!gamePINValid}
         />

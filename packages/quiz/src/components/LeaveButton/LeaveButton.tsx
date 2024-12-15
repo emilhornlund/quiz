@@ -14,7 +14,7 @@ const LeaveButton: FC = () => {
     <IconButtonArrowLeft
       id="leave-game-button"
       type="button"
-      kind="secondary"
+      kind="call-to-action"
       size="small"
       value="Leave"
       onClick={handleLeaveButtonClicked}

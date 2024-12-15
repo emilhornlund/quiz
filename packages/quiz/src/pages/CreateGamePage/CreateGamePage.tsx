@@ -236,7 +236,7 @@ const CreateGamePage: FC = () => {
           <IconButtonArrowRight
             id="create-game-button"
             type="submit"
-            kind="secondary"
+            kind="call-to-action"
             size="small"
             value="Create Game"
             disabled={!isValid}

@@ -44,7 +44,7 @@ const Quizzes = () => {
       <Button
         id="create-quiz-button"
         type="button"
-        kind="secondary"
+        kind="call-to-action"
         size="normal"
         value="Create New Quiz"
         onClick={() => navigate('/quiz/create')}

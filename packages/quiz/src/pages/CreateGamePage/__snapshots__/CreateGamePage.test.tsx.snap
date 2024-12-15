@@ -28,7 +28,7 @@ exports[`CreateGamePage > should render CreateGamePage 1`] = `
             class="main small"
           >
             <button
-              class="secondary"
+              class="callToAction"
               data-testid="test-create-game-button-button"
               disabled=""
               id="create-game-button"
