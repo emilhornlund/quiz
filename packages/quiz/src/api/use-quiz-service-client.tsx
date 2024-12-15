@@ -5,6 +5,7 @@ import {
   FindGameResponseDto,
   PaginatedQuizResponseDto,
   PlayerResponseDto,
+  QuestionDto,
   QuestionType,
   QuizRequestDto,
   QuizResponseDto,
@@ -18,6 +19,7 @@ import {
   CLIENT_LOCAL_STORAGE_KEY,
   TOKEN_LOCAL_STORAGE_KEY,
 } from '../utils/constants'
+import { notifySuccess } from '../utils/notification.ts'
 
 import {
   ApiPostBody,
@@ -201,7 +203,10 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the created quiz details as a `QuizResponseDto`.
    */
   const createQuiz = (request: QuizRequestDto): Promise<QuizResponseDto> =>
-    apiPost('/quizzes', request)
+    apiPost<QuizResponseDto>('/quizzes', request).then((response) => {
+      notifySuccess('Success! Your quiz has been created and is ready to go!')
+      return response
+    })
 
   /**
    * Retrieves the details of a specific quiz by its ID.
@@ -224,7 +229,11 @@ export const useQuizServiceClient = () => {
   const updateQuiz = (
     quizId: string,
     request: QuizRequestDto,
-  ): Promise<QuizResponseDto> => apiPut(`/quizzes/${quizId}`, request)
+  ): Promise<QuizResponseDto> =>
+    apiPut<QuizResponseDto>(`/quizzes/${quizId}`, request).then((response) => {
+      notifySuccess('Success! Your quiz has been saved and is ready to go!')
+      return response
+    })
 
   /**
    * Deletes a quiz by its ID.
@@ -234,18 +243,19 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the quiz has been successfully deleted.
    */
   const deleteQuiz = (quizId: string): Promise<void> =>
-    apiDelete(`/quizzes/${quizId}`)
+    apiDelete<void>(`/quizzes/${quizId}`).then(() => {
+      notifySuccess('Success! The quiz has been deleted successfully.')
+    })
 
   /**
    * Retrieves the list of questions for a specific quiz.
    *
    * @param quizId - The ID of the quiz to retrieve questions for.
    *
-   * @returns A promise resolving to the paginated list of questions as a `PaginatedQuizResponseDto`.
+   * @returns A promise resolving to the list of questions as a `QuestionDto`.
    */
-  const getQuizQuestions = (
-    quizId: string,
-  ): Promise<PaginatedQuizResponseDto> => apiGet(`/quizzes/${quizId}/questions`)
+  const getQuizQuestions = (quizId: string): Promise<QuestionDto[]> =>
+    apiGet(`/quizzes/${quizId}/questions`)
 
   /**
    * Finds a game using the provided game PIN.

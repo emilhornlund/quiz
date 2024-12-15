@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode'
-import { Bounce, toast } from 'react-toastify'
 
 import config from '../config.ts'
+import { notifyError } from '../utils/notification.ts'
 
 /**
  * Represents the structure of a POST body for API requests.
@@ -57,17 +57,7 @@ export const parseResponseAndHandleError = async <T extends object | void>(
   } else {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { message } = (await response.json()) as Record<string, any>
-    toast.error(message ?? 'Unknown error', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-    })
+    notifyError(message ?? 'Unknown error')
     throw new ApiError(message)
   }
 }

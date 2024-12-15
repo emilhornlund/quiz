@@ -1,6 +1,5 @@
 import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
-import { Bounce, toast, ToastOptions } from 'react-toastify'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client'
 import { LoadingSpinner, Page } from '../../components'
@@ -23,6 +22,11 @@ import {
   PlayerResultState,
 } from '../../states'
 import {
+  notifyError,
+  notifySuccess,
+  notifyWarning,
+} from '../../utils/notification.ts'
+import {
   ConnectionStatus,
   useEventSource,
 } from '../../utils/use-event-source.tsx'
@@ -39,31 +43,20 @@ const GamePage = () => {
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
-      const options: ToastOptions = {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-      }
       switch (connectionStatus) {
         case 'CONNECTED':
           if (hasReconnected) {
-            toast.success('Connected', options)
             setHasReconnected(false)
+            notifySuccess('Connected')
           }
           break
         case 'RECONNECTING':
           setHasReconnected(true)
-          toast.warning('Reconnecting', options)
+          notifyWarning('Reconnecting')
           break
         case 'RECONNECTING_FAILED':
           setHasReconnected(true)
-          toast.error('Reconnecting failed', options)
+          notifyError('Reconnecting failed')
           break
         default:
           break
