@@ -1,0 +1,91 @@
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.floatingOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $black-1-80;
+}
+
+.confirmDialog {
+  display: flex;
+  flex-direction: column;
+  background-color: $white;
+  color: $gray-4;
+  width: $mobile-width;
+
+  @include mobile {
+    width: 100%;
+    padding: $mobile-narrow-layout-gutter;
+    row-gap: $mobile-narrow-layout-gutter;
+    border-radius: $mobile-border-radius;
+  }
+
+  @include tablet {
+    width: $mobile-width;
+    padding: $tablet-narrow-layout-gutter;
+    row-gap: $tablet-narrow-layout-gutter;
+    border-radius: $tablet-border-radius;
+  }
+
+  @include desktop {
+    width: $mobile-width;
+    padding: $desktop-narrow-layout-gutter;
+    row-gap: $desktop-narrow-layout-gutter;
+    border-radius: $desktop-border-radius;
+  }
+
+  .title {
+    font-weight: bold;
+
+    @include mobile {
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      @include fontSize(20px);
+    }
+
+    @include desktop {
+      @include fontSize(24px);
+    }
+  }
+
+  .message {
+
+    @include mobile {
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      @include fontSize(18px);
+    }
+
+    @include desktop {
+      @include fontSize(20px);
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter;
+    }
+
+    > div {
+      flex: 1;
+    }
+  }
+}

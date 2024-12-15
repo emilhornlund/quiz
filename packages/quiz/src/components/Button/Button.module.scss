@@ -59,6 +59,18 @@ $outline-offset: pxToRem(2px);
       }
     }
 
+    &.destructive {
+      border: $outline-offset solid transparent;
+      background-color: $red-2;
+      outline: $outline-offset solid $red-2;
+      color: $white;
+
+      &:hover {
+        background-color: $red-1;
+        outline-color: $red-1;
+      }
+    }
+
     &:disabled {
       &:not(&.plain) {
         background-color: $gray-1;

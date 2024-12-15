@@ -10,7 +10,7 @@ export interface ButtonProps {
   id: string
   name?: string
   type: 'submit' | 'reset' | 'button'
-  kind?: 'primary' | 'secondary' | 'plain'
+  kind?: 'primary' | 'secondary' | 'plain' | 'destructive'
   size?: 'normal' | 'small'
   value?: React.ReactNode | string | undefined
   disabled?: boolean
@@ -49,6 +49,7 @@ const Button: React.FC<ButtonProps> = ({
           kind === 'primary' ? styles.primary : undefined,
           kind === 'secondary' ? styles.secondary : undefined,
           kind === 'plain' ? styles.plain : undefined,
+          kind === 'destructive' ? styles.destructive : undefined,
         )}
         data-testid={`test-${id}-button`}>
         {icon && iconPosition === 'leading' && (
