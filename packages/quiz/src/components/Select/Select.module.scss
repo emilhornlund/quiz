@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
@@ -59,17 +61,17 @@ $outline-offset: pxToRem(2px);
     position: absolute;
 
     @include mobile {
-      top: calc(50% - #{pxToRem(16px) / 2});
+      top: calc(50% - #{math.div(pxToRem(16px), 2)});
       right: $layout-gutter * 0.8;
     }
 
     @include tablet {
-      top: calc(50% - #{pxToRem(17px) / 2});
+      top: calc(50% - #{math.div(pxToRem(17px), 2)});
       right: $layout-gutter * 0.9;
     }
 
     @include desktop {
-      top: calc(50% - #{pxToRem(18px) / 2});
+      top: calc(50% - #{math.div(pxToRem(18px), 2)});
       right: $layout-gutter;
     }
   }
