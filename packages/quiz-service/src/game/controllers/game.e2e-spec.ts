@@ -132,7 +132,7 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games (GET)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -149,7 +149,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -166,7 +166,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a classic mode game if it was created more than 6 hours ago', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -193,7 +193,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a zero to one hundred mode game if it was created more than 6 hours ago', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -249,7 +249,7 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/players (POST)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -265,7 +265,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining when nickname already taken', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -301,7 +301,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining an expired game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -363,7 +363,7 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/events (GET)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -381,7 +381,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should allow event subscription for a player who joined the game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -401,7 +401,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny event subscription without an authorization token', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -434,12 +434,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return Forbidden when subscribing to events with a token for a different game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
 
-      await gameService.createGame(
+      await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         playerClient,
       )
@@ -458,7 +458,7 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/tasks/current/complete (POST)', () => {
     it('should succeed in completing the current task', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -477,7 +477,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -501,7 +501,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is already completed', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -525,7 +525,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny completing the current task without an authorization token', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -558,12 +558,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return 401 when completing the current task with a token for a different game', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
 
-      await gameService.createGame(
+      await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         playerClient,
       )
@@ -582,7 +582,7 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/answers (POST)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -613,7 +613,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return Forbidden when a host tries to submit an answer', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -644,7 +644,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest for invalid task status', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -680,7 +680,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest for non-question task type', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )
@@ -707,7 +707,7 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest when the player has already submitted an answer', async () => {
-      const { id: gameID } = await gameService.createGame(
+      const { id: gameID } = await gameService.createGameLegacy(
         CREATE_CLASSIC_MODE_GAME_REQUEST,
         hostClient,
       )

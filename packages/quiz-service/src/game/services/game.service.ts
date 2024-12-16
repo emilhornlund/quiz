@@ -12,6 +12,7 @@ import {
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
 import { PlayerService } from '../../player/services'
+import { QuizService } from '../../quiz/services'
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
@@ -33,13 +34,41 @@ export class GameService {
    * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
    * @param {PlayerService} playerService - The service responsible for managing player information.
    * @param {ClientService} clientService - Service for retrieving client information.
+   * @param {QuizService} quizService - Service for managing quiz-related operations.
    */
   constructor(
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private playerService: PlayerService,
     private clientService: ClientService,
+    private quizService: QuizService,
   ) {}
+
+  /**
+   * Creates a new game based on the provided quiz ID. It generates a unique 6-digit game PIN,
+   * saves the game, and returns a response containing the game ID and JWT token for the host.
+   *
+   * @param {string} quizId - The ID of the quiz to create a game from.
+   * @param {Client} client - The client object containing details of the authorized client creating the game.
+   *
+   * @returns {Promise<CreateGameResponseDto>} A Promise that resolves to the response object containing the created game details.
+   */
+  public async createGame(
+    quizId: string,
+    client: Client,
+  ): Promise<CreateGameResponseDto> {
+    const { title, mode, questions } =
+      await this.quizService.findQuizDocumentByIdOrThrow(quizId)
+
+    const gameDocument = await this.gameRepository.createGame(
+      { name: title, mode, questions },
+      client,
+    )
+
+    await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
+
+    return { id: gameDocument._id }
+  }
 
   /**
    * Creates a new game based on the provided request. It generates a unique 6-digit game PIN,
@@ -50,7 +79,7 @@ export class GameService {
    *
    * @returns {Promise<CreateGameResponseDto>} A Promise that resolves to the response object containing the created game details.
    */
-  public async createGame(
+  public async createGameLegacy(
     request:
       | CreateClassicModeGameRequestDto
       | CreateZeroToOneHundredModeGameRequestDto,

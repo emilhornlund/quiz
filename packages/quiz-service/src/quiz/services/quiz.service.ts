@@ -183,7 +183,7 @@ export class QuizService {
    *
    * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
    */
-  private async findQuizDocumentByIdOrThrow(quizId: string): Promise<Quiz> {
+  public async findQuizDocumentByIdOrThrow(quizId: string): Promise<Quiz> {
     const quiz = await this.quizModel.findById(quizId).populate('owner')
 
     if (!quiz) {

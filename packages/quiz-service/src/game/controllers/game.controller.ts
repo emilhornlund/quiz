@@ -117,7 +117,7 @@ export class GameController {
       | CreateClassicModeGameRequest
       | CreateZeroToOneHundredModeGameRequest,
   ): Promise<CreateGameResponse> {
-    return await this.gameService.createGame(createGameRequest, client)
+    return await this.gameService.createGameLegacy(createGameRequest, client)
   }
 
   /**

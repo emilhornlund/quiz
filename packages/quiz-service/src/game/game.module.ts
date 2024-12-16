@@ -6,8 +6,9 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
 import { PlayerModule } from '../player'
+import { QuizModule } from '../quiz'
 
-import { GameController } from './controllers/game.controller'
+import { GameController, QuizGameController } from './controllers'
 import {
   GameEventPublisher,
   GameEventSubscriber,
@@ -34,8 +35,9 @@ import { Game, GameSchema } from './services/models/schemas'
     AuthModule,
     PlayerModule,
     ClientModule,
+    QuizModule,
   ],
-  controllers: [GameController],
+  controllers: [GameController, QuizGameController],
   providers: [
     Logger,
     GameRepository,
