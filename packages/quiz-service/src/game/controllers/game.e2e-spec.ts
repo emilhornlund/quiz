@@ -1,13 +1,14 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
 import {
-  CreateClassicModeGameRequestDto,
-  CreateZeroToOneHundredModeGameRequestDto,
   GameMode,
   GameParticipantType,
+  LanguageCode,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
+  QuizRequestDto,
+  QuizVisibility,
 } from '@quiz/common'
 import { Model } from 'mongoose'
 import supertest from 'supertest'
@@ -21,6 +22,7 @@ import {
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
+import { QuizService } from '../../quiz/services'
 import { GameService } from '../services'
 import { Game, TaskType } from '../services/models/schemas'
 import { buildLobbyTask } from '../services/utils'
@@ -31,6 +33,7 @@ describe('GameController (e2e)', () => {
   let gameModel: Model<Game>
   let authService: AuthService
   let clientService: ClientService
+  let quizService: QuizService
 
   let hostClient: Client
   let hostClientToken: string
@@ -51,6 +54,7 @@ describe('GameController (e2e)', () => {
     gameModel = app.get<Model<Game>>(getModelToken(Game.name))
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
+    quizService = app.get(QuizService)
 
     const hostClientId = uuidv4()
     hostClient = await clientService.findOrCreateClient(hostClientId)
@@ -71,71 +75,14 @@ describe('GameController (e2e)', () => {
     await app.close()
   }, 30000)
 
-  describe('/api/games (POST)', () => {
-    it('should succeed in creating a new classic mode game', () => {
-      return supertest(app.getHttpServer())
-        .post('/api/games')
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .send(CREATE_CLASSIC_MODE_GAME_REQUEST)
-        .expect(201)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('id')
-        })
-    })
-
-    it('should succeed in creating a new zero to one hundred mode game', () => {
-      return supertest(app.getHttpServer())
-        .post('/api/games')
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .send(CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST)
-        .expect(201)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('id')
-        })
-    })
-
-    it('should fail in creating a new game', () => {
-      return supertest(app.getHttpServer())
-        .post('/api/games')
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .send({
-          mode: GameMode.Classic,
-        })
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Validation failed')
-          expect(res.body).toHaveProperty('status', 400)
-          expect(res.body).toHaveProperty('timestamp')
-          expect(res.body).toHaveProperty('validationErrors', [
-            {
-              property: 'name',
-              constraints: {
-                isString: 'name must be a string',
-                minLength: 'name must be longer than or equal to 3 characters',
-                maxLength:
-                  'name must be shorter than or equal to 25 characters',
-                matches:
-                  'The name of the game can only contain letters, numbers, and underscores.',
-              },
-            },
-            {
-              property: 'questions',
-              constraints: {
-                isArray: 'questions must be an array',
-                arrayMinSize: 'questions must contain at least 1 elements',
-              },
-            },
-          ])
-        })
-    })
-  })
-
   describe('/api/games (GET)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const game = await gameModel.findById(gameID).exec()
 
@@ -149,10 +96,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        zeroToOneHundredQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const game = await gameModel.findById(gameID).exec()
 
@@ -166,10 +115,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a classic mode game if it was created more than 6 hours ago', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -193,10 +144,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail to retrieve a zero to one hundred mode game if it was created more than 6 hours ago', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        zeroToOneHundredQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -249,10 +202,12 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/players (POST)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
@@ -265,10 +220,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining when nickname already taken', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -301,10 +258,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining an expired game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
@@ -363,10 +322,12 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/events (GET)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const response = supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -381,10 +342,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should allow event subscription for a player who joined the game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
@@ -401,10 +364,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny event subscription without an authorization token', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -434,15 +399,19 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return Forbidden when subscribing to events with a token for a different game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
 
-      await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        playerClient,
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      const { id: quizIdSecond } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      await gameService.createGame(quizIdSecond, playerClient)
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -458,10 +427,12 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/tasks/current/complete (POST)', () => {
     it('should succeed in completing the current task', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'active' })
@@ -477,10 +448,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'pending' })
@@ -501,10 +474,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in completing the current task if its current status is already completed', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameModel
         .findByIdAndUpdate(gameID, { 'currentTask.status': 'completed' })
@@ -525,10 +500,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should deny completing the current task without an authorization token', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
@@ -558,15 +535,19 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return 401 when completing the current task with a token for a different game', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
 
-      await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        playerClient,
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      const { id: quizIdSecond } = await quizService.createQuiz(
+        classicQuizRequest,
+        playerClient.player,
       )
+
+      await gameService.createGame(quizIdSecond, playerClient)
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/tasks/current/complete`)
@@ -582,10 +563,12 @@ describe('GameController (e2e)', () => {
 
   describe('/api/games/:gameID/answers (POST)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
@@ -613,10 +596,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return Forbidden when a host tries to submit an answer', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -644,10 +629,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest for invalid task status', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
@@ -680,10 +667,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest for non-question task type', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
@@ -707,10 +696,12 @@ describe('GameController (e2e)', () => {
     })
 
     it('should return BadRequest when the player has already submitted an answer', async () => {
-      const { id: gameID } = await gameService.createGameLegacy(
-        CREATE_CLASSIC_MODE_GAME_REQUEST,
-        hostClient,
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       await gameService.joinGame(gameID, playerClient, 'FrostyBear')
 
@@ -748,9 +739,13 @@ describe('GameController (e2e)', () => {
   })
 })
 
-const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
-  name: 'Classic Mode Game',
+const classicQuizRequest: QuizRequestDto = {
+  title: 'Trivia Battle',
+  description: 'A fun and engaging trivia quiz for all ages.',
   mode: GameMode.Classic,
+  visibility: QuizVisibility.Public,
+  imageCoverURL: 'https://example.com/question-cover-image.png',
+  languageCode: LanguageCode.English,
   questions: [
     {
       type: QuestionType.MultiChoice,
@@ -759,13 +754,13 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
         type: MediaType.Image,
         url: 'https://example.com/question-image.png',
       },
-      answers: [
+      options: [
         {
           value: 'Stockholm',
           correct: true,
         },
         {
-          value: 'Paris',
+          value: 'Copenhagen',
           correct: false,
         },
         {
@@ -781,17 +776,6 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       duration: 30,
     },
     {
-      type: QuestionType.TrueFalse,
-      question: 'The earth is flat.',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      correct: true,
-      points: 1000,
-      duration: 30,
-    },
-    {
       type: QuestionType.Range,
       question: 'Guess the temperature of the hottest day ever recorded.',
       media: {
@@ -800,39 +784,53 @@ const CREATE_CLASSIC_MODE_GAME_REQUEST: CreateClassicModeGameRequestDto = {
       },
       min: 0,
       max: 100,
-      margin: QuestionRangeAnswerMargin.Medium,
       correct: 50,
+      margin: QuestionRangeAnswerMargin.Medium,
+      points: 1000,
+      duration: 30,
+    },
+    {
+      type: QuestionType.TrueFalse,
+      question: 'The earth is flat.',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
+      },
+      correct: false,
       points: 1000,
       duration: 30,
     },
     {
       type: QuestionType.TypeAnswer,
-      question: 'What is the capital of Sweden?',
+      question: 'What is the capital of Denmark?',
       media: {
         type: MediaType.Image,
         url: 'https://example.com/question-image.png',
       },
-      correct: 'Stockholm',
+      options: ['Copenhagen'],
       points: 1000,
       duration: 30,
     },
   ],
 }
 
-const CREATE_ZERO_TO_ONE_HUNDRED_MODE_GAME_REQUEST: CreateZeroToOneHundredModeGameRequestDto =
-  {
-    name: '0 to 100 Mode Game',
-    mode: GameMode.ZeroToOneHundred,
-    questions: [
-      {
-        type: QuestionType.Range,
-        question: 'Guess the temperature of the hottest day ever recorded.',
-        media: {
-          type: MediaType.Image,
-          url: 'https://example.com/question-image.png',
-        },
-        correct: 50,
-        duration: 30,
+const zeroToOneHundredQuizRequest: QuizRequestDto = {
+  title: 'Updated Trivia Battle',
+  description: 'A fun and engaging updated trivia quiz for all ages.',
+  mode: GameMode.ZeroToOneHundred,
+  visibility: QuizVisibility.Private,
+  imageCoverURL: 'https://example.com/updated-question-cover-image.png',
+  languageCode: LanguageCode.Swedish,
+  questions: [
+    {
+      type: QuestionType.Range,
+      question: 'Guess the temperature of the hottest day ever recorded.',
+      media: {
+        type: MediaType.Image,
+        url: 'https://example.com/question-image.png',
       },
-    ],
-  }
+      correct: 50,
+      duration: 30,
+    },
+  ],
+}

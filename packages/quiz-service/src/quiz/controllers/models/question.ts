@@ -13,7 +13,6 @@ import {
 } from '@quiz/common'
 import { IsNumber, Max, Min, Validate } from 'class-validator'
 
-import { InRangeValidator } from '../../../game/controllers/decorators'
 import {
   ApiQuestionDurationProperty,
   ApiQuestionMediaProperty,
@@ -31,6 +30,7 @@ import {
   ApiQuestionTypeProperty,
   QuestionOptionValueProperty,
 } from '../decorators/api'
+import { InRangeValidator } from '../decorators/api/in-range-validator.decorator'
 
 /**
  * Represents a data transfer object for a media associated with a question, such as images or videos.

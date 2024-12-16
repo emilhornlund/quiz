@@ -1,5 +1,4 @@
 export * from './auth'
-export * from './create-game-request.dto'
 export * from './find-game-response.dto'
 export * from './game.dto'
 export * from './game-event'

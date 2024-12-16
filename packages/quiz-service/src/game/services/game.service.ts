@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import {
-  CreateClassicModeGameRequestDto,
   CreateGameResponseDto,
-  CreateZeroToOneHundredModeGameRequestDto,
   FindGameResponseDto,
   GameParticipantType,
   QuestionType,
@@ -17,7 +15,6 @@ import { QuizService } from '../../quiz/services'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
 import { TaskType } from './models/schemas'
-import { buildPartialGameModel } from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -62,31 +59,6 @@ export class GameService {
 
     const gameDocument = await this.gameRepository.createGame(
       { name: title, mode, questions },
-      client,
-    )
-
-    await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
-
-    return { id: gameDocument._id }
-  }
-
-  /**
-   * Creates a new game based on the provided request. It generates a unique 6-digit game PIN,
-   * saves the game, and returns a response containing the game ID and JWT token for the host.
-   *
-   * @param {CreateClassicModeGameRequestDto | CreateZeroToOneHundredModeGameRequestDto} request - The details of the game to be created.
-   * @param {Client} client - The client object representing the host creating the game.
-   *
-   * @returns {Promise<CreateGameResponseDto>} A Promise that resolves to the response object containing the created game details.
-   */
-  public async createGameLegacy(
-    request:
-      | CreateClassicModeGameRequestDto
-      | CreateZeroToOneHundredModeGameRequestDto,
-    client: Client,
-  ): Promise<CreateGameResponseDto> {
-    const gameDocument = await this.gameRepository.createGame(
-      buildPartialGameModel(request),
       client,
     )
 

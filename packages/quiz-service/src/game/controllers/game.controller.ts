@@ -14,7 +14,6 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiCreatedResponse,
   ApiExtraModels,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -34,7 +33,6 @@ import {
 } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
 import {
-  ParseCreateGameRequestPipe,
   ParseGamePINPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
@@ -43,8 +41,6 @@ import { GameEventSubscriber, GameService } from '../services'
 import { GameIdParam } from './decorators'
 import { AuthorizedGame } from './decorators/auth'
 import {
-  CreateClassicModeGameRequest,
-  CreateZeroToOneHundredModeGameRequest,
   JoinGameRequest,
   SubmitMultiChoiceQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
@@ -52,7 +48,6 @@ import {
   SubmitTypeAnswerQuestionAnswerRequest,
 } from './models/requests'
 import { FindGameResponse } from './models/response'
-import { CreateGameResponse } from './models/response/create-game.response'
 
 /**
  * GameController handles incoming HTTP requests related to game operations,
@@ -61,8 +56,6 @@ import { CreateGameResponse } from './models/response/create-game.response'
  * - Uses the `LegacyAuth` decorator to indicate legacy authentication logic is used.
  */
 @ApiExtraModels(
-  CreateClassicModeGameRequest,
-  CreateZeroToOneHundredModeGameRequest,
   SubmitMultiChoiceQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
@@ -81,44 +74,6 @@ export class GameController {
     private readonly gameService: GameService,
     private readonly gameEventSubscriber: GameEventSubscriber,
   ) {}
-
-  /**
-   * Creates a new game and assigns it to the authorized player.
-   *
-   * @param {Client} client - The client object containing details of the authorized client creating the game.
-   * @param {CreateClassicModeGameRequest | CreateZeroToOneHundredModeGameRequest} createGameRequest - The details of the game to be created.
-   *
-   * @returns {CreateGameResponse} A response containing the details of the created game.
-   */
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: 'Create a new game',
-    description:
-      'Allows users to create a new game in either Classic Mode or Zero to One Hundred Mode. The request must specify a name and a list of questions for the selected mode.',
-  })
-  @ApiBody({
-    description: 'Request body for creating a new game.',
-    schema: {
-      oneOf: [
-        { $ref: getSchemaPath(CreateClassicModeGameRequest) },
-        { $ref: getSchemaPath(CreateZeroToOneHundredModeGameRequest) },
-      ],
-    },
-  })
-  @ApiCreatedResponse({
-    description: 'The game has been successfully created.',
-    type: CreateGameResponse,
-  })
-  async createGame(
-    @AuthorizedClientParam() client: Client,
-    @Body(new ParseCreateGameRequestPipe())
-    createGameRequest:
-      | CreateClassicModeGameRequest
-      | CreateZeroToOneHundredModeGameRequest,
-  ): Promise<CreateGameResponse> {
-    return await this.gameService.createGameLegacy(createGameRequest, client)
-  }
 
   /**
    * Finds an active game by its game PIN.

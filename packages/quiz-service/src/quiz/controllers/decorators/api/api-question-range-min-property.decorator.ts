@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min, Validate } from 'class-validator'
 
-import { MinMaxValidator } from '../../../../game/controllers/decorators'
+import { MinMaxValidator } from './min-max-validator.dectorator'
 
 /**
  * Decorator for Swagger documentation of the `min` property in range questions.
