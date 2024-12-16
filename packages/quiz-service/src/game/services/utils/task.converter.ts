@@ -5,9 +5,19 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  BaseQuestionDao,
+  QuestionDao,
+  QuestionRangeDao,
+} from '../../../quiz/services/models/schemas'
+import {
+  isMultiChoiceQuestion,
+  isRangeQuestion,
+  isTrueFalseQuestion,
+  isTypeAnswerQuestion,
+} from '../../../quiz/services/utils'
 import { IllegalTaskTypeException } from '../../exceptions'
 import {
-  BaseQuestion,
   BaseTask,
   GameDocument,
   LeaderboardTask,
@@ -16,8 +26,6 @@ import {
   Participant,
   ParticipantPlayer,
   PodiumTask,
-  QuestionMultiChoice,
-  QuestionRange,
   QuestionResultTask,
   QuestionResultTaskItem,
   QuestionTask,
@@ -26,21 +34,15 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-  QuestionTrueFalse,
-  QuestionTypeAnswer,
   TaskType,
 } from '../models/schemas'
 
 import {
   isMultiChoiceAnswer,
-  isMultiChoiceQuestion,
   isRangeAnswer,
-  isRangeQuestion,
   isTrueFalseAnswer,
-  isTrueFalseQuestion,
   isTypeAnswerAnswer,
-  isTypeAnswerQuestion,
-} from './question.utils'
+} from './question-answer.utils'
 import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
 /**
@@ -120,19 +122,13 @@ export function calculateRangeMargin(
  * - True/False questions: Checks if the answer matches the correct boolean value.
  * - Type answer questions: Compares the lowercased correct answer and provided answer.
  *
- * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
+ * @param {QuestionDao} question - The question object to check against.
  * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
  *
  * @returns {boolean} Returns `true` if the answer is correct for the given question, otherwise `false`.
  */
 export function isQuestionAnswerCorrect(
-  question: BaseQuestion &
-    (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
-    ),
+  question: QuestionDao,
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -164,9 +160,12 @@ export function isQuestionAnswerCorrect(
   }
   if (isTypeAnswerQuestion(question) && isTypeAnswerAnswer(answer)) {
     return !!(
-      question.correct?.length &&
       answer?.answer?.length &&
-      question.correct.toLowerCase() === answer.answer.toLowerCase()
+      question.options.some(
+        (option) =>
+          !!option?.length &&
+          option.trim().toLowerCase() === answer.answer.trim().toLowerCase(),
+      )
     )
   }
   return false
@@ -180,20 +179,14 @@ export function isQuestionAnswerCorrect(
  * for responses that exceed the question's duration.
  *
  * @param {Date} presented - The time when the question was presented.
- * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object containing duration and points.
+ * @param {QuestionDao} question - The question object containing duration and points.
  * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The user's answer, including the time it was created.
  *
  * @returns {number} - The raw score calculated based on response time and the maximum points for the question.
  */
 export function calculateClassicModeRawScore(
   presented: Date,
-  question: BaseQuestion &
-    (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
-    ),
+  question: QuestionDao,
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -244,14 +237,14 @@ export function calculateClassicModeRawScore(
  *    to the correct answer, within the allowed margin.
  *
  * @param {Date} presented - The time when the question was presented.
- * @param {BaseQuestion & QuestionRange} question - The range question object, including the correct answer, margin, and points.
+ * @param {BaseQuestionDao & QuestionRangeDao} question - The range question object, including the correct answer, margin, and points.
  * @param {QuestionTaskBaseAnswer & QuestionTaskRangeAnswer} answer - The user's range answer, including the provided answer value.
  *
  * @returns {number} - The calculated total score for the range question.
  */
 export function calculateClassicModeRangeQuestionScore(
   presented: Date,
-  question: BaseQuestion & QuestionRange,
+  question: BaseQuestionDao & QuestionRangeDao,
   answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
 ): number {
   const { correct, margin, points } = question
@@ -293,7 +286,7 @@ export function calculateClassicModeRangeQuestionScore(
  *   which only considers speed.
  *
  * @param {Date} presented - The timestamp when the question was presented.
- * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
+ * @param {QuestionDao} question - The question object to check against.
  * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
  *
  * @returns {number} - The player's calculated score, rounded to the nearest whole number.
@@ -304,13 +297,7 @@ export function calculateClassicModeRangeQuestionScore(
  */
 export function calculateClassicModeScore(
   presented: Date,
-  question: BaseQuestion &
-    (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
-    ),
+  question: QuestionDao,
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -339,7 +326,7 @@ export function calculateClassicModeScore(
  *   between the correct answer and the player's answer.
  * - Answers outside the range [0, 100] or invalid answers default to a score of `100`.
  *
- * @param {BaseQuestion & (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)} question - The question object to check against.
+ * @param {QuestionDao} question - The question object to check against.
  * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
  *
  * @returns {number} - The player's score:
@@ -348,13 +335,7 @@ export function calculateClassicModeScore(
  *   - `100` for invalid or out-of-range answers.
  */
 export function calculateZeroToOneHundredModeScore(
-  question: BaseQuestion &
-    (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
-    ),
+  question: QuestionDao,
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer

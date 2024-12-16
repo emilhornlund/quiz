@@ -36,7 +36,7 @@ describe('Game Event Converter', () => {
             [
               {
                 type: QuestionType.MultiChoice,
-                question: 'What is the capital of Sweden?',
+                text: 'What is the capital of Sweden?',
                 media: {
                   type: MediaType.Image,
                   url: 'https://example.com/question-image.png',
@@ -97,7 +97,7 @@ describe('Game Event Converter', () => {
             },
             question: {
               type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].question,
+              question: gameDocument.questions[0].text,
             },
             results: {
               type: QuestionType.MultiChoice,
@@ -128,8 +128,7 @@ describe('Game Event Converter', () => {
             [
               {
                 type: QuestionType.Range,
-                question:
-                  'Guess the temperature of the hottest day ever recorded.',
+                text: 'Guess the temperature of the hottest day ever recorded.',
                 media: {
                   type: MediaType.Image,
                   url: 'https://example.com/question-image.png',
@@ -177,7 +176,7 @@ describe('Game Event Converter', () => {
             },
             question: {
               type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].question,
+              question: gameDocument.questions[0].text,
             },
             results: {
               type: QuestionType.Range,
@@ -208,7 +207,7 @@ describe('Game Event Converter', () => {
             [
               {
                 type: QuestionType.TrueFalse,
-                question: 'The earth is flat.',
+                text: 'The earth is flat.',
                 media: {
                   type: MediaType.Image,
                   url: 'https://example.com/question-image.png',
@@ -252,7 +251,7 @@ describe('Game Event Converter', () => {
             },
             question: {
               type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].question,
+              question: gameDocument.questions[0].text,
             },
             results: {
               type: QuestionType.TrueFalse,
@@ -283,12 +282,12 @@ describe('Game Event Converter', () => {
             [
               {
                 type: QuestionType.TypeAnswer,
-                question: 'What is the capital of Sweden?',
+                text: 'What is the capital of Sweden?',
                 media: {
                   type: MediaType.Image,
                   url: 'https://example.com/question-image.png',
                 },
-                correct: 'Stockholm',
+                options: ['stockholm'],
                 points: 1000,
                 duration: 30,
               },
@@ -327,7 +326,7 @@ describe('Game Event Converter', () => {
             },
             question: {
               type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].question,
+              question: gameDocument.questions[0].text,
             },
             results: {
               type: QuestionType.TypeAnswer,

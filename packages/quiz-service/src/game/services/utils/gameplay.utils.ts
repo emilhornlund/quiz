@@ -77,7 +77,7 @@ export function getQuestionTaskPendingDuration(
     throw new Error('Invalid question index')
   }
 
-  const questionText = gameDocument.questions[questionIndex].question
+  const questionText = gameDocument.questions[questionIndex].text
 
   const wordCount = questionText.trim().split(/\s+/).length
   const readingDuration = (wordCount / AVERAGE_WPM) * MILLISECONDS_PER_MINUTE

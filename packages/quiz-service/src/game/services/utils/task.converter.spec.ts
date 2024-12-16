@@ -1,16 +1,18 @@
 import { QuestionRangeAnswerMargin, QuestionType } from '@quiz/common'
 
 import {
-  BaseQuestion,
-  QuestionMultiChoice,
-  QuestionRange,
+  BaseQuestionDao,
+  QuestionMultiChoiceDao,
+  QuestionRangeDao,
+  QuestionTrueFalseDao,
+  QuestionTypeAnswerDao,
+} from '../../../quiz/services/models/schemas'
+import {
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-  QuestionTrueFalse,
-  QuestionTypeAnswer,
 } from '../models/schemas'
 
 import {
@@ -88,7 +90,7 @@ describe('TaskConverter', () => {
         const question = {
           type: QuestionType.MultiChoice,
           options: [{ correct: true }, { correct: false }],
-        } as BaseQuestion & QuestionMultiChoice
+        } as BaseQuestionDao & QuestionMultiChoiceDao
 
         const answer = {
           type: QuestionType.MultiChoice,
@@ -107,7 +109,7 @@ describe('TaskConverter', () => {
         const question = {
           type: QuestionType.MultiChoice,
           options: [{ correct: true }, { correct: false }],
-        } as BaseQuestion & QuestionMultiChoice
+        } as BaseQuestionDao & QuestionMultiChoiceDao
 
         const answer = {
           type: QuestionType.MultiChoice,
@@ -120,7 +122,7 @@ describe('TaskConverter', () => {
         const question = {
           type: QuestionType.MultiChoice,
           options: [{ correct: true }],
-        } as BaseQuestion & QuestionMultiChoice
+        } as BaseQuestionDao & QuestionMultiChoiceDao
 
         expect(
           isQuestionAnswerCorrect(question, {
@@ -139,7 +141,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.None,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         const answer = {
           type: QuestionType.Range,
@@ -159,7 +161,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.Low,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         expect(
           isQuestionAnswerCorrect(
@@ -207,7 +209,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.Medium,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         expect(
           isQuestionAnswerCorrect(
@@ -255,7 +257,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.High,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         expect(
           isQuestionAnswerCorrect(
@@ -303,7 +305,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.Maximum,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         expect(
           isQuestionAnswerCorrect(
@@ -331,7 +333,7 @@ describe('TaskConverter', () => {
           type: QuestionType.Range,
           correct: 100,
           margin: QuestionRangeAnswerMargin.None,
-        } as BaseQuestion & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
 
         expect(
           isQuestionAnswerCorrect(question, {
@@ -349,7 +351,7 @@ describe('TaskConverter', () => {
         const question = {
           type: QuestionType.TrueFalse,
           correct: true,
-        } as BaseQuestion & QuestionTrueFalse
+        } as BaseQuestionDao & QuestionTrueFalseDao
 
         const answer = {
           type: QuestionType.TrueFalse,
@@ -368,7 +370,7 @@ describe('TaskConverter', () => {
         const question = {
           type: QuestionType.TrueFalse,
           correct: true,
-        } as BaseQuestion & QuestionTrueFalse
+        } as BaseQuestionDao & QuestionTrueFalseDao
 
         expect(
           isQuestionAnswerCorrect(question, {
@@ -385,8 +387,8 @@ describe('TaskConverter', () => {
       it('should validate type answer questions with case-insensitive match', () => {
         const question = {
           type: QuestionType.TypeAnswer,
-          correct: 'OpenAI',
-        } as BaseQuestion & QuestionTypeAnswer
+          options: ['OpenAI'],
+        } as BaseQuestionDao & QuestionTypeAnswerDao
 
         const answer = {
           type: QuestionType.TypeAnswer,
@@ -404,8 +406,8 @@ describe('TaskConverter', () => {
       it('should handle undefined answer', () => {
         const question = {
           type: QuestionType.TypeAnswer,
-          correct: 'OpenAI',
-        } as BaseQuestion & QuestionTypeAnswer
+          options: ['OpenAI'],
+        } as BaseQuestionDao & QuestionTypeAnswerDao
 
         expect(
           isQuestionAnswerCorrect(question, {
@@ -427,7 +429,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() + 1000),
@@ -445,7 +447,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() + 15000),
@@ -463,7 +465,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() + 30000),
@@ -481,7 +483,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() + 60000),
@@ -497,7 +499,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 0,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() + 1000),
@@ -513,7 +515,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = { created: presented } as QuestionTaskBaseAnswer &
         QuestionTaskMultiChoiceAnswer // Exact time
@@ -530,7 +532,7 @@ describe('TaskConverter', () => {
         type: QuestionType.MultiChoice,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         created: new Date(presented.getTime() - 5000),
@@ -550,7 +552,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -575,7 +577,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -600,7 +602,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -625,7 +627,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -650,7 +652,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Maximum,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -675,7 +677,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.None,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -700,7 +702,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -729,7 +731,7 @@ describe('TaskConverter', () => {
         ],
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         type: QuestionType.MultiChoice,
@@ -752,7 +754,7 @@ describe('TaskConverter', () => {
         ],
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         type: QuestionType.MultiChoice,
@@ -773,7 +775,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -792,7 +794,7 @@ describe('TaskConverter', () => {
         type: QuestionType.TrueFalse,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionTrueFalse
+      } as BaseQuestionDao & QuestionTrueFalseDao
 
       const score = calculateClassicModeScore(presented, question, undefined)
       expect(score).toEqual(0) // No answer provided
@@ -807,7 +809,7 @@ describe('TaskConverter', () => {
         margin: QuestionRangeAnswerMargin.Medium,
         points: 1000,
         duration: 30,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -827,7 +829,7 @@ describe('TaskConverter', () => {
         correct: true,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionTrueFalse
+      } as BaseQuestionDao & QuestionTrueFalseDao
 
       const answer = {
         type: QuestionType.TrueFalse,
@@ -847,7 +849,7 @@ describe('TaskConverter', () => {
         correct: true,
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionTrueFalse
+      } as BaseQuestionDao & QuestionTrueFalseDao
 
       const answer = {
         type: QuestionType.TrueFalse,
@@ -864,10 +866,10 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.TypeAnswer,
-        correct: 'correct answer',
+        options: ['correct answer'],
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionTypeAnswer
+      } as BaseQuestionDao & QuestionTypeAnswerDao
 
       const answer = {
         type: QuestionType.TypeAnswer,
@@ -884,10 +886,10 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.TypeAnswer,
-        correct: 'correct answer',
+        options: ['correct answer'],
         duration: 30,
         points: 1000,
-      } as BaseQuestion & QuestionTypeAnswer
+      } as BaseQuestionDao & QuestionTypeAnswerDao
 
       const answer = {
         type: QuestionType.TypeAnswer,
@@ -905,7 +907,7 @@ describe('TaskConverter', () => {
       const question = {
         type: QuestionType.Range,
         correct: 50,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
@@ -919,7 +921,7 @@ describe('TaskConverter', () => {
       const question = {
         type: QuestionType.Range,
         correct: 50,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       let answer = {
         type: QuestionType.Range,
@@ -950,7 +952,7 @@ describe('TaskConverter', () => {
       const question = {
         type: QuestionType.Range,
         correct: 50,
-      } as BaseQuestion & QuestionRange
+      } as BaseQuestionDao & QuestionRangeDao
 
       let answer = {
         type: QuestionType.Range,
@@ -968,7 +970,7 @@ describe('TaskConverter', () => {
     it('should return 100 for invalid questions or answers', () => {
       const question = {
         type: QuestionType.MultiChoice, // Invalid type
-      } as BaseQuestion & QuestionMultiChoice
+      } as BaseQuestionDao & QuestionMultiChoiceDao
 
       const answer = {
         type: QuestionType.MultiChoice,

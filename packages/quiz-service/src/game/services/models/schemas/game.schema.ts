@@ -3,6 +3,15 @@ import { GameMode, GameParticipantType, QuestionType } from '@quiz/common'
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
 
 import {
+  BaseQuestionDaoSchema,
+  QuestionDao,
+  QuestionMultiChoiceDaoSchema,
+  QuestionRangeDaoSchema,
+  QuestionTrueFalseDaoSchema,
+  QuestionTypeAnswerDaoSchema,
+} from '../../../../quiz/services/models/schemas'
+
+import {
   Participant,
   ParticipantHost,
   ParticipantHostSchema,
@@ -10,18 +19,6 @@ import {
   ParticipantPlayerSchema,
   ParticipantSchema,
 } from './participant.schema'
-import {
-  BaseQuestion,
-  BaseQuestionSchema,
-  QuestionMultiChoice,
-  QuestionMultiChoiceSchema,
-  QuestionRange,
-  QuestionRangeSchema,
-  QuestionTrueFalse,
-  QuestionTrueFalseSchema,
-  QuestionTypeAnswer,
-  QuestionTypeAnswerSchema,
-} from './question.schema'
 import {
   BaseTask,
   LeaderboardTask,
@@ -55,14 +52,11 @@ export class Game {
   @Prop({ type: String, required: true })
   pin: string
 
-  @Prop({ type: [BaseQuestionSchema], required: true })
-  questions: (BaseQuestion &
-    (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
-    ))[]
+  /**
+   * The associated questions of the game.
+   */
+  @Prop({ type: [BaseQuestionDaoSchema], required: true })
+  questions: QuestionDao[]
 
   @Prop({ type: Number, required: true })
   nextQuestion: number
@@ -113,11 +107,17 @@ participantsSchema.discriminator(
 const questionsSchema = GameSchema.path<MongooseSchema.Types.Array>('questions')
 questionsSchema.discriminator(
   QuestionType.MultiChoice,
-  QuestionMultiChoiceSchema,
+  QuestionMultiChoiceDaoSchema,
 )
-questionsSchema.discriminator(QuestionType.Range, QuestionRangeSchema)
-questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
-questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
+questionsSchema.discriminator(QuestionType.Range, QuestionRangeDaoSchema)
+questionsSchema.discriminator(
+  QuestionType.TrueFalse,
+  QuestionTrueFalseDaoSchema,
+)
+questionsSchema.discriminator(
+  QuestionType.TypeAnswer,
+  QuestionTypeAnswerDaoSchema,
+)
 
 const currentTaskSchema =
   GameSchema.path<MongooseSchema.Types.Subdocument>('currentTask')

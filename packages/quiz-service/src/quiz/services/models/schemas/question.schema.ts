@@ -153,6 +153,12 @@ export class QuestionRangeDao {
   max: number
 
   /**
+   * description here.
+   */
+  @Prop({ type: Number, required: true })
+  step: number
+
+  /**
    * The margin of error allowed for the answer.
    */
   @Prop({

@@ -30,6 +30,12 @@ import { GameEventQuestionResultsMultiChoice } from '@quiz/common/dist/cjs/model
 import { GameLeaderboardPlayerEvent } from '@quiz/common/src'
 
 import {
+  isMultiChoiceQuestion,
+  isRangeQuestion,
+  isTrueFalseQuestion,
+  isTypeAnswerQuestion,
+} from '../../../quiz/services/utils'
+import {
   GameDocument,
   Participant,
   ParticipantPlayer,
@@ -42,14 +48,10 @@ import {
 } from './gameplay.utils'
 import {
   isMultiChoiceAnswer,
-  isMultiChoiceQuestion,
   isRangeAnswer,
-  isRangeQuestion,
   isTrueFalseAnswer,
-  isTrueFalseQuestion,
   isTypeAnswerAnswer,
-  isTypeAnswerQuestion,
-} from './question.utils'
+} from './question-answer.utils'
 import {
   isLeaderboardTask,
   isLobbyTask,
@@ -343,7 +345,7 @@ function buildPaginationEvent(
 function buildGameQuestionPreviewHostEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
 ): GameQuestionPreviewHostEvent {
-  const { type, question } =
+  const { type, text: question } =
     document.questions[document.currentTask.questionIndex]
   return {
     type: GameEventType.GameQuestionPreviewHost,
@@ -371,7 +373,7 @@ function buildGameQuestionPreviewPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
   participantPlayer: Participant & ParticipantPlayer,
 ): GameQuestionPreviewPlayerEvent {
-  const { type, question } =
+  const { type, text: question } =
     document.questions[document.currentTask.questionIndex]
 
   const {
@@ -407,7 +409,7 @@ function buildGameEventQuestion(
   question: GameDocument['questions'][number],
 ): GameEventQuestion {
   const common = {
-    question: question.question,
+    question: question.text,
     media: question.media
       ? { type: question.media.type, url: question.media.url }
       : null,
@@ -667,9 +669,11 @@ function buildGameEventQuestionResults(
     type Distribution = GameEventQuestionResultsTypeAnswer['distribution']
     type DistributionItem = Distribution[number]
 
-    const initial: DistributionItem[] = [
-      { value: question.correct.toLowerCase(), count: 0, correct: true },
-    ]
+    const initial: DistributionItem[] = question.options.map((option) => ({
+      value: option,
+      count: 0,
+      correct: true,
+    }))
 
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
@@ -708,7 +712,7 @@ function buildGameEventQuestionResults(
 function buildGameResultHostEvent(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
 ): GameResultHostEvent {
-  const { type, question } =
+  const { type, text: question } =
     document.questions[document.currentTask.questionIndex]
   return {
     type: GameEventType.GameResultHost,

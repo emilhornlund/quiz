@@ -29,6 +29,7 @@ import {
   Quiz,
   QuizModel,
 } from './models/schemas'
+import { calculateRangeStep } from './utils'
 
 /**
  * Service for managing quiz-related operations.
@@ -302,6 +303,7 @@ export class QuizService {
                 type: QuestionType.Range,
                 min: question.min,
                 max: question.max,
+                step: calculateRangeStep(question.min, question.max),
                 correct: question.correct,
                 margin: question.margin,
               } as BaseQuestionDao & QuestionRangeDao),
@@ -334,6 +336,7 @@ export class QuizService {
           media: question.media,
           min: 0,
           max: 100,
+          step: 1,
           correct: question.correct,
           margin: QuestionRangeAnswerMargin.None,
           points: 0,

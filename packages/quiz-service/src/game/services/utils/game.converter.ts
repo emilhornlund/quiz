@@ -15,17 +15,16 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { Client } from '../../../client/services/models/schemas'
 import {
-  BaseQuestion,
-  Game,
-  Media,
-  PartialGameModel,
-  QuestionMultiChoice,
-  QuestionRange,
-  QuestionTrueFalse,
-  QuestionTypeAnswer,
-} from '../models/schemas'
+  BaseQuestionDao,
+  QuestionMediaDao,
+  QuestionMultiChoiceDao,
+  QuestionRangeDao,
+  QuestionTrueFalseDao,
+  QuestionTypeAnswerDao,
+} from '../../../quiz/services/models/schemas'
+import { calculateRangeStep } from '../../../quiz/services/utils'
+import { Game, PartialGameModel } from '../models/schemas'
 
-import { calculateRangeStep } from './question.utils'
 import { buildLobbyTask } from './task.converter'
 
 /**
@@ -91,15 +90,15 @@ export function buildPartialGameModel(
         ) {
           return {
             type: QuestionType.MultiChoice,
-            question: question.question,
-            media: buildMedia(question.media),
+            text: question.question,
+            media: buildQuestionMediaDao(question.media),
             points: question.points,
             duration: question.duration,
             options: question.answers.map((option) => ({
               value: option.value,
               correct: option.correct,
             })),
-          } as BaseQuestion & QuestionMultiChoice
+          } as BaseQuestionDao & QuestionMultiChoiceDao
         }
 
         if (
@@ -107,8 +106,8 @@ export function buildPartialGameModel(
         ) {
           return {
             type: QuestionType.Range,
-            question: question.question,
-            media: buildMedia(question.media),
+            text: question.question,
+            media: buildQuestionMediaDao(question.media),
             min: question.min,
             max: question.max,
             step: calculateRangeStep(question.min, question.max),
@@ -116,7 +115,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: question.points,
             duration: question.duration,
-          } as BaseQuestion & QuestionRange
+          } as BaseQuestionDao & QuestionRangeDao
         }
 
         if (
@@ -127,8 +126,8 @@ export function buildPartialGameModel(
         ) {
           return {
             type: QuestionType.Range,
-            question: question.question,
-            media: buildMedia(question.media),
+            text: question.question,
+            media: buildQuestionMediaDao(question.media),
             min: 0,
             max: 100,
             step: 1,
@@ -136,7 +135,7 @@ export function buildPartialGameModel(
             correct: question.correct,
             points: -1,
             duration: question.duration,
-          } as BaseQuestion & QuestionRange
+          } as BaseQuestionDao & QuestionRangeDao
         }
 
         if (
@@ -144,12 +143,12 @@ export function buildPartialGameModel(
         ) {
           return {
             type: QuestionType.TrueFalse,
-            question: question.question,
-            media: buildMedia(question.media),
+            text: question.question,
+            media: buildQuestionMediaDao(question.media),
             correct: question.correct,
             points: question.points,
             duration: question.duration,
-          } as BaseQuestion & QuestionTrueFalse
+          } as BaseQuestionDao & QuestionTrueFalseDao
         }
 
         if (
@@ -160,19 +159,21 @@ export function buildPartialGameModel(
         ) {
           return {
             type: QuestionType.TypeAnswer,
-            question: question.question,
-            media: buildMedia(question.media),
-            correct: question.correct,
+            text: question.question,
+            media: buildQuestionMediaDao(question.media),
+            options: [question.correct],
             points: question.points,
             duration: question.duration,
-          } as BaseQuestion & QuestionTypeAnswer
+          } as BaseQuestionDao & QuestionTypeAnswerDao
         }
       })
       .filter((obj) => !!obj),
   }
 }
 
-function buildMedia(media?: CreateCommonMediaRequestDto): Media {
+function buildQuestionMediaDao(
+  media?: CreateCommonMediaRequestDto,
+): QuestionMediaDao {
   if (!media) {
     return undefined
   }
