@@ -1,4 +1,3 @@
-export { default as CreateGamePage } from './CreateGamePage'
 export { default as CreateQuizPage } from './CreateQuizPage'
 export { default as EditQuizPage } from './EditQuizPage'
 export { default as ErrorPage } from './ErrorPage'

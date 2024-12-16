@@ -72,7 +72,7 @@ const HomePage: FC = () => {
           disabled={!gamePINValid}
         />
       </form>
-      <Link to={'/create'}>
+      <Link to={'/quiz/create'}>
         <Typography variant="link">Create your own quiz</Typography>
       </Link>
     </Page>

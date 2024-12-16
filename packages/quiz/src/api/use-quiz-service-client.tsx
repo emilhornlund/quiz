@@ -1,6 +1,5 @@
 import {
   AuthResponseDto,
-  CreateGameRequestDto,
   CreateGameResponseDto,
   FindGameResponseDto,
   PaginatedQuizResponseDto,
@@ -278,18 +277,6 @@ export const useQuizServiceClient = () => {
     apiPost<CreateGameResponseDto>(`/quizzes/${quizId}/games`, {})
 
   /**
-   * Creates a new game using the provided game request data.
-   *
-   * @param request - The request data to create a new game.
-   *
-   * @returns A promise resolving to the created game details as a `CreateGameResponseDto`.
-   */
-  const createGameLegacy = (
-    request: CreateGameRequestDto,
-  ): Promise<CreateGameResponseDto> =>
-    apiPost<CreateGameResponseDto>('/games', request)
-
-  /**
    * Joins an existing game using the provided game ID and player nickname.
    *
    * @param gameID - The ID of the game to join.
@@ -352,7 +339,6 @@ export const useQuizServiceClient = () => {
     getQuizQuestions,
     findGame,
     createGame,
-    createGameLegacy,
     joinGame,
     completeTask,
     submitQuestionAnswer,
