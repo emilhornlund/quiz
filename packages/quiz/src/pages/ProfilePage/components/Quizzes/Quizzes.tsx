@@ -13,7 +13,7 @@ import {
 const Quizzes = () => {
   const navigate = useNavigate()
 
-  const { getCurrentPlayerQuizzes } = useQuizServiceClient()
+  const { getCurrentPlayerQuizzes, createGame } = useQuizServiceClient()
 
   const {
     data: { results: quizzes, total = 0, limit = 0, offset = 0 } = {},
@@ -23,6 +23,12 @@ const Quizzes = () => {
     queryKey: ['currentPlayerQuizzes'],
     queryFn: getCurrentPlayerQuizzes,
   })
+
+  const handleCreateGame = (quizId: string): void => {
+    createGame(quizId).then((response) =>
+      navigate(`/game?gameID=${response.id}`),
+    )
+  }
 
   if (isLoading || isError) {
     return <LoadingSpinner />
@@ -58,6 +64,7 @@ const Quizzes = () => {
             offset,
           }}
           onEdit={(quizId) => navigate(`/quiz/${quizId}`)}
+          onHostGame={handleCreateGame}
         />
       )}
     </>

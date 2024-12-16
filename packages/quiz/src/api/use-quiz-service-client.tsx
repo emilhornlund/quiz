@@ -268,13 +268,23 @@ export const useQuizServiceClient = () => {
     apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
 
   /**
+   * Creates a new game using the provided quizId.
+   *
+   * @param quizId - The ID of the quiz to create a game from.
+   *
+   * @returns A promise resolving to the created game details as a `CreateGameResponseDto`.
+   */
+  const createGame = (quizId: string): Promise<CreateGameResponseDto> =>
+    apiPost<CreateGameResponseDto>(`/quizzes/${quizId}/games`, {})
+
+  /**
    * Creates a new game using the provided game request data.
    *
    * @param request - The request data to create a new game.
    *
    * @returns A promise resolving to the created game details as a `CreateGameResponseDto`.
    */
-  const createGame = (
+  const createGameLegacy = (
     request: CreateGameRequestDto,
   ): Promise<CreateGameResponseDto> =>
     apiPost<CreateGameResponseDto>('/games', request)
@@ -342,6 +352,7 @@ export const useQuizServiceClient = () => {
     getQuizQuestions,
     findGame,
     createGame,
+    createGameLegacy,
     joinGame,
     completeTask,
     submitQuestionAnswer,

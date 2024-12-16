@@ -36,7 +36,7 @@ const GameModeLabels: { [key in GameMode]: string } = {
 const CreateGamePage: FC = () => {
   const navigate = useNavigate()
 
-  const { createGame } = useQuizServiceClient()
+  const { createGameLegacy } = useQuizServiceClient()
 
   const [name, setName] = useState<string>('')
   const [mode, setMode] = useState<GameMode>(GameMode.Classic)
@@ -221,7 +221,7 @@ const CreateGamePage: FC = () => {
         request.questions = zeroToOneHundredModeQuestions
       }
 
-      createGame(request)
+      createGameLegacy(request)
         .then((response) => {
           navigate(`/game?gameID=${response.id}`)
         })
