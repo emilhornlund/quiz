@@ -10,16 +10,16 @@ import { Model, Schema as MongooseSchema } from 'mongoose'
 import { Player } from '../../../../player/services/models/schemas'
 
 import {
-  Question,
-  QuestionMultiChoice,
-  QuestionMultiChoiceSchema,
-  QuestionRange,
-  QuestionRangeSchema,
-  QuestionSchema,
-  QuestionTrueFalse,
-  QuestionTrueFalseSchema,
-  QuestionTypeAnswer,
-  QuestionTypeAnswerSchema,
+  BaseQuestionDao,
+  BaseQuestionDaoSchema,
+  QuestionMultiChoiceDao,
+  QuestionMultiChoiceDaoSchema,
+  QuestionRangeDao,
+  QuestionRangeDaoSchema,
+  QuestionTrueFalseDao,
+  QuestionTrueFalseDaoSchema,
+  QuestionTypeAnswerDao,
+  QuestionTypeAnswerDaoSchema,
 } from './question.schema'
 
 /**
@@ -73,13 +73,13 @@ export class Quiz {
   /**
    * The associated questions of the quiz.
    */
-  @Prop({ type: [QuestionSchema], required: true })
-  questions: (Question &
+  @Prop({ type: [BaseQuestionDaoSchema], required: true })
+  questions: (BaseQuestionDao &
     (
-      | QuestionMultiChoice
-      | QuestionRange
-      | QuestionTrueFalse
-      | QuestionTypeAnswer
+      | QuestionMultiChoiceDao
+      | QuestionRangeDao
+      | QuestionTrueFalseDao
+      | QuestionTypeAnswerDao
     ))[]
 
   /**
@@ -119,8 +119,14 @@ export const QuizSchema = SchemaFactory.createForClass(Quiz)
 const questionsSchema = QuizSchema.path<MongooseSchema.Types.Array>('questions')
 questionsSchema.discriminator(
   QuestionType.MultiChoice,
-  QuestionMultiChoiceSchema,
+  QuestionMultiChoiceDaoSchema,
 )
-questionsSchema.discriminator(QuestionType.Range, QuestionRangeSchema)
-questionsSchema.discriminator(QuestionType.TrueFalse, QuestionTrueFalseSchema)
-questionsSchema.discriminator(QuestionType.TypeAnswer, QuestionTypeAnswerSchema)
+questionsSchema.discriminator(QuestionType.Range, QuestionRangeDaoSchema)
+questionsSchema.discriminator(
+  QuestionType.TrueFalse,
+  QuestionTrueFalseDaoSchema,
+)
+questionsSchema.discriminator(
+  QuestionType.TypeAnswer,
+  QuestionTypeAnswerDaoSchema,
+)

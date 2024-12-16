@@ -4,13 +4,12 @@ import {
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
-import { Model } from 'mongoose'
 
 /**
  * Mongoose schema for the Question Media.
  */
 @Schema({ _id: false })
-export class QuestionMedia {
+export class QuestionMediaDao {
   /**
    * The type of media (e.g., image, audio, video).
    */
@@ -29,18 +28,19 @@ export class QuestionMedia {
 }
 
 /**
- * Schema factory for the QuestionMedia class.
+ * Schema factory for the QuestionMediaDao class.
  */
-export const QuestionMediaSchema = SchemaFactory.createForClass(QuestionMedia)
+export const QuestionMediaDaoSchema =
+  SchemaFactory.createForClass(QuestionMediaDao)
 
 /**
- * Mongoose schema for a general Question document.
+ * Mongoose schema for a general BaseQuestionDao document.
  *
  * This base schema includes common properties shared by all question types
  * and acts as a parent for discriminator-based subtypes.
  */
 @Schema({ _id: false, discriminatorKey: 'type' })
-export class Question {
+export class BaseQuestionDao {
   /**
    * The type of the question.
    */
@@ -59,8 +59,8 @@ export class Question {
   /**
    * Optional media associated with the question (e.g., image or video).
    */
-  @Prop({ type: QuestionMedia, required: false })
-  media?: QuestionMedia
+  @Prop({ type: QuestionMediaDao, required: false })
+  media?: QuestionMediaDao
 
   /**
    * The number of points awarded for correctly answering the question.
@@ -76,20 +76,16 @@ export class Question {
 }
 
 /**
- * Mongoose model type for the Question schema.
+ * Schema factory for the BaseQuestionDao class.
  */
-export type QuestionModel = Model<Question>
+export const BaseQuestionDaoSchema =
+  SchemaFactory.createForClass(BaseQuestionDao)
 
 /**
- * Schema factory for the Question class.
- */
-export const QuestionSchema = SchemaFactory.createForClass(Question)
-
-/**
- * Mongoose schema for the Question Option.
+ * Mongoose schema for the QuestionMultiChoiceDao Option.
  */
 @Schema({ _id: false })
-export class QuestionMultiChoiceOption {
+export class QuestionMultiChoiceOptionDao {
   /**
    * The value or text of the option.
    */
@@ -104,17 +100,17 @@ export class QuestionMultiChoiceOption {
 }
 
 /**
- * Schema factory for the QuestionMultiChoiceOption class.
+ * Schema factory for the QuestionMultiChoiceOptionDao class.
  */
-export const QuestionOptionSchema = SchemaFactory.createForClass(
-  QuestionMultiChoiceOption,
+export const QuestionMultiChoiceOptionDaoSchema = SchemaFactory.createForClass(
+  QuestionMultiChoiceOptionDao,
 )
 
 /**
  * Mongoose schema for the multiple-choice question.
  */
 @Schema()
-export class QuestionMultiChoice {
+export class QuestionMultiChoiceDao {
   /**
    * The type of the question, set to `MultiChoice`.
    */
@@ -123,21 +119,22 @@ export class QuestionMultiChoice {
   /**
    * The list of options for the question.
    */
-  @Prop({ type: [QuestionMultiChoiceOption], required: true })
-  options: QuestionMultiChoiceOption[]
+  @Prop({ type: [QuestionMultiChoiceOptionDao], required: true })
+  options: QuestionMultiChoiceOptionDao[]
 }
 
 /**
- * Schema factory for the QuestionMultiChoice class.
+ * Schema factory for the QuestionMultiChoiceDao class.
  */
-export const QuestionMultiChoiceSchema =
-  SchemaFactory.createForClass(QuestionMultiChoice)
+export const QuestionMultiChoiceDaoSchema = SchemaFactory.createForClass(
+  QuestionMultiChoiceDao,
+)
 
 /**
  * Mongoose schema for the range question.
  */
 @Schema()
-export class QuestionRange {
+export class QuestionRangeDao {
   /**
    * The type of the question, set to `Range`.
    */
@@ -173,15 +170,16 @@ export class QuestionRange {
 }
 
 /**
- * Schema factory for the QuestionRange class.
+ * Schema factory for the QuestionRangeDao class.
  */
-export const QuestionRangeSchema = SchemaFactory.createForClass(QuestionRange)
+export const QuestionRangeDaoSchema =
+  SchemaFactory.createForClass(QuestionRangeDao)
 
 /**
  * Mongoose schema for the true false question.
  */
 @Schema()
-export class QuestionTrueFalse {
+export class QuestionTrueFalseDao {
   /**
    * The type of the question, set to `TrueFalse`.
    */
@@ -195,16 +193,16 @@ export class QuestionTrueFalse {
 }
 
 /**
- * Schema factory for the QuestionTrueFalse class.
+ * Schema factory for the QuestionTrueFalseDao class.
  */
-export const QuestionTrueFalseSchema =
-  SchemaFactory.createForClass(QuestionTrueFalse)
+export const QuestionTrueFalseDaoSchema =
+  SchemaFactory.createForClass(QuestionTrueFalseDao)
 
 /**
  * Mongoose schema for the type answer question.
  */
 @Schema()
-export class QuestionTypeAnswer {
+export class QuestionTypeAnswerDao {
   /**
    * The type of the question, set to `TypeAnswer`.
    */
@@ -218,18 +216,24 @@ export class QuestionTypeAnswer {
 }
 
 /**
- * Schema factory for the QuestionTypeAnswer class.
+ * Schema factory for the QuestionTypeAnswerDao class.
  */
-export const QuestionTypeAnswerSchema =
-  SchemaFactory.createForClass(QuestionTypeAnswer)
+export const QuestionTypeAnswerDaoSchema = SchemaFactory.createForClass(
+  QuestionTypeAnswerDao,
+)
 
 /**
  * Represents a question document with its specific discriminator type.
  *
- * Combines the base question schema (`Question`) with the possible
- * discriminator types (`QuestionMultiChoice`, `QuestionRange`,
- * `QuestionTrueFalse`, and `QuestionTypeAnswer`) to define a complete
+ * Combines the base question schema (`BaseQuestion`) with the possible
+ * discriminator types (`QuestionMultiChoiceDao`, `QuestionRangeDao`,
+ * `QuestionTrueFalseDao`, and `QuestionTypeAnswerDao`) to define a complete
  * question model.
  */
-export type QuestionWithDiscriminatorVariant = Question &
-  (QuestionMultiChoice | QuestionRange | QuestionTrueFalse | QuestionTypeAnswer)
+export type QuestionDao = BaseQuestionDao &
+  (
+    | QuestionMultiChoiceDao
+    | QuestionRangeDao
+    | QuestionTrueFalseDao
+    | QuestionTypeAnswerDao
+  )

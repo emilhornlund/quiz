@@ -20,12 +20,12 @@ import { Player } from '../../player/services/models/schemas'
 import { QuizNotFoundException } from '../exceptions'
 
 import {
-  Question,
-  QuestionMultiChoice,
-  QuestionRange,
-  QuestionTrueFalse,
-  QuestionTypeAnswer,
-  QuestionWithDiscriminatorVariant,
+  BaseQuestionDao,
+  QuestionDao,
+  QuestionMultiChoiceDao,
+  QuestionRangeDao,
+  QuestionTrueFalseDao,
+  QuestionTypeAnswerDao,
   Quiz,
   QuizModel,
 } from './models/schemas'
@@ -270,15 +270,15 @@ export class QuizService {
    *
    * @param {QuizRequestDto} quizRequest - The data for the question.
    *
-   * @returns {QuestionWithDiscriminatorVariant} - The constructed question documents.
+   * @returns {QuestionDao} - The constructed question documents.
    * @private
    */
   private static buildQuizQuestions(
     quizRequest: QuizRequestDto,
-  ): QuestionWithDiscriminatorVariant[] {
+  ): QuestionDao[] {
     if (quizRequest.mode === GameMode.Classic) {
       return quizRequest.questions.map((question) => {
-        const common: Partial<Question> = {
+        const common: Partial<BaseQuestionDao> = {
           type: question.type,
           text: question.question,
           media: question.media,
@@ -293,7 +293,7 @@ export class QuizService {
               ...({
                 type: QuestionType.MultiChoice,
                 options: question.options,
-              } as Question & QuestionMultiChoice),
+              } as BaseQuestionDao & QuestionMultiChoiceDao),
             }
           case QuestionType.Range:
             return {
@@ -304,7 +304,7 @@ export class QuizService {
                 max: question.max,
                 correct: question.correct,
                 margin: question.margin,
-              } as Question & QuestionRange),
+              } as BaseQuestionDao & QuestionRangeDao),
             }
           case QuestionType.TrueFalse:
             return {
@@ -312,7 +312,7 @@ export class QuizService {
               ...({
                 type: QuestionType.TrueFalse,
                 correct: question.correct,
-              } as Question & QuestionTrueFalse),
+              } as BaseQuestionDao & QuestionTrueFalseDao),
             }
           case QuestionType.TypeAnswer:
             return {
@@ -320,7 +320,7 @@ export class QuizService {
               ...({
                 type: QuestionType.TypeAnswer,
                 options: question.options,
-              } as Question & QuestionTypeAnswer),
+              } as BaseQuestionDao & QuestionTypeAnswerDao),
             }
         }
       })
@@ -338,7 +338,7 @@ export class QuizService {
           margin: QuestionRangeAnswerMargin.None,
           points: 0,
           duration: question.duration,
-        } as Question & QuestionRange
+        } as BaseQuestionDao & QuestionRangeDao
       })
     }
   }
@@ -347,14 +347,14 @@ export class QuizService {
    * Constructs a `QuestionDto` object from a Mongoose `Question` document.
    *
    * @param {GameMode} mode - The game mode of the quiz.
-   * @param {Question} question - The Mongoose question document to transform.
+   * @param {BaseQuestionDao} question - The Mongoose question document to transform.
    *
    * @returns {QuestionDto} - The constructed DTO representing the question details.
    * @private
    */
   private static buildQuestionDto(
     mode: GameMode,
-    question: Question,
+    question: BaseQuestionDao,
   ): QuestionDto {
     const { type, text, media, points, duration } = question
 
@@ -369,7 +369,7 @@ export class QuizService {
 
       switch (type) {
         case QuestionType.MultiChoice: {
-          const cast = question as Question & QuestionMultiChoice
+          const cast = question as BaseQuestionDao & QuestionMultiChoiceDao
           return {
             ...common,
             type: QuestionType.MultiChoice,
@@ -377,7 +377,7 @@ export class QuizService {
           } as QuestionMultiChoiceDto
         }
         case QuestionType.Range: {
-          const cast = question as Question & QuestionRange
+          const cast = question as BaseQuestionDao & QuestionRangeDao
           return {
             ...common,
             type: QuestionType.Range,
@@ -388,7 +388,7 @@ export class QuizService {
           } as QuestionRangeDto
         }
         case QuestionType.TrueFalse: {
-          const cast = question as Question & QuestionTrueFalse
+          const cast = question as BaseQuestionDao & QuestionTrueFalseDao
           return {
             ...common,
             type: QuestionType.TrueFalse,
@@ -396,7 +396,7 @@ export class QuizService {
           } as QuestionTrueFalseDto
         }
         case QuestionType.TypeAnswer: {
-          const cast = question as Question & QuestionTypeAnswer
+          const cast = question as BaseQuestionDao & QuestionTypeAnswerDao
           return {
             ...common,
             type: QuestionType.TypeAnswer,
@@ -407,7 +407,7 @@ export class QuizService {
     }
 
     if (mode === GameMode.ZeroToOneHundred) {
-      const cast = question as Question & QuestionRange
+      const cast = question as BaseQuestionDao & QuestionRangeDao
       return {
         type,
         question: text,
