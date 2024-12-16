@@ -3,7 +3,7 @@ import {
   MediaType,
   QuestionMediaDto,
   QuestionMultiChoiceDto,
-  QuestionOptionDto,
+  QuestionMultiChoiceOptionDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -27,6 +27,7 @@ import {
   ApiQuestionRangeMaxProperty,
   ApiQuestionRangeMinProperty,
   ApiQuestionTrueFalseCorrectProperty,
+  ApiQuestionTypeAnswerOptionsProperty,
   ApiQuestionTypeProperty,
   QuestionOptionValueProperty,
 } from '../decorators/api'
@@ -51,7 +52,7 @@ export class QuestionMedia implements QuestionMediaDto {
 /**
  * Represents a data transfer object for an option for multiple-choice or type-answer questions.
  */
-export class QuestionOption implements QuestionOptionDto {
+export class QuestionMultiChoiceOption implements QuestionMultiChoiceOptionDto {
   /**
    * The text or value of the option.
    */
@@ -91,7 +92,7 @@ export class QuestionMultiChoice implements QuestionMultiChoiceDto {
    * The list of options for the question.
    */
   @ApiQuestionOptionsProperty()
-  options: QuestionOption[]
+  options: QuestionMultiChoiceOption[]
 
   /**
    * The points awarded for answering the question correctly.
@@ -291,8 +292,8 @@ export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
   /**
    * The list of acceptable answers for the question.
    */
-  @ApiQuestionOptionsProperty()
-  options: QuestionOption[]
+  @ApiQuestionTypeAnswerOptionsProperty()
+  options: string[]
 
   /**
    * The points awarded for answering the question correctly.

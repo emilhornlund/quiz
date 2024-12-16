@@ -76,22 +76,7 @@ exports[`QuestionEditor > should render QuestionEditor for classic mode 1`] = `
       "url": ""
     },
     "options": [
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      }
+      ""
     ],
     "points": 1000,
     "duration": 30

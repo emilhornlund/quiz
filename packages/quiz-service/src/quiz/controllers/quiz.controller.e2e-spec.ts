@@ -88,24 +88,7 @@ const typeAnswerQuestion: QuestionTypeAnswerDto = {
     type: MediaType.Image,
     url: 'https://example.com/question-image.png',
   },
-  options: [
-    {
-      value: 'Stockholm',
-      correct: true,
-    },
-    {
-      value: 'Copenhagen',
-      correct: false,
-    },
-    {
-      value: 'London',
-      correct: false,
-    },
-    {
-      value: 'Berlin',
-      correct: false,
-    },
-  ],
+  options: ['Copenhagen'],
   points: 1000,
   duration: 30,
 }

@@ -68,12 +68,7 @@ export const DEFAULT_CLASSIC_MODE_QUESTIONS: QuizClassicModeRequestDto['question
         type: MediaType.Image,
         url: '',
       },
-      options: [
-        { value: '', correct: true },
-        { value: '', correct: true },
-        { value: '', correct: true },
-        { value: '', correct: true },
-      ],
+      options: [''],
       points: 1000,
       duration: 30,
     },

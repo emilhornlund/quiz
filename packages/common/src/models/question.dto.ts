@@ -45,7 +45,7 @@ export interface QuestionCommonDto {
 /**
  * Represents an option for multiple-choice or type-answer questions.
  */
-export interface QuestionOptionDto {
+export interface QuestionMultiChoiceOptionDto {
   /**
    * The value or text of the option.
    */
@@ -69,7 +69,7 @@ export interface QuestionMultiChoiceDto extends QuestionCommonDto {
   /**
    * The list of options for the question.
    */
-  options: QuestionOptionDto[]
+  options: QuestionMultiChoiceOptionDto[]
 }
 
 /**
@@ -137,7 +137,7 @@ export interface QuestionTypeAnswerDto extends QuestionCommonDto {
   /**
    * The list of acceptable answers for the question.
    */
-  options: QuestionOptionDto[]
+  options: string[]
 }
 
 /**

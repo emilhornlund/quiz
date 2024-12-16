@@ -1138,22 +1138,7 @@ exports[`QuizEditor > should render QuizEditor for classic mode 1`] = `
       "url": ""
     },
     "options": [
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      },
-      {
-        "value": "",
-        "correct": true
-      }
+      ""
     ],
     "points": 1000,
     "duration": 30

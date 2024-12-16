@@ -89,7 +89,7 @@ export const QuestionSchema = SchemaFactory.createForClass(Question)
  * Mongoose schema for the Question Option.
  */
 @Schema({ _id: false })
-export class QuestionOption {
+export class QuestionMultiChoiceOption {
   /**
    * The value or text of the option.
    */
@@ -104,9 +104,11 @@ export class QuestionOption {
 }
 
 /**
- * Schema factory for the QuestionOption class.
+ * Schema factory for the QuestionMultiChoiceOption class.
  */
-export const QuestionOptionSchema = SchemaFactory.createForClass(QuestionOption)
+export const QuestionOptionSchema = SchemaFactory.createForClass(
+  QuestionMultiChoiceOption,
+)
 
 /**
  * Mongoose schema for the multiple-choice question.
@@ -121,8 +123,8 @@ export class QuestionMultiChoice {
   /**
    * The list of options for the question.
    */
-  @Prop({ type: [QuestionOption], required: true })
-  options: QuestionOption[]
+  @Prop({ type: [QuestionMultiChoiceOption], required: true })
+  options: QuestionMultiChoiceOption[]
 }
 
 /**
@@ -211,8 +213,8 @@ export class QuestionTypeAnswer {
   /**
    * The list of acceptable answers for the question.
    */
-  @Prop({ type: [QuestionOption], required: true })
-  options: QuestionOption[]
+  @Prop({ type: [String], required: true })
+  options: string[]
 }
 
 /**

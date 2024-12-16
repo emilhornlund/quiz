@@ -8,8 +8,8 @@ import {
   Question,
   QuestionMedia,
   QuestionMediaSchema,
+  QuestionMultiChoiceOption,
   QuestionMultiChoiceSchema,
-  QuestionOption,
   QuestionOptionSchema,
   QuestionRangeSchema,
   QuestionSchema,
@@ -41,7 +41,7 @@ import {
         schema: QuestionMediaSchema,
       },
       {
-        name: QuestionOption.name,
+        name: QuestionMultiChoiceOption.name,
         schema: QuestionOptionSchema,
       },
     ]),

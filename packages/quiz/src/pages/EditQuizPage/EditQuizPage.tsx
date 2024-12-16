@@ -64,7 +64,6 @@ const EditQuizPage: FC = () => {
 
   useEffect(() => {
     if (originalQuiz && originalQuizQuestions) {
-      console.log('UPDATE')
       setEditableData({
         title: originalQuiz.title,
         description: originalQuiz.description,

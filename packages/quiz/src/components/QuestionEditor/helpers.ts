@@ -176,23 +176,14 @@ export const parseQuestionsJson = <T extends GameMode>(
             media: assertMediaType(question.media),
             options: assertType(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              question.options.map((option: any) => ({
-                value: assertType<string>(
-                  option.value,
-                  'string',
-                  'options.value',
-                ),
-                correct: assertType<boolean>(
-                  option.correct,
-                  'boolean',
-                  'options.correct',
-                ),
-              })),
+              question.options.map((option: any, index: number) =>
+                assertType<string>(option, 'string', `options[${index}]`),
+              ),
               'object',
               'options',
               {
-                minLength: 2,
-                maxLength: 6,
+                minLength: 1,
+                maxLength: 4,
               },
             ),
             points: assertPointsType(question.points),

@@ -77,24 +77,7 @@ export const QuestionRequestExamples: ExamplesObject = {
         type: MediaType.Image,
         url: 'https://example.com/question-image.png',
       },
-      options: [
-        {
-          value: 'Stockholm',
-          correct: true,
-        },
-        {
-          value: 'Copenhagen',
-          correct: false,
-        },
-        {
-          value: 'London',
-          correct: false,
-        },
-        {
-          value: 'Berlin',
-          correct: false,
-        },
-      ],
+      options: ['Stockholm', 'Copenhagen', 'London', 'Berlin'],
       points: 1000,
       duration: 30,
     } as QuestionTypeAnswerDto,
@@ -211,24 +194,7 @@ export const QuestionResponseExamples: ExamplesObject = {
         type: MediaType.Image,
         url: 'https://example.com/question-image.png',
       },
-      options: [
-        {
-          value: 'Stockholm',
-          correct: true,
-        },
-        {
-          value: 'Copenhagen',
-          correct: false,
-        },
-        {
-          value: 'London',
-          correct: false,
-        },
-        {
-          value: 'Berlin',
-          correct: false,
-        },
-      ],
+      options: ['Stockholm', 'Copenhagen', 'London', 'Berlin'],
       points: 1000,
       duration: 30,
       created: new Date(),
