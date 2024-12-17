@@ -25,7 +25,7 @@ import {
 /**
  * Mongoose schema for the Quiz collection.
  */
-@Schema({ collection: 'quizzes' })
+@Schema({ _id: true, collection: 'quizzes' })
 export class Quiz {
   /**
    * The unique identifier of the quiz.

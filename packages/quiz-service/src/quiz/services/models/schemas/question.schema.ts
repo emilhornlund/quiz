@@ -59,7 +59,7 @@ export class BaseQuestionDao {
   /**
    * Optional media associated with the question (e.g., image or video).
    */
-  @Prop({ type: QuestionMediaDao, required: false })
+  @Prop({ type: QuestionMediaDaoSchema, required: false })
   media?: QuestionMediaDao
 
   /**
@@ -109,7 +109,7 @@ export const QuestionMultiChoiceOptionDaoSchema = SchemaFactory.createForClass(
 /**
  * Mongoose schema for the multiple-choice question.
  */
-@Schema()
+@Schema({ _id: false })
 export class QuestionMultiChoiceDao {
   /**
    * The type of the question, set to `MultiChoice`.
@@ -119,7 +119,10 @@ export class QuestionMultiChoiceDao {
   /**
    * The list of options for the question.
    */
-  @Prop({ type: [QuestionMultiChoiceOptionDao], required: true })
+  @Prop({
+    type: [QuestionMultiChoiceOptionDaoSchema],
+    required: true,
+  })
   options: QuestionMultiChoiceOptionDao[]
 }
 
@@ -133,7 +136,7 @@ export const QuestionMultiChoiceDaoSchema = SchemaFactory.createForClass(
 /**
  * Mongoose schema for the range question.
  */
-@Schema()
+@Schema({ _id: false })
 export class QuestionRangeDao {
   /**
    * The type of the question, set to `Range`.
@@ -184,7 +187,7 @@ export const QuestionRangeDaoSchema =
 /**
  * Mongoose schema for the true false question.
  */
-@Schema()
+@Schema({ _id: false })
 export class QuestionTrueFalseDao {
   /**
    * The type of the question, set to `TrueFalse`.
@@ -207,7 +210,7 @@ export const QuestionTrueFalseDaoSchema =
 /**
  * Mongoose schema for the type answer question.
  */
-@Schema()
+@Schema({ _id: false })
 export class QuestionTypeAnswerDao {
   /**
    * The type of the question, set to `TypeAnswer`.

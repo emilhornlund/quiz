@@ -22,6 +22,7 @@ import {
 } from './participant.schema'
 import {
   BaseTask,
+  BaseTaskSchema,
   LeaderboardTask,
   LeaderboardTaskSchema,
   LobbyTask,
@@ -37,7 +38,7 @@ import {
 
 export type GameDocument = HydratedDocument<Game>
 
-@Schema({ collection: 'games' })
+@Schema({ _id: true, collection: 'games' })
 export class Game {
   @Prop({ type: String, required: true })
   _id: string
@@ -69,7 +70,7 @@ export class Game {
   @Prop({ type: [ParticipantSchema], required: true })
   participants: (Participant & (ParticipantHost | ParticipantPlayer))[]
 
-  @Prop({ type: BaseTask, required: true })
+  @Prop({ type: BaseTaskSchema, required: true })
   currentTask: BaseTask &
     (
       | LobbyTask
@@ -79,7 +80,7 @@ export class Game {
       | PodiumTask
     )
 
-  @Prop({ type: [BaseTask], required: true })
+  @Prop({ type: [BaseTaskSchema], required: true })
   previousTasks: (BaseTask &
     (
       | LobbyTask

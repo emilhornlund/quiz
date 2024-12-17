@@ -6,7 +6,7 @@ import { Player } from '../../../../player/services/models/schemas'
 /**
  * Mongoose schema for the Client collection.
  */
-@Schema({ collection: 'clients' })
+@Schema({ _id: true, collection: 'clients' })
 export class Client extends Document {
   /**
    * The unique identifier of the client.

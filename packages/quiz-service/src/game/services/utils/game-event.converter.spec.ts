@@ -425,7 +425,6 @@ function buildQuestionResultTask(
   results: QuestionResultTaskItem[],
 ): BaseTask & QuestionResultTask {
   return {
-    _id: uuidv4(),
     type: TaskType.QuestionResult,
     status: 'active',
     questionIndex: 0,

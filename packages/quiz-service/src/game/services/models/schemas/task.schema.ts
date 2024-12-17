@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { QuestionType } from '@quiz/common'
 import { Schema as MongooseSchema } from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
 
 export enum TaskType {
   Lobby = 'LOBBY',
@@ -15,11 +14,8 @@ export enum TaskType {
  * BaseTask
  */
 
-@Schema({ _id: true, discriminatorKey: 'type' })
+@Schema({ _id: false, discriminatorKey: 'type' })
 export class BaseTask {
-  @Prop({ type: String, default: uuidv4 })
-  _id: string
-
   @Prop({
     type: String,
     enum: Object.keys(TaskType),
@@ -56,7 +52,7 @@ export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
  * QuestionTaskBaseAnswer
  */
 
-@Schema({ _id: true, discriminatorKey: 'type' })
+@Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionTaskBaseAnswer {
   @Prop({
     enum: [
@@ -151,7 +147,7 @@ export class QuestionTask {
   @Prop({ type: Number, required: true })
   questionIndex: number
 
-  @Prop({ type: [QuestionTaskBaseAnswer], required: true })
+  @Prop({ type: [QuestionTaskBaseAnswerSchema], required: true })
   answers: (QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -189,7 +185,7 @@ questionTaskSchema.discriminator(
  * QuestionResultTaskItem
  */
 
-@Schema({ _id: true, discriminatorKey: 'type' })
+@Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionResultTaskItem {
   @Prop({
     enum: [
@@ -209,7 +205,7 @@ export class QuestionResultTaskItem {
   @Prop({ type: String, required: true })
   playerId: string
 
-  @Prop({ type: QuestionTaskBaseAnswer, required: false })
+  @Prop({ type: QuestionTaskBaseAnswerSchema, required: false })
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -268,7 +264,7 @@ export class QuestionResultTask {
   @Prop({ type: Number, required: true })
   questionIndex: number
 
-  @Prop({ type: [QuestionResultTaskItem], required: true })
+  @Prop({ type: [QuestionResultTaskItemSchema], required: true })
   results: QuestionResultTaskItem[]
 }
 
@@ -297,6 +293,9 @@ export class LeaderboardTaskItem {
   streaks: number
 }
 
+export const LeaderboardTaskItemSchema =
+  SchemaFactory.createForClass(LeaderboardTaskItem)
+
 /**
  * LeaderboardTask
  */
@@ -308,7 +307,7 @@ export class LeaderboardTask {
   @Prop({ type: Number, required: true })
   questionIndex: number
 
-  @Prop({ type: [LeaderboardTaskItem], required: true })
+  @Prop({ type: [LeaderboardTaskItemSchema], required: true })
   leaderboard: LeaderboardTaskItem[]
 }
 
@@ -323,7 +322,7 @@ export const LeaderboardTaskSchema =
 export class PodiumTask {
   type!: TaskType.Podium
 
-  @Prop({ type: [LeaderboardTaskItem], required: true })
+  @Prop({ type: [LeaderboardTaskItemSchema], required: true })
   leaderboard: LeaderboardTaskItem[]
 }
 

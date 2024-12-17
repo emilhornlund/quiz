@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose'
 /**
  * Mongoose schema for the Player collection.
  */
-@Schema({ collection: 'players' })
+@Schema({ _id: true, collection: 'players' })
 export class Player extends Document {
   /**
    * The unique identifier of the player.
