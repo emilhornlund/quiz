@@ -226,6 +226,7 @@ export class GameRepository {
       if (
         currentDocument.participants.some(
           (participant) =>
+            participant.type === GameParticipantType.PLAYER &&
             participant.client.player.nickname === client.player.nickname,
         )
       ) {

@@ -22,6 +22,7 @@ import {
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
+import { Player } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { GameService } from '../services'
 import { Game, TaskType } from '../services/models/schemas'
@@ -31,6 +32,7 @@ describe('GameController (e2e)', () => {
   let app: INestApplication
   let gameService: GameService
   let gameModel: Model<Game>
+  let playerModel: Model<Player>
   let authService: AuthService
   let clientService: ClientService
   let quizService: QuizService
@@ -52,6 +54,7 @@ describe('GameController (e2e)', () => {
     app = await createTestApp()
     gameService = app.get(GameService)
     gameModel = app.get<Model<Game>>(getModelToken(Game.name))
+    playerModel = app.get<Model<Player>>(getModelToken(Player.name))
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
     quizService = app.get(QuizService)
@@ -206,6 +209,28 @@ describe('GameController (e2e)', () => {
         classicQuizRequest,
         hostClient.player,
       )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .send({ nickname: 'FrostyBear' })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should succeed in joining when nickname equals host player name', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      await playerModel
+        .findByIdAndUpdate(hostClient.player._id, { nickname: 'FrostyBear' })
+        .exec()
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
