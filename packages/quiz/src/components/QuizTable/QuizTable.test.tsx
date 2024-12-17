@@ -83,7 +83,7 @@ describe('QuizTable', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('calls onHostGame when the host game button is clicked', () => {
+  it('calls onHostGame when the confirm dialog button button is clicked', () => {
     const { container } = render(
       <QuizTable
         items={mockItems}
@@ -97,8 +97,33 @@ describe('QuizTable', () => {
     const hostButton = screen.getAllByRole('button', { name: 'Host Game' })[0]
     fireEvent.click(hostButton)
 
+    const confirmButton = screen.getAllByRole('button', { name: 'Confirm' })[0]
+    fireEvent.click(confirmButton)
+
     expect(mockOnHostGame).toHaveBeenCalledTimes(1)
     expect(mockOnHostGame).toHaveBeenCalledWith('1')
+
+    expect(container).toMatchSnapshot()
+  })
+
+  it('do not calls onHostGame when the close dialog button is clicked', () => {
+    const { container } = render(
+      <QuizTable
+        items={mockItems}
+        pagination={mockPagination}
+        onEdit={mockOnEdit}
+        onHostGame={mockOnHostGame}
+        onPagination={mockOnPagination}
+      />,
+    )
+
+    const hostButton = screen.getAllByRole('button', { name: 'Host Game' })[0]
+    fireEvent.click(hostButton)
+
+    const closeButton = screen.getAllByRole('button', { name: 'Close' })[0]
+    fireEvent.click(closeButton)
+
+    expect(mockOnHostGame).not.toHaveBeenCalled()
 
     expect(container).toMatchSnapshot()
   })
