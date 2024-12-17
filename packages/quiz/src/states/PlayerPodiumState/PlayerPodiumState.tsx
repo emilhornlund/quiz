@@ -1,9 +1,11 @@
 import { GamePodiumPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Badge,
   getBadgePositionBackgroundColor,
+  IconButtonArrowLeft,
   NicknameChip,
   Page,
   Typography,
@@ -25,12 +27,26 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
     },
   },
 }) => {
+  const navigate = useNavigate()
+
   const message = useMemo(() => {
     return getPodiumPositionMessage(position)
   }, [position])
 
   return (
-    <Page height="full" align="start">
+    <Page
+      height="full"
+      align="start"
+      header={
+        <IconButtonArrowLeft
+          id="end-game-button"
+          type="button"
+          kind="call-to-action"
+          size="small"
+          value="End Game"
+          onClick={() => navigate('/')}
+        />
+      }>
       <Typography variant="subtitle" size="medium">
         {name}
       </Typography>
