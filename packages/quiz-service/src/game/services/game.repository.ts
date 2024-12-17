@@ -5,6 +5,7 @@ import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { Client } from '../../client/services/models/schemas'
+import { Quiz } from '../../quiz/services/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
@@ -15,7 +16,6 @@ import { GameEventPublisher } from './game-event.publisher'
 import {
   Game,
   GameDocument,
-  PartialGameModel,
   Participant,
   ParticipantPlayer,
 } from './models/schemas'
@@ -184,18 +184,17 @@ export class GameRepository {
   /**
    * Creates and saves a new game.
    *
-   * @param {PartialGameModel} game - The partial game data to create the game document.
+   * @param {Quiz} quiz - The quiz document.
    * @param {Client} client - The client object representing the host creating the game.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the saved GameDocument.
    */
-  public async createGame(
-    game: PartialGameModel,
-    client: Client,
-  ): Promise<GameDocument> {
+  public async createGame(quiz: Quiz, client: Client): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    return new this.gameModel(buildGameModel(game, gamePIN, client)).save()
+    const game = buildGameModel(quiz, gamePIN, client)
+
+    return new this.gameModel(game).save()
   }
 
   /**

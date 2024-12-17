@@ -9,6 +9,7 @@ import {
   QuestionRangeDaoSchema,
   QuestionTrueFalseDaoSchema,
   QuestionTypeAnswerDaoSchema,
+  Quiz,
 } from '../../../../quiz/services/models/schemas'
 
 import {
@@ -34,8 +35,6 @@ import {
   TaskType,
 } from './task.schema'
 
-export type PartialGameModel = Pick<Game, 'name' | 'mode' | 'questions'>
-
 export type GameDocument = HydratedDocument<Game>
 
 @Schema({ collection: 'games' })
@@ -51,6 +50,12 @@ export class Game {
 
   @Prop({ type: String, required: true })
   pin: string
+
+  /**
+   * The quiz document associated with the game.
+   */
+  @Prop({ type: String, ref: 'Quiz' })
+  quiz: Quiz
 
   /**
    * The associated questions of the game.

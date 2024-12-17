@@ -54,13 +54,9 @@ export class GameService {
     quizId: string,
     client: Client,
   ): Promise<CreateGameResponseDto> {
-    const { title, mode, questions } =
-      await this.quizService.findQuizDocumentByIdOrThrow(quizId)
+    const quiz = await this.quizService.findQuizDocumentByIdOrThrow(quizId)
 
-    const gameDocument = await this.gameRepository.createGame(
-      { name: title, mode, questions },
-      client,
-    )
+    const gameDocument = await this.gameRepository.createGame(quiz, client)
 
     await this.gameTaskTransitionScheduler.scheduleTaskTransition(gameDocument)
 
