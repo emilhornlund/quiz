@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { GameParticipantType } from '@quiz/common'
 import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
 
@@ -9,16 +8,10 @@ import { Quiz } from '../../quiz/services/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
-  NicknameAlreadyTakenException,
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
-import {
-  Game,
-  GameDocument,
-  Participant,
-  ParticipantPlayer,
-} from './models/schemas'
+import { Game, GameDocument } from './models/schemas'
 import { buildGameModel } from './utils'
 
 /**
@@ -195,47 +188,5 @@ export class GameRepository {
     const game = buildGameModel(quiz, gamePIN, client)
 
     return new this.gameModel(game).save()
-  }
-
-  /**
-   * Adds a new player to a game and publishes an event after the player is added.
-   *
-   * @param {string} gameID - The ID of the game to add the player to.
-   * @param {Client} client - The client object representing the player joining the game.
-   *
-   * @returns {Promise<GameDocument>} A promise that resolves to the updated GameDocument.
-   *
-   * @throws {NicknameAlreadyTakenException} if the nickname is already used by another player.
-   */
-  public async addPlayer(
-    gameID: string,
-    client: Client,
-  ): Promise<GameDocument> {
-    const now = new Date()
-
-    const newParticipant: Participant & ParticipantPlayer = {
-      type: GameParticipantType.PLAYER,
-      client,
-      totalScore: 0,
-      currentStreak: 0,
-      created: now,
-      updated: now,
-    }
-
-    return this.findAndSaveWithLock(gameID, (currentDocument) => {
-      if (
-        currentDocument.participants.some(
-          (participant) =>
-            participant.type === GameParticipantType.PLAYER &&
-            participant.client.player.nickname === client.player.nickname,
-        )
-      ) {
-        throw new NicknameAlreadyTakenException(client.player.nickname)
-      }
-
-      currentDocument.participants.push(newParticipant)
-
-      return currentDocument
-    })
   }
 }

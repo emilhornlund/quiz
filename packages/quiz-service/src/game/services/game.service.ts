@@ -11,10 +11,15 @@ import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
 import { PlayerService } from '../../player/services'
 import { QuizService } from '../../quiz/services'
+import {
+  ClientNotUniqueException,
+  NicknameNotUniqueException,
+} from '../exceptions'
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
-import { TaskType } from './models/schemas'
+import { Participant, ParticipantPlayer, TaskType } from './models/schemas'
+import { isClientUnique, isNicknameUnique } from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -98,21 +103,42 @@ export class GameService {
    *
    * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID`
    * was created in the last 6 hours.
-   * @throws {NicknameAlreadyTakenException} If the provided `nickname` is already in use by another
-   * player in the game.
+   * @throws {ClientNotUniqueException} If the client has already joined the game.
+   * @throws {NicknameNotUniqueException} If the provided `nickname` is already taken in the game.
    */
   public async joinGame(
     gameID: string,
-    client: Client,
+    { _id: clientId, player: { _id: playerId } }: Client,
     nickname: string,
   ): Promise<void> {
-    await this.playerService.updatePlayer(client.player._id, nickname)
+    await this.playerService.updatePlayer(playerId, nickname)
 
-    const updatedClient = await this.clientService.findByClientIdOrThrow(
-      client._id,
-    )
+    const client = await this.clientService.findByClientIdOrThrow(clientId)
 
-    await this.gameRepository.addPlayer(gameID, updatedClient)
+    const now = new Date()
+
+    const newParticipant: Participant & ParticipantPlayer = {
+      type: GameParticipantType.PLAYER,
+      client,
+      totalScore: 0,
+      currentStreak: 0,
+      created: now,
+      updated: now,
+    }
+
+    await this.gameRepository.findAndSaveWithLock(gameID, (currentDocument) => {
+      if (!isClientUnique(currentDocument.participants, clientId)) {
+        throw new ClientNotUniqueException()
+      }
+
+      if (!isNicknameUnique(currentDocument.participants, nickname)) {
+        throw new NicknameNotUniqueException(nickname)
+      }
+
+      currentDocument.participants.push(newParticipant)
+
+      return currentDocument
+    })
   }
 
   /**

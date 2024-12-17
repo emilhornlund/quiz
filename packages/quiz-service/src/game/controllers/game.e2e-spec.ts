@@ -244,7 +244,7 @@ describe('GameController (e2e)', () => {
         })
     })
 
-    it('should fail in joining when nickname already taken', async () => {
+    it('should fail in joining client has already joined', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
         hostClient.player,
@@ -273,9 +273,55 @@ describe('GameController (e2e)', () => {
         .send({ nickname: 'FrostyBear' })
         .expect(409)
         .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Client has already joined this game',
+            status: 409,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should fail in joining when nickname already taken', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      const secondPlayerClient =
+        await clientService.findOrCreateClient(uuidv4())
+
+      await playerModel
+        .findByIdAndUpdate(secondPlayerClient.player._id, {
+          nickname: 'FrostyBear',
+        })
+        .exec()
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.PLAYER,
+              client: secondPlayerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .send({ nickname: 'FrostyBear' })
+        .expect(409)
+        .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            'Nickname "FrostyBear" is already taken in this game.',
+            'Nickname "FrostyBear" is already taken in this game',
           )
           expect(res.body).toHaveProperty('status', 409)
           expect(res.body).toHaveProperty('timestamp')
