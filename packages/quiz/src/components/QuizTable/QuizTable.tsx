@@ -119,44 +119,46 @@ const QuizTable: FC<QuizTableProps> = ({
             </div>
           ))}
         </div>
-        <div className={styles.pagination}>
-          <div className={styles.navigation}>
-            <IconButtonArrowLeft
-              id="prev-page-button"
-              type="button"
-              kind="primary"
-              size="normal"
-              disabled={currentPage === 1}
-              onClick={() =>
-                onPagination?.(
-                  pagination.limit,
-                  Math.max(0, pagination.offset - pagination.limit),
-                )
-              }
-            />
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            <div className={styles.navigation}>
+              <IconButtonArrowLeft
+                id="prev-page-button"
+                type="button"
+                kind="primary"
+                size="normal"
+                disabled={currentPage === 1}
+                onClick={() =>
+                  onPagination?.(
+                    pagination.limit,
+                    Math.max(0, pagination.offset - pagination.limit),
+                  )
+                }
+              />
+            </div>
+            <div className={styles.page}>
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className={styles.navigation}>
+              <IconButtonArrowRight
+                id="next-page-button"
+                type="button"
+                kind="primary"
+                size="normal"
+                disabled={currentPage >= totalPages}
+                onClick={() =>
+                  onPagination?.(
+                    pagination.limit,
+                    Math.min(
+                      pagination.total - pagination.limit,
+                      pagination.offset + pagination.limit,
+                    ),
+                  )
+                }
+              />
+            </div>
           </div>
-          <div className={styles.page}>
-            Page {currentPage} of {totalPages}
-          </div>
-          <div className={styles.navigation}>
-            <IconButtonArrowRight
-              id="next-page-button"
-              type="button"
-              kind="primary"
-              size="normal"
-              disabled={currentPage >= totalPages}
-              onClick={() =>
-                onPagination?.(
-                  pagination.limit,
-                  Math.min(
-                    pagination.total - pagination.limit,
-                    pagination.offset + pagination.limit,
-                  ),
-                )
-              }
-            />
-          </div>
-        </div>
+        )}
       </div>
       <ConfirmDialog
         title="Host Game"
