@@ -137,6 +137,17 @@ export const QuestionTaskTypeAnswerAnswerSchema = SchemaFactory.createForClass(
 )
 
 /**
+ * Represents a question task answer with its specific discriminator type.
+ */
+export type QuestionTaskAnswer = QuestionTaskBaseAnswer &
+  (
+    | QuestionTaskMultiChoiceAnswer
+    | QuestionTaskRangeAnswer
+    | QuestionTaskTrueFalseAnswer
+    | QuestionTaskTypeAnswerAnswer
+  )
+
+/**
  * QuestionTask
  */
 

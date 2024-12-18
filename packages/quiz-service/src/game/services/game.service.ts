@@ -3,7 +3,6 @@ import {
   CreateGameResponseDto,
   FindGameResponseDto,
   GameParticipantType,
-  QuestionType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 
@@ -19,7 +18,7 @@ import {
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
 import { Participant, ParticipantPlayer, TaskType } from './models/schemas'
-import { isClientUnique, isNicknameUnique } from './utils'
+import { isClientUnique, isNicknameUnique, toQuestionTaskAnswer } from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -174,6 +173,8 @@ export class GameService {
     playerId: string,
     submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
   ): Promise<void> {
+    const answer = toQuestionTaskAnswer(playerId, submitQuestionAnswerRequest)
+
     await this.gameRepository.findAndSaveWithLock(gameID, (gameDocument) => {
       if (
         gameDocument.currentTask.type !== TaskType.Question ||
@@ -192,45 +193,7 @@ export class GameService {
         throw new BadRequestException('Answer already provided')
       }
 
-      if (submitQuestionAnswerRequest.type === QuestionType.MultiChoice) {
-        const { type, optionIndex: answer } = submitQuestionAnswerRequest
-        gameDocument.currentTask.answers.push({
-          type,
-          playerId,
-          answer,
-          created: new Date(),
-        })
-      }
-
-      if (submitQuestionAnswerRequest.type === QuestionType.Range) {
-        const { type, value: answer } = submitQuestionAnswerRequest
-        gameDocument.currentTask.answers.push({
-          type,
-          playerId,
-          answer,
-          created: new Date(),
-        })
-      }
-
-      if (submitQuestionAnswerRequest.type === QuestionType.TrueFalse) {
-        const { type, value: answer } = submitQuestionAnswerRequest
-        gameDocument.currentTask.answers.push({
-          type,
-          playerId,
-          answer,
-          created: new Date(),
-        })
-      }
-
-      if (submitQuestionAnswerRequest.type === QuestionType.TypeAnswer) {
-        const { type, value: answer } = submitQuestionAnswerRequest
-        gameDocument.currentTask.answers.push({
-          type,
-          playerId,
-          answer,
-          created: new Date(),
-        })
-      }
+      gameDocument.currentTask.answers.push(answer)
       return gameDocument
     })
 
