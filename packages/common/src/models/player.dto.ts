@@ -22,3 +22,28 @@ export interface PlayerResponseDto {
    */
   modified: Date
 }
+
+/**
+ * Response DTO for the player link code, containing the code and expiration time.
+ */
+export interface PlayerLinkCodeResponseDto {
+  /**
+   * The generated player link code.
+   */
+  code: string
+
+  /**
+   * The expiration date and time of the link code.
+   */
+  expires: Date
+}
+
+/**
+ * Request DTO for associating a player via a link code.
+ */
+export interface PlayerLinkCodeRequestDto {
+  /**
+   * The link code to associate a player.
+   */
+  code: string
+}

@@ -4,6 +4,7 @@ import {
   GameMode,
   LanguageCode,
   MediaType,
+  PLAYER_LINK_CODE_REGEX,
   QuestionType,
   QuizVisibility,
 } from '@quiz/common'
@@ -16,15 +17,18 @@ import {
   stopMongoMemoryServer,
 } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
+import { PlayerService } from '../../player/services'
 import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { ClientService } from '../services'
+import { Client } from '../services/models/schemas'
 
 describe('ClientController (e2e)', () => {
   let app: INestApplication
   let authService: AuthService
   let clientService: ClientService
   let playerModel: PlayerModel
+  let playerService: PlayerService
   let quizService: QuizService
 
   beforeAll(async () => {
@@ -40,6 +44,7 @@ describe('ClientController (e2e)', () => {
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
     playerModel = app.get<PlayerModel>(getModelToken(Player.name))
+    playerService = app.get(PlayerService)
     quizService = app.get(QuizService)
   }, 30000)
 
@@ -104,6 +109,119 @@ describe('ClientController (e2e)', () => {
           expect(res.body).toHaveProperty('message', 'Unauthorized')
           expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
+
+  describe('/api/client/player/link (GET)', () => {
+    it('should succeed in retrieving the client associated players link code', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .get('/api/client/player/link')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            code: expect.stringMatching(PLAYER_LINK_CODE_REGEX),
+            expires: expect.anything(),
+          })
+        })
+    })
+
+    it('should fail in retrieving the client associated players link code without a token', async () => {
+      return supertest(app.getHttpServer())
+        .get('/api/client/player/link')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
+  describe('/api/client/player/link (POST)', () => {
+    it('should succeed in associating a player from a valid link code', async () => {
+      const { token } = await authenticate('ShadowWhirlwind')
+
+      const { client, player: playerToLink } = await authenticate('FrostyBear')
+
+      const { code } = await playerService.generateLinkCode(client)
+
+      return supertest(app.getHttpServer())
+        .post('/api/client/player/link')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ code })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: playerToLink.id,
+            nickname: 'FrostyBear',
+            created: playerToLink.created.toISOString(),
+            modified: playerToLink.modified.toISOString(),
+          })
+        })
+    })
+
+    it('should fail in associating a player from an unknown link code', async () => {
+      const { token } = await authenticate('ShadowWhirlwind')
+
+      return supertest(app.getHttpServer())
+        .post('/api/client/player/link')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ code: 'XXXX-XXXX' })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Player link code was not found',
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should fail in associating a player from an invalid link code', async () => {
+      const { token } = await authenticate('ShadowWhirlwind')
+
+      return supertest(app.getHttpServer())
+        .post('/api/client/player/link')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ code: '' })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            validationErrors: [
+              {
+                property: 'code',
+                constraints: {
+                  isNotEmpty: 'code should not be empty',
+                  matches: `The code must match the pattern ${PLAYER_LINK_CODE_REGEX}`,
+                },
+              },
+            ],
+            status: 400,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should fail in associating a player without a token', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/client/player/link')
+        .send({ code: 'XXXX-XXXX' })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
         })
     })
   })
@@ -248,4 +366,25 @@ describe('ClientController (e2e)', () => {
         })
     })
   })
+
+  /**
+   * description here.
+   *
+   * @param nickname
+   */
+  async function authenticate(
+    nickname: string,
+  ): Promise<{ token: string; client: Client; player: Player }> {
+    const clientId = uuidv4()
+
+    const client = await clientService.findOrCreateClient(clientId)
+
+    const player = await playerModel.findByIdAndUpdate(client.player.id, {
+      nickname,
+    })
+
+    const { token } = await authService.authenticate({ clientId })
+
+    return { token, client, player }
+  }
 })

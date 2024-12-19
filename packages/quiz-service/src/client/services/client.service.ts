@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcryptjs'
 
 import { PlayerService } from '../../player/services'
+import { Player } from '../../player/services/models/schemas'
 import {
   ClientByIdHashNotFoundException,
   ClientByIdNotFoundException,
@@ -102,5 +103,15 @@ export class ClientService {
     }
 
     return client
+  }
+
+  /**
+   * Associates a player with a client.
+   *
+   * @param {Client} client - The client to which the player should be associated.
+   * @param {Player} player - The player to be associated with the client.
+   */
+  public async setPlayer(client: Client, player: Player): Promise<void> {
+    await this.clientModel.findByIdAndUpdate(client._id, { player }).exec()
   }
 }

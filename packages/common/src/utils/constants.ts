@@ -15,3 +15,6 @@ export const QUESTION_TYPE_ANSWER_REGEX = /^[a-zA-Z0-9_ ]{1,75}$/
 /* URL */
 export const URL_REGEX =
   /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/
+
+/* Player Link Code */
+export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/

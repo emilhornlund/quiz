@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   Logger,
+  Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common'
@@ -21,10 +23,12 @@ import { PlayerNotFoundException } from '../../player/exceptions'
 import { PlayerService } from '../../player/services'
 import { PaginatedQuizResponse } from '../../quiz/controllers/models'
 import { QuizService } from '../../quiz/services'
+import { ClientService } from '../services'
 import { Client } from '../services/models/schemas'
 
 import { ApiQuizPageQuery } from './decorators/api'
 import { AuthorizedClientParam } from './decorators/auth'
+import { PlayerLinkCodeRequest, PlayerLinkCodeResponse } from './models'
 
 /**
  * Controller for managing client-related operations.
@@ -37,11 +41,13 @@ export class ClientController {
    * Initializes the ClientController.
    *
    * @param {PlayerService} playerService - Service to manage players.
+   * @param {ClientService} clientService - Service to manage client data.
    * @param {QuizService} quizService - Service responsible for managing quiz-related operations.
    * @param {Logger} logger - Logger instance for logging operations.
    */
   constructor(
     private readonly playerService: PlayerService,
+    private readonly clientService: ClientService,
     private readonly quizService: QuizService,
     private readonly logger: Logger = new Logger(ClientController.name),
   ) {}
@@ -86,6 +92,75 @@ export class ClientController {
       created,
       modified,
     } = await this.playerService.findPlayerOrThrow(client.player._id)
+
+    return { id, nickname, created, modified }
+  }
+
+  /**
+   * Retrieves the client's associated player link code.
+   *
+   * @param {Client} client - The authenticated client making the request.
+   *
+   * @returns {Promise<PlayerLinkCodeResponseDto>} The associated player's link code and expiration details.
+   */
+  @Get('/player/link')
+  @ApiOperation({
+    summary: 'Retrieve the associated player link code.',
+    description:
+      'This endpoint retrieves the link code that is associated with the authenticated client.',
+  })
+  @ApiOkResponse({
+    description: "Successfully retrieved the associated player's link code.",
+    type: PlayerLinkCodeResponse,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access to the endpoint.',
+  })
+  @ApiNotFoundResponse({
+    description: 'The associated player or client was not found.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async getClientAssociatedPlayerLinkCode(
+    @AuthorizedClientParam() client: Client,
+  ): Promise<PlayerLinkCodeResponse> {
+    return this.playerService.generateLinkCode(client)
+  }
+
+  /**
+   * Associates a player from a valid link code.
+   *
+   * @param {Client} client - The authenticated client making the request.
+   * @param {PlayerLinkCodeRequest} request - The request containing the link code.
+   *
+   * @returns {Promise<PlayerResponse>} The associated player's details.
+   */
+  @Post('/player/link')
+  @ApiOperation({
+    summary: 'Associate a player using a link code.',
+    description: 'This endpoint associates a player with a valid link code.',
+  })
+  @ApiOkResponse({
+    description: 'Successfully associated the player with the link code.',
+    type: PlayerResponse,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access to the endpoint.',
+  })
+  @ApiNotFoundResponse({
+    description: 'The associated player or client was not found.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async setClientAssociatedPlayerFromLinkCode(
+    @AuthorizedClientParam() client: Client,
+    @Body() request: PlayerLinkCodeRequest,
+  ): Promise<PlayerResponse> {
+    const player = await this.playerService.findPlayerByLinkCodeOrThrow(
+      request.code,
+    )
+
+    await this.clientService.setPlayer(client, player)
+
+    const { id, nickname, created, modified } = player
 
     return { id, nickname, created, modified }
   }
