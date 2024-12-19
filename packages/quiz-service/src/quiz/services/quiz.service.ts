@@ -114,6 +114,7 @@ export class QuizService {
 
     const quizzes = await this.quizModel
       .find({ owner: ownerId })
+      .sort({ created: -1 })
       .skip(offset)
       .limit(limit)
       .populate('owner')
