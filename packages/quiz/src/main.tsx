@@ -12,6 +12,7 @@ import {
   GamePage,
   HomePage,
   JoinPage,
+  PlayerLinkPage,
   ProfilePage,
 } from './pages'
 
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: '/player/profile',
         element: <ProfilePage />,
+      },
+      {
+        path: '/player/link',
+        element: <PlayerLinkPage />,
       },
       {
         path: '/quiz/create',

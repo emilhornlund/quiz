@@ -1,0 +1,73 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.linkPage {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    row-gap: $tablet-layout-gutter;
+    width: $mobile-width;
+  }
+
+  @include desktop {
+    row-gap: $desktop-layout-gutter;
+    width: $mobile-width;
+  }
+
+  .linkCode {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: $white-1-50;
+    font-weight: bold;
+
+    @include mobile {
+      padding: $mobile-narrow-layout-gutter;
+      border-radius: $mobile-border-radius;
+
+      @include fontSize($mobile-text-font-size);
+    }
+
+    @include tablet {
+      padding: $tablet-narrow-layout-gutter;
+      border-radius: $tablet-border-radius;
+
+      @include fontSize($tablet-text-font-size);
+    }
+
+    @include desktop {
+      padding: $desktop-narrow-layout-gutter;
+      border-radius: $desktop-border-radius;
+
+      @include fontSize($desktop-text-font-size);
+    }
+  }
+
+  .divider {
+    border-top: pxToRem(2px) solid $white;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      row-gap: $mobile-layout-gutter;
+    }
+
+    @include tablet {
+      row-gap: $tablet-layout-gutter;
+    }
+
+    @include desktop {
+      row-gap: $desktop-layout-gutter;
+    }
+  }
+}
