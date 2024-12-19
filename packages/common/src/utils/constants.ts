@@ -1,7 +1,7 @@
 /* Quiz Title */
 export const QUIZ_TITLE_MIN_LENGTH = 3
 export const QUIZ_TITLE_MAX_LENGTH = 95
-export const QUIZ_TITLE_REGEX = /^[a-zA-Z0-9_\-!?@#$%&|,.*\\/ ]{3,95}$/
+export const QUIZ_TITLE_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{3,95}$/u
 
 /* Quiz Description */
 export const QUIZ_DESCRIPTION_MAX_LENGTH = 500
