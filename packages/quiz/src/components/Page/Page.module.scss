@@ -140,13 +140,13 @@
         justify-content: center;
 
         @include mobile {
-          width: pxToRem(36px);
-          height: pxToRem(36px);
+          width: pxToRem(44px);
+          height: pxToRem(44px);
         }
 
         @include tablet {
-          width: pxToRem(42px);
-          height: pxToRem(42px);
+          width: pxToRem(46px);
+          height: pxToRem(46px);
         }
 
         @include desktop {
