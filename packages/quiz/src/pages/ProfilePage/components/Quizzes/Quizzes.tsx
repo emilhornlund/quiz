@@ -1,3 +1,4 @@
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -41,9 +42,9 @@ const Quizzes = () => {
           ? 'Your Quizzes'
           : "You Haven't Created Any Quizzes Yet"}
       </Typography>
-      <Typography variant="text">
+      <Typography variant="text" size="medium">
         {quizzes?.length
-          ? "Here's a list of your quizzes. You can edit them as needed."
+          ? "Here's a list of your quizzes. You can edit them or host live games as needed."
           : 'Start creating engaging quizzes and share them with your audience.\n' +
             'Your creations will appear here!'}
       </Typography>
@@ -51,8 +52,10 @@ const Quizzes = () => {
         id="create-quiz-button"
         type="button"
         kind="call-to-action"
-        size="normal"
+        size="small"
         value="Create New Quiz"
+        icon={faPlus}
+        iconPosition="leading"
         onClick={() => navigate('/quiz/create')}
       />
       {!!quizzes?.length && (

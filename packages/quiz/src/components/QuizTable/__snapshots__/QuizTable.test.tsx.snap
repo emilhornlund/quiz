@@ -25,6 +25,7 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -169,6 +170,7 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -403,6 +405,7 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -547,6 +550,7 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -854,6 +858,7 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -998,6 +1003,7 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -1230,6 +1236,7 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -1374,6 +1381,7 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -1605,6 +1613,7 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -1749,6 +1758,7 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -1981,6 +1991,7 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -2125,6 +2136,7 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -2357,6 +2369,7 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -2501,6 +2514,7 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>
@@ -2820,6 +2834,7 @@ exports[`QuizTable > renders the table with items 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 1"
           >
             Description for Quiz 1
           </div>
@@ -2964,6 +2979,7 @@ exports[`QuizTable > renders the table with items 1`] = `
           </div>
           <div
             class="description"
+            title="Description for Quiz 2"
           >
             Description for Quiz 2
           </div>

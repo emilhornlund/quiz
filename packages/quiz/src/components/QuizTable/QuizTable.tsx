@@ -79,7 +79,9 @@ const QuizTable: FC<QuizTableProps> = ({
               <div className={styles.content}>
                 <div className={styles.title}>{item.title}</div>
                 {item.description && (
-                  <div className={styles.description}>{item.description}</div>
+                  <div title={item.description} className={styles.description}>
+                    {item.description}
+                  </div>
                 )}
                 <div className={styles.details}>
                   <span>
