@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-service
+  namespace: quiz
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quiz-service
+  template:
+    metadata:
+      labels:
+        app: quiz-service
+        name: quiz-service
+    spec:
+      nodeSelector:
+        node-type: worker
+      containers:
+        - name: quiz-service
+          image: registry.cluster.local:5000/emilhornlund/quiz-service:58436f5
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: REDIS_HOST
+              value: "redis-server.redis-server.svc.cluster.local"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: MONGODB_HOST
+              value: "mongodb-server.mongodb-server.svc.cluster.local"
+            - name: MONGODB_PORT
+              value: "27017"
+            - name: MONGODB_DB
+              value: "quiz_service"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: quiz-service-secret
+                  key: JWT_SECRET
+          ports:
+            - name: quiz-service
+              containerPort: 8080

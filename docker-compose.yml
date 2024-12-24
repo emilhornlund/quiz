@@ -1,41 +1,6 @@
 version: '3.8'
 
 services:
-  quiz:
-    image: emilhornlund/quiz:latest
-    container_name: quiz
-    hostname: quiz
-    restart: always
-    build:
-      context: .
-      dockerfile: ./packages/quiz/Dockerfile
-    env_file:
-      - ./packages/quiz/.env.development
-    ports:
-      - '3000:80'
-    depends_on:
-      - quiz-service
-    networks:
-      - quiz-network
-
-  quiz-service:
-    image: emilhornlund/quiz-service:latest
-    container_name: quiz-service
-    hostname: quiz-service
-    restart: always
-    build:
-      context: .
-      dockerfile: ./packages/quiz-service/Dockerfile
-    env_file:
-      - ./packages/quiz-service/.env.development
-    ports:
-      - '8080:8080'
-    depends_on:
-      - redis
-      - mongodb
-    networks:
-      - quiz-network
-
   redis:
     image: redis:7.4-alpine
     container_name: redis
@@ -43,8 +8,6 @@ services:
     restart: always
     ports:
       - '6379:6379'
-    networks:
-      - quiz-network
     volumes:
       - redis:/data
 
@@ -55,14 +18,8 @@ services:
     restart: always
     ports:
       - '27017:27017'
-    networks:
-      - quiz-network
     volumes:
       - mongodb:/data/db
-
-networks:
-  quiz-network:
-    driver: bridge
 
 volumes:
   redis:
