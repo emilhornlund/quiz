@@ -25,7 +25,12 @@ docker image push $REGISTRY/$QUIZ_SERVICE_REPOSITORY:$TAG
 docker image push $REGISTRY/$QUIZ_REPOSITORY:$TAG
 
 sed -i "s|image:.*|image: $REGISTRY/$QUIZ_SERVICE_REPOSITORY:$TAG|" "$QUIZ_SERVICE_DEPLOYMENT_FILE"
+git add "$QUIZ_SERVICE_DEPLOYMENT_FILE" && git commit --no-verify -m "Promote $QUIZ_SERVICE_PACKAGE to k3s"
+
 sed -i "s|image:.*|image: $REGISTRY/$QUIZ_REPOSITORY:$TAG|" "$QUIZ_DEPLOYMENT_FILE"
+git add "$QUIZ_DEPLOYMENT_FILE" && git commit --no-verify -m "Promote $QUIZ_PACKAGE to k3s"
+
+git push
 
 echo "Deploying updated images to Kubernetes"
 
