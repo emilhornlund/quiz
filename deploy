@@ -13,7 +13,7 @@ QUIZ_REPOSITORY="emilhornlund/$QUIZ_PACKAGE"
 QUIZ_DEPLOYMENT_FILE="kubernetes/k3s/$QUIZ_PACKAGE/$QUIZ_PACKAGE-deployment.yaml"
 
 echo "Building Docker image: $QUIZ_SERVICE_REPOSITORY:$TAG"
-docker build --platform linux/arm64 -t $QUIZ_REPOSITORY:$TAG -f ./packages/$QUIZ_SERVICE_PACKAGE/Dockerfile . || exit 1
+docker build --platform linux/arm64 -t $QUIZ_SERVICE_REPOSITORY:$TAG -f ./packages/$QUIZ_SERVICE_PACKAGE/Dockerfile . || exit 1
 
 echo "Building Docker image: $QUIZ_REPOSITORY:$TAG"
 docker build --platform linux/arm64 -t $QUIZ_REPOSITORY:$TAG -f ./packages/$QUIZ_PACKAGE/Dockerfile . || exit 1
@@ -24,8 +24,8 @@ docker image tag $QUIZ_REPOSITORY:$TAG $REGISTRY/$QUIZ_REPOSITORY:$TAG
 docker image push $REGISTRY/$QUIZ_SERVICE_REPOSITORY:$TAG
 docker image push $REGISTRY/$QUIZ_REPOSITORY:$TAG
 
-sed -i "s|^image:.*|image: $REGISTRY/$QUIZ_SERVICE_REPOSITORY:$TAG|" $QUIZ_SERVICE_DEPLOYMENT_FILE
-sed -i "s|^image:.*|image: $REGISTRY/$QUIZ_REPOSITORY:$TAG|" $QUIZ_DEPLOYMENT_FILE
+sed -i "s|image:.*|image: $REGISTRY/$QUIZ_SERVICE_REPOSITORY:$TAG|" "$QUIZ_SERVICE_DEPLOYMENT_FILE"
+sed -i "s|image:.*|image: $REGISTRY/$QUIZ_REPOSITORY:$TAG|" "$QUIZ_DEPLOYMENT_FILE"
 
 echo "Deploying updated images to Kubernetes"
 
