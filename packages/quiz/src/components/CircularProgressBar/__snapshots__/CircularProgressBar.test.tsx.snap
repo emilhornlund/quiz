@@ -1,0 +1,264 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CircularProgressBar > should render a CircularProgressBar with default props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default medium"
+    height="100"
+    width="100"
+  >
+    <circle
+      class="circleBackground"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-width="10"
+    />
+    <circle
+      class="circleProgress"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-linecap="round"
+      stroke-width="10"
+      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar with kind correct props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar correct medium"
+    height="100"
+    width="100"
+  >
+    <circle
+      class="circleBackground"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-width="10"
+    />
+    <circle
+      class="circleProgress"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-linecap="round"
+      stroke-width="10"
+      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar with kind default props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default medium"
+    height="100"
+    width="100"
+  >
+    <circle
+      class="circleBackground"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-width="10"
+    />
+    <circle
+      class="circleProgress"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-linecap="round"
+      stroke-width="10"
+      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar with size large props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default large"
+    height="120"
+    width="120"
+  >
+    <circle
+      class="circleBackground"
+      cx="60"
+      cy="60"
+      fill="transparent"
+      r="53"
+      stroke-width="14"
+    />
+    <circle
+      class="circleProgress"
+      cx="60"
+      cy="60"
+      fill="transparent"
+      r="53"
+      stroke-linecap="round"
+      stroke-width="14"
+      style="stroke-dasharray: 333.0088212805181; stroke-dashoffset: 116.55308744818132;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar with size medium props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default medium"
+    height="100"
+    width="100"
+  >
+    <circle
+      class="circleBackground"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-width="10"
+    />
+    <circle
+      class="circleProgress"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-linecap="round"
+      stroke-width="10"
+      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar with size small props 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default small"
+    height="60"
+    width="60"
+  >
+    <circle
+      class="circleBackground"
+      cx="30"
+      cy="30"
+      fill="transparent"
+      r="27"
+      stroke-width="6"
+    />
+    <circle
+      class="circleProgress"
+      cx="30"
+      cy="30"
+      fill="transparent"
+      r="27"
+      stroke-linecap="round"
+      stroke-width="6"
+      style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 59.376101152847085;"
+    />
+    <text
+      class="progressText"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      x="50%"
+      y="50%"
+    >
+      65
+      %
+    </text>
+  </svg>
+</div>
+`;
+
+exports[`CircularProgressBar > should render a CircularProgressBar without progress text 1`] = `
+<div>
+  <svg
+    class="circularProgressBar default medium"
+    height="100"
+    width="100"
+  >
+    <circle
+      class="circleBackground"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-width="10"
+    />
+    <circle
+      class="circleProgress"
+      cx="50"
+      cy="50"
+      fill="transparent"
+      r="45"
+      stroke-linecap="round"
+      stroke-width="10"
+      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
+    />
+  </svg>
+</div>
+`;

@@ -1,5 +1,6 @@
 export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
 export type { ButtonProps } from './Button'
+export type { CircularProgressBarProps } from './CircularProgressBar'
 export type { ConfirmDialogProps } from './ConfirmDialog'
 export type { HostGameFooterProps } from './HostGameFooter'
 export type { LeaderboardProps } from './Leaderboard'
@@ -29,6 +30,11 @@ export {
   IconButtonArrowRight,
 } from './Button'
 export { default as Badge, getBadgePositionBackgroundColor } from './Badge'
+export {
+  default as CircularProgressBar,
+  CircularProgressBarSize,
+  CircularProgressBarKind,
+} from './CircularProgressBar'
 export { default as ConfirmDialog } from './ConfirmDialog'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'

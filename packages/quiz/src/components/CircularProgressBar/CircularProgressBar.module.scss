@@ -1,0 +1,110 @@
+@use 'sass:math';
+
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.circularProgressBar {
+  display: block;
+
+  .circleBackground {
+    stroke: $red-2;
+  }
+
+  .circleProgress {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 0.35s;
+
+    stroke: $green-2;
+  }
+
+  .progressText {
+    font-family: inherit;
+    font-weight: bold;
+    fill: $white;
+  }
+
+  &.default {
+    .circleBackground {
+      stroke: $white;
+    }
+    .circleProgress {
+      stroke: $orange-2;
+    }
+    .progressText {
+      fill: $white;
+    }
+  }
+
+  &.correct {
+    .circleBackground {
+      stroke: $red-2;
+    }
+    .circleProgress {
+      stroke: $green-2;
+    }
+    .progressText {
+      fill: $white;
+    }
+  }
+
+  &.small {
+    @include mobile {
+      .progressText {
+        @include fontSize(10px)
+      }
+    }
+
+    @include tablet {
+      .progressText {
+        @include fontSize(12px)
+      }
+    }
+
+    @include desktop {
+      .progressText {
+        @include fontSize(14px)
+      }
+    }
+  }
+
+  &.medium {
+    @include mobile {
+      .progressText {
+        @include fontSize(14px)
+      }
+    }
+
+    @include tablet {
+      .progressText {
+        @include fontSize(16px)
+      }
+    }
+
+    @include desktop {
+      .progressText {
+        @include fontSize(18px)
+      }
+    }
+  }
+
+  &.large {
+    @include mobile {
+      .progressText {
+        @include fontSize(18px)
+      }
+    }
+
+    @include tablet {
+      .progressText {
+        @include fontSize(20px)
+      }
+    }
+
+    @include desktop {
+      .progressText {
+        @include fontSize(22px)
+      }
+    }
+  }
+}
