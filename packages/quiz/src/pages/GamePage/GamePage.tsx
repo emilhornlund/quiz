@@ -67,6 +67,12 @@ const GamePage = () => {
     }
   }, [connectionStatus, hasReconnected])
 
+  useEffect(() => {
+    if (event?.type === GameEventType.GameQuitEvent) {
+      navigate('/')
+    }
+  }, [event, navigate])
+
   const stateComponent = useMemo(() => {
     switch (event?.type) {
       case GameEventType.GameLobbyHost:
@@ -125,8 +131,6 @@ const GamePage = () => {
         )
       case GameEventType.GamePodiumPlayer:
         return <PlayerPodiumState event={event} />
-      case GameEventType.GameQuitEvent:
-        return navigate('/')
       default:
         return (
           <Page>
@@ -134,7 +138,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event, gameID, completeTask, submitQuestionAnswer, navigate])
+  }, [event, gameID, completeTask, submitQuestionAnswer])
 
   return <>{stateComponent}</>
 }

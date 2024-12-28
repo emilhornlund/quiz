@@ -26,6 +26,7 @@ describe('HostPodiumState', () => {
               { position: 10, nickname: 'ScarletFlame', score: 6723 },
             ],
           }}
+          onComplete={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -45,6 +46,7 @@ describe('HostPodiumState', () => {
               { position: 3, nickname: 'ShadowWhirlwind', score: 15492 },
             ],
           }}
+          onComplete={() => undefined}
         />
       </MemoryRouter>,
     )
