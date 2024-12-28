@@ -16,4 +16,5 @@ export enum GameEventType {
   GameResultPlayer = 'GAME_RESULT_PLAYER',
   GamePodiumHost = 'GAME_PODIUM_HOST',
   GamePodiumPlayer = 'GAME_PODIUM_PLAYER',
+  GameQuitEvent = 'GAME_QUIT_EVENT',
 }

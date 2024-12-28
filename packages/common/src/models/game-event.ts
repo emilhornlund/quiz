@@ -255,6 +255,10 @@ export type GamePodiumPlayerEvent = {
   }
 }
 
+export type GameQuitEvent = {
+  type: GameEventType.GameQuitEvent
+}
+
 export type GameEvent =
   | GameHeartbeatEvent
   | GameLoadingEvent
@@ -273,3 +277,4 @@ export type GameEvent =
   | GameLeaderboardPlayerEvent
   | GamePodiumHostEvent
   | GamePodiumPlayerEvent
+  | GameQuitEvent

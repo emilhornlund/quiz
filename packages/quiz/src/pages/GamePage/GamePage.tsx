@@ -1,5 +1,6 @@
 import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client'
 import { LoadingSpinner, Page } from '../../components'
@@ -33,6 +34,8 @@ import {
 import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
 
 const GamePage = () => {
+  const navigate = useNavigate()
+
   const [gameID] = useGameIDQueryParam()
   const { token } = useAuthContext()
 
@@ -114,9 +117,16 @@ const GamePage = () => {
       case GameEventType.GameLeaderboardPlayer:
         return <PlayerLeaderboardState event={event} />
       case GameEventType.GamePodiumHost:
-        return <HostPodiumState event={event} />
+        return (
+          <HostPodiumState
+            event={event}
+            onComplete={() => completeTask(gameID!)}
+          />
+        )
       case GameEventType.GamePodiumPlayer:
         return <PlayerPodiumState event={event} />
+      case GameEventType.GameQuitEvent:
+        return navigate('/')
       default:
         return (
           <Page>
@@ -124,7 +134,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event, gameID, completeTask, submitQuestionAnswer])
+  }, [event, gameID, completeTask, submitQuestionAnswer, navigate])
 
   return <>{stateComponent}</>
 }

@@ -6,6 +6,7 @@ import {
   buildPodiumTask,
   buildQuestionResultTask,
   buildQuestionTask,
+  buildQuitTask,
 } from './task.converter'
 
 /**
@@ -183,4 +184,20 @@ export function leaderboardTaskCompletedCallback(
   gameDocument.previousTasks.push(gameDocument.currentTask)
   gameDocument.currentTask = buildQuestionTask(gameDocument)
   gameDocument.nextQuestion = gameDocument.nextQuestion + 1
+}
+
+/**
+ *
+ * @param {GameDocument} gameDocument - The game document containing the current task.
+ */
+export function podiumTaskCompletedCallback(gameDocument: GameDocument): void {
+  if (gameDocument.currentTask.type !== TaskType.Podium) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Podium,
+    )
+  }
+
+  gameDocument.previousTasks.push(gameDocument.currentTask)
+  gameDocument.currentTask = buildQuitTask()
 }

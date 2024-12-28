@@ -9,6 +9,7 @@ import {
   getQuestionTaskPendingDuration,
   leaderboardTaskCompletedCallback,
   lobbyTaskCompletedCallback,
+  podiumTaskCompletedCallback,
   questionResultTaskCompletedCallback,
   questionTaskCompletedCallback,
 } from './utils'
@@ -61,6 +62,13 @@ const TransitionHandlers: {
     },
   },
   [TaskType.Podium]: {
+    pending: {},
+    active: {},
+    completed: {
+      callback: podiumTaskCompletedCallback,
+    },
+  },
+  [TaskType.Quit]: {
     pending: {},
     active: {},
     completed: {},
@@ -280,6 +288,12 @@ export class GameTaskTransitionScheduler {
       ) {
         this.logger.warn(
           `Skipping post-transition actions since current status ${updatedGameDocument.currentTask.status} does not match expected status ${nextStatus} for Game ID: ${_id}`,
+        )
+        return
+      }
+      if (updatedGameDocument.currentTask.type === TaskType.Quit) {
+        this.logger.warn(
+          `Skipping post-transition actions since current type ${TaskType.Quit} for Game ID: ${_id}`,
         )
         return
       }

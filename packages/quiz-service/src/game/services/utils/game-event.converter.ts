@@ -27,7 +27,7 @@ import {
   QuestionType,
 } from '@quiz/common'
 import { GameEventQuestionResultsMultiChoice } from '@quiz/common/dist/cjs/models/game-event'
-import { GameLeaderboardPlayerEvent } from '@quiz/common/src'
+import { GameLeaderboardPlayerEvent, GameQuitEvent } from '@quiz/common/src'
 
 import {
   isMultiChoiceQuestion,
@@ -58,6 +58,7 @@ import {
   isPodiumTask,
   isQuestionResultTask,
   isQuestionTask,
+  isQuitTask,
 } from './task.utils'
 
 /**
@@ -123,6 +124,10 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
       case 'completed':
         return buildGameLoadingEvent()
     }
+  }
+
+  if (isQuitTask(document)) {
+    return buildGameQuitEvent()
   }
 
   throw new Error('Unknown task')
@@ -199,6 +204,10 @@ export function buildPlayerGameEvent(
       case 'completed':
         return buildGameLoadingEvent()
     }
+  }
+
+  if (isQuitTask(document)) {
+    return buildGameQuitEvent()
   }
 
   throw new Error('Unknown task')
@@ -900,4 +909,13 @@ function buildGamePodiumPlayerEvent(
       },
     },
   }
+}
+
+/**
+ * Builds a quit event for the game.
+ *
+ * @returns {GameLoadingEvent} A quit event for the game, indicating that the game is terminated.
+ */
+function buildGameQuitEvent(): GameQuitEvent {
+  return { type: GameEventType.GameQuitEvent }
 }

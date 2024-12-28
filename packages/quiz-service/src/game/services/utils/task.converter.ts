@@ -33,6 +33,7 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
+  QuitTask,
   TaskType,
 } from '../models/schemas'
 
@@ -621,6 +622,19 @@ export function buildPodiumTask(
     type: TaskType.Podium,
     status: 'pending',
     leaderboard: buildLeaderboardItems(gameDocument),
+    created: new Date(),
+  }
+}
+
+/**
+ * Constructs a new quit task, setting its initial status and creation timestamp.
+ *
+ * @returns {BaseTask & QuitTask} A new quit task object.
+ */
+export function buildQuitTask(): BaseTask & QuitTask {
+  return {
+    type: TaskType.Quit,
+    status: 'completed',
     created: new Date(),
   }
 }
