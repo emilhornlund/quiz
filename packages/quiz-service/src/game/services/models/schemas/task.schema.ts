@@ -15,8 +15,11 @@ export enum TaskType {
  * BaseTask
  */
 
-@Schema({ _id: false, discriminatorKey: 'type' })
+@Schema({ _id: true, discriminatorKey: 'type' })
 export class BaseTask {
+  @Prop({ type: String, required: true })
+  _id: string
+
   @Prop({
     type: String,
     enum: Object.keys(TaskType),

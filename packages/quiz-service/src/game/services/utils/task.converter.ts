@@ -3,6 +3,7 @@ import {
   GameParticipantType,
   QuestionRangeAnswerMargin,
 } from '@quiz/common'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   BaseQuestionDao,
@@ -52,6 +53,7 @@ import { isQuestionResultTask, isQuestionTask } from './task.utils'
  */
 export function buildLobbyTask(): BaseTask & LobbyTask {
   return {
+    _id: uuidv4(),
     type: TaskType.Lobby,
     status: 'pending',
     created: new Date(),
@@ -69,6 +71,7 @@ export function buildQuestionTask(
   gameDocument: GameDocument,
 ): BaseTask & QuestionTask {
   return {
+    _id: uuidv4(),
     type: TaskType.Question,
     status: 'pending',
     questionIndex: gameDocument.nextQuestion,
@@ -424,6 +427,7 @@ export function buildQuestionResultTask(
     .map((item, index) => ({ ...item, position: index + 1 }))
 
   return {
+    _id: uuidv4(),
     type: TaskType.QuestionResult,
     status: 'pending',
     questionIndex,
@@ -589,6 +593,7 @@ export function buildLeaderboardTask(
   applyLastScore(gameDocument)
 
   return {
+    _id: uuidv4(),
     type: TaskType.Leaderboard,
     status: 'pending',
     questionIndex: gameDocument.nextQuestion - 1,
@@ -619,6 +624,7 @@ export function buildPodiumTask(
   applyLastScore(gameDocument)
 
   return {
+    _id: uuidv4(),
     type: TaskType.Podium,
     status: 'pending',
     leaderboard: buildLeaderboardItems(gameDocument),
@@ -633,6 +639,7 @@ export function buildPodiumTask(
  */
 export function buildQuitTask(): BaseTask & QuitTask {
   return {
+    _id: uuidv4(),
     type: TaskType.Quit,
     status: 'completed',
     created: new Date(),

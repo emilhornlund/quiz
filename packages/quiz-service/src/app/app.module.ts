@@ -1,4 +1,5 @@
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
+import { BullModule } from '@nestjs/bullmq'
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
@@ -68,6 +69,16 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         logLevel: 'log',
         lockKeyPrefix: 'custom',
         ignoreUnlockFail: false,
+      }),
+      inject: [ConfigService],
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService<EnvironmentVariables>) => ({
+        connection: {
+          host: config.get('REDIS_HOST'),
+          port: config.get('REDIS_PORT'),
+        },
       }),
       inject: [ConfigService],
     }),

@@ -1,7 +1,7 @@
+import { BullModule } from '@nestjs/bullmq'
 import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
-import { ScheduleModule } from '@nestjs/schedule'
 
 import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
@@ -15,6 +15,7 @@ import {
   GameRepository,
   GameService,
   GameTaskTransitionScheduler,
+  TASK_QUEUE_NAME,
 } from './services'
 import { Game, GameSchema } from './services/models/schemas'
 
@@ -25,13 +26,13 @@ import { Game, GameSchema } from './services/models/schemas'
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
+    BullModule.registerQueue({ name: TASK_QUEUE_NAME }),
     MongooseModule.forFeature([
       {
         name: Game.name,
         schema: GameSchema,
       },
     ]),
-    ScheduleModule.forRoot(),
     AuthModule,
     PlayerModule,
     ClientModule,

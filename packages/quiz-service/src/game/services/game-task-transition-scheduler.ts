@@ -1,5 +1,6 @@
+import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
-import { SchedulerRegistry } from '@nestjs/schedule'
+import { Job, Queue } from 'bullmq'
 
 import { GameRepository } from './game.repository'
 import { GameDocument, TaskType } from './models/schemas'
@@ -13,6 +14,9 @@ import {
   questionResultTaskCompletedCallback,
   questionTaskCompletedCallback,
 } from './utils'
+
+export const TASK_QUEUE_NAME = 'task'
+const TASK_TRANSITION_JOB_NAME = TASK_QUEUE_NAME + 'transition'
 
 type DelayHandler = ((gameDocument: GameDocument) => number) | number
 
@@ -81,19 +85,23 @@ const TransitionHandlers: {
  * using configured handlers and delays for each transition.
  */
 @Injectable()
-export class GameTaskTransitionScheduler {
+@Processor(TASK_QUEUE_NAME)
+export class GameTaskTransitionScheduler extends WorkerHost {
   private readonly logger = new Logger(GameTaskTransitionScheduler.name)
 
   /**
    * Constructs an instance of GameTaskTransitionScheduler.
    *
-   * @param schedulerRegistry - The registry for scheduling and managing timeouts and intervals.
+   * @param taskQueue - Task queue for scheduling deferred transitions.
    * @param gameRepository - Repository for accessing and modifying game data.
    */
   constructor(
-    private schedulerRegistry: SchedulerRegistry,
+    @InjectQueue(TASK_QUEUE_NAME)
+    private taskQueue: Queue<GameDocument, void, string>,
     private gameRepository: GameRepository,
-  ) {}
+  ) {
+    super()
+  }
 
   /**
    * Initiates the scheduling process for transitioning the current task
@@ -123,15 +131,15 @@ export class GameTaskTransitionScheduler {
       `Scheduling ${type} task transition from ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,
     )
 
-    const transitionName =
-      GameTaskTransitionScheduler.getTransitionTimeoutName(gameDocument)
+    const jobId = GameTaskTransitionScheduler.getTransitionJobId(gameDocument)
 
-    if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
+    const existingTransitionJob = await this.taskQueue.getJob(jobId)
+    if (existingTransitionJob) {
       if (status === 'active') {
         this.logger.debug(
           `Deleting existing timeout for task type ${type} and status ${status} for Game ID: ${gameDocument._id}`,
         )
-        this.schedulerRegistry.deleteTimeout(transitionName)
+        await this.taskQueue.remove(jobId)
         await this.performTransition(gameDocument, nextStatus, callback)
       } else {
         this.logger.warn(
@@ -150,7 +158,6 @@ export class GameTaskTransitionScheduler {
           gameDocument,
           delayHandler,
           nextStatus,
-          callback,
         )
       } else {
         await this.performTransition(gameDocument, nextStatus, callback)
@@ -160,12 +167,11 @@ export class GameTaskTransitionScheduler {
 
   /**
    * Schedules a task transition to occur after a specified delay.
-   * It sets up a timeout that will trigger the transition after the delay.
+   * It sets up a job that will trigger the transition after the delay.
    *
    * @param gameDocument - The current game document.
    * @param delayHandler - The delay in milliseconds or a function to compute the delay.
    * @param nextStatus - The status to transition to.
-   * @param callback - An optional callback to execute during the transition.
    *
    * @private
    */
@@ -173,7 +179,6 @@ export class GameTaskTransitionScheduler {
     gameDocument: GameDocument,
     delayHandler: DelayHandler,
     nextStatus: 'active' | 'completed',
-    callback?: (gameDocument: GameDocument) => void,
   ): Promise<void> {
     const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
@@ -187,44 +192,14 @@ export class GameTaskTransitionScheduler {
       `Scheduling deferred transition for task ${type} from status ${status} to ${nextStatus} with delay: ${delay}ms for Game ID: ${_id}`,
     )
 
-    const transitionName =
-      GameTaskTransitionScheduler.getTransitionTimeoutName(gameDocument)
+    const jobId = GameTaskTransitionScheduler.getTransitionJobId(gameDocument)
 
     try {
-      const timeout = setTimeout(async () => {
-        try {
-          this.logger.debug(
-            `Executing timeout handler for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
-          )
-
-          const latestGameDocument =
-            await this.gameRepository.findGameByIDOrThrow(_id)
-
-          if (
-            latestGameDocument.currentTask.type === type &&
-            latestGameDocument.currentTask.status === status
-          ) {
-            if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
-              this.schedulerRegistry.deleteTimeout(transitionName)
-            }
-            await this.performTransition(gameDocument, nextStatus, callback)
-          } else {
-            this.logger.warn(
-              `Skipping timeout handler since task type or status has changed for Game ID: ${_id}`,
-            )
-          }
-        } catch (error) {
-          if (this.schedulerRegistry.doesExist('timeout', transitionName)) {
-            this.schedulerRegistry.deleteTimeout(transitionName)
-          }
-          this.logger.error(
-            `Error during scheduled deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
-            error,
-          )
-        }
-      }, delay)
-
-      this.schedulerRegistry.addTimeout(transitionName, timeout)
+      await this.taskQueue.add(TASK_TRANSITION_JOB_NAME, gameDocument, {
+        jobId,
+        delay,
+        priority: delay ? 1 : 2,
+      })
     } catch (error) {
       this.logger.error(
         `Failed to schedule deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${_id}`,
@@ -353,17 +328,77 @@ export class GameTaskTransitionScheduler {
   }
 
   /**
-   * Generates a unique name for the transition timeout based on the game ID.
+   * A job consumer for scheduled deferred transitions.
    *
-   * @param gameDocument - The game document to generate the timeout name for.
+   * @param job - The scheduled transition job.
+   */
+  async process(job: Job<GameDocument, void, string>): Promise<void> {
+    if (job.name === TASK_TRANSITION_JOB_NAME) {
+      const gameDocument = job.data
+      const { currentTask } = job.data
+      const { type, status } = currentTask
+      const nextStatus = GameTaskTransitionScheduler.getNextTaskStatus(status)
+
+      try {
+        const transitionConfig = TransitionHandlers[type]?.[status]
+        if (!transitionConfig) {
+          this.logger.error(
+            `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${gameDocument._id}`,
+          )
+          return
+        }
+
+        const { callback } = transitionConfig
+
+        this.logger.debug(
+          `Executing timeout handler for task ${type} from status ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,
+        )
+
+        const latestGameDocument =
+          await this.gameRepository.findGameByIDOrThrow(gameDocument._id)
+
+        if (
+          latestGameDocument.currentTask.type === type &&
+          latestGameDocument.currentTask.status === status
+        ) {
+          const existingTransitionJob = await this.taskQueue.getJob(job.id)
+          if (existingTransitionJob) {
+            await this.taskQueue.remove(job.id)
+          }
+          await this.performTransition(gameDocument, nextStatus, callback)
+        } else {
+          this.logger.warn(
+            `Skipping timeout handler since task type or status has changed for Game ID: ${gameDocument._id}`,
+          )
+        }
+      } catch (error) {
+        const existingTransitionJob = await this.taskQueue.getJob(job.id)
+        if (existingTransitionJob) {
+          await this.taskQueue.remove(job.id)
+        }
+        this.logger.error(
+          `Error during scheduled deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,
+          error,
+        )
+      }
+    }
+    throw new Error('Method not implemented.')
+  }
+
+  /**
+   * Generates a unique name for the transition job based on the task details.
    *
-   * @returns The unique timeout name string.
+   * @param gameDocument - The game document to generate the transition job name for.
+   *
+   * @returns The unique transition job name string.
    *
    * @private
    */
-  private static getTransitionTimeoutName(gameDocument: GameDocument): string {
-    const { _id } = gameDocument
-    return `transition-${_id}`
+  private static getTransitionJobId(gameDocument: GameDocument): string {
+    const {
+      currentTask: { _id, type, status },
+    } = gameDocument
+    return `transition-${_id}_${type}_${status}`
   }
 
   /**
