@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@nest-lab/throttler-storage-redis": "^1.0.0",
