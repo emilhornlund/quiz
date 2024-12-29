@@ -1,6 +1,23 @@
 @import '../../styles/colors.scss';
 @import '../../styles/helpers.scss';
 
+@mixin iconSize() {
+  @include mobile {
+    width: pxToRem(40px);
+    height: pxToRem(40px);
+  }
+
+  @include tablet {
+    width: pxToRem(42px);
+    height: pxToRem(42px);
+  }
+
+  @include desktop {
+    width: pxToRem(44px);
+    height: pxToRem(44px);
+  }
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -32,10 +49,13 @@
       outline: none;
       background: none;
       cursor: pointer;
+      padding: 0;
 
       .icon {
         background-image: url(../../assets/images/logo-small.svg);
         background-size: 100% auto;
+
+        @include iconSize();
       }
 
       .text {
@@ -50,8 +70,6 @@
         column-gap: $layout-gutter * 0.7;
 
         .icon {
-          width: pxToRem(36px);
-          height: pxToRem(36px);
           border-radius: pxToRem(10px);
 
           &::after {
@@ -64,8 +82,6 @@
         column-gap: $layout-gutter * 0.85;
 
         .icon {
-          width: pxToRem(42px);
-          height: pxToRem(42px);
           border-radius: pxToRem(12px);
 
           &::after {
@@ -82,8 +98,6 @@
         column-gap: $layout-gutter;
 
         .icon {
-          width: pxToRem(48px);
-          height: pxToRem(48px);
           border-radius: pxToRem(14px);
 
           &::after {
@@ -137,22 +151,9 @@
       .avatar {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        align-items: center;
 
-        @include mobile {
-          width: pxToRem(44px);
-          height: pxToRem(44px);
-        }
-
-        @include tablet {
-          width: pxToRem(46px);
-          height: pxToRem(46px);
-        }
-
-        @include desktop {
-          width: pxToRem(48px);
-          height: pxToRem(48px);
-        }
+        @include iconSize();
 
         button {
           display: flex;
@@ -162,12 +163,15 @@
           outline: none;
           background: none;
           cursor: pointer;
+          padding: 0;
 
           img {
-            filter: brightness(0) saturate(100%) invert(92%) sepia(0%) saturate(7467%) hue-rotate(204deg) brightness(107%) contrast(107%);
+            @include iconSize();
+
+            @include recolor($white);
 
             &:hover {
-              filter: brightness(0) saturate(100%) invert(96%) sepia(72%) saturate(19%) hue-rotate(346deg) brightness(93%) contrast(87%);
+              @include recolor($white, 0.8);
             }
           }
         }

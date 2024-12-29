@@ -28,3 +28,8 @@
     @content;
   }
 }
+
+@mixin recolor($color: #000, $opacity: 1) {
+  $lightness: lightness($color);
+  filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
+}

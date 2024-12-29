@@ -1,8 +1,10 @@
-import React from 'react'
+import { faLink, faUser } from '@fortawesome/free-solid-svg-icons'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
 import { classNames } from '../../utils/helpers'
+import { Menu, MenuItem } from '../Menu'
 
 import styles from './Page.module.scss'
 
@@ -29,6 +31,11 @@ const Page: React.FC<PageProps> = ({
 }) => {
   const navigate = useNavigate()
 
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+  const profileButtonRef = useRef<HTMLDivElement>(null)
+
+  const toggleProfileMenu = () => setProfileMenuOpen((prev) => !prev)
+
   return (
     <div className={styles.main}>
       <div className={classNames(styles.header)}>
@@ -39,10 +46,21 @@ const Page: React.FC<PageProps> = ({
         <div className={styles.side}>
           {header}
           {profile && (
-            <div className={styles.avatar}>
-              <button type="button" onClick={() => navigate('/player/profile')}>
+            <div className={styles.avatar} ref={profileButtonRef}>
+              <button onClick={toggleProfileMenu} type="button">
                 <img src={Avatar} alt="Profile" />
               </button>
+              <Menu
+                anchorRef={profileButtonRef}
+                isOpen={profileMenuOpen}
+                onClose={() => setProfileMenuOpen(false)}>
+                <MenuItem icon={faUser} link="/player/profile">
+                  Profile
+                </MenuItem>
+                <MenuItem icon={faLink} link="/player/link">
+                  Link
+                </MenuItem>
+              </Menu>
             </div>
           )}
         </div>

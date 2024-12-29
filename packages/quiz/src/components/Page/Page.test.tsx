@@ -32,3 +32,13 @@ test('should render Page with header', async () => {
 
   expect(container).toMatchSnapshot()
 })
+
+test('should render Page with profile', async () => {
+  const { container } = render(
+    <MemoryRouter>
+      <Page profile>Content</Page>
+    </MemoryRouter>,
+  )
+
+  expect(container).toMatchSnapshot()
+})

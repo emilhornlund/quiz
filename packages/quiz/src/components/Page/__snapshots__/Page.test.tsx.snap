@@ -76,3 +76,49 @@ exports[`should render Page with header 1`] = `
   </div>
 </div>
 `;
+
+exports[`should render Page with profile 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="avatar"
+        >
+          <button
+            type="button"
+          >
+            <img
+              alt="Profile"
+              src="/src/assets/images/avatar.svg"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      Content
+    </div>
+  </div>
+</div>
+`;

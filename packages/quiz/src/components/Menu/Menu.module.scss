@@ -1,0 +1,51 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: $white;
+  border: none;
+  color: black;
+  z-index: 999;
+  transform: translateX(-100%);
+  row-gap: pxToRem(8px);
+  padding: pxToRem(8px) 0;
+  border-radius: pxToRem(8px);
+  box-shadow: 0 pxToRem(4px) pxToRem(4px) rgba(0, 0, 0, 0.1);
+
+  .menuItem {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: $gray-4;
+    appearance: none;
+    padding: 0;
+    border: none;
+    outline: none;
+
+    .content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      width: 100%;
+      background-color: $white;
+      column-gap: pxToRem(16px);
+      padding: pxToRem(8px) pxToRem(16px);
+
+      @include fontSize(22px);
+
+      .icon {
+        width: pxToRem(22px);
+      }
+    }
+
+    &:hover {
+      .content {
+        background-color: $gray-1;
+      }
+    }
+  }
+}
