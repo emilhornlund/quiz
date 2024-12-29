@@ -63,6 +63,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       useFactory: (config: ConfigService<EnvironmentVariables>) => ({
         redisOptions: {
           url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+          database: Number(config.get('REDIS_DB')),
         },
         wait: 1000,
         maxAttempts: 3,
@@ -78,6 +79,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         connection: {
           host: config.get('REDIS_HOST'),
           port: config.get('REDIS_PORT'),
+          db: Number(config.get('REDIS_DB')),
         },
       }),
       inject: [ConfigService],

@@ -37,6 +37,8 @@ spec:
               value: "redis-server.redis-server.svc.cluster.local"
             - name: REDIS_PORT
               value: "6379"
+            - name: REDIS_DB
+              value: "0"
             - name: MONGODB_HOST
               value: "mongodb-server.mongodb-server.svc.cluster.local"
             - name: MONGODB_PORT
