@@ -21,13 +21,6 @@ spec:
         - name: quiz-service
           image: registry.cluster.local:5000/emilhornlund/quiz-service:9e37c40
           imagePullPolicy: IfNotPresent
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
           env:
             - name: NODE_ENV
               value: "production"
@@ -53,3 +46,24 @@ spec:
           ports:
             - name: quiz-service
               containerPort: 8080
+
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15

@@ -12,6 +12,7 @@ import { MurLockModule } from 'murlock'
 import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
 import { GameModule } from '../game'
+import { HealthModule } from '../health'
 import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
@@ -126,6 +127,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     AuthModule,
     ClientModule,
     GameModule,
+    HealthModule,
     PlayerModule,
     QuizModule,
   ],

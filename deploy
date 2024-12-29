@@ -30,8 +30,6 @@ git add "$QUIZ_SERVICE_DEPLOYMENT_FILE" && git commit --no-verify -m "Promote $Q
 sed -i "s|image:.*|image: $REGISTRY/$QUIZ_REPOSITORY:$TAG|" "$QUIZ_DEPLOYMENT_FILE"
 git add "$QUIZ_DEPLOYMENT_FILE" && git commit --no-verify -m "Promote $QUIZ_PACKAGE to k3s"
 
-git push
-
 echo "Deploying updated images to Kubernetes"
 
 kubectl apply -f $QUIZ_SERVICE_DEPLOYMENT_FILE || exit 1
