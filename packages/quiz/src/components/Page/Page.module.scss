@@ -39,6 +39,16 @@
     padding: $layout-gutter $layout-gutter 0 $layout-gutter;
     width: 100%;
 
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter
+    }
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter
+    }
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter;
+    }
+
     .logo {
       position: relative;
       display: flex;
@@ -117,6 +127,7 @@
       justify-content: flex-end;
       align-items: center;
       column-gap: $layout-gutter;
+      flex: 1;
 
       @include mobile {
         column-gap: $mobile-narrow-layout-gutter

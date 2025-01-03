@@ -1,0 +1,80 @@
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.floatingOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $black-1-80;
+
+  .modalContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    color: $gray-4;
+    width: $mobile-width;
+
+    @include mobile {
+      width: 100%;
+      padding: $mobile-narrow-layout-gutter;
+      row-gap: $mobile-narrow-layout-gutter;
+      border-radius: $mobile-border-radius;
+    }
+
+    @include tablet {
+      width: $mobile-width;
+      padding: $tablet-narrow-layout-gutter;
+      row-gap: $tablet-narrow-layout-gutter;
+      border-radius: $tablet-border-radius;
+    }
+
+    @include desktop {
+      width: $mobile-width;
+      padding: $desktop-narrow-layout-gutter;
+      row-gap: $desktop-narrow-layout-gutter;
+      border-radius: $desktop-border-radius;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+
+      @include mobile {
+        @include fontSize(16px);
+      }
+
+      @include tablet {
+        @include fontSize(20px);
+      }
+
+      @include desktop {
+        @include fontSize(24px);
+      }
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+
+      @include mobile {
+        row-gap: $mobile-narrow-layout-gutter;
+
+        @include fontSize(16px);
+      }
+
+      @include tablet {
+        row-gap: $tablet-narrow-layout-gutter;
+
+        @include fontSize(18px);
+      }
+
+      @include desktop {
+        row-gap: $desktop-narrow-layout-gutter;
+
+        @include fontSize(20px);
+      }
+    }
+  }
+}

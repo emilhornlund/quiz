@@ -1,8 +1,9 @@
 import { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { classNames } from '../../utils/helpers'
+import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
 
 import styles from './Button.module.scss'
 
@@ -13,11 +14,13 @@ export interface ButtonProps {
   kind?: 'primary' | 'secondary' | 'call-to-action' | 'plain' | 'destructive'
   size?: 'normal' | 'small'
   value?: React.ReactNode | string | undefined
+  hideValue?: 'mobile' | 'never'
   disabled?: boolean
   icon?: IconDefinition
   iconPosition?: 'leading' | 'trailing'
   iconColor?: string
   onClick?: () => void
+  children?: React.ReactNode
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -27,12 +30,22 @@ const Button: React.FC<ButtonProps> = ({
   kind = 'primary',
   size = 'normal',
   value,
+  hideValue = 'never',
   disabled,
   icon,
   iconPosition = 'leading',
   iconColor,
   onClick,
 }) => {
+  const deviceType = useDeviceSizeType()
+
+  const showValue = useMemo(() => {
+    if (hideValue === 'mobile' && deviceType === DeviceType.Mobile) {
+      return false
+    }
+    return !!value
+  }, [value, deviceType, hideValue])
+
   return (
     <div
       className={classNames(
@@ -56,7 +69,7 @@ const Button: React.FC<ButtonProps> = ({
         {icon && iconPosition === 'leading' && (
           <FontAwesomeIcon icon={icon} color={iconColor} />
         )}
-        {!!value && <span>{value}</span>}
+        {showValue && <span>{value}</span>}
         {icon && iconPosition === 'trailing' && (
           <FontAwesomeIcon icon={icon} color={iconColor} />
         )}

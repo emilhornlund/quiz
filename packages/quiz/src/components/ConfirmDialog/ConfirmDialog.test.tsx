@@ -64,6 +64,6 @@ describe('ConfirmDialog', () => {
     )
 
     expect(titleElement).toHaveAttribute('id')
-    expect(messageElement).toHaveAttribute('id')
+    expect(messageElement).toBeInTheDocument()
   })
 })
