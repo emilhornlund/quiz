@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuestionType,
+  QuizVisibility,
+} from '@quiz/common'
 
 export const GameModeLabels: { [key in GameMode]: string } = {
   [GameMode.Classic]: 'Classic',
@@ -194,4 +199,11 @@ export const LanguageLabels: { [key in LanguageCode]: string } = {
 export const QuizVisibilityLabels: { [key in QuizVisibility]: string } = {
   [QuizVisibility.Public]: 'Public',
   [QuizVisibility.Private]: 'Private',
+}
+
+export const QuestionTypeLabels: { [key in QuestionType]: string } = {
+  [QuestionType.MultiChoice]: 'Multi Choice',
+  [QuestionType.Range]: 'Range',
+  [QuestionType.TrueFalse]: 'True or False',
+  [QuestionType.TypeAnswer]: 'Type Answer',
 }

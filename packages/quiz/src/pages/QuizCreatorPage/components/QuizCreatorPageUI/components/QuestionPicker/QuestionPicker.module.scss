@@ -1,0 +1,86 @@
+@import '../../../../../../styles/colors';
+@import '../../../../../../styles/helpers';
+
+$outline-offset: pxToRem(2px);
+
+.questionPickerWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  @include mobile {
+    column-gap: $mobile-narrow-layout-gutter;
+  }
+
+  @include tablet {
+    column-gap: $tablet-narrow-layout-gutter;
+  }
+
+  @include desktop {
+    column-gap: $desktop-narrow-layout-gutter;
+  }
+
+  .questionPickerItemContainer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    background-color: $white;
+    outline: $white solid $outline-offset;
+    outline-offset: $outline-offset;
+    border: $outline-offset solid transparent;
+    margin: calc($outline-offset * 2);
+
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter * 0.5;
+      padding: $mobile-narrow-layout-gutter;
+      border-radius: $mobile-border-radius;
+    }
+
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter * 0.5;
+      padding: $tablet-narrow-layout-gutter;
+      border-radius: $tablet-border-radius;
+    }
+
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter;
+      padding: $desktop-narrow-layout-gutter;
+      border-radius: $desktop-border-radius;
+    }
+  }
+
+  .addQuestionButtonWrapper {
+    display: flex;
+    flex-direction: column;
+
+    .addQuestionButton {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      outline: $yellow-2 solid $outline-offset;
+      border: $outline-offset solid transparent;
+      border-radius: 50%;
+      padding: 0;
+      background-color: transparent;
+      color: $yellow-2;
+      cursor: pointer;
+
+      @include mobile {
+        @include fontSize(28px);
+      }
+
+      @include tablet {
+        @include fontSize(32px);
+      }
+
+      @include desktop {
+        @include fontSize(32px);
+      }
+    }
+  }
+}

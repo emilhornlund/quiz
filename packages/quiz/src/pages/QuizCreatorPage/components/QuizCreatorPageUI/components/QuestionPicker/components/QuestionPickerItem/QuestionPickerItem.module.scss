@@ -1,0 +1,236 @@
+@import '../../../../../../../../styles/colors';
+@import '../../../../../../../../styles/helpers';
+
+$small-question-picker-item-width: pxToRem(120px);
+$normal-question-picker-item-width: pxToRem(160px);
+
+$small-question-picker-item-border-width: pxToRem(2px);
+$normal-question-picker-item-border-width: pxToRem(3px);
+
+$small-question-picker-item-indicator-size: pxToRem(16px);
+$normal-question-picker-item-indicator-size: pxToRem(22px);
+
+.questionPickerItemWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @include mobile {
+    column-gap: $mobile-narrow-layout-gutter;
+    min-width: $small-question-picker-item-width;
+    max-width: $small-question-picker-item-width;
+    height: $small-question-picker-item-width * 0.7;
+  }
+
+  @include tablet {
+    column-gap: $tablet-narrow-layout-gutter;
+    min-width: $normal-question-picker-item-width;
+    max-width: $normal-question-picker-item-width;
+    height: $normal-question-picker-item-width * 0.7;
+  }
+
+  @include desktop {
+    column-gap: $desktop-narrow-layout-gutter;
+    min-width: $normal-question-picker-item-width;
+    max-width: $normal-question-picker-item-width;
+    height: $normal-question-picker-item-width * 0.7;
+  }
+
+  .questionPickerItemButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: $gray-2;
+    border-style: solid;
+    border-color: $gray-2;
+    cursor: pointer;
+    background-color: $white;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+
+    @include mobile {
+      row-gap: $mobile-narrow-layout-gutter * 0.5;
+      padding: pxToRem(10px) pxToRem(3px);
+      border-width: $small-question-picker-item-border-width;
+      border-radius: $mobile-border-radius * 0.5;
+      height: $small-question-picker-item-width * 0.7;
+    }
+
+    @include tablet {
+      row-gap: $tablet-narrow-layout-gutter * 0.5;
+      padding: pxToRem(16px) pxToRem(6px);
+      border-width: $normal-question-picker-item-border-width;
+      border-radius: $tablet-border-radius * 0.5;
+    }
+
+    @include desktop {
+      row-gap: $desktop-narrow-layout-gutter * 0.5;
+      padding: pxToRem(16px) pxToRem(6px);
+      border-width: $normal-question-picker-item-border-width;
+      border-radius: $desktop-border-radius * 0.5;
+    }
+
+    &.questionPickerItemActive, &:hover {
+      border-color: $blue-2;
+      background-color: mix($white, $blue-2, 85%);
+      color: $gray-4;
+    }
+
+    &.questionPickerItemActive {
+      cursor: move;
+    }
+
+    .questionPickerItemText {
+      @include mobile {
+        @include fontSize(10px);
+      }
+
+      @include tablet {
+        @include fontSize(12px);
+      }
+
+      @include desktop {
+        @include fontSize(12px);
+      }
+    }
+
+    .questionPickerItemType {
+      font-weight: bold;
+
+      @include mobile {
+        @include fontSize(8px);
+      }
+
+      @include tablet {
+        @include fontSize(10px);
+      }
+
+      @include desktop {
+        @include fontSize(10px);
+      }
+
+    }
+  }
+
+  .questionPickerItemOverlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    width: 100%;
+
+    @include mobile {
+      height: calc(100% + $small-question-picker-item-indicator-size - $small-question-picker-item-border-width * 2);
+    }
+
+    @include tablet {
+      height: calc(100% + $normal-question-picker-item-indicator-size - $normal-question-picker-item-border-width * 2);
+    }
+
+    @include desktop {
+      height: calc(100% + $normal-question-picker-item-indicator-size - $normal-question-picker-item-border-width * 2);
+    }
+
+    .questionPickerItemOverlayTop, .questionPickerItemOverlayBottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+
+      div, button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+
+        @include mobile {
+          width: $small-question-picker-item-indicator-size;
+          height: $small-question-picker-item-indicator-size;
+        }
+
+        @include tablet {
+          width: $normal-question-picker-item-indicator-size;
+          height: $normal-question-picker-item-indicator-size;
+        }
+
+        @include desktop {
+          width: $normal-question-picker-item-indicator-size;
+          height: $normal-question-picker-item-indicator-size;
+        }
+      }
+    }
+
+    .questionPickerItemOverlayTop {
+      .questionPickerItemOverlayNumber {
+        background-color: $gray-2;
+        color: $white;
+        font-weight: bold;
+
+        @include mobile {
+          @include fontSize(10px);
+        }
+
+        @include tablet {
+          @include fontSize(12px);
+        }
+
+        @include desktop {
+          @include fontSize(12px);
+        }
+
+        &.questionPickerItemActive {
+          background-color: $blue-2;
+        }
+      }
+    }
+
+    .questionPickerItemOverlayBottom {
+      .questionPickerItemOverlayDuplicate, .questionPickerItemOverlayDelete {
+        border: none;
+        outline: none;
+        appearance: none;
+        pointer-events: auto;
+        cursor: pointer;
+        color: $white;
+        background-color: $gray-2;
+
+        @include mobile {
+          @include fontSize(10px);
+        }
+
+        @include tablet {
+          @include fontSize(12px);
+        }
+
+        @include desktop {
+          @include fontSize(12px);
+        }
+      }
+
+      .questionPickerItemOverlayError {
+        color: $orange-2;
+        background-color: $white;
+        pointer-events: auto;
+
+        @include mobile {
+          @include fontSize(16px);
+        }
+
+        @include tablet {
+          @include fontSize(22px);
+        }
+
+        @include desktop {
+          @include fontSize(22px);
+        }
+      }
+    }
+  }
+}
