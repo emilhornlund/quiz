@@ -1,95 +1,182 @@
 @import '../../styles/colors.scss';
 @import '../../styles/helpers.scss';
 
-$outline-offset: pxToRem(2px);
+$checkbox-height-ratio: 0.7;
+
+$mobile-checkbox-normal-size: calc($mobile-control-normal-height * $checkbox-height-ratio);
+$tablet-checkbox-normal-size: calc($tablet-control-normal-height * $checkbox-height-ratio);
+$desktop-checkbox-normal-size: calc($desktop-control-normal-height * $checkbox-height-ratio);
+
+$mobile-checkbox-small-size: calc($mobile-control-small-height * $checkbox-height-ratio);
+$tablet-checkbox-small-size: calc($tablet-control-small-height * $checkbox-height-ratio);
+$desktop-checkbox-small-size: calc($desktop-control-small-height * $checkbox-height-ratio);
+
+$mobile-checkbox-normal-font-size: $mobile-control-normal-font-size;
+$tablet-checkbox-normal-font-size: $tablet-control-normal-font-size;
+$desktop-checkbox-normal-font-size: $desktop-control-normal-font-size;
+
+$mobile-checkbox-small-font-size: calc($mobile-checkbox-normal-font-size * 0.8);
+$tablet-checkbox-small-font-size: calc($tablet-checkbox-normal-font-size * 0.8);
+$desktop-checkbox-small-font-size: calc($desktop-checkbox-normal-font-size * 0.8);
 
 .main {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  margin: $outline-offset * 2;
+  flex-direction: row;
   flex-grow: 0;
   flex-shrink: 1;
+  align-items: center;
+  outline: $white solid $control-outside-border-width;
+  outline-offset: $control-outside-border-width;
+  border: $control-outside-border-width solid transparent;
+  margin: calc($control-outside-border-width * 2);
+  background-color: $white;
+  overflow: hidden;
 
-  input {
-    flex-grow: 0;
-    flex-shrink: 1;
-    display: flex;
-    flex-direction: column;
-    appearance: none;
-    height: 100%;
-    outline-offset: $outline-offset;
-    border: none;
-    outline: $outline-offset solid $white;
-    background-color: $white;
-    color: $gray-4;
+  &.disabled {
+    background-color: $gray-1;
 
-    &:disabled {
-      background-color: $gray-1;
-      outline-color: $gray-1;
+    .textfield {
       color: $gray-2;
     }
   }
 
-  @include mobile {
-    height: pxToRem(42px);
+  &.error {
+    outline-color: $red-2;
+  }
 
-    &.small {
-      height: pxToRem(32px);
+  .textfield {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    appearance: none;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: $gray-4;
 
-      input {
-        padding: 0 $layout-gutter * 0.5;
-        @include fontSize(14px);
-      }
+    @include mobile {
+      @include fontSize($mobile-control-normal-font-size);
     }
 
-    input {
-      padding: 0 $layout-gutter * 0.8;
-      border-radius: $layout-gutter * 0.5;
-      @include fontSize(16px);
+    @include tablet {
+      @include fontSize($tablet-control-normal-font-size);
+    }
+
+    @include desktop {
+      @include fontSize($desktop-control-normal-font-size);
+    }
+  }
+
+  .checkboxLabel {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: $control-outside-border-width solid $green-2;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+
+    input[type=checkbox] {
+      display: none;
+    }
+
+    .checkboxIcon {
+      color: $white;
+    }
+
+    &:has(> input:checked) {
+      background-color: $green-1;
+    }
+
+    @include mobile {
+      width: $mobile-checkbox-normal-size;
+      height: $mobile-checkbox-normal-size;
+
+      @include fontSize($tablet-checkbox-normal-font-size);
+    }
+
+    @include tablet {
+      width: $tablet-checkbox-normal-size;
+      height: $tablet-checkbox-normal-size;
+
+      @include fontSize($tablet-checkbox-normal-font-size);
+    }
+
+    @include desktop {
+      width: $desktop-checkbox-normal-size;
+      height: $desktop-checkbox-normal-size;
+
+      @include fontSize($desktop-checkbox-normal-font-size);
+    }
+  }
+
+  @include mobile {
+    height: $mobile-control-normal-height;
+    padding: 0 $mobile-control-normal-layout-gutter;
+    border-radius: $mobile-control-normal-border-radius;
+
+    &.small {
+      height: $mobile-control-small-height;
+      padding: 0 $mobile-control-small-layout-gutter;
+      border-radius: $mobile-control-small-border-radius;
+
+      .textfield {
+        @include fontSize($mobile-control-small-font-size);
+      }
+
+      .checkboxLabel {
+        width: $mobile-checkbox-small-size;
+        height: $mobile-checkbox-small-size;
+
+        @include fontSize($mobile-checkbox-small-font-size);
+      }
     }
   }
 
   @include tablet {
-    height: pxToRem(44px);
+    height: $tablet-control-normal-height;
+    padding: 0 $tablet-control-normal-layout-gutter;
+    border-radius: $tablet-control-normal-border-radius;
 
     &.small {
-      height: pxToRem(34px);
+      height: $tablet-control-small-height;
+      padding: 0 $tablet-control-small-layout-gutter;
+      border-radius: $tablet-control-small-border-radius;
 
-      input {
-        padding: 0 $layout-gutter * 0.6;
-        @include fontSize(15px);
+      .textfield {
+        @include fontSize($tablet-control-small-font-size);
       }
-    }
 
-    input {
-      padding: 0 $layout-gutter * 0.9;
-      border-radius: $layout-gutter * 0.6;
-      @include fontSize(17px);
+      .checkboxLabel {
+        width: $tablet-checkbox-small-size;
+        height: $tablet-checkbox-small-size;
+
+        @include fontSize($tablet-checkbox-small-font-size);
+      }
     }
   }
 
   @include desktop {
-    height: pxToRem(46px);
+    height: $desktop-control-normal-height;
+    padding: 0 $desktop-control-normal-layout-gutter;
+    border-radius: $desktop-control-normal-border-radius;
 
     &.small {
-      height: pxToRem(36px);
+      height: $desktop-control-small-height;
+      padding: 0 $desktop-control-small-layout-gutter;
+      border-radius: $desktop-control-small-border-radius;
 
-      input {
-        padding: 0 $layout-gutter * 0.7;
-        @include fontSize(16px);
+      .textfield {
+        @include fontSize($desktop-control-small-font-size);
       }
-    }
 
-    input {
-      padding: 0 $layout-gutter;
-      border-radius: $layout-gutter * 0.7;
-      @include fontSize(18px);
-    }
-  }
+      .checkboxLabel {
+        width: $desktop-checkbox-small-size;
+        height: $desktop-checkbox-small-size;
 
-  &.error {
-    input {
-      outline-color: $red-2;
+        @include fontSize($desktop-checkbox-small-font-size);
+      }
     }
   }
 }

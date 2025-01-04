@@ -1,3 +1,5 @@
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import { classNames, isValidNumber } from '../../utils/helpers.ts'
@@ -14,10 +16,13 @@ export interface TextFieldProps {
   min?: number
   max?: number
   regex?: RegExp
+  checked?: boolean
   required?: boolean
   disabled?: boolean
+  readOnly?: boolean
   onChange?: (value?: string | number) => void
   onValid?: (valid: boolean) => void
+  onCheck?: (checked: boolean) => void
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -30,10 +35,13 @@ const TextField: React.FC<TextFieldProps> = ({
   min,
   max,
   regex,
+  checked,
   required,
   disabled,
+  readOnly,
   onChange,
   onValid,
+  onCheck,
 }) => {
   const [internalValue, setInternalValue] = useState<string | number>(
     value ?? '',
@@ -83,6 +91,7 @@ const TextField: React.FC<TextFieldProps> = ({
       className={classNames(
         styles.main,
         size === 'small' ? styles.small : undefined,
+        disabled ? styles.disabled : undefined,
         !valid && hasFocus ? styles.error : undefined,
       )}>
       <input
@@ -94,11 +103,30 @@ const TextField: React.FC<TextFieldProps> = ({
         max={max}
         placeholder={placeholder}
         disabled={disabled}
+        readOnly={readOnly}
+        className={styles.textfield}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
         onBlur={() => setHasFocus(false)}
         data-testid={`test-${id}-textfield`}
       />
+      {checked !== undefined && (
+        <label htmlFor={`${id}-checkbox`} className={styles.checkboxLabel}>
+          <input
+            id={`${id}-checkbox`}
+            type="checkbox"
+            checked={checked}
+            disabled={disabled}
+            className={styles.checkbox}
+            onChange={(event) => onCheck?.(event.target.checked)}
+          />
+          {checked && (
+            <span className={styles.checkboxIcon}>
+              <FontAwesomeIcon icon={faCheck} />
+            </span>
+          )}
+        </label>
+      )}
     </div>
   )
 }

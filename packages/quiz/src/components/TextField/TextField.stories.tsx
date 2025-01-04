@@ -45,3 +45,43 @@ export const Small = {
     placeholder: 'Placeholder',
   },
 } satisfies Story
+
+export const Checkbox = {
+  args: {
+    id: 'my-checkbox-text-field',
+    type: 'text',
+    placeholder: 'Placeholder',
+    checked: true,
+  },
+} satisfies Story
+
+export const CheckboxDisabled = {
+  args: {
+    id: 'my-disabled-checkbox-text-field',
+    type: 'text',
+    placeholder: 'Placeholder',
+    checked: true,
+    disabled: true,
+  },
+} satisfies Story
+
+export const CheckboxSmall = {
+  args: {
+    id: 'my-checkbox-text-field',
+    type: 'text',
+    size: 'small',
+    placeholder: 'Placeholder',
+    checked: true,
+  },
+} satisfies Story
+
+export const CheckboxSmallDisabled = {
+  args: {
+    id: 'my-disabled-checkbox-text-field',
+    type: 'text',
+    size: 'small',
+    placeholder: 'Placeholder',
+    checked: true,
+    disabled: true,
+  },
+} satisfies Story

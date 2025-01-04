@@ -6,6 +6,7 @@ exports[`TextField > should not receive onChange event when not a number changes
     class="main error"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       max="100"
@@ -24,6 +25,7 @@ exports[`TextField > should not receive onChange event when number above max cha
     class="main error"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       max="100"
@@ -42,6 +44,7 @@ exports[`TextField > should not receive onChange event when number bellow min ch
     class="main error"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       max="100"
@@ -60,6 +63,7 @@ exports[`TextField > should receive onChange event when number changes 1`] = `
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       name="my-textfield"
@@ -76,6 +80,7 @@ exports[`TextField > should receive onChange event when number equal max changes
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       max="100"
@@ -93,6 +98,7 @@ exports[`TextField > should receive onChange event when number equal min changes
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       min="0"
@@ -110,6 +116,7 @@ exports[`TextField > should receive onChange event when text changes 1`] = `
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       name="my-textfield"
@@ -126,6 +133,7 @@ exports[`TextField > should render a TextField with type number 1`] = `
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       name="my-textfield"
@@ -142,6 +150,7 @@ exports[`TextField > should render a TextField with type text 1`] = `
     class="main"
   >
     <input
+      class="textfield"
       data-testid="test-my-textfield-textfield"
       id="my-textfield"
       name="my-textfield"
