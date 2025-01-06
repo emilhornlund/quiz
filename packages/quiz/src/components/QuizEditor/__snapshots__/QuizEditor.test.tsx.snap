@@ -12,17 +12,21 @@ exports[`QuizEditor > should render QuizEditor for classic mode 1`] = `
         class="column"
       >
         <div
-          class="textFieldInputContainer"
+          class="inputContainer"
         >
-          <input
-            class="textfield"
-            data-testid="test-quiz-title-textfield-textfield"
-            id="quiz-title-textfield"
-            name="quiz-title-textfield"
-            placeholder="Title"
-            type="text"
-            value="My Classic Quiz"
-          />
+          <div
+            class="textFieldInputContainer"
+          >
+            <input
+              class="textfield"
+              data-testid="test-quiz-title-textfield-textfield"
+              id="quiz-title-textfield"
+              name="quiz-title-textfield"
+              placeholder="Title"
+              type="text"
+              value="My Classic Quiz"
+            />
+          </div>
         </div>
         <div
           class="textareaInputContainer"
@@ -111,17 +115,21 @@ exports[`QuizEditor > should render QuizEditor for classic mode 1`] = `
           </svg>
         </div>
         <div
-          class="textFieldInputContainer"
+          class="inputContainer"
         >
-          <input
-            class="textfield"
-            data-testid="test-quiz-image-cover-textfield-textfield"
-            id="quiz-image-cover-textfield"
-            name="quiz-image-cover-textfield"
-            placeholder="Image Cover URL"
-            type="text"
-            value=""
-          />
+          <div
+            class="textFieldInputContainer"
+          >
+            <input
+              class="textfield"
+              data-testid="test-quiz-image-cover-textfield-textfield"
+              id="quiz-image-cover-textfield"
+              name="quiz-image-cover-textfield"
+              placeholder="Image Cover URL"
+              type="text"
+              value=""
+            />
+          </div>
         </div>
         <div
           class="selectInputContainer"
@@ -1170,17 +1178,21 @@ exports[`QuizEditor > should render QuizEditor for zero to one hundred mode 1`] 
         class="column"
       >
         <div
-          class="textFieldInputContainer"
+          class="inputContainer"
         >
-          <input
-            class="textfield"
-            data-testid="test-quiz-title-textfield-textfield"
-            id="quiz-title-textfield"
-            name="quiz-title-textfield"
-            placeholder="Title"
-            type="text"
-            value="My ZeroToOneHundred Quiz"
-          />
+          <div
+            class="textFieldInputContainer"
+          >
+            <input
+              class="textfield"
+              data-testid="test-quiz-title-textfield-textfield"
+              id="quiz-title-textfield"
+              name="quiz-title-textfield"
+              placeholder="Title"
+              type="text"
+              value="My ZeroToOneHundred Quiz"
+            />
+          </div>
         </div>
         <div
           class="textareaInputContainer"
@@ -1269,17 +1281,21 @@ exports[`QuizEditor > should render QuizEditor for zero to one hundred mode 1`] 
           </svg>
         </div>
         <div
-          class="textFieldInputContainer"
+          class="inputContainer"
         >
-          <input
-            class="textfield"
-            data-testid="test-quiz-image-cover-textfield-textfield"
-            id="quiz-image-cover-textfield"
-            name="quiz-image-cover-textfield"
-            placeholder="Image Cover URL"
-            type="text"
-            value=""
-          />
+          <div
+            class="textFieldInputContainer"
+          >
+            <input
+              class="textfield"
+              data-testid="test-quiz-image-cover-textfield-textfield"
+              id="quiz-image-cover-textfield"
+              name="quiz-image-cover-textfield"
+              placeholder="Image Cover URL"
+              type="text"
+              value=""
+            />
+          </div>
         </div>
         <div
           class="selectInputContainer"

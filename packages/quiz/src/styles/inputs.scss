@@ -275,3 +275,33 @@
     }
   }
 }
+
+.input-error {
+  align-items: center;
+  background-color: $yellow-2;
+  color: $gray-4;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex: 1;
+  font-weight: bold;
+  justify-content: flex-start;
+
+  @include mobile {
+    border-radius: $mobile-control-normal-border-radius;
+    padding: $mobile-control-normal-layout-gutter;
+    column-gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    border-radius: $tablet-control-normal-border-radius;
+    padding: $tablet-control-normal-layout-gutter;
+    column-gap: $tablet-control-normal-layout-gutter;
+  }
+
+  @include desktop {
+    border-radius: $desktop-control-normal-border-radius;
+    padding: $desktop-control-normal-layout-gutter;
+    column-gap: $desktop-control-normal-layout-gutter;
+  }
+}

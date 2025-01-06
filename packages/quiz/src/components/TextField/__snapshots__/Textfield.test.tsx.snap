@@ -3,18 +3,43 @@
 exports[`TextField > should not receive onChange event when not a number changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer error"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      max="100"
-      min="0"
-      name="my-textfield"
-      type="number"
-      value=""
-    />
+    <div
+      class="textFieldInputContainer error"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        max="100"
+        min="0"
+        name="my-textfield"
+        type="number"
+        value=""
+      />
+    </div>
+    <div
+      class="errorContainer"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-triangle-exclamation "
+        data-icon="triangle-exclamation"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+          fill="currentColor"
+        />
+      </svg>
+       
+      Is not a valid number
+    </div>
   </div>
 </div>
 `;
@@ -22,18 +47,43 @@ exports[`TextField > should not receive onChange event when not a number changes
 exports[`TextField > should not receive onChange event when number above max changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer error"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      max="100"
-      min="0"
-      name="my-textfield"
-      type="number"
-      value="101"
-    />
+    <div
+      class="textFieldInputContainer error"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        max="100"
+        min="0"
+        name="my-textfield"
+        type="number"
+        value="101"
+      />
+    </div>
+    <div
+      class="errorContainer"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-triangle-exclamation "
+        data-icon="triangle-exclamation"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+          fill="currentColor"
+        />
+      </svg>
+       
+      Cannot be greater than 100
+    </div>
   </div>
 </div>
 `;
@@ -41,18 +91,43 @@ exports[`TextField > should not receive onChange event when number above max cha
 exports[`TextField > should not receive onChange event when number bellow min changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer error"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      max="100"
-      min="0"
-      name="my-textfield"
-      type="number"
-      value="-1"
-    />
+    <div
+      class="textFieldInputContainer error"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        max="100"
+        min="0"
+        name="my-textfield"
+        type="number"
+        value="-1"
+      />
+    </div>
+    <div
+      class="errorContainer"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-triangle-exclamation "
+        data-icon="triangle-exclamation"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+          fill="currentColor"
+        />
+      </svg>
+       
+      Cannot be less than 0
+    </div>
   </div>
 </div>
 `;
@@ -60,16 +135,20 @@ exports[`TextField > should not receive onChange event when number bellow min ch
 exports[`TextField > should receive onChange event when number changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      name="my-textfield"
-      type="number"
-      value="1337"
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        name="my-textfield"
+        type="number"
+        value="1337"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -77,17 +156,21 @@ exports[`TextField > should receive onChange event when number changes 1`] = `
 exports[`TextField > should receive onChange event when number equal max changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      max="100"
-      name="my-textfield"
-      type="number"
-      value="100"
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        max="100"
+        name="my-textfield"
+        type="number"
+        value="100"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -95,17 +178,21 @@ exports[`TextField > should receive onChange event when number equal max changes
 exports[`TextField > should receive onChange event when number equal min changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      min="0"
-      name="my-textfield"
-      type="number"
-      value="0"
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        min="0"
+        name="my-textfield"
+        type="number"
+        value="0"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -113,16 +200,20 @@ exports[`TextField > should receive onChange event when number equal min changes
 exports[`TextField > should receive onChange event when text changes 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      name="my-textfield"
-      type="text"
-      value="some value"
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        name="my-textfield"
+        type="text"
+        value="some value"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -130,16 +221,20 @@ exports[`TextField > should receive onChange event when text changes 1`] = `
 exports[`TextField > should render a TextField with type number 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      name="my-textfield"
-      type="number"
-      value=""
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        name="my-textfield"
+        type="number"
+        value=""
+      />
+    </div>
   </div>
 </div>
 `;
@@ -147,16 +242,20 @@ exports[`TextField > should render a TextField with type number 1`] = `
 exports[`TextField > should render a TextField with type text 1`] = `
 <div>
   <div
-    class="textFieldInputContainer"
+    class="inputContainer"
   >
-    <input
-      class="textfield"
-      data-testid="test-my-textfield-textfield"
-      id="my-textfield"
-      name="my-textfield"
-      type="text"
-      value="some value"
-    />
+    <div
+      class="textFieldInputContainer"
+    >
+      <input
+        class="textfield"
+        data-testid="test-my-textfield-textfield"
+        id="my-textfield"
+        name="my-textfield"
+        type="text"
+        value="some value"
+      />
+    </div>
   </div>
 </div>
 `;

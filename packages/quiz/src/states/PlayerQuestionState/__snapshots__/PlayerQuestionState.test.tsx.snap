@@ -463,18 +463,22 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                 class="inputGroup"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="inputContainer"
                 >
-                  <input
-                    class="textfield"
-                    data-testid="test-slider-input-textfield"
-                    id="slider-input"
-                    max="100"
-                    min="0"
-                    name="slider-input"
-                    type="number"
-                    value="50"
-                  />
+                  <div
+                    class="textFieldInputContainer"
+                  >
+                    <input
+                      class="textfield"
+                      data-testid="test-slider-input-textfield"
+                      id="slider-input"
+                      max="100"
+                      min="0"
+                      name="slider-input"
+                      type="number"
+                      value="50"
+                    />
+                  </div>
                 </div>
                 <div
                   class="buttonInputContainer buttonInputKindPrimary"
@@ -714,17 +718,21 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <form>
               <div
-                class="textFieldInputContainer"
+                class="inputContainer"
               >
-                <input
-                  class="textfield"
-                  data-testid="test-answer-input-textfield"
-                  id="answer-input"
-                  name="answer-input"
-                  placeholder="Answer"
-                  type="text"
-                  value=""
-                />
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-answer-input-textfield"
+                    id="answer-input"
+                    name="answer-input"
+                    placeholder="Answer"
+                    type="text"
+                    value=""
+                  />
+                </div>
               </div>
               <div
                 class="buttonInputContainer buttonInputKindPrimary"
