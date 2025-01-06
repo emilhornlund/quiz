@@ -1,0 +1,277 @@
+@import './colors';
+@import './helpers';
+
+.input {
+  align-items: center;
+  border: $control-outside-border-width solid transparent;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 1;
+  justify-content: center;
+  margin: calc($control-outside-border-width * 2);
+  outline-offset: $control-outside-border-width;
+  outline-style: solid;
+  outline-width: $control-outside-border-width;
+  overflow: hidden;
+  position: relative;
+
+  @extend .input-kind-primary;
+
+  &:has(> input:disabled, select:disabled, textarea:disabled, button:disabled) {
+    @extend .inout-kind-disabled;
+  }
+
+  input, select, textarea, button {
+    -moz-appearance: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    display: inline-flex;
+    flex-direction: row;
+    flex: 1;
+    font-family: inherit;
+    height: 100%;
+    outline: none;
+    align-items: center;
+    justify-content: center;
+
+    @include mobile {
+      column-gap: $mobile-control-normal-layout-gutter;
+
+      @include fontSize($mobile-control-normal-font-size);
+    }
+
+    @include tablet {
+      column-gap: $tablet-control-normal-layout-gutter;
+
+      @include fontSize($tablet-control-normal-font-size);
+    }
+
+    @include desktop {
+      column-gap: $desktop-control-normal-layout-gutter;
+
+      @include fontSize($desktop-control-normal-font-size);
+    }
+  }
+
+  /* begin select overrides */
+  select {
+    cursor: pointer;
+  }
+  /* end select overrides */
+
+  /* begin textarea overrides */
+  textarea {
+    resize: none;
+  }
+  &:has(> textarea) {
+    flex-grow: 1;
+  }
+  &:not(textarea) {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* end textarea overrides */
+
+  /* begin button overrides */
+  button {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  /* end button overrides */
+
+  @include mobile {
+    border-radius: $mobile-control-normal-border-radius;
+    height: $mobile-control-normal-height;
+    padding: 0 $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    border-radius: $tablet-control-normal-border-radius;
+    height: $tablet-control-normal-height;
+    padding: 0 $tablet-control-normal-layout-gutter;
+  }
+
+  @include desktop {
+    border-radius: $desktop-control-normal-border-radius;
+    height: $desktop-control-normal-height;
+    padding: 0 $desktop-control-normal-layout-gutter;
+
+    &:has(> textarea) {
+      padding: $desktop-control-normal-layout-gutter;
+    }
+  }
+}
+
+.input-kind-primary {
+  outline-color: $control-primary-normal-color;
+  background-color: $control-primary-normal-color;
+
+  &:has(> button) {
+    background-color: $control-primary-normal-color;
+  }
+  input, select, textarea, button {
+    color: $control-text-normal-color;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: mix($white, $control-primary-normal-color, 30%);
+    outline-color: mix($white, $control-primary-normal-color, 30%);
+
+    button {
+      color: mix($white, $control-text-normal-color, 30%);
+    }
+  }
+}
+
+.input-kind-secondary {
+  outline-color: $control-secondary-normal-color;
+
+  &:has(> button) {
+    background-color: $control-secondary-normal-color;
+  }
+  button {
+    color: $control-text-normal-color;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: mix($white, $control-secondary-normal-color, 30%);
+    outline-color: mix($white, $control-secondary-normal-color, 30%);
+
+    button {
+      color: mix($white, $control-text-normal-color, 30%);
+    }
+  }
+}
+
+.inout-kind-disabled {
+  background-color: $control-primary-disabled-color;
+  outline-color: $control-primary-disabled-color;
+
+  input, select, textarea, button {
+    color: $control-text-disabled-color;
+    cursor: default;
+  }
+}
+
+.input-kind-call-to-action {
+  outline-color: $control-primary-call-to-action-color;
+
+  &:has(> button) {
+    background-color: $control-primary-call-to-action-color;
+  }
+  button {
+    color: $control-text-normal-color;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: mix($white, $control-primary-call-to-action-color, 30%);
+    outline-color: mix($white, $control-primary-call-to-action-color, 30%);
+
+    button {
+      color: mix($white, $control-text-normal-color, 30%);
+    }
+  }
+}
+
+.input-kind-success {
+  outline-color: $control-primary-success-color;
+
+  &:has(> button) {
+    background-color: $control-primary-success-color;
+  }
+  button {
+    color: $control-text-contrast-color;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: mix($white, $control-primary-success-color, 30%);
+    outline-color: mix($white, $control-primary-success-color, 30%);
+
+    button {
+      color: mix($white, $control-text-contrast-color, 30%);
+    }
+  }
+}
+
+.input-kind-destructive {
+  outline-color: $control-primary-danger-color;
+
+  &:has(> button) {
+    background-color: $control-primary-danger-color;
+  }
+  button {
+    color: $control-text-contrast-color;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: mix($white, $control-primary-danger-color, 30%);
+    outline-color: mix($white, $control-primary-danger-color, 30%);
+
+    button {
+      color: mix($white, $control-text-contrast-color, 30%);
+    }
+  }
+}
+
+.input-kind-plain {
+  outline-color: transparent;
+  background-color: transparent;
+
+  input, select, textarea, button {
+    background-color: transparent;
+    outline-color: transparent;
+    color: $white;
+  }
+
+  &:has(> button:hover, button:disabled) {
+    background-color: transparent;
+    outline-color: transparent;
+
+    button {
+      color: mix($white, $gray-1, 30%);
+    }
+  }
+}
+
+.input-size-small {
+  @include mobile {
+    border-radius: $mobile-control-small-border-radius;
+    height: $mobile-control-small-height;
+    padding: 0 $mobile-control-small-layout-gutter;
+
+    input, select, textarea, button {
+      column-gap: $mobile-control-small-layout-gutter;
+
+      @include fontSize($mobile-control-small-font-size);
+    }
+  }
+
+  @include tablet {
+    border-radius: $tablet-control-small-border-radius;
+    height: $tablet-control-small-height;
+    padding: 0 $tablet-control-small-layout-gutter;
+
+    input, select, textarea, button {
+      column-gap: $tablet-control-small-layout-gutter;
+
+      @include fontSize($tablet-control-small-font-size);
+    }
+  }
+
+  @include desktop {
+    border-radius: $desktop-control-small-border-radius;
+    height: $desktop-control-small-height;
+    padding: 0 $desktop-control-small-layout-gutter;
+
+    input, select, textarea, button {
+      column-gap: $desktop-control-small-layout-gutter;
+
+      @include fontSize($desktop-control-small-font-size);
+    }
+  }
+}

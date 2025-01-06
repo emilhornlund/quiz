@@ -92,10 +92,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -122,10 +121,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -237,10 +235,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -267,10 +264,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -306,10 +302,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -346,10 +341,9 @@ exports[`QuizTable > calls onEdit when the edit button is clicked 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -472,10 +466,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -502,10 +495,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -617,10 +609,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -647,10 +638,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -686,10 +676,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -726,10 +715,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -788,10 +776,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-confirm-button-button"
               id="confirm-button"
               name="confirm-button"
@@ -803,10 +790,9 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindSecondary buttonInputSizeSmall"
           >
             <button
-              class="secondary"
               data-testid="test-close-button-button"
               id="close-button"
               name="close-button"
@@ -923,10 +909,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -953,10 +938,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1068,10 +1052,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -1098,10 +1081,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1137,10 +1119,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -1177,10 +1158,9 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -1301,10 +1281,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -1331,10 +1310,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1446,10 +1424,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -1476,10 +1453,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1515,10 +1491,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             id="prev-page-button"
             name="prev-page-button"
@@ -1554,10 +1529,9 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -1678,10 +1652,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -1708,10 +1681,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1823,10 +1795,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -1853,10 +1824,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -1892,10 +1862,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             id="prev-page-button"
             name="prev-page-button"
@@ -1931,10 +1900,9 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             disabled=""
             id="next-page-button"
@@ -2056,10 +2024,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -2086,10 +2053,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -2201,10 +2167,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -2231,10 +2196,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -2270,10 +2234,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -2310,10 +2273,9 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -2434,10 +2396,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -2464,10 +2425,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -2579,10 +2539,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -2609,10 +2568,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -2648,10 +2606,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -2688,10 +2645,9 @@ exports[`QuizTable > do not calls onHostGame when the close dialog button is cli
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -2735,10 +2691,9 @@ exports[`QuizTable > handles edge case: renders without items 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -2775,10 +2730,9 @@ exports[`QuizTable > handles edge case: renders without items 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"
@@ -2899,10 +2853,9 @@ exports[`QuizTable > renders the table with items 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -2929,10 +2882,9 @@ exports[`QuizTable > renders the table with items 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -3044,10 +2996,9 @@ exports[`QuizTable > renders the table with items 1`] = `
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-edit-quiz-button-button"
               id="edit-quiz-button"
               name="edit-quiz-button"
@@ -3074,10 +3025,9 @@ exports[`QuizTable > renders the table with items 1`] = `
             </button>
           </div>
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
           >
             <button
-              class="callToAction"
               data-testid="test-host-game-button-button"
               id="host-game-button"
               name="host-game-button"
@@ -3113,10 +3063,9 @@ exports[`QuizTable > renders the table with items 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-prev-page-button-button"
             disabled=""
             id="prev-page-button"
@@ -3153,10 +3102,9 @@ exports[`QuizTable > renders the table with items 1`] = `
         class="navigation"
       >
         <div
-          class="main"
+          class="buttonInputContainer buttonInputKindPrimary"
         >
           <button
-            class="primary"
             data-testid="test-next-page-button-button"
             id="next-page-button"
             name="next-page-button"

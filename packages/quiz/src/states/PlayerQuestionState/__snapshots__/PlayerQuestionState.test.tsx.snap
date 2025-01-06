@@ -463,9 +463,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                 class="inputGroup"
               >
                 <div
-                  class="main"
+                  class="textFieldInputContainer"
                 >
                   <input
+                    class="textfield"
                     data-testid="test-slider-input-textfield"
                     id="slider-input"
                     max="100"
@@ -476,10 +477,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   />
                 </div>
                 <div
-                  class="main"
+                  class="buttonInputContainer buttonInputKindPrimary"
                 >
                   <button
-                    class="primary"
                     data-testid="test-submit-button-button"
                     id="submit-button"
                     name="submit-button"
@@ -714,9 +714,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <form>
               <div
-                class="main"
+                class="textFieldInputContainer"
               >
                 <input
+                  class="textfield"
                   data-testid="test-answer-input-textfield"
                   id="answer-input"
                   name="answer-input"
@@ -726,10 +727,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                 />
               </div>
               <div
-                class="main"
+                class="buttonInputContainer buttonInputKindPrimary"
               >
                 <button
-                  class="primary"
                   data-testid="test-submit-button-button"
                   disabled=""
                   id="submit-button"

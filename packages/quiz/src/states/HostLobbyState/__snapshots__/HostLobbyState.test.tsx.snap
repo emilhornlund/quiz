@@ -24,10 +24,9 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-start-game-button-button"
             id="start-game-button"
             name="start-game-button"

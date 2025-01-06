@@ -1,163 +1,33 @@
-@use 'sass:color';
+@import '../../styles/inputs';
 
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+.buttonInputContainer {
+  @extend .input;
 
-$outline-offset: pxToRem(2px);
-
-.main {
-  display: flex;
-  flex-direction: column;
-  margin: $outline-offset * 2;
-
-  button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    appearance: none;
-    border: $outline-offset solid transparent;
-    font-weight: bold;
-    width: 100%;
-    height: 100%;
-    outline-width: $outline-offset;
-    outline-style: solid;
-    outline-offset: $outline-offset;
-    cursor: pointer;
-
-    @mixin apply-colors($primary, $secondary) {
-      outline-color: $primary;
-      background-color: $primary;
-      color: $secondary;
-
-      &:hover {
-        background-color: mix($white, $primary, 30%);
-        outline-color: mix($white, $primary, 30%);
-        color: mix($white, $secondary, 30%);
-      }
-
-      &:disabled {
-        background-color: mix($white, $primary, 30%);
-        outline-color: mix($white, $primary, 30%);
-        color: mix($white, $secondary, 30%);
-        cursor: default;
-      }
-    }
-
-    &.primary {
-      @include apply-colors($white, $gray-4);
-    }
-
-    &.secondary {
-      @include apply-colors($gray-1, $gray-4);
-    }
-
-    &.callToAction {
-      @include apply-colors($yellow-2, $gray-4);
-    }
-
-    &.plain {
-      @include apply-colors(transparent, $white);
-    }
-
-    &.destructive {
-      @include apply-colors($red-2, $white);
-    }
+  &.buttonInputKindPrimary {
+    @extend .input-kind-primary;
   }
 
-  @include mobile {
-    height: pxToRem(42px);
-
-    button {
-      column-gap: $layout-gutter * 0.5;
-      @include fontSize(16px);
-
-      &:not(.plain) {
-        padding: 0 $layout-gutter * 0.8;
-        border-radius: $layout-gutter * 0.5;
-      }
-    }
-
-    &.small {
-      height: pxToRem(32px);
-
-      button {
-        &:not(.plain) {
-          @include fontSize(14px);
-        }
-
-        &.plain {
-          svg {
-            @include fontSize(24px);
-          }
-        }
-      }
-    }
-  }
-  @include tablet {
-    height: pxToRem(44px);
-
-    button {
-      column-gap: $layout-gutter * 0.6;
-      @include fontSize(17px);
-
-      &:not(.plain) {
-        padding: 0 $layout-gutter * 0.9;
-        border-radius: $layout-gutter * 0.6;
-      }
-    }
-
-    &.small {
-      height: pxToRem(34px);
-
-      button {
-        &:not(.plain) {
-          @include fontSize(15px);
-        }
-
-        &.plain {
-          svg {
-            @include fontSize(25px);
-          }
-        }
-      }
-    }
+  &.buttonInputKindSecondary {
+    @extend .input-kind-secondary;
   }
 
-  @include desktop {
-    height: pxToRem(46px);
+  &.buttonInputKindCallToAction {
+    @extend .input-kind-call-to-action;
+  }
 
-    button {
-      column-gap: $layout-gutter * 0.7;
+  &.buttonInputKindSuccess {
+    @extend .input-kind-success;
+  }
 
-      &:not(.plain) {
-        border-radius: $layout-gutter * 0.7;
-        padding: 0 $layout-gutter;
+  &.buttonInputKindDestructive {
+    @extend .input-kind-destructive;
+  }
 
-        @include fontSize(18px);
-      }
+  &.buttonInputKindPlain {
+    @extend .input-kind-plain;
+  }
 
-      &.plain {
-        svg {
-          @include fontSize(28px);
-        }
-      }
-    }
-
-    &.small {
-      height: pxToRem(36px);
-
-      button {
-        &:not(.plain) {
-          @include fontSize(16px);
-        }
-
-        &.plain {
-          svg {
-            @include fontSize(26px);
-          }
-        }
-      }
-    }
+  &.buttonInputSizeSmall {
+    @extend .input-size-small;
   }
 }

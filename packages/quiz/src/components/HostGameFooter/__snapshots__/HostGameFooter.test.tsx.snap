@@ -55,10 +55,9 @@ exports[`HostGameFooter > should render HostGameFooter with default props 1`] = 
       class="actions"
     >
       <div
-        class="main small"
+        class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
       >
         <button
-          class="plain"
           data-testid="test-settings-icon-button-button"
           id="settings-icon-button"
           name="settings-icon-button"

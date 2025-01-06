@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import Button from './Button.tsx'
 
 const meta = {
+  title: 'Inputs/Button',
   component: Button,
   tags: ['autodocs'],
 } satisfies Meta<typeof Button>
@@ -38,12 +39,30 @@ export const CallToAction = {
   },
 } satisfies Story
 
+export const Success = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'success',
+    value: 'Success Button',
+  },
+} satisfies Story
+
 export const Destructive = {
   args: {
     id: 'my-button',
     type: 'button',
     kind: 'destructive',
-    value: 'Destructive',
+    value: 'Destructive Button',
+  },
+} satisfies Story
+
+export const Plain = {
+  args: {
+    id: 'my-plain-button',
+    type: 'button',
+    kind: 'plain',
+    value: 'Plain Button',
   },
 } satisfies Story
 
@@ -73,7 +92,17 @@ export const CallToActionSmall = {
     type: 'button',
     kind: 'call-to-action',
     size: 'small',
-    value: 'Call To Action Button',
+    value: 'Call To Action Small Button',
+  },
+} satisfies Story
+
+export const SuccessSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'success',
+    size: 'small',
+    value: 'Success Small Button',
   },
 } satisfies Story
 
@@ -83,7 +112,17 @@ export const DestructiveSmall = {
     type: 'button',
     kind: 'destructive',
     size: 'small',
-    value: 'Destructive',
+    value: 'Destructive Small Button',
+  },
+} satisfies Story
+
+export const PlainSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'plain',
+    size: 'small',
+    value: 'Plain Small Button',
   },
 } satisfies Story
 
@@ -112,7 +151,17 @@ export const CallToActionDisabled = {
     id: 'my-button',
     type: 'button',
     kind: 'call-to-action',
-    value: 'Call To Action Button',
+    value: 'Call To Action Disabled Button',
+    disabled: true,
+  },
+} satisfies Story
+
+export const SuccessDisabled = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'success',
+    value: 'Success Disabled Button',
     disabled: true,
   },
 } satisfies Story
@@ -122,29 +171,73 @@ export const DestructiveDisabled = {
     id: 'my-button',
     type: 'button',
     kind: 'destructive',
-    value: 'Destructive',
+    value: 'Destructive Disabled Button',
     disabled: true,
   },
 } satisfies Story
 
-export const ArrowIconLeft = {
+export const PrimaryIcon = {
   args: {
     id: 'my-button',
     type: 'button',
     kind: 'primary',
-    value: 'Arrow Left Button',
+    value: 'Primary Button',
     icon: faArrowLeft,
     iconPosition: 'leading',
   },
 } satisfies Story
 
-export const ArrowIconRight = {
+export const SecondaryIcon = {
   args: {
     id: 'my-button',
     type: 'button',
-    kind: 'primary',
-    value: 'Arrow Right Button',
-    icon: faArrowRight,
-    iconPosition: 'trailing',
+    kind: 'secondary',
+    value: 'Secondary Button',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
+  },
+} satisfies Story
+
+export const CallToActionIcon = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    value: 'CallToAction Button',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
+  },
+} satisfies Story
+
+export const SuccessIcon = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'success',
+    value: 'Success Button',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
+  },
+} satisfies Story
+
+export const DestructiveIcon = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'destructive',
+    value: 'Destructive Icon',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
+  },
+} satisfies Story
+
+export const PlainIcon = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'plain',
+    value: 'Plain Icon',
+    icon: faArrowLeft,
+    iconPosition: 'leading',
   },
 } satisfies Story

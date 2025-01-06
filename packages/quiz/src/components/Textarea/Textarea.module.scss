@@ -1,55 +1,9 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@import '../../styles/inputs';
 
 $outline-offset: pxToRem(2px);
 
-.container {
-  display: flex;
-  flex-direction: column;
-  margin: $outline-offset * 2;
-  flex: 1;
-
-  textarea {
-    display: flex;
-    flex-direction: column;
-    appearance: none;
-    outline: $white solid $outline-offset;
-    outline-offset: $outline-offset;
-    border: none;
-    width: 100%;
-    height: 100%;
-    resize: none;
-    background-color: $white;
-    color: $gray-4;
-    font-family: inherit;
-
-    &:disabled {
-      background-color: $gray-1;
-      outline-color: $gray-1;
-      color: $gray-2;
-    }
-
-    @include mobile {
-      padding: $layout-gutter * 0.8;
-      border-radius: $layout-gutter * 0.5;
-
-      @include fontSize(16px);
-    }
-
-    @include tablet {
-      padding: $layout-gutter * 0.9;
-      border-radius: $layout-gutter * 0.6;
-
-      @include fontSize(17px);
-    }
-
-    @include desktop {
-      padding: $layout-gutter;
-      border-radius: $layout-gutter * 0.7;
-
-      @include fontSize(18px);
-    }
-  }
+.textareaInputContainer {
+  @extend .input;
 
   &.code {
     textarea {
@@ -58,8 +12,6 @@ $outline-offset: pxToRem(2px);
   }
 
   &.error {
-    textarea {
-      outline-color: $red-2;
-    }
+    @extend .input-kind-destructive;
   }
 }

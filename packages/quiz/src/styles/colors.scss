@@ -36,3 +36,24 @@ $black-1-10: rgba(0, 0, 0, 0.1);
 $gold: #FFC727;
 $silver: #DFDFDF;
 $bronze: #FFA750;
+
+/* Primary control colors */
+$control-primary-normal-color: $white;
+$control-primary-success-color: $green-2;
+$control-primary-call-to-action-color: $yellow-2;
+$control-primary-danger-color: $red-2;
+
+/* Secondary control colors */
+$control-secondary-normal-color: $gray-1;
+$control-secondary-success-color: $green-1;
+$control-secondary-danger-color: $red-1;
+
+/* Text control colors*/
+$control-text-normal-color: $gray-4;
+$control-text-contrast-color: $white;
+$control-text-success-color: $green-2;
+$control-text-danger-color: $red-2;
+
+/* Disabled control colors */
+$control-primary-disabled-color: $gray-1;
+$control-text-disabled-color: $gray-2;

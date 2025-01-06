@@ -24,10 +24,9 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -160,10 +159,9 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"
@@ -217,10 +215,9 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -369,10 +366,9 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"
@@ -426,10 +422,9 @@ exports[`HostResultState > should render HostResultState with question type mult
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -546,10 +541,9 @@ exports[`HostResultState > should render HostResultState with question type mult
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"
@@ -603,10 +597,9 @@ exports[`HostResultState > should render HostResultState with question type rang
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -779,10 +772,9 @@ exports[`HostResultState > should render HostResultState with question type rang
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"
@@ -836,10 +828,9 @@ exports[`HostResultState > should render HostResultState with question type true
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -956,10 +947,9 @@ exports[`HostResultState > should render HostResultState with question type true
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"
@@ -1013,10 +1003,9 @@ exports[`HostResultState > should render HostResultState with question type type
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-next-button-button"
             id="next-button"
             name="next-button"
@@ -1149,10 +1138,9 @@ exports[`HostResultState > should render HostResultState with question type type
           class="actions"
         >
           <div
-            class="main small"
+            class="buttonInputContainer buttonInputKindPlain buttonInputSizeSmall"
           >
             <button
-              class="plain"
               data-testid="test-settings-icon-button-button"
               id="settings-icon-button"
               name="settings-icon-button"

@@ -58,7 +58,7 @@ const Textarea: FC<TextareaProps> = ({
   return (
     <div
       className={classNames(
-        styles.container,
+        styles.textareaInputContainer,
         !valid && hasFocus ? styles.error : undefined,
         type === 'code' ? styles.code : undefined,
       )}>

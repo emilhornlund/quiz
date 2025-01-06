@@ -21,7 +21,7 @@ const Select: FC<SelectProps> = ({
   disabled = false,
   onChange,
 }) => (
-  <div className={styles.select}>
+  <div className={styles.selectInputContainer}>
     <select
       id={id}
       name={name}
@@ -35,7 +35,11 @@ const Select: FC<SelectProps> = ({
         </option>
       ))}
     </select>
-    <FontAwesomeIcon icon={faChevronDown} color="black" />
+    <FontAwesomeIcon
+      icon={faChevronDown}
+      color="black"
+      className={styles.selectIcon}
+    />
   </div>
 )
 

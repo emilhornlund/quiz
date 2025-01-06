@@ -11,7 +11,13 @@ export interface ButtonProps {
   id: string
   name?: string
   type: 'submit' | 'reset' | 'button'
-  kind?: 'primary' | 'secondary' | 'call-to-action' | 'plain' | 'destructive'
+  kind?:
+    | 'primary'
+    | 'secondary'
+    | 'call-to-action'
+    | 'success'
+    | 'destructive'
+    | 'plain'
   size?: 'normal' | 'small'
   value?: React.ReactNode | string | undefined
   hideValue?: 'mobile' | 'never'
@@ -49,8 +55,16 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <div
       className={classNames(
-        styles.main,
-        size === 'small' ? styles.small : undefined,
+        styles.buttonInputContainer,
+        kind === 'primary' ? styles.buttonInputKindPrimary : undefined,
+        kind === 'secondary' ? styles.buttonInputKindSecondary : undefined,
+        kind === 'call-to-action'
+          ? styles.buttonInputKindCallToAction
+          : undefined,
+        kind === 'success' ? styles.buttonInputKindSuccess : undefined,
+        kind === 'destructive' ? styles.buttonInputKindDestructive : undefined,
+        kind === 'plain' ? styles.buttonInputKindPlain : undefined,
+        size === 'small' ? styles.buttonInputSizeSmall : undefined,
       )}>
       <button
         id={id}
@@ -58,13 +72,6 @@ const Button: React.FC<ButtonProps> = ({
         type={type}
         disabled={disabled}
         onClick={onClick}
-        className={classNames(
-          kind === 'primary' ? styles.primary : undefined,
-          kind === 'secondary' ? styles.secondary : undefined,
-          kind === 'call-to-action' ? styles.callToAction : undefined,
-          kind === 'plain' ? styles.plain : undefined,
-          kind === 'destructive' ? styles.destructive : undefined,
-        )}
         data-testid={`test-${id}-button`}>
         {icon && iconPosition === 'leading' && (
           <FontAwesomeIcon icon={icon} color={iconColor} />

@@ -24,10 +24,9 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-skip-button-button"
             id="skip-button"
             name="skip-button"
@@ -407,10 +406,9 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            class="callToAction"
             data-testid="test-skip-button-button"
             id="skip-button"
             name="skip-button"

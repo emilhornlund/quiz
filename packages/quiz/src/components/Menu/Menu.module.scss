@@ -8,7 +8,7 @@
   background-color: $white;
   border: none;
   color: black;
-  z-index: 999;
+  z-index: $menu-z-index;
   transform: translateX(-100%);
   row-gap: pxToRem(8px);
   padding: pxToRem(8px) 0;

@@ -177,13 +177,13 @@
           padding: 0;
 
           img {
-            @include iconSize();
-
             @include recolor($white);
 
             &:hover {
               @include recolor($white, 0.8);
             }
+
+            @include iconSize();
           }
         }
       }

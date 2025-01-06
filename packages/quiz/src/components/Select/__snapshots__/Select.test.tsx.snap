@@ -3,7 +3,7 @@
 exports[`Select > should fire Select when Select option 1`] = `
 <div>
   <div
-    class="select"
+    class="selectInputContainer"
   >
     <select
       data-testid="test-my-select-select"
@@ -28,7 +28,7 @@ exports[`Select > should fire Select when Select option 1`] = `
     </select>
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-chevron-down "
+      class="svg-inline--fa fa-chevron-down selectIcon"
       color="black"
       data-icon="chevron-down"
       data-prefix="fas"
@@ -49,7 +49,7 @@ exports[`Select > should fire Select when Select option 1`] = `
 exports[`Select > should render a Select with default props 1`] = `
 <div>
   <div
-    class="select"
+    class="selectInputContainer"
   >
     <select
       data-testid="test-my-select-select"
@@ -58,7 +58,7 @@ exports[`Select > should render a Select with default props 1`] = `
     />
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-chevron-down "
+      class="svg-inline--fa fa-chevron-down selectIcon"
       color="black"
       data-icon="chevron-down"
       data-prefix="fas"
@@ -79,7 +79,7 @@ exports[`Select > should render a Select with default props 1`] = `
 exports[`Select > should render a Select with disabled props 1`] = `
 <div>
   <div
-    class="select"
+    class="selectInputContainer"
   >
     <select
       data-testid="test-my-select-select"
@@ -89,7 +89,7 @@ exports[`Select > should render a Select with disabled props 1`] = `
     />
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-chevron-down "
+      class="svg-inline--fa fa-chevron-down selectIcon"
       color="black"
       data-icon="chevron-down"
       data-prefix="fas"

@@ -1,79 +1,36 @@
-@use 'sass:math';
+@import '../../styles/inputs';
 
-@import '../../styles/colors';
-@import '../../styles/helpers';
+$mobile-select-normal-size: calc($mobile-control-normal-height * 0.4);
+$tablet-select-normal-size: calc($tablet-control-normal-height * 0.4);
+$desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
 
-$outline-offset: pxToRem(2px);
+.selectInputContainer {
+  @extend .input;
 
-.select {
-  display: flex;
-  flex-direction: column;
-  margin: $outline-offset * 2;
-  position: relative;
-
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    height: 100%;
-    outline-offset: $outline-offset;
-    border: none;
-    outline: $outline-offset solid $white;
-    background-color: $white;
-    color: $gray-4;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-
-    @include mobile {
-      height: pxToRem(42px);
-      padding: 0 $layout-gutter * 0.8;
-      border-radius: $layout-gutter * 0.5;
-
-      @include fontSize(16px);
-    }
-
-    @include tablet {
-      height: pxToRem(44px);
-      padding: 0 $layout-gutter * 0.9;
-      border-radius: $layout-gutter * 0.6;
-
-      @include fontSize(17px);
-    }
-
-    @include desktop {
-      height: pxToRem(46px);
-      padding: 0 $layout-gutter;
-      border-radius: $layout-gutter * 0.7;
-
-      @include fontSize(18px);
-    }
-
-    &:disabled {
-      background-color: $gray-1;
-      outline-color: $gray-1;
-      color: $gray-2;
-    }
-  }
-
-  svg {
+  .selectIcon {
     position: absolute;
+    color: $control-text-normal-color;
 
     @include mobile {
-      top: calc(50% - #{math.div(pxToRem(16px), 2)});
-      right: $layout-gutter * 0.8;
+      width: $mobile-select-normal-size;
+      height: $mobile-select-normal-size;
     }
 
     @include tablet {
-      top: calc(50% - #{math.div(pxToRem(17px), 2)});
-      right: $layout-gutter * 0.9;
+      width: $tablet-select-normal-size;
+      height: $tablet-select-normal-size;
     }
 
     @include desktop {
-      top: calc(50% - #{math.div(pxToRem(18px), 2)});
-      right: $layout-gutter;
+      width: $desktop-select-normal-size;
+      height: $desktop-select-normal-size;
+      right: $desktop-control-normal-layout-gutter;
     }
   }
 
+  &:has(> select:disabled) {
+    .selectIcon {
+      color: $control-text-disabled-color;
+    }
+  }
 }

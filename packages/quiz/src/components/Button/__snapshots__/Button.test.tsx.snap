@@ -3,10 +3,9 @@
 exports[`Button > should receive onClick event when button is clicked 1`] = `
 <div>
   <div
-    class="main"
+    class="buttonInputContainer buttonInputKindPrimary"
   >
     <button
-      class="primary"
       data-testid="test-my-button-button"
       id="my-button"
       name="my-button"
@@ -23,10 +22,9 @@ exports[`Button > should receive onClick event when button is clicked 1`] = `
 exports[`Button > should render a Button with default props 1`] = `
 <div>
   <div
-    class="main"
+    class="buttonInputContainer buttonInputKindPrimary"
   >
     <button
-      class="primary"
       data-testid="test-my-button-button"
       id="my-button"
       name="my-button"

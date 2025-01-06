@@ -89,7 +89,7 @@ const TextField: React.FC<TextFieldProps> = ({
   return (
     <div
       className={classNames(
-        styles.main,
+        styles.textFieldInputContainer,
         size === 'small' ? styles.small : undefined,
         disabled ? styles.disabled : undefined,
         !valid && hasFocus ? styles.error : undefined,

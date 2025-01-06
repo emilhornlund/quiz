@@ -3,7 +3,7 @@
 exports[`TextField > should not receive onChange event when not a number changes 1`] = `
 <div>
   <div
-    class="main error"
+    class="textFieldInputContainer error"
   >
     <input
       class="textfield"
@@ -22,7 +22,7 @@ exports[`TextField > should not receive onChange event when not a number changes
 exports[`TextField > should not receive onChange event when number above max changes 1`] = `
 <div>
   <div
-    class="main error"
+    class="textFieldInputContainer error"
   >
     <input
       class="textfield"
@@ -41,7 +41,7 @@ exports[`TextField > should not receive onChange event when number above max cha
 exports[`TextField > should not receive onChange event when number bellow min changes 1`] = `
 <div>
   <div
-    class="main error"
+    class="textFieldInputContainer error"
   >
     <input
       class="textfield"
@@ -60,7 +60,7 @@ exports[`TextField > should not receive onChange event when number bellow min ch
 exports[`TextField > should receive onChange event when number changes 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"
@@ -77,7 +77,7 @@ exports[`TextField > should receive onChange event when number changes 1`] = `
 exports[`TextField > should receive onChange event when number equal max changes 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"
@@ -95,7 +95,7 @@ exports[`TextField > should receive onChange event when number equal max changes
 exports[`TextField > should receive onChange event when number equal min changes 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"
@@ -113,7 +113,7 @@ exports[`TextField > should receive onChange event when number equal min changes
 exports[`TextField > should receive onChange event when text changes 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"
@@ -130,7 +130,7 @@ exports[`TextField > should receive onChange event when text changes 1`] = `
 exports[`TextField > should render a TextField with type number 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"
@@ -147,7 +147,7 @@ exports[`TextField > should render a TextField with type number 1`] = `
 exports[`TextField > should render a TextField with type text 1`] = `
 <div>
   <div
-    class="main"
+    class="textFieldInputContainer"
   >
     <input
       class="textfield"

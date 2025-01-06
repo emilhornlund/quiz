@@ -24,10 +24,9 @@ exports[`ErrorPage > should match snapshot 1`] = `
         class="side"
       >
         <div
-          class="main small"
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
           <button
-            class="primary"
             data-testid="test-go-back-button"
             id="go-back"
             name="go-back"
