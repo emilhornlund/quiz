@@ -3,9 +3,14 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
+import {
+  isCallbackValid,
+  isValidNumber,
+  isValidString,
+} from '../../utils/validation.ts'
 
 import styles from './TextField.module.scss'
 
@@ -25,8 +30,10 @@ export interface TextFieldProps {
   required?: boolean | string
   disabled?: boolean
   readOnly?: boolean
+  forceValidate?: boolean
   onChange?: (value?: string | number) => void
   onValid?: (valid: boolean) => void
+  onAdditionalValidation?: (value: string | number) => boolean | string
   onCheck?: (checked: boolean) => void
 }
 
@@ -46,90 +53,81 @@ const TextField: React.FC<TextFieldProps> = ({
   required,
   disabled,
   readOnly,
+  forceValidate = false,
   onChange,
   onValid,
+  onAdditionalValidation,
   onCheck,
 }) => {
-  const [internalValue, setInternalValue] = useState<string | number>(
-    value ?? '',
-  )
+  const [internalValue, setInternalValue] = useState<string | number>()
 
   useEffect(() => {
     setInternalValue(value ?? '')
   }, [value])
 
-  const [valid, setValid] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>()
   const [hasFocus, setHasFocus] = useState<boolean>(false)
   const [lostFocus, setLostFocus] = useState<boolean>(false)
 
-  useEffect(() => {
+  const [valid, errorMessage] = useMemo<[boolean, string | undefined]>(() => {
     let tmpValid = true
     let tmpErrorMessage: string | undefined
-    if (type === 'number') {
-      if (typeof internalValue !== 'number' || Number.isNaN(internalValue)) {
-        tmpValid = false
-        tmpErrorMessage = 'Is not a valid number'
-      } else if (min !== undefined && internalValue < min) {
-        tmpValid = false
-        tmpErrorMessage = 'Cannot be less than ' + min
-      } else if (max !== undefined && internalValue > max) {
-        tmpValid = false
-        tmpErrorMessage = 'Cannot be greater than ' + max
-      }
-    } else if (type === 'text') {
-      if (typeof internalValue !== 'string') {
-        tmpValid = false
-      } else if (required && !internalValue) {
-        tmpValid = false
-        tmpErrorMessage =
-          typeof required === 'string' ? required : 'This field is required'
-      } else if (
-        internalValue &&
-        minLength &&
-        internalValue.length < minLength
-      ) {
-        tmpValid = false
-        tmpErrorMessage = 'Minimum length must be greater than ' + minLength
-      } else if (
-        internalValue &&
-        maxLength &&
-        internalValue.length > maxLength
-      ) {
-        tmpValid = false
-        tmpErrorMessage = 'Maximum length must be less than ' + maxLength
-      } else if (
-        internalValue &&
-        regex &&
-        !(regex instanceof RegExp ? regex : regex.value).test(internalValue)
-      ) {
-        tmpValid = false
-        tmpErrorMessage =
-          regex instanceof RegExp
-            ? "Can't contain illegal character"
-            : regex.message
-      }
+
+    if (type === 'text') {
+      ;[tmpValid, tmpErrorMessage] = isValidString({
+        value: internalValue as string,
+        disabled,
+        required,
+        minLength,
+        maxLength,
+        regex,
+      })
     }
-    onValid?.(tmpValid)
-    setValid(tmpValid)
-    setErrorMessage(tmpErrorMessage)
+
+    if (type === 'number') {
+      ;[tmpValid, tmpErrorMessage] = isValidNumber({
+        value: internalValue as number,
+        disabled,
+        required,
+        min,
+        max,
+      })
+    }
+
+    if (tmpValid) {
+      ;[tmpValid, tmpErrorMessage] = isCallbackValid(
+        internalValue,
+        onAdditionalValidation,
+      )
+    }
+
+    return [tmpValid, tmpErrorMessage]
   }, [
-    internalValue,
     type,
+    internalValue,
+    disabled,
+    required,
     min,
     max,
     minLength,
     maxLength,
     regex,
-    required,
-    onValid,
+    onAdditionalValidation,
   ])
 
+  useEffect(() => {
+    onValid?.(valid)
+  }, [valid, onValid])
+
+  const showError = useMemo(
+    () => !valid && (lostFocus || hasFocus || forceValidate),
+    [valid, lostFocus, hasFocus, forceValidate],
+  )
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let newValue: string | number = event.target.value
+    let newValue: string | number | undefined = event.target.value
     if (type === 'number') {
       const parsedValue = parseInt(newValue, 10)
-      newValue = isNaN(parsedValue) ? '' : parsedValue
+      newValue = isNaN(parsedValue) ? undefined : parsedValue
     }
     setInternalValue(newValue)
     onChange?.(newValue)
@@ -142,13 +140,13 @@ const TextField: React.FC<TextFieldProps> = ({
           styles.textFieldInputContainer,
           size === 'small' ? styles.small : undefined,
           disabled ? styles.disabled : undefined,
-          !valid && (lostFocus || hasFocus) ? styles.error : undefined,
+          showError ? styles.error : undefined,
         )}>
         <input
           id={id}
           name={name ?? id}
           type={type}
-          value={internalValue}
+          value={internalValue ?? ''}
           min={min}
           max={max}
           minLength={minLength}
@@ -183,7 +181,7 @@ const TextField: React.FC<TextFieldProps> = ({
           </label>
         )}
       </div>
-      {!valid && (lostFocus || hasFocus) && (
+      {showError && (
         <div className={styles.errorContainer}>
           <FontAwesomeIcon icon={faTriangleExclamation} />{' '}
           {errorMessage ?? 'Unknown error'}

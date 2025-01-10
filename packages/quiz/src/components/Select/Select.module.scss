@@ -4,33 +4,46 @@ $mobile-select-normal-size: calc($mobile-control-normal-height * 0.4);
 $tablet-select-normal-size: calc($tablet-control-normal-height * 0.4);
 $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
 
-.selectInputContainer {
-  @extend .input;
+.inputContainer {
+  display: flex;
+  flex-direction: column;
 
-  .selectIcon {
-    position: absolute;
-    color: $control-text-normal-color;
+  .selectInputContainer {
+    @extend .input;
 
-    @include mobile {
-      width: $mobile-select-normal-size;
-      height: $mobile-select-normal-size;
+    .selectIcon {
+      position: absolute;
+      color: $control-text-normal-color;
+
+      @include mobile {
+        width: $mobile-select-normal-size;
+        height: $mobile-select-normal-size;
+      }
+
+      @include tablet {
+        width: $tablet-select-normal-size;
+        height: $tablet-select-normal-size;
+      }
+
+      @include desktop {
+        width: $desktop-select-normal-size;
+        height: $desktop-select-normal-size;
+        right: $desktop-control-normal-layout-gutter;
+      }
     }
 
-    @include tablet {
-      width: $tablet-select-normal-size;
-      height: $tablet-select-normal-size;
-    }
-
-    @include desktop {
-      width: $desktop-select-normal-size;
-      height: $desktop-select-normal-size;
-      right: $desktop-control-normal-layout-gutter;
+    &:has(> select:disabled) {
+      .selectIcon {
+        color: $control-text-disabled-color;
+      }
     }
   }
 
-  &:has(> select:disabled) {
-    .selectIcon {
-      color: $control-text-disabled-color;
-    }
+  .errorContainer {
+    @extend .input-error;
+  }
+
+  @include desktop {
+    row-gap: $desktop-control-normal-layout-gutter;
   }
 }

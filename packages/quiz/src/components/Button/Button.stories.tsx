@@ -1,4 +1,4 @@
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import Button from './Button.tsx'

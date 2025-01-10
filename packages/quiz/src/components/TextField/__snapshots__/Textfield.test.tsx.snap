@@ -38,7 +38,7 @@ exports[`TextField > should not receive onChange event when not a number changes
         />
       </svg>
        
-      Is not a valid number
+      Must be a valid number
     </div>
   </div>
 </div>

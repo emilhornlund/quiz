@@ -2,16 +2,30 @@
 
 $outline-offset: pxToRem(2px);
 
-.textareaInputContainer {
-  @extend .input;
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
-  &.code {
-    textarea {
-      font-family: monospace, monospace;
+  .textareaInputContainer {
+    @extend .input;
+
+    &.code {
+      textarea {
+        font-family: monospace, monospace;
+      }
+    }
+
+    &.error {
+      @extend .input-kind-destructive;
     }
   }
 
-  &.error {
-    @extend .input-kind-destructive;
+  .errorContainer {
+    @extend .input-error;
+  }
+
+  @include desktop {
+    row-gap: $desktop-control-normal-layout-gutter;
   }
 }
