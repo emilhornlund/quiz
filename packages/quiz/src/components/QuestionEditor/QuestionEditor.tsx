@@ -114,8 +114,9 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
         placeholder="Questions"
         value={questionsJson}
         onChange={handleChangeJSON}
+        onAdditionalValidation={() => jsonError || true}
+        forceValidate
       />
-      {jsonError && <div className={styles.error}>{jsonError}</div>}
     </div>
   )
 }

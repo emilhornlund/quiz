@@ -16,5 +16,28 @@ export const QUESTION_TYPE_ANSWER_REGEX = /^[a-zA-Z0-9_ ]{1,75}$/
 export const URL_REGEX =
   /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/
 
+/* Quiz Question General */
+export const QUIZ_QUESTION_MIN = 1
+export const QUIZ_QUESTION_MAX = 50
+
+/* Quiz Question Text */
+export const QUIZ_QUESTION_TEXT_MIN_LENGTH = 3
+export const QUIZ_QUESTION_TEXT_MAX_LENGTH = 120
+export const QUIZ_QUESTION_TEXT_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{3,120}$/u
+
+/* Quiz Question Multi Choice Options */
+export const QUIZ_MULTI_CHOICE_OPTIONS_MIN = 2
+export const QUIZ_MULTI_CHOICE_OPTIONS_MAX = 6
+export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MIN_LENGTH = 1
+export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MAX_LENGTH = 75
+export const QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX =
+  /^[\p{L}\p{N}\p{P}\p{Zs}]{1,75}$/u
+
+/* Quiz Question Type Answer Options */
+export const QUIZ_TYPE_ANSWER_OPTIONS_MIN = 1
+export const QUIZ_TYPE_ANSWER_OPTIONS_MAX = 4
+export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN = 1
+export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX = 20
+
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/

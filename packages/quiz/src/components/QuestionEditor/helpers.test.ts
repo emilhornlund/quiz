@@ -43,7 +43,7 @@ describe('parseQuestionsJson', () => {
         },
       ]
       expect(() => parseQuestionsJson(parsedJson, GameMode.Classic)).toThrow(
-        "Invalid value for field 'points'. Value did not pass custom validation.",
+        "Invalid value for field '[0].points'. Expected 0, 1000 or 2000.",
       )
     })
 
@@ -65,7 +65,7 @@ describe('parseQuestionsJson', () => {
         },
       ]
       expect(() => parseQuestionsJson(parsedJson, GameMode.Classic)).toThrow(
-        "Invalid value for field 'duration'. Value did not pass custom validation.",
+        "Invalid value for field '[0].duration'. Expected 5, 30, 60 or 120.",
       )
     })
 
@@ -161,7 +161,7 @@ describe('parseQuestionsJson', () => {
       expect(() =>
         parseQuestionsJson(parsedJson, GameMode.ZeroToOneHundred),
       ).toThrow(
-        "Invalid value for field 'duration'. Value did not pass custom validation.",
+        "Invalid value for field '[0].duration'. Expected 5, 30, 60 or 120.",
       )
     })
   })

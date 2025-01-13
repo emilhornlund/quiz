@@ -18,11 +18,13 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
       @include mobile {
         width: $mobile-select-normal-size;
         height: $mobile-select-normal-size;
+        right: $mobile-control-normal-layout-gutter;
       }
 
       @include tablet {
         width: $tablet-select-normal-size;
         height: $tablet-select-normal-size;
+        right: $tablet-control-normal-layout-gutter;
       }
 
       @include desktop {

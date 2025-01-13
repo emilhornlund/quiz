@@ -1,7 +1,10 @@
 import {
   GameMode,
   LanguageCode,
+  QUIZ_DESCRIPTION_MAX_LENGTH,
   QUIZ_DESCRIPTION_REGEX,
+  QUIZ_TITLE_MAX_LENGTH,
+  QUIZ_TITLE_MIN_LENGTH,
   QUIZ_TITLE_REGEX,
   QuizRequestDto,
   QuizVisibility,
@@ -112,20 +115,25 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
             type="text"
             placeholder="Title"
             value={quiz.title}
+            minLength={QUIZ_TITLE_MIN_LENGTH}
+            maxLength={QUIZ_TITLE_MAX_LENGTH}
             regex={QUIZ_TITLE_REGEX}
             onChange={(value) => handleValueChange('title', value as string)}
             onValid={(valid) => handleValidChange('title', valid)}
             required
+            forceValidate
           />
           <Textarea
             id="quiz-description-textarea"
             placeholder="Description"
             value={quiz.description}
+            maxLength={QUIZ_DESCRIPTION_MAX_LENGTH}
             regex={QUIZ_DESCRIPTION_REGEX}
             onChange={(value) =>
               handleValueChange('description', value as string)
             }
             onValid={(valid) => handleValidChange('description', valid)}
+            forceValidate
           />
         </div>
         <div className={styles.column}>
@@ -138,6 +146,8 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
             }))}
             value={quiz.mode}
             onChange={(value) => handleValueChange('mode', value as GameMode)}
+            required
+            forceValidate
           />
           <Select
             id="quiz-visibility-select"
@@ -150,6 +160,8 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
             onChange={(value) =>
               handleValueChange('visibility', value as QuizVisibility)
             }
+            required
+            forceValidate
           />
           <TextField
             id="quiz-image-cover-textfield"
@@ -161,6 +173,7 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
               handleValueChange('imageCoverURL', value as string)
             }
             onValid={(valid) => handleValidChange('imageCoverURL', valid)}
+            forceValidate
           />
           <Select
             id="quiz-language-select"
@@ -173,6 +186,8 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
             onChange={(value) =>
               handleValueChange('languageCode', value as LanguageCode)
             }
+            required
+            forceValidate
           />
         </div>
       </div>
