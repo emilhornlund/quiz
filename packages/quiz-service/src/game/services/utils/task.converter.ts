@@ -23,12 +23,13 @@ import {
   LeaderboardTask,
   LeaderboardTaskItem,
   LobbyTask,
-  Participant,
+  ParticipantBase,
   ParticipantPlayer,
   PodiumTask,
   QuestionResultTask,
   QuestionResultTaskItem,
   QuestionTask,
+  QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
   QuestionTaskRangeAnswer,
@@ -371,6 +372,7 @@ export function calculateZeroToOneHundredModeScore(
  * Constructs a new question result task based on the provided game document.
  *
  * @param {GameDocument} gameDocument - The current game document.
+ * @param {QuestionTaskAnswer[]} answers - The list of answers submitted for the question task.
  *
  * @throws {IllegalTaskTypeException} If the current task type is not a question.
  *
@@ -378,6 +380,7 @@ export function calculateZeroToOneHundredModeScore(
  */
 export function buildQuestionResultTask(
   gameDocument: GameDocument,
+  answers: QuestionTaskAnswer[],
 ): BaseTask & QuestionResultTask {
   if (!isQuestionTask(gameDocument)) {
     throw new IllegalTaskTypeException(
@@ -395,9 +398,7 @@ export function buildQuestionResultTask(
     .map((participant) => {
       const player = participant.client.player
 
-      const answer = gameDocument.currentTask.answers.find(
-        ({ playerId }) => playerId === player._id,
-      )
+      const answer = answers.find(({ playerId }) => playerId === player._id)
 
       const correct = isQuestionAnswerCorrect(question, answer)
 
@@ -472,14 +473,14 @@ function compareSortClassicModeQuestionResultTaskItemByScore(
 /**
  * Compares two players by their total scores in Classic mode.
  *
- * @param {Participant & ParticipantPlayer} lhs - The first player participant to compare.
- * @param {Participant & ParticipantPlayer} rhs - The second player participant to compare.
+ * @param {ParticipantBase & ParticipantPlayer} lhs - The first player participant to compare.
+ * @param {ParticipantBase & ParticipantPlayer} rhs - The second player participant to compare.
  *
  * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
  */
 function compareSortClassicModePlayersByScore(
-  lhs: Participant & ParticipantPlayer,
-  rhs: Participant & ParticipantPlayer,
+  lhs: ParticipantBase & ParticipantPlayer,
+  rhs: ParticipantBase & ParticipantPlayer,
 ): number {
   return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
 }
@@ -505,8 +506,8 @@ function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
 /**
  * Compares two players by their total scores in ZeroToOneHundred mode.
  *
- * @param {Participant & ParticipantPlayer} lhs - The first player participant to compare.
- * @param {Participant & ParticipantPlayer} rhs - The second player participant to compare.
+ * @param {ParticipantBase & ParticipantPlayer} lhs - The first player participant to compare.
+ * @param {ParticipantBase & ParticipantPlayer} rhs - The second player participant to compare.
  *
  * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
  *
@@ -514,8 +515,8 @@ function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
  * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
  */
 function compareZeroToOneHundredModePlayersByScore(
-  lhs: Participant & ParticipantPlayer,
-  rhs: Participant & ParticipantPlayer,
+  lhs: ParticipantBase & ParticipantPlayer,
+  rhs: ParticipantBase & ParticipantPlayer,
 ): number {
   return compareSortClassicModePlayersByScore(lhs, rhs) * -1 //sort scores from lowest to highest
 }

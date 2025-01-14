@@ -137,11 +137,12 @@ export class GameRepository {
   @MurLock(5000, 'game', 'gameID')
   public async findAndSaveWithLock(
     gameID: string,
-    callback: (gameDocument: GameDocument) => GameDocument,
+    callback: (gameDocument: GameDocument) => Promise<GameDocument>,
   ): Promise<GameDocument> {
     const gameDocument = await this.findGameByIDOrThrow(gameID)
 
-    const savedGameDocument = await callback(gameDocument).save()
+    const updatedGameDocument = await callback(gameDocument)
+    const savedGameDocument = await updatedGameDocument.save()
 
     await this.gameEventPublisher.publish(savedGameDocument)
 

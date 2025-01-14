@@ -4,8 +4,14 @@ import { GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { DistributedEvent } from './models/event'
-import { GameDocument } from './models/schemas'
-import { buildHostGameEvent, buildPlayerGameEvent } from './utils'
+import { GameDocument, TaskType } from './models/schemas'
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  getRedisPlayerParticipantAnswerKey,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 
@@ -32,14 +38,29 @@ export class GameEventPublisher {
    * @returns {Promise<void>} A promise that resolves once the events are published.
    */
   public async publish(document: GameDocument): Promise<void> {
+    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
+      await this.redis.lrange(
+        getRedisPlayerParticipantAnswerKey(document._id),
+        0,
+        -1,
+      ),
+      {},
+      document.participants,
+    )
+
     await Promise.all(
       document.participants.map((participant) =>
         this.publishDistributedEvent({
           clientId: participant.client.player._id,
           event:
             participant.type === GameParticipantType.HOST
-              ? buildHostGameEvent(document)
-              : buildPlayerGameEvent(document, participant),
+              ? buildHostGameEvent(document, metaData)
+              : buildPlayerGameEvent(document, participant, {
+                  ...metaData,
+                  ...(document.currentTask.type === TaskType.Question
+                    ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                    : {}),
+                }),
         } as DistributedEvent),
       ),
     )

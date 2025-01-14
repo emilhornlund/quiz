@@ -1,6 +1,13 @@
-import { QuestionType, SubmitQuestionAnswerRequestDto } from '@quiz/common'
+import {
+  GameParticipantType,
+  QuestionType,
+  SubmitQuestionAnswerRequestDto,
+} from '@quiz/common'
 
 import {
+  Participant,
+  ParticipantBase,
+  ParticipantPlayer,
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
@@ -8,6 +15,8 @@ import {
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
 } from '../models/schemas'
+
+import { GameEventMetaData } from './game-event.converter'
 
 type Answer = QuestionTaskBaseAnswer &
   (
@@ -119,5 +128,88 @@ export function toQuestionTaskAnswer(
     playerId,
     answer,
     created: new Date(),
+  }
+}
+
+/**
+ * Deserializes a string to create a `QuestionTaskAnswer` object.
+ *
+ * @param {string} serializedValue - The serialized string representation of a question task answer.
+ *
+ * @returns {QuestionTaskAnswer} The deserialized `QuestionTaskAnswer` object.
+ */
+export function toQuestionTaskAnswerFromString(
+  serializedValue: string,
+): QuestionTaskAnswer {
+  const deserializedValue = JSON.parse(serializedValue)
+
+  const base: QuestionTaskBaseAnswer = {
+    type: deserializedValue.type as QuestionType,
+    playerId: deserializedValue.playerId as string,
+    created: new Date(deserializedValue.created as Date),
+  }
+
+  let answer: string | number | boolean
+
+  switch (deserializedValue.type) {
+    case QuestionType.MultiChoice:
+      answer = deserializedValue.answer as number
+      break
+    case QuestionType.Range:
+      answer = deserializedValue.answer as number
+      break
+    case QuestionType.TrueFalse:
+      answer = deserializedValue.answer as boolean
+      break
+    case QuestionType.TypeAnswer:
+      answer = deserializedValue.answer as string
+      break
+  }
+
+  return { ...base, answer }
+}
+
+/**
+ * Converts serialized answers and participant information into metadata and answers.
+ *
+ * @param serializedAnswers - An array of serialized answers retrieved from Redis.
+ * @param metaData - Partial metadata containing current and total submissions.
+ * @param participants - The list of game participants, used to calculate submission-related metadata.
+ *
+ * @returns {[QuestionTaskAnswer[], Partial<GameEventMetaData>]} A tuple containing deserialized answers and metadata.
+ */
+export function toBaseQuestionTaskEventMetaDataTuple(
+  serializedAnswers: string[],
+  metaData: Partial<GameEventMetaData>,
+  participants: Participant[],
+): [QuestionTaskAnswer[], Partial<GameEventMetaData>] {
+  return [
+    serializedAnswers.map(toQuestionTaskAnswerFromString),
+    {
+      ...metaData,
+      currentAnswerSubmissions: serializedAnswers.length,
+      totalAnswerSubmissions: participants.filter(
+        (participant) => participant.type === GameParticipantType.PLAYER,
+      ).length,
+    },
+  ]
+}
+
+/**
+ * Constructs metadata for a player's question event based on their answers.
+ *
+ * @param answers - The list of answers submitted for the current question task.
+ * @param participant - The participant for whom the metadata is generated.
+ *
+ * @returns {Partial<GameEventMetaData>} Metadata indicating whether the participant has submitted an answer.
+ */
+export function toPlayerQuestionPlayerEventMetaData(
+  answers: QuestionTaskAnswer[],
+  participant: ParticipantBase & ParticipantPlayer,
+): Partial<GameEventMetaData> {
+  return {
+    hasPlayerAnswerSubmission: !!answers?.find(
+      (answer) => answer.playerId === participant.client.player._id,
+    ),
   }
 }

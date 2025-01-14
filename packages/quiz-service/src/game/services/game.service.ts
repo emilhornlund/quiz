@@ -1,10 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { InjectRedis } from '@nestjs-modules/ioredis'
 import {
   CreateGameResponseDto,
   FindGameResponseDto,
   GameParticipantType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
+import { Redis } from 'ioredis'
 
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
@@ -17,8 +19,13 @@ import {
 
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
-import { Participant, ParticipantPlayer, TaskType } from './models/schemas'
-import { isClientUnique, isNicknameUnique, toQuestionTaskAnswer } from './utils'
+import { ParticipantBase, ParticipantPlayer, TaskType } from './models/schemas'
+import {
+  getRedisPlayerParticipantAnswerKey,
+  isClientUnique,
+  isNicknameUnique,
+  toQuestionTaskAnswer,
+} from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -28,9 +35,12 @@ import { isClientUnique, isNicknameUnique, toQuestionTaskAnswer } from './utils'
  */
 @Injectable()
 export class GameService {
+  private readonly logger = new Logger(GameService.name)
+
   /**
    * Creates an instance of GameService.
    *
+   * @param {Redis} redis - The Redis instance used for managing data synchronization and storing answers.
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
    * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
    * @param {PlayerService} playerService - The service responsible for managing player information.
@@ -38,6 +48,7 @@ export class GameService {
    * @param {QuizService} quizService - Service for managing quiz-related operations.
    */
   constructor(
+    @InjectRedis() private readonly redis: Redis,
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private playerService: PlayerService,
@@ -116,7 +127,7 @@ export class GameService {
 
     const now = new Date()
 
-    const newParticipant: Participant & ParticipantPlayer = {
+    const newParticipant: ParticipantBase & ParticipantPlayer = {
       type: GameParticipantType.PLAYER,
       client,
       totalScore: 0,
@@ -125,19 +136,22 @@ export class GameService {
       updated: now,
     }
 
-    await this.gameRepository.findAndSaveWithLock(gameID, (currentDocument) => {
-      if (!isClientUnique(currentDocument.participants, clientId)) {
-        throw new ClientNotUniqueException()
-      }
+    await this.gameRepository.findAndSaveWithLock(
+      gameID,
+      async (currentDocument) => {
+        if (!isClientUnique(currentDocument.participants, clientId)) {
+          throw new ClientNotUniqueException()
+        }
 
-      if (!isNicknameUnique(currentDocument.participants, nickname)) {
-        throw new NicknameNotUniqueException(nickname)
-      }
+        if (!isNicknameUnique(currentDocument.participants, nickname)) {
+          throw new NicknameNotUniqueException(nickname)
+        }
 
-      currentDocument.participants.push(newParticipant)
+        currentDocument.participants.push(newParticipant)
 
-      return currentDocument
-    })
+        return currentDocument
+      },
+    )
   }
 
   /**
@@ -175,51 +189,71 @@ export class GameService {
   ): Promise<void> {
     const answer = toQuestionTaskAnswer(playerId, submitQuestionAnswerRequest)
 
-    await this.gameRepository.findAndSaveWithLock(gameID, (gameDocument) => {
-      if (
-        gameDocument.currentTask.type !== TaskType.Question ||
-        gameDocument.currentTask.status !== 'active'
-      ) {
-        throw new BadRequestException(
-          'Current task is either not of question type or not in active status',
-        )
-      }
-
-      if (
-        gameDocument.currentTask.answers.find(
-          (answer) => answer.playerId === playerId,
-        )
-      ) {
-        throw new BadRequestException('Answer already provided')
-      }
-
-      gameDocument.currentTask.answers.push(answer)
-      return gameDocument
-    })
-
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 
     if (
-      gameDocument.currentTask.type === TaskType.Question &&
-      gameDocument.currentTask.status === 'active'
+      gameDocument.currentTask.type !== TaskType.Question ||
+      gameDocument.currentTask.status !== 'active'
     ) {
-      const allAnswers = gameDocument.currentTask.answers
+      throw new BadRequestException(
+        'Current task is either not of question type or not in active status',
+      )
+    }
 
-      const hasAllPlayersAnswered = gameDocument.participants
-        .filter(({ type }) => type === GameParticipantType.PLAYER)
-        .every((participant) =>
-          allAnswers.find(
-            (answer) =>
-              participant.type === GameParticipantType.PLAYER &&
-              answer.playerId === participant.client.player._id,
-          ),
-        )
+    let hasAlreadyAnswered = false
 
-      if (hasAllPlayersAnswered) {
-        await this.gameTaskTransitionScheduler.scheduleTaskTransition(
-          gameDocument,
+    try {
+      hasAlreadyAnswered =
+        (
+          await this.redis.lrange(
+            getRedisPlayerParticipantAnswerKey(gameID),
+            0,
+            -1,
+          )
         )
-      }
+          .map((value) => JSON.parse(value))
+          .filter((value) => value.playerId === playerId).length > 0
+    } catch (error) {
+      this.logger.error('Failed to submit question answer', error)
+      throw new BadRequestException('Failed to submit question answer')
+    }
+
+    if (hasAlreadyAnswered) {
+      throw new BadRequestException('Answer already provided')
+    }
+
+    let currentAnswerCount = 0
+    const serializedValue = JSON.stringify(answer)
+
+    try {
+      currentAnswerCount = await this.redis.rpush(
+        getRedisPlayerParticipantAnswerKey(gameID),
+        serializedValue,
+      )
+    } catch (error) {
+      this.logger.error('Failed to submit question answer', error)
+      throw new BadRequestException('Failed to submit question answer')
+    }
+
+    const playerCount = gameDocument.participants.filter(
+      (participant) => participant.type === GameParticipantType.PLAYER,
+    ).length
+
+    try {
+      await this.redis.ltrim(
+        getRedisPlayerParticipantAnswerKey(gameID),
+        0,
+        playerCount - 1,
+      )
+    } catch (error) {
+      this.logger.error('Failed to submit question answer', error)
+      throw new BadRequestException('Failed to submit question answer')
+    }
+
+    if (currentAnswerCount === playerCount) {
+      await this.gameTaskTransitionScheduler.scheduleTaskTransition(
+        gameDocument,
+      )
     }
   }
 }

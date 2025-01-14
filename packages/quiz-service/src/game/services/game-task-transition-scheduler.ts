@@ -1,6 +1,8 @@
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
+import { InjectRedis } from '@nestjs-modules/ioredis'
 import { Job, Queue } from 'bullmq'
+import { Redis } from 'ioredis'
 
 import { GameRepository } from './game.repository'
 import { GameDocument, TaskType } from './models/schemas'
@@ -24,7 +26,7 @@ type DelayHandler = ((gameDocument: GameDocument) => number) | number
 const TransitionHandlers: {
   [key in TaskType]: {
     [status in 'pending' | 'active' | 'completed']: {
-      callback?: (gameDocument: GameDocument) => void
+      callback?: (gameDocument: GameDocument, redis: Redis) => Promise<void>
       delay?: DelayHandler
     }
   }
@@ -94,11 +96,14 @@ export class GameTaskTransitionScheduler extends WorkerHost {
    *
    * @param taskQueue - Task queue for scheduling deferred transitions.
    * @param gameRepository - Repository for accessing and modifying game data.
+   * @param {Redis} redis - The Redis instance used for managing data synchronization and event handling.
    */
   constructor(
     @InjectQueue(TASK_QUEUE_NAME)
     private taskQueue: Queue<GameDocument, void, string>,
     private gameRepository: GameRepository,
+    @InjectRedis()
+    private readonly redis: Redis,
   ) {
     super()
   }
@@ -221,7 +226,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
   private async performTransition(
     gameDocument: GameDocument,
     nextStatus: 'active' | 'completed' | undefined,
-    callback?: (gameDocument: GameDocument) => void,
+    callback?: (gameDocument: GameDocument, redis: Redis) => Promise<void>,
   ): Promise<void> {
     const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
@@ -235,12 +240,12 @@ export class GameTaskTransitionScheduler extends WorkerHost {
     try {
       updatedGameDocument = await this.gameRepository.findAndSaveWithLock(
         _id,
-        (doc) => {
+        async (doc) => {
           if (nextStatus) {
             doc.currentTask.status = nextStatus
           }
           if (callback) {
-            callback(doc)
+            await callback(doc, this.redis)
           }
           return doc
         },

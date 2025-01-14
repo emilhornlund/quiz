@@ -37,7 +37,7 @@ import {
 } from '../../../quiz/services/utils'
 import {
   GameDocument,
-  Participant,
+  ParticipantBase,
   ParticipantPlayer,
   TaskType,
 } from '../models/schemas'
@@ -62,15 +62,28 @@ import {
 } from './task.utils'
 
 /**
+ * Metadata associated with game events, used to track answer submissions and player-specific information.
+ */
+export interface GameEventMetaData {
+  currentAnswerSubmissions: number
+  totalAnswerSubmissions: number
+  hasPlayerAnswerSubmission: boolean
+}
+
+/**
  * Constructs an event for the host based on the current state of the game document.
  *
  * @param {GameDocument} document - The `GameDocument` representing the current state of the game, including its task and associated data.
+ * @param {Partial<GameEventMetaData>} metadata - Metadata including the number of submissions and related player information.
  *
  * @throws {Error} Throws an error if the task type is not recognized.
  *
  * @returns A `GameEvent` tailored for the host, depending on the type and status of the current task.
  */
-export function buildHostGameEvent(document: GameDocument): GameEvent {
+export function buildHostGameEvent(
+  document: GameDocument,
+  metadata: Partial<GameEventMetaData> = {},
+): GameEvent {
   if (isLobbyTask(document)) {
     switch (document.currentTask.status) {
       case 'pending':
@@ -87,7 +100,11 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
       case 'pending':
         return buildGameQuestionPreviewHostEvent(document)
       case 'active':
-        return buildGameQuestionHostEvent(document)
+        return buildGameQuestionHostEvent(
+          document,
+          metadata.currentAnswerSubmissions ?? 0,
+          metadata.totalAnswerSubmissions ?? 0,
+        )
       case 'completed':
         return buildGameLoadingEvent()
     }
@@ -137,7 +154,8 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
  * Constructs an event for a player based on the current state of the game document and the provided player details.
  *
  * @param {GameDocument} document - The `GameDocument` representing the current state of the game, including its task and associated data.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {Partial<GameEventMetaData>} metadata - Metadata containing the number of submissions and related player information.
  *
  * @throws {Error} Throws an error if the task type is not recognized.
  *
@@ -145,7 +163,8 @@ export function buildHostGameEvent(document: GameDocument): GameEvent {
  */
 export function buildPlayerGameEvent(
   document: GameDocument,
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
+  metadata: Partial<GameEventMetaData> = {},
 ): GameEvent {
   if (isLobbyTask(document)) {
     switch (document.currentTask.status) {
@@ -163,9 +182,7 @@ export function buildPlayerGameEvent(
       case 'pending':
         return buildGameQuestionPreviewPlayerEvent(document, participantPlayer)
       case 'active':
-        return document.currentTask.answers.find(
-          ({ playerId }) => playerId === participantPlayer.client.player._id,
-        )
+        return metadata.hasPlayerAnswerSubmission
           ? buildGameAwaitingResultPlayerEvent(document, participantPlayer)
           : buildGameQuestionPlayerEvent(document, participantPlayer)
       case 'completed':
@@ -245,13 +262,13 @@ function buildGameLobbyHostEvent(
  * Builds a lobby event for a player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameLobbyPlayerEvent} A lobby event containing the player's nickname.
  */
 function buildGameLobbyPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Lobby } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameLobbyPlayerEvent {
   return {
     type: GameEventType.GameLobbyPlayer,
@@ -272,13 +289,13 @@ function buildGameBeginHostEvent(): GameBeginHostEvent {
  * Builds an event to signal the start of the game for a player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameBeginPlayerEvent} An event indicating the game has started for the player.
  */
 function buildGameBeginPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Lobby } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameBeginPlayerEvent {
   return {
     type: GameEventType.GameBeginPlayer,
@@ -374,13 +391,13 @@ function buildGameQuestionPreviewHostEvent(
  * Builds a question preview event for a player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameQuestionPreviewPlayerEvent} An event showing a preview of the current question for the player.
  */
 function buildGameQuestionPreviewPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameQuestionPreviewPlayerEvent {
   const { type, text: question } =
     document.questions[document.currentTask.questionIndex]
@@ -456,17 +473,17 @@ function buildGameEventQuestion(
  * Builds a question event for the host, including countdown and submission details.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
+ * @param {number} currentAnswerSubmissions - The current count of answers submitted for the question.
+ * @param {number} totalAnswerSubmissions - The total number of answers expected to be submitted for the question.
  *
  * @returns {GameQuestionHostEvent} A question event for the host.
  */
 function buildGameQuestionHostEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
+  currentAnswerSubmissions: number,
+  totalAnswerSubmissions: number,
 ): GameQuestionHostEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
-
-  const total = document.participants.filter(
-    ({ type }) => type === GameParticipantType.PLAYER,
-  ).length
 
   return {
     type: GameEventType.GameQuestionHost,
@@ -476,8 +493,8 @@ function buildGameQuestionHostEvent(
     question: buildGameEventQuestion(currentQuestion),
     countdown: buildGameQuestionCountdownEvent(document),
     submissions: {
-      current: document.currentTask.answers.length,
-      total,
+      current: currentAnswerSubmissions,
+      total: totalAnswerSubmissions,
     },
     pagination: buildPaginationEvent(document),
   }
@@ -487,13 +504,13 @@ function buildGameQuestionHostEvent(
  * Builds a question event for a player, including countdown and score details.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameQuestionPlayerEvent} A question event for the player.
  */
 function buildGameQuestionPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameQuestionPlayerEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
 
@@ -522,13 +539,13 @@ function buildGameQuestionPlayerEvent(
  * Builds an event indicating the player is awaiting the result of the question.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameAwaitingResultPlayerEvent} An event indicating the player is waiting for the question result.
  */
 function buildGameAwaitingResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameAwaitingResultPlayerEvent {
   const {
     client: {
@@ -741,11 +758,11 @@ function buildGameResultHostEvent(
  * Builds a question result event for the player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document containing the current question result task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  */
 function buildGameResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameResultPlayerEvent {
   const player = participantPlayer.client.player
 
@@ -826,11 +843,11 @@ function buildGameLeaderboardHostEvent(
  * Builds a leaderboard event for the player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  */
 function buildGameLeaderboardPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameLeaderboardPlayerEvent {
   const player = participantPlayer.client.player
 
@@ -880,11 +897,11 @@ function buildGamePodiumHostEvent(
  * Builds a podium event for the player.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document containing the current podium task.
- * @param {Participant & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  */
 function buildGamePodiumPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Podium } },
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GamePodiumPlayerEvent {
   const player = participantPlayer.client.player
 

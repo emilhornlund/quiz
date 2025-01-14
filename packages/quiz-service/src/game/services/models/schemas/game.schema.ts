@@ -14,9 +14,7 @@ import {
 
 import {
   Participant,
-  ParticipantHost,
   ParticipantHostSchema,
-  ParticipantPlayer,
   ParticipantPlayerSchema,
   ParticipantSchema,
 } from './participant.schema'
@@ -70,7 +68,7 @@ export class Game {
   nextQuestion: number
 
   @Prop({ type: [ParticipantSchema], required: true })
-  participants: (Participant & (ParticipantHost | ParticipantPlayer))[]
+  participants: Participant[]
 
   @Prop({ type: BaseTaskSchema, required: true })
   currentTask: BaseTask &

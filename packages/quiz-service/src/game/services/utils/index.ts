@@ -1,6 +1,7 @@
 export * from './game.converter'
 export * from './game.utils'
 export * from './game-event.converter'
+export * from './game-redis.utils'
 export * from './gameplay.utils'
 export * from './question-answer.utils'
 export * from './task.converter'

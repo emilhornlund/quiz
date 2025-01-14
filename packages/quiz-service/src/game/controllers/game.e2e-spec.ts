@@ -783,18 +783,16 @@ describe('GameController (e2e)', () => {
             type: TaskType.Question,
             status: 'active',
             questionIndex: 0,
-            answers: [
-              {
-                type: QuestionType.MultiChoice,
-                playerId: playerClient.player._id,
-                answer: 0,
-                created: new Date(),
-              },
-            ],
+            answers: [],
             created: new Date(),
           },
         })
         .exec()
+
+      await gameService.submitQuestionAnswer(gameID, playerClient.player._id, {
+        type: QuestionType.MultiChoice,
+        optionIndex: 0,
+      })
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/answers`)

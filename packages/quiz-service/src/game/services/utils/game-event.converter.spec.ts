@@ -14,7 +14,7 @@ import { Player } from '../../../player/services/models/schemas'
 import {
   BaseTask,
   GameDocument,
-  Participant,
+  ParticipantBase,
   ParticipantPlayer,
   QuestionResultTask,
   QuestionResultTaskItem,
@@ -356,19 +356,19 @@ describe('Game Event Converter', () => {
   })
 })
 
-const PLAYER_01: Participant & ParticipantPlayer = buildParticipantPlayer(
+const PLAYER_01: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
   'ShadowCyborg',
   18456,
   2,
 )
 
-const PLAYER_02: Participant & ParticipantPlayer = buildParticipantPlayer(
+const PLAYER_02: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
   'Radar',
   18398,
   0,
 )
 
-const PLAYER_03: Participant & ParticipantPlayer = buildParticipantPlayer(
+const PLAYER_03: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
   'ShadowWhirlwind',
   15492,
   0,
@@ -378,7 +378,7 @@ function buildParticipantPlayer(
   nickname: string,
   totalScore: number,
   currentStreak: number,
-): Participant & ParticipantPlayer {
+): ParticipantBase & ParticipantPlayer {
   return {
     type: GameParticipantType.PLAYER,
     client: mockMongooseDocument({
@@ -436,7 +436,7 @@ function buildQuestionResultTask(
 
 function buildQuestionResultTaskItem(
   type: QuestionType,
-  participantPlayer: Participant & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
   correct: boolean,
   position: number,
   answer: (

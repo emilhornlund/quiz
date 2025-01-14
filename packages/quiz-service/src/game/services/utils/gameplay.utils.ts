@@ -1,6 +1,10 @@
-import { IllegalTaskTypeException } from '../../exceptions'
-import { GameDocument, TaskType } from '../models/schemas'
+import { Redis } from 'ioredis'
 
+import { IllegalTaskTypeException } from '../../exceptions'
+import { GameDocument, QuestionTaskAnswer, TaskType } from '../models/schemas'
+
+import { getRedisPlayerParticipantAnswerKey } from './game-redis.utils'
+import { toQuestionTaskAnswerFromString } from './question-answer.utils'
 import {
   buildLeaderboardTask,
   buildPodiumTask,
@@ -18,7 +22,9 @@ import {
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
  */
-export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
+export async function lobbyTaskCompletedCallback(
+  gameDocument: GameDocument,
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.Lobby) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
@@ -38,18 +44,32 @@ export function lobbyTaskCompletedCallback(gameDocument: GameDocument): void {
  * with a newly created question result task.
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
+ * @param {Redis} redis - The Redis instance used for managing data synchronization and storing answers.
  */
-export function questionTaskCompletedCallback(
+export async function questionTaskCompletedCallback(
   gameDocument: GameDocument,
-): void {
+  redis: Redis,
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.Question) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
       TaskType.Question,
     )
   }
+
+  const answers: QuestionTaskAnswer[] = (
+    await redis.lrange(
+      getRedisPlayerParticipantAnswerKey(gameDocument._id),
+      0,
+      -1,
+    )
+  ).map(toQuestionTaskAnswerFromString)
+
+  await redis.del(getRedisPlayerParticipantAnswerKey(gameDocument._id))
+
+  gameDocument.currentTask.answers = answers
   gameDocument.previousTasks.push(gameDocument.currentTask)
-  gameDocument.currentTask = buildQuestionResultTask(gameDocument)
+  gameDocument.currentTask = buildQuestionResultTask(gameDocument, answers)
 }
 
 const AVERAGE_WPM = 220 // Average reading speed in words per minute
@@ -97,9 +117,9 @@ export function getQuestionTaskPendingDuration(
  * @param {GameDocument} gameDocument - The game document containing the current task.
  * @throws {IllegalTaskTypeException} If the current task type is not a question.
  */
-export function getQuestionTaskPendingCallback(
+export async function getQuestionTaskPendingCallback(
   gameDocument: GameDocument,
-): void {
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.Question) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
@@ -143,9 +163,9 @@ export function getQuestionTaskActiveDuration(
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
  */
-export function questionResultTaskCompletedCallback(
+export async function questionResultTaskCompletedCallback(
   gameDocument: GameDocument,
-): void {
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.QuestionResult) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
@@ -171,9 +191,9 @@ export function questionResultTaskCompletedCallback(
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
  */
-export function leaderboardTaskCompletedCallback(
+export async function leaderboardTaskCompletedCallback(
   gameDocument: GameDocument,
-): void {
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.Leaderboard) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
@@ -187,10 +207,15 @@ export function leaderboardTaskCompletedCallback(
 }
 
 /**
+ * Handles the completion of the podium task by transitioning it to the quit task.
  *
  * @param {GameDocument} gameDocument - The game document containing the current task.
+ *
+ * @throws {IllegalTaskTypeException} If the current task type is not `Podium`.
  */
-export function podiumTaskCompletedCallback(gameDocument: GameDocument): void {
+export async function podiumTaskCompletedCallback(
+  gameDocument: GameDocument,
+): Promise<void> {
   if (gameDocument.currentTask.type !== TaskType.Podium) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,

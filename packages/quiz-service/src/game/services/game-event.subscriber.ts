@@ -16,7 +16,14 @@ import { PlayerNotFoundException } from '../exceptions'
 
 import { GameRepository } from './game.repository'
 import { DistributedEvent } from './models/event'
-import { buildHostGameEvent, buildPlayerGameEvent } from './utils'
+import { TaskType } from './models/schemas'
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  getRedisPlayerParticipantAnswerKey,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
@@ -133,12 +140,27 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
       LOCAL_EVENT_EMITTER_CHANNEL,
     ) as Observable<DistributedEvent>
 
+    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
+      await this.redis.lrange(
+        getRedisPlayerParticipantAnswerKey(document._id),
+        0,
+        -1,
+      ),
+      {},
+      document.participants,
+    )
+
     const initialEvent: DistributedEvent = {
       clientId: playerId,
       event:
         participant.type === GameParticipantType.PLAYER
-          ? buildPlayerGameEvent(document, participant)
-          : buildHostGameEvent(document),
+          ? buildPlayerGameEvent(document, participant, {
+              ...metaData,
+              ...(document.currentTask.type === TaskType.Question
+                ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                : {}),
+            })
+          : buildHostGameEvent(document, metaData),
     }
 
     return concat(from([initialEvent]), source).pipe(
