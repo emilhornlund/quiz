@@ -16,16 +16,15 @@
       display: flex;
       justify-content: center;
       flex: 1;
+      gap: $layout-gutter;
 
       @include mobile {
         flex-direction: column;
-        gap: $layout-gutter;
       }
 
       @include tablet {
         flex-direction: row;
         align-items: center;
-        gap: $layout-gutter * 1.5;
 
         div:first-child {
           flex: 1;
@@ -35,7 +34,6 @@
       @include desktop {
         flex-direction: row;
         align-items: center;
-        gap: $layout-gutter * 2;
 
         div:first-child {
           flex: 1;

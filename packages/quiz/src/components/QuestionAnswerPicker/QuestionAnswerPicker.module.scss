@@ -6,4 +6,12 @@
   flex-direction: column;
   flex: 1;
   width: 100%;
+
+  .loadingWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
 }

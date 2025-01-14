@@ -75,6 +75,17 @@
         }
       }
 
+      @media (hover: none) and (pointer: coarse) {
+        &:active {
+          &:not(:disabled) {
+            border: none;
+            outline: none;
+            background-color: $gray-1;
+            color: $gray-4;
+          }
+        }
+      }
+
       div {
         display: flex;
         flex-direction: column;
