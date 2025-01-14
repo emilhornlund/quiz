@@ -86,19 +86,27 @@
 
   @include mobile {
     border-radius: $mobile-control-normal-border-radius;
-    height: $mobile-control-normal-height;
+    min-height: $mobile-control-normal-height;
     padding: 0 $mobile-control-normal-layout-gutter;
+
+    &:has(> textarea) {
+      padding: $mobile-control-normal-layout-gutter;
+    }
   }
 
   @include tablet {
     border-radius: $tablet-control-normal-border-radius;
-    height: $tablet-control-normal-height;
+    min-height: $tablet-control-normal-height;
     padding: 0 $tablet-control-normal-layout-gutter;
+
+    &:has(> textarea) {
+      padding: $tablet-control-normal-layout-gutter;
+    }
   }
 
   @include desktop {
     border-radius: $desktop-control-normal-border-radius;
-    height: $desktop-control-normal-height;
+    min-height: $desktop-control-normal-height;
     padding: 0 $desktop-control-normal-layout-gutter;
 
     &:has(> textarea) {
@@ -241,7 +249,7 @@
 .input-size-small {
   @include mobile {
     border-radius: $mobile-control-small-border-radius;
-    height: $mobile-control-small-height;
+    min-height: $mobile-control-small-height;
     padding: 0 $mobile-control-small-layout-gutter;
 
     input, select, textarea, button {
@@ -253,7 +261,7 @@
 
   @include tablet {
     border-radius: $tablet-control-small-border-radius;
-    height: $tablet-control-small-height;
+    min-height: $tablet-control-small-height;
     padding: 0 $tablet-control-small-layout-gutter;
 
     input, select, textarea, button {
@@ -265,7 +273,7 @@
 
   @include desktop {
     border-radius: $desktop-control-small-border-radius;
-    height: $desktop-control-small-height;
+    min-height: $desktop-control-small-height;
     padding: 0 $desktop-control-small-layout-gutter;
 
     input, select, textarea, button {
