@@ -19,7 +19,7 @@ spec:
         node-type: worker
       containers:
         - name: quiz
-          image: registry.cluster.local:5000/emilhornlund/quiz:bae3bc0
+          image: registry.cluster.local:5000/emilhornlund/quiz:0ade66b
           imagePullPolicy: IfNotPresent
           resources:
             requests:
