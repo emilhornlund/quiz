@@ -17,6 +17,7 @@ import {
   NicknameNotUniqueException,
 } from '../exceptions'
 
+import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
 import { ParticipantBase, ParticipantPlayer, TaskType } from './models/schemas'
@@ -43,6 +44,7 @@ export class GameService {
    * @param {Redis} redis - The Redis instance used for managing data synchronization and storing answers.
    * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
    * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
+   * @param {GameEventPublisher} gameEventPublisher - Service responsible for publishing game events to clients.
    * @param {PlayerService} playerService - The service responsible for managing player information.
    * @param {ClientService} clientService - Service for retrieving client information.
    * @param {QuizService} quizService - Service for managing quiz-related operations.
@@ -51,6 +53,7 @@ export class GameService {
     @InjectRedis() private readonly redis: Redis,
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
+    private gameEventPublisher: GameEventPublisher,
     private playerService: PlayerService,
     private clientService: ClientService,
     private quizService: QuizService,
@@ -254,6 +257,8 @@ export class GameService {
       await this.gameTaskTransitionScheduler.scheduleTaskTransition(
         gameDocument,
       )
+    } else {
+      await this.gameEventPublisher.publish(gameDocument)
     }
   }
 }
