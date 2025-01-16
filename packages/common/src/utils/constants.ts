@@ -10,7 +10,6 @@ export const QUIZ_DESCRIPTION_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,500}$/u
 export const GAME_NAME_REGEX = /^[a-zA-Z0-9_ ]{3,25}$/
 export const GAME_PIN_REGEX = /^[1-9]\d{5}$/
 export const PLAYER_NICKNAME_REGEX = /^[a-zA-Z0-9_]{2,20}$/
-export const QUESTION_TYPE_ANSWER_REGEX = /^[a-zA-Z0-9_ ]{1,75}$/
 
 /* URL */
 export const URL_REGEX =
@@ -38,6 +37,7 @@ export const QUIZ_TYPE_ANSWER_OPTIONS_MIN = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_MAX = 4
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX = 20
+export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX = /^[\p{L}\p{N}\p{P}]{1,75}$/u
 
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/

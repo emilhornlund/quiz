@@ -1,6 +1,10 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
-import { QUESTION_TYPE_ANSWER_REGEX } from '@quiz/common'
+import {
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
+} from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 export function GameQuestionTypeAnswerValue() {
@@ -9,14 +13,14 @@ export function GameQuestionTypeAnswerValue() {
       description: 'The submitted answer to the type answer question.',
       example: 'Stockholm',
       required: true,
-      minLength: 1,
-      maxLength: 75,
+      minLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
+      maxLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
       type: String,
     }),
     IsString(),
-    MinLength(1),
-    MaxLength(75),
-    Matches(QUESTION_TYPE_ANSWER_REGEX, {
+    MinLength(QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN),
+    MaxLength(QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX),
+    Matches(QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX, {
       message:
         'The typed answer can only contain letters, numbers, underscores and spaces.',
     }),

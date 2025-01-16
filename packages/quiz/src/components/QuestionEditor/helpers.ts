@@ -17,6 +17,7 @@ import {
   QUIZ_TYPE_ANSWER_OPTIONS_MIN,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
   QuizClassicModeRequestDto,
   QuizZeroToOneHundredModeRequestDto,
   URL_REGEX,
@@ -339,6 +340,7 @@ export const parseQuestionsJson = <T extends GameMode>(
                     {
                       minLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
                       maxLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
+                      regex: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
                     },
                   ),
                 ),

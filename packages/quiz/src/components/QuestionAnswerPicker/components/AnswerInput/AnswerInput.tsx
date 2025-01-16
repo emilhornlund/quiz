@@ -1,6 +1,10 @@
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { QUESTION_TYPE_ANSWER_REGEX } from '@quiz/common'
+import {
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
+} from '@quiz/common'
 import React, { FC, FormEvent, useCallback, useState } from 'react'
 
 import Button from '../../../Button'
@@ -40,7 +44,9 @@ const AnswerInput: FC<AnswerInputProps> = ({
               type="text"
               placeholder="Answer"
               value={value}
-              regex={QUESTION_TYPE_ANSWER_REGEX}
+              regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
+              minLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN}
+              maxLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX}
               onChange={(newValue) => setValue(newValue as string)}
               onValid={setValid}
               required
