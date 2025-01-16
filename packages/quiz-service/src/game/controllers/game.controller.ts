@@ -24,6 +24,7 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { SkipThrottle } from '@nestjs/throttler'
 import { GameParticipantType } from '@quiz/common'
 import { Observable } from 'rxjs'
 
@@ -188,6 +189,7 @@ export class GameController {
   })
   @AuthorizedGame()
   @GameIdParam()
+  @SkipThrottle()
   public async getEventStream(
     @AuthorizedPlayerIdParam() playerId: string,
     @Param('gameID', ParseUUIDPipe) gameID: string,
