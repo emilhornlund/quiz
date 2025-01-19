@@ -28,6 +28,7 @@ import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
 import { ParticipantBase, ParticipantPlayer, TaskType } from './models/schemas'
 import {
+  buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
   isClientUnique,
   isNicknameUnique,
@@ -216,6 +217,13 @@ export class GameService {
         return currentDocument
       },
     )
+
+    if (clientParticipant.type === GameParticipantType.HOST) {
+      await this.gameEventPublisher.publishParticipantEvent(
+        participantToRemove,
+        buildGameQuitEvent(),
+      )
+    }
   }
 
   /**

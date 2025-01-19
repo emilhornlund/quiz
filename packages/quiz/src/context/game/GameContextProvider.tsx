@@ -27,7 +27,8 @@ export interface GameContextProviderProps {
 const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
   const [gameID] = useGameIDQueryParam()
 
-  const { completeTask, submitQuestionAnswer } = useQuizServiceClient()
+  const { completeTask, submitQuestionAnswer, leaveGame } =
+    useQuizServiceClient()
 
   /**
    * Memoized value for the `GameContext`, containing the current game ID
@@ -39,8 +40,10 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       completeTask: () => (gameID ? completeTask(gameID) : Promise.reject()),
       submitQuestionAnswer: (request) =>
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
+      leaveGame: (playerID: string) =>
+        gameID ? leaveGame(gameID, playerID) : Promise.reject(),
     }),
-    [gameID, completeTask, submitQuestionAnswer],
+    [gameID, completeTask, submitQuestionAnswer, leaveGame],
   )
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>

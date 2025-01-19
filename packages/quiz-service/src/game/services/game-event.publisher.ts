@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRedis } from '@nestjs-modules/ioredis'
-import { GameParticipantType } from '@quiz/common'
+import { GameEvent, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { DistributedEvent } from './models/event'
-import { GameDocument, TaskType } from './models/schemas'
+import { GameDocument, Participant, TaskType } from './models/schemas'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
@@ -50,20 +50,37 @@ export class GameEventPublisher {
 
     await Promise.all(
       document.participants.map((participant) =>
-        this.publishDistributedEvent({
-          clientId: participant.client.player._id,
-          event:
-            participant.type === GameParticipantType.HOST
-              ? buildHostGameEvent(document, metaData)
-              : buildPlayerGameEvent(document, participant, {
-                  ...metaData,
-                  ...(document.currentTask.type === TaskType.Question
-                    ? toPlayerQuestionPlayerEventMetaData(answers, participant)
-                    : {}),
-                }),
-        } as DistributedEvent),
+        this.publishParticipantEvent(
+          participant,
+          participant.type === GameParticipantType.HOST
+            ? buildHostGameEvent(document, metaData)
+            : buildPlayerGameEvent(document, participant, {
+                ...metaData,
+                ...(document.currentTask.type === TaskType.Question
+                  ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                  : {}),
+              }),
+        ),
       ),
     )
+  }
+
+  /**
+   * Publishes a game event for a specified participant.
+
+   * @param {Participant} participant - The participant for whom the event published for.
+   * @param {GameEvent} event - The event to be published.
+   *
+   * @returns {Promise<void>} A promise that resolves once the event is published.
+   */
+  public async publishParticipantEvent(
+    participant: Participant,
+    event: GameEvent,
+  ): Promise<void> {
+    return this.publishDistributedEvent({
+      clientId: participant.client.player._id,
+      event,
+    })
   }
 
   /**

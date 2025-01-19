@@ -1,3 +1,4 @@
+@import '../../styles/colors';
 @import '../../styles/helpers';
 
 .main {
@@ -5,8 +6,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: $white-1-50;
   font-weight: bold;
+  position: relative;
+  overflow: hidden;
 
   @include mobile {
     padding: 0 pxToRem(16px);
@@ -30,5 +33,45 @@
     height: 48px;
 
     @include fontSize(22px);
+  }
+
+  &:hover {
+    .delete {
+      display: inline-flex;
+    }
+  }
+
+  .delete {
+    -o-appearance: none;
+    -webkit-appearance: none;
+    align-items: center;
+    appearance: none;
+    background-color: $black-1-50;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    display: none;
+    flex-direction: row;
+    flex: 1;
+    font-family: inherit;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+
+    @include mobile {
+      @include fontSize(20px);
+    }
+
+    @include tablet {
+      @include fontSize(24px);
+    }
+
+    @include desktop {
+      @include fontSize(28px);
+    }
   }
 }

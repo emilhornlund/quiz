@@ -11,6 +11,7 @@ export interface ConfirmDialogProps {
   open?: boolean
   destructive?: boolean
   confirmTitle?: string
+  loading?: boolean
   onConfirm?: () => void
   onClose?: () => void
 }
@@ -21,6 +22,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   open = false,
   destructive = false,
   confirmTitle = 'Confirm',
+  loading = false,
   onConfirm,
   onClose,
 }) => (
@@ -33,6 +35,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
         kind={destructive ? 'destructive' : 'call-to-action'}
         size="small"
         value={confirmTitle}
+        loading={loading}
         onClick={() => onConfirm?.()}
       />
       <Button

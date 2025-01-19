@@ -31,7 +31,10 @@ export type GameLobbyHostEvent = {
     id: string
     pin: string
   }
-  players: { nickname: string }[]
+  players: {
+    id: string
+    nickname: string
+  }[]
 }
 
 export type GameLobbyPlayerEvent = {

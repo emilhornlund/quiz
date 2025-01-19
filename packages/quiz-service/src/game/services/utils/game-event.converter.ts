@@ -254,7 +254,10 @@ function buildGameLobbyHostEvent(
     game: { id: document._id, pin: document.pin },
     players: document.participants
       .filter((participant) => participant.type === GameParticipantType.PLAYER)
-      .map((participant) => ({ nickname: participant.client.player.nickname })),
+      .map((participant) => ({
+        id: participant.client.player._id,
+        nickname: participant.client.player.nickname,
+      })),
   }
 }
 
@@ -933,6 +936,6 @@ function buildGamePodiumPlayerEvent(
  *
  * @returns {GameLoadingEvent} A quit event for the game, indicating that the game is terminated.
  */
-function buildGameQuitEvent(): GameQuitEvent {
+export function buildGameQuitEvent(): GameQuitEvent {
   return { type: GameEventType.GameQuitEvent }
 }
