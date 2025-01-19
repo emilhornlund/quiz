@@ -1,12 +1,6 @@
-import {
-  faCircleQuestion,
-  faGear,
-  faLockOpen,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCircleQuestion, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { FC } from 'react'
-
-import Button from '../Button'
 
 import styles from './HostGameFooter.module.scss'
 
@@ -32,15 +26,7 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
       <FontAwesomeIcon icon={faLockOpen} />
       <span>{gamePIN}</span>
     </div>
-    <div className={styles.actions}>
-      <Button
-        id="settings-icon-button"
-        type="button"
-        kind="plain"
-        size="small"
-        icon={faGear}
-      />
-    </div>
+    <div className={styles.actions} />
   </div>
 )
 
