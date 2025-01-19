@@ -24,6 +24,8 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
     players,
   },
 }) => {
+  const [showConfirmStartGameDialog, setShowConfirmStartGameDialog] =
+    useState(false)
   const [isStartingGame, setIsStartingGame] = useState<boolean>(false)
 
   const [playerToRemove, setPlayerToRemove] = useState<{
@@ -60,7 +62,11 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
             size="small"
             value="Start"
             loading={isStartingGame}
-            onClick={handleStartGame}
+            onClick={() =>
+              !players.length
+                ? setShowConfirmStartGameDialog(true)
+                : handleStartGame()
+            }
           />
         }>
         <div className={styles.header}>
@@ -96,6 +102,14 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
         onConfirm={handleRemovePlayer}
         onClose={() => setPlayerToRemove(undefined)}
         destructive
+      />
+      <ConfirmDialog
+        title="Start Game Without Players?"
+        message="There are no players in the game. Are you sure you want to start the game anyway?"
+        open={showConfirmStartGameDialog}
+        confirmTitle="Start Game"
+        onConfirm={handleStartGame}
+        onClose={() => setShowConfirmStartGameDialog(false)}
       />
     </>
   )
