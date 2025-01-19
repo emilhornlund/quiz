@@ -2,9 +2,9 @@ import { GameEventType } from '@quiz/common'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client'
 import { LoadingSpinner, Page } from '../../components'
 import { useAuthContext } from '../../context/auth'
+import { useGameContext } from '../../context/game'
 import {
   HostGameBeginState,
   HostLeaderboardState,
@@ -31,18 +31,24 @@ import {
   ConnectionStatus,
   useEventSource,
 } from '../../utils/use-event-source.tsx'
-import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
 
+/**
+ * Represents the main game page.
+ *
+ * Displays the current game state, handles reconnection logic, and renders
+ * the appropriate game state component based on the `GameEventType`.
+ *
+ * @returns A React component rendering the game state.
+ */
 const GamePage = () => {
   const navigate = useNavigate()
 
-  const [gameID] = useGameIDQueryParam()
+  const { gameID } = useGameContext()
+
   const { token } = useAuthContext()
 
   const [event, connectionStatus] = useEventSource(gameID, token)
   const [hasReconnected, setHasReconnected] = useState(false)
-
-  const { completeTask, submitQuestionAnswer } = useQuizServiceClient()
 
   useEffect(() => {
     if (connectionStatus !== ConnectionStatus.INITIALIZED) {
@@ -73,12 +79,14 @@ const GamePage = () => {
     }
   }, [event, navigate])
 
+  /**
+   * Dynamically determines the appropriate component to render
+   * based on the current game event type.
+   */
   const stateComponent = useMemo(() => {
     switch (event?.type) {
       case GameEventType.GameLobbyHost:
-        return (
-          <HostLobbyState event={event} onStart={() => completeTask(gameID!)} />
-        )
+        return <HostLobbyState event={event} />
       case GameEventType.GameLobbyPlayer:
         return <PlayerLobbyState event={event} />
       case GameEventType.GameBeginHost:
@@ -90,45 +98,21 @@ const GamePage = () => {
       case GameEventType.GameQuestionPreviewPlayer:
         return <PlayerQuestionPreviewState event={event} />
       case GameEventType.GameQuestionHost:
-        return (
-          <HostQuestionState
-            event={event}
-            onSkip={() => completeTask(gameID!)}
-          />
-        )
+        return <HostQuestionState event={event} />
       case GameEventType.GameQuestionPlayer:
-        return (
-          <PlayerQuestionState
-            event={event}
-            onSubmitQuestionAnswer={(request) =>
-              submitQuestionAnswer(gameID!, request)
-            }
-          />
-        )
+        return <PlayerQuestionState event={event} />
       case GameEventType.GameAwaitingResultPlayer:
         return <PlayerAwaitingResultState event={event} />
       case GameEventType.GameLeaderboardHost:
-        return (
-          <HostLeaderboardState
-            event={event}
-            onNext={() => completeTask(gameID!)}
-          />
-        )
+        return <HostLeaderboardState event={event} />
       case GameEventType.GameResultHost:
-        return (
-          <HostResultState event={event} onNext={() => completeTask(gameID!)} />
-        )
+        return <HostResultState event={event} />
       case GameEventType.GameResultPlayer:
         return <PlayerResultState event={event} />
       case GameEventType.GameLeaderboardPlayer:
         return <PlayerLeaderboardState event={event} />
       case GameEventType.GamePodiumHost:
-        return (
-          <HostPodiumState
-            event={event}
-            onComplete={() => completeTask(gameID!)}
-          />
-        )
+        return <HostPodiumState event={event} />
       case GameEventType.GamePodiumPlayer:
         return <PlayerPodiumState event={event} />
       default:
@@ -138,7 +122,7 @@ const GamePage = () => {
           </Page>
         )
     }
-  }, [event, gameID, completeTask, submitQuestionAnswer])
+  }, [event])
 
   return <>{stateComponent}</>
 }

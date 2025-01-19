@@ -36,6 +36,5 @@ export const Default = {
       ],
       pagination: { current: 1, total: 20 },
     },
-    onNext: () => undefined,
   },
 } satisfies Story

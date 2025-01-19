@@ -38,7 +38,6 @@ export const QuestionMultiTwoAnswers = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story
 
@@ -67,7 +66,6 @@ export const QuestionMultiFourAnswers = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story
 
@@ -98,7 +96,6 @@ export const QuestionMultiSixAnswers = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story
 
@@ -132,7 +129,6 @@ export const QuestionSlider = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story
 
@@ -159,7 +155,6 @@ export const QuestionTrueFalse = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story
 
@@ -188,6 +183,5 @@ export const QuestionTypeAnswer = {
         total: 20,
       },
     },
-    onNext: () => undefined,
   },
 } satisfies Story

@@ -41,7 +41,7 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
         Waiting for other players
       </div>
       <div
-        class="loadingSpinner"
+        class="loadingSpinnerContainer"
       >
         <div />
         <div />

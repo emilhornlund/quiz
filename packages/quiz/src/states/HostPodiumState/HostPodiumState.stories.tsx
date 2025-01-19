@@ -32,7 +32,6 @@ export const Default = {
         { position: 10, nickname: 'ScarletFlame', score: 6723 },
       ],
     },
-    onComplete: () => undefined,
   },
 } satisfies Story
 
@@ -46,6 +45,5 @@ export const ThreePlayers = {
         { position: 3, nickname: 'ShadowWhirlwind', score: 15492 },
       ],
     },
-    onComplete: () => undefined,
   },
 } satisfies Story

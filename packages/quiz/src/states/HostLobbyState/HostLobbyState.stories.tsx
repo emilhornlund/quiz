@@ -33,6 +33,5 @@ export const Default = {
         { nickname: 'ScarletFlame' },
       ],
     },
-    onStart: () => undefined,
   },
 } satisfies Story

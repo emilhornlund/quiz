@@ -32,7 +32,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -67,7 +66,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -104,7 +102,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -145,7 +142,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -178,7 +174,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -213,7 +208,6 @@ describe('HostResultState', () => {
               total: 20,
             },
           }}
-          onNext={() => undefined}
         />
       </MemoryRouter>,
     )

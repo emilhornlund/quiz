@@ -36,7 +36,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -75,7 +74,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -116,7 +114,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -149,7 +146,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -178,7 +174,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -207,7 +202,6 @@ describe('PlayerQuestionState', () => {
             },
             pagination: { current: 1, total: 20 },
           }}
-          onSubmitQuestionAnswer={() => undefined}
         />
       </MemoryRouter>,
     )

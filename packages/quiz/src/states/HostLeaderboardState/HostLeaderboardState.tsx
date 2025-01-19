@@ -1,5 +1,5 @@
 import { GameLeaderboardHostEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import {
   HostGameFooter,
@@ -8,10 +8,10 @@ import {
   Page,
   Typography,
 } from '../../components'
+import { useGameContext } from '../../context/game'
 
 export interface HostLeaderboardStateProps {
   event: GameLeaderboardHostEvent
-  onNext: () => void
 }
 
 const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
@@ -20,8 +20,17 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
     leaderboard,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
-  onNext,
 }) => {
+  const [isInitiatingNextQuestion, setIsInitiatingNextQuestion] =
+    useState<boolean>(false)
+
+  const { completeTask } = useGameContext()
+
+  const handleInitiateNextQuestion = () => {
+    setIsInitiatingNextQuestion(true)
+    completeTask?.().finally(() => setIsInitiatingNextQuestion(false))
+  }
+
   return (
     <Page
       width="medium"
@@ -34,7 +43,8 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
           kind="call-to-action"
           size="small"
           value="Next"
-          onClick={onNext}
+          loading={isInitiatingNextQuestion}
+          onClick={handleInitiateNextQuestion}
         />
       }
       footer={

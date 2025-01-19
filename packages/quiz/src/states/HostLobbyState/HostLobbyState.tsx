@@ -1,16 +1,16 @@
 import { GameLobbyHostEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import QRCode from 'react-qr-code'
 
 import { IconButtonArrowRight, NicknameChip, Page } from '../../components'
 import config from '../../config'
+import { useGameContext } from '../../context/game'
 import { classNames, extractUrl } from '../../utils/helpers.ts'
 
 import styles from './HostLobbyState.module.scss'
 
 export interface HostLobbyStateProps {
   event: GameLobbyHostEvent
-  onStart: () => void
 }
 
 const HostLobbyState: FC<HostLobbyStateProps> = ({
@@ -18,8 +18,16 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
     game: { id, pin },
     players,
   },
-  onStart,
 }) => {
+  const [isStartingGame, setIsStartingGame] = useState<boolean>(false)
+
+  const { completeTask } = useGameContext()
+
+  const handleStartGame = () => {
+    setIsStartingGame(true)
+    completeTask?.().finally(() => setIsStartingGame(false))
+  }
+
   return (
     <Page
       width="medium"
@@ -30,7 +38,8 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
           kind="call-to-action"
           size="small"
           value="Start"
-          onClick={onStart}
+          loading={isStartingGame}
+          onClick={handleStartGame}
         />
       }>
       <div className={styles.header}>

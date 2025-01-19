@@ -38,7 +38,7 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
         The game starts any second
       </div>
       <div
-        class="loadingSpinner"
+        class="loadingSpinnerContainer"
       >
         <div />
         <div />

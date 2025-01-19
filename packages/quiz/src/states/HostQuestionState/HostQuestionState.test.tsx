@@ -36,7 +36,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -75,7 +74,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -116,7 +114,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -149,7 +146,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -178,7 +174,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -207,7 +202,6 @@ describe('HostQuestionState', () => {
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
           }}
-          onSkip={() => undefined}
         />
       </MemoryRouter>,
     )

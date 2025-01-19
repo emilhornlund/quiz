@@ -5,6 +5,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
 import AuthContextProvider from './context/auth'
+import GameContextProvider from './context/game'
 import {
   CreateQuizPage,
   EditQuizPage,
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/game',
-        element: <GamePage />,
+        element: (
+          <GameContextProvider>
+            <GamePage />
+          </GameContextProvider>
+        ),
       },
       {
         path: '/player/profile',

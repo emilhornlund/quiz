@@ -2,7 +2,7 @@ import {
   GameQuestionPlayerEvent,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import {
   Page,
@@ -11,10 +11,10 @@ import {
   QuestionAnswerPicker,
   Typography,
 } from '../../components'
+import { useGameContext } from '../../context/game'
 
 export interface PlayerQuestionStateProps {
   event: GameQuestionPlayerEvent
-  onSubmitQuestionAnswer: (request: SubmitQuestionAnswerRequestDto) => void
 }
 
 const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
@@ -27,27 +27,43 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
     countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
-  onSubmitQuestionAnswer,
-}) => (
-  <Page
-    height="full"
-    footer={
-      <PlayerGameFooter
-        currentQuestion={currentQuestion}
-        totalQuestions={totalQuestions}
-        nickname={nickname}
-        totalScore={totalScore}
+}) => {
+  const [isSubmittingQuestionAnswer, setIsSubmittingQuestionAnswer] =
+    useState<boolean>(false)
+
+  const { submitQuestionAnswer } = useGameContext()
+
+  const handleSubmitQuestionAnswer = (
+    request: SubmitQuestionAnswerRequestDto,
+  ) => {
+    setIsSubmittingQuestionAnswer(true)
+    submitQuestionAnswer?.(request).finally(() =>
+      setIsSubmittingQuestionAnswer(false),
+    )
+  }
+
+  return (
+    <Page
+      height="full"
+      footer={
+        <PlayerGameFooter
+          currentQuestion={currentQuestion}
+          totalQuestions={totalQuestions}
+          nickname={nickname}
+          totalScore={totalScore}
+        />
+      }>
+      <Typography variant="subtitle" size="medium">
+        {question.question}
+      </Typography>
+      <ProgressBar countdown={countdown} />
+      <QuestionAnswerPicker
+        question={question}
+        loading={isSubmittingQuestionAnswer}
+        onChange={handleSubmitQuestionAnswer}
       />
-    }>
-    <Typography variant="subtitle" size="medium">
-      {question.question}
-    </Typography>
-    <ProgressBar countdown={countdown} />
-    <QuestionAnswerPicker
-      question={question}
-      onChange={onSubmitQuestionAnswer}
-    />
-  </Page>
-)
+    </Page>
+  )
+}
 
 export default PlayerQuestionState
