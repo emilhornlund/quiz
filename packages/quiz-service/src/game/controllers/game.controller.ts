@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -15,6 +16,7 @@ import {
   ApiBadRequestResponse,
   ApiBody,
   ApiExtraModels,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -33,6 +35,7 @@ import {
   AuthorizedPlayerIdParam,
 } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
+import { ApiPlayerIDParam } from '../../player/controller/decorators/api'
 import {
   ParseGamePINPipe,
   ParseSubmitQuestionAnswerRequestPipe,
@@ -147,6 +150,45 @@ export class GameController {
     @Body() request: JoinGameRequest,
   ): Promise<void> {
     return this.gameService.joinGame(gameID, client, request.nickname)
+  }
+
+  /**
+   * Removes a player from a game.
+   *
+   * This endpoint allows an authorized client (player or host) to remove a player from a game.
+   * - Players can only remove themselves from a game.
+   * - Hosts can remove any player except themselves.
+   *
+   * @param client - The client object containing details of the authorized client performing the action.
+   * @param gameID - The unique identifier of the game.
+   * @param playerID - The unique identifier of the player to remove.
+   */
+  @Delete('/:gameID/players/:playerID')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Remove a player from a game',
+    description:
+      'Allows an authorized client to remove a player from a specified game.',
+  })
+  @ApiNoContentResponse({
+    description: 'The player has successfully left the game.',
+  })
+  @ApiForbiddenResponse({
+    description: 'The client is not allowed to remove the player.',
+  })
+  @ApiNotFoundResponse({
+    description:
+      'No game or player found with the specified unique identifier.',
+  })
+  @AuthorizedGame()
+  @GameIdParam()
+  @ApiPlayerIDParam()
+  async leaveGame(
+    @AuthorizedClientParam() client: Client,
+    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @Param('playerID', ParseUUIDPipe) playerID: string,
+  ): Promise<void> {
+    return this.gameService.leaveGame(client, gameID, playerID)
   }
 
   /**

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common'
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import {
   CreateGameResponseDto,
@@ -15,6 +20,7 @@ import { QuizService } from '../../quiz/services'
 import {
   ClientNotUniqueException,
   NicknameNotUniqueException,
+  PlayerNotFoundException,
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
@@ -152,6 +158,61 @@ export class GameService {
 
         currentDocument.participants.push(newParticipant)
 
+        return currentDocument
+      },
+    )
+  }
+
+  /**
+   * Removes a player from a game.
+   *
+   * This method removes a specified player from a game. It enforces the following rules:
+   * - Players can only remove themselves.
+   * - Hosts can remove any player except themselves.
+   *
+   * @param client - The client object performing the removal.
+   * @param gameID - The unique identifier of the game.
+   * @param playerID - The unique identifier of the player to remove.
+   *
+   * @returns A Promise that resolves when the player is successfully removed from the game.
+   *
+   * @throws {PlayerNotFoundException} If the specified player does not exist in the game.
+   * @throws {ForbiddenException} If the client is not authorized to remove the specified player.
+   */
+  public async leaveGame(
+    client: Client,
+    gameID: string,
+    playerID: string,
+  ): Promise<void> {
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
+
+    const clientParticipant = gameDocument.participants.find(
+      (participant) => participant.client._id === client._id,
+    )
+
+    const participantToRemove = gameDocument.participants.find(
+      (participant) => participant.client.player._id === playerID,
+    )
+
+    if (!participantToRemove) {
+      throw new PlayerNotFoundException(playerID)
+    }
+
+    if (
+      !clientParticipant ||
+      participantToRemove.type !== GameParticipantType.PLAYER ||
+      (clientParticipant.type === GameParticipantType.PLAYER &&
+        client.player._id !== playerID)
+    ) {
+      throw new ForbiddenException('Forbidden to remove player')
+    }
+
+    await this.gameRepository.findAndSaveWithLock(
+      gameID,
+      async (currentDocument) => {
+        currentDocument.participants = currentDocument.participants.filter(
+          (participant) => participant.client.player._id !== playerID,
+        )
         return currentDocument
       },
     )

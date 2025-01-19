@@ -391,6 +391,211 @@ describe('GameController (e2e)', () => {
     })
   })
 
+  describe('/api/games/:gameID/players (DELETE)', () => {
+    it('should allow a player to leave a game they are part of', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.HOST,
+              client: hostClient,
+              created: new Date(),
+              updated: new Date(),
+            },
+            {
+              type: GameParticipantType.PLAYER,
+              client: playerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should allow the host to remove a player from the game', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.HOST,
+              client: hostClient,
+              created: new Date(),
+              updated: new Date(),
+            },
+            {
+              type: GameParticipantType.PLAYER,
+              client: playerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should fail when attempting to remove a player who does not exist', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.HOST,
+              client: hostClient,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Player not found by id ${playerClient.player._id}`,
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should prevent a player from removing another player from the game', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      const secondPlayerClient =
+        await clientService.findOrCreateClient(uuidv4())
+
+      await playerModel
+        .findByIdAndUpdate(secondPlayerClient.player._id, {
+          nickname: 'FrostyBear',
+        })
+        .exec()
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.HOST,
+              client: hostClient,
+              created: new Date(),
+              updated: new Date(),
+            },
+            {
+              type: GameParticipantType.PLAYER,
+              client: playerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
+            },
+            {
+              type: GameParticipantType.PLAYER,
+              client: secondPlayerClient,
+              totalScore: 0,
+              currentStreak: 0,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/players/${secondPlayerClient.player._id}`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden to remove player',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should prevent a host from removing themselves from the game', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          participants: [
+            {
+              type: GameParticipantType.HOST,
+              client: hostClient,
+              created: new Date(),
+              updated: new Date(),
+            },
+          ],
+        })
+        .exec()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/players/${hostClient.player._id}`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden to remove player',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
   describe('/api/games/:gameID/events (GET)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
       const { id: quizId } = await quizService.createQuiz(
