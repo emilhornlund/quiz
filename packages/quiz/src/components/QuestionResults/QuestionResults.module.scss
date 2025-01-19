@@ -8,6 +8,18 @@
   align-items: center;
   flex: 1;
 
+  @include mobile {
+    gap: $mobile-layout-gutter;
+  }
+
+  @include tablet {
+    gap: $tablet-layout-gutter;
+  }
+
+  @include desktop {
+    gap: $desktop-layout-gutter;
+  }
+
   .chips {
     display: flex;
     flex-direction: row;
@@ -16,15 +28,15 @@
     flex-wrap: wrap;
 
     @include mobile {
-      gap: $layout-gutter * 0.5;
+      gap: $mobile-layout-gutter;
     }
 
     @include tablet {
-      gap: $layout-gutter * 0.75;
+      gap: $tablet-layout-gutter;
     }
 
     @include desktop {
-      gap: $layout-gutter;
+      gap: $desktop-layout-gutter;
     }
 
     .chip {
@@ -35,69 +47,77 @@
       font-weight: bold;
 
       @include mobile {
-        padding: $layout-gutter * 0.5;
-        column-gap: $layout-gutter * 0.5;
-        border-radius: $layout-gutter * 0.5;
+        padding: $mobile-narrow-layout-gutter $mobile-layout-gutter;
+        column-gap: $mobile-layout-gutter;
+        border-radius: $mobile-layout-gutter;
 
-        @include fontSize(18px);
+        @include fontSize(16px);
       }
 
       @include tablet {
-        padding: $layout-gutter * 0.75;
-        column-gap: $layout-gutter * 0.75;
-        border-radius: $layout-gutter * 0.75;
+        padding: $tablet-narrow-layout-gutter $tablet-layout-gutter;
+        column-gap: $tablet-layout-gutter;
+        border-radius: $tablet-layout-gutter;
 
-        @include fontSize(23px);
+        @include fontSize(22px);
       }
 
       @include desktop {
-        padding: $layout-gutter;
-        column-gap: $layout-gutter;
-        border-radius: $layout-gutter;
+        padding: $desktop-narrow-layout-gutter $desktop-layout-gutter;
+        column-gap: $desktop-layout-gutter;
+        border-radius: $desktop-layout-gutter;
 
         @include fontSize(28px);
       }
 
       &.correct {
         background-color: $green-1;
+
+        span {
+          background-color: $green-2;
+        }
       }
 
       &.incorrect {
-        background-color: $red-2;
+        background-color: $red-1;
+
+        span {
+          background-color: mix($gray-4, $red-2, 10%);
+        }
       }
 
       span {
-        display: flex;
-        flex-direction: column;
+        display: inline-flex;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
-        aspect-ratio: 1 / 1;
-        background-color: $white;
-        color: $gray-4;
-        font-weight: bold;
+        color: $white;
 
         @include mobile {
           height: pxToRem(30px);
           border-radius: pxToRem(calc(30px / 2));
-          padding: $layout-gutter * 0.5;
+          padding: $mobile-layout-gutter;
+          column-gap: $mobile-narrow-layout-gutter;
 
-          @include fontSize(18px);
+          @include fontSize(14px);
         }
 
         @include tablet {
           height: pxToRem(40px);
           border-radius: pxToRem(calc(40px / 2));
-          padding: $layout-gutter * 0.75;
+          padding: $tablet-layout-gutter;
+          column-gap: $tablet-narrow-layout-gutter;
 
-          @include fontSize(23px);
+          @include fontSize(18px);
         }
 
         @include desktop {
           height: pxToRem(50px);
           border-radius: pxToRem(calc(50px / 2));
-          padding: $layout-gutter;
+          padding: $desktop-layout-gutter;
+          column-gap: $desktop-narrow-layout-gutter;
 
-          @include fontSize(28px);
+          @include fontSize(22px);
         }
       }
     }

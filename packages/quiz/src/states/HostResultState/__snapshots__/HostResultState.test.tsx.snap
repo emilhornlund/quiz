@@ -73,7 +73,51 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Vincent van Gogh
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               3
+            </span>
+          </div>
+        </div>
+        <div
+          class="chips"
+        >
+          <div
+            class="chip incorrect"
+          >
+            Claude Monet
+            <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
+              5
             </span>
           </div>
           <div
@@ -81,6 +125,22 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Pablo Picasso
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               2
             </span>
           </div>
@@ -89,15 +149,23 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Leonardo da Vinci
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               0
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Claude Monet
-            <span>
-              5
             </span>
           </div>
         </div>
@@ -237,7 +305,75 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Vincent van Gogh
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
+            </span>
+          </div>
+        </div>
+        <div
+          class="chips"
+        >
+          <div
+            class="chip incorrect"
+          >
+            Leonardo da Vinci
+            <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
+              4
+            </span>
+          </div>
+          <div
+            class="chip incorrect"
+          >
+            Rembrandt
+            <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
+              3
             </span>
           </div>
           <div
@@ -245,15 +381,23 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Pablo Picasso
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               2
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Leonardo da Vinci
-            <span>
-              4
             </span>
           </div>
           <div
@@ -261,6 +405,22 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Claude Monet
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               0
             </span>
           </div>
@@ -269,15 +429,23 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Michelangelo
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               0
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Rembrandt
-            <span>
-              3
             </span>
           </div>
         </div>
@@ -417,14 +585,50 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             Vincent van Gogh
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               3
             </span>
           </div>
+        </div>
+        <div
+          class="chips"
+        >
           <div
             class="chip incorrect"
           >
             Pablo Picasso
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               7
             </span>
           </div>
@@ -561,10 +765,54 @@ exports[`HostResultState > should render HostResultState with question type rang
           class="chips"
         >
           <div
+            class="chip correct"
+          >
+            71
+            <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
+              2
+            </span>
+          </div>
+        </div>
+        <div
+          class="chips"
+        >
+          <div
             class="chip incorrect"
           >
             59
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -573,6 +821,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             61
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -581,6 +845,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             64
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -589,15 +869,23 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             65
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
-            </span>
-          </div>
-          <div
-            class="chip correct"
-          >
-            71
-            <span>
-              2
             </span>
           </div>
           <div
@@ -605,6 +893,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             72
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -613,6 +917,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             73
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -621,6 +941,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             79
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -629,6 +965,22 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             83
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
@@ -769,14 +1121,50 @@ exports[`HostResultState > should render HostResultState with question type true
           >
             True
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               4
             </span>
           </div>
+        </div>
+        <div
+          class="chips"
+        >
           <div
             class="chip incorrect"
           >
             False
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               6
             </span>
           </div>
@@ -917,14 +1305,50 @@ exports[`HostResultState > should render HostResultState with question type type
           >
             leonardo da vinci
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               2
             </span>
           </div>
+        </div>
+        <div
+          class="chips"
+        >
           <div
             class="chip incorrect"
           >
             leonardo
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               4
             </span>
           </div>
@@ -933,6 +1357,22 @@ exports[`HostResultState > should render HostResultState with question type type
           >
             picasso
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               3
             </span>
           </div>
@@ -941,6 +1381,22 @@ exports[`HostResultState > should render HostResultState with question type type
           >
             rembrandt
             <span>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-group "
+                data-icon="user-group"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 640 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM609.3 512l-137.8 0c5.4-9.4 8.6-20.3 8.6-32l0-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2l61.4 0C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+                  fill="currentColor"
+                />
+              </svg>
+               
               1
             </span>
           </div>
