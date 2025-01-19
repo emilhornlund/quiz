@@ -73,13 +73,13 @@
     }
 
     @include tablet {
-      padding: $layout-gutter $layout-gutter * 1.5;
+      padding: $tablet-layout-gutter;
 
       @include fontSize(20px);
     }
 
     @include desktop {
-      padding: $layout-gutter $layout-gutter * 2;
+      padding: $desktop-layout-gutter;
 
       @include fontSize(24px);
     }
@@ -91,15 +91,15 @@
     justify-content: center;
 
     @include mobile {
-      padding: $layout-gutter $layout-gutter;
+      padding: $mobile-layout-gutter;
     }
 
     @include tablet {
-      padding: $layout-gutter $layout-gutter * 1.5;
+      padding: $tablet-layout-gutter;
     }
 
     @include desktop {
-      padding: $layout-gutter $layout-gutter * 2;
+      padding: $desktop-layout-gutter;
     }
 
     div {

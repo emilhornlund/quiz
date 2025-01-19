@@ -8,15 +8,15 @@
   align-items: center;
 
   @include mobile {
-    gap: $layout-gutter * 0.5;
+    gap: $mobile-layout-gutter;
   }
 
   @include tablet {
-    gap: $layout-gutter;
+    gap: $tablet-layout-gutter;
   }
 
   @include desktop {
-    gap: $layout-gutter * 2;
+    gap: $desktop-layout-gutter;
   }
 
   &.flexibleHeight {

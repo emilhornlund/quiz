@@ -9,14 +9,14 @@
   flex: 1;
 
   @include mobile {
-    row-gap: $layout-gutter;
+    row-gap: $mobile-layout-gutter;
   }
 
   @include tablet {
-    row-gap: $layout-gutter * 1.5;
+    row-gap: $tablet-layout-gutter;
   }
 
   @include desktop {
-    row-gap: $layout-gutter * 2;
+    row-gap: $desktop-layout-gutter;
   }
 }
