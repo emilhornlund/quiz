@@ -25,6 +25,14 @@ $outline-offset: pxToRem(2px);
     @extend .input-error;
   }
 
+  @include mobile {
+    row-gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-control-normal-layout-gutter;
+  }
+
   @include desktop {
     row-gap: $desktop-control-normal-layout-gutter;
   }

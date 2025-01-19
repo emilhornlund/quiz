@@ -45,6 +45,14 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
     @extend .input-error;
   }
 
+  @include mobile {
+    row-gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-control-normal-layout-gutter;
+  }
+
   @include desktop {
     row-gap: $desktop-control-normal-layout-gutter;
   }
