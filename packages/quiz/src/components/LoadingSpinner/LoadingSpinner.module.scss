@@ -1,78 +1,22 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
+@import '../../styles/loading';
 
-@mixin loading-spinner-dimensions($size) {
-  width: $size;
-  height: $size;
-
-  $--loading-spinner-bar-left: calc($size / 10);
-  $--loading-spinner-bar-width: calc($size / 5);
-
-  div {
-    left: $--loading-spinner-bar-left;
-    width: $--loading-spinner-bar-width;
-
-    @keyframes loading-spinner-animation {
-      0% {
-        top: $--loading-spinner-bar-left;
-        height: $size - ($--loading-spinner-bar-left * 2);
-      }
-      50%, 100% {
-        top: $--loading-spinner-bar-left * 3;
-        height: $--loading-spinner-bar-width * 2;
-      }
-    }
-
-    &:nth-child(1) {
-      animation-delay: -0.24s;
-      left: $--loading-spinner-bar-left * 1;
-    }
-    &:nth-child(2) {
-      animation-delay: -0.12s;
-      left: $--loading-spinner-bar-left * 4;
-    }
-    &:nth-child(3) {
-      animation-delay: 0s;
-      left: $--loading-spinner-bar-left * 7;
-    }
-  }
-}
-
-.loadingSpinner {
-  display: inline-block;
-  position: relative;
+.loadingSpinnerContainer {
+  @extend .loading-spinner;
 
   @include mobile {
     $--mobile-loading-spinner-size: pxToRem(80px);
-    @include loading-spinner-dimensions($--mobile-loading-spinner-size);
+    @include loading-spinner-dimensions($--mobile-loading-spinner-size, $white, default-mobile);
   }
 
   @include tablet {
     $--tablet-loading-spinner-size: pxToRem(100px);
-    @include loading-spinner-dimensions($--tablet-loading-spinner-size);
+    @include loading-spinner-dimensions($--tablet-loading-spinner-size, $white, default-tablet);
   }
 
   @include desktop {
     $--desktop-loading-spinner-size: pxToRem(120px);
-    @include loading-spinner-dimensions($--desktop-loading-spinner-size);
-  }
-
-  div {
-    display: inline-block;
-    position: absolute;
-    background: currentColor;
-    animation: loading-spinner-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
-
-    &:nth-child(1) {
-      animation-delay: -0.24s;
-    }
-
-    &:nth-child(2) {
-      animation-delay: -0.12s;
-    }
-
-    &:nth-child(3) {
-      animation-delay: 0s;
-    }
+    @include loading-spinner-dimensions($--desktop-loading-spinner-size, $white, default-desktop);
   }
 }

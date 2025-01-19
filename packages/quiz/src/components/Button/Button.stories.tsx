@@ -241,3 +241,66 @@ export const PlainIcon = {
     iconPosition: 'leading',
   },
 } satisfies Story
+
+export const PrimaryLoading = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'primary',
+    value: 'Primary Button',
+    loading: true,
+  },
+} satisfies Story
+
+export const SecondaryLoading = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'secondary',
+    value: 'Secondary Button',
+    loading: true,
+  },
+} satisfies Story
+
+export const CallToActionLoading = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    value: 'CallToAction Button',
+    loading: true,
+  },
+} satisfies Story
+
+export const PrimaryLoadingSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'primary',
+    size: 'small',
+    value: 'Primary Button',
+    loading: true,
+  },
+} satisfies Story
+
+export const SecondaryLoadingSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'secondary',
+    size: 'small',
+    value: 'Secondary Button',
+    loading: true,
+  },
+} satisfies Story
+
+export const CallToActionLoadingSmall = {
+  args: {
+    id: 'my-button',
+    type: 'button',
+    kind: 'call-to-action',
+    size: 'small',
+    value: 'CallToAction Button',
+    loading: true,
+  },
+} satisfies Story

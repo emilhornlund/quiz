@@ -1,7 +1,29 @@
 @import '../../styles/inputs';
+@import '../../styles/loading';
 
 .buttonInputContainer {
   @extend .input;
+
+  button {
+    .loadingSpinner {
+      @extend .loading-spinner;
+
+      @include mobile {
+        $--mobile-loading-spinner-size: calc($mobile-control-normal-height * 0.9);
+        @include loading-spinner-dimensions($--mobile-loading-spinner-size, $gray-4, button-mobile-normal);
+      }
+
+      @include tablet {
+        $--tablet-loading-spinner-size: calc($tablet-control-normal-height * 0.9);
+        @include loading-spinner-dimensions($--tablet-loading-spinner-size, $gray-4, button-tablet-normal);
+      }
+
+      @include desktop {
+        $--desktop-loading-spinner-size: calc($desktop-control-normal-height * 0.9);
+        @include loading-spinner-dimensions($--desktop-loading-spinner-size, $gray-4, button-desktop-normal);
+      }
+    }
+  }
 
   &.buttonInputKindPrimary {
     @extend .input-kind-primary;
@@ -29,5 +51,24 @@
 
   &.buttonInputSizeSmall {
     @extend .input-size-small;
+
+    button {
+      .loadingSpinner {
+        @include mobile {
+          $--mobile-loading-spinner-size: calc($mobile-control-small-height * 0.9);
+          @include loading-spinner-dimensions($--mobile-loading-spinner-size, $gray-4, button-mobile-small);
+        }
+
+        @include tablet {
+          $--tablet-loading-spinner-size: calc($tablet-control-small-height * 0.9);
+          @include loading-spinner-dimensions($--tablet-loading-spinner-size, $gray-4, button-tablet-small);
+        }
+
+        @include desktop {
+          $--desktop-loading-spinner-size: calc($desktop-control-small-height * 0.9);
+          @include loading-spinner-dimensions($--desktop-loading-spinner-size, $gray-4, button-desktop-small);
+        }
+      }
+    }
   }
 }

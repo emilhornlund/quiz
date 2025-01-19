@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoadingSpinner > should render a LoadingSpinner with default props 1`] = `
+<div>
+  <div
+    class="loadingSpinnerContainer"
+  >
+    <div />
+    <div />
+    <div />
+  </div>
+</div>
+`;

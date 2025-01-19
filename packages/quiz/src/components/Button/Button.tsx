@@ -22,6 +22,7 @@ export interface ButtonProps {
   value?: React.ReactNode | string | undefined
   hideValue?: 'mobile' | 'never'
   disabled?: boolean
+  loading?: boolean
   icon?: IconDefinition
   iconPosition?: 'leading' | 'trailing'
   iconColor?: string
@@ -38,6 +39,7 @@ const Button: React.FC<ButtonProps> = ({
   value,
   hideValue = 'never',
   disabled,
+  loading,
   icon,
   iconPosition = 'leading',
   iconColor,
@@ -70,15 +72,25 @@ const Button: React.FC<ButtonProps> = ({
         id={id}
         name={name ?? id}
         type={type}
-        disabled={disabled}
+        disabled={loading || disabled}
         onClick={onClick}
         data-testid={`test-${id}-button`}>
-        {icon && iconPosition === 'leading' && (
-          <FontAwesomeIcon icon={icon} color={iconColor} />
-        )}
-        {showValue && <span>{value}</span>}
-        {icon && iconPosition === 'trailing' && (
-          <FontAwesomeIcon icon={icon} color={iconColor} />
+        {loading ? (
+          <div className={styles.loadingSpinner}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        ) : (
+          <>
+            {icon && iconPosition === 'leading' && (
+              <FontAwesomeIcon icon={icon} color={iconColor} />
+            )}
+            {showValue && <span>{value}</span>}
+            {icon && iconPosition === 'trailing' && (
+              <FontAwesomeIcon icon={icon} color={iconColor} />
+            )}
+          </>
         )}
       </button>
     </div>
