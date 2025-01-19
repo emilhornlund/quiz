@@ -312,6 +312,17 @@ export const useQuizServiceClient = () => {
     apiPost<void>(`/games/${gameID}/players`, { nickname })
 
   /**
+   * Leaves an existing game using the provided game ID and player ID.
+   *
+   * @param gameID - The ID of the game to join.
+   * @param playerID - The ID of the player to remove.
+   *
+   * @returns A Promise that resolves when the player is successfully removed from the game.
+   */
+  const leaveGame = (gameID: string, playerID: string): Promise<void> =>
+    apiDelete<void>(`/games/${gameID}/players/${playerID}`)
+
+  /**
    * Marks the current task in the game as completed.
    *
    * @param gameID - The ID of the game whose current task should be completed.
@@ -366,6 +377,7 @@ export const useQuizServiceClient = () => {
     findGame,
     createGame,
     joinGame,
+    leaveGame,
     completeTask,
     submitQuestionAnswer,
   }

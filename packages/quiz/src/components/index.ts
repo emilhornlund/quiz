@@ -40,7 +40,6 @@ export {
 export { default as ConfirmDialog } from './ConfirmDialog'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as Leaderboard } from './Leaderboard'
-export { default as LeaveButton } from './LeaveButton'
 export { default as LoadingSpinner } from './LoadingSpinner'
 export { Menu, MenuItem } from './Menu'
 export { default as Modal } from './Modal'
