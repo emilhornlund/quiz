@@ -13,9 +13,10 @@ const options: ToastOptions = {
 }
 
 export const notifySuccess = (message: string) =>
-  toast.success(message, options)
+  toast.success(message, { ...options, style: { backgroundColor: '#05c46b' } })
 
 export const notifyWarning = (message: string) =>
-  toast.warning(message, options)
+  toast.warning(message, { ...options, style: { backgroundColor: '#ffa801' } })
 
-export const notifyError = (message: string) => toast.error(message, options)
+export const notifyError = (message: string) =>
+  toast.error(message, { ...options, style: { backgroundColor: '#ff3f34' } })
