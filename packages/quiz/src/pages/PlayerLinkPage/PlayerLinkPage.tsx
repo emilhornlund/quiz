@@ -1,3 +1,4 @@
+import { PLAYER_LINK_CODE_REGEX } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import React, { FC, FormEvent } from 'react'
 
@@ -46,6 +47,7 @@ const PlayerLinkPage: FC = () => {
             id="link-code-textfield"
             type="text"
             placeholder="Enter Link Code"
+            regex={PLAYER_LINK_CODE_REGEX}
             onChange={(value) => setEditableLinkCode(value as string)}
           />
           <Button

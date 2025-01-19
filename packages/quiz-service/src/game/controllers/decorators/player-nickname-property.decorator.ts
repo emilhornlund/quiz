@@ -1,6 +1,10 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
-import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
+import {
+  PLAYER_NICKNAME_MAX_LENGTH,
+  PLAYER_NICKNAME_MIN_LENGTH,
+  PLAYER_NICKNAME_REGEX,
+} from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 export function PlayerNicknameProperty() {
@@ -10,14 +14,14 @@ export function PlayerNicknameProperty() {
         'A nickname chosen by the player, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
       required: true,
       type: String,
-      minLength: 2,
-      maxLength: 20,
+      minLength: PLAYER_NICKNAME_MIN_LENGTH,
+      maxLength: PLAYER_NICKNAME_MAX_LENGTH,
       pattern: `${PLAYER_NICKNAME_REGEX}`,
       example: 'FrostyBear',
     }),
     IsString(),
-    MinLength(2),
-    MaxLength(20),
+    MinLength(PLAYER_NICKNAME_MIN_LENGTH),
+    MaxLength(PLAYER_NICKNAME_MAX_LENGTH),
     Matches(PLAYER_NICKNAME_REGEX, {
       message: 'Nickname can only contain letters, numbers, and underscores.',
     }),

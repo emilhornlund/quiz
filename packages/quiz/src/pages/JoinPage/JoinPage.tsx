@@ -1,4 +1,8 @@
-import { PLAYER_NICKNAME_REGEX } from '@quiz/common'
+import {
+  PLAYER_NICKNAME_MAX_LENGTH,
+  PLAYER_NICKNAME_MIN_LENGTH,
+  PLAYER_NICKNAME_REGEX,
+} from '@quiz/common'
 import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -77,6 +81,8 @@ const JoinPage: FC = () => {
           type="text"
           placeholder="Nickname"
           value={nickname ?? ''}
+          minLength={PLAYER_NICKNAME_MIN_LENGTH}
+          maxLength={PLAYER_NICKNAME_MAX_LENGTH}
           regex={PLAYER_NICKNAME_REGEX}
           onChange={(value) => setNickname(value as string)}
           onValid={setNicknameValid}

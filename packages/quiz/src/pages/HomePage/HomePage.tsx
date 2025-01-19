@@ -1,4 +1,4 @@
-import { GAME_PIN_REGEX } from '@quiz/common'
+import { GAME_PIN_LENGTH, GAME_PIN_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -59,6 +59,8 @@ const HomePage: FC = () => {
           type="text"
           placeholder="Game PIN"
           value={gamePIN ?? ''}
+          minLength={GAME_PIN_LENGTH}
+          maxLength={GAME_PIN_LENGTH}
           regex={GAME_PIN_REGEX}
           onChange={(value) => setGamePIN(value as string)}
           onValid={setGamePINValid}
