@@ -11,17 +11,17 @@
     flex: 1;
 
     @include mobile {
-      gap: $layout-gutter * 0.5;
+      gap: $mobile-narrow-layout-gutter;
       grid-template-columns: 1fr;
     }
 
     @include tablet {
-      gap: $layout-gutter * 0.75;
+      gap: $tablet-narrow-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
     @include desktop {
-      gap: $layout-gutter;
+      gap: $desktop-narrow-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
@@ -37,24 +37,24 @@
       cursor: pointer;
 
       @include mobile {
-        gap: $layout-gutter * 0.5;
-        padding: $layout-gutter * 0.5;
+        gap: $mobile-narrow-layout-gutter;
+        padding: $mobile-narrow-layout-gutter;
         border-radius: pxToRem(8px);
 
         @include fontSize(12px);
       }
 
       @include tablet {
-        gap: $layout-gutter * 0.75;
-        padding: $layout-gutter * 0.75;
+        gap: $tablet-narrow-layout-gutter;
+        padding: $tablet-narrow-layout-gutter;
         border-radius: pxToRem(12px);
 
         @include fontSize(18px);
       }
 
       @include desktop {
-        gap: $layout-gutter;
-        padding: $layout-gutter;
+        gap: $desktop-narrow-layout-gutter;
+        padding: $desktop-narrow-layout-gutter;
         border-radius: pxToRem(16px);
 
         @include fontSize(24px);
@@ -98,7 +98,10 @@
 
         &:after {
           position: absolute;
-          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           width: 100%;
           height: 100%;
         }
@@ -106,34 +109,25 @@
         @include mobile {
           min-width: pxToRem(30px);
           min-height: pxToRem(30px);
+          line-height: 16px;
 
           @include fontSize(16px);
-
-          &:after {
-            top: 5px;
-          }
         }
 
         @include tablet {
           min-width: pxToRem(40px);
           min-height: pxToRem(40px);
+          line-height: 20px;
 
           @include fontSize(20px);
-
-          &:after {
-            top: 8px;
-          }
         }
 
         @include desktop {
           min-width: pxToRem(50px);
           min-height: pxToRem(50px);
+          line-height: 24px;
 
           @include fontSize(24px);
-
-          &:after {
-            top: 10px;
-          }
         }
       }
 

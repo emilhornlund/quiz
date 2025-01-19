@@ -13,15 +13,15 @@
     flex: 1;
 
     @include mobile {
-      row-gap: $layout-gutter;
+      row-gap: $mobile-layout-gutter;
     }
 
     @include tablet {
-      row-gap: $layout-gutter * 1.5;
+      row-gap: $tablet-layout-gutter;
     }
 
     @include desktop {
-      row-gap: $layout-gutter * 2;
+      row-gap: $desktop-layout-gutter;
     }
 
     input[type=range] {
@@ -97,7 +97,18 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      column-gap: $layout-gutter;
+
+      @include mobile {
+        column-gap: $mobile-narrow-layout-gutter;
+      }
+
+      @include tablet {
+        column-gap: $tablet-narrow-layout-gutter;
+      }
+
+      @include desktop {
+        column-gap: $desktop-narrow-layout-gutter;
+      }
 
       div:first-child {
         flex: 1;
@@ -114,20 +125,20 @@
     flex: 1;
 
     @include mobile {
-      column-gap: $layout-gutter;
-      padding: $layout-gutter;
+      column-gap: $mobile-layout-gutter;
+      padding: $mobile-layout-gutter;
       border-radius: pxToRem(8px);
     }
 
     @include tablet {
-      column-gap: $layout-gutter * 1.5;
-      padding: $layout-gutter * 1.5;
+      column-gap: $tablet-layout-gutter;
+      padding: $tablet-layout-gutter;
       border-radius: pxToRem(12px);
     }
 
     @include desktop {
-      column-gap: $layout-gutter * 2;
-      padding: $layout-gutter * 2;
+      column-gap: $desktop-layout-gutter;
+      padding: $desktop-layout-gutter;
       border-radius: pxToRem(16px);
     }
 

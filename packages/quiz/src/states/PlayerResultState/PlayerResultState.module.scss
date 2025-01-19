@@ -10,23 +10,23 @@
   background-color: $white-1-50;
   font-weight: bold;
 
-  @mixin score-dimensions($size, $padding-ratio) {
-    padding: 0 $layout-gutter * $padding-ratio;
+  @mixin score-dimensions($size, $layout-gutter) {
+    padding: calc($layout-gutter * 0.5) calc($layout-gutter * 2);
     border-radius: calc($size / 2);
-    line-height: $size;
+    line-height: $size * 0.7;
 
     @include fontSize($size * 0.7);
   }
 
   @include mobile {
-    @include score-dimensions(42px, 2);
+    @include score-dimensions(42px, $mobile-narrow-layout-gutter);
   }
 
   @include tablet {
-    @include score-dimensions(52px, 2);
+    @include score-dimensions(52px, $tablet-narrow-layout-gutter);
   }
 
   @include desktop {
-    @include score-dimensions(62px, 2);
+    @include score-dimensions(62px, $desktop-narrow-layout-gutter);
   }
 }

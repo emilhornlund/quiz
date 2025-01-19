@@ -120,6 +120,15 @@ $desktop-checkbox-small-font-size: calc($desktop-checkbox-normal-font-size * 0.8
     @extend .input-error;
   }
 
+
+  @include mobile {
+    row-gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-control-normal-layout-gutter;
+  }
+
   @include desktop {
     row-gap: $desktop-control-normal-layout-gutter;
   }

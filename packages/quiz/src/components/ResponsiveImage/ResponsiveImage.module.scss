@@ -19,15 +19,15 @@
     object-fit: contain;
 
     @include mobile {
-      border-radius: $layout-gutter * 0.5;
+      border-radius: $mobile-narrow-layout-gutter;
     }
 
     @include tablet {
-      border-radius: $layout-gutter * 0.75;
+      border-radius: $tablet-narrow-layout-gutter;
     }
 
     @include desktop {
-      border-radius: $layout-gutter;
+      border-radius: $desktop-narrow-layout-gutter;
     }
   }
 }

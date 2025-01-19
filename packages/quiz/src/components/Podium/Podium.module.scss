@@ -17,15 +17,15 @@
     align-items: center;
 
     @include mobile {
-      row-gap: $layout-gutter * 0.5;
+      row-gap: $mobile-narrow-layout-gutter;
     }
 
     @include tablet {
-      row-gap: $layout-gutter * 0.75;
+      row-gap: $tablet-narrow-layout-gutter;
     }
 
     @include desktop {
-      row-gap: $layout-gutter;
+      row-gap: $desktop-narrow-layout-gutter;
     }
 
     .spacer {
@@ -75,18 +75,18 @@
       flex: 1;
 
       @include mobile {
-        padding: $layout-gutter 0 $layout-gutter * 2 0;
-        row-gap: $layout-gutter * 0.5;
+        padding: $mobile-layout-gutter 0 $mobile-layout-gutter * 4 0;
+        row-gap: $mobile-narrow-layout-gutter;
       }
 
       @include tablet {
-        padding: $layout-gutter * 1.5 0 $layout-gutter * 3 0;
-        row-gap: $layout-gutter * 0.75;
+        padding: $tablet-layout-gutter 0 $tablet-layout-gutter * 4 0;
+        row-gap: $tablet-narrow-layout-gutter;
       }
 
       @include desktop {
-        padding: $layout-gutter * 2 0 $layout-gutter * 4 0;
-        row-gap: $layout-gutter;
+        padding: $desktop-layout-gutter 0 $desktop-layout-gutter * 4 0;
+        row-gap: $desktop-narrow-layout-gutter;
       }
 
       .position {

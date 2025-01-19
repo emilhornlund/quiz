@@ -15,16 +15,16 @@
 
   @include mobile {
     border-width: pxToRem(2px);
-    border-radius: $layout-gutter * 0.5;
+    border-radius: $mobile-narrow-layout-gutter;
   }
 
   @include tablet {
     border-width: pxToRem(3px);
-    border-radius: $layout-gutter * 0.75;
+    border-radius: $tablet-narrow-layout-gutter;
   }
 
   @include desktop {
     border-width: pxToRem(4px);
-    border-radius: $layout-gutter;
+    border-radius: $desktop-narrow-layout-gutter;
   }
 }

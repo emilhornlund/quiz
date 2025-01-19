@@ -18,19 +18,19 @@
     @include mobile {
       @include fontSize(16px);
 
-      padding: $layout-gutter * 0.5;
+      padding: $mobile-narrow-layout-gutter;
     }
 
     @include tablet {
       @include fontSize(22px);
 
-      padding: $layout-gutter * 0.75;
+      padding: $tablet-narrow-layout-gutter;
     }
 
     @include desktop {
       @include fontSize(28px);
 
-      padding: $layout-gutter;
+      padding: $desktop-narrow-layout-gutter;
     }
 
     &.podium:nth-child(-n+3) {
@@ -47,18 +47,18 @@
 
     &:nth-child(3n+1) {
       @include mobile {
-        border-top-left-radius: $layout-gutter * 0.5;
-        border-bottom-left-radius: $layout-gutter * 0.5;
+        border-top-left-radius: $mobile-narrow-layout-gutter;
+        border-bottom-left-radius: $mobile-narrow-layout-gutter;
       }
 
       @include tablet {
-        border-top-left-radius: $layout-gutter * 0.75;
-        border-bottom-left-radius: $layout-gutter * 0.75;
+        border-top-left-radius: $tablet-narrow-layout-gutter;
+        border-bottom-left-radius: $tablet-narrow-layout-gutter;
       }
 
       @include desktop {
-        border-top-left-radius: $layout-gutter;
-        border-bottom-left-radius: $layout-gutter;
+        border-top-left-radius: $desktop-narrow-layout-gutter;
+        border-bottom-left-radius: $desktop-narrow-layout-gutter;
       }
     }
 
@@ -67,18 +67,18 @@
       font-weight: bold;
 
       @include mobile {
-        border-top-right-radius: $layout-gutter * 0.5;
-        border-bottom-right-radius: $layout-gutter * 0.5;
+        border-top-right-radius: $mobile-narrow-layout-gutter;
+        border-bottom-right-radius: $mobile-narrow-layout-gutter;
       }
 
       @include tablet {
-        border-top-right-radius: $layout-gutter * 0.75;
-        border-bottom-right-radius: $layout-gutter * 0.75;
+        border-top-right-radius: $tablet-narrow-layout-gutter;
+        border-bottom-right-radius: $tablet-narrow-layout-gutter;
       }
 
       @include desktop {
-        border-top-right-radius: $layout-gutter;
-        border-bottom-right-radius: $layout-gutter;
+        border-top-right-radius: $desktop-narrow-layout-gutter;
+        border-bottom-right-radius: $desktop-narrow-layout-gutter;
       }
     }
 
@@ -124,7 +124,18 @@
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
-      column-gap: $layout-gutter * 2;
+
+      @include mobile {
+        column-gap: $mobile-narrow-layout-gutter;
+      }
+
+      @include tablet {
+        column-gap: $tablet-narrow-layout-gutter;
+      }
+
+      @include desktop {
+        column-gap: $desktop-narrow-layout-gutter;
+      }
     }
 
     .score {
@@ -132,20 +143,20 @@
       align-items: center;
       justify-content: center;
       background-color: $black-1-10;
-      color: rgba(0, 0, 0, 0.8);
+      color: $black-1-80;
 
       @include mobile {
-        padding: 0 $layout-gutter * 0.5;
+        padding: 0 $mobile-narrow-layout-gutter;
         border-radius: pxToRem(8px);
       }
 
       @include tablet {
-        padding: 0 $layout-gutter * 0.75;
+        padding: 0 $tablet-narrow-layout-gutter;
         border-radius: pxToRem(10px);
       }
 
       @include desktop {
-        padding: 0 $layout-gutter;
+        padding: 0 $desktop-narrow-layout-gutter;
         border-radius: pxToRem(12px);
       }
     }

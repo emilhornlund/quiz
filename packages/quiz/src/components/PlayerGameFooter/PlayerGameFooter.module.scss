@@ -1,56 +1,72 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
+$--mobile-font-size: 16px;
+$--mobile-line-height: pxToRem($--mobile-font-size);
+
+$--tablet-font-size: 20px;
+$--tablet-line-height: pxToRem($--tablet-font-size);
+
+$--desktop-font-size: 24px;
+$--desktop-line-height: pxToRem($--desktop-font-size);
+
 .main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: rgba(255, 255, 255, 0.5);
+  align-items: center;
+  background-color: $white-1-50;
 
   @include mobile {
-    border-radius: $layout-gutter * 0.5;
-    padding: $layout-gutter * 0.5;
+    border-radius: $mobile-narrow-layout-gutter;
+    padding: $mobile-narrow-layout-gutter;
     width: 100%;
+    max-height: calc($mobile-narrow-layout-gutter * 2 + $--mobile-line-height);
   }
 
   @include tablet {
-    border-radius: $layout-gutter * 0.75;
-    padding: $layout-gutter * 0.75;
+    border-radius: $tablet-narrow-layout-gutter;
+    padding: $tablet-narrow-layout-gutter;
     width: $tablet-width;
+    max-height: calc($tablet-narrow-layout-gutter * 2 + $--tablet-line-height);
   }
 
   @include desktop {
-    border-radius: $layout-gutter;
-    padding: $layout-gutter;
+    border-radius: $desktop-narrow-layout-gutter;
+    padding: $desktop-narrow-layout-gutter;
     width: $desktop-width;
+    max-height: calc($desktop-narrow-layout-gutter * 2 + $--desktop-line-height);
   }
 
   .questions, .nickname, .score {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
     flex: 1;
 
     @include mobile {
-      column-gap: $layout-gutter * 0.5;
+      column-gap: $mobile-narrow-layout-gutter;
+      line-height: $--mobile-line-height;
 
-      @include fontSize(16px);
+      @include fontSize($--mobile-font-size);
     }
 
     @include tablet {
-      column-gap: $layout-gutter * 0.75;
+      column-gap: $tablet-narrow-layout-gutter;
+      line-height: $--tablet-line-height;
 
-      @include fontSize(20px);
+      @include fontSize($--tablet-font-size);
     }
 
     @include desktop {
-      column-gap: $layout-gutter;
+      column-gap: $desktop-narrow-layout-gutter;
+      line-height: $--desktop-line-height;
 
-      @include fontSize(24px);
+      @include fontSize($--desktop-font-size);
     }
 
     span {
-      margin-top: -1%;
       font-weight: bold;
     }
   }
@@ -72,17 +88,17 @@
       color: $gray-4;
 
       @include mobile {
-        padding: 0 $layout-gutter * 0.5;
+        padding: calc($mobile-narrow-layout-gutter * 0.3) $mobile-narrow-layout-gutter;
         border-radius: pxToRem(8px);
       }
 
       @include tablet {
-        padding: 0 $layout-gutter * 0.75;
+        padding: calc($tablet-narrow-layout-gutter * 0.3) $tablet-narrow-layout-gutter;
         border-radius: pxToRem(10px);
       }
 
       @include desktop {
-        padding: 0 $layout-gutter;
+        padding: calc($desktop-narrow-layout-gutter * 0.3) $desktop-narrow-layout-gutter;
         border-radius: pxToRem(12px);
       }
     }

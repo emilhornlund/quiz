@@ -7,17 +7,17 @@
   align-items: center;
 
   @include mobile {
-    column-gap: $layout-gutter * 0.5;
+    column-gap: $mobile-narrow-layout-gutter;
     @include fontSize($mobile-text-font-size);
   }
 
   @include tablet {
-    column-gap: $layout-gutter * 0.75;
+    column-gap: $tablet-narrow-layout-gutter;
     @include fontSize($tablet-text-font-size);
   }
 
   @include desktop {
-    column-gap: $layout-gutter;
+    column-gap: $desktop-narrow-layout-gutter;
     @include fontSize($desktop-text-font-size);
   }
 }
