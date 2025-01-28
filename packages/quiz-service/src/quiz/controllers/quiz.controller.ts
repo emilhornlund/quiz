@@ -7,6 +7,8 @@ import {
   HttpStatus,
   Post,
   Put,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
@@ -27,10 +29,11 @@ import { Client } from '../../client/services/models/schemas'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
-import { ApiQuizIdParam } from './decorators/api'
+import { ApiPublicQuizPageFilter, ApiQuizIdParam } from './decorators/api'
 import { AuthorizedQuiz } from './decorators/auth'
 import { RouteQuizIdParam } from './decorators/route'
 import {
+  PaginatedQuizResponse,
   QuestionMultiChoice,
   QuestionRange,
   QuestionTrueFalse,
@@ -102,6 +105,46 @@ export class QuizController {
     quizRequest: QuizClassicRequest | QuizZeroToOneHundredRequest,
   ): Promise<QuizResponse> {
     return this.quizService.createQuiz(quizRequest, client.player)
+  }
+
+  /**
+   * Retrieves a paginated list of public quizzes.
+   *
+   * This endpoint allows users to retrieve a list of quizzes that are publicly
+   * available. Quizzes can be optionally filtered by search terms and sorted
+   * by specific fields.
+   *
+   * @param queryParams - The filter, sorting, and pagination options for retrieving quizzes.
+   *
+   * @returns {Promise<PaginatedQuizResponse>} A paginated response containing
+   * the list of public quizzes.
+   */
+  @Get()
+  @ApiOperation({
+    summary: 'Retrieve public quizzes',
+    description:
+      'Retrieves a paginated list of public quizzes. Supports filtering, sorting, and pagination.',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved the paginated list of public quizzes.',
+    type: PaginatedQuizResponse,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access to the endpoint.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async getPublicQuizzes(
+    @Query(new ValidationPipe({ transform: true }))
+    queryParams: ApiPublicQuizPageFilter,
+  ): Promise<PaginatedQuizResponse> {
+    return this.quizService.findPublicQuizzes(
+      queryParams.search,
+      queryParams.mode,
+      queryParams.sort,
+      queryParams.order,
+      queryParams.limit,
+      queryParams.offset,
+    )
   }
 
   /**

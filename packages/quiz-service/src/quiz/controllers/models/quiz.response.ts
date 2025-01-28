@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import {
   GameMode,
   LanguageCode,
@@ -16,6 +17,8 @@ import {
   ApiQuizUpdatedProperty,
   ApiQuizVisibilityProperty,
 } from '../decorators/api'
+
+import { QuizAuthorResponse } from './quiz-author.response'
 
 /**
  * Represents the response object for a quiz.
@@ -62,6 +65,15 @@ export class QuizResponse implements QuizResponseDto {
    */
   @ApiQuizLanguageCodeProperty()
   languageCode: LanguageCode
+
+  /**
+   * The author of the quiz.
+   */
+  @ApiProperty({
+    description: 'Details about the author of the quiz.',
+    type: QuizAuthorResponse,
+  })
+  author: QuizAuthorResponse
 
   /**
    * The date and time when the quiz was created.

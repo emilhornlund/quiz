@@ -13,7 +13,9 @@ import {
   QuestionZeroToOneHundredRangeDto,
   QuizRequestDto,
   QuizResponseDto,
+  QuizVisibility,
 } from '@quiz/common'
+import { RootFilterQuery } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Player } from '../../player/services/models/schemas'
@@ -124,6 +126,53 @@ export class QuizService {
       total,
       limit,
       offset,
+    }
+  }
+
+  /**
+   * Retrieves a paginated list of public quizzes.
+   *
+   * This method fetches quizzes with public visibility, optionally filtered by
+   * search terms or game mode. Results can also be sorted by specific fields
+   * and ordered in ascending or descending order.
+   *
+   * @param search - Optional search term to filter quizzes by title.
+   * @param mode - Optional filter for the game mode of the quizzes.
+   * @param sortField - Field by which to sort the results. Defaults to 'created'.
+   * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
+   * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
+   * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
+   *
+   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the list of quizzes.
+   */
+  public async findPublicQuizzes(
+    search?: string,
+    mode?: GameMode,
+    sortField: 'title' | 'created' | 'updated' = 'created',
+    sortOrder: 'asc' | 'desc' = 'desc',
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<PaginatedQuizResponseDto> {
+    const filter: RootFilterQuery<Quiz> = {
+      visibility: QuizVisibility.Public,
+      ...(search?.length ? { title: { $regex: search, $options: 'i' } } : {}),
+      ...(mode ? { mode } : {}),
+    }
+
+    const total = await this.quizModel.countDocuments(filter)
+
+    const quizzes = await this.quizModel
+      .find(filter)
+      .sort({ [sortField]: sortOrder })
+      .skip(offset)
+      .limit(limit)
+      .populate('owner')
+
+    return {
+      results: quizzes.map(QuizService.buildQuizResponseDto),
+      offset,
+      limit,
+      total,
     }
   }
 
@@ -439,6 +488,7 @@ export class QuizService {
       visibility,
       imageCoverURL,
       languageCode,
+      owner,
       created,
       updated,
     } = quiz
@@ -450,6 +500,10 @@ export class QuizService {
       visibility,
       imageCoverURL,
       languageCode,
+      author: {
+        id: owner._id,
+        name: owner.nickname,
+      },
       created,
       updated,
     }

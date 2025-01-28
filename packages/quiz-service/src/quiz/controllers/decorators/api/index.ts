@@ -1,4 +1,5 @@
 export * from './api-mode-property.decorator'
+export * from './api-public-quiz-page-filter.decorator'
 export * from './api-question-duration-property.decorator'
 export * from './api-question-media-property.decorator'
 export * from './api-question-media-type-property.decorator'

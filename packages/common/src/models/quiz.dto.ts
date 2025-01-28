@@ -77,6 +77,21 @@ export type QuizZeroToOneHundredModeRequestDto = Extract<
 >
 
 /**
+ * Represents the response object for a quiz author.
+ */
+export interface QuizAuthorResponseDto {
+  /**
+   * The unique identifier of the author.
+   */
+  id: string
+
+  /**
+   * The name of the author.
+   */
+  name: string
+}
+
+/**
  * Data transfer object for quiz responses.
  */
 export interface QuizResponseDto {
@@ -114,6 +129,11 @@ export interface QuizResponseDto {
    * The language code of the quiz.
    */
   languageCode: LanguageCode
+
+  /**
+   * The author of the quiz.
+   */
+  author: QuizAuthorResponseDto
 
   /**
    * The date and time when the quiz was created.
