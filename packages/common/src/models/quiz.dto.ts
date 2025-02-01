@@ -131,6 +131,11 @@ export interface QuizResponseDto {
   languageCode: LanguageCode
 
   /**
+   * The total number of questions in the quiz.
+   */
+  numberOfQuestions: number
+
+  /**
    * The author of the quiz.
    */
   author: QuizAuthorResponseDto

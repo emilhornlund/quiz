@@ -67,6 +67,17 @@ export class QuizResponse implements QuizResponseDto {
   languageCode: LanguageCode
 
   /**
+   * The total number of questions in the quiz.
+   */
+  @ApiProperty({
+    description: 'The total number of questions in the quiz.',
+    type: Number,
+    required: true,
+    example: 20,
+  })
+  numberOfQuestions: number
+
+  /**
    * The author of the quiz.
    */
   @ApiProperty({

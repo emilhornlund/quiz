@@ -488,6 +488,7 @@ export class QuizService {
       visibility,
       imageCoverURL,
       languageCode,
+      questions,
       owner,
       created,
       updated,
@@ -500,6 +501,7 @@ export class QuizService {
       visibility,
       imageCoverURL,
       languageCode,
+      numberOfQuestions: questions.length,
       author: {
         id: owner._id,
         name: owner.nickname,
