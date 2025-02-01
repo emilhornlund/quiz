@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 import { IsInt, IsOptional, Max, Min } from 'class-validator'
 
 /**
@@ -20,6 +21,7 @@ export class ApiQuizPageQuery {
   @IsInt()
   @Min(5)
   @Max(50)
+  @Type(() => Number)
   limit?: number
 
   /**
@@ -35,5 +37,6 @@ export class ApiQuizPageQuery {
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   offset?: number
 }
