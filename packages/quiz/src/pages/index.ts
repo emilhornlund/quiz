@@ -1,4 +1,5 @@
 export { default as CreateQuizPage } from './CreateQuizPage'
+export { default as DiscoverPage } from './DiscoverPage'
 export { default as EditQuizPage } from './EditQuizPage'
 export { default as ErrorPage } from './ErrorPage'
 export { default as GamePage } from './GamePage'

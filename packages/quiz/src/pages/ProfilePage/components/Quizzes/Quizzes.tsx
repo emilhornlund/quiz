@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
@@ -10,20 +10,31 @@ import {
   QuizTable,
   Typography,
 } from '../../../../components'
+import { useAuthContext } from '../../../../context/auth'
 
 const Quizzes = () => {
   const navigate = useNavigate()
 
+  const { player } = useAuthContext()
+
   const { getCurrentPlayerQuizzes, createGame } = useQuizServiceClient()
+
+  const [searchParams, setSearchParams] = useState<{
+    limit?: number
+    offset?: number
+  }>({ limit: 5, offset: 0 })
 
   const {
     data: { results: quizzes, total = 0, limit = 0, offset = 0 } = {},
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['currentPlayerQuizzes'],
-    queryFn: getCurrentPlayerQuizzes,
+    queryKey: ['currentPlayerQuizzes', searchParams],
+    queryFn: () => getCurrentPlayerQuizzes(searchParams),
   })
+
+  const handlePaginationChange = (newLimit: number, newOffset: number): void =>
+    setSearchParams({ ...searchParams, limit: newLimit, offset: newOffset })
 
   const handleCreateGame = (quizId: string): void => {
     createGame(quizId).then((response) =>
@@ -66,6 +77,8 @@ const Quizzes = () => {
             limit,
             offset,
           }}
+          playerId={player?.id}
+          onPagination={handlePaginationChange}
           onEdit={(quizId) => navigate(`/quiz/${quizId}`)}
           onHostGame={handleCreateGame}
         />

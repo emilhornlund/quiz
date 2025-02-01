@@ -1,4 +1,5 @@
 import {
+  faCircleQuestion,
   faEye,
   faGamepad,
   faLanguage,
@@ -6,7 +7,12 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizAuthorResponseDto,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 
 import Picture from '../../assets/images/picture.svg'
@@ -29,6 +35,8 @@ export interface QuizTableItem {
   visibility: QuizVisibility
   imageCoverURL?: string
   languageCode: LanguageCode
+  numberOfQuestions: number
+  author: QuizAuthorResponseDto
 }
 
 export interface QuizTablePagination {
@@ -40,6 +48,8 @@ export interface QuizTablePagination {
 export interface QuizTableProps {
   items: QuizTableItem[]
   pagination: QuizTablePagination
+  isPublic?: boolean
+  playerId?: string
   onEdit?: (id: string) => void
   onHostGame?: (id: string) => void
   onPagination?: (limit: number, offset: number) => void
@@ -48,6 +58,7 @@ export interface QuizTableProps {
 const QuizTable: FC<QuizTableProps> = ({
   items,
   pagination,
+  playerId,
   onEdit,
   onHostGame,
   onPagination,
@@ -96,18 +107,24 @@ const QuizTable: FC<QuizTableProps> = ({
                     <FontAwesomeIcon icon={faGamepad} />
                     {GameModeLabels[item.mode]}
                   </span>
+                  <span>
+                    <FontAwesomeIcon icon={faCircleQuestion} />
+                    {item.numberOfQuestions}
+                  </span>
                 </div>
               </div>
               <div className={styles.actions}>
-                <Button
-                  id="edit-quiz-button"
-                  type="button"
-                  kind="call-to-action"
-                  size="small"
-                  value={deviceType != DeviceType.Mobile && 'Edit'}
-                  icon={faPen}
-                  onClick={() => onEdit?.(item.id)}
-                />
+                {playerId === item.author.id && (
+                  <Button
+                    id="edit-quiz-button"
+                    type="button"
+                    kind="call-to-action"
+                    size="small"
+                    value={deviceType != DeviceType.Mobile && 'Edit'}
+                    icon={faPen}
+                    onClick={() => onEdit?.(item.id)}
+                  />
+                )}
                 <Button
                   id="host-game-button"
                   type="button"
@@ -152,7 +169,7 @@ const QuizTable: FC<QuizTableProps> = ({
                   onPagination?.(
                     pagination.limit,
                     Math.min(
-                      pagination.total - pagination.limit,
+                      pagination.total,
                       pagination.offset + pagination.limit,
                     ),
                   )

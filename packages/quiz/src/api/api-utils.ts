@@ -80,3 +80,32 @@ export const isTokenExpired = (token: string | undefined): boolean => {
     return true
   }
 }
+
+/**
+ * Converts an object of query parameters into a URL query string.
+ *
+ * Filters out `undefined` keys and values, as well as empty string values.
+ * Encodes each key-value pair for safe URL transmission.
+ *
+ * @param params - An object containing query parameters where keys are strings
+ *                 and values can be strings, numbers, or undefined.
+ * @returns A formatted query string starting with `?` if there are valid parameters,
+ *          otherwise returns an empty string.
+ */
+export function parseQueryParams(
+  params: Record<string, string | number | undefined>,
+): string {
+  const parsed = Object.entries(params)
+    .filter(
+      ([key, value]) =>
+        key !== undefined &&
+        value !== undefined &&
+        !(typeof value === 'string' && value.trim().length === 0),
+    )
+    .map((components) =>
+      (components as (string | number)[]).map(encodeURIComponent).join('='),
+    )
+    .join('&')
+
+  return parsed.length ? `?${parsed}` : ''
+}

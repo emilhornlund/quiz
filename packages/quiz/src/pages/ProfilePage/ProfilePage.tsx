@@ -5,7 +5,7 @@ import { Page } from '../../components'
 import { Quizzes } from './components'
 
 const ProfilePage: FC = () => (
-  <Page align="start" profile>
+  <Page align="start" discover profile>
     <Quizzes />
   </Page>
 )

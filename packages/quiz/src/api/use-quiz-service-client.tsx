@@ -24,6 +24,7 @@ import { notifySuccess } from '../utils/notification.ts'
 import {
   ApiPostBody,
   isTokenExpired,
+  parseQueryParams,
   parseResponseAndHandleError,
   resolveUrl,
 } from './api-utils.ts'
@@ -190,10 +191,18 @@ export const useQuizServiceClient = () => {
   /**
    * Retrieves the quizzes associated with the current player.
    *
+   * @param options.limit - The maximum number of quizzes to retrieve per page.
+   * @param options.offset - The number of quizzes to skip before starting retrieval.
+   *
    * @returns A promise resolving to the quizzes in a paginated format as a `PaginatedQuizResponseDto`.
    */
-  const getCurrentPlayerQuizzes = (): Promise<PaginatedQuizResponseDto> =>
-    apiGet<PaginatedQuizResponseDto>('/client/quizzes')
+  const getCurrentPlayerQuizzes = (options: {
+    limit?: number
+    offset?: number
+  }): Promise<PaginatedQuizResponseDto> =>
+    apiGet<PaginatedQuizResponseDto>(
+      `/client/quizzes${parseQueryParams(options)}`,
+    )
 
   /**
    * Creates a new quiz with the specified request data.
@@ -217,6 +226,20 @@ export const useQuizServiceClient = () => {
    */
   const getQuiz = (quizId: string): Promise<QuizResponseDto> =>
     apiGet(`/quizzes/${quizId}`)
+
+  /**
+   * Retrieves a paginated list of public quizzes.
+   *
+   * @param options.searchTerm - A search term to filter quizzes by their titles.
+   * @param options.limit - The maximum number of quizzes to retrieve per page.
+   * @param options.offset - The number of quizzes to skip before starting retrieval.
+   */
+  const getPublicQuizzes = (options: {
+    search?: string
+    limit?: number
+    offset?: number
+  }): Promise<PaginatedQuizResponseDto> =>
+    apiGet<PaginatedQuizResponseDto>(`/quizzes${parseQueryParams(options)}`)
 
   /**
    * Updates an existing quiz with the specified request data.
@@ -369,6 +392,7 @@ export const useQuizServiceClient = () => {
     getCurrentPlayerQuizzes,
     createQuiz,
     getQuiz,
+    getPublicQuizzes,
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,

@@ -1,6 +1,6 @@
 import { faLink, faUser } from '@fortawesome/free-solid-svg-icons'
 import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
 import { classNames } from '../../utils/helpers'
@@ -13,6 +13,7 @@ export interface PageProps {
   height?: 'normal' | 'full'
   align?: 'start' | 'center' | 'space-between'
   noPadding?: boolean
+  discover?: boolean
   profile?: boolean
   header?: React.ReactNode
   footer?: React.ReactNode
@@ -24,6 +25,7 @@ const Page: React.FC<PageProps> = ({
   height = 'normal',
   align = 'center',
   noPadding = false,
+  discover = false,
   profile = false,
   header,
   footer,
@@ -44,6 +46,7 @@ const Page: React.FC<PageProps> = ({
           <span className={styles.text}>Quiz</span>
         </button>
         <div className={styles.side}>
+          {discover && <Link to="/discover">Discover</Link>}
           {header}
           {profile && (
             <div className={styles.avatar} ref={profileButtonRef}>

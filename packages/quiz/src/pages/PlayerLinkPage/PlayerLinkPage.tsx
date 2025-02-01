@@ -27,7 +27,7 @@ const PlayerLinkPage: FC = () => {
   }
 
   return (
-    <Page profile>
+    <Page discover profile>
       <div className={styles.linkPage}>
         <Typography variant="subtitle">Link Your Devices!</Typography>
         <Typography variant="text">

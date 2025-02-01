@@ -1,0 +1,31 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.quizTableFilter, .quizTableFilter > form {
+  display: flex;
+  flex-direction: row;
+
+  @include mobile {
+    column-gap: $mobile-narrow-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    column-gap: $tablet-narrow-layout-gutter;
+    width: $tablet-width * 0.7;
+  }
+
+  @include desktop {
+    column-gap: $desktop-narrow-layout-gutter;
+    width: $tablet-width * 0.7;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+
+    &.full {
+      flex: 1;
+    }
+  }
+}

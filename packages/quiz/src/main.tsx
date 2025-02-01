@@ -8,6 +8,7 @@ import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
   CreateQuizPage,
+  DiscoverPage,
   EditQuizPage,
   ErrorPage,
   GamePage,
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: '/',
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: '/discover',
+        element: <DiscoverPage />,
       },
       {
         path: '/join',

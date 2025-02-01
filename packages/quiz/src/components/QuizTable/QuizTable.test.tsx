@@ -6,6 +6,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import QuizTable, { QuizTableItem, QuizTablePagination } from './QuizTable'
 
+const PLAYER_ID = '490fbab7-dc75-47fe-bf17-048308eaad14'
+
 const mockItems: QuizTableItem[] = [
   {
     id: '1',
@@ -15,6 +17,8 @@ const mockItems: QuizTableItem[] = [
     visibility: QuizVisibility.Public,
     imageCoverURL: 'https://example.com/image1.jpg',
     languageCode: LanguageCode.English,
+    numberOfQuestions: 14,
+    author: { id: PLAYER_ID, name: 'FrostyBear' },
   },
   {
     id: '2',
@@ -24,6 +28,8 @@ const mockItems: QuizTableItem[] = [
     visibility: QuizVisibility.Private,
     imageCoverURL: 'https://example.com/image2.jpg',
     languageCode: LanguageCode.English,
+    numberOfQuestions: 28,
+    author: { id: PLAYER_ID, name: 'FrostyBear' },
   },
 ]
 
@@ -47,6 +53,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -68,6 +75,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -88,6 +96,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -111,6 +120,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -133,6 +143,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -150,6 +161,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={{ ...mockPagination, offset: 8 }}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -167,6 +179,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -187,6 +200,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={mockItems}
         pagination={{ ...mockPagination, offset: 2 }}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}
@@ -207,6 +221,7 @@ describe('QuizTable', () => {
       <QuizTable
         items={[]}
         pagination={mockPagination}
+        playerId={PLAYER_ID}
         onEdit={mockOnEdit}
         onHostGame={mockOnHostGame}
         onPagination={mockOnPagination}

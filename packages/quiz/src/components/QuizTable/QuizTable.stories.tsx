@@ -24,6 +24,8 @@ const TableItems: QuizTableItem[] = [
     visibility: QuizVisibility.Public,
     imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
     languageCode: LanguageCode.English,
+    numberOfQuestions: 14,
+    author: { id: uuidv4(), name: 'FrostyBear' },
   },
   {
     id: uuidv4(),
@@ -33,6 +35,8 @@ const TableItems: QuizTableItem[] = [
     mode: GameMode.ZeroToOneHundred,
     visibility: QuizVisibility.Private,
     languageCode: LanguageCode.English,
+    numberOfQuestions: 20,
+    author: { id: uuidv4(), name: 'FrostyBear' },
   },
   {
     id: uuidv4(),
@@ -42,6 +46,8 @@ const TableItems: QuizTableItem[] = [
     mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
     languageCode: LanguageCode.English,
+    numberOfQuestions: 16,
+    author: { id: uuidv4(), name: 'FrostyBear' },
   },
   {
     id: uuidv4(),
@@ -51,6 +57,8 @@ const TableItems: QuizTableItem[] = [
     mode: GameMode.ZeroToOneHundred,
     visibility: QuizVisibility.Private,
     languageCode: LanguageCode.English,
+    numberOfQuestions: 28,
+    author: { id: uuidv4(), name: 'FrostyBear' },
   },
   {
     id: uuidv4(),
@@ -60,6 +68,8 @@ const TableItems: QuizTableItem[] = [
     mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
     languageCode: LanguageCode.English,
+    numberOfQuestions: 24,
+    author: { id: uuidv4(), name: 'FrostyBear' },
   },
 ]
 
