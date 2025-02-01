@@ -47,6 +47,10 @@ export class ApiPublicQuizPageFilter {
     example: 'title',
   })
   @IsOptional()
+  @IsEnum(['title', 'created', 'updated'], {
+    message:
+      'sort must be one of the following values: title, created, updated',
+  })
   sort?: 'title' | 'created' | 'updated'
 
   /**
@@ -61,6 +65,9 @@ export class ApiPublicQuizPageFilter {
     example: 'asc',
   })
   @IsOptional()
+  @IsEnum(['asc', 'desc'], {
+    message: 'order must be one of the following values: asc, desc',
+  })
   order?: 'asc' | 'desc'
 
   /**

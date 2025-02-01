@@ -11,6 +11,7 @@ import {
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
   QuizRequestDto,
+  QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
 import supertest from 'supertest'
@@ -171,6 +172,314 @@ describe('QuizController (e2e)', () => {
           )
           expect(res.body).toHaveProperty('created')
           expect(res.body).toHaveProperty('updated')
+        })
+    })
+  })
+
+  describe('/api/quizzes (GET)', () => {
+    it('should return a paginated list of public quizzes', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      const publicQuizzes: QuizResponseDto[] = []
+      for (let i = 0; i < 10; i++) {
+        publicQuizzes.push(
+          await quizService.createQuiz(originalData, client.player),
+        )
+      }
+
+      await Promise.all(
+        [...Array(5).keys()].map(() =>
+          quizService.createQuiz(
+            { ...originalData, visibility: QuizVisibility.Private },
+            client.player,
+          ),
+        ),
+      )
+
+      const allResultsSortedByCreatedDate = publicQuizzes
+        .sort((a, b) => b.created.getTime() - a.created.getTime())
+        .map((quiz) => JSON.parse(JSON.stringify(quiz)))
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: allResultsSortedByCreatedDate,
+            total: 10,
+            limit: 10,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return quizzes filtered by search term', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      await Promise.all([
+        ...[...Array(10).keys()].map(() =>
+          quizService.createQuiz({ ...originalData }, client.player),
+        ),
+      ])
+
+      const uniqueQuiz = await quizService.createQuiz(
+        { ...originalData, title: 'Unique Quiz Title' },
+        client.player,
+      )
+
+      const uniqueQuizTitleResultsSortedByCreatedDate = [uniqueQuiz].map(
+        (quiz) => JSON.parse(JSON.stringify(quiz)),
+      )
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?search=Unique%20Quiz%20Title')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: uniqueQuizTitleResultsSortedByCreatedDate,
+            total: 1,
+            limit: 10,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return quizzes filtered by mode', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      await Promise.all(
+        [...Array(10).keys()].map(() =>
+          quizService.createQuiz({ ...originalData }, client.player),
+        ),
+      )
+
+      const zeroToOneHundredQuizzes: QuizResponseDto[] = []
+      for (let i = 0; i < 10; i++) {
+        zeroToOneHundredQuizzes.push(
+          await quizService.createQuiz(
+            { ...updatedData, visibility: QuizVisibility.Public },
+            client.player,
+          ),
+        )
+      }
+
+      const zeroToOneHundredModeResultsSortedByCreatedDate =
+        zeroToOneHundredQuizzes
+          .filter((quiz) => quiz.mode === GameMode.ZeroToOneHundred)
+          .sort((a, b) => b.created.getTime() - a.created.getTime())
+          .map((quiz) => JSON.parse(JSON.stringify(quiz)))
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?mode=ZERO_TO_ONE_HUNDRED')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: zeroToOneHundredModeResultsSortedByCreatedDate,
+            total: 10,
+            limit: 10,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return quizzes sort by updated in ascending order', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      const publicQuizzes: QuizResponseDto[] = []
+      for (let i = 0; i < 10; i++) {
+        publicQuizzes.push(
+          await quizService.createQuiz(originalData, client.player),
+        )
+      }
+
+      const allResultsSortedByUpdatedAscendingDate = publicQuizzes
+        .sort((a, b) => a.updated.getTime() - b.updated.getTime())
+        .map((quiz) => JSON.parse(JSON.stringify(quiz)))
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?sort=updated&order=asc')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: allResultsSortedByUpdatedAscendingDate,
+            total: 10,
+            limit: 10,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return the correct number of quizzes based on the limit', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      const publicQuizzes: QuizResponseDto[] = []
+      for (let i = 0; i < 10; i++) {
+        publicQuizzes.push(
+          await quizService.createQuiz(originalData, client.player),
+        )
+      }
+
+      const firstFiveResultsSortedByCreatedDate = publicQuizzes
+        .sort((a, b) => b.created.getTime() - a.created.getTime())
+        .filter((_, index) => index >= 0 && index < 5)
+        .map((quiz) => JSON.parse(JSON.stringify(quiz)))
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?limit=5')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: firstFiveResultsSortedByCreatedDate,
+            total: 10,
+            limit: 5,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return quizzes with the correct offset', async () => {
+      const clientId = uuidv4()
+
+      const client = await clientService.findOrCreateClient(clientId)
+
+      const { token } = await authService.authenticate({ clientId })
+
+      const publicQuizzes: QuizResponseDto[] = []
+      for (let i = 0; i < 10; i++) {
+        publicQuizzes.push(
+          await quizService.createQuiz(originalData, client.player),
+        )
+      }
+
+      const secondFiveResultsSortedByCreatedDate = publicQuizzes
+        .sort((a, b) => b.created.getTime() - a.created.getTime())
+        .filter((_, index) => index >= 5 && index < 10)
+        .map((quiz) => JSON.parse(JSON.stringify(quiz)))
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?limit=5&offset=5')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: secondFiveResultsSortedByCreatedDate,
+            total: 10,
+            limit: 5,
+            offset: 5,
+          })
+        })
+    })
+
+    it('should return an empty list when no quizzes exists', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            results: [],
+            total: 0,
+            limit: 10,
+            offset: 0,
+          })
+        })
+    })
+
+    it('should return a 401 error when the request is unauthorized', async () => {
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should validate query parameters and return a 400 error for invalid input', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .get('/api/quizzes?limit=X&offset=X&mode=X&sort=X&order=X')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.anything(),
+            validationErrors: [
+              {
+                constraints: {
+                  isEnum:
+                    'mode must be one of the following values: CLASSIC, ZERO_TO_ONE_HUNDRED',
+                },
+                property: 'mode',
+              },
+              {
+                constraints: {
+                  isEnum:
+                    'sort must be one of the following values: title, created, updated',
+                },
+                property: 'sort',
+              },
+              {
+                constraints: {
+                  isEnum:
+                    'order must be one of the following values: asc, desc',
+                },
+                property: 'order',
+              },
+              {
+                constraints: {
+                  isInt: 'limit must be an integer number',
+                  max: 'limit must not be greater than 50',
+                  min: 'limit must not be less than 5',
+                },
+                property: 'limit',
+              },
+              {
+                constraints: {
+                  isInt: 'offset must be an integer number',
+                  min: 'offset must not be less than 0',
+                },
+                property: 'offset',
+              },
+            ],
+          })
         })
     })
   })
