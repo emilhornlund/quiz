@@ -16,11 +16,7 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  createTestApp,
-  initializeMongoMemoryServer,
-  stopMongoMemoryServer,
-} from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { QuizService } from '../../quiz/services'
@@ -135,24 +131,16 @@ describe('QuizGameController (e2e)', () => {
   let quizService: QuizService
   let clientService: ClientService
 
-  beforeAll(async () => {
-    await initializeMongoMemoryServer()
-  }, 30000)
-
-  afterAll(async () => {
-    await stopMongoMemoryServer()
-  }, 30000)
-
   beforeEach(async () => {
     app = await createTestApp()
     authService = app.get(AuthService)
     quizService = app.get(QuizService)
     clientService = app.get(ClientService)
-  }, 30000)
+  })
 
   afterEach(async () => {
-    await app.close()
-  }, 30000)
+    await closeTestApp(app)
+  })
 
   describe('/api/quizzes/:quizId/games (POST)', () => {
     it('should succeed in creating a new game from an existing classic mode quiz', async () => {

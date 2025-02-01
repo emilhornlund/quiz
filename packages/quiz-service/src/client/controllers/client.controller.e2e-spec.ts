@@ -11,11 +11,7 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  createTestApp,
-  initializeMongoMemoryServer,
-  stopMongoMemoryServer,
-} from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { PlayerService } from '../../player/services'
 import { Player, PlayerModel } from '../../player/services/models/schemas'
@@ -31,26 +27,19 @@ describe('ClientController (e2e)', () => {
   let playerService: PlayerService
   let quizService: QuizService
 
-  beforeAll(async () => {
-    await initializeMongoMemoryServer()
-  }, 30000)
-
-  afterAll(async () => {
-    await stopMongoMemoryServer()
-  }, 30000)
-
   beforeEach(async () => {
     app = await createTestApp()
+
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
     playerModel = app.get<PlayerModel>(getModelToken(Player.name))
     playerService = app.get(PlayerService)
     quizService = app.get(QuizService)
-  }, 30000)
+  })
 
   afterEach(async () => {
-    await app.close()
-  }, 30000)
+    await closeTestApp(app)
+  })
 
   describe('/api/client/player (POST)', () => {
     it('should succeed in retrieving the associated player from a new authenticated client', async () => {

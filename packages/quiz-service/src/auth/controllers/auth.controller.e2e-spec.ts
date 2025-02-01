@@ -4,11 +4,7 @@ import * as bcrypt from 'bcryptjs'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  createTestApp,
-  initializeMongoMemoryServer,
-  stopMongoMemoryServer,
-} from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { ClientService } from '../../client/services'
 
 describe('AuthController (e2e)', () => {
@@ -16,23 +12,15 @@ describe('AuthController (e2e)', () => {
   let jwtService: JwtService
   let clientService: ClientService
 
-  beforeAll(async () => {
-    await initializeMongoMemoryServer()
-  }, 30000)
-
-  afterAll(async () => {
-    await stopMongoMemoryServer()
-  }, 30000)
-
   beforeEach(async () => {
     app = await createTestApp()
     jwtService = app.get(JwtService)
     clientService = app.get(ClientService)
-  }, 30000)
+  })
 
   afterEach(async () => {
-    await app.close()
-  }, 30000)
+    await closeTestApp(app)
+  })
 
   describe('/api/games (POST)', () => {
     it('should succeed in authenticating a new client', () => {

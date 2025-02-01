@@ -14,11 +14,7 @@ import { Model } from 'mongoose'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  createTestApp,
-  initializeMongoMemoryServer,
-  stopMongoMemoryServer,
-} from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
@@ -42,14 +38,6 @@ describe('GameController (e2e)', () => {
   let playerClient: Client
   let playerClientToken: string
 
-  beforeAll(async () => {
-    await initializeMongoMemoryServer()
-  }, 30000)
-
-  afterAll(async () => {
-    await stopMongoMemoryServer()
-  }, 30000)
-
   beforeEach(async () => {
     app = await createTestApp()
     gameService = app.get(GameService)
@@ -72,11 +60,11 @@ describe('GameController (e2e)', () => {
       clientId: playerClientId,
     })
     playerClientToken = playerAuthResponse.token
-  }, 30000)
+  })
 
   afterEach(async () => {
-    await app.close()
-  }, 30000)
+    await closeTestApp(app)
+  })
 
   describe('/api/games (GET)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
