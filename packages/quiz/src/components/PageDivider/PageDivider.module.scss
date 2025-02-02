@@ -4,17 +4,22 @@
 .pageDivider {
   display: flex;
   flex-direction: column;
-  border-top: 2px solid $white;
+  border-width: pxToRem(1px);
+  border-style: solid;
+  border-color: $white;
 
   @include mobile {
     width: 100%;
+    margin: $mobile-layout-gutter 0;
   }
 
   @include tablet {
-    width: $mobile-width;
+    width: $tablet-width;
+    margin: $tablet-layout-gutter 0;
   }
 
   @include desktop {
     width: $tablet-width;
+    margin: $desktop-layout-gutter 0;
   }
 }
