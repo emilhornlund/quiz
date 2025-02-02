@@ -5,6 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react'
 
+import { classNames } from '../../utils/helpers.ts'
 import { isCallbackValid } from '../../utils/validation.ts'
 
 import styles from './Select.module.scss'
@@ -12,6 +13,7 @@ import styles from './Select.module.scss'
 export interface SelectProps {
   id: string
   name?: string
+  kind?: 'primary' | 'secondary'
   value?: string | undefined
   values?: { key: string; value: string; valueLabel: string }[]
   required?: boolean | string
@@ -25,6 +27,7 @@ export interface SelectProps {
 const Select: FC<SelectProps> = ({
   id,
   name = id,
+  kind = 'primary',
   value,
   values,
   required,
@@ -82,7 +85,12 @@ const Select: FC<SelectProps> = ({
 
   return (
     <div className={styles.inputContainer}>
-      <div className={styles.selectInputContainer}>
+      <div
+        className={classNames(
+          styles.selectInputContainer,
+          kind === 'primary' ? styles.selectInputKindPrimary : undefined,
+          kind === 'secondary' ? styles.selectInputKindSecondary : undefined,
+        )}>
         <select
           id={id}
           name={name}

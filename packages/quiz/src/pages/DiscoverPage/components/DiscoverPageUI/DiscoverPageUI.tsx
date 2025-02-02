@@ -1,4 +1,9 @@
-import { QuizResponseDto } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizResponseDto,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -17,6 +22,11 @@ export interface DiscoverPageUIProps {
   isError: boolean
   onChangeSearchParams: (params: {
     search?: string
+    visibility?: QuizVisibility
+    languageCode?: LanguageCode
+    mode?: GameMode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
     limit?: number
     offset?: number
   }) => void
@@ -41,9 +51,7 @@ const DiscoverPageUI: FC<DiscoverPageUIProps> = ({
       the perfect quiz to host and share the fun!
     </Typography>
     <QuizTableFilter
-      onSearch={(searchTerm) =>
-        onChangeSearchParams({ search: searchTerm, offset: 0 })
-      }
+      onChange={(options) => onChangeSearchParams({ ...options, offset: 0 })}
     />
     {!isLoading && !isError && results ? (
       <QuizTable

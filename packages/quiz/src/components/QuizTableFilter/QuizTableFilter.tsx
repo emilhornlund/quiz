@@ -1,52 +1,101 @@
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import React, { FC, useEffect, useState } from 'react'
+import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import React, { FC, FormEvent, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'
 import { TextField } from '../index.ts'
 
+import FilterModal from './components/FilterModal'
 import styles from './QuizTableFilter.module.scss'
 
+export interface FilterOptions {
+  search?: string
+  visibility?: QuizVisibility
+  languageCode?: LanguageCode
+  mode?: GameMode
+  sort?: 'title' | 'created' | 'updated'
+  order?: 'asc' | 'desc'
+}
+
 export interface QuizTableFilterProps {
-  searchTerm?: string
-  onSearch: (search?: string) => void
+  showVisibilityFilter?: boolean
+  onChange?: (options: FilterOptions) => void
 }
 
 const QuizTableFilter: FC<QuizTableFilterProps> = ({
-  searchTerm,
-  onSearch,
+  showVisibilityFilter = false,
+  onChange,
 }) => {
-  const [internalSearchTerm, setInternalSearchTerm] = useState<string>()
+  const [internalFilter, setInternalFilter] = useState<FilterOptions>({
+    sort: 'created',
+    order: 'desc',
+  })
 
-  useEffect(() => setInternalSearchTerm(searchTerm), [searchTerm])
+  const [showFilterModal, setShowFilterModal] = useState(false)
+
+  const handleSubmit = (event?: FormEvent) => {
+    event?.preventDefault()
+    onChange?.(internalFilter)
+  }
+
+  const handleSearch = (): void => {
+    onChange?.(internalFilter)
+  }
+
+  const handleApplyFilter = (options: Omit<FilterOptions, 'search'>) => {
+    setShowFilterModal(false)
+    const newFilter: FilterOptions = { ...internalFilter, ...options }
+    setInternalFilter(newFilter)
+    onChange?.(newFilter)
+  }
 
   return (
-    <div className={styles.quizTableFilter}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          onSearch(internalSearchTerm)
-        }}>
-        <div className={classNames(styles.column, styles.full)}>
-          <TextField
-            id="search-textfield"
-            type="text"
-            placeholder="Search"
-            value={internalSearchTerm}
-            onChange={(value) => setInternalSearchTerm(value as string)}
-          />
-        </div>
-        <div className={styles.column}>
-          <Button
-            id="search-button"
-            type="button"
-            kind="call-to-action"
-            icon={faMagnifyingGlass}
-            onClick={() => onSearch(internalSearchTerm)}
-          />
-        </div>
-      </form>
-    </div>
+    <>
+      <div className={styles.quizTableFilter}>
+        <form onSubmit={handleSubmit}>
+          <div className={classNames(styles.column, styles.full)}>
+            <TextField
+              id="search-textfield"
+              type="text"
+              placeholder="Search"
+              value={internalFilter.search}
+              onChange={(value) =>
+                setInternalFilter({
+                  ...internalFilter,
+                  search: value as string,
+                })
+              }
+            />
+          </div>
+          <div className={styles.column}>
+            <Button
+              id="search-button"
+              type="button"
+              kind="primary"
+              icon={faMagnifyingGlass}
+              onClick={handleSearch}
+            />
+          </div>
+          <div className={styles.column}>
+            <Button
+              id="filter-button"
+              type="button"
+              kind="primary"
+              icon={faFilter}
+              onClick={() => setShowFilterModal(true)}
+            />
+          </div>
+        </form>
+      </div>
+      <FilterModal
+        {...internalFilter}
+        showVisibilityFilter={showVisibilityFilter}
+        open={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={handleApplyFilter}
+      />
+    </>
   )
 }
 

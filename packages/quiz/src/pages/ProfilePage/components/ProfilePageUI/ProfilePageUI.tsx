@@ -1,4 +1,9 @@
-import { QuizResponseDto } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizResponseDto,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC } from 'react'
 
 import { Page, PageDivider } from '../../../../components'
@@ -16,6 +21,11 @@ export interface ProfilePageUIProps {
   onNicknameChange: (nickname: string) => void
   onChangeSearchParams: (params: {
     search?: string
+    visibility?: QuizVisibility
+    languageCode?: LanguageCode
+    mode?: GameMode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
     limit?: number
     offset?: number
   }) => void

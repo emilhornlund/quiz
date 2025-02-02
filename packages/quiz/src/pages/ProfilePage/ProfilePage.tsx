@@ -1,4 +1,9 @@
-import { DEFAULT_QUIZ_PAGINATION_LIMIT } from '@quiz/common'
+import {
+  DEFAULT_QUIZ_PAGINATION_LIMIT,
+  GameMode,
+  LanguageCode,
+  QuizVisibility,
+} from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +23,11 @@ const ProfilePage: FC = () => {
 
   const [searchParams, setSearchParams] = useState<{
     search?: string
+    visibility?: QuizVisibility
+    languageCode?: LanguageCode
+    mode?: GameMode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
     limit: number
     offset: number
   }>({ limit: DEFAULT_QUIZ_PAGINATION_LIMIT, offset: 0 })

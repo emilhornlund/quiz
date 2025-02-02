@@ -39,6 +39,14 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
         color: $control-text-disabled-color;
       }
     }
+
+    &.selectInputKindPrimary {
+      @extend .input-kind-primary;
+    }
+
+    &.selectInputKindSecondary {
+      @extend .input-kind-secondary;
+    }
   }
 
   .errorContainer {

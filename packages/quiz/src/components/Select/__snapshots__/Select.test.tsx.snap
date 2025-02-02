@@ -6,7 +6,7 @@ exports[`Select > should fire Select when Select option 1`] = `
     class="inputContainer"
   >
     <div
-      class="selectInputContainer"
+      class="selectInputContainer selectInputKindPrimary"
     >
       <select
         data-testid="test-my-select-select"
@@ -56,7 +56,7 @@ exports[`Select > should render a Select with default props 1`] = `
     class="inputContainer"
   >
     <div
-      class="selectInputContainer"
+      class="selectInputContainer selectInputKindPrimary"
     >
       <select
         data-testid="test-my-select-select"
@@ -90,7 +90,7 @@ exports[`Select > should render a Select with disabled props 1`] = `
     class="inputContainer"
   >
     <div
-      class="selectInputContainer"
+      class="selectInputContainer selectInputKindPrimary"
     >
       <select
         data-testid="test-my-select-select"

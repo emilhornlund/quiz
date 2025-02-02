@@ -1,5 +1,10 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { QuizResponseDto } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizResponseDto,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
@@ -18,6 +23,11 @@ export interface ProfileQuizzesProps {
   isError: boolean
   onChangeSearchParams: (params: {
     search?: string
+    visibility?: QuizVisibility
+    languageCode?: LanguageCode
+    mode?: GameMode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
     limit?: number
     offset?: number
   }) => void
@@ -61,9 +71,8 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
         onClick={onCreateQuiz}
       />
       <QuizTableFilter
-        onSearch={(searchTerm) =>
-          onChangeSearchParams({ search: searchTerm, offset: 0 })
-        }
+        onChange={(params) => onChangeSearchParams({ ...params, offset: 0 })}
+        showVisibilityFilter
       />
       {!isLoading && !isError && quizzes ? (
         <QuizTable
