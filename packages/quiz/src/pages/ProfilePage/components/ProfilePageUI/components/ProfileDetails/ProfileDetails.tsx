@@ -4,7 +4,7 @@ import {
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useState } from 'react'
+import React, { FC, FormEvent, useEffect, useState } from 'react'
 
 import { Button, TextField, Typography } from '../../../../../../components'
 import { classNames } from '../../../../../../utils/helpers.ts'
@@ -19,6 +19,10 @@ export interface ProfileDetailsProps {
 const ProfileDetails: FC<ProfileDetailsProps> = ({ nickname, onChange }) => {
   const [tmpNickname, setTmpNickname] = useState<string | undefined>(nickname)
   const [tmpNicknameValid, setTmpNicknameValid] = useState<boolean>(false)
+
+  useEffect(() => {
+    setTmpNickname(nickname)
+  }, [nickname])
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
