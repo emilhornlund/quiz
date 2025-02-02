@@ -2,30 +2,29 @@
 
 .profileDetailsForm {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
   @include mobile {
-    row-gap: $mobile-narrow-layout-gutter;
+    column-gap: $mobile-narrow-layout-gutter;
     width: 100%;
   }
 
   @include tablet {
-    row-gap: $tablet-narrow-layout-gutter;
+    column-gap: $tablet-narrow-layout-gutter;
     width: $mobile-width;
   }
 
   @include desktop {
-    row-gap: $desktop-narrow-layout-gutter;
+    column-gap: $desktop-narrow-layout-gutter;
     width: $mobile-width;
   }
 
-  .row {
+  .column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
-    &.button {
-      flex-direction: row;
+    &.full {
+      flex: 1;
     }
   }
 }

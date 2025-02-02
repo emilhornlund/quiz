@@ -16,7 +16,7 @@ exports[`ProfileDetails > should render ProfileDetails 1`] = `
     class="profileDetailsForm"
   >
     <div
-      class="row"
+      class="column full"
     >
       <div
         class="inputContainer"
@@ -39,10 +39,10 @@ exports[`ProfileDetails > should render ProfileDetails 1`] = `
       </div>
     </div>
     <div
-      class="row button"
+      class="column"
     >
       <div
-        class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        class="buttonInputContainer buttonInputKindCallToAction"
       >
         <button
           data-testid="test-update-player-button-button"
@@ -65,9 +65,6 @@ exports[`ProfileDetails > should render ProfileDetails 1`] = `
               fill="currentColor"
             />
           </svg>
-          <span>
-            Save
-          </span>
         </button>
       </div>
     </div>

@@ -36,7 +36,7 @@ const ProfileDetails: FC<ProfileDetailsProps> = ({ nickname, onChange }) => {
         is how other players will see you in quizzes.
       </Typography>
       <form className={styles.profileDetailsForm} onSubmit={handleSubmit}>
-        <div className={styles.row}>
+        <div className={classNames(styles.column, styles.full)}>
           <TextField
             id="nickname"
             type="text"
@@ -50,15 +50,13 @@ const ProfileDetails: FC<ProfileDetailsProps> = ({ nickname, onChange }) => {
             required
           />
         </div>
-        <div className={classNames(styles.row, styles.button)}>
+        <div className={styles.column}>
           <Button
             id="update-player-button"
             type="submit"
             kind="call-to-action"
-            size="small"
-            value="Save"
+            size="normal"
             icon={faFloppyDisk}
-            iconPosition="leading"
             disabled={!tmpNicknameValid}
             onClick={() => undefined}
           />

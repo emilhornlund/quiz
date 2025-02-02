@@ -40,7 +40,7 @@ const QuizTableFilter: FC<QuizTableFilterProps> = ({
           <Button
             id="search-button"
             type="button"
-            kind="primary"
+            kind="call-to-action"
             icon={faMagnifyingGlass}
             onClick={() => onSearch(internalSearchTerm)}
           />

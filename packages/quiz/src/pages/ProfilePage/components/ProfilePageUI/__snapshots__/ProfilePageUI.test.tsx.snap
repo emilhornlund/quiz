@@ -59,7 +59,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
         class="profileDetailsForm"
       >
         <div
-          class="row"
+          class="column full"
         >
           <div
             class="inputContainer"
@@ -82,10 +82,10 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
           </div>
         </div>
         <div
-          class="row button"
+          class="column"
         >
           <div
-            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+            class="buttonInputContainer buttonInputKindCallToAction"
           >
             <button
               data-testid="test-update-player-button-button"
@@ -108,9 +108,6 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
                   fill="currentColor"
                 />
               </svg>
-              <span>
-                Save
-              </span>
             </button>
           </div>
         </div>
@@ -186,7 +183,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
             class="column"
           >
             <div
-              class="buttonInputContainer buttonInputKindPrimary"
+              class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
                 data-testid="test-search-button-button"

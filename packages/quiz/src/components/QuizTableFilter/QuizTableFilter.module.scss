@@ -12,12 +12,12 @@
 
   @include tablet {
     column-gap: $tablet-narrow-layout-gutter;
-    width: $tablet-width * 0.7;
+    width: $mobile-width;
   }
 
   @include desktop {
     column-gap: $desktop-narrow-layout-gutter;
-    width: $tablet-width * 0.7;
+    width: $mobile-width;
   }
 
   .column {

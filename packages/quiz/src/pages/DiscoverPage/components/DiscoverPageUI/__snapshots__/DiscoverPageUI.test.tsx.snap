@@ -84,7 +84,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
             class="column"
           >
             <div
-              class="buttonInputContainer buttonInputKindPrimary"
+              class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
                 data-testid="test-search-button-button"
