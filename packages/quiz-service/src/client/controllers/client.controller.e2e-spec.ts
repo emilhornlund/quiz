@@ -41,7 +41,7 @@ describe('ClientController (e2e)', () => {
     await closeTestApp(app)
   })
 
-  describe('/api/client/player (POST)', () => {
+  describe('/api/client/player (GET)', () => {
     it('should succeed in retrieving the associated player from a new authenticated client', async () => {
       const clientId = uuidv4()
 
@@ -98,6 +98,74 @@ describe('ClientController (e2e)', () => {
           expect(res.body).toHaveProperty('message', 'Unauthorized')
           expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+  })
+
+  describe('/api/client/player (PUT)', () => {
+    it('should update player nickname successfully', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .put('/api/client/player')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ nickname: 'FrostyBear' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: expect.anything(),
+            nickname: 'FrostyBear',
+            created: expect.anything(),
+            modified: expect.anything(),
+          })
+        })
+    })
+
+    it('should handle validation errors for invalid nickname', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .put('/api/client/player')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ nickname: undefined })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.anything(),
+            validationErrors: [
+              {
+                constraints: {
+                  isString: 'nickname must be a string',
+                  matches:
+                    'Nickname can only contain letters, numbers, and underscores.',
+                  maxLength:
+                    'nickname must be shorter than or equal to 20 characters',
+                  minLength:
+                    'nickname must be longer than or equal to 2 characters',
+                },
+                property: 'nickname',
+              },
+            ],
+          })
+        })
+    })
+
+    it('should return 401 if client is unauthorized', async () => {
+      return supertest(app.getHttpServer())
+        .put('/api/client/player')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
         })
     })
   })

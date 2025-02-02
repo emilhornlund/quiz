@@ -24,6 +24,16 @@ export interface PlayerResponseDto {
 }
 
 /**
+ * Represents the DTO structure for updating a player's profile.
+ */
+export interface UpdatePlayerRequestDto {
+  /**
+   * The new nickname of the player to update.
+   */
+  nickname: string
+}
+
+/**
  * Response DTO for the player link code, containing the code and expiration time.
  */
 export interface PlayerLinkCodeResponseDto {

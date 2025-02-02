@@ -6,11 +6,13 @@ import {
   HttpStatus,
   Logger,
   Post,
+  Put,
   Query,
   ValidationPipe,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -18,7 +20,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-import { PlayerResponse } from '../../player/controller/models'
+import {
+  PlayerResponse,
+  UpdatePlayerRequest,
+} from '../../player/controller/models'
 import { PlayerNotFoundException } from '../../player/exceptions'
 import { PlayerService } from '../../player/services'
 import { PaginatedQuizResponse } from '../../quiz/controllers/models'
@@ -92,6 +97,59 @@ export class ClientController {
       created,
       modified,
     } = await this.playerService.findPlayerOrThrow(client.player._id)
+
+    return { id, nickname, created, modified }
+  }
+
+  /**
+   * Updates the authenticated client's associated player profile.
+   *
+   * @param client - The authenticated client making the request.
+   * @param request - The update details for the player profile.
+   *
+   * @throws {PlayerNotFoundException} If the associated player does not exist.
+   *
+   * @returns {Promise<PlayerResponse>} The updated player details.
+   */
+  @Put('/player')
+  @ApiOperation({
+    summary: 'Update the associated player',
+    description:
+      'Updates the nickname of the authenticated client’s associated player.',
+  })
+  @ApiBody({
+    description: 'Payload containing the new nickname for the player.',
+    type: UpdatePlayerRequest,
+  })
+  @ApiOkResponse({
+    description: 'Successfully updated the player’s profile.',
+    type: PlayerResponse,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access. The client must be authenticated.',
+  })
+  @ApiNotFoundResponse({
+    description: 'The player associated with the client was not found.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async updateClientAssociatedPlayer(
+    @AuthorizedClientParam() client: Client,
+    @Body() request: UpdatePlayerRequest,
+  ): Promise<PlayerResponse> {
+    if (!client?.player?._id) {
+      this.logger.warn(`Player was not found by id 'undefined'.`)
+      throw new PlayerNotFoundException('undefined')
+    }
+
+    const {
+      _id: id,
+      nickname,
+      created,
+      modified,
+    } = await this.playerService.updatePlayer(
+      client.player._id,
+      request.nickname,
+    )
 
     return { id, nickname, created, modified }
   }
