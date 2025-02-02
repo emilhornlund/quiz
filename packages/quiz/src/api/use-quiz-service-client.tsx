@@ -197,8 +197,8 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the quizzes in a paginated format as a `PaginatedQuizResponseDto`.
    */
   const getCurrentPlayerQuizzes = (options: {
-    limit?: number
-    offset?: number
+    limit: number
+    offset: number
   }): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>(
       `/client/quizzes${parseQueryParams(options)}`,
@@ -236,8 +236,8 @@ export const useQuizServiceClient = () => {
    */
   const getPublicQuizzes = (options: {
     search?: string
-    limit?: number
-    offset?: number
+    limit: number
+    offset: number
   }): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>(`/quizzes${parseQueryParams(options)}`)
 

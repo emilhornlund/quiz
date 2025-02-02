@@ -1,3 +1,4 @@
+import { DEFAULT_QUIZ_PAGINATION_LIMIT } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -16,9 +17,9 @@ const DiscoverPage: FC = () => {
 
   const [searchParams, setSearchParams] = useState<{
     search?: string
-    limit?: number
-    offset?: number
-  }>({ limit: 5, offset: 0 })
+    limit: number
+    offset: number
+  }>({ limit: DEFAULT_QUIZ_PAGINATION_LIMIT, offset: 0 })
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['publicQuizzes', searchParams],
@@ -37,7 +38,7 @@ const DiscoverPage: FC = () => {
       results={data?.results ?? []}
       pagination={{
         total: data?.total ?? 0,
-        limit: data?.limit ?? 0,
+        limit: data?.limit ?? DEFAULT_QUIZ_PAGINATION_LIMIT,
         offset: data?.offset ?? 0,
       }}
       isLoading={isLoading}

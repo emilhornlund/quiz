@@ -215,7 +215,7 @@ describe('ClientController (e2e)', () => {
     })
   })
 
-  describe('/api/client/quizzes (POST)', () => {
+  describe('/api/client/quizzes (GET)', () => {
     it('should succeed in retrieving an empty page of associated quizzes from a new authenticated client', async () => {
       const clientId = uuidv4()
 

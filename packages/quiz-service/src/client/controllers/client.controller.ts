@@ -26,7 +26,7 @@ import { QuizService } from '../../quiz/services'
 import { ClientService } from '../services'
 import { Client } from '../services/models/schemas'
 
-import { ApiQuizPageQuery } from './decorators/api'
+import { ApiQuizPageQueryFilter } from './decorators/api'
 import { AuthorizedClientParam } from './decorators/auth'
 import { PlayerLinkCodeRequest, PlayerLinkCodeResponse } from './models'
 
@@ -170,7 +170,7 @@ export class ClientController {
    *
    * @param {Client} client - The authenticated client making the request.
    *
-   * @param {ApiQuizPageQuery} queryParams - The pagination and filtering query parameters for retrieving quizzes.
+   * @param {ApiQuizPageQueryFilter} queryParams - The pagination and filtering query parameters for retrieving quizzes.
    *
    * @returns {Promise<PaginatedQuizResponse>} A paginated response containing the client's associated quizzes.
    */
@@ -190,10 +190,15 @@ export class ClientController {
   public async getClientAssociatedQuizzes(
     @AuthorizedClientParam() client: Client,
     @Query(new ValidationPipe({ transform: true }))
-    queryParams: ApiQuizPageQuery,
+    queryParams: ApiQuizPageQueryFilter,
   ): Promise<PaginatedQuizResponse> {
     return this.quizService.findQuizzesByOwnerId(
       client.player._id,
+      queryParams.search,
+      queryParams.mode,
+      queryParams.visibility,
+      queryParams.sort,
+      queryParams.order,
       queryParams.limit,
       queryParams.offset,
     )

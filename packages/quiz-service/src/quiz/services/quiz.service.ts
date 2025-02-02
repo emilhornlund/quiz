@@ -101,32 +101,37 @@ export class QuizService {
   /**
    * Retrieves quizzes owned by a specific owner with pagination.
    *
-   * @param {string} ownerId - The ID of the owner whose quizzes are to be retrieved.
-   * @param {number} limit - The maximum number of quizzes to retrieve per page.
-   * @param {number} offset - The number of quizzes to skip before starting retrieval.
+   * @param ownerId - The ID of the owner whose quizzes are to be retrieved.
+   * @param search - Optional search term to filter quizzes by title.
+   * @param mode - Optional filter for the game mode of the quizzes.
+   * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param sortField - Field by which to sort the results. Defaults to 'created'.
+   * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
+   * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
+   * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
    *
    * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the quizzes and metadata.
    */
   public async findQuizzesByOwnerId(
     ownerId: string,
+    search?: string,
+    mode?: GameMode,
+    visibility?: QuizVisibility,
+    sortField: 'title' | 'created' | 'updated' = 'created',
+    sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,
     offset: number = 0,
   ): Promise<PaginatedQuizResponseDto> {
-    const total = await this.quizModel.countDocuments({ owner: ownerId })
-
-    const quizzes = await this.quizModel
-      .find({ owner: ownerId })
-      .sort({ created: -1 })
-      .skip(offset)
-      .limit(limit)
-      .populate('owner')
-
-    return {
-      results: quizzes.map(QuizService.buildQuizResponseDto),
-      total,
+    return this.findQuizzes(
+      ownerId,
+      search,
+      mode,
+      visibility,
+      sortField,
+      sortOrder,
       limit,
       offset,
-    }
+    )
   }
 
   /**
@@ -153,10 +158,49 @@ export class QuizService {
     limit: number = 10,
     offset: number = 0,
   ): Promise<PaginatedQuizResponseDto> {
+    return this.findQuizzes(
+      undefined,
+      search,
+      mode,
+      QuizVisibility.Public,
+      sortField,
+      sortOrder,
+      limit,
+      offset,
+    )
+  }
+
+  /**
+   * description here.
+   *
+   * @param ownerId - The ID of the owner whose quizzes are to be retrieved.
+   * @param search - Optional search term to filter quizzes by title.
+   * @param mode - Optional filter for the game mode of the quizzes.
+   * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param sortField - Field by which to sort the results. Defaults to 'created'.
+   * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
+   * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
+   * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
+   *
+   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the list of quizzes.
+   *
+   * @private
+   */
+  private async findQuizzes(
+    ownerId: string,
+    search?: string,
+    mode?: GameMode,
+    visibility?: QuizVisibility,
+    sortField: 'title' | 'created' | 'updated' = 'created',
+    sortOrder: 'asc' | 'desc' = 'desc',
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<PaginatedQuizResponseDto> {
     const filter: RootFilterQuery<Quiz> = {
-      visibility: QuizVisibility.Public,
+      ...(ownerId ? { owner: ownerId } : {}),
       ...(search?.length ? { title: { $regex: search, $options: 'i' } } : {}),
       ...(mode ? { mode } : {}),
+      ...(visibility ? { visibility } : {}),
     }
 
     const total = await this.quizModel.countDocuments(filter)

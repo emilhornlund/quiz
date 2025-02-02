@@ -46,3 +46,6 @@ export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX = /^[\p{L}\p{N}\p{P}]{1,75}$/u
 
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/
+
+/* Quiz Pagination */
+export const DEFAULT_QUIZ_PAGINATION_LIMIT = 5
