@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
+import { Player } from '../../../../models'
+
 import ProfilePageUI from './ProfilePageUI'
 
 const meta = {
@@ -17,11 +19,14 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const PlayerID = uuidv4()
+const player: Player = {
+  id: uuidv4(),
+  nickname: 'FrostyBear',
+}
 
 export const Default = {
   args: {
-    playerId: PlayerID,
+    player,
     quizzes: [
       {
         id: uuidv4(),
@@ -33,7 +38,7 @@ export const Default = {
         imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
         languageCode: LanguageCode.English,
         numberOfQuestions: 14,
-        author: { id: PlayerID, name: 'FrostyBear' },
+        author: { id: player.id, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -46,7 +51,7 @@ export const Default = {
         visibility: QuizVisibility.Private,
         languageCode: LanguageCode.English,
         numberOfQuestions: 20,
-        author: { id: PlayerID, name: 'FrostyBear' },
+        author: { id: player.id, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -59,7 +64,7 @@ export const Default = {
         visibility: QuizVisibility.Public,
         languageCode: LanguageCode.English,
         numberOfQuestions: 16,
-        author: { id: PlayerID, name: 'FrostyBear' },
+        author: { id: player.id, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -72,7 +77,7 @@ export const Default = {
         visibility: QuizVisibility.Private,
         languageCode: LanguageCode.English,
         numberOfQuestions: 28,
-        author: { id: PlayerID, name: 'FrostyBear' },
+        author: { id: player.id, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -85,7 +90,7 @@ export const Default = {
         visibility: QuizVisibility.Public,
         languageCode: LanguageCode.English,
         numberOfQuestions: 24,
-        author: { id: PlayerID, name: 'FrostyBear' },
+        author: { id: player.id, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -93,6 +98,7 @@ export const Default = {
     pagination: { total: 10, limit: 5, offset: 0 },
     isLoading: false,
     isError: false,
+    onNicknameChange: () => undefined,
     onChangeSearchParams: () => undefined,
     onCreateQuiz: () => undefined,
     onEditQuiz: () => undefined,

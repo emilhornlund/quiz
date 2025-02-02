@@ -1,0 +1,31 @@
+@import '../../../../../../styles/helpers';
+
+.profileDetailsForm {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-narrow-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    row-gap: $tablet-narrow-layout-gutter;
+    width: $mobile-width;
+  }
+
+  @include desktop {
+    row-gap: $desktop-narrow-layout-gutter;
+    width: $mobile-width;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &.button {
+      flex-direction: row;
+    }
+  }
+}

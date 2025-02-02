@@ -11,9 +11,10 @@ import { ProfilePageUI } from './components'
 const ProfilePage: FC = () => {
   const navigate = useNavigate()
 
-  const { player } = useAuthContext()
+  const { player, setPlayer } = useAuthContext()
 
-  const { getCurrentPlayerQuizzes, createGame } = useQuizServiceClient()
+  const { updateCurrentPlayer, getCurrentPlayerQuizzes, createGame } =
+    useQuizServiceClient()
 
   const [searchParams, setSearchParams] = useState<{
     search?: string
@@ -30,6 +31,14 @@ const ProfilePage: FC = () => {
     queryFn: () => getCurrentPlayerQuizzes(searchParams),
   })
 
+  const handleNicknameChange = (nickname: string): void => {
+    if (player) {
+      updateCurrentPlayer(nickname).then(() => {
+        setPlayer({ ...player, nickname })
+      })
+    }
+  }
+
   const handleCreateGame = (quizId: string): void => {
     createGame(quizId).then((response) =>
       navigate(`/game?gameID=${response.id}`),
@@ -38,7 +47,7 @@ const ProfilePage: FC = () => {
 
   return (
     <ProfilePageUI
-      playerId={player?.id}
+      player={player}
       quizzes={quizzes?.results ?? []}
       pagination={{
         total: quizzes?.total ?? 0,
@@ -47,6 +56,7 @@ const ProfilePage: FC = () => {
       }}
       isLoading={isQuizzesLoading}
       isError={isQuizzesError}
+      onNicknameChange={handleNicknameChange}
       onChangeSearchParams={(params) =>
         setSearchParams({ ...searchParams, ...params })
       }

@@ -189,6 +189,23 @@ export const useQuizServiceClient = () => {
     apiGet<PlayerResponseDto>('/client/player')
 
   /**
+   * Updates the currently authenticated player's profile.
+   *
+   * @param nickname - The new nickname to update for the player.
+   *
+   * @returns A promise resolving to the updated player information as a `PlayerResponseDto`.
+   */
+  const updateCurrentPlayer = (nickname: string): Promise<PlayerResponseDto> =>
+    apiPut<PlayerResponseDto>('/client/player', { nickname }).then(
+      (response) => {
+        notifySuccess(
+          'Nice! Your new nickname is locked in. Get ready to quiz in style!',
+        )
+        return response
+      },
+    )
+
+  /**
    * Retrieves the quizzes associated with the current player.
    *
    * @param options.limit - The maximum number of quizzes to retrieve per page.
@@ -389,6 +406,7 @@ export const useQuizServiceClient = () => {
 
   return {
     getCurrentPlayer,
+    updateCurrentPlayer,
     getCurrentPlayerQuizzes,
     createQuiz,
     getQuiz,

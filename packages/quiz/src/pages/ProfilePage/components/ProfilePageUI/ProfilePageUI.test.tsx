@@ -5,16 +5,21 @@ import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 
+import { Player } from '../../../../models'
+
 import ProfilePageUI from './ProfilePageUI'
 
-const PlayerID = uuidv4()
+const player: Player = {
+  id: uuidv4(),
+  nickname: 'FrostyBear',
+}
 
 describe('ProfilePageUI', () => {
   it('should render ProfilePageUI', async () => {
     const { container } = render(
       <MemoryRouter>
         <ProfilePageUI
-          playerId={PlayerID}
+          player={player}
           quizzes={[
             {
               id: uuidv4(),
@@ -26,7 +31,7 @@ describe('ProfilePageUI', () => {
               imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
               languageCode: LanguageCode.English,
               numberOfQuestions: 14,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -39,7 +44,7 @@ describe('ProfilePageUI', () => {
               visibility: QuizVisibility.Private,
               languageCode: LanguageCode.English,
               numberOfQuestions: 20,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -52,7 +57,7 @@ describe('ProfilePageUI', () => {
               visibility: QuizVisibility.Public,
               languageCode: LanguageCode.English,
               numberOfQuestions: 16,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -65,7 +70,7 @@ describe('ProfilePageUI', () => {
               visibility: QuizVisibility.Private,
               languageCode: LanguageCode.English,
               numberOfQuestions: 28,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -78,7 +83,7 @@ describe('ProfilePageUI', () => {
               visibility: QuizVisibility.Public,
               languageCode: LanguageCode.English,
               numberOfQuestions: 24,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -86,6 +91,7 @@ describe('ProfilePageUI', () => {
           pagination={{ total: 10, limit: 5, offset: 0 }}
           isLoading={false}
           isError={false}
+          onNicknameChange={() => undefined}
           onChangeSearchParams={() => undefined}
           onCreateQuiz={() => undefined}
           onEditQuiz={() => undefined}

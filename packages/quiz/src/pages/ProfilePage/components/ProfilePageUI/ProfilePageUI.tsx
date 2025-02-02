@@ -1,16 +1,19 @@
 import { QuizResponseDto } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { Page } from '../../../../components'
+import { Page, PageDivider } from '../../../../components'
+import { Player } from '../../../../models'
 
+import ProfileDetails from './components/ProfileDetails'
 import ProfileQuizzes from './components/ProfileQuizzes'
 
 export interface ProfilePageUIProps {
-  playerId?: string
+  player?: Player
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
+  onNicknameChange: (nickname: string) => void
   onChangeSearchParams: (params: {
     search?: string
     limit?: number
@@ -22,19 +25,22 @@ export interface ProfilePageUIProps {
 }
 
 const ProfilePageUI: FC<ProfilePageUIProps> = ({
-  playerId,
+  player,
   quizzes,
   pagination,
   isLoading,
   isError,
+  onNicknameChange,
   onChangeSearchParams,
   onCreateQuiz,
   onEditQuiz,
   onHostGame,
 }) => (
   <Page align="start" discover profile>
+    <ProfileDetails nickname={player?.nickname} onChange={onNicknameChange} />
+    <PageDivider />
     <ProfileQuizzes
-      playerId={playerId}
+      playerId={player?.id}
       quizzes={quizzes}
       pagination={pagination}
       isLoading={isLoading}
