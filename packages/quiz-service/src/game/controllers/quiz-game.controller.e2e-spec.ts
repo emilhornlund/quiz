@@ -205,10 +205,28 @@ describe('QuizGameController (e2e)', () => {
         })
     })
 
+    it('should succeed in creating a new game from public quiz', async () => {
+      const client = await clientService.findOrCreateClient(uuidv4())
+      const { id } = await quizService.createQuiz(
+        { ...classicQuizRequest, visibility: QuizVisibility.Public },
+        client.player,
+      )
+
+      const { token } = await authService.authenticate({ clientId: uuidv4() })
+
+      return supertest(app.getHttpServer())
+        .post(`/api/quizzes/${id}/games`)
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('id')
+        })
+    })
+
     it('should fail in creating a new game from a non authorized quiz', async () => {
       const client = await clientService.findOrCreateClient(uuidv4())
       const { id } = await quizService.createQuiz(
-        classicQuizRequest,
+        { ...classicQuizRequest, visibility: QuizVisibility.Private },
         client.player,
       )
 

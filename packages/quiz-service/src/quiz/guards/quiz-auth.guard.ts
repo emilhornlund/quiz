@@ -6,7 +6,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
+import { QuizVisibility } from '@quiz/common'
 
+import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
 import { QuizService } from '../services'
 
 /**
@@ -20,9 +23,13 @@ export class QuizAuthGuard implements CanActivate {
   /**
    * Initializes the QuizAuthGuard.
    *
+   * @param reflector - Used for retrieving metadata, such as if allow public.
    * @param {QuizService} quizService - Service for managing quiz-related operations.
    */
-  constructor(private readonly quizService: QuizService) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly quizService: QuizService,
+  ) {}
 
   /**
    * Determines whether the request can proceed based on authorization.
@@ -47,9 +54,21 @@ export class QuizAuthGuard implements CanActivate {
       throw new BadRequestException()
     }
 
-    const owner = await this.quizService.findOwnerByQuizId(quizId)
+    const quiz = await this.quizService.findQuizDocumentByIdOrThrow(quizId)
 
-    if (owner._id !== request.client.player._id) {
+    const allowPublic =
+      this.reflector.getAllAndOverride<boolean>(AUTHORIZED_QUIZ_ALLOW_PUBLIC, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? false
+
+    const isOwner = quiz.owner._id === request.client.player._id
+    const isPublicQuiz = quiz.visibility === QuizVisibility.Public
+
+    if (
+      (!allowPublic && !isOwner) ||
+      (allowPublic && !isPublicQuiz && !isOwner)
+    ) {
       throw new ForbiddenException()
     }
 

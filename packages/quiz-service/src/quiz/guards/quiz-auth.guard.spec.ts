@@ -5,9 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import { QuizVisibility } from '@quiz/common'
 
 import { Player } from '../../player/services/models/schemas'
 import { QuizService } from '../services'
+import { Quiz } from '../services/models/schemas'
 
 import { QuizAuthGuard } from './quiz-auth.guard'
 
@@ -27,7 +29,7 @@ describe('QuizAuthGuard', () => {
         {
           provide: QuizService,
           useValue: {
-            findOwnerByQuizId: jest.fn(),
+            findQuizDocumentByIdOrThrow: jest.fn(),
           },
         },
       ],
@@ -49,19 +51,30 @@ describe('QuizAuthGuard', () => {
       },
     }
 
-    const mockOwner = { _id: 'player1' } as Player
-    quizService.findOwnerByQuizId.mockResolvedValue(mockOwner)
+    const mockQuiz = {
+      visibility: QuizVisibility.Private,
+      owner: { _id: 'player1' } as Player,
+    } as Quiz
+    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
         getRequest: () => mockRequest,
       }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
     } as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(false)
 
     const result = await quizAuthGuard.canActivate(mockContext)
 
     expect(result).toBe(true)
-    expect(quizService.findOwnerByQuizId).toHaveBeenCalledWith('quiz1')
+    expect(quizService.findQuizDocumentByIdOrThrow).toHaveBeenCalledWith(
+      'quiz1',
+    )
   })
 
   it('should throw UnauthorizedException if the client is not authenticated', async () => {
@@ -76,7 +89,13 @@ describe('QuizAuthGuard', () => {
       switchToHttp: () => ({
         getRequest: () => mockRequest,
       }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
     } as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(false)
 
     await expect(quizAuthGuard.canActivate(mockContext)).rejects.toThrow(
       UnauthorizedException,
@@ -97,7 +116,13 @@ describe('QuizAuthGuard', () => {
       switchToHttp: () => ({
         getRequest: () => mockRequest,
       }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
     } as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(false)
 
     await expect(quizAuthGuard.canActivate(mockContext)).rejects.toThrow(
       BadRequestException,
@@ -116,21 +141,30 @@ describe('QuizAuthGuard', () => {
       },
     }
 
-    const mockOwner = { _id: 'player1' } as Player
-    quizService.findOwnerByQuizId.mockResolvedValue(mockOwner)
+    const mockQuiz = {
+      visibility: QuizVisibility.Private,
+      owner: { _id: 'player1' } as Player,
+    } as Quiz
+    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
         getRequest: () => mockRequest,
       }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
     } as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(false)
 
     await expect(quizAuthGuard.canActivate(mockContext)).rejects.toThrow(
       ForbiddenException,
     )
   })
 
-  it('should call findOwnerByQuizId with the correct quizId', async () => {
+  it('should call findQuizDocumentByIdOrThrow with the correct quizId', async () => {
     const mockRequest = {
       client: {
         player: {
@@ -142,17 +176,63 @@ describe('QuizAuthGuard', () => {
       },
     }
 
-    const mockOwner = { _id: 'player1' } as Player
-    quizService.findOwnerByQuizId.mockResolvedValue(mockOwner)
+    const mockQuiz = {
+      visibility: QuizVisibility.Private,
+      owner: { _id: 'player1' } as Player,
+    } as Quiz
+    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
         getRequest: () => mockRequest,
       }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
     } as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(false)
 
     await quizAuthGuard.canActivate(mockContext)
 
-    expect(quizService.findOwnerByQuizId).toHaveBeenCalledWith('quiz1')
+    expect(quizService.findQuizDocumentByIdOrThrow).toHaveBeenCalledWith(
+      'quiz1',
+    )
+  })
+
+  it('should allow access to a public quiz when allowPublic is true', async () => {
+    const mockRequest: MockRequest = {
+      client: {
+        player: {
+          _id: 'player2',
+        } as Player,
+      },
+      params: {
+        quizId: 'quiz1',
+      },
+    }
+
+    const mockQuiz = {
+      visibility: QuizVisibility.Public,
+      owner: { _id: 'player1' } as Player,
+    } as Quiz
+    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
+
+    const mockContext = {
+      switchToHttp: () => ({
+        getRequest: () => mockRequest,
+      }),
+      getHandler: () => ({}),
+      getClass: () => ({}),
+    } as unknown as ExecutionContext
+
+    jest
+      .spyOn(quizAuthGuard['reflector'], 'getAllAndOverride')
+      .mockReturnValue(true)
+
+    const result = await quizAuthGuard.canActivate(mockContext)
+
+    expect(result).toBe(true)
   })
 })

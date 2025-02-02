@@ -39,7 +39,7 @@ export class QuizGameController {
    * @returns {CreateGameResponse} A response containing the details of the created game.
    */
   @Post()
-  @AuthorizedQuiz()
+  @AuthorizedQuiz({ allowPublic: true })
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Create a new game',
