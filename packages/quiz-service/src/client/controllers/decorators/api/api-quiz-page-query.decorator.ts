@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import { GameMode, QuizVisibility } from '@quiz/common'
+import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
 import { Type } from 'class-transformer'
 import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 
@@ -49,6 +49,21 @@ export class ApiQuizPageQueryFilter {
   @IsOptional()
   @IsEnum(QuizVisibility)
   visibility?: QuizVisibility
+
+  /**
+   * Filters quizzes by language code.
+   */
+  @ApiPropertyOptional({
+    name: 'languageCode',
+    description: 'Filters quizzes by language code.',
+    enum: LanguageCode,
+    required: false,
+    default: undefined,
+    example: `${LanguageCode.English}`,
+  })
+  @IsOptional()
+  @IsEnum(LanguageCode)
+  languageCode?: LanguageCode
 
   /**
    * The field by which to sort the results.

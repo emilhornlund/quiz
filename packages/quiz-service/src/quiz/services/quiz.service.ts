@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import {
   GameMode,
+  LanguageCode,
   PaginatedQuizResponseDto,
   QuestionDto,
   QuestionMultiChoiceDto,
@@ -105,6 +106,7 @@ export class QuizService {
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
    * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
@@ -117,6 +119,7 @@ export class QuizService {
     search?: string,
     mode?: GameMode,
     visibility?: QuizVisibility,
+    languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,
@@ -127,6 +130,7 @@ export class QuizService {
       search,
       mode,
       visibility,
+      languageCode,
       sortField,
       sortOrder,
       limit,
@@ -143,6 +147,7 @@ export class QuizService {
    *
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
+   * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
@@ -153,6 +158,7 @@ export class QuizService {
   public async findPublicQuizzes(
     search?: string,
     mode?: GameMode,
+    languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,
@@ -163,6 +169,7 @@ export class QuizService {
       search,
       mode,
       QuizVisibility.Public,
+      languageCode,
       sortField,
       sortOrder,
       limit,
@@ -177,6 +184,7 @@ export class QuizService {
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
    * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
@@ -191,6 +199,7 @@ export class QuizService {
     search?: string,
     mode?: GameMode,
     visibility?: QuizVisibility,
+    languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,
@@ -201,6 +210,7 @@ export class QuizService {
       ...(search?.length ? { title: { $regex: search, $options: 'i' } } : {}),
       ...(mode ? { mode } : {}),
       ...(visibility ? { visibility } : {}),
+      ...(languageCode ? { languageCode } : {}),
     }
 
     const total = await this.quizModel.countDocuments(filter)
