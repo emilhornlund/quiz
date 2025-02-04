@@ -47,6 +47,10 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
     &.selectInputKindSecondary {
       @extend .input-kind-secondary;
     }
+
+    &.selectInputSizeSmall {
+      @extend .input-size-small;
+    }
   }
 
   .errorContainer {

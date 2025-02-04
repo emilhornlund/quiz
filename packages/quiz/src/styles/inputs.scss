@@ -37,6 +37,7 @@
     outline: none;
     align-items: center;
     justify-content: center;
+    min-width: 0;
 
     @include mobile {
       column-gap: $mobile-control-normal-layout-gutter;

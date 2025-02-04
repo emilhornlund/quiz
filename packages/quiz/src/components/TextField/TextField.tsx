@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
+import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
 import {
   isCallbackValid,
   isValidNumber,
@@ -133,12 +134,19 @@ const TextField: React.FC<TextFieldProps> = ({
     onChange?.(newValue)
   }
 
+  const deviceType = useDeviceSizeType()
+
+  const deviceSize = useMemo(
+    () => (deviceType === DeviceType.Mobile ? 'small' : size),
+    [size, deviceType],
+  )
+
   return (
     <div className={styles.inputContainer}>
       <div
         className={classNames(
           styles.textFieldInputContainer,
-          size === 'small' ? styles.small : undefined,
+          deviceSize === 'small' ? styles.small : undefined,
           disabled ? styles.disabled : undefined,
           showError ? styles.error : undefined,
         )}>

@@ -1,31 +1,47 @@
 @import '../../styles/colors';
 @import '../../styles/helpers';
 
-.quizTableFilter, .quizTableFilter > form {
+.quizTableFilter {
   display: flex;
   flex-direction: row;
 
   @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
     width: 100%;
   }
 
   @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
     width: $mobile-width;
   }
 
   @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
     width: $mobile-width;
   }
 
-  .column {
+  form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    width: 100%;
 
-    &.full {
-      flex: 1;
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      &.full {
+        flex: 1;
+      }
     }
   }
 }

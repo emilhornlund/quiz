@@ -29,6 +29,7 @@
 
       @include mobile {
         row-gap: $mobile-narrow-layout-gutter;
+        width: calc(50% - #{$mobile-narrow-layout-gutter});
       }
 
       @include tablet {

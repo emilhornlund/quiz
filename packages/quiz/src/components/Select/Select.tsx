@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
+import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
 import { isCallbackValid } from '../../utils/validation.ts'
 
 import styles from './Select.module.scss'
@@ -14,6 +15,7 @@ export interface SelectProps {
   id: string
   name?: string
   kind?: 'primary' | 'secondary'
+  size?: 'normal' | 'small'
   value?: string | undefined
   values?: { key: string; value: string; valueLabel: string }[]
   required?: boolean | string
@@ -28,6 +30,7 @@ const Select: FC<SelectProps> = ({
   id,
   name = id,
   kind = 'primary',
+  size = 'normal',
   value,
   values,
   required,
@@ -83,6 +86,13 @@ const Select: FC<SelectProps> = ({
     onChange?.(newValue)
   }
 
+  const deviceType = useDeviceSizeType()
+
+  const deviceSize = useMemo(
+    () => (deviceType === DeviceType.Mobile ? 'small' : size),
+    [size, deviceType],
+  )
+
   return (
     <div className={styles.inputContainer}>
       <div
@@ -90,6 +100,7 @@ const Select: FC<SelectProps> = ({
           styles.selectInputContainer,
           kind === 'primary' ? styles.selectInputKindPrimary : undefined,
           kind === 'secondary' ? styles.selectInputKindSecondary : undefined,
+          deviceSize === 'small' ? styles.selectInputSizeSmall : undefined,
         )}>
         <select
           id={id}

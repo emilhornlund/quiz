@@ -54,6 +54,11 @@ const Button: React.FC<ButtonProps> = ({
     return !!value
   }, [value, deviceType, hideValue])
 
+  const deviceSize = useMemo(
+    () => (deviceType === DeviceType.Mobile ? 'small' : size),
+    [size, deviceType],
+  )
+
   return (
     <div
       className={classNames(
@@ -66,7 +71,7 @@ const Button: React.FC<ButtonProps> = ({
         kind === 'success' ? styles.buttonInputKindSuccess : undefined,
         kind === 'destructive' ? styles.buttonInputKindDestructive : undefined,
         kind === 'plain' ? styles.buttonInputKindPlain : undefined,
-        size === 'small' ? styles.buttonInputSizeSmall : undefined,
+        deviceSize === 'small' ? styles.buttonInputSizeSmall : undefined,
       )}>
       <button
         id={id}
