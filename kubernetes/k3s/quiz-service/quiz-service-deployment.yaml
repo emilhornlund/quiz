@@ -19,7 +19,7 @@ spec:
         node-type: worker
       containers:
         - name: quiz-service
-          image: registry.cluster.local:5000/emilhornlund/quiz-service:1f23862
+          image: registry.cluster.local:5000/emilhornlund/quiz-service:1a5ad31
           imagePullPolicy: IfNotPresent
           env:
             - name: NODE_ENV
