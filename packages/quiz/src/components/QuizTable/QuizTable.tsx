@@ -48,7 +48,7 @@ export interface QuizTablePagination {
 export interface QuizTableProps {
   items: QuizTableItem[]
   pagination: QuizTablePagination
-  isPublic?: boolean
+  isHostingGame?: boolean
   playerId?: string
   onEdit?: (id: string) => void
   onHostGame?: (id: string) => void
@@ -58,6 +58,7 @@ export interface QuizTableProps {
 const QuizTable: FC<QuizTableProps> = ({
   items,
   pagination,
+  isHostingGame = false,
   playerId,
   onEdit,
   onHostGame,
@@ -183,6 +184,7 @@ const QuizTable: FC<QuizTableProps> = ({
         title="Host Game"
         message="Are you sure you want to start hosting a new game? Players will be able to join as soon as the game starts."
         open={!!hostGameId}
+        loading={isHostingGame}
         onConfirm={() => !!hostGameId && onHostGame?.(hostGameId)}
         onClose={() => setHostGameId(undefined)}
       />

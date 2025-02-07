@@ -49,10 +49,13 @@ const ProfilePage: FC = () => {
     }
   }
 
+  const [isHostingGame, setIsHostingGame] = useState(false)
+
   const handleCreateGame = (quizId: string): void => {
-    createGame(quizId).then((response) =>
-      navigate(`/game?gameID=${response.id}`),
-    )
+    setIsHostingGame(true)
+    createGame(quizId)
+      .then((response) => navigate(`/game?gameID=${response.id}`))
+      .finally(() => setIsHostingGame(false))
   }
 
   return (
@@ -66,6 +69,7 @@ const ProfilePage: FC = () => {
       }}
       isLoading={isQuizzesLoading}
       isError={isQuizzesError}
+      isHostingGame={isHostingGame}
       onNicknameChange={handleNicknameChange}
       onChangeSearchParams={(params) =>
         setSearchParams({ ...searchParams, ...params })

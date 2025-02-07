@@ -34,10 +34,13 @@ const DiscoverPage: FC = () => {
     queryFn: () => getPublicQuizzes(searchParams),
   })
 
+  const [isHostingGame, setIsHostingGame] = useState(false)
+
   const handleCreateGame = (quizId: string): void => {
-    createGame(quizId).then((response) =>
-      navigate(`/game?gameID=${response.id}`),
-    )
+    setIsHostingGame(true)
+    createGame(quizId)
+      .then((response) => navigate(`/game?gameID=${response.id}`))
+      .finally(() => setIsHostingGame(false))
   }
 
   return (
@@ -51,6 +54,7 @@ const DiscoverPage: FC = () => {
       }}
       isLoading={isLoading}
       isError={isError}
+      isHostingGame={isHostingGame}
       onChangeSearchParams={(params) =>
         setSearchParams({ ...searchParams, ...params })
       }

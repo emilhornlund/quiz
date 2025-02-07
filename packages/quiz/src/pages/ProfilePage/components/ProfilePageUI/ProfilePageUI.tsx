@@ -18,6 +18,7 @@ export interface ProfilePageUIProps {
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
+  isHostingGame?: boolean
   onNicknameChange: (nickname: string) => void
   onChangeSearchParams: (params: {
     search?: string
@@ -40,6 +41,7 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
   pagination,
   isLoading,
   isError,
+  isHostingGame = false,
   onNicknameChange,
   onChangeSearchParams,
   onCreateQuiz,
@@ -55,6 +57,7 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
       pagination={pagination}
       isLoading={isLoading}
       isError={isError}
+      isHostingGame={isHostingGame}
       onChangeSearchParams={onChangeSearchParams}
       onCreateQuiz={onCreateQuiz}
       onEditQuiz={onEditQuiz}

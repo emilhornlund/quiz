@@ -32,6 +32,7 @@ export interface ProfileQuizzesProps {
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
+  isHostingGame?: boolean
   onChangeSearchParams: (params: SearchParams) => void
   onCreateQuiz: () => void
   onEditQuiz: (quizID: string) => void
@@ -44,6 +45,7 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
   pagination,
   isLoading,
   isError,
+  isHostingGame = false,
   onChangeSearchParams,
   onCreateQuiz,
   onEditQuiz,
@@ -98,6 +100,7 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
             limit: pagination.limit,
             offset: pagination.offset,
           }}
+          isHostingGame={isHostingGame}
           playerId={playerId}
           onPagination={(newLimit, newOffset) =>
             onChangeSearchParams({ limit: newLimit, offset: newOffset })

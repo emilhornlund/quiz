@@ -20,6 +20,7 @@ export interface DiscoverPageUIProps {
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
+  isHostingGame?: boolean
   onChangeSearchParams: (params: {
     search?: string
     visibility?: QuizVisibility
@@ -40,6 +41,7 @@ const DiscoverPageUI: FC<DiscoverPageUIProps> = ({
   pagination,
   isLoading,
   isError,
+  isHostingGame = false,
   onChangeSearchParams,
   onEditQuiz,
   onHostGame,
@@ -61,6 +63,7 @@ const DiscoverPageUI: FC<DiscoverPageUIProps> = ({
           limit: pagination.limit,
           offset: pagination.offset,
         }}
+        isHostingGame={isHostingGame}
         playerId={playerId}
         onPagination={(newLimit, newOffset) =>
           onChangeSearchParams({ limit: newLimit, offset: newOffset })
