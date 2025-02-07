@@ -5,7 +5,7 @@ import {
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import {
   Button,
@@ -15,22 +15,24 @@ import {
 } from '../../../../../../components'
 import QuizTableFilter from '../../../../../../components/QuizTableFilter'
 
+type SearchParams = {
+  search?: string
+  visibility?: QuizVisibility
+  languageCode?: LanguageCode
+  mode?: GameMode
+  sort?: 'title' | 'created' | 'updated'
+  order?: 'asc' | 'desc'
+  limit?: number
+  offset?: number
+}
+
 export interface ProfileQuizzesProps {
   playerId?: string
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  onChangeSearchParams: (params: {
-    search?: string
-    visibility?: QuizVisibility
-    languageCode?: LanguageCode
-    mode?: GameMode
-    sort?: 'title' | 'created' | 'updated'
-    order?: 'asc' | 'desc'
-    limit?: number
-    offset?: number
-  }) => void
+  onChangeSearchParams: (params: SearchParams) => void
   onCreateQuiz: () => void
   onEditQuiz: (quizID: string) => void
   onHostGame: (quizID: string) => void
@@ -47,15 +49,27 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
   onEditQuiz,
   onHostGame,
 }) => {
+  const [hasSearchFilter, setHasSearchFilter] = useState<boolean>(false)
+
+  const handleSearchFilterChange = (params: SearchParams) => {
+    onChangeSearchParams({ ...params, offset: 0 })
+    setHasSearchFilter(
+      !!params.search?.length ||
+        !!params.mode ||
+        !!params.languageCode ||
+        !!params.visibility,
+    )
+  }
+
   return (
     <>
       <Typography variant="subtitle">
-        {quizzes.length
+        {quizzes.length || hasSearchFilter
           ? 'Your Quizzes'
           : "You Haven't Created Any Quizzes Yet"}
       </Typography>
       <Typography variant="text" size="medium">
-        {quizzes.length
+        {quizzes.length || hasSearchFilter
           ? "Here's a list of your quizzes. You can edit them or host live games as needed."
           : 'Start creating engaging quizzes and share them with your audience.\n' +
             'Your creations will appear here!'}
@@ -70,10 +84,12 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
         iconPosition="leading"
         onClick={onCreateQuiz}
       />
-      <QuizTableFilter
-        onChange={(params) => onChangeSearchParams({ ...params, offset: 0 })}
-        showVisibilityFilter
-      />
+      {(!!quizzes.length || hasSearchFilter) && (
+        <QuizTableFilter
+          onChange={handleSearchFilterChange}
+          showVisibilityFilter
+        />
+      )}
       {!isLoading && !isError && quizzes ? (
         <QuizTable
           items={quizzes}
