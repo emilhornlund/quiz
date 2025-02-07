@@ -3,11 +3,11 @@ import {
   QuizClassicModeRequestDto,
   QuizZeroToOneHundredModeRequestDto,
 } from '@quiz/common'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import Textarea from '../Textarea'
 
-import { parseQuestionsJson, QuestionsForMode } from './helpers.ts'
+import { parseQuestionsJson } from './helpers'
 import styles from './QuestionEditor.module.scss'
 
 export type QuestionEditorProps = {
@@ -40,71 +40,61 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
   onChange,
   onValid,
 }) => {
-  const [questionsJson, setQuestionsJson] = useState<string>('[]')
+  const [questionsJson, setQuestionsJson] = useState(() =>
+    JSON.stringify(questions, null, 2),
+  )
   const [jsonError, setJsonError] = useState<string>()
 
-  const handleParseQuestionJson = useCallback(
-    (value: string, mode: GameMode) => {
-      setQuestionsJson(value)
-      setJsonError(undefined)
-
-      /* eslint-disable-next-line */
-    let parsedJson: any
-      let jsonValid = true
-      try {
-        parsedJson = JSON.parse(value)
-      } catch (error) {
-        jsonValid = false
-        setJsonError((error as Error).message)
-      }
-
-      if (jsonValid) {
-        if (mode === GameMode.Classic) {
-          let parsedQuestions: QuestionsForMode<GameMode.Classic> = []
-          try {
-            parsedQuestions = parseQuestionsJson(parsedJson, mode)
-          } catch (error) {
-            jsonValid = false
-            setJsonError((error as Error).message)
-            onValid(false)
-          }
-          if (parsedQuestions && jsonValid) {
-            onValid(true)
-            onChange({ mode, questions: parsedQuestions })
-          }
-        }
-        if (mode === GameMode.ZeroToOneHundred) {
-          let parsedQuestions: QuestionsForMode<GameMode.ZeroToOneHundred> = []
-          try {
-            parsedQuestions = parseQuestionsJson(parsedJson, mode)
-          } catch (error) {
-            jsonValid = false
-            setJsonError((error as Error).message)
-            onValid(false)
-          }
-          if (parsedQuestions && jsonValid) {
-            onValid(true)
-            onChange({ mode, questions: parsedQuestions })
-          }
-        }
-      }
-    },
-    [onChange, onValid],
-  )
-
-  const handleChangeJSON = useCallback(
-    (value: string) => {
-      handleParseQuestionJson(value, mode)
-    },
-    [mode, handleParseQuestionJson],
-  )
+  const lastPropJsonRef = useRef<string>(JSON.stringify(questions, null, 2))
 
   useEffect(() => {
-    const newQuestionsJson = JSON.stringify(questions, null, 2)
-    if (newQuestionsJson !== questionsJson && !jsonError) {
-      handleParseQuestionJson(newQuestionsJson, mode)
+    const newPropJson = JSON.stringify(questions, null, 2)
+
+    if (newPropJson !== lastPropJsonRef.current) {
+      lastPropJsonRef.current = newPropJson
+      setQuestionsJson(newPropJson)
+
+      try {
+        parseQuestionsJson(questions, mode)
+        setJsonError(undefined)
+        onValid(true)
+      } catch (err) {
+        setJsonError((err as Error).message)
+        onValid(false)
+      }
     }
-  }, [mode, questions, questionsJson, jsonError, handleParseQuestionJson])
+  }, [mode, questions, onValid])
+
+  const handleChange = useCallback(
+    (newValue: string) => {
+      setQuestionsJson(newValue)
+      setJsonError(undefined)
+
+      try {
+        const parsed = JSON.parse(newValue)
+
+        onChange(
+          mode === GameMode.Classic
+            ? {
+                mode: GameMode.Classic,
+                questions: parseQuestionsJson(parsed, GameMode.Classic),
+              }
+            : {
+                mode: GameMode.ZeroToOneHundred,
+                questions: parseQuestionsJson(
+                  parsed,
+                  GameMode.ZeroToOneHundred,
+                ),
+              },
+        )
+        onValid(true)
+      } catch (err) {
+        setJsonError((err as Error).message)
+        onValid(false)
+      }
+    },
+    [mode, onChange, onValid],
+  )
 
   return (
     <div className={styles.questionEditor}>
@@ -113,7 +103,7 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
         type="code"
         placeholder="Questions"
         value={questionsJson}
-        onChange={handleChangeJSON}
+        onChange={handleChange}
         onAdditionalValidation={() => jsonError || true}
         forceValidate
       />
