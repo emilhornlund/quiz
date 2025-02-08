@@ -76,10 +76,9 @@ export const useEventSource = (
     if (gameID && token) {
       setConnectionStatus(ConnectionStatus.INITIALIZED)
       createEventSource(gameID, token)
-
-      return () => {
-        eventSourceRef.current?.close()
-      }
+    }
+    return () => {
+      eventSourceRef.current?.close()
     }
   }, [createEventSource, gameID, token])
 

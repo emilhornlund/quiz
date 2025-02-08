@@ -12,7 +12,7 @@ import {
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
 } from '@quiz/common/dist/cjs/models/question.dto'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -91,25 +91,28 @@ const EditQuizPage: FC = () => {
 
   const [isQuizValid, setIsQuizValid] = useState<boolean>(false)
 
-  const updateQuizMutation = useMutation({
-    mutationFn: (request: QuizRequestDto) =>
-      updateQuiz(quizId as string, request),
-    onSuccess: () => navigate('/player/profile'),
-  })
-
-  const deleteQuizMutation = useMutation({
-    mutationFn: () => deleteQuiz(quizId as string),
-    onSuccess: () => navigate('/player/profile'),
-  })
+  const [isSavingQuiz, setIsSavingQuiz] = useState(false)
 
   const handleSaveQuiz = (): void => {
-    updateQuizMutation.mutate(editableData)
+    if (quizId) {
+      setIsSavingQuiz(true)
+      updateQuiz(quizId, editableData)
+        .then(() => navigate('/player/profile'))
+        .finally(() => setIsSavingQuiz(false))
+    }
   }
 
   const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false)
 
+  const [isDeletingQuiz, setIsDeletingQuiz] = useState(false)
+
   const handleDeleteQuiz = (): void => {
-    deleteQuizMutation.mutate()
+    if (quizId) {
+      setIsDeletingQuiz(true)
+      deleteQuiz(quizId)
+        .then(() => navigate('/player/profile'))
+        .finally(() => setIsDeletingQuiz(false))
+    }
   }
 
   if (
@@ -151,6 +154,7 @@ const EditQuizPage: FC = () => {
               kind="call-to-action"
               size="small"
               value="Save"
+              loading={isSavingQuiz}
               disabled={!isQuizValid}
               onClick={handleSaveQuiz}
             />
@@ -167,6 +171,7 @@ const EditQuizPage: FC = () => {
         title="Delete Quiz"
         message="Are you sure you want to delete this quiz?"
         open={showConfirmDeleteDialog}
+        loading={isDeletingQuiz}
         onConfirm={handleDeleteQuiz}
         onClose={() => setShowConfirmDeleteDialog(false)}
         destructive

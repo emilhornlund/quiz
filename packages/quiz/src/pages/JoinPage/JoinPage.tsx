@@ -41,6 +41,8 @@ const JoinPage: FC = () => {
   const title = useMemo<string>(() => getTitle(), [])
   const message = useMemo<string>(() => getMessage(), [])
 
+  const [isJoiningGame, setIsJoiningGame] = useState(false)
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
@@ -49,11 +51,10 @@ const JoinPage: FC = () => {
     }
 
     if (gameID && nickname) {
+      setIsJoiningGame(true)
       joinGame(gameID, nickname)
-        .then(() => {
-          navigate(`/game?gameID=${gameID}`)
-        })
-        .catch(console.error)
+        .then(() => navigate(`/game?gameID=${gameID}`))
+        .finally(() => setIsJoiningGame(false))
     }
   }
 
@@ -84,6 +85,7 @@ const JoinPage: FC = () => {
           minLength={PLAYER_NICKNAME_MIN_LENGTH}
           maxLength={PLAYER_NICKNAME_MAX_LENGTH}
           regex={PLAYER_NICKNAME_REGEX}
+          disabled={isJoiningGame}
           onChange={(value) => setNickname(value as string)}
           onValid={setNicknameValid}
           required
@@ -93,6 +95,7 @@ const JoinPage: FC = () => {
           type="submit"
           kind="call-to-action"
           value="OK, Go!"
+          loading={isJoiningGame}
           disabled={!nicknameValid}
         />
       </form>

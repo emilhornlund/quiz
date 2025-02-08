@@ -36,11 +36,16 @@ const HomePage: FC = () => {
     [],
   )
 
+  const [isFindingGame, setIsFindingGame] = useState(false)
+
   const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (gamePIN) {
-      findGame(gamePIN).then(({ id }) => navigate(`/join?gameID=${id}`))
+      setIsFindingGame(true)
+      findGame(gamePIN)
+        .then(({ id }) => navigate(`/join?gameID=${id}`))
+        .finally(() => setIsFindingGame(false))
     }
   }
 
@@ -62,6 +67,7 @@ const HomePage: FC = () => {
           minLength={GAME_PIN_LENGTH}
           maxLength={GAME_PIN_LENGTH}
           regex={GAME_PIN_REGEX}
+          disabled={isFindingGame}
           onChange={(value) => setGamePIN(value as string)}
           onValid={setGamePINValid}
           required
@@ -71,6 +77,7 @@ const HomePage: FC = () => {
           type="submit"
           kind="call-to-action"
           value="Join the game"
+          loading={isFindingGame}
           disabled={!gamePINValid}
         />
       </form>
