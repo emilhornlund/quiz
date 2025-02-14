@@ -6,6 +6,7 @@ import {
   MediaType,
   PLAYER_LINK_CODE_REGEX,
   QuestionType,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
 import supertest from 'supertest'
@@ -309,6 +310,7 @@ describe('ClientController (e2e)', () => {
           description: 'A fun and engaging trivia quiz for all ages.',
           mode: GameMode.Classic,
           visibility: QuizVisibility.Public,
+          category: QuizCategory.GeneralKnowledge,
           imageCoverURL: 'https://example.com/question-cover-image.png',
           languageCode: LanguageCode.English,
           questions: [
@@ -353,6 +355,7 @@ describe('ClientController (e2e)', () => {
             'Test your knowledge about countries, capitals, and landmarks.',
           mode: GameMode.ZeroToOneHundred,
           visibility: QuizVisibility.Private,
+          category: QuizCategory.GeneralKnowledge,
           imageCoverURL: 'https://example.com/geography-cover-image.png',
           languageCode: LanguageCode.Swedish,
           questions: [
@@ -395,6 +398,10 @@ describe('ClientController (e2e)', () => {
           expect(res.body.results[0]).toHaveProperty(
             'visibility',
             originalQuiz.visibility,
+          )
+          expect(res.body.results[0]).toHaveProperty(
+            'category',
+            originalQuiz.category,
           )
           expect(res.body.results[0]).toHaveProperty(
             'imageCoverURL',

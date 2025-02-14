@@ -17,6 +17,33 @@ export enum QuizVisibility {
 }
 
 /**
+ * Quiz Category
+ */
+export enum QuizCategory {
+  GeneralKnowledge = 'GENERAL_KNOWLEDGE',
+  Science = 'SCIENCE',
+  History = 'HISTORY',
+  Geography = 'GEOGRAPHY',
+  Entertainment = 'ENTERTAINMENT',
+  Sports = 'SPORTS',
+  Literature = 'LITERATURE',
+  Technology = 'TECHNOLOGY',
+  Art = 'ART',
+  Music = 'MUSIC',
+  Film = 'FILM',
+  FoodAndDrink = 'FOOD_AND_DRINK',
+  Politics = 'POLITICS',
+  Mythology = 'MYTHOLOGY',
+  Nature = 'NATURE',
+  Business = 'BUSINESS',
+  Health = 'HEALTH',
+  Religion = 'RELIGION',
+  Space = 'SPACE',
+  Mathematics = 'MATHEMATICS',
+  Other = 'OTHER',
+}
+
+/**
  * Data transfer object for quiz creation and updating requests.
  */
 export type QuizRequestDto = {
@@ -34,6 +61,11 @@ export type QuizRequestDto = {
    * Whether the quiz's visibility is public or private.
    */
   visibility: QuizVisibility
+
+  /**
+   * description here.
+   */
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.
@@ -119,6 +151,11 @@ export interface QuizResponseDto {
    * Whether the quiz's visibility is public or private.
    */
   visibility: QuizVisibility
+
+  /**
+   * description here.
+   */
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.

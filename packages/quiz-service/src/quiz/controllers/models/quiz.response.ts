@@ -2,12 +2,14 @@ import { ApiProperty } from '@nestjs/swagger'
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
 
 import {
   ApiModeProperty,
+  ApiQuizCategoryProperty,
   ApiQuizCreatedProperty,
   ApiQuizDescriptionProperty,
   ApiQuizIdProperty,
@@ -53,6 +55,12 @@ export class QuizResponse implements QuizResponseDto {
    */
   @ApiQuizVisibilityProperty()
   visibility: QuizVisibility
+
+  /**
+   * Specifies the category of the quiz.
+   */
+  @ApiQuizCategoryProperty()
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.

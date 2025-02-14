@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import { validate } from 'class-validator'
 
 import { QuizResponse } from './quiz.response'
@@ -10,6 +15,7 @@ describe('QuizResponse', () => {
     description: 'A fun and engaging trivia quiz for all ages.',
     mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
     imageCoverURL: 'https://example.com/question-cover-image.png',
     languageCode: LanguageCode.English,
     created: new Date().toISOString(),

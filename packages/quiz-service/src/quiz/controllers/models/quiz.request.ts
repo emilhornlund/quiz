@@ -4,6 +4,7 @@ import {
   GameMode,
   LanguageCode,
   QuestionType,
+  QuizCategory,
   QuizClassicModeRequestDto,
   QuizVisibility,
   QuizZeroToOneHundredModeRequestDto,
@@ -13,6 +14,7 @@ import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
 
 import {
   ApiModeProperty,
+  ApiQuizCategoryProperty,
   ApiQuizDescriptionProperty,
   ApiQuizImageCoverProperty,
   ApiQuizLanguageCodeProperty,
@@ -82,6 +84,12 @@ export class QuizClassicRequest implements QuizClassicModeRequestDto {
    */
   @ApiQuizVisibilityProperty()
   visibility: QuizVisibility
+
+  /**
+   * Specifies the category of the quiz.
+   */
+  @ApiQuizCategoryProperty()
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.
@@ -154,6 +162,12 @@ export class QuizZeroToOneHundredRequest
    */
   @ApiQuizVisibilityProperty()
   visibility: QuizVisibility
+
+  /**
+   * Specifies the category of the quiz.
+   */
+  @ApiQuizCategoryProperty()
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.

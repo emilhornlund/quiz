@@ -3,6 +3,7 @@ import {
   LanguageCode,
   MediaType,
   QuestionType,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
 import { validate } from 'class-validator'
@@ -15,6 +16,7 @@ describe('QuizRequest', () => {
     description: 'A fun and engaging trivia quiz for all ages.',
     mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
     imageCoverURL: 'https://example.com/question-cover-image.png',
     languageCode: LanguageCode.English,
     questions: [

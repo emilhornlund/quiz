@@ -3,6 +3,7 @@ import {
   GameMode,
   LanguageCode,
   QuestionType,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
 import { Model, Schema as MongooseSchema } from 'mongoose'
@@ -57,6 +58,12 @@ export class Quiz {
    */
   @Prop({ enum: QuizVisibility, required: true })
   visibility: QuizVisibility
+
+  /**
+   * Specifies the category of the quiz.
+   */
+  @Prop({ enum: QuizCategory, required: true, default: QuizCategory.Other })
+  category: QuizCategory
 
   /**
    * The URL of the cover image for the quiz.

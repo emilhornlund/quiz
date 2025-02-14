@@ -7,6 +7,7 @@ import {
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
+  QuizCategory,
   QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
@@ -1006,6 +1007,7 @@ const classicQuizRequest: QuizRequestDto = {
   description: 'A fun and engaging trivia quiz for all ages.',
   mode: GameMode.Classic,
   visibility: QuizVisibility.Public,
+  category: QuizCategory.GeneralKnowledge,
   imageCoverURL: 'https://example.com/question-cover-image.png',
   languageCode: LanguageCode.English,
   questions: [
@@ -1081,6 +1083,7 @@ const zeroToOneHundredQuizRequest: QuizRequestDto = {
   description: 'A fun and engaging updated trivia quiz for all ages.',
   mode: GameMode.ZeroToOneHundred,
   visibility: QuizVisibility.Private,
+  category: QuizCategory.GeneralKnowledge,
   imageCoverURL: 'https://example.com/updated-question-cover-image.png',
   languageCode: LanguageCode.Swedish,
   questions: [
