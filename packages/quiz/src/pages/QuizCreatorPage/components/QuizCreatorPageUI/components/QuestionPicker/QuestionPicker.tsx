@@ -86,7 +86,7 @@ const QuestionPicker: FC<QuestionPickerProps> = ({
           <QuestionPickerItem
             key={`question-picker-item-${index}`}
             index={index}
-            text={text ?? 'Question'}
+            text={text || 'Question'}
             type={type}
             active={isActive(index)}
             error={error}
