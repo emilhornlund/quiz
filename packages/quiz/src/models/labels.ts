@@ -1,6 +1,8 @@
 import {
   GameMode,
   LanguageCode,
+  MediaType,
+  QuestionRangeAnswerMargin,
   QuestionType,
   QuizCategory,
   QuizVisibility,
@@ -202,13 +204,6 @@ export const QuizVisibilityLabels: { [key in QuizVisibility]: string } = {
   [QuizVisibility.Private]: 'Private',
 }
 
-export const QuestionTypeLabels: { [key in QuestionType]: string } = {
-  [QuestionType.MultiChoice]: 'Multi Choice',
-  [QuestionType.Range]: 'Range',
-  [QuestionType.TrueFalse]: 'True or False',
-  [QuestionType.TypeAnswer]: 'Type Answer',
-}
-
 export const QuizCategoryLabels: { [key in QuizCategory]: string } = {
   [QuizCategory.GeneralKnowledge]: 'General Knowledge',
   [QuizCategory.Science]: 'Science',
@@ -231,4 +226,27 @@ export const QuizCategoryLabels: { [key in QuizCategory]: string } = {
   [QuizCategory.Space]: 'Space',
   [QuizCategory.Mathematics]: 'Mathematics',
   [QuizCategory.Other]: 'Other',
+}
+
+export const QuestionTypeLabels: { [key in QuestionType]: string } = {
+  [QuestionType.MultiChoice]: 'Multi Choice',
+  [QuestionType.Range]: 'Range',
+  [QuestionType.TrueFalse]: 'True or False',
+  [QuestionType.TypeAnswer]: 'Type Answer',
+}
+
+export const QuestionRangeAnswerMarginLabels: {
+  [key in QuestionRangeAnswerMargin]: string
+} = {
+  [QuestionRangeAnswerMargin.None]: 'None',
+  [QuestionRangeAnswerMargin.Low]: 'Low',
+  [QuestionRangeAnswerMargin.Medium]: 'Medium',
+  [QuestionRangeAnswerMargin.High]: 'High',
+  [QuestionRangeAnswerMargin.Maximum]: 'Maximum',
+}
+
+export const MediaTypeLabels: { [key in MediaType]: string } = {
+  [MediaType.Image]: 'Image',
+  [MediaType.Audio]: 'Audio',
+  [MediaType.Video]: 'Video',
 }
