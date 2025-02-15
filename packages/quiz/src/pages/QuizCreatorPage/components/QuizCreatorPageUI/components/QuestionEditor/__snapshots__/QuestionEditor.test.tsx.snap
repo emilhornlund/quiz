@@ -1,0 +1,2077 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuestionEditor > renders a classic multi choice option question editor 1`] = `
+<div>
+  <div
+    class="questionEditorContainer"
+  >
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-question-type-select-select"
+                id="question-type-select"
+                name="question-type-select"
+              >
+                <option
+                  value="MULTI_CHOICE"
+                >
+                  Multi Choice
+                </option>
+                <option
+                  value="RANGE"
+                >
+                  Range
+                </option>
+                <option
+                  value="TRUE_FALSE"
+                >
+                  True or False
+                </option>
+                <option
+                  value="TYPE_ANSWER"
+                >
+                  Type Answer
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Question
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-question-text-textfield-textfield"
+                id="question-text-textfield"
+                maxlength="120"
+                minlength="3"
+                name="question-text-textfield"
+                placeholder="Question"
+                type="text"
+                value="Who painted The Starry Night?"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-media-type-select-select"
+                id="media-type-select"
+                name="media-type-select"
+              >
+                <option
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="IMAGE"
+                >
+                  Image
+                </option>
+                <option
+                  value="AUDIO"
+                >
+                  Audio
+                </option>
+                <option
+                  value="VIDEO"
+                >
+                  Video
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media URL
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-media-url-textfield-textfield"
+                id="media-url-textfield"
+                name="media-url-textfield"
+                placeholder="URL"
+                type="text"
+                value="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Options
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="optionsContainer"
+          >
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-0-textfield-textfield"
+                    id="multi-choice-option-0-textfield"
+                    name="multi-choice-option-0-textfield"
+                    placeholder="Option 1"
+                    type="text"
+                    value="Vincent van Gogh"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-0-textfield-checkbox"
+                  >
+                    <input
+                      checked=""
+                      class="checkbox"
+                      id="multi-choice-option-0-textfield-checkbox"
+                      type="checkbox"
+                    />
+                    <span
+                      class="checkboxIcon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-check "
+                        data-icon="check"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 448 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-1-textfield-textfield"
+                    id="multi-choice-option-1-textfield"
+                    name="multi-choice-option-1-textfield"
+                    placeholder="Option 2"
+                    type="text"
+                    value="Pablo Picasso"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-1-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="multi-choice-option-1-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-2-textfield-textfield"
+                    id="multi-choice-option-2-textfield"
+                    name="multi-choice-option-2-textfield"
+                    placeholder="Option 3"
+                    type="text"
+                    value="Leonardo da Vinci"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-2-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="multi-choice-option-2-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-3-textfield-textfield"
+                    id="multi-choice-option-3-textfield"
+                    name="multi-choice-option-3-textfield"
+                    placeholder="Option 4"
+                    type="text"
+                    value="Claude Monet"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-3-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="multi-choice-option-3-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-4-textfield-textfield"
+                    id="multi-choice-option-4-textfield"
+                    name="multi-choice-option-4-textfield"
+                    placeholder="Option 5"
+                    type="text"
+                    value="Michelangelo"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-4-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="multi-choice-option-4-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-multi-choice-option-5-textfield-textfield"
+                    id="multi-choice-option-5-textfield"
+                    name="multi-choice-option-5-textfield"
+                    placeholder="Option 6"
+                    type="text"
+                    value="Rembrandt"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="multi-choice-option-5-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="multi-choice-option-5-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Points
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-points-select-select"
+                id="points-select"
+                name="points-select"
+              >
+                <option
+                  value="0"
+                >
+                  Zero Points
+                </option>
+                <option
+                  value="1000"
+                >
+                  Standard Points (1000)
+                </option>
+                <option
+                  value="2000"
+                >
+                  Double Points (2000)
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Time Limit
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-duration-select-select"
+                id="duration-select"
+                name="duration-select"
+              >
+                <option
+                  value="5"
+                >
+                  5 seconds
+                </option>
+                <option
+                  value="30"
+                >
+                  30 seconds
+                </option>
+                <option
+                  value="60"
+                >
+                  1 minute
+                </option>
+                <option
+                  value="120"
+                >
+                  2 minutes
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionEditor > renders a classic range question editor 1`] = `
+<div>
+  <div
+    class="questionEditorContainer"
+  >
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-question-type-select-select"
+                id="question-type-select"
+                name="question-type-select"
+              >
+                <option
+                  value="MULTI_CHOICE"
+                >
+                  Multi Choice
+                </option>
+                <option
+                  value="RANGE"
+                >
+                  Range
+                </option>
+                <option
+                  value="TRUE_FALSE"
+                >
+                  True or False
+                </option>
+                <option
+                  value="TYPE_ANSWER"
+                >
+                  Type Answer
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Question
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-question-text-textfield-textfield"
+                id="question-text-textfield"
+                maxlength="120"
+                minlength="3"
+                name="question-text-textfield"
+                placeholder="Question"
+                type="text"
+                value="What percentage of the earth's surface is covered by water?"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-media-type-select-select"
+                id="media-type-select"
+                name="media-type-select"
+              >
+                <option
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="IMAGE"
+                >
+                  Image
+                </option>
+                <option
+                  value="AUDIO"
+                >
+                  Audio
+                </option>
+                <option
+                  value="VIDEO"
+                >
+                  Video
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media URL
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-media-url-textfield-textfield"
+                id="media-url-textfield"
+                name="media-url-textfield"
+                placeholder="URL"
+                type="text"
+                value="https://editalconcursosbrasil.com.br/wp-content/uploads/2022/12/planeta-terra-scaled.jpg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Min
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-range-min-textfield-textfield"
+                id="range-min-textfield"
+                name="range-min-textfield"
+                placeholder=""
+                type="number"
+                value="0"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Max
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-range-max-textfield-textfield"
+                id="range-max-textfield"
+                name="range-max-textfield"
+                placeholder=""
+                type="number"
+                value="100"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Correct
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-range-correct-textfield-textfield"
+                id="range-correct-textfield"
+                max="100"
+                min="0"
+                name="range-correct-textfield"
+                placeholder=""
+                type="number"
+                value="71"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Points
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-points-select-select"
+                id="points-select"
+                name="points-select"
+              >
+                <option
+                  value="0"
+                >
+                  Zero Points
+                </option>
+                <option
+                  value="1000"
+                >
+                  Standard Points (1000)
+                </option>
+                <option
+                  value="2000"
+                >
+                  Double Points (2000)
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Time Limit
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-duration-select-select"
+                id="duration-select"
+                name="duration-select"
+              >
+                <option
+                  value="5"
+                >
+                  5 seconds
+                </option>
+                <option
+                  value="30"
+                >
+                  30 seconds
+                </option>
+                <option
+                  value="60"
+                >
+                  1 minute
+                </option>
+                <option
+                  value="120"
+                >
+                  2 minutes
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionEditor > renders a classic true or false question editor 1`] = `
+<div>
+  <div
+    class="questionEditorContainer"
+  >
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-question-type-select-select"
+                id="question-type-select"
+                name="question-type-select"
+              >
+                <option
+                  value="MULTI_CHOICE"
+                >
+                  Multi Choice
+                </option>
+                <option
+                  value="RANGE"
+                >
+                  Range
+                </option>
+                <option
+                  value="TRUE_FALSE"
+                >
+                  True or False
+                </option>
+                <option
+                  value="TYPE_ANSWER"
+                >
+                  Type Answer
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Question
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-question-text-textfield-textfield"
+                id="question-text-textfield"
+                maxlength="120"
+                minlength="3"
+                name="question-text-textfield"
+                placeholder="Question"
+                type="text"
+                value="Rabbits can't vomit?"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-media-type-select-select"
+                id="media-type-select"
+                name="media-type-select"
+              >
+                <option
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="IMAGE"
+                >
+                  Image
+                </option>
+                <option
+                  value="AUDIO"
+                >
+                  Audio
+                </option>
+                <option
+                  value="VIDEO"
+                >
+                  Video
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media URL
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-media-url-textfield-textfield"
+                id="media-url-textfield"
+                name="media-url-textfield"
+                placeholder="URL"
+                type="text"
+                value="https://assets.petco.com/petco/image/upload/f_auto,q_auto/rabbit-care-sheet"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Options
+        </div>
+        <div
+          class="content optionsContainer"
+        >
+          <div
+            class="optionsContainer"
+          >
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-true-false-option-0-textfield-textfield"
+                    id="true-false-option-0-textfield"
+                    name="true-false-option-0-textfield"
+                    readonly=""
+                    type="text"
+                    value="True"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="true-false-option-0-textfield-checkbox"
+                  >
+                    <input
+                      checked=""
+                      class="checkbox"
+                      id="true-false-option-0-textfield-checkbox"
+                      type="checkbox"
+                    />
+                    <span
+                      class="checkboxIcon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-check "
+                        data-icon="check"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 448 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-true-false-option-1-textfield-textfield"
+                    id="true-false-option-1-textfield"
+                    name="true-false-option-1-textfield"
+                    readonly=""
+                    type="text"
+                    value="False"
+                  />
+                  <label
+                    class="checkboxLabel"
+                    for="true-false-option-1-textfield-checkbox"
+                  >
+                    <input
+                      class="checkbox"
+                      id="true-false-option-1-textfield-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Points
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-points-select-select"
+                id="points-select"
+                name="points-select"
+              >
+                <option
+                  value="0"
+                >
+                  Zero Points
+                </option>
+                <option
+                  value="1000"
+                >
+                  Standard Points (1000)
+                </option>
+                <option
+                  value="2000"
+                >
+                  Double Points (2000)
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Time Limit
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-duration-select-select"
+                id="duration-select"
+                name="duration-select"
+              >
+                <option
+                  value="5"
+                >
+                  5 seconds
+                </option>
+                <option
+                  value="30"
+                >
+                  30 seconds
+                </option>
+                <option
+                  value="60"
+                >
+                  1 minute
+                </option>
+                <option
+                  value="120"
+                >
+                  2 minutes
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
+<div>
+  <div
+    class="questionEditorContainer"
+  >
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-question-type-select-select"
+                id="question-type-select"
+                name="question-type-select"
+              >
+                <option
+                  value="MULTI_CHOICE"
+                >
+                  Multi Choice
+                </option>
+                <option
+                  value="RANGE"
+                >
+                  Range
+                </option>
+                <option
+                  value="TRUE_FALSE"
+                >
+                  True or False
+                </option>
+                <option
+                  value="TYPE_ANSWER"
+                >
+                  Type Answer
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Question
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-question-text-textfield-textfield"
+                id="question-text-textfield"
+                maxlength="120"
+                minlength="3"
+                name="question-text-textfield"
+                placeholder="Question"
+                type="text"
+                value="Who painted the Mono Lisa?"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-media-type-select-select"
+                id="media-type-select"
+                name="media-type-select"
+              >
+                <option
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="IMAGE"
+                >
+                  Image
+                </option>
+                <option
+                  value="AUDIO"
+                >
+                  Audio
+                </option>
+                <option
+                  value="VIDEO"
+                >
+                  Video
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media URL
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-media-url-textfield-textfield"
+                id="media-url-textfield"
+                name="media-url-textfield"
+                placeholder="URL"
+                type="text"
+                value="https://i.pinimg.com/originals/a1/4a/04/a14a0433d085057106b61a5ef63c7249.jpg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Options
+        </div>
+        <div
+          class="content optionsContainer"
+        >
+          <div
+            class="optionsContainer"
+          >
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-type-answer-option-0-textfield-textfield"
+                    id="type-answer-option-0-textfield"
+                    name="type-answer-option-0-textfield"
+                    placeholder="Option 1"
+                    type="text"
+                    value="leonardo da vinci"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-type-answer-option-1-textfield-textfield"
+                    id="type-answer-option-1-textfield"
+                    name="type-answer-option-1-textfield"
+                    placeholder="Option 2"
+                    type="text"
+                    value="leonardo"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-type-answer-option-2-textfield-textfield"
+                    id="type-answer-option-2-textfield"
+                    name="type-answer-option-2-textfield"
+                    placeholder="Option 3"
+                    type="text"
+                    value="da vinci"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="option"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-type-answer-option-3-textfield-textfield"
+                    id="type-answer-option-3-textfield"
+                    name="type-answer-option-3-textfield"
+                    placeholder="Option 4"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Points
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-points-select-select"
+                id="points-select"
+                name="points-select"
+              >
+                <option
+                  value="0"
+                >
+                  Zero Points
+                </option>
+                <option
+                  value="1000"
+                >
+                  Standard Points (1000)
+                </option>
+                <option
+                  value="2000"
+                >
+                  Double Points (2000)
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Time Limit
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-duration-select-select"
+                id="duration-select"
+                name="duration-select"
+              >
+                <option
+                  value="5"
+                >
+                  5 seconds
+                </option>
+                <option
+                  value="30"
+                >
+                  30 seconds
+                </option>
+                <option
+                  value="60"
+                >
+                  1 minute
+                </option>
+                <option
+                  value="120"
+                >
+                  2 minutes
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionEditor > renders a zero to one hundred range question editor 1`] = `
+<div>
+  <div
+    class="questionEditorContainer"
+  >
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutFull"
+      >
+        <div
+          class="label"
+        >
+          Question
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-question-text-textfield-textfield"
+                id="question-text-textfield"
+                maxlength="120"
+                minlength="3"
+                name="question-text-textfield"
+                placeholder="Question"
+                type="text"
+                value="What percentage of the earth's surface is covered by water?"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media Type
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-media-type-select-select"
+                id="media-type-select"
+                name="media-type-select"
+              >
+                <option
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="IMAGE"
+                >
+                  Image
+                </option>
+                <option
+                  value="AUDIO"
+                >
+                  Audio
+                </option>
+                <option
+                  value="VIDEO"
+                >
+                  Video
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Media URL
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer"
+            >
+              <input
+                class="textfield"
+                data-testid="test-media-url-textfield-textfield"
+                id="media-url-textfield"
+                name="media-url-textfield"
+                placeholder="URL"
+                type="text"
+                value="https://editalconcursosbrasil.com.br/wp-content/uploads/2022/12/planeta-terra-scaled.jpg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="section"
+    >
+      <div
+        class="questionFieldContainer layoutHalf"
+      >
+        <div
+          class="label"
+        >
+          Time Limit
+        </div>
+        <div
+          class="content"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindPrimary"
+            >
+              <select
+                data-testid="test-duration-select-select"
+                id="duration-select"
+                name="duration-select"
+              >
+                <option
+                  value="5"
+                >
+                  5 seconds
+                </option>
+                <option
+                  value="30"
+                >
+                  30 seconds
+                </option>
+                <option
+                  value="60"
+                >
+                  1 minute
+                </option>
+                <option
+                  value="120"
+                >
+                  2 minutes
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

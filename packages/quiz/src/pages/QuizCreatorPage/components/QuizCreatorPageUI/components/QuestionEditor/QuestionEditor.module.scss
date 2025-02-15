@@ -1,0 +1,37 @@
+@import '../../../../../../styles/colors.scss';
+@import '../../../../../../styles/helpers.scss';
+
+.questionEditorContainer, .section {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-narrow-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-narrow-layout-gutter;
+  }
+
+  @include desktop {
+    row-gap: $desktop-narrow-layout-gutter;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    @include mobile {
+      gap: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      gap: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      gap: $desktop-narrow-layout-gutter;
+    }
+  }
+}
