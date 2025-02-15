@@ -1,0 +1,1413 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="quizCreatorPageHeader"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer small"
+            >
+              <input
+                class="textfield"
+                data-testid="test-quiz-title-text-field-textfield"
+                id="quiz-title-text-field"
+                name="quiz-title-text-field"
+                placeholder="Title"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-settings-button-button"
+              id="settings-button"
+              name="settings-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-gear "
+                data-icon="gear"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Settings
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-save-button-button"
+              id="save-button"
+              name="save-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-floppy-disk "
+                data-icon="floppy-disk"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Save
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth fullHeight centerAlign"
+    >
+      <div
+        class="quizCreatorPage"
+      >
+        <div
+          class="questionPickerWrapper"
+        >
+          <div
+            class="questionPickerItemContainer"
+          >
+            <div
+              class="questionPickerItemWrapper"
+              draggable="true"
+              id="question-picker-item-0"
+            >
+              <button
+                class="questionPickerItemButton questionPickerItemActive"
+              >
+                <div
+                  class="questionPickerItemText"
+                >
+                  Who painted The Starry Night?
+                </div>
+                <div
+                  class="questionPickerItemType"
+                >
+                  Multi Choice
+                </div>
+              </button>
+              <div
+                class="questionPickerItemOverlay"
+              >
+                <div
+                  class="questionPickerItemOverlayTop"
+                >
+                  <div
+                    class="questionPickerItemOverlayNumber questionPickerItemActive"
+                  >
+                    1
+                  </div>
+                </div>
+                <div
+                  class="questionPickerItemOverlayBottom"
+                >
+                  <button
+                    class="questionPickerItemOverlayDuplicate"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-copy "
+                      data-icon="copy"
+                      data-prefix="far"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M384 336l-192 0c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l140.1 0L400 115.9 400 320c0 8.8-7.2 16-16 16zM192 384l192 0c35.3 0 64-28.7 64-64l0-204.1c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1L192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-32-48 0 0 32c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l32 0 0-48-32 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="questionPickerItemOverlayDelete"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-trash "
+                      data-icon="trash"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="questionPickerItemWrapper"
+              draggable="false"
+              id="question-picker-item-1"
+            >
+              <button
+                class="questionPickerItemButton"
+              >
+                <div
+                  class="questionPickerItemText"
+                >
+                  What percentage of the earth's surface is covered by water?
+                </div>
+                <div
+                  class="questionPickerItemType"
+                >
+                  Range
+                </div>
+              </button>
+              <div
+                class="questionPickerItemOverlay"
+              >
+                <div
+                  class="questionPickerItemOverlayTop"
+                >
+                  <div
+                    class="questionPickerItemOverlayNumber"
+                  >
+                    2
+                  </div>
+                </div>
+                <div
+                  class="questionPickerItemOverlayBottom"
+                />
+              </div>
+            </div>
+            <div
+              class="questionPickerItemWrapper"
+              draggable="false"
+              id="question-picker-item-2"
+            >
+              <button
+                class="questionPickerItemButton"
+              >
+                <div
+                  class="questionPickerItemText"
+                >
+                  Rabbits can't vomit?
+                </div>
+                <div
+                  class="questionPickerItemType"
+                >
+                  True or False
+                </div>
+              </button>
+              <div
+                class="questionPickerItemOverlay"
+              >
+                <div
+                  class="questionPickerItemOverlayTop"
+                >
+                  <div
+                    class="questionPickerItemOverlayNumber"
+                  >
+                    3
+                  </div>
+                </div>
+                <div
+                  class="questionPickerItemOverlayBottom"
+                />
+              </div>
+            </div>
+            <div
+              class="questionPickerItemWrapper"
+              draggable="false"
+              id="question-picker-item-3"
+            >
+              <button
+                class="questionPickerItemButton"
+              >
+                <div
+                  class="questionPickerItemText"
+                >
+                  Who painted the Mono Lisa?
+                </div>
+                <div
+                  class="questionPickerItemType"
+                >
+                  Type Answer
+                </div>
+              </button>
+              <div
+                class="questionPickerItemOverlay"
+              >
+                <div
+                  class="questionPickerItemOverlayTop"
+                >
+                  <div
+                    class="questionPickerItemOverlayNumber"
+                  >
+                    4
+                  </div>
+                </div>
+                <div
+                  class="questionPickerItemOverlayBottom"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="addQuestionButtonWrapper"
+          >
+            <button
+              class="addQuestionButton"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-plus "
+                data-icon="circle-plus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          class="questionEditorContainer"
+        >
+          <div
+            class="section"
+          >
+            <div
+              class="questionFieldContainer layoutHalf"
+            >
+              <div
+                class="label"
+              >
+                Type
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="selectInputContainer selectInputKindPrimary"
+                  >
+                    <select
+                      data-testid="test-question-type-select-select"
+                      id="question-type-select"
+                      name="question-type-select"
+                    >
+                      <option
+                        value="MULTI_CHOICE"
+                      >
+                        Multi Choice
+                      </option>
+                      <option
+                        value="RANGE"
+                      >
+                        Range
+                      </option>
+                      <option
+                        value="TRUE_FALSE"
+                      >
+                        True or False
+                      </option>
+                      <option
+                        value="TYPE_ANSWER"
+                      >
+                        Type Answer
+                      </option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down selectIcon"
+                      color="black"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="section"
+          >
+            <div
+              class="questionFieldContainer layoutFull"
+            >
+              <div
+                class="label"
+              >
+                Question
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="textFieldInputContainer"
+                  >
+                    <input
+                      class="textfield"
+                      data-testid="test-question-text-textfield-textfield"
+                      id="question-text-textfield"
+                      maxlength="120"
+                      minlength="3"
+                      name="question-text-textfield"
+                      placeholder="Question"
+                      type="text"
+                      value="Who painted The Starry Night?"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="section"
+          >
+            <div
+              class="questionFieldContainer layoutHalf"
+            >
+              <div
+                class="label"
+              >
+                Media Type
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="selectInputContainer selectInputKindPrimary"
+                  >
+                    <select
+                      data-testid="test-media-type-select-select"
+                      id="media-type-select"
+                      name="media-type-select"
+                    >
+                      <option
+                        value="none"
+                      >
+                        None
+                      </option>
+                      <option
+                        value="IMAGE"
+                      >
+                        Image
+                      </option>
+                      <option
+                        value="AUDIO"
+                      >
+                        Audio
+                      </option>
+                      <option
+                        value="VIDEO"
+                      >
+                        Video
+                      </option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down selectIcon"
+                      color="black"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="questionFieldContainer layoutHalf"
+            >
+              <div
+                class="label"
+              >
+                Media URL
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="textFieldInputContainer"
+                  >
+                    <input
+                      class="textfield"
+                      data-testid="test-media-url-textfield-textfield"
+                      id="media-url-textfield"
+                      name="media-url-textfield"
+                      placeholder="URL"
+                      type="text"
+                      value="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="section"
+          >
+            <div
+              class="questionFieldContainer layoutFull"
+            >
+              <div
+                class="label"
+              >
+                Options
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="optionsContainer"
+                >
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-0-textfield-textfield"
+                          id="multi-choice-option-0-textfield"
+                          name="multi-choice-option-0-textfield"
+                          placeholder="Option 1"
+                          type="text"
+                          value="Vincent van Gogh"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-0-textfield-checkbox"
+                        >
+                          <input
+                            checked=""
+                            class="checkbox"
+                            id="multi-choice-option-0-textfield-checkbox"
+                            type="checkbox"
+                          />
+                          <span
+                            class="checkboxIcon"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="svg-inline--fa fa-check "
+                              data-icon="check"
+                              data-prefix="fas"
+                              focusable="false"
+                              role="img"
+                              viewBox="0 0 448 512"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-1-textfield-textfield"
+                          id="multi-choice-option-1-textfield"
+                          name="multi-choice-option-1-textfield"
+                          placeholder="Option 2"
+                          type="text"
+                          value="Pablo Picasso"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-1-textfield-checkbox"
+                        >
+                          <input
+                            class="checkbox"
+                            id="multi-choice-option-1-textfield-checkbox"
+                            type="checkbox"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-2-textfield-textfield"
+                          id="multi-choice-option-2-textfield"
+                          name="multi-choice-option-2-textfield"
+                          placeholder="Option 3"
+                          type="text"
+                          value="Leonardo da Vinci"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-2-textfield-checkbox"
+                        >
+                          <input
+                            class="checkbox"
+                            id="multi-choice-option-2-textfield-checkbox"
+                            type="checkbox"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-3-textfield-textfield"
+                          id="multi-choice-option-3-textfield"
+                          name="multi-choice-option-3-textfield"
+                          placeholder="Option 4"
+                          type="text"
+                          value="Claude Monet"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-3-textfield-checkbox"
+                        >
+                          <input
+                            class="checkbox"
+                            id="multi-choice-option-3-textfield-checkbox"
+                            type="checkbox"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-4-textfield-textfield"
+                          id="multi-choice-option-4-textfield"
+                          name="multi-choice-option-4-textfield"
+                          placeholder="Option 5"
+                          type="text"
+                          value="Michelangelo"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-4-textfield-checkbox"
+                        >
+                          <input
+                            class="checkbox"
+                            id="multi-choice-option-4-textfield-checkbox"
+                            type="checkbox"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="option"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-multi-choice-option-5-textfield-textfield"
+                          id="multi-choice-option-5-textfield"
+                          name="multi-choice-option-5-textfield"
+                          placeholder="Option 6"
+                          type="text"
+                          value="Rembrandt"
+                        />
+                        <label
+                          class="checkboxLabel"
+                          for="multi-choice-option-5-textfield-checkbox"
+                        >
+                          <input
+                            class="checkbox"
+                            id="multi-choice-option-5-textfield-checkbox"
+                            type="checkbox"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="section"
+          >
+            <div
+              class="questionFieldContainer layoutHalf"
+            >
+              <div
+                class="label"
+              >
+                Points
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="selectInputContainer selectInputKindPrimary"
+                  >
+                    <select
+                      data-testid="test-points-select-select"
+                      id="points-select"
+                      name="points-select"
+                    >
+                      <option
+                        value="0"
+                      >
+                        Zero Points
+                      </option>
+                      <option
+                        value="1000"
+                      >
+                        Standard Points (1000)
+                      </option>
+                      <option
+                        value="2000"
+                      >
+                        Double Points (2000)
+                      </option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down selectIcon"
+                      color="black"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="questionFieldContainer layoutHalf"
+            >
+              <div
+                class="label"
+              >
+                Time Limit
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="inputContainer"
+                >
+                  <div
+                    class="selectInputContainer selectInputKindPrimary"
+                  >
+                    <select
+                      data-testid="test-duration-select-select"
+                      id="duration-select"
+                      name="duration-select"
+                    >
+                      <option
+                        value="5"
+                      >
+                        5 seconds
+                      </option>
+                      <option
+                        value="30"
+                      >
+                        30 seconds
+                      </option>
+                      <option
+                        value="60"
+                      >
+                        1 minute
+                      </option>
+                      <option
+                        value="120"
+                      >
+                        2 minutes
+                      </option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down selectIcon"
+                      color="black"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without questions 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="quizCreatorPageHeader"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer small"
+            >
+              <input
+                class="textfield"
+                data-testid="test-quiz-title-text-field-textfield"
+                id="quiz-title-text-field"
+                name="quiz-title-text-field"
+                placeholder="Title"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-settings-button-button"
+              id="settings-button"
+              name="settings-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-gear "
+                data-icon="gear"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Settings
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-save-button-button"
+              id="save-button"
+              name="save-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-floppy-disk "
+                data-icon="floppy-disk"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Save
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth fullHeight centerAlign"
+    >
+      <div
+        class="quizCreatorPage"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred mode 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="quizCreatorPageHeader"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer small"
+            >
+              <input
+                class="textfield"
+                data-testid="test-quiz-title-text-field-textfield"
+                id="quiz-title-text-field"
+                name="quiz-title-text-field"
+                placeholder="Title"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-settings-button-button"
+              id="settings-button"
+              name="settings-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-gear "
+                data-icon="gear"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Settings
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-save-button-button"
+              id="save-button"
+              name="save-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-floppy-disk "
+                data-icon="floppy-disk"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Save
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth fullHeight centerAlign"
+    >
+      <div
+        class="quizCreatorPage"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred mode without questions 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="quizCreatorPageHeader"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer small"
+            >
+              <input
+                class="textfield"
+                data-testid="test-quiz-title-text-field-textfield"
+                id="quiz-title-text-field"
+                name="quiz-title-text-field"
+                placeholder="Title"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-settings-button-button"
+              id="settings-button"
+              name="settings-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-gear "
+                data-icon="gear"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Settings
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-save-button-button"
+              id="save-button"
+              name="save-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-floppy-disk "
+                data-icon="floppy-disk"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Save
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth fullHeight centerAlign"
+    >
+      <div
+        class="quizCreatorPage"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      aria-hidden="true"
+      class="header"
+      data-floating-ui-inert=""
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="quizCreatorPageHeader"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer small"
+            >
+              <input
+                class="textfield"
+                data-testid="test-quiz-title-text-field-textfield"
+                id="quiz-title-text-field"
+                name="quiz-title-text-field"
+                placeholder="Title"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-settings-button-button"
+              id="settings-button"
+              name="settings-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-gear "
+                data-icon="gear"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Settings
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-save-button-button"
+              id="save-button"
+              name="save-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-floppy-disk "
+                data-icon="floppy-disk"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Save
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content fullWidth fullHeight centerAlign"
+    >
+      <div
+        class="quizCreatorPage"
+      >
+        <div
+          class="floatingOverlay"
+          style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"
+        >
+          <span
+            data-floating-ui-focus-guard=""
+            data-type="inside"
+            role="button"
+            style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+            tabindex="0"
+          />
+          <div
+            aria-labelledby=":r2:"
+            class="modalContainer"
+            data-floating-ui-focusable=""
+            id=":r0:"
+            role="dialog"
+            tabindex="-1"
+          >
+            <div
+              class="title"
+              id=":r2:"
+            >
+              Choose Your Game Mode
+            </div>
+            <div
+              class="content"
+            >
+              Choose the game mode for your quiz. Each mode offers a unique way for participants to play and enjoy!
+              <div
+                class="gameModeSelectionModalWrapper"
+              >
+                <button
+                  class="classic"
+                >
+                  Classic Mode
+                  <div
+                    class="description"
+                  >
+                    Create a traditional quiz with a mix of question types, including multiple-choice, true/false, range sliders, and typed answers.
+                  </div>
+                </button>
+                <button
+                  class="zeroToOneHundred"
+                >
+                  0-100 Mode
+                  <div
+                    class="description"
+                  >
+                    Design a quiz with slider-based questions, where all answers range between 0 and 100.
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <span
+            data-floating-ui-focus-guard=""
+            data-type="inside"
+            role="button"
+            style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+            tabindex="0"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
