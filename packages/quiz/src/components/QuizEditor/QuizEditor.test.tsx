@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -18,6 +23,7 @@ describe('QuizEditor', () => {
           title: 'My Classic Quiz',
           mode: GameMode.Classic,
           visibility: QuizVisibility.Private,
+          category: QuizCategory.GeneralKnowledge,
           languageCode: LanguageCode.English,
           questions: DEFAULT_CLASSIC_MODE_QUESTIONS,
         }}
@@ -36,6 +42,7 @@ describe('QuizEditor', () => {
           title: 'My ZeroToOneHundred Quiz',
           mode: GameMode.ZeroToOneHundred,
           visibility: QuizVisibility.Private,
+          category: QuizCategory.GeneralKnowledge,
           languageCode: LanguageCode.English,
           questions: DEFAULT_ZERO_TO_ONE_HUNDRED_MODE_QUESTIONS,
         }}

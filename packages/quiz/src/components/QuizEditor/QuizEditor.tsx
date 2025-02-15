@@ -6,6 +6,7 @@ import {
   QUIZ_TITLE_MAX_LENGTH,
   QUIZ_TITLE_MIN_LENGTH,
   QUIZ_TITLE_REGEX,
+  QuizCategory,
   QuizRequestDto,
   QuizVisibility,
   URL_REGEX,
@@ -15,6 +16,7 @@ import React, { FC, useEffect, useState } from 'react'
 import {
   GameModeLabels,
   LanguageLabels,
+  QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../models/labels.ts'
 import {
@@ -42,6 +44,7 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
     description: false,
     mode: true,
     visibility: true,
+    category: true,
     imageCoverURL: false,
     languageCode: true,
     questions: true,
@@ -146,6 +149,20 @@ const QuizEditor: FC<QuizEditorProps> = ({ quiz, onChange, onValid }) => {
             }))}
             value={quiz.mode}
             onChange={(value) => handleValueChange('mode', value as GameMode)}
+            required
+            forceValidate
+          />
+          <Select
+            id="category-select"
+            values={Object.values(QuizCategory).map((category) => ({
+              key: category,
+              value: category,
+              valueLabel: QuizCategoryLabels[category],
+            }))}
+            value={quiz.category}
+            onChange={(value) =>
+              handleValueChange('category', value as QuizCategory)
+            }
             required
             forceValidate
           />

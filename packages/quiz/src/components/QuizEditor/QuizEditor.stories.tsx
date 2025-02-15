@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
@@ -33,6 +38,7 @@ export const Classic = {
       title: 'My Classic Quiz',
       mode: GameMode.Classic,
       visibility: QuizVisibility.Private,
+      category: QuizCategory.GeneralKnowledge,
       languageCode: LanguageCode.English,
       questions: DEFAULT_CLASSIC_MODE_QUESTIONS,
     },
@@ -47,6 +53,7 @@ export const ZeroToOneHundred = {
       title: 'My ZeroToOneHundred Quiz',
       mode: GameMode.ZeroToOneHundred,
       visibility: QuizVisibility.Private,
+      category: QuizCategory.GeneralKnowledge,
       languageCode: LanguageCode.English,
       questions: DEFAULT_ZERO_TO_ONE_HUNDRED_MODE_QUESTIONS,
     },

@@ -1,10 +1,10 @@
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
-import { useMutation } from '@tanstack/react-query'
 import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,6 +20,7 @@ const CreateQuizPage: FC = () => {
   const [editableData, setEditableData] = useState<QuizRequestDto>({
     title: '',
     visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
     languageCode: LanguageCode.English,
     mode: GameMode.Classic,
     questions: DEFAULT_CLASSIC_MODE_QUESTIONS,
@@ -27,13 +28,13 @@ const CreateQuizPage: FC = () => {
 
   const [isQuizValid, setIsQuizValid] = useState<boolean>(false)
 
-  const createQuizMutation = useMutation({
-    mutationFn: (request: QuizRequestDto) => createQuiz(request),
-    onSuccess: () => navigate('/player/profile'),
-  })
+  const [isSavingQuiz, setIsSavingQuiz] = useState(false)
 
-  const handleSave = (): void => {
-    createQuizMutation.mutate(editableData)
+  const handleSaveQuiz = (): void => {
+    setIsSavingQuiz(true)
+    createQuiz(editableData)
+      .then(() => navigate('/player/profile'))
+      .finally(() => setIsSavingQuiz(false))
   }
 
   return (
@@ -45,8 +46,9 @@ const CreateQuizPage: FC = () => {
           kind="call-to-action"
           size="small"
           value="Save"
+          loading={isSavingQuiz}
           disabled={!isQuizValid}
-          onClick={handleSave}
+          onClick={handleSaveQuiz}
         />
       }
       profile>

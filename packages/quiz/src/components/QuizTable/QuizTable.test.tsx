@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import '@testing-library/jest-dom'
@@ -8,6 +13,8 @@ import QuizTable, { QuizTableItem, QuizTablePagination } from './QuizTable'
 
 const PLAYER_ID = '490fbab7-dc75-47fe-bf17-048308eaad14'
 
+const updated = new Date('2025-02-14T15:31:14.000Z')
+
 const mockItems: QuizTableItem[] = [
   {
     id: '1',
@@ -15,10 +22,12 @@ const mockItems: QuizTableItem[] = [
     description: 'Description for Quiz 1',
     mode: GameMode.Classic,
     visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
     imageCoverURL: 'https://example.com/image1.jpg',
     languageCode: LanguageCode.English,
     numberOfQuestions: 14,
     author: { id: PLAYER_ID, name: 'FrostyBear' },
+    updated,
   },
   {
     id: '2',
@@ -26,10 +35,12 @@ const mockItems: QuizTableItem[] = [
     description: 'Description for Quiz 2',
     mode: GameMode.ZeroToOneHundred,
     visibility: QuizVisibility.Private,
+    category: QuizCategory.GeneralKnowledge,
     imageCoverURL: 'https://example.com/image2.jpg',
     languageCode: LanguageCode.English,
     numberOfQuestions: 28,
     author: { id: PLAYER_ID, name: 'FrostyBear' },
+    updated,
   },
 ]
 

@@ -2,6 +2,7 @@ import {
   GameMode,
   LanguageCode,
   QuestionType,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
 
@@ -206,4 +207,28 @@ export const QuestionTypeLabels: { [key in QuestionType]: string } = {
   [QuestionType.Range]: 'Range',
   [QuestionType.TrueFalse]: 'True or False',
   [QuestionType.TypeAnswer]: 'Type Answer',
+}
+
+export const QuizCategoryLabels: { [key in QuizCategory]: string } = {
+  [QuizCategory.GeneralKnowledge]: 'General Knowledge',
+  [QuizCategory.Science]: 'Science',
+  [QuizCategory.History]: 'History',
+  [QuizCategory.Geography]: 'Geography',
+  [QuizCategory.Entertainment]: 'Entertainment',
+  [QuizCategory.Sports]: 'Sports',
+  [QuizCategory.Literature]: 'Literature',
+  [QuizCategory.Technology]: 'Technology',
+  [QuizCategory.Art]: 'Art',
+  [QuizCategory.Music]: 'Music',
+  [QuizCategory.Film]: 'Film',
+  [QuizCategory.FoodAndDrink]: 'Food & Drink',
+  [QuizCategory.Politics]: 'Politics',
+  [QuizCategory.Mythology]: 'Mythology',
+  [QuizCategory.Nature]: 'Nature',
+  [QuizCategory.Business]: 'Business',
+  [QuizCategory.Health]: 'Health',
+  [QuizCategory.Religion]: 'Religion',
+  [QuizCategory.Space]: 'Space',
+  [QuizCategory.Mathematics]: 'Mathematics',
+  [QuizCategory.Other]: 'Other',
 }

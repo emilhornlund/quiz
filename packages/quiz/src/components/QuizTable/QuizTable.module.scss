@@ -139,6 +139,7 @@
         .details {
           display: flex;
           flex-direction: row;
+          flex-wrap: wrap;
           align-items: center;
 
           @include mobile {
@@ -150,7 +151,8 @@
           }
 
           @include desktop {
-            column-gap: $desktop-narrow-layout-gutter;
+            column-gap: $desktop-layout-gutter;
+            row-gap: $desktop-narrow-layout-gutter * 0.3;
           }
 
           span {
@@ -171,22 +173,6 @@
             @include desktop {
               column-gap: calc($desktop-narrow-layout-gutter * 0.5);
               @include fontSize(18px);
-            }
-
-            &:not(:last-child)::after {
-              content: '•';
-
-              @include mobile {
-                margin-left: calc($mobile-narrow-layout-gutter * 0.5);
-              }
-
-              @include tablet {
-                margin-left: calc($tablet-narrow-layout-gutter * 0.5);
-              }
-
-              @include desktop {
-                margin-left: calc($desktop-narrow-layout-gutter * 0.5);
-              }
             }
           }
         }

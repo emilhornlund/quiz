@@ -2,6 +2,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
@@ -57,6 +58,7 @@ const EditQuizPage: FC = () => {
   const [editableData, setEditableData] = useState<QuizRequestDto>({
     title: '',
     visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
     languageCode: LanguageCode.English,
     mode: GameMode.Classic,
     questions: [],
@@ -68,6 +70,7 @@ const EditQuizPage: FC = () => {
         title: originalQuiz.title,
         description: originalQuiz.description,
         visibility: originalQuiz.visibility,
+        category: originalQuiz.category,
         imageCoverURL: originalQuiz.imageCoverURL,
         languageCode: originalQuiz.languageCode,
         ...(originalQuiz.mode === GameMode.Classic

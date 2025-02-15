@@ -25,6 +25,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@quiz/common": "1.0.0",
     "@tanstack/react-query": "4",
+    "date-fns": "^4.1.0",
     "event-source-polyfill": "^1.0.31",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",

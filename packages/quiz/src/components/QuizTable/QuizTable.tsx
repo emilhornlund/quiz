@@ -1,7 +1,9 @@
 import {
+  faCalendarDays,
   faCircleQuestion,
   faEye,
   faGamepad,
+  faIcons,
   faLanguage,
   faPen,
   faPlay,
@@ -11,14 +13,17 @@ import {
   GameMode,
   LanguageCode,
   QuizAuthorResponseDto,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
+import { format } from 'date-fns'
 import React, { FC, useMemo, useState } from 'react'
 
 import Picture from '../../assets/images/picture.svg'
 import {
   GameModeLabels,
   LanguageLabels,
+  QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../models/labels.ts'
 import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
@@ -33,10 +38,12 @@ export interface QuizTableItem {
   description?: string
   mode: GameMode
   visibility: QuizVisibility
+  category: QuizCategory
   imageCoverURL?: string
   languageCode: LanguageCode
   numberOfQuestions: number
   author: QuizAuthorResponseDto
+  updated: Date
 }
 
 export interface QuizTablePagination {
@@ -101,6 +108,10 @@ const QuizTable: FC<QuizTableProps> = ({
                     {QuizVisibilityLabels[item.visibility]}
                   </span>
                   <span>
+                    <FontAwesomeIcon icon={faIcons} />
+                    {QuizCategoryLabels[item.category]}
+                  </span>
+                  <span>
                     <FontAwesomeIcon icon={faLanguage} />
                     {LanguageLabels[item.languageCode]}
                   </span>
@@ -110,7 +121,13 @@ const QuizTable: FC<QuizTableProps> = ({
                   </span>
                   <span>
                     <FontAwesomeIcon icon={faCircleQuestion} />
-                    {item.numberOfQuestions}
+                    {item.numberOfQuestions}{' '}
+                    {item.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+                  </span>
+                  <span
+                    title={`Updated ${format(item.updated, 'y-LL-dd HH:mm:ss')}`}>
+                    <FontAwesomeIcon icon={faCalendarDays} />
+                    {format(item.updated, 'y-LL-dd')}
                   </span>
                 </div>
               </div>
