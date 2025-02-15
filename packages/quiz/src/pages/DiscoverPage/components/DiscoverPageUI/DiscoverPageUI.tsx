@@ -1,6 +1,7 @@
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
@@ -24,6 +25,7 @@ export interface DiscoverPageUIProps {
   onChangeSearchParams: (params: {
     search?: string
     visibility?: QuizVisibility
+    category?: QuizCategory
     languageCode?: LanguageCode
     mode?: GameMode
     sort?: 'title' | 'created' | 'updated'

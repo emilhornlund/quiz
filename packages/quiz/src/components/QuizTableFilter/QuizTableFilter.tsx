@@ -1,5 +1,10 @@
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC, FormEvent, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
@@ -12,6 +17,7 @@ import styles from './QuizTableFilter.module.scss'
 export interface FilterOptions {
   search?: string
   visibility?: QuizVisibility
+  category?: QuizCategory
   languageCode?: LanguageCode
   mode?: GameMode
   sort?: 'title' | 'created' | 'updated'

@@ -140,6 +140,7 @@ export class QuizController {
     return this.quizService.findPublicQuizzes(
       queryParams.search,
       queryParams.mode,
+      queryParams.category,
       queryParams.languageCode,
       queryParams.sort,
       queryParams.order,

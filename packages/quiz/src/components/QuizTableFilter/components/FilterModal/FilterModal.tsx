@@ -1,9 +1,15 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import React, { FC, useState } from 'react'
 
 import {
   GameModeLabels,
   LanguageLabels,
+  QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../models/labels.ts'
 import { classNames } from '../../../../utils/helpers.ts'
@@ -15,6 +21,7 @@ import styles from './FilterModal.module.scss'
 
 export interface FilterOptions {
   visibility?: QuizVisibility
+  category?: QuizCategory
   languageCode?: LanguageCode
   mode?: GameMode
   sort?: 'title' | 'created' | 'updated'
@@ -66,6 +73,28 @@ const FilterModal: FC<FilterModalProps> = ({
     <Modal title="Refine Your Quiz Search" open={open}>
       <div className={styles.filterModalContainer}>
         Narrow down your search and find the perfect quiz!
+        <div className={styles.row}>
+          <div className={styles.label}>Category</div>
+          <Select
+            id="category-select"
+            kind="secondary"
+            values={[
+              { key: 'none', value: 'none', valueLabel: 'None' },
+              ...Object.values(QuizCategory).map((category) => ({
+                key: category,
+                value: category,
+                valueLabel: QuizCategoryLabels[category],
+              })),
+            ]}
+            value={internalFilterOptions.category || 'none'}
+            onChange={(value) =>
+              handleFilterOptionChange(
+                'category',
+                value === 'none' ? undefined : (value as QuizCategory),
+              )
+            }
+          />
+        </div>
         {showVisibilityFilter && (
           <div className={styles.row}>
             <div className={styles.label}>Visibility</div>

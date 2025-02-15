@@ -1,6 +1,7 @@
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
@@ -23,6 +24,7 @@ export interface ProfilePageUIProps {
   onChangeSearchParams: (params: {
     search?: string
     visibility?: QuizVisibility
+    category?: QuizCategory
     languageCode?: LanguageCode
     mode?: GameMode
     sort?: 'title' | 'created' | 'updated'

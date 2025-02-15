@@ -1,5 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import { Type } from 'class-transformer'
 import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 
@@ -39,7 +44,7 @@ export class ApiQuizPageQueryFilter {
    * Filters quizzes by visibility.
    */
   @ApiPropertyOptional({
-    name: 'mode',
+    name: 'visibility',
     description: 'Filters quizzes by their visibility.',
     enum: QuizVisibility,
     required: false,
@@ -49,6 +54,21 @@ export class ApiQuizPageQueryFilter {
   @IsOptional()
   @IsEnum(QuizVisibility)
   visibility?: QuizVisibility
+
+  /**
+   * Filters quizzes by category.
+   */
+  @ApiPropertyOptional({
+    name: 'category',
+    description: 'Filters quizzes by their category.',
+    enum: QuizCategory,
+    required: false,
+    default: undefined,
+    example: `${QuizCategory.GeneralKnowledge}`,
+  })
+  @IsOptional()
+  @IsEnum(QuizCategory)
+  category?: QuizCategory
 
   /**
    * Filters quizzes by language code.
@@ -104,8 +124,10 @@ export class ApiQuizPageQueryFilter {
    * The maximum number of quizzes to retrieve per page.
    */
   @ApiPropertyOptional({
+    name: 'limit',
     description: 'The maximum number of quizzes to retrieve per page.',
     type: Number,
+    required: false,
     minimum: 5,
     maximum: 50,
     default: 10,
@@ -122,8 +144,10 @@ export class ApiQuizPageQueryFilter {
    * The number of quizzes to skip before starting retrieval.
    */
   @ApiPropertyOptional({
+    name: 'offset',
     description: 'The number of quizzes to skip before starting retrieval.',
     type: Number,
+    required: false,
     minimum: 0,
     default: 0,
     example: 0,

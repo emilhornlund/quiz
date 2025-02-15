@@ -2,6 +2,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import {
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
@@ -18,6 +19,7 @@ import QuizTableFilter from '../../../../../../components/QuizTableFilter'
 type SearchParams = {
   search?: string
   visibility?: QuizVisibility
+  category?: QuizCategory
   languageCode?: LanguageCode
   mode?: GameMode
   sort?: 'title' | 'created' | 'updated'

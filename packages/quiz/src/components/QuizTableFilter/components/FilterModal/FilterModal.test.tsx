@@ -1,4 +1,9 @@
-import { GameMode, LanguageCode, QuizVisibility } from '@quiz/common'
+import {
+  GameMode,
+  LanguageCode,
+  QuizCategory,
+  QuizVisibility,
+} from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -10,6 +15,7 @@ describe('FilterModal', () => {
     const { container } = render(
       <FilterModal
         visibility={QuizVisibility.Public}
+        category={QuizCategory.GeneralKnowledge}
         languageCode={LanguageCode.English}
         mode={GameMode.Classic}
         sort="created"

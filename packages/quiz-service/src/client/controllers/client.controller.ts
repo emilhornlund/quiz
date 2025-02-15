@@ -255,6 +255,7 @@ export class ClientController {
       queryParams.search,
       queryParams.mode,
       queryParams.visibility,
+      queryParams.category,
       queryParams.languageCode,
       queryParams.sort,
       queryParams.order,

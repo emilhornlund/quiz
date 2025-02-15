@@ -2,6 +2,7 @@ import {
   DEFAULT_QUIZ_PAGINATION_LIMIT,
   GameMode,
   LanguageCode,
+  QuizCategory,
 } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import React, { FC, useState } from 'react'
@@ -21,6 +22,7 @@ const DiscoverPage: FC = () => {
 
   const [searchParams, setSearchParams] = useState<{
     search?: string
+    category?: QuizCategory
     languageCode?: LanguageCode
     mode?: GameMode
     sort?: 'title' | 'created' | 'updated'

@@ -12,6 +12,7 @@ import {
   QuestionType,
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
+  QuizCategory,
   QuizRequestDto,
   QuizResponseDto,
   QuizVisibility,
@@ -106,6 +107,7 @@ export class QuizService {
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
    * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param category - The category assigned to the quiz (e.g., Science, History).
    * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
@@ -119,6 +121,7 @@ export class QuizService {
     search?: string,
     mode?: GameMode,
     visibility?: QuizVisibility,
+    category?: QuizCategory,
     languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
@@ -130,6 +133,7 @@ export class QuizService {
       search,
       mode,
       visibility,
+      category,
       languageCode,
       sortField,
       sortOrder,
@@ -147,6 +151,7 @@ export class QuizService {
    *
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
+   * @param category - The category assigned to the quiz (e.g., Science, History).
    * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
@@ -158,6 +163,7 @@ export class QuizService {
   public async findPublicQuizzes(
     search?: string,
     mode?: GameMode,
+    category?: QuizCategory,
     languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
@@ -169,6 +175,7 @@ export class QuizService {
       search,
       mode,
       QuizVisibility.Public,
+      category,
       languageCode,
       sortField,
       sortOrder,
@@ -184,6 +191,7 @@ export class QuizService {
    * @param search - Optional search term to filter quizzes by title.
    * @param mode - Optional filter for the game mode of the quizzes.
    * @param visibility - The visibility setting of the quizzes (e.g., Public, Private).
+   * @param category - The category assigned to the quiz (e.g., Science, History).
    * @param languageCode - The language in which the quiz is written.
    * @param sortField - Field by which to sort the results. Defaults to 'created'.
    * @param sortOrder - Sort order ('asc' for ascending, 'desc' for descending). Defaults to 'desc'.
@@ -199,6 +207,7 @@ export class QuizService {
     search?: string,
     mode?: GameMode,
     visibility?: QuizVisibility,
+    category?: QuizCategory,
     languageCode?: LanguageCode,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
@@ -210,6 +219,7 @@ export class QuizService {
       ...(search?.length ? { title: { $regex: search, $options: 'i' } } : {}),
       ...(mode ? { mode } : {}),
       ...(visibility ? { visibility } : {}),
+      ...(category ? { category } : {}),
       ...(languageCode ? { languageCode } : {}),
     }
 

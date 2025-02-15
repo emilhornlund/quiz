@@ -2,6 +2,7 @@ import {
   DEFAULT_QUIZ_PAGINATION_LIMIT,
   GameMode,
   LanguageCode,
+  QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
@@ -24,6 +25,7 @@ const ProfilePage: FC = () => {
   const [searchParams, setSearchParams] = useState<{
     search?: string
     visibility?: QuizVisibility
+    category?: QuizCategory
     languageCode?: LanguageCode
     mode?: GameMode
     sort?: 'title' | 'created' | 'updated'
