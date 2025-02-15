@@ -86,9 +86,9 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
               questions={questions.map(({ data, validation }) => ({
                 type: data.type as QuestionType,
                 text: data.question,
-                error: Object.keys(validation).length
-                  ? 'Some error here'
-                  : undefined,
+                error: Object.values(validation).some(
+                  (valid) => valid === false,
+                ),
               }))}
               selectedQuestionIndex={selectedQuestionIndex}
               onAddQuestion={onAddQuestion}

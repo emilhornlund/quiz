@@ -19,7 +19,7 @@ import styles from './QuestionPicker.module.scss'
 export type QuestionPickerItem = {
   type: QuestionType
   text?: string
-  error?: string
+  error?: boolean
 }
 
 export interface QuestionPickerProps {

@@ -14,7 +14,7 @@ export interface QuestionPickerItemProps {
   text: string
   type: QuestionType
   active?: boolean
-  error?: string
+  error?: boolean
   onClick?: () => void
   onDrop?: (id: number) => void
   onDuplicate?: () => void
@@ -96,9 +96,7 @@ const QuestionPickerItem: FC<QuestionPickerItemProps> = ({
             </button>
           )}
           {!!error && (
-            <div
-              title={error}
-              className={styles.questionPickerItemOverlayError}>
+            <div className={styles.questionPickerItemOverlayError}>
               <FontAwesomeIcon icon={faCircleExclamation} />
             </div>
           )}
