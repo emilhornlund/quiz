@@ -3,7 +3,14 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
@@ -115,9 +122,18 @@ const TextField: React.FC<TextFieldProps> = ({
     onAdditionalValidation,
   ])
 
-  useEffect(() => {
-    onValid?.(valid)
+  const prevValid = useRef<boolean>()
+
+  const handleValidChange = useCallback(() => {
+    if (prevValid.current !== valid) {
+      prevValid.current = valid
+      onValid?.(valid)
+    }
   }, [valid, onValid])
+
+  useEffect(() => {
+    handleValidChange()
+  }, [handleValidChange])
 
   const showError = useMemo(
     () => !valid && (lostFocus || hasFocus || forceValidate),
