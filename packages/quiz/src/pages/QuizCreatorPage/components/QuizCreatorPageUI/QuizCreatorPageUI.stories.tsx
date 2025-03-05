@@ -16,10 +16,12 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
     selectedQuestionIndex,
     selectQuestion,
     addQuestion,
-    editQuestion,
+    setQuestionValue,
+    setQuestionValueValid,
     dropQuestion,
     duplicateQuestion,
     deleteQuestion,
+    replaceQuestion,
     resetQuestions,
   } = useQuestionDataSource()
 
@@ -46,10 +48,12 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
       selectedQuestionIndex={selectedQuestionIndex}
       onSelectedQuestionIndex={selectQuestion}
       onAddQuestion={handleAddQuestion}
-      onEditQuestion={editQuestion}
+      onQuestionValueChange={setQuestionValue}
+      onQuestionValueValidChange={setQuestionValueValid}
       onDropQuestionIndex={dropQuestion}
       onDuplicateQuestionIndex={duplicateQuestion}
       onDeleteQuestionIndex={deleteQuestion}
+      onReplaceQuestion={replaceQuestion}
     />
   )
 }
@@ -74,9 +78,11 @@ export const Default = {
     selectedQuestionIndex: -1,
     onSelectedQuestionIndex: () => undefined,
     onAddQuestion: () => undefined,
-    onEditQuestion: () => undefined,
+    onQuestionValueChange: () => undefined,
+    onQuestionValueValidChange: () => undefined,
     onDropQuestionIndex: () => undefined,
     onDuplicateQuestionIndex: () => undefined,
     onDeleteQuestionIndex: () => undefined,
+    onReplaceQuestion: () => undefined,
   },
 } satisfies Story

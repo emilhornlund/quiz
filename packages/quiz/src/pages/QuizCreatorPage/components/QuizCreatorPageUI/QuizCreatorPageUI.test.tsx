@@ -24,10 +24,12 @@ describe('QuizCreatorPageUI', () => {
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
-          onEditQuestion={() => undefined}
+          onQuestionValueChange={() => undefined}
+          onQuestionValueValidChange={() => undefined}
           onDropQuestionIndex={() => undefined}
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
+          onReplaceQuestion={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -46,10 +48,12 @@ describe('QuizCreatorPageUI', () => {
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
-          onEditQuestion={() => undefined}
+          onQuestionValueChange={() => undefined}
+          onQuestionValueValidChange={() => undefined}
           onDropQuestionIndex={() => undefined}
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
+          onReplaceQuestion={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -161,10 +165,12 @@ describe('QuizCreatorPageUI', () => {
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
-          onEditQuestion={() => undefined}
+          onQuestionValueChange={() => undefined}
+          onQuestionValueValidChange={() => undefined}
           onDropQuestionIndex={() => undefined}
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
+          onReplaceQuestion={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -183,10 +189,12 @@ describe('QuizCreatorPageUI', () => {
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
-          onEditQuestion={() => undefined}
+          onQuestionValueChange={() => undefined}
+          onQuestionValueValidChange={() => undefined}
           onDropQuestionIndex={() => undefined}
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
+          onReplaceQuestion={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -221,10 +229,12 @@ describe('QuizCreatorPageUI', () => {
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
-          onEditQuestion={() => undefined}
+          onQuestionValueChange={() => undefined}
+          onQuestionValueValidChange={() => undefined}
           onDropQuestionIndex={() => undefined}
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
+          onReplaceQuestion={() => undefined}
         />
       </MemoryRouter>,
     )

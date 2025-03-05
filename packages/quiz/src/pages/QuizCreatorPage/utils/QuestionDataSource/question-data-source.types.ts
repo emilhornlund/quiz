@@ -16,6 +16,30 @@ export type QuestionDataMapping = {
   [GameMode.ZeroToOneHundred]: QuestionZeroToOneHundredRangeDto
 }
 
+export type QuestionValueChangeFunction = <
+  T extends
+    | QuestionMultiChoiceDto
+    | QuestionRangeDto
+    | QuestionTrueFalseDto
+    | QuestionTypeAnswerDto
+    | QuestionZeroToOneHundredRangeDto,
+>(
+  key: keyof T,
+  value: T[keyof T],
+) => void
+
+export type QuestionValueValidChangeFunction = <
+  T extends
+    | QuestionMultiChoiceDto
+    | QuestionRangeDto
+    | QuestionTrueFalseDto
+    | QuestionTypeAnswerDto
+    | QuestionZeroToOneHundredRangeDto,
+>(
+  key: keyof T,
+  valid: boolean,
+) => void
+
 export type QuestionValidationModel<T extends GameMode> = {
   mode: T
   data: Partial<QuestionDataMapping[T]>

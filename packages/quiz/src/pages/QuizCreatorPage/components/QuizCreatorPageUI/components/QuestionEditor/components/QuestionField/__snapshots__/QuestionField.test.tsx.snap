@@ -794,7 +794,7 @@ exports[`QuestionField > renders a range max question field 1`] = `
             data-testid="test-range-max-textfield-textfield"
             id="range-max-textfield"
             name="range-max-textfield"
-            placeholder=""
+            placeholder="Max"
             type="number"
             value="100"
           />
@@ -829,7 +829,7 @@ exports[`QuestionField > renders a range min question field 1`] = `
             data-testid="test-range-min-textfield-textfield"
             id="range-min-textfield"
             name="range-min-textfield"
-            placeholder=""
+            placeholder="Min"
             type="number"
             value="0"
           />

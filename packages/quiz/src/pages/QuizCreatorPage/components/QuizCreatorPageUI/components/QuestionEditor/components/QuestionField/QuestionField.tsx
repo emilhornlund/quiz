@@ -152,6 +152,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               },
             ]}
             onChange={(value) => props.onChange(parseInt(value))}
+            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -177,6 +178,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                     : { type: value as MediaType, url: props.value?.url || '' },
                 )
               }
+              onValid={props.onValid}
             />
           </QuestionFieldWrapper>
           <QuestionFieldWrapper label="Media URL" layout="half">
@@ -195,6 +197,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                     : undefined,
                 )
               }
+              onValid={props.onValid}
             />
           </QuestionFieldWrapper>
         </>
@@ -223,6 +226,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               },
             ]}
             onChange={(value) => props.onChange(parseInt(value))}
+            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -239,6 +243,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             regex={QUIZ_QUESTION_TEXT_REGEX}
             required={true}
             onChange={(value) => props.onChange(value as string)}
+            onValid={props.onValid}
             forceValidate
           />
         </QuestionFieldWrapper>
@@ -255,6 +260,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               valueLabel: QuestionTypeLabels[type],
             }))}
             onChange={(value) => props.onChange(value as QuestionType)}
+            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -275,6 +281,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             min={props.min}
             max={props.max}
             onChange={(value) => props.onChange(value as number)}
+            onValid={props.onValid}
             required
           />
         </QuestionFieldWrapper>
@@ -293,6 +300,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             onChange={(value) =>
               props.onChange(value as QuestionRangeAnswerMargin)
             }
+            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -302,9 +310,10 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           <TextField
             id="range-max-textfield"
             type="number"
-            placeholder=""
+            placeholder="Max"
             value={props.value}
             onChange={(value) => props.onChange(value as number)}
+            onValid={props.onValid}
             required
           />
         </QuestionFieldWrapper>
@@ -315,9 +324,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           <TextField
             id="range-min-textfield"
             type="number"
-            placeholder=""
+            placeholder="Min"
             value={props.value}
             onChange={(value) => props.onChange(value as number)}
+            onValid={(valid) => props.onValid(valid)}
+            forceValidate
             required
           />
         </QuestionFieldWrapper>

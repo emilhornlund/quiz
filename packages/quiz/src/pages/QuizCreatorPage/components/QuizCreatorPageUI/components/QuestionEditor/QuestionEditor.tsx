@@ -1,9 +1,10 @@
-import { GameMode, QuestionRangeAnswerMargin, QuestionType } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 import React, { FC } from 'react'
 
 import {
-  ClassicModeQuestionValidationModel,
   QuestionData,
+  QuestionValueChangeFunction,
+  QuestionValueValidChangeFunction,
 } from '../../../../utils/QuestionDataSource/question-data-source.types.ts'
 import {
   isClassicMultiChoiceQuestion,
@@ -26,55 +27,17 @@ import styles from './QuestionEditor.module.scss'
 
 export interface QuestionEditorProps {
   question: QuestionData
-  onChange: (data: QuestionData) => void
+  onTypeChange: (type: QuestionType) => void
+  onQuestionValueChange: QuestionValueChangeFunction
+  onQuestionValueValidChange: QuestionValueValidChangeFunction
 }
 
-const createQuestion = (
-  original: ClassicModeQuestionValidationModel['data'],
-  type: QuestionType,
-): ClassicModeQuestionValidationModel['data'] => {
-  switch (type) {
-    case QuestionType.MultiChoice:
-      return {
-        type,
-        question: original.question,
-        media: original.media,
-        options: [],
-        points: original.points,
-        duration: original.duration,
-      }
-    case QuestionType.TrueFalse:
-      return {
-        type,
-        question: original.question,
-        media: original.media,
-        points: original.points,
-        duration: original.duration,
-      }
-    case QuestionType.Range:
-      return {
-        type,
-        question: original.question,
-        media: original.media,
-        min: 0,
-        max: 100,
-        margin: QuestionRangeAnswerMargin.Medium,
-        points: original.points,
-        duration: original.duration,
-      }
-    case QuestionType.TypeAnswer:
-      return {
-        type,
-        question: original.question,
-        media: original.media,
-        options: [],
-        points: original.points,
-        duration: original.duration,
-      }
-  }
-}
-
-const QuestionEditor: FC<QuestionEditorProps> = ({ question, onChange }) => {
+const QuestionEditor: FC<QuestionEditorProps> = ({
+  question,
+  onTypeChange,
+  onQuestionValueChange,
+  onQuestionValueValidChange,
+}) => {
   return (
     <div className={styles.questionEditorContainer}>
       {question.mode === GameMode.Classic && (
@@ -82,18 +45,8 @@ const QuestionEditor: FC<QuestionEditorProps> = ({ question, onChange }) => {
           <QuestionField
             type={QuestionFieldType.CommonType}
             value={question.data.type}
-            onChange={(type) =>
-              onChange({
-                ...question,
-                data: createQuestion(question.data, type),
-              })
-            }
-            onValid={(newValid) =>
-              onChange({
-                ...question,
-                validation: { ...question.validation, type: newValid },
-              })
-            }
+            onChange={onTypeChange}
+            onValid={() => undefined}
           />
         </div>
       )}
@@ -101,90 +54,40 @@ const QuestionEditor: FC<QuestionEditorProps> = ({ question, onChange }) => {
       {isClassicMultiChoiceQuestion(question) && (
         <ClassicMultiChoiceOptionQuestionForm
           data={question.data}
-          onChange={(field, value) =>
-            onChange({
-              ...question,
-              data: { ...question.data, [field]: value },
-            })
-          }
-          onValidChange={(field, valid) =>
-            onChange({
-              ...question,
-              validation: { ...question.validation, [field]: valid },
-            })
-          }
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
         />
       )}
 
       {isClassicRangeQuestion(question) && (
         <ClassicRangeQuestionForm
           data={question.data}
-          onChange={(field, value) =>
-            onChange({
-              ...question,
-              data: { ...question.data, [field]: value },
-            })
-          }
-          onValidChange={(field, valid) =>
-            onChange({
-              ...question,
-              validation: { ...question.validation, [field]: valid },
-            })
-          }
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
         />
       )}
 
       {isClassicTrueFalseQuestion(question) && (
         <ClassicTrueFalseQuestionForm
           data={question.data}
-          onChange={(field, value) =>
-            onChange({
-              ...question,
-              data: { ...question.data, [field]: value },
-            })
-          }
-          onValidChange={(field, valid) =>
-            onChange({
-              ...question,
-              validation: { ...question.validation, [field]: valid },
-            })
-          }
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
         />
       )}
 
       {isClassicTypeAnswerQuestion(question) && (
         <ClassicTypeAnswerQuestionForm
           data={question.data}
-          onChange={(field, value) =>
-            onChange({
-              ...question,
-              data: { ...question.data, [field]: value },
-            })
-          }
-          onValidChange={(field, valid) =>
-            onChange({
-              ...question,
-              validation: { ...question.validation, [field]: valid },
-            })
-          }
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
         />
       )}
 
       {isZeroToOneHundredRangeDto(question) && (
         <ZeroToOneHundredRangeQuestionForm
           data={question.data}
-          onChange={(field, value) =>
-            onChange({
-              ...question,
-              data: { ...question.data, [field]: value },
-            })
-          }
-          onValidChange={(field, valid) =>
-            onChange({
-              ...question,
-              validation: { ...question.validation, [field]: valid },
-            })
-          }
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
         />
       )}
     </div>

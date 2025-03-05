@@ -37,7 +37,9 @@ describe('QuestionEditor', () => {
           },
           validation: {},
         }}
-        onChange={() => undefined}
+        onTypeChange={() => undefined}
+        onQuestionValueChange={() => undefined}
+        onQuestionValueValidChange={() => undefined}
       />,
     )
 
@@ -66,7 +68,9 @@ describe('QuestionEditor', () => {
           },
           validation: {},
         }}
-        onChange={() => undefined}
+        onTypeChange={() => undefined}
+        onQuestionValueChange={() => undefined}
+        onQuestionValueValidChange={() => undefined}
       />,
     )
 
@@ -91,7 +95,9 @@ describe('QuestionEditor', () => {
           },
           validation: {},
         }}
-        onChange={() => undefined}
+        onTypeChange={() => undefined}
+        onQuestionValueChange={() => undefined}
+        onQuestionValueValidChange={() => undefined}
       />,
     )
 
@@ -116,7 +122,9 @@ describe('QuestionEditor', () => {
           },
           validation: {},
         }}
-        onChange={() => undefined}
+        onTypeChange={() => undefined}
+        onQuestionValueChange={() => undefined}
+        onQuestionValueValidChange={() => undefined}
       />,
     )
 
@@ -141,7 +149,9 @@ describe('QuestionEditor', () => {
           },
           validation: {},
         }}
-        onChange={() => undefined}
+        onTypeChange={() => undefined}
+        onQuestionValueChange={() => undefined}
+        onQuestionValueValidChange={() => undefined}
       />,
     )
 

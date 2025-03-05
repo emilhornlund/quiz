@@ -7,7 +7,11 @@ import {
   DeviceType,
   useDeviceSizeType,
 } from '../../../../utils/use-device-size.tsx'
-import { QuestionData } from '../../utils/QuestionDataSource/question-data-source.types.ts'
+import {
+  QuestionData,
+  QuestionValueChangeFunction,
+  QuestionValueValidChangeFunction,
+} from '../../utils/QuestionDataSource/question-data-source.types.ts'
 
 import {
   GameModeSelectionModal,
@@ -24,10 +28,12 @@ export interface QuizCreatorPageUIProps {
   selectedQuestionIndex: number
   onSelectedQuestionIndex: (index: number) => void
   onAddQuestion: () => void
-  onEditQuestion: (data: QuestionData) => void
+  onQuestionValueChange: QuestionValueChangeFunction
+  onQuestionValueValidChange: QuestionValueValidChangeFunction
   onDropQuestionIndex: (index: number) => void
   onDuplicateQuestionIndex: (index: number) => void
   onDeleteQuestionIndex: (index: number) => void
+  onReplaceQuestion: (type: QuestionType) => void
 }
 
 const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
@@ -38,10 +44,12 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   selectedQuestionIndex,
   onSelectedQuestionIndex,
   onAddQuestion,
-  onEditQuestion,
+  onQuestionValueChange,
+  onQuestionValueValidChange,
   onDropQuestionIndex,
   onDuplicateQuestionIndex,
   onDeleteQuestionIndex,
+  onReplaceQuestion,
 }) => {
   const deviceType = useDeviceSizeType()
 
@@ -99,7 +107,9 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             />
             <QuestionEditor
               question={selectedQuestion}
-              onChange={onEditQuestion}
+              onQuestionValueChange={onQuestionValueChange}
+              onQuestionValueValidChange={onQuestionValueValidChange}
+              onTypeChange={onReplaceQuestion}
             />
           </>
         )}
