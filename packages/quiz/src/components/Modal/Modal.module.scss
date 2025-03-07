@@ -37,21 +37,28 @@
       border-radius: $desktop-border-radius;
     }
 
-    .title {
+    .header {
       display: flex;
-      flex-direction: column;
-      font-weight: bold;
+      flex-direction: row;
+      align-items: center;
 
-      @include mobile {
-        @include fontSize(16px);
-      }
+      .title {
+        display: flex;
+        flex-direction: column;
+        font-weight: bold;
+        flex: 1;
 
-      @include tablet {
-        @include fontSize(20px);
-      }
+        @include mobile {
+          @include fontSize(16px);
+        }
 
-      @include desktop {
-        @include fontSize(24px);
+        @include tablet {
+          @include fontSize(20px);
+        }
+
+        @include desktop {
+          @include fontSize(24px);
+        }
       }
     }
 

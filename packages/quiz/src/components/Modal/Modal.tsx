@@ -7,17 +7,21 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import React, { FC, ReactNode, useId } from 'react'
+
+import Button from '../Button'
 
 import styles from './Modal.module.scss'
 
 export interface ModalProps {
   title: string
   open?: boolean
+  onClose?: () => void
   children?: ReactNode | ReactNode[]
 }
 
-const Modal: FC<ModalProps> = ({ title, open = false, children }) => {
+const Modal: FC<ModalProps> = ({ title, open = false, onClose, children }) => {
   const { refs, context } = useFloating({
     open,
   })
@@ -44,8 +48,20 @@ const Modal: FC<ModalProps> = ({ title, open = false, children }) => {
           className={styles.modalContainer}
           ref={refs.setFloating}
           {...getFloatingProps()}>
-          <div id={titleId} className={styles.title}>
-            {title}
+          <div className={styles.header}>
+            <div id={titleId} className={styles.title}>
+              {title}
+            </div>
+            {onClose && (
+              <Button
+                id="close-modal-button"
+                type="button"
+                kind="plain"
+                icon={faXmark}
+                iconColor="gray"
+                onClick={onClose}
+              />
+            )}
           </div>
           <div className={styles.content}>{children}</div>
         </div>
