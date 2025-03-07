@@ -22,7 +22,7 @@ exports[`ProfileDetails > should render ProfileDetails 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"

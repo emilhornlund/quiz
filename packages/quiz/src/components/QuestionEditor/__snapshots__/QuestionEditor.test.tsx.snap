@@ -9,7 +9,7 @@ exports[`QuestionEditor > should render QuestionEditor for classic mode 1`] = `
       class="inputContainer"
     >
       <div
-        class="textareaInputContainer code"
+        class="textareaInputContainer code textareaInputKindPrimary"
       >
         <textarea
           data-testid="test-quiz-question-editor-textarea-textarea"
@@ -101,7 +101,7 @@ exports[`QuestionEditor > should render QuestionEditor for zero to one hundred m
       class="inputContainer"
     >
       <div
-        class="textareaInputContainer code"
+        class="textareaInputContainer code textareaInputKindPrimary"
       >
         <textarea
           data-testid="test-quiz-question-editor-textarea-textarea"

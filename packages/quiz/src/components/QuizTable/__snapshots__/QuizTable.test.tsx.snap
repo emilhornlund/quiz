@@ -995,10 +995,14 @@ exports[`QuizTable > calls onHostGame when the confirm dialog button button is c
       tabindex="-1"
     >
       <div
-        class="title"
-        id=":r8:"
+        class="header"
       >
-        Host Game
+        <div
+          class="title"
+          id=":r8:"
+        >
+          Host Game
+        </div>
       </div>
       <div
         class="content"

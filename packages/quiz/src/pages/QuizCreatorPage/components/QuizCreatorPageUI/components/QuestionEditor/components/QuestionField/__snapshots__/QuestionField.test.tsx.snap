@@ -80,7 +80,7 @@ exports[`QuestionField > renders a audio media question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -246,7 +246,7 @@ exports[`QuestionField > renders a image media question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -287,7 +287,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -338,7 +338,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -369,7 +369,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -400,7 +400,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -431,7 +431,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -462,7 +462,7 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -640,7 +640,7 @@ exports[`QuestionField > renders a question text question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -677,7 +677,7 @@ exports[`QuestionField > renders a range correct question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -787,7 +787,7 @@ exports[`QuestionField > renders a range max question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -822,7 +822,7 @@ exports[`QuestionField > renders a range min question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"
@@ -931,7 +931,7 @@ exports[`QuestionField > renders a true or false options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -982,7 +982,7 @@ exports[`QuestionField > renders a true or false options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1103,7 +1103,7 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1124,7 +1124,7 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1145,7 +1145,7 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1166,7 +1166,7 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1334,7 +1334,7 @@ exports[`QuestionField > renders a video media question field 1`] = `
         class="inputContainer"
       >
         <div
-          class="textFieldInputContainer"
+          class="textFieldInputContainer textFieldInputKindPrimary"
         >
           <input
             class="textfield"

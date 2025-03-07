@@ -52,7 +52,7 @@ exports[`ProfileQuizzes > should render ProfileQuizzes 1`] = `
           class="inputContainer"
         >
           <div
-            class="textFieldInputContainer"
+            class="textFieldInputContainer textFieldInputKindPrimary"
           >
             <input
               class="textfield"

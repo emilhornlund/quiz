@@ -22,10 +22,14 @@ exports[`FilterModal > should render FilterModal 1`] = `
       tabindex="-1"
     >
       <div
-        class="title"
-        id=":r2:"
+        class="header"
       >
-        Refine Your Quiz Search
+        <div
+          class="title"
+          id=":r2:"
+        >
+          Refine Your Quiz Search
+        </div>
       </div>
       <div
         class="content"

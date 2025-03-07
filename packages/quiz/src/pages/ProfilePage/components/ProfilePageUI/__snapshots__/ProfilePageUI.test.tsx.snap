@@ -65,7 +65,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -165,7 +165,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
               class="inputContainer"
             >
               <div
-                class="textFieldInputContainer"
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
                   class="textfield"

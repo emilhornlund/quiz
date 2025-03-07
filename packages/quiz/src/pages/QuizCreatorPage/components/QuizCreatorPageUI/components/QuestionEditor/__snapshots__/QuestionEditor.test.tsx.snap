@@ -90,7 +90,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -189,7 +189,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -229,7 +229,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -280,7 +280,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -311,7 +311,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -342,7 +342,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -373,7 +373,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -404,7 +404,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -651,7 +651,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -750,7 +750,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -784,7 +784,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -814,7 +814,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -844,7 +844,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1081,7 +1081,7 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1180,7 +1180,7 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1220,7 +1220,7 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1271,7 +1271,7 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1518,7 +1518,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1617,7 +1617,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1657,7 +1657,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1678,7 +1678,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1699,7 +1699,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1720,7 +1720,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                 class="inputContainer"
               >
                 <div
-                  class="textFieldInputContainer"
+                  class="textFieldInputContainer textFieldInputKindPrimary"
                 >
                   <input
                     class="textfield"
@@ -1890,7 +1890,7 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
@@ -1989,7 +1989,7 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer"
+              class="textFieldInputContainer textFieldInputKindPrimary"
             >
               <input
                 class="textfield"
