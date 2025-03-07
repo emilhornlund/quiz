@@ -19,6 +19,7 @@ import { createQuestionValidationModel } from './question-data-source.utils.ts'
 
 type QuestionDataSourceReturnType = {
   questions: QuestionData[]
+  allQuestionsValid: boolean
   selectedQuestion?: QuestionData
   selectedQuestionIndex: number
   selectQuestion: (index: number) => void
@@ -44,6 +45,15 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
   )
 
   const questions = useMemo<QuestionData[]>(() => model.questions, [model])
+
+  const allQuestionsValid = useMemo(
+    () =>
+      model.questions.every(
+        ({ validation }) =>
+          !Object.values(validation).some((valid) => valid === false),
+      ),
+    [model],
+  )
 
   const selectedQuestion = useMemo<QuestionData | undefined>(() => {
     if (isValidIndex(model.selectedIndex)) {
@@ -353,6 +363,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
 
   return {
     questions,
+    allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,
     selectQuestion,
