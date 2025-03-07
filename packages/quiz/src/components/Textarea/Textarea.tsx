@@ -1,6 +1,14 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import { isCallbackValid, isValidString } from '../../utils/validation.ts'
@@ -79,9 +87,18 @@ const Textarea: FC<TextareaProps> = ({
     onAdditionalValidation,
   ])
 
-  useEffect(() => {
-    onValid?.(valid)
+  const prevValid = useRef<boolean>()
+
+  const handleValidChange = useCallback(() => {
+    if (prevValid.current !== valid) {
+      prevValid.current = valid
+      onValid?.(valid)
+    }
   }, [valid, onValid])
+
+  useEffect(() => {
+    handleValidChange()
+  }, [handleValidChange])
 
   const showError = useMemo(
     () => !valid && (lostFocus || hasFocus || forceValidate),
