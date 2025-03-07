@@ -1,0 +1,56 @@
+@import '../../../../../../styles/colors.scss';
+@import '../../../../../../styles/helpers.scss';
+
+$outline-offset: pxToRem(2px);
+
+.quizSettingsModalWrapper {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-narrow-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-narrow-layout-gutter;
+  }
+
+  @include desktop {
+    row-gap: $desktop-narrow-layout-gutter;
+  }
+
+  .quizSettingsRow {
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      row-gap: $mobile-narrow-layout-gutter * 0.5;
+    }
+
+    @include tablet {
+      row-gap: $tablet-narrow-layout-gutter * 0.5;
+    }
+
+    @include desktop {
+      row-gap: $desktop-narrow-layout-gutter * 0.5;
+    }
+
+    .label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 700;
+
+      @include mobile {
+        @include fontSize(14px);
+      }
+
+      @include tablet {
+        @include fontSize(16px);
+      }
+
+      @include desktop {
+        @include fontSize(18px);
+      }
+    }
+  }
+}
