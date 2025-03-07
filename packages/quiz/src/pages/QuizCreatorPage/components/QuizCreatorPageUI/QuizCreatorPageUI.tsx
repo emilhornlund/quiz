@@ -51,6 +51,8 @@ export interface QuizCreatorPageUIProps {
   onDuplicateQuestionIndex: (index: number) => void
   onDeleteQuestionIndex: (index: number) => void
   onReplaceQuestion: (type: QuestionType) => void
+  isSavingQuiz?: boolean
+  onSaveQuiz: () => void
 }
 
 const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
@@ -72,6 +74,8 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   onDuplicateQuestionIndex,
   onDeleteQuestionIndex,
   onReplaceQuestion,
+  isSavingQuiz,
+  onSaveQuiz,
 }) => {
   const deviceType = useDeviceSizeType()
 
@@ -125,7 +129,9 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             value="Save"
             hideValue="mobile"
             icon={faFloppyDisk}
+            loading={!!isSavingQuiz}
             disabled={!isValid}
+            onClick={onSaveQuiz}
           />
         </div>
       }>

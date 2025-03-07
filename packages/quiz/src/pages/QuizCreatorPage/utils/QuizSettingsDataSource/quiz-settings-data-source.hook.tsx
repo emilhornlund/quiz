@@ -10,6 +10,7 @@ import {
 type QuizSettingsDataSourceReturnType = {
   values: Partial<QuizSettingsData>
   valid: boolean
+  setValues: (values: QuizSettingsData) => void
   onValueChange: QuizSettingsDataSourceValueChangeFunction
   onValidChange: QuizSettingsDataSourceValidChangeFunction
 }
@@ -29,6 +30,13 @@ export const useQuizSettingsDataSource =
       () => Object.values(model.validation).every((valid) => !!valid),
       [model],
     )
+
+    const setValues = useCallback((values: QuizSettingsData) => {
+      setModel({
+        data: values,
+        validation: {},
+      })
+    }, [])
 
     const onValueChange = useCallback(
       <K extends keyof QuizSettingsData>(
@@ -55,5 +63,5 @@ export const useQuizSettingsDataSource =
       [],
     )
 
-    return { values, valid, onValueChange, onValidChange }
+    return { values, setValues, valid, onValueChange, onValidChange }
   }

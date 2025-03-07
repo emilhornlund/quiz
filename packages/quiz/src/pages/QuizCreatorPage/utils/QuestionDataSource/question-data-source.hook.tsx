@@ -19,6 +19,7 @@ import { createQuestionValidationModel } from './question-data-source.utils.ts'
 
 type QuestionDataSourceReturnType = {
   questions: QuestionData[]
+  setQuestions: (questions: QuestionData[]) => void
   allQuestionsValid: boolean
   selectedQuestion?: QuestionData
   selectedQuestionIndex: number
@@ -45,6 +46,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
   )
 
   const questions = useMemo<QuestionData[]>(() => model.questions, [model])
+
+  const setQuestions = useCallback((questions: QuestionData[]) => {
+    setModel({ questions, selectedIndex: 0 })
+  }, [])
 
   const allQuestionsValid = useMemo(
     () =>
@@ -363,6 +368,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
 
   return {
     questions,
+    setQuestions,
     allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,

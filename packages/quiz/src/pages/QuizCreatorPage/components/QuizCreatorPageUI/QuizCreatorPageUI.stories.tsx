@@ -68,6 +68,7 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
       onDuplicateQuestionIndex={duplicateQuestion}
       onDeleteQuestionIndex={deleteQuestion}
       onReplaceQuestion={replaceQuestion}
+      onSaveQuiz={() => undefined}
     />
   )
 }
@@ -103,5 +104,6 @@ export const Default = {
     onDuplicateQuestionIndex: () => undefined,
     onDeleteQuestionIndex: () => undefined,
     onReplaceQuestion: () => undefined,
+    onSaveQuiz: () => undefined,
   },
 } satisfies Story

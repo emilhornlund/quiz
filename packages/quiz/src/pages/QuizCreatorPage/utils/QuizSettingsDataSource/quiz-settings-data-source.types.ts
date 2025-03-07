@@ -9,7 +9,7 @@ export interface QuizSettingsData {
   /**
    * A description of the quiz.
    */
-  description: string
+  description?: string
 
   /**
    * The URL of the cover image for the quiz.

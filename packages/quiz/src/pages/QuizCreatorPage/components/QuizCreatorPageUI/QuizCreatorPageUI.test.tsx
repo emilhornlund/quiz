@@ -35,6 +35,7 @@ describe('QuizCreatorPageUI', () => {
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
           onReplaceQuestion={() => undefined}
+          onSaveQuiz={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -64,6 +65,7 @@ describe('QuizCreatorPageUI', () => {
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
           onReplaceQuestion={() => undefined}
+          onSaveQuiz={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -186,6 +188,7 @@ describe('QuizCreatorPageUI', () => {
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
           onReplaceQuestion={() => undefined}
+          onSaveQuiz={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -215,6 +218,7 @@ describe('QuizCreatorPageUI', () => {
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
           onReplaceQuestion={() => undefined}
+          onSaveQuiz={() => undefined}
         />
       </MemoryRouter>,
     )
@@ -260,6 +264,7 @@ describe('QuizCreatorPageUI', () => {
           onDuplicateQuestionIndex={() => undefined}
           onDeleteQuestionIndex={() => undefined}
           onReplaceQuestion={() => undefined}
+          onSaveQuiz={() => undefined}
         />
       </MemoryRouter>,
     )
