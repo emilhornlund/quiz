@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
 import { useQuestionDataSource } from '../../utils/QuestionDataSource'
+import { useQuizSettingsDataSource } from '../../utils/QuizSettingsDataSource'
 
 import QuizCreatorPageUI, { QuizCreatorPageUIProps } from './QuizCreatorPageUI'
 
@@ -11,7 +12,15 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
   const [gameMode, setGameMode] = useState<GameMode>()
 
   const {
+    values: quizSettings,
+    valid: allQuizSettingsValid,
+    onValueChange: onQuizSettingsValueChange,
+    onValidChange: onQuizSettingsValidChange,
+  } = useQuizSettingsDataSource()
+
+  const {
     questions,
+    allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,
     selectQuestion,
@@ -43,7 +52,12 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
     <QuizCreatorPageUI
       gameMode={gameMode}
       onSelectGameMode={handleSetGameMode}
+      quizSettings={quizSettings}
+      allQuizSettingsValid={allQuizSettingsValid}
+      onQuizSettingsValueChange={onQuizSettingsValueChange}
+      onQuizSettingsValidChange={onQuizSettingsValidChange}
       questions={questions}
+      allQuestionsValid={allQuestionsValid}
       selectedQuestion={selectedQuestion}
       selectedQuestionIndex={selectedQuestionIndex}
       onSelectedQuestionIndex={selectQuestion}
@@ -73,9 +87,14 @@ type Story = StoryObj<typeof meta>
 
 export const Default = {
   args: {
+    quizSettings: {},
+    allQuizSettingsValid: false,
     questions: [],
+    allQuestionsValid: false,
     selectedQuestion: undefined,
     selectedQuestionIndex: -1,
+    onQuizSettingsValueChange: () => undefined,
+    onQuizSettingsValidChange: () => undefined,
     onSelectedQuestionIndex: () => undefined,
     onAddQuestion: () => undefined,
     onQuestionValueChange: () => undefined,

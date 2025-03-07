@@ -1,6 +1,12 @@
 import { faFloppyDisk, faGear } from '@fortawesome/free-solid-svg-icons'
-import { GameMode, QuestionType } from '@quiz/common'
-import React, { FC } from 'react'
+import {
+  GameMode,
+  QuestionType,
+  QUIZ_TITLE_MAX_LENGTH,
+  QUIZ_TITLE_MIN_LENGTH,
+  QUIZ_TITLE_REGEX,
+} from '@quiz/common'
+import React, { FC, useMemo, useState } from 'react'
 
 import { Button, Page, TextField } from '../../../../components'
 import {
@@ -12,18 +18,29 @@ import {
   QuestionValueChangeFunction,
   QuestionValueValidChangeFunction,
 } from '../../utils/QuestionDataSource/question-data-source.types.ts'
+import {
+  QuizSettingsData,
+  QuizSettingsDataSourceValidChangeFunction,
+  QuizSettingsDataSourceValueChangeFunction,
+} from '../../utils/QuizSettingsDataSource'
 
 import {
   GameModeSelectionModal,
   QuestionEditor,
   QuestionPicker,
 } from './components'
+import QuizSettingsModal from './components/QuizSettingsModal'
 import styles from './QuizCreatorPageUI.module.scss'
 
 export interface QuizCreatorPageUIProps {
   gameMode?: GameMode
   onSelectGameMode?: (gameMode: GameMode) => void
+  quizSettings: Partial<QuizSettingsData>
+  allQuizSettingsValid: boolean
+  onQuizSettingsValueChange: QuizSettingsDataSourceValueChangeFunction
+  onQuizSettingsValidChange: QuizSettingsDataSourceValidChangeFunction
   questions: QuestionData[]
+  allQuestionsValid: boolean
   selectedQuestion?: QuestionData
   selectedQuestionIndex: number
   onSelectedQuestionIndex: (index: number) => void
@@ -39,7 +56,12 @@ export interface QuizCreatorPageUIProps {
 const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   gameMode,
   onSelectGameMode,
+  quizSettings,
+  allQuizSettingsValid,
+  onQuizSettingsValueChange,
+  onQuizSettingsValidChange,
   questions,
+  allQuestionsValid,
   selectedQuestion,
   selectedQuestionIndex,
   onSelectedQuestionIndex,
@@ -53,6 +75,13 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
 }) => {
   const deviceType = useDeviceSizeType()
 
+  const [showQuizSettingsModal, setShowQuizSettingsModal] = useState(false)
+
+  const isValid = useMemo(
+    () => allQuestionsValid && allQuizSettingsValid,
+    [allQuestionsValid, allQuizSettingsValid],
+  )
+
   return (
     <Page
       height="full"
@@ -60,10 +89,22 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
         <div className={styles.quizCreatorPageHeader}>
           {deviceType !== DeviceType.Mobile && (
             <TextField
-              id="quiz-title-text-field"
-              size="small"
+              id="quiz-title-textfield"
               type="text"
+              kind="secondary"
+              size="small"
               placeholder="Title"
+              value={quizSettings.title}
+              minLength={QUIZ_TITLE_MIN_LENGTH}
+              maxLength={QUIZ_TITLE_MAX_LENGTH}
+              regex={QUIZ_TITLE_REGEX}
+              onChange={(value) =>
+                onQuizSettingsValueChange('title', value as string)
+              }
+              onValid={(valid) => onQuizSettingsValidChange('title', valid)}
+              showErrorMessage={false}
+              required
+              forceValidate
             />
           )}
           <Button
@@ -74,6 +115,7 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             value="Settings"
             hideValue="mobile"
             icon={faGear}
+            onClick={() => setShowQuizSettingsModal(true)}
           />
           <Button
             id="save-button"
@@ -83,11 +125,22 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             value="Save"
             hideValue="mobile"
             icon={faFloppyDisk}
+            disabled={!isValid}
           />
         </div>
       }>
       <div className={styles.quizCreatorPage}>
         {!gameMode && <GameModeSelectionModal onSelect={onSelectGameMode} />}
+
+        {gameMode && showQuizSettingsModal && (
+          <QuizSettingsModal
+            values={quizSettings}
+            onValueChange={onQuizSettingsValueChange}
+            onValidChange={onQuizSettingsValidChange}
+            onClose={() => setShowQuizSettingsModal(false)}
+          />
+        )}
+
         {gameMode && selectedQuestion && (
           <>
             <QuestionPicker

@@ -19,7 +19,12 @@ describe('QuizCreatorPageUI', () => {
         <QuizCreatorPageUI
           gameMode={undefined}
           onSelectGameMode={() => undefined}
+          quizSettings={{}}
+          allQuizSettingsValid={false}
+          onQuizSettingsValueChange={() => undefined}
+          onQuizSettingsValidChange={() => undefined}
           questions={[]}
+          allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
@@ -43,7 +48,12 @@ describe('QuizCreatorPageUI', () => {
         <QuizCreatorPageUI
           gameMode={GameMode.Classic}
           onSelectGameMode={() => undefined}
+          quizSettings={{}}
+          allQuizSettingsValid={false}
+          onQuizSettingsValueChange={() => undefined}
+          onQuizSettingsValidChange={() => undefined}
           questions={[]}
+          allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
@@ -67,6 +77,10 @@ describe('QuizCreatorPageUI', () => {
         <QuizCreatorPageUI
           gameMode={GameMode.Classic}
           onSelectGameMode={() => undefined}
+          quizSettings={{}}
+          allQuizSettingsValid={false}
+          onQuizSettingsValueChange={() => undefined}
+          onQuizSettingsValidChange={() => undefined}
           questions={[
             {
               mode: GameMode.Classic,
@@ -162,6 +176,7 @@ describe('QuizCreatorPageUI', () => {
             },
             validation: {},
           }}
+          allQuestionsValid={false}
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
@@ -184,7 +199,12 @@ describe('QuizCreatorPageUI', () => {
         <QuizCreatorPageUI
           gameMode={GameMode.ZeroToOneHundred}
           onSelectGameMode={() => undefined}
+          quizSettings={{}}
+          allQuizSettingsValid={false}
+          onQuizSettingsValueChange={() => undefined}
+          onQuizSettingsValidChange={() => undefined}
           questions={[]}
+          allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
@@ -208,6 +228,10 @@ describe('QuizCreatorPageUI', () => {
         <QuizCreatorPageUI
           gameMode={GameMode.ZeroToOneHundred}
           onSelectGameMode={() => undefined}
+          quizSettings={{}}
+          allQuizSettingsValid={false}
+          onQuizSettingsValueChange={() => undefined}
+          onQuizSettingsValidChange={() => undefined}
           questions={[
             {
               mode: GameMode.ZeroToOneHundred,
@@ -225,6 +249,7 @@ describe('QuizCreatorPageUI', () => {
               validation: {},
             },
           ]}
+          allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
           onSelectedQuestionIndex={() => undefined}
