@@ -39,6 +39,7 @@ export interface TextFieldProps {
   required?: boolean | string
   disabled?: boolean
   readOnly?: boolean
+  showErrorMessage?: boolean
   forceValidate?: boolean
   onChange?: (value?: string | number) => void
   onValid?: (valid: boolean) => void
@@ -63,6 +64,7 @@ const TextField: React.FC<TextFieldProps> = ({
   required,
   disabled,
   readOnly,
+  showErrorMessage = true,
   forceValidate = false,
   onChange,
   onValid,
@@ -209,7 +211,7 @@ const TextField: React.FC<TextFieldProps> = ({
           </label>
         )}
       </div>
-      {showError && (
+      {showError && showErrorMessage && (
         <div className={styles.errorContainer}>
           <FontAwesomeIcon icon={faTriangleExclamation} />{' '}
           {errorMessage ?? 'Unknown error'}
