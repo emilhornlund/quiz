@@ -16,6 +16,14 @@ $outline-offset: pxToRem(2px);
       }
     }
 
+    &.textareaInputKindPrimary {
+      @extend .input-kind-primary;
+    }
+
+    &.textareaInputKindSecondary {
+      @extend .input-kind-secondary;
+    }
+
     &.error {
       @extend .input-kind-destructive;
     }

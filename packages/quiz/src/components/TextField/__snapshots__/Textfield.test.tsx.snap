@@ -6,7 +6,7 @@ exports[`TextField > should not receive onChange event when not a number changes
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer error"
+      class="textFieldInputContainer textFieldInputKindPrimary error"
     >
       <input
         class="textfield"
@@ -50,7 +50,7 @@ exports[`TextField > should not receive onChange event when number above max cha
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer error"
+      class="textFieldInputContainer textFieldInputKindPrimary error"
     >
       <input
         class="textfield"
@@ -94,7 +94,7 @@ exports[`TextField > should not receive onChange event when number bellow min ch
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer error"
+      class="textFieldInputContainer textFieldInputKindPrimary error"
     >
       <input
         class="textfield"
@@ -138,7 +138,7 @@ exports[`TextField > should receive onChange event when number changes 1`] = `
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"
@@ -159,7 +159,7 @@ exports[`TextField > should receive onChange event when number equal max changes
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"
@@ -181,7 +181,7 @@ exports[`TextField > should receive onChange event when number equal min changes
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"
@@ -203,7 +203,7 @@ exports[`TextField > should receive onChange event when text changes 1`] = `
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"
@@ -224,7 +224,7 @@ exports[`TextField > should render a TextField with type number 1`] = `
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"
@@ -245,7 +245,7 @@ exports[`TextField > should render a TextField with type text 1`] = `
     class="inputContainer"
   >
     <div
-      class="textFieldInputContainer"
+      class="textFieldInputContainer textFieldInputKindPrimary"
     >
       <input
         class="textfield"

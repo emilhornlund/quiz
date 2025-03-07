@@ -6,7 +6,7 @@ exports[`Textarea > should fire onChange when Textarea receives text 1`] = `
     class="inputContainer"
   >
     <div
-      class="textareaInputContainer"
+      class="textareaInputContainer textareaInputKindPrimary"
     >
       <textarea
         data-testid="test-my-textarea-textarea"
@@ -24,7 +24,7 @@ exports[`Textarea > should render a Textarea with default props 1`] = `
     class="inputContainer"
   >
     <div
-      class="textareaInputContainer"
+      class="textareaInputContainer textareaInputKindPrimary"
     >
       <textarea
         data-testid="test-my-textarea-textarea"

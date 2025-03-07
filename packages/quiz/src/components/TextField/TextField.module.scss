@@ -33,6 +33,14 @@ $desktop-checkbox-small-font-size: calc($desktop-checkbox-normal-font-size * 0.8
       @extend .input-kind-destructive;
     }
 
+    &.textFieldInputKindPrimary {
+      @extend .input-kind-primary;
+    }
+
+    &.textFieldInputKindSecondary {
+      @extend .input-kind-secondary;
+    }
+
     .checkboxLabel {
       display: inline-flex;
       justify-content: center;

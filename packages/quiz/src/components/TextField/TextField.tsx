@@ -26,6 +26,7 @@ export interface TextFieldProps {
   id: string
   name?: string
   type: 'text' | 'number'
+  kind?: 'primary' | 'secondary'
   size?: 'normal' | 'small'
   placeholder?: string
   value?: string | number
@@ -49,6 +50,7 @@ const TextField: React.FC<TextFieldProps> = ({
   id,
   name,
   type,
+  kind = 'primary',
   size = 'normal',
   placeholder,
   value,
@@ -162,6 +164,8 @@ const TextField: React.FC<TextFieldProps> = ({
       <div
         className={classNames(
           styles.textFieldInputContainer,
+          kind === 'primary' ? styles.textFieldInputKindPrimary : undefined,
+          kind === 'secondary' ? styles.textFieldInputKindSecondary : undefined,
           deviceSize === 'small' ? styles.small : undefined,
           disabled ? styles.disabled : undefined,
           showError ? styles.error : undefined,
