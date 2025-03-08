@@ -21,10 +21,9 @@ describe('ProfileQuizzes', () => {
     const { container } = render(
       <MemoryRouter>
         <ProfileQuizzes
-          playerId={PlayerID}
           quizzes={[
             {
-              id: uuidv4(),
+              id: 'e314f952-6480-4fef-9553-4df0527800d4',
               title: 'The Ultimate Geography Challenge',
               description:
                 'Test your knowledge of world capitals, landmarks, and continents in this fun and educational geography quiz.',
@@ -39,7 +38,7 @@ describe('ProfileQuizzes', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: 'a1acbaff-8d97-45b2-89a3-906ff8aa8d88',
               title: 'Pop Culture Trivia',
               description:
                 'How well do you know movies, music, and celebrity gossip? Find out with this entertaining pop culture quiz.',
@@ -53,7 +52,7 @@ describe('ProfileQuizzes', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: 'fc71c63b-4dd5-4813-9106-abeeaba60c08',
               title: 'History Through the Ages',
               description:
                 'Explore key moments in history, from ancient civilizations to modern events, and see how much you remember.',
@@ -67,7 +66,7 @@ describe('ProfileQuizzes', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: 'bb3ca2ea-a8f4-4b74-95de-d90ea7e8de36',
               title: 'Science Facts and Myths',
               description:
                 'Separate fact from fiction as you answer questions about physics, biology, chemistry, and other scientific wonders.',
@@ -81,7 +80,7 @@ describe('ProfileQuizzes', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: '02cd1f62-024b-4962-ba1b-0c7c12ab2b18',
               title: 'Literary Legends',
               description:
                 'Dive into the world of books, famous authors, and classic stories in this quiz for literature enthusiasts.',
@@ -100,8 +99,6 @@ describe('ProfileQuizzes', () => {
           isError={false}
           onChangeSearchParams={() => undefined}
           onCreateQuiz={() => undefined}
-          onEditQuiz={() => undefined}
-          onHostGame={() => undefined}
         />
       </MemoryRouter>,
     )

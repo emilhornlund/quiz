@@ -1,12 +1,9 @@
 import {
-  faCalendarDays,
   faCircleQuestion,
   faEye,
   faGamepad,
   faIcons,
   faLanguage,
-  faPen,
-  faPlay,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -16,8 +13,8 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import { format } from 'date-fns'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 
 import Picture from '../../assets/images/picture.svg'
 import {
@@ -26,9 +23,7 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../models/labels.ts'
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
-import Button, { IconButtonArrowLeft, IconButtonArrowRight } from '../Button'
-import { ConfirmDialog } from '../index.ts'
+import { IconButtonArrowLeft, IconButtonArrowRight } from '../Button'
 
 import styles from './QuizTable.module.scss'
 
@@ -55,26 +50,16 @@ export interface QuizTablePagination {
 export interface QuizTableProps {
   items: QuizTableItem[]
   pagination: QuizTablePagination
-  isHostingGame?: boolean
-  playerId?: string
-  onEdit?: (id: string) => void
-  onHostGame?: (id: string) => void
+  isPublic?: boolean
   onPagination?: (limit: number, offset: number) => void
 }
 
 const QuizTable: FC<QuizTableProps> = ({
   items,
   pagination,
-  isHostingGame = false,
-  playerId,
-  onEdit,
-  onHostGame,
+  isPublic = false,
   onPagination,
 }) => {
-  const deviceType = useDeviceSizeType()
-
-  const [hostGameId, setHostGameId] = useState<string>()
-
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(pagination.total / pagination.limit)),
     [pagination],
@@ -89,71 +74,50 @@ const QuizTable: FC<QuizTableProps> = ({
       <div className={styles.quizTable}>
         <div className={styles.rows}>
           {items.map((item) => (
-            <div key={item.id} className={styles.row}>
-              <img
-                src={item.imageCoverURL ?? Picture}
-                className={item.imageCoverURL ? undefined : styles.svg}
-                alt="image"
-              />
-              <div className={styles.content}>
-                <div className={styles.title}>{item.title}</div>
-                {item.description && (
-                  <div title={item.description} className={styles.description}>
-                    {item.description}
+            <Link key={item.id} to={`/quiz/details/${item.id}`}>
+              <div className={styles.row}>
+                <img
+                  src={item.imageCoverURL ?? Picture}
+                  className={item.imageCoverURL ? undefined : styles.svg}
+                  alt="image"
+                />
+                <div className={styles.content}>
+                  <div className={styles.title}>{item.title}</div>
+                  {item.description && (
+                    <div
+                      title={item.description}
+                      className={styles.description}>
+                      {item.description}
+                    </div>
+                  )}
+                  <div className={styles.details}>
+                    <span>
+                      <FontAwesomeIcon icon={faGamepad} />
+                      {GameModeLabels[item.mode]}
+                    </span>
+                    <span>
+                      <FontAwesomeIcon icon={faIcons} />
+                      {QuizCategoryLabels[item.category]}
+                    </span>
+                    {!isPublic && (
+                      <span>
+                        <FontAwesomeIcon icon={faEye} />
+                        {QuizVisibilityLabels[item.visibility]}
+                      </span>
+                    )}
+                    <span>
+                      <FontAwesomeIcon icon={faLanguage} />
+                      {LanguageLabels[item.languageCode]}
+                    </span>
+                    <span>
+                      <FontAwesomeIcon icon={faCircleQuestion} />
+                      {item.numberOfQuestions}{' '}
+                      {item.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+                    </span>
                   </div>
-                )}
-                <div className={styles.details}>
-                  <span>
-                    <FontAwesomeIcon icon={faEye} />
-                    {QuizVisibilityLabels[item.visibility]}
-                  </span>
-                  <span>
-                    <FontAwesomeIcon icon={faIcons} />
-                    {QuizCategoryLabels[item.category]}
-                  </span>
-                  <span>
-                    <FontAwesomeIcon icon={faLanguage} />
-                    {LanguageLabels[item.languageCode]}
-                  </span>
-                  <span>
-                    <FontAwesomeIcon icon={faGamepad} />
-                    {GameModeLabels[item.mode]}
-                  </span>
-                  <span>
-                    <FontAwesomeIcon icon={faCircleQuestion} />
-                    {item.numberOfQuestions}{' '}
-                    {item.numberOfQuestions === 1 ? 'Question' : 'Questions'}
-                  </span>
-                  <span
-                    title={`Updated ${format(item.updated, 'y-LL-dd HH:mm:ss')}`}>
-                    <FontAwesomeIcon icon={faCalendarDays} />
-                    {format(item.updated, 'y-LL-dd')}
-                  </span>
                 </div>
               </div>
-              <div className={styles.actions}>
-                {playerId === item.author.id && (
-                  <Button
-                    id="edit-quiz-button"
-                    type="button"
-                    kind="call-to-action"
-                    size="small"
-                    value={deviceType != DeviceType.Mobile && 'Edit'}
-                    icon={faPen}
-                    onClick={() => onEdit?.(item.id)}
-                  />
-                )}
-                <Button
-                  id="host-game-button"
-                  type="button"
-                  kind="call-to-action"
-                  size="small"
-                  value={deviceType != DeviceType.Mobile && 'Host Game'}
-                  icon={faPlay}
-                  onClick={() => setHostGameId(item.id)}
-                />
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
         {totalPages > 1 && (
@@ -197,14 +161,6 @@ const QuizTable: FC<QuizTableProps> = ({
           </div>
         )}
       </div>
-      <ConfirmDialog
-        title="Host Game"
-        message="Are you sure you want to start hosting a new game? Players will be able to join as soon as the game starts."
-        open={!!hostGameId}
-        loading={isHostingGame}
-        onConfirm={() => !!hostGameId && onHostGame?.(hostGameId)}
-        onClose={() => setHostGameId(undefined)}
-      />
     </>
   )
 }

@@ -29,29 +29,21 @@ type SearchParams = {
 }
 
 export interface ProfileQuizzesProps {
-  playerId?: string
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  isHostingGame?: boolean
   onChangeSearchParams: (params: SearchParams) => void
   onCreateQuiz: () => void
-  onEditQuiz: (quizID: string) => void
-  onHostGame: (quizID: string) => void
 }
 
 const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
-  playerId,
   quizzes,
   pagination,
   isLoading,
   isError,
-  isHostingGame = false,
   onChangeSearchParams,
   onCreateQuiz,
-  onEditQuiz,
-  onHostGame,
 }) => {
   const [hasSearchFilter, setHasSearchFilter] = useState<boolean>(false)
 
@@ -102,13 +94,9 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
             limit: pagination.limit,
             offset: pagination.offset,
           }}
-          isHostingGame={isHostingGame}
-          playerId={playerId}
           onPagination={(newLimit, newOffset) =>
             onChangeSearchParams({ limit: newLimit, offset: newOffset })
           }
-          onEdit={onEditQuiz}
-          onHostGame={onHostGame}
         />
       ) : (
         <LoadingSpinner />

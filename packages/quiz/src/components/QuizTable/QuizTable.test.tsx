@@ -7,6 +7,7 @@ import {
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import '@testing-library/jest-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import QuizTable, { QuizTableItem, QuizTablePagination } from './QuizTable'
@@ -50,8 +51,6 @@ const mockPagination: QuizTablePagination = {
   offset: 0,
 }
 
-const mockOnEdit = vi.fn()
-const mockOnHostGame = vi.fn()
 const mockOnPagination = vi.fn()
 
 describe('QuizTable', () => {
@@ -61,14 +60,13 @@ describe('QuizTable', () => {
 
   it('renders the table with items', () => {
     const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={mockItems}
+          pagination={mockPagination}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     expect(screen.getByText('Quiz 1')).toBeInTheDocument()
@@ -81,84 +79,15 @@ describe('QuizTable', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('calls onEdit when the edit button is clicked', () => {
-    const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
-    )
-
-    const editButton = screen.getAllByRole('button', { name: 'Edit' })[0]
-    fireEvent.click(editButton)
-
-    expect(mockOnEdit).toHaveBeenCalledTimes(1)
-    expect(mockOnEdit).toHaveBeenCalledWith('1')
-
-    expect(container).toMatchSnapshot()
-  })
-
-  it('calls onHostGame when the confirm dialog button button is clicked', () => {
-    const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
-    )
-
-    const hostButton = screen.getAllByRole('button', { name: 'Host Game' })[0]
-    fireEvent.click(hostButton)
-
-    const confirmButton = screen.getAllByRole('button', { name: 'Confirm' })[0]
-    fireEvent.click(confirmButton)
-
-    expect(mockOnHostGame).toHaveBeenCalledTimes(1)
-    expect(mockOnHostGame).toHaveBeenCalledWith('1')
-
-    expect(container).toMatchSnapshot()
-  })
-
-  it('do not calls onHostGame when the close dialog button is clicked', () => {
-    const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
-    )
-
-    const hostButton = screen.getAllByRole('button', { name: 'Host Game' })[0]
-    fireEvent.click(hostButton)
-
-    const closeButton = screen.getAllByRole('button', { name: 'Close' })[0]
-    fireEvent.click(closeButton)
-
-    expect(mockOnHostGame).not.toHaveBeenCalled()
-
-    expect(container).toMatchSnapshot()
-  })
-
   it('disables the previous button on the first page', () => {
     const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={mockItems}
+          pagination={mockPagination}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     const prevButton = screen.getByTestId('test-prev-page-button-button')
@@ -169,14 +98,13 @@ describe('QuizTable', () => {
 
   it('disables the next button on the last page', () => {
     const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={{ ...mockPagination, offset: 8 }}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={mockItems}
+          pagination={{ ...mockPagination, offset: 8 }}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     const nextButton = screen.getByTestId('test-next-page-button-button')
@@ -187,14 +115,13 @@ describe('QuizTable', () => {
 
   it('calls onPagination when navigating to the next page', () => {
     const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={mockItems}
+          pagination={mockPagination}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     const nextButton = screen.getByTestId('test-next-page-button-button')
@@ -208,14 +135,13 @@ describe('QuizTable', () => {
 
   it('calls onPagination when navigating to the previous page', () => {
     const { container } = render(
-      <QuizTable
-        items={mockItems}
-        pagination={{ ...mockPagination, offset: 2 }}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={mockItems}
+          pagination={{ ...mockPagination, offset: 2 }}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     const prevButton = screen.getByTestId('test-prev-page-button-button')
@@ -229,14 +155,13 @@ describe('QuizTable', () => {
 
   it('handles edge case: renders without items', () => {
     const { container } = render(
-      <QuizTable
-        items={[]}
-        pagination={mockPagination}
-        playerId={PLAYER_ID}
-        onEdit={mockOnEdit}
-        onHostGame={mockOnHostGame}
-        onPagination={mockOnPagination}
-      />,
+      <MemoryRouter>
+        <QuizTable
+          items={[]}
+          pagination={mockPagination}
+          onPagination={mockOnPagination}
+        />
+      </MemoryRouter>,
     )
 
     expect(screen.queryByText('Quiz 1')).not.toBeInTheDocument()

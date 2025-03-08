@@ -26,7 +26,6 @@ const PlayerID = uuidv4()
 
 export const Default = {
   args: {
-    playerId: PlayerID,
     results: [
       {
         id: uuidv4(),
@@ -104,7 +103,5 @@ export const Default = {
     isLoading: false,
     isError: false,
     onChangeSearchParams: () => undefined,
-    onEditQuiz: () => undefined,
-    onHostGame: () => undefined,
   },
 } satisfies Story

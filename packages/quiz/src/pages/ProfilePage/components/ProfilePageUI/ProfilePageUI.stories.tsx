@@ -111,7 +111,5 @@ export const Default = {
     onNicknameChange: () => undefined,
     onChangeSearchParams: () => undefined,
     onCreateQuiz: () => undefined,
-    onEditQuiz: () => undefined,
-    onHostGame: () => undefined,
   },
 } satisfies Story

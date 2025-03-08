@@ -43,6 +43,11 @@
       background-color: white;
       color: $gray-4;
 
+      &:hover {
+        background-color: $gray-1;
+        cursor: pointer;
+      }
+
       @include mobile {
         padding: $mobile-narrow-layout-gutter;
         column-gap: $mobile-narrow-layout-gutter;
@@ -175,27 +180,6 @@
               @include fontSize(18px);
             }
           }
-        }
-      }
-
-      .actions {
-        display: flex;
-        flex-direction: column;
-
-        @include mobile {
-          .buttonTitle {
-            display: none;
-          }
-
-          row-gap: $mobile-narrow-layout-gutter;
-        }
-
-        @include tablet {
-          row-gap: $tablet-narrow-layout-gutter;
-        }
-
-        @include desktop {
-          row-gap: $desktop-narrow-layout-gutter;
         }
       }
     }

@@ -21,10 +21,9 @@ describe('DiscoverPageUI', () => {
     const { container } = render(
       <MemoryRouter>
         <DiscoverPageUI
-          playerId={PlayerID}
           results={[
             {
-              id: uuidv4(),
+              id: '66e89e5d-4e27-4864-8020-790428f94d0e',
               title: 'The Ultimate Geography Challenge',
               description:
                 'Test your knowledge of world capitals, landmarks, and continents in this fun and educational geography quiz.',
@@ -39,7 +38,7 @@ describe('DiscoverPageUI', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: '59d4f710-a451-45c7-8fa9-91e1abda506a',
               title: 'Pop Culture Trivia',
               description:
                 'How well do you know movies, music, and celebrity gossip? Find out with this entertaining pop culture quiz.',
@@ -53,7 +52,7 @@ describe('DiscoverPageUI', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: '085726dd-f6f4-4984-baed-6225b11f4164',
               title: 'History Through the Ages',
               description:
                 'Explore key moments in history, from ancient civilizations to modern events, and see how much you remember.',
@@ -67,7 +66,7 @@ describe('DiscoverPageUI', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: 'bd07a122-bcc3-4298-94c3-b5375169615d',
               title: 'Science Facts and Myths',
               description:
                 'Separate fact from fiction as you answer questions about physics, biology, chemistry, and other scientific wonders.',
@@ -81,7 +80,7 @@ describe('DiscoverPageUI', () => {
               updated,
             },
             {
-              id: uuidv4(),
+              id: 'ec05918c-be05-495d-b122-0f6576e25388',
               title: 'Literary Legends',
               description:
                 'Dive into the world of books, famous authors, and classic stories in this quiz for literature enthusiasts.',
@@ -99,8 +98,6 @@ describe('DiscoverPageUI', () => {
           isLoading={false}
           isError={false}
           onChangeSearchParams={() => undefined}
-          onEditQuiz={() => undefined}
-          onHostGame={() => undefined}
         />
       </MemoryRouter>,
     )

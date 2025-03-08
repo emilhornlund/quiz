@@ -19,7 +19,6 @@ export interface ProfilePageUIProps {
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  isHostingGame?: boolean
   onNicknameChange: (nickname: string) => void
   onChangeSearchParams: (params: {
     search?: string
@@ -33,8 +32,6 @@ export interface ProfilePageUIProps {
     offset?: number
   }) => void
   onCreateQuiz: () => void
-  onEditQuiz: (quizID: string) => void
-  onHostGame: (quizID: string) => void
 }
 
 const ProfilePageUI: FC<ProfilePageUIProps> = ({
@@ -43,27 +40,20 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
   pagination,
   isLoading,
   isError,
-  isHostingGame = false,
   onNicknameChange,
   onChangeSearchParams,
   onCreateQuiz,
-  onEditQuiz,
-  onHostGame,
 }) => (
   <Page align="start" discover profile>
     <ProfileDetails nickname={player?.nickname} onChange={onNicknameChange} />
     <PageDivider />
     <ProfileQuizzes
-      playerId={player?.id}
       quizzes={quizzes}
       pagination={pagination}
       isLoading={isLoading}
       isError={isError}
-      isHostingGame={isHostingGame}
       onChangeSearchParams={onChangeSearchParams}
       onCreateQuiz={onCreateQuiz}
-      onEditQuiz={onEditQuiz}
-      onHostGame={onHostGame}
     />
   </Page>
 )

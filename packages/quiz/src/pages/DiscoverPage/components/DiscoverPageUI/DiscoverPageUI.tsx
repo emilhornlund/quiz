@@ -16,12 +16,10 @@ import {
 import QuizTableFilter from '../../../../components/QuizTableFilter'
 
 export interface DiscoverPageUIProps {
-  playerId?: string
   results: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  isHostingGame?: boolean
   onChangeSearchParams: (params: {
     search?: string
     visibility?: QuizVisibility
@@ -33,20 +31,14 @@ export interface DiscoverPageUIProps {
     limit?: number
     offset?: number
   }) => void
-  onEditQuiz: (quizID: string) => void
-  onHostGame: (quizID: string) => void
 }
 
 const DiscoverPageUI: FC<DiscoverPageUIProps> = ({
-  playerId,
   results,
   pagination,
   isLoading,
   isError,
-  isHostingGame = false,
   onChangeSearchParams,
-  onEditQuiz,
-  onHostGame,
 }) => (
   <Page align="start" discover profile>
     <Typography variant="subtitle">Discover Exciting Quizzes</Typography>
@@ -65,13 +57,10 @@ const DiscoverPageUI: FC<DiscoverPageUIProps> = ({
           limit: pagination.limit,
           offset: pagination.offset,
         }}
-        isHostingGame={isHostingGame}
-        playerId={playerId}
         onPagination={(newLimit, newOffset) =>
           onChangeSearchParams({ limit: newLimit, offset: newOffset })
         }
-        onEdit={onEditQuiz}
-        onHostGame={onHostGame}
+        isPublic
       />
     ) : (
       <LoadingSpinner />

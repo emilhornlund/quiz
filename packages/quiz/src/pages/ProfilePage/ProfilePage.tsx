@@ -19,7 +19,7 @@ const ProfilePage: FC = () => {
 
   const { player, setPlayer } = useAuthContext()
 
-  const { updateCurrentPlayer, getCurrentPlayerQuizzes, createGame } =
+  const { updateCurrentPlayer, getCurrentPlayerQuizzes } =
     useQuizServiceClient()
 
   const [searchParams, setSearchParams] = useState<{
@@ -51,15 +51,6 @@ const ProfilePage: FC = () => {
     }
   }
 
-  const [isHostingGame, setIsHostingGame] = useState(false)
-
-  const handleCreateGame = (quizId: string): void => {
-    setIsHostingGame(true)
-    createGame(quizId)
-      .then((response) => navigate(`/game?gameID=${response.id}`))
-      .finally(() => setIsHostingGame(false))
-  }
-
   return (
     <ProfilePageUI
       player={player}
@@ -71,14 +62,11 @@ const ProfilePage: FC = () => {
       }}
       isLoading={isQuizzesLoading}
       isError={isQuizzesError}
-      isHostingGame={isHostingGame}
       onNicknameChange={handleNicknameChange}
       onChangeSearchParams={(params) =>
         setSearchParams({ ...searchParams, ...params })
       }
       onCreateQuiz={() => navigate('/quiz/create')}
-      onEditQuiz={(quizID) => navigate(`/quiz/details/${quizID}/edit`)}
-      onHostGame={handleCreateGame}
     />
   )
 }
