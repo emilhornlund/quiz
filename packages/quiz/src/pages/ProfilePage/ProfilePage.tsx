@@ -77,7 +77,7 @@ const ProfilePage: FC = () => {
         setSearchParams({ ...searchParams, ...params })
       }
       onCreateQuiz={() => navigate('/quiz/create')}
-      onEditQuiz={(quizID) => navigate(`/quiz/${quizID}`)}
+      onEditQuiz={(quizID) => navigate(`/quiz/details/${quizID}/edit`)}
       onHostGame={handleCreateGame}
     />
   )

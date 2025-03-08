@@ -7,9 +7,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
-  CreateQuizPage,
   DiscoverPage,
-  EditQuizPage,
   ErrorPage,
   GamePage,
   HomePage,
@@ -61,22 +59,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/quiz/create',
-        element: <CreateQuizPage />,
-      },
-      {
-        path: '/quiz/:quizId',
-        element: <EditQuizPage />,
-      },
-      {
-        path: '/beta/quiz/create',
         element: <QuizCreatorPage />,
       },
       {
-        path: '/beta/quiz/details/:quizId',
+        path: '/quiz/details/:quizId',
         element: <QuizDetailsPage />,
       },
       {
-        path: '/beta/quiz/details/:quizId/edit',
+        path: '/quiz/details/:quizId/edit',
         element: <QuizCreatorPage />,
       },
     ],

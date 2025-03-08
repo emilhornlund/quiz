@@ -42,7 +42,7 @@ const QuizDetailsPage: FC = () => {
 
   const handleEditQuiz = () => {
     if (quizId) {
-      navigate(`/beta/quiz/details/${quizId}/edit`)
+      navigate(`/quiz/details/${quizId}/edit`)
     }
   }
 

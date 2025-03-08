@@ -60,7 +60,7 @@ const DiscoverPage: FC = () => {
       onChangeSearchParams={(params) =>
         setSearchParams({ ...searchParams, ...params })
       }
-      onEditQuiz={(quizID) => navigate(`/quiz/${quizID}`)}
+      onEditQuiz={(quizID) => navigate(`/quiz/details/${quizID}/edit`)}
       onHostGame={handleCreateGame}
     />
   )
