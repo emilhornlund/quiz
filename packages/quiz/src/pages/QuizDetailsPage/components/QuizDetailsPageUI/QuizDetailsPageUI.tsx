@@ -1,0 +1,180 @@
+import {
+  faCalendarCheck,
+  faCalendarPlus,
+  faCircleQuestion,
+  faEye,
+  faGamepad,
+  faIcons,
+  faLanguage,
+  faPen,
+  faPlay,
+  faTrash,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { QuizResponseDto } from '@quiz/common'
+import { format } from 'date-fns'
+import React, { FC, useState } from 'react'
+
+import {
+  Button,
+  ConfirmDialog,
+  LoadingSpinner,
+  Page,
+  ResponsiveImage,
+  Typography,
+} from '../../../../components'
+import {
+  GameModeLabels,
+  LanguageLabels,
+  QuizCategoryLabels,
+  QuizVisibilityLabels,
+} from '../../../../models/labels.ts'
+
+import styles from './QuizDetailsPageUI.module.scss'
+
+export interface QuizDetailsPageUIProps {
+  quiz?: QuizResponseDto
+  isLoadingQuiz?: boolean
+  isHostGameLoading?: boolean
+  isDeleteQuizLoading?: boolean
+  onHostGame: () => void
+  onEditQuiz: () => void
+  onDeleteQuiz: () => void
+}
+
+const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
+  quiz,
+  isLoadingQuiz,
+  isHostGameLoading,
+  isDeleteQuizLoading,
+  onHostGame,
+  onEditQuiz,
+  onDeleteQuiz,
+}) => {
+  const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false)
+
+  const [showConfirmHostGameModal, setShowConfirmHostGameModal] =
+    useState<boolean>(false)
+
+  if (!quiz || isLoadingQuiz) {
+    return (
+      <Page align="start" height="full" profile>
+        <LoadingSpinner />
+      </Page>
+    )
+  }
+
+  return (
+    <Page
+      align="start"
+      height="full"
+      header={
+        <>
+          <Button
+            id="delete-quiz-button"
+            type="button"
+            kind="destructive"
+            size="small"
+            value="Delete"
+            icon={faTrash}
+            onClick={() => setShowConfirmDeleteDialog(true)}
+          />
+          <Button
+            id="edit-quiz-button"
+            type="button"
+            kind="primary"
+            size="small"
+            value="Edit"
+            icon={faPen}
+            onClick={onEditQuiz}
+          />
+        </>
+      }
+      profile>
+      <Typography variant="subtitle" size="medium">
+        {quiz.title}
+      </Typography>
+
+      {quiz.description && (
+        <Typography variant="text" size="medium">
+          {quiz.description}
+        </Typography>
+      )}
+
+      {quiz.imageCoverURL && <ResponsiveImage imageURL={quiz.imageCoverURL} />}
+
+      <div className={styles.details}>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faEye} />
+          {QuizVisibilityLabels[quiz.visibility]}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faIcons} />
+          {QuizCategoryLabels[quiz.category]}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faLanguage} />
+          {LanguageLabels[quiz.languageCode]}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faGamepad} />
+          {GameModeLabels[quiz.mode]}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faCircleQuestion} />
+          {quiz.numberOfQuestions}{' '}
+          {quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+        </div>
+        <div
+          className={styles.item}
+          title={`Created ${format(quiz.created, 'y-LL-dd HH:mm:ss')}`}>
+          <FontAwesomeIcon icon={faCalendarPlus} />
+          {format(quiz.created, 'y-LL-dd HH:mm')}
+        </div>
+        <div
+          className={styles.item}
+          title={`Updated ${format(quiz.updated, 'y-LL-dd HH:mm:ss')}`}>
+          <FontAwesomeIcon icon={faCalendarCheck} />
+          {format(quiz.updated, 'y-LL-dd HH:mm')}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faUser} />
+          {quiz.author.name ?? 'Unknown'}
+        </div>
+      </div>
+
+      <div className={styles.actions}>
+        <Button
+          id="host-game-button"
+          type="button"
+          kind="call-to-action"
+          value="Host Game"
+          icon={faPlay}
+          onClick={() => setShowConfirmHostGameModal(true)}
+        />
+      </div>
+
+      <ConfirmDialog
+        title="Host Game"
+        message="Are you sure you want to start hosting a new game? Players will be able to join as soon as the game starts."
+        open={showConfirmHostGameModal}
+        loading={isHostGameLoading}
+        onConfirm={onHostGame}
+        onClose={() => setShowConfirmHostGameModal(false)}
+      />
+
+      <ConfirmDialog
+        title="Delete Quiz"
+        message="Are you sure you want to delete this quiz?"
+        open={showConfirmDeleteDialog}
+        loading={isDeleteQuizLoading}
+        onConfirm={onDeleteQuiz}
+        onClose={() => setShowConfirmDeleteDialog(false)}
+        destructive
+      />
+    </Page>
+  )
+}
+
+export default QuizDetailsPageUI

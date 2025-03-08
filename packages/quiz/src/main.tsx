@@ -17,6 +17,7 @@ import {
   PlayerLinkPage,
   ProfilePage,
   QuizCreatorPage,
+  QuizDetailsPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: '/beta/quiz/create',
         element: <QuizCreatorPage />,
+      },
+      {
+        path: '/beta/quiz/details/:quizId',
+        element: <QuizDetailsPage />,
       },
       {
         path: '/beta/quiz/details/:quizId/edit',

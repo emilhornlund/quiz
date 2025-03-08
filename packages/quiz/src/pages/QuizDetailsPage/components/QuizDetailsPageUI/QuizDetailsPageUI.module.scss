@@ -1,0 +1,85 @@
+@import '../../../../styles/colors';
+@import '../../../../styles/helpers';
+
+.details {
+  display: grid;
+  border-style: solid;
+  border-color: $white-1-50;
+  background-color: $white-1-80;
+
+  @include mobile {
+    grid-template-columns: 1fr 1fr;
+    gap: $mobile-narrow-layout-gutter;
+    width: 100%;
+    border-width: pxToRem(2px);
+    border-radius: $mobile-narrow-layout-gutter;
+    padding: $mobile-narrow-layout-gutter;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: $tablet-narrow-layout-gutter;
+    width: $tablet-width;
+    border-width: pxToRem(3px);
+    border-radius: $tablet-narrow-layout-gutter;
+    padding: $tablet-narrow-layout-gutter;
+  }
+
+  @include desktop {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: $desktop-narrow-layout-gutter;
+    width: $tablet-width;
+    border-width: pxToRem(4px);
+    border-radius: $desktop-narrow-layout-gutter;
+    padding: $desktop-narrow-layout-gutter;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    color: $gray-4;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include mobile {
+      gap: calc($mobile-narrow-layout-gutter * 0.5);
+
+      @include fontSize(16px);
+    }
+
+    @include tablet {
+      gap: calc($tablet-narrow-layout-gutter * 0.5);
+
+      @include fontSize(20px);
+    }
+
+    @include desktop {
+      gap: calc($desktop-narrow-layout-gutter * 0.5);
+
+      @include fontSize(18px);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  @include mobile {
+    column-gap: $mobile-narrow-layout-gutter;
+    width: 100%;
+  }
+
+  @include tablet {
+    column-gap: $tablet-narrow-layout-gutter;
+    width: $tablet-width;
+  }
+
+  @include desktop {
+    column-gap: $desktop-narrow-layout-gutter;
+    width: $tablet-width;
+  }
+}
