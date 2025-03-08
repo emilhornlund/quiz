@@ -38,4 +38,23 @@
   @include desktop {
     row-gap: $desktop-narrow-layout-gutter;
   }
+
+  .editorToggleSection {
+    display: flex;
+    flex-direction: column;
+    row-gap: $desktop-narrow-layout-gutter;
+
+    .divider {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid $white;
+    }
+
+    .toggleButtonWrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }

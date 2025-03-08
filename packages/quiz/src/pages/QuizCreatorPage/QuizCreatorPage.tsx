@@ -193,6 +193,7 @@ const QuizCreatorPage: FC = () => {
       allQuestionsValid={allQuestionsValid}
       selectedQuestion={selectedQuestion}
       selectedQuestionIndex={selectedQuestionIndex}
+      onSetQuestions={setQuestions}
       onSelectedQuestionIndex={selectQuestion}
       onAddQuestion={handleAddQuestion}
       onQuestionValueChange={setQuestionValue}

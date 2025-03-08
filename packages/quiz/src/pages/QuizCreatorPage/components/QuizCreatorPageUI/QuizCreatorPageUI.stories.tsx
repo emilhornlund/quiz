@@ -20,6 +20,7 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
 
   const {
     questions,
+    setQuestions,
     allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,
@@ -60,6 +61,7 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
       allQuestionsValid={allQuestionsValid}
       selectedQuestion={selectedQuestion}
       selectedQuestionIndex={selectedQuestionIndex}
+      onSetQuestions={setQuestions}
       onSelectedQuestionIndex={selectQuestion}
       onAddQuestion={handleAddQuestion}
       onQuestionValueChange={setQuestionValue}
@@ -94,6 +96,7 @@ export const Default = {
     allQuestionsValid: false,
     selectedQuestion: undefined,
     selectedQuestionIndex: -1,
+    onSetQuestions: () => undefined,
     onQuizSettingsValueChange: () => undefined,
     onQuizSettingsValidChange: () => undefined,
     onSelectedQuestionIndex: () => undefined,

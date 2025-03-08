@@ -1,4 +1,9 @@
-import { faFloppyDisk, faGear } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCode,
+  faFloppyDisk,
+  faGear,
+  faSliders,
+} from '@fortawesome/free-solid-svg-icons'
 import {
   GameMode,
   QuestionType,
@@ -25,6 +30,7 @@ import {
 } from '../../utils/QuizSettingsDataSource'
 
 import {
+  AdvancedQuestionEditor,
   GameModeSelectionModal,
   QuestionEditor,
   QuestionPicker,
@@ -40,6 +46,7 @@ export interface QuizCreatorPageUIProps {
   onQuizSettingsValueChange: QuizSettingsDataSourceValueChangeFunction
   onQuizSettingsValidChange: QuizSettingsDataSourceValidChangeFunction
   questions: QuestionData[]
+  onSetQuestions: (questions: QuestionData[]) => void
   allQuestionsValid: boolean
   selectedQuestion?: QuestionData
   selectedQuestionIndex: number
@@ -63,6 +70,7 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   onQuizSettingsValueChange,
   onQuizSettingsValidChange,
   questions,
+  onSetQuestions,
   allQuestionsValid,
   selectedQuestion,
   selectedQuestionIndex,
@@ -80,6 +88,9 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   const deviceType = useDeviceSizeType()
 
   const [showQuizSettingsModal, setShowQuizSettingsModal] = useState(false)
+
+  const [showAdvancedQuestionEditor, setShowAdvancedQuestionEditor] =
+    useState(false)
 
   const isValid = useMemo(
     () => allQuestionsValid && allQuizSettingsValid,
@@ -147,7 +158,7 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
           />
         )}
 
-        {gameMode && selectedQuestion && (
+        {gameMode && selectedQuestion && !showAdvancedQuestionEditor && (
           <>
             <QuestionPicker
               questions={questions.map(({ data, validation }) => ({
@@ -171,6 +182,36 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
               onTypeChange={onReplaceQuestion}
             />
           </>
+        )}
+
+        {gameMode && showAdvancedQuestionEditor && (
+          <AdvancedQuestionEditor
+            gameMode={gameMode}
+            questions={questions}
+            onChange={onSetQuestions}
+          />
+        )}
+
+        {gameMode && (
+          <div className={styles.editorToggleSection}>
+            <div className={styles.divider} />
+            <div className={styles.toggleButtonWrapper}>
+              <Button
+                id="toggle-editor-button"
+                type="button"
+                size="small"
+                value={
+                  showAdvancedQuestionEditor
+                    ? 'Show Simple Editor'
+                    : 'Show Advanced Editor'
+                }
+                icon={showAdvancedQuestionEditor ? faSliders : faCode}
+                onClick={() =>
+                  setShowAdvancedQuestionEditor(!showAdvancedQuestionEditor)
+                }
+              />
+            </div>
+          </div>
         )}
       </div>
     </Page>

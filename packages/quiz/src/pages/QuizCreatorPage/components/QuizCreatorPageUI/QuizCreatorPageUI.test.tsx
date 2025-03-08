@@ -27,6 +27,7 @@ describe('QuizCreatorPageUI', () => {
           allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
+          onSetQuestions={() => undefined}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
           onQuestionValueChange={() => undefined}
@@ -57,6 +58,7 @@ describe('QuizCreatorPageUI', () => {
           allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
+          onSetQuestions={() => undefined}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
           onQuestionValueChange={() => undefined}
@@ -180,6 +182,7 @@ describe('QuizCreatorPageUI', () => {
           }}
           allQuestionsValid={false}
           selectedQuestionIndex={0}
+          onSetQuestions={() => undefined}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
           onQuestionValueChange={() => undefined}
@@ -210,6 +213,7 @@ describe('QuizCreatorPageUI', () => {
           allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
+          onSetQuestions={() => undefined}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
           onQuestionValueChange={() => undefined}
@@ -256,6 +260,7 @@ describe('QuizCreatorPageUI', () => {
           allQuestionsValid={false}
           selectedQuestion={undefined}
           selectedQuestionIndex={0}
+          onSetQuestions={() => undefined}
           onSelectedQuestionIndex={() => undefined}
           onAddQuestion={() => undefined}
           onQuestionValueChange={() => undefined}

@@ -1,8 +1,10 @@
+export type { AdvancedQuestionEditorProps } from './AdvancedQuestionEditor'
 export type { GameModeSelectionModalProps } from './GameModeSelectionModal'
 export type { QuestionEditorProps } from './QuestionEditor'
 export type { QuestionPickerItem, QuestionPickerProps } from './QuestionPicker'
 export type { QuizSettingsModalProps } from './QuizSettingsModal'
 
+export { default as AdvancedQuestionEditor } from './AdvancedQuestionEditor'
 export { default as GameModeSelectionModal } from './GameModeSelectionModal'
 export { default as QuestionEditor } from './QuestionEditor'
 export { default as QuestionPicker } from './QuestionPicker'
