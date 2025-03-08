@@ -76,6 +76,7 @@ export const createQuestionValidationModel = (
       mode: GameMode.ZeroToOneHundred,
       data: {
         type: QuestionType.Range,
+        correct: 50,
         duration: 60,
       },
       validation: {},

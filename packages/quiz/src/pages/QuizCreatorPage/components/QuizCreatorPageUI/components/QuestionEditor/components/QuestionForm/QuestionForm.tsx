@@ -241,6 +241,16 @@ export const ZeroToOneHundredRangeQuestionForm: FC<
       </div>
       <div className={styles.section}>
         <QuestionField
+          type={QuestionFieldType.RangeCorrect}
+          value={data.correct}
+          min={0}
+          max={100}
+          onChange={(newValue) => onChange('correct', newValue)}
+          onValid={(valid) => onValidChange('correct', valid)}
+        />
+      </div>
+      <div className={styles.section}>
+        <QuestionField
           type={QuestionFieldType.CommonDuration}
           value={data.duration}
           onChange={(newValue) => onChange('duration', newValue)}

@@ -1727,6 +1727,42 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
       <div
         class="label"
       >
+        Correct
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-range-correct-textfield-textfield"
+              id="range-correct-textfield"
+              max="100"
+              min="0"
+              name="range-correct-textfield"
+              placeholder=""
+              type="number"
+              value="71"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutHalf"
+    >
+      <div
+        class="label"
+      >
         Time Limit
       </div>
       <div
