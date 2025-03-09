@@ -554,9 +554,54 @@ describe('QuizController (e2e)', () => {
         })
     })
 
-    it('should fail in retrieving a non authorized quiz', async () => {
+    it('should succeed in retrieving a public quiz', async () => {
       const client = await clientService.findOrCreateClient(uuidv4())
-      const { id } = await quizService.createQuiz(originalData, client.player)
+      const {
+        id,
+        title,
+        description,
+        mode,
+        visibility,
+        languageCode,
+        category,
+        imageCoverURL,
+        created,
+        updated,
+      } = await quizService.createQuiz(originalData, client.player)
+
+      const { token } = await authService.authenticate({ clientId: uuidv4() })
+
+      return supertest(app.getHttpServer())
+        .get(`/api/quizzes/${id}`)
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id,
+            title,
+            description,
+            mode,
+            visibility,
+            languageCode,
+            category,
+            imageCoverURL,
+            numberOfQuestions: originalData.questions.length,
+            author: {
+              id: client.player._id,
+              name: client.player.nickname,
+            },
+            created: created.toISOString(),
+            updated: updated.toISOString(),
+          })
+        })
+    })
+
+    it('should fail in retrieving a private quiz', async () => {
+      const client = await clientService.findOrCreateClient(uuidv4())
+      const { id } = await quizService.createQuiz(
+        { ...originalData, visibility: QuizVisibility.Private },
+        client.player,
+      )
 
       const { token } = await authService.authenticate({ clientId: uuidv4() })
 

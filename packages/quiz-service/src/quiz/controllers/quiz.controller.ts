@@ -157,7 +157,7 @@ export class QuizController {
    * @returns {Promise<QuizResponse>} The requested quiz.
    */
   @Get(':quizId')
-  @AuthorizedQuiz()
+  @AuthorizedQuiz({ allowPublic: true })
   @ApiOperation({
     summary: 'Retrieve a quiz',
     description: 'Retrieves an existing quiz by its unique ID.',
