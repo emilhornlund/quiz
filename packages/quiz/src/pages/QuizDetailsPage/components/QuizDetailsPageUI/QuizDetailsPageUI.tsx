@@ -35,6 +35,7 @@ import styles from './QuizDetailsPageUI.module.scss'
 
 export interface QuizDetailsPageUIProps {
   quiz?: QuizResponseDto
+  isOwner?: boolean
   isLoadingQuiz?: boolean
   isHostGameLoading?: boolean
   isDeleteQuizLoading?: boolean
@@ -45,6 +46,7 @@ export interface QuizDetailsPageUIProps {
 
 const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
   quiz,
+  isOwner = false,
   isLoadingQuiz,
   isHostGameLoading,
   isDeleteQuizLoading,
@@ -70,27 +72,30 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
       align="start"
       height="full"
       header={
-        <>
-          <Button
-            id="delete-quiz-button"
-            type="button"
-            kind="destructive"
-            size="small"
-            value="Delete"
-            icon={faTrash}
-            onClick={() => setShowConfirmDeleteDialog(true)}
-          />
-          <Button
-            id="edit-quiz-button"
-            type="button"
-            kind="primary"
-            size="small"
-            value="Edit"
-            icon={faPen}
-            onClick={onEditQuiz}
-          />
-        </>
+        isOwner && (
+          <>
+            <Button
+              id="delete-quiz-button"
+              type="button"
+              kind="destructive"
+              size="small"
+              value="Delete"
+              icon={faTrash}
+              onClick={() => setShowConfirmDeleteDialog(true)}
+            />
+            <Button
+              id="edit-quiz-button"
+              type="button"
+              kind="primary"
+              size="small"
+              value="Edit"
+              icon={faPen}
+              onClick={onEditQuiz}
+            />
+          </>
+        )
       }
+      discover
       profile>
       <Typography variant="subtitle" size="medium">
         {quiz.title}
