@@ -10,6 +10,7 @@ import { Client } from '../../client/services/models/schemas'
 import { PlayerNotFoundException } from '../exceptions'
 
 import { Player, PlayerModel } from './models/schemas'
+import { generateNickname } from './utils'
 
 const PLAYER_LINK_CODE_PREFIX = 'player-link-code'
 
@@ -45,7 +46,7 @@ export class PlayerService {
 
     const player = await new this.playerModel({
       _id: uuidv4(),
-      nickname: '',
+      nickname: generateNickname(),
       created,
       modified: created,
     }).save()

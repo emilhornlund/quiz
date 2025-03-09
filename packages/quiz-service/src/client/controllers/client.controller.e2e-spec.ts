@@ -46,17 +46,22 @@ describe('ClientController (e2e)', () => {
     it('should succeed in retrieving the associated player from a new authenticated client', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const {
+        token,
+        player: { id, nickname },
+      } = await authService.authenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/client/player')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200)
         .expect((res) => {
-          expect(res.body).toHaveProperty('id')
-          expect(res.body).toHaveProperty('nickname', '')
-          expect(res.body).toHaveProperty('created')
-          expect(res.body).toHaveProperty('modified')
+          expect(res.body).toEqual({
+            id,
+            nickname,
+            created: expect.anything(),
+            modified: expect.anything(),
+          })
         })
     })
 

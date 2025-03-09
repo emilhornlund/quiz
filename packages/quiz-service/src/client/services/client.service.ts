@@ -4,6 +4,7 @@ import * as bcrypt from 'bcryptjs'
 
 import { PlayerService } from '../../player/services'
 import { Player } from '../../player/services/models/schemas'
+import { generateNickname } from '../../player/services/utils'
 import {
   ClientByIdHashNotFoundException,
   ClientByIdNotFoundException,
@@ -56,6 +57,13 @@ export class ClientService {
       }).save()
 
       this.logger.log(`Created client with id '${client._id}.'`)
+    }
+
+    if (!client.player.nickname.trim().length) {
+      client.player = await this.playerService.updatePlayer(
+        client.player._id,
+        generateNickname(),
+      )
     }
 
     return client

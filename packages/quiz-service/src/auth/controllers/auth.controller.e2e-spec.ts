@@ -34,7 +34,7 @@ describe('AuthController (e2e)', () => {
           expect(res.body).toEqual({
             token: expect.anything(),
             client: { id: clientId, name: '' },
-            player: { id: expect.anything(), nickname: '' },
+            player: { id: expect.anything(), nickname: expect.anything() },
           })
           const { sub } = jwtService.verify(res.body.token)
           const isMatch = bcrypt.compareSync(clientId, sub)
@@ -45,7 +45,10 @@ describe('AuthController (e2e)', () => {
     it('should succeed in authenticating an existing client', async () => {
       const clientId = uuidv4()
 
-      const { _id } = await clientService.findOrCreateClient(clientId)
+      const {
+        _id,
+        player: { _id: playerId, nickname },
+      } = await clientService.findOrCreateClient(clientId)
 
       expect(clientId).toEqual(_id)
 
@@ -57,7 +60,7 @@ describe('AuthController (e2e)', () => {
           expect(res.body).toEqual({
             token: expect.anything(),
             client: { id: clientId, name: '' },
-            player: { id: expect.anything(), nickname: '' },
+            player: { id: playerId, nickname },
           })
           const { sub } = jwtService.verify(res.body.token)
           const isMatch = bcrypt.compareSync(_id, sub)
