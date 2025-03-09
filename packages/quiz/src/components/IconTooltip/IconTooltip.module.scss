@@ -1,0 +1,62 @@
+@import '../../styles/colors.scss';
+@import '../../styles/helpers.scss';
+
+.iconTooltipButton {
+  -moz-appearance: none;
+  -o-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  outline: none;
+
+  @include mobile {
+    @include fontSize($mobile-control-normal-font-size);
+  }
+
+  @include tablet {
+    @include fontSize($tablet-control-normal-font-size);
+  }
+
+  @include desktop {
+    @include fontSize($desktop-control-normal-font-size);
+  }
+}
+
+.iconTooltip {
+  display: flex;
+  flex-direction: column;
+  color: $gray-4;
+  z-index: $tooltip-z-index;
+  background-color: $turquoise-1;
+  max-width: $mobile-width;
+
+  @include mobile {
+    @include fontSize($mobile-control-normal-font-size);
+
+    row-gap: $mobile-narrow-layout-gutter * 0.5;
+    padding: $mobile-narrow-layout-gutter * 0.5 $mobile-narrow-layout-gutter;
+    border-radius: $mobile-control-small-border-radius;
+  }
+
+  @include tablet {
+    @include fontSize($tablet-control-normal-font-size);
+
+    row-gap: $tablet-narrow-layout-gutter * 0.5;
+    padding: $tablet-narrow-layout-gutter * 0.5 $tablet-narrow-layout-gutter;
+    border-radius: $tablet-control-small-border-radius;
+  }
+
+  @include desktop {
+    @include fontSize($desktop-control-normal-font-size);
+
+    row-gap: $desktop-narrow-layout-gutter * 0.5;
+    padding: $desktop-narrow-layout-gutter * 0.5 $desktop-narrow-layout-gutter;
+    border-radius: $desktop-control-small-border-radius;
+  }
+
+  ul {
+    margin: 0;
+  }
+}
