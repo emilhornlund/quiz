@@ -1,3 +1,4 @@
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import {
   MediaType,
   QuestionMediaDto,
@@ -12,6 +13,7 @@ import {
 import React, { FC, ReactNode } from 'react'
 
 import { Select, TextField } from '../../../../../../../../components'
+import IconTooltip from '../../../../../../../../components/IconTooltip'
 import {
   MediaTypeLabels,
   QuestionRangeAnswerMarginLabels,
@@ -104,9 +106,10 @@ export type QuestionFieldProps =
 const QuestionFieldWrapper: FC<{
   label: string
   layout?: 'full' | 'half'
+  info?: ReactNode | ReactNode[] | string
   className?: string
   children: ReactNode
-}> = ({ label, layout = 'full', className, children }) => (
+}> = ({ label, layout = 'full', info, className, children }) => (
   <div
     className={classNames(
       styles.questionFieldContainer,
@@ -116,7 +119,10 @@ const QuestionFieldWrapper: FC<{
         'half-exclusive': styles.layoutHalfExclusive,
       }[layout],
     )}>
-    <div className={styles.label}>{label}</div>
+    <div className={styles.label}>
+      <span>{label}</span>
+      {info && <IconTooltip icon={faCircleInfo}>{info}</IconTooltip>}
+    </div>
     <div className={classNames(styles.content, className)}>{children}</div>
   </div>
 )
@@ -125,7 +131,20 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
   switch (props.type) {
     case QuestionFieldType.CommonDuration:
       return (
-        <QuestionFieldWrapper label="Time Limit" layout="half">
+        <QuestionFieldWrapper
+          label="Time Limit"
+          layout="half"
+          info={
+            <>
+              The time limit for answering the question. The allowed values are:
+              <ul>
+                <li>5 seconds</li>
+                <li>30 seconds</li>
+                <li>1 minute</li>
+                <li>2 minutes</li>
+              </ul>
+            </>
+          }>
           <Select
             id="duration-select"
             value={props.value !== undefined ? `${props.value}` : '30'}
@@ -204,7 +223,20 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonPoints:
       return (
-        <QuestionFieldWrapper label="Points" layout="half">
+        <QuestionFieldWrapper
+          label="Points"
+          layout="half"
+          info={
+            <>
+              The maximum number of points awarded for a correct answer. The
+              allowed values are:
+              <ul>
+                <li>Zero Points</li>
+                <li>Standard Points (1000)</li>
+                <li>Double Points (2000)</li>
+              </ul>
+            </>
+          }>
           <Select
             id="points-select"
             value={props.value !== undefined ? `${props.value}` : '1000'}
@@ -266,13 +298,19 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.MultiChoiceOptions:
       return (
-        <QuestionFieldWrapper label="Options" layout="full">
+        <QuestionFieldWrapper
+          label="Options"
+          layout="full"
+          info="The list of possible answers for a question.">
           <MultiChoiceOptions {...props} />
         </QuestionFieldWrapper>
       )
     case QuestionFieldType.RangeCorrect:
       return (
-        <QuestionFieldWrapper label="Correct" layout="half">
+        <QuestionFieldWrapper
+          label="Correct"
+          layout="half"
+          info="The correct value for the range question, which must be within the range of min and max.">
           <TextField
             id="range-correct-textfield"
             type="number"
@@ -288,7 +326,24 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.RangeMargin:
       return (
-        <QuestionFieldWrapper label="Margin" layout="half">
+        <QuestionFieldWrapper
+          label="Margin"
+          layout="half"
+          info={
+            <>
+              Specifies the margin of error allowed for a range question.
+              Determines how close a player’s answer must be to the correct
+              value to be considered correct or partially correct. The margin
+              can be one of the following:
+              <ul>
+                <li>None: Only the exact correct answer is accepted.</li>
+                <li>Low: Accepts answers within ±5% of the correct value. </li>
+                <li>Medium: Accepts answers within ±10%.</li>
+                <li>High: Accepts answers within ±20%. </li>
+                <li>Maximum: Any answer is considered correct.</li>
+              </ul>
+            </>
+          }>
           <Select
             id="range-margin-select"
             value={props.value}
@@ -306,7 +361,10 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.RangeMax:
       return (
-        <QuestionFieldWrapper label="Max" layout="half">
+        <QuestionFieldWrapper
+          label="Max"
+          layout="half"
+          info="The maximum possible value for the range question.">
           <TextField
             id="range-max-textfield"
             type="number"
@@ -320,7 +378,10 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.RangeMin:
       return (
-        <QuestionFieldWrapper label="Min" layout="half">
+        <QuestionFieldWrapper
+          label="Min"
+          layout="half"
+          info="The minimum possible value for the range question.">
           <TextField
             id="range-min-textfield"
             type="number"
@@ -347,6 +408,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Options"
           layout="full"
+          info="The list of allowed typed answers for a question."
           className={styles.optionsContainer}>
           <TypeAnswerOptions {...props} />
         </QuestionFieldWrapper>

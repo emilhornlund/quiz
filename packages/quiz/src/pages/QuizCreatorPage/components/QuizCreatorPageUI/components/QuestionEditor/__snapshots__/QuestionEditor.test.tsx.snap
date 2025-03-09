@@ -14,7 +14,9 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Type
+          <span>
+            Type
+          </span>
         </div>
         <div
           class="content"
@@ -81,7 +83,9 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Question
+          <span>
+            Question
+          </span>
         </div>
         <div
           class="content"
@@ -117,7 +121,9 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Media Type
+          <span>
+            Media Type
+          </span>
         </div>
         <div
           class="content"
@@ -180,7 +186,9 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Media URL
+          <span>
+            Media URL
+          </span>
         </div>
         <div
           class="content"
@@ -214,7 +222,28 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Options
+          <span>
+            Options
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -441,7 +470,28 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Points
+          <span>
+            Points
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -499,7 +549,28 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
         <div
           class="label"
         >
-          Time Limit
+          <span>
+            Time Limit
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -575,7 +646,9 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Type
+          <span>
+            Type
+          </span>
         </div>
         <div
           class="content"
@@ -642,7 +715,9 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Question
+          <span>
+            Question
+          </span>
         </div>
         <div
           class="content"
@@ -678,7 +753,9 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Media Type
+          <span>
+            Media Type
+          </span>
         </div>
         <div
           class="content"
@@ -741,7 +818,9 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Media URL
+          <span>
+            Media URL
+          </span>
         </div>
         <div
           class="content"
@@ -775,7 +854,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Min
+          <span>
+            Min
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -805,7 +905,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Max
+          <span>
+            Max
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -835,7 +956,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Correct
+          <span>
+            Correct
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -867,7 +1009,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Margin
+          <span>
+            Margin
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -939,7 +1102,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Points
+          <span>
+            Points
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -997,7 +1181,28 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
         <div
           class="label"
         >
-          Time Limit
+          <span>
+            Time Limit
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -1073,7 +1278,9 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Type
+          <span>
+            Type
+          </span>
         </div>
         <div
           class="content"
@@ -1140,7 +1347,9 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Question
+          <span>
+            Question
+          </span>
         </div>
         <div
           class="content"
@@ -1176,7 +1385,9 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Media Type
+          <span>
+            Media Type
+          </span>
         </div>
         <div
           class="content"
@@ -1239,7 +1450,9 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Media URL
+          <span>
+            Media URL
+          </span>
         </div>
         <div
           class="content"
@@ -1273,7 +1486,9 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Options
+          <span>
+            Options
+          </span>
         </div>
         <div
           class="content optionsContainer"
@@ -1376,7 +1591,28 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Points
+          <span>
+            Points
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -1434,7 +1670,28 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
         <div
           class="label"
         >
-          Time Limit
+          <span>
+            Time Limit
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -1510,7 +1767,9 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Type
+          <span>
+            Type
+          </span>
         </div>
         <div
           class="content"
@@ -1577,7 +1836,9 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Question
+          <span>
+            Question
+          </span>
         </div>
         <div
           class="content"
@@ -1613,7 +1874,9 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Media Type
+          <span>
+            Media Type
+          </span>
         </div>
         <div
           class="content"
@@ -1676,7 +1939,9 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Media URL
+          <span>
+            Media URL
+          </span>
         </div>
         <div
           class="content"
@@ -1710,7 +1975,28 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Options
+          <span>
+            Options
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content optionsContainer"
@@ -1815,7 +2101,28 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Points
+          <span>
+            Points
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -1873,7 +2180,28 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
         <div
           class="label"
         >
-          Time Limit
+          <span>
+            Time Limit
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -1949,7 +2277,9 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
         <div
           class="label"
         >
-          Question
+          <span>
+            Question
+          </span>
         </div>
         <div
           class="content"
@@ -1985,7 +2315,9 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
         <div
           class="label"
         >
-          Media Type
+          <span>
+            Media Type
+          </span>
         </div>
         <div
           class="content"
@@ -2048,7 +2380,9 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
         <div
           class="label"
         >
-          Media URL
+          <span>
+            Media URL
+          </span>
         </div>
         <div
           class="content"
@@ -2082,7 +2416,28 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
         <div
           class="label"
         >
-          Correct
+          <span>
+            Correct
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
@@ -2118,7 +2473,28 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
         <div
           class="label"
         >
-          Time Limit
+          <span>
+            Time Limit
+          </span>
+          <button
+            class="iconTooltipButton"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-circle-info "
+              data-icon="circle-info"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
         <div
           class="content"
