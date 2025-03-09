@@ -720,6 +720,74 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="questionFieldContainer layoutHalf"
+    >
+      <div
+        class="label"
+      >
+        Margin
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="selectInputContainer selectInputKindPrimary"
+          >
+            <select
+              data-testid="test-range-margin-select-select"
+              id="range-margin-select"
+              name="range-margin-select"
+            >
+              <option
+                value="NONE"
+              >
+                None
+              </option>
+              <option
+                value="LOW"
+              >
+                Low
+              </option>
+              <option
+                value="MEDIUM"
+              >
+                Medium
+              </option>
+              <option
+                value="HIGH"
+              >
+                High
+              </option>
+              <option
+                value="MAXIMUM"
+              >
+                Maximum
+              </option>
+            </select>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down selectIcon"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div
     class="section"

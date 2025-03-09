@@ -105,6 +105,12 @@ export const ClassicRangeQuestionForm: FC<
           onChange={(newValue) => onChange('correct', newValue)}
           onValid={(valid) => onValidChange('correct', valid)}
         />
+        <QuestionField
+          type={QuestionFieldType.RangeMargin}
+          value={data.margin}
+          onChange={(newValue) => onChange('margin', newValue)}
+          onValid={(valid) => onValidChange('margin', valid)}
+        />
       </div>
       <div className={styles.section}>
         <QuestionField
