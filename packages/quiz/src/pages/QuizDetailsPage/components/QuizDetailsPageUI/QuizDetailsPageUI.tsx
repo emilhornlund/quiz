@@ -157,7 +157,7 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
         </div>
         <div className={styles.item}>
           <FontAwesomeIcon icon={faUser} />
-          {quiz.author.name ?? 'Unknown'}
+          {quiz.author.name || 'N/A'}
         </div>
       </div>
 
