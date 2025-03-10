@@ -80,6 +80,7 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
               kind="destructive"
               size="small"
               value="Delete"
+              hideValue="mobile"
               icon={faTrash}
               onClick={() => setShowConfirmDeleteDialog(true)}
             />
@@ -89,8 +90,19 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
               kind="primary"
               size="small"
               value="Edit"
+              hideValue="mobile"
               icon={faPen}
               onClick={onEditQuiz}
+            />
+            <Button
+              id="host-game-button"
+              type="button"
+              kind="call-to-action"
+              size="small"
+              value="Host Game"
+              hideValue="mobile"
+              icon={faPlay}
+              onClick={() => setShowConfirmHostGameModal(true)}
             />
           </>
         )
