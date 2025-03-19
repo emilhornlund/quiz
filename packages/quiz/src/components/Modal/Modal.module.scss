@@ -17,24 +17,49 @@
     width: $mobile-width;
 
     @include mobile {
-      width: 100%;
       padding: $mobile-narrow-layout-gutter;
       row-gap: $mobile-narrow-layout-gutter;
       border-radius: $mobile-border-radius;
     }
 
     @include tablet {
-      width: $mobile-width;
       padding: $tablet-narrow-layout-gutter;
       row-gap: $tablet-narrow-layout-gutter;
       border-radius: $tablet-border-radius;
     }
 
     @include desktop {
-      width: $mobile-width;
       padding: $desktop-narrow-layout-gutter;
       row-gap: $desktop-narrow-layout-gutter;
       border-radius: $desktop-border-radius;
+    }
+
+    &.sizeNormal {
+      @include mobile {
+        width: 100%;
+      }
+
+      @include tablet {
+        width: $mobile-width;
+      }
+
+      @include desktop {
+        width: $mobile-width;
+      }
+    }
+
+    &.sizeLarge {
+      @include mobile {
+        width: 100%;
+      }
+
+      @include tablet {
+        width: $tablet-width;
+      }
+
+      @include desktop {
+        width: $tablet-width;
+      }
     }
 
     .header {

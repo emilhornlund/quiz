@@ -15,7 +15,7 @@ exports[`FilterModal > should render FilterModal 1`] = `
     />
     <div
       aria-labelledby=":r2:"
-      class="modalContainer"
+      class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
       id=":r0:"
       role="dialog"

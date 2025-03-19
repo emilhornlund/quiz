@@ -1605,7 +1605,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
           />
           <div
             aria-labelledby=":r2:"
-            class="modalContainer"
+            class="modalContainer sizeNormal"
             data-floating-ui-focusable=""
             id=":r0:"
             role="dialog"
