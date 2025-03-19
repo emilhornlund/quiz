@@ -13,6 +13,7 @@ import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
 import { GameModule } from '../game'
 import { HealthModule } from '../health'
+import { MediaModule } from '../media'
 import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
@@ -47,6 +48,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         JWT_SECRET: Joi.string(),
         JWT_PRIVATE_KEY_PATH: Joi.string(),
         JWT_PUBLIC_KEY_PATH: Joi.string(),
+        PEXELS_API_KEY: Joi.string(),
       }),
       isGlobal: true,
     }),
@@ -128,6 +130,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     ClientModule,
     GameModule,
     HealthModule,
+    MediaModule,
     PlayerModule,
     QuizModule,
   ],

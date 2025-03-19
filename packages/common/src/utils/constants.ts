@@ -49,3 +49,8 @@ export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/
 
 /* Quiz Pagination */
 export const DEFAULT_QUIZ_PAGINATION_LIMIT = 5
+
+/* Media Search Term */
+export const MEDIA_SEARCH_TERM_MIN_LENGTH = 2
+export const MEDIA_SEARCH_TERM_MAX_LENGTH = 20
+export const MEDIA_SEARCH_TERM_REGEX = /^[a-zA-Z0-9_ ]{2,20}$/
