@@ -15,7 +15,6 @@ import {
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
 
-import { Public } from '../../auth/decorators'
 import { MediaService } from '../services'
 
 import { ApiMediaPhotoSearchPageFilter } from './decorators/api'
@@ -42,7 +41,6 @@ export class MediaController {
    *
    * @returns A paginated list of photos matching the search criteria.
    */
-  @Public()
   @Get('/photos')
   @ApiOperation({
     summary: 'Search for media photos',

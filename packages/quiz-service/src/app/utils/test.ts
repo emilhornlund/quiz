@@ -3,14 +3,36 @@ import { getConnectionToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Connection } from 'mongoose'
 
+import { PexelsMediaSearchService } from '../../media/services'
 import { AppModule } from '../app.module'
 
 import { configureApp } from './bootstrap'
 
+const mockPexelsMediaSearchService = {
+  searchPhotos: async () =>
+    Promise.resolve({
+      photos: [
+        {
+          photoURL:
+            'https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+          thumbnailURL:
+            'https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=280',
+          alt: 'Lush green terraced rice fields with a rustic hut under soft sunlight.',
+        },
+      ],
+      total: 1,
+      limit: 10,
+      offset: 0,
+    }),
+}
+
 export async function createTestApp(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
-  }).compile()
+  })
+    .overrideProvider(PexelsMediaSearchService)
+    .useValue(mockPexelsMediaSearchService)
+    .compile()
 
   const app = moduleFixture.createNestApplication()
   configureApp(app)
