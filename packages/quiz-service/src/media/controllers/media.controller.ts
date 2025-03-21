@@ -13,6 +13,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { Throttle } from '@nestjs/throttler'
 
 import { Public } from '../../auth/decorators'
 import { MediaService } from '../services'
@@ -56,6 +57,11 @@ export class MediaController {
     description: 'Unauthorized access to the endpoint.',
   })
   @HttpCode(HttpStatus.OK)
+  @Throttle({
+    short: { limit: 1, ttl: 1000 },
+    medium: { limit: 3, ttl: 10000 },
+    long: { limit: 10, ttl: 60000 },
+  })
   public searchMedia(
     @Query(new ValidationPipe({ transform: true }))
     filter: ApiMediaPhotoSearchPageFilter,

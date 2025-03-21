@@ -135,9 +135,11 @@ const isTestEnv = process.env.NODE_ENV === 'test'
                   limit: 100,
                 },
               ],
-              storage: new ThrottlerStorageRedisService(
-                `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
-              ),
+              storage: new ThrottlerStorageRedisService({
+                host: config.get('REDIS_HOST'),
+                port: config.get('REDIS_PORT'),
+                db: Number(config.get('REDIS_DB')),
+              }),
             }),
           }),
         ]),
