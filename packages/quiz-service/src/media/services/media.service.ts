@@ -1,7 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable, Logger } from '@nestjs/common'
 import { PaginatedMediaPhotoSearchDto } from '@quiz/common'
 
+import { Cacheable } from '../../app/cache'
+
 import { PexelsMediaSearchService } from './pexels-media-search.service'
+
+const CACHE_PHOTOS_TTL = 60 * 60 // 1h in seconds
 
 /**
  * Service for managing media-related operations.
@@ -11,10 +16,12 @@ export class MediaService {
   /**
    * Initializes the MediaService.
    *
+   * @param cacheManager - The cache manager used for caching responses.
    * @param pexelsMediaSearchService - The service for fetching photos from the Pexels API.
    * @param logger - Logger instance for debugging and monitoring.
    */
   constructor(
+    @Inject(CACHE_MANAGER) public readonly cacheManager: Cache,
     private readonly pexelsMediaSearchService: PexelsMediaSearchService,
     private readonly logger: Logger = new Logger(MediaService.name),
   ) {}
@@ -28,6 +35,7 @@ export class MediaService {
    *
    * @returns A paginated response containing the search results.
    */
+  @Cacheable(CACHE_PHOTOS_TTL)
   public async searchPhotos(
     search?: string,
     limit: number = 10,

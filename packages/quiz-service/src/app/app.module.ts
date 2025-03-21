@@ -1,5 +1,7 @@
+import { createKeyv } from '@keyv/redis'
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import { BullModule } from '@nestjs/bullmq'
+import { CacheModule } from '@nestjs/cache-manager'
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
@@ -95,6 +97,19 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         }
       },
       inject: [ConfigService],
+    }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService<EnvironmentVariables>) => ({
+        stores: [
+          createKeyv({
+            url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+            database: Number(config.get('REDIS_DB')),
+          }),
+        ],
+      }),
+      inject: [ConfigService],
+      isGlobal: true,
     }),
     ...(isTestEnv
       ? []
