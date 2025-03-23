@@ -1,3 +1,6 @@
+import { unlink } from 'node:fs/promises'
+import { join } from 'path'
+
 import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
@@ -49,6 +52,67 @@ describe('MediaController (e2e)', () => {
     it('should return a 401 error when the request is unauthorized', async () => {
       return supertest(app.getHttpServer())
         .get('/api/media/photos')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
+  describe('/api/media/photos (POST)', () => {
+    test.each([['gif'], ['jpeg'], ['jpg'], ['png'], ['tiff'], ['webp']])(
+      'should succeed in uploading a %s image',
+      async (extension) => {
+        const { token } = await authService.authenticate({ clientId: uuidv4() })
+
+        await supertest(app.getHttpServer())
+          .post('/api/media/photos')
+          .set({ Authorization: `Bearer ${token}` })
+          .attach(
+            'file',
+            join(__dirname, `../../../test/assets/photo.${extension}`),
+          )
+          .expect(201)
+          .expect((res) => {
+            expect(res.body).toEqual({
+              filename: expect.stringMatching(/^.*\.webp$/),
+            })
+            return unlink(
+              join(
+                __dirname,
+                '../../../',
+                process.env.UPLOAD_DIRECTORY,
+                `/${res.body.filename}`,
+              ),
+            )
+          })
+      },
+    )
+
+    it('should fail in uploading a non image file', async () => {
+      const { token } = await authService.authenticate({ clientId: uuidv4() })
+
+      return supertest(app.getHttpServer())
+        .post('/api/media/photos')
+        .set({ Authorization: `Bearer ${token}` })
+        .attach('file', join(__dirname, '../../../test/assets/empty.txt'))
+        .expect(422)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unable to process image file',
+            status: 422,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return a 401 error when the request is unauthorized', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/media/photos')
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({

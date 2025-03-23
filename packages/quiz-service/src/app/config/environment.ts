@@ -10,4 +10,5 @@ export interface EnvironmentVariables {
   JWT_PRIVATE_KEY_PATH: string
   JWT_PUBLIC_KEY_PATH: string
   PEXELS_API_KEY: string
+  UPLOAD_DIRECTORY: string
 }

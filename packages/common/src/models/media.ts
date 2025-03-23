@@ -42,3 +42,13 @@ export interface PaginatedMediaPhotoSearchDto {
    */
   offset: number
 }
+
+/**
+ * Response returned after uploading a photo.
+ */
+export interface MediaUploadPhotoResponseDto {
+  /**
+   * The filename of the uploaded and processed image (converted to .webp).
+   */
+  filename: string
+}
