@@ -1,5 +1,6 @@
 export interface EnvironmentVariables {
   SERVER_PORT: number
+  SERVER_ALLOW_ORIGIN: string
   REDIS_HOST: string
   REDIS_PORT: number
   REDIS_DB: number
