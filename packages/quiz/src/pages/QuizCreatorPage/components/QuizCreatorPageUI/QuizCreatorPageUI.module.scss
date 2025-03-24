@@ -44,6 +44,18 @@
     flex-direction: column;
     row-gap: $desktop-narrow-layout-gutter;
 
+    @include mobile {
+      padding-bottom: $mobile-narrow-layout-gutter;
+    }
+
+    @include tablet {
+      padding-bottom: $tablet-narrow-layout-gutter;
+    }
+
+    @include desktop {
+      padding-bottom: $desktop-narrow-layout-gutter;
+    }
+
     .divider {
       display: flex;
       flex-direction: column;
