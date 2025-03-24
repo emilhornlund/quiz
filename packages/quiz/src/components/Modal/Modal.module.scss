@@ -104,7 +104,8 @@
     .content {
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
 
       @include mobile {
         row-gap: $mobile-narrow-layout-gutter;
