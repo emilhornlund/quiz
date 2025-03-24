@@ -129,6 +129,26 @@ describe('ClientController (e2e)', () => {
         })
     })
 
+    it('should update player nickname containing emojis successfully', async () => {
+      const clientId = uuidv4()
+
+      const { token } = await authService.authenticate({ clientId })
+
+      return supertest(app.getHttpServer())
+        .put('/api/client/player')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ nickname: '🥶🐻' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: expect.anything(),
+            nickname: '🥶🐻',
+            created: expect.anything(),
+            modified: expect.anything(),
+          })
+        })
+    })
+
     it('should handle validation errors for invalid nickname', async () => {
       const clientId = uuidv4()
 

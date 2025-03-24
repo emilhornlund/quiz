@@ -14,7 +14,7 @@ export const GAME_PIN_LENGTH = 6
 /* Player Nickname */
 export const PLAYER_NICKNAME_MIN_LENGTH = 2
 export const PLAYER_NICKNAME_MAX_LENGTH = 20
-export const PLAYER_NICKNAME_REGEX = /^[a-zA-Z0-9_]{2,20}$/
+export const PLAYER_NICKNAME_REGEX = /^[\p{L}\p{N}_\p{Emoji}]{2,20}$/u
 
 /* URL */
 export const URL_REGEX =
