@@ -59,5 +59,10 @@ http {
         return 204;
       }
     }
+
+    location /images/ {
+      proxy_pass ${QUIZ_SERVICE_IMAGES_PROXY}/;
+      add_header Access-Control-Allow-Origin *;
+    }
   }
 }

@@ -15,6 +15,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(env.VITE_QUIZ_SERVICE_URL, ''),
         },
+        [env.VITE_QUIZ_SERVICE_IMAGES_URL]: {
+          target: env.QUIZ_SERVICE_IMAGES_PROXY,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(env.VITE_QUIZ_SERVICE_IMAGES_URL, ''),
+        },
       },
     },
     base: env.VITE_BASE_URL,
