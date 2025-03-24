@@ -1,0 +1,164 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.mediaModal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @include mobile {
+    gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    gap: $tablet-control-normal-layout-gutter;
+  }
+
+  @include desktop {
+    gap: $desktop-control-normal-layout-gutter;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    &.half {
+      @include mobile {
+        width: calc(50% - $mobile-control-normal-layout-gutter * 0.5);
+      }
+
+      @include tablet {
+        width: calc(50% - $tablet-control-normal-layout-gutter * 0.5);
+      }
+
+      @include desktop {
+        width: calc(50% - $desktop-control-normal-layout-gutter * 0.5);
+      }
+    }
+
+    &.preview {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    &.inline, &.search {
+      flex-direction: row;
+      justify-content: space-between;
+
+      @include mobile {
+        column-gap: $mobile-control-normal-layout-gutter;
+      }
+
+      @include tablet {
+        column-gap: $tablet-control-normal-layout-gutter;
+      }
+
+      @include desktop {
+        column-gap: $desktop-control-normal-layout-gutter;
+      }
+
+      .textFieldWrapper {
+        flex: 1;
+      }
+    }
+
+    &.divider {
+      border-top-style: dashed;
+      border-top-color: $gray-1;
+
+      @include mobile {
+        border-top-width: pxToRem(1px);
+        margin: $mobile-control-normal-layout-gutter 0;
+      }
+
+      @include tablet {
+        border-top-width: pxToRem(2px);
+        margin: $tablet-control-normal-layout-gutter 0;
+      }
+
+      @include desktop {
+        border-top-width: pxToRem(3px);
+        margin: $desktop-control-normal-layout-gutter 0;
+      }
+    }
+
+    &.resultsColumn {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+
+      .resultsGrid {
+        display: grid;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 0;
+
+        @include mobile {
+          gap: $mobile-control-normal-layout-gutter;
+          grid-template-columns: 1fr  1fr;
+        }
+
+        @include tablet {
+          gap: $tablet-control-normal-layout-gutter;
+          grid-template-columns: 1fr 1fr  1fr;
+        }
+
+        @include desktop {
+          gap: $desktop-control-normal-layout-gutter;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .itemButton {
+          display: flex;
+          flex-direction: column;
+          -moz-appearance: none;
+          -o-appearance: none;
+          -webkit-appearance: none;
+          appearance: none;
+          background-color: transparent;
+          border: none;
+          font-family: inherit;
+          outline: none;
+          margin: 0;
+          padding: 0;
+          cursor: pointer;
+        }
+      }
+    }
+
+    &.actions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      width: 100%;
+      max-width: $mobile-width;
+
+      @include mobile {
+        column-gap: $mobile-control-normal-layout-gutter;
+      }
+
+      @include tablet {
+        column-gap: $tablet-control-normal-layout-gutter;
+      }
+
+      @include desktop {
+        column-gap: $desktop-control-normal-layout-gutter;
+      }
+
+      div[class*="buttonInputContainer"] {
+        flex: 1;
+      }
+    }
+  }
+}
