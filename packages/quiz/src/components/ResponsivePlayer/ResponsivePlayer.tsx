@@ -3,14 +3,24 @@ import ReactPlayer from 'react-player'
 
 import styles from './ResponsivePlayer.module.scss'
 
-const ResponsivePlayer: FC<{ url: string }> = ({ url }) => (
+export interface ResponsivePlayerProps {
+  url: string
+  playing?: boolean
+  grow?: boolean
+}
+
+const ResponsivePlayer: FC<ResponsivePlayerProps> = ({
+  url,
+  playing = true,
+  grow = true,
+}) => (
   <div className={styles.playerWrapper}>
     <ReactPlayer
       url={url}
       muted={false}
-      width="100%"
-      height="100%"
-      playing
+      width={grow ? '100%' : undefined}
+      height={grow ? '100%' : undefined}
+      playing={playing}
       loop
       controls
       stopOnUnmount

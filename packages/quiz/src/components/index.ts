@@ -21,6 +21,7 @@ export type {
 export type { QuizTableFilterProps } from './QuizTableFilter'
 export type { QuestionResultsProps } from './QuestionResults'
 export type { ResponsiveImageProps } from './ResponsiveImage'
+export type { ResponsivePlayerProps } from './ResponsivePlayer'
 export type { SelectProps } from './Select'
 export type { StreakBadgeProps } from './StreakBadge'
 export type { TextareaProps } from './Textarea'
