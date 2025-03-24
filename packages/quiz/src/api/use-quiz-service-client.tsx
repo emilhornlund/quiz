@@ -2,6 +2,7 @@ import {
   AuthResponseDto,
   CreateGameResponseDto,
   FindGameResponseDto,
+  PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
   PlayerLinkCodeResponseDto,
   PlayerResponseDto,
@@ -404,6 +405,13 @@ export const useQuizServiceClient = () => {
     await apiPost(`/games/${gameID}/answers`, requestBody)
   }
 
+  const searchPhotos = (
+    search?: string,
+  ): Promise<PaginatedMediaPhotoSearchDto> =>
+    apiGet<PaginatedMediaPhotoSearchDto>(
+      `/media/photos?search=${search}&offset=0&limit=50`,
+    )
+
   return {
     getCurrentPlayer,
     updateCurrentPlayer,
@@ -422,5 +430,6 @@ export const useQuizServiceClient = () => {
     leaveGame,
     completeTask,
     submitQuestionAnswer,
+    searchPhotos,
   }
 }
