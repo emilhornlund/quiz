@@ -6,10 +6,14 @@ import {
 import { render } from '@testing-library/react'
 import React from 'react'
 import '@testing-library/jest-dom'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import QuestionField from './QuestionField'
 import { QuestionFieldType } from './types'
+
+vi.mock('react-player', () => ({
+  default: () => <div data-testid="mock-player">Mock Player</div>,
+}))
 
 describe('QuestionField', () => {
   it('renders a duration question field', () => {

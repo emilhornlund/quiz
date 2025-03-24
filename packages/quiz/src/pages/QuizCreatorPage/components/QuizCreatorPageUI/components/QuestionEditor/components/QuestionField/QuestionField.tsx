@@ -21,6 +21,7 @@ import {
 } from '../../../../../../../../models/labels.ts'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
 
+import MediaQuestionField from './MediaQuestionField'
 import MultiChoiceOptions from './MultiChoiceOptions.tsx'
 import styles from './QuestionField.module.scss'
 import TrueFalseOptions from './TrueFalseOptions.tsx'
@@ -104,7 +105,7 @@ export type QuestionFieldProps =
     }
 
 const QuestionFieldWrapper: FC<{
-  label: string
+  label?: string
   layout?: 'full' | 'half'
   info?: ReactNode | ReactNode[] | string
   className?: string
@@ -120,7 +121,7 @@ const QuestionFieldWrapper: FC<{
       }[layout],
     )}>
     <div className={styles.label}>
-      <span>{label}</span>
+      {label && <span>{label}</span>}
       {info && <IconTooltip icon={faCircleInfo}>{info}</IconTooltip>}
     </div>
     <div className={classNames(styles.content, className)}>{children}</div>
@@ -178,6 +179,13 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
     case QuestionFieldType.CommonMedia:
       return (
         <>
+          <QuestionFieldWrapper layout="full">
+            <MediaQuestionField
+              value={props.value}
+              onChange={props.onChange}
+              onValid={props.onValid}
+            />
+          </QuestionFieldWrapper>
           <QuestionFieldWrapper label="Media Type" layout="half">
             <Select
               id="media-type-select"
