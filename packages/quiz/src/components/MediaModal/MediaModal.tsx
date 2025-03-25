@@ -1,22 +1,19 @@
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import {
-  MediaType,
-  PaginatedMediaPhotoSearchDto,
-  QuestionMediaDto,
-  URL_REGEX,
-} from '@quiz/common'
+import { MediaType, QuestionMediaDto, URL_REGEX } from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { MediaTypeLabels } from '../../models/labels.ts'
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'
 import Modal from '../Modal'
-import ResponsiveImage from '../ResponsiveImage'
+import SegmentedControl from '../SegmentedControl'
 import Select from '../Select'
 import TextField from '../TextField'
 
+import { PexelsImageProvider, UploadImageProvider } from './components'
 import styles from './MediaModal.module.scss'
+
+const IMAGE_PROVIDER_PEXELS_VALUE = 'pexels'
+const IMAGE_PROVIDER_UPLOAD_VALUE = 'upload'
 
 export interface MediaModalProps {
   title?: string
@@ -50,28 +47,9 @@ const MediaModal: FC<MediaModalProps> = ({
     [internalValid],
   )
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] =
-    useState<PaginatedMediaPhotoSearchDto>()
-
-  const { searchPhotos } = useQuizServiceClient()
-  const [isLoadingSearch, setIsLoadingSearch] = useState(false)
-
   const handleChangeType = (newType: MediaType) => {
     setInternalType(newType)
     setInternalURL(undefined)
-    setSearchTerm('')
-    setSearchResults(undefined)
-  }
-
-  const handleSearch = () => {
-    if (searchTerm.trim().length) {
-      setSearchResults(undefined)
-      setIsLoadingSearch(true)
-      searchPhotos(searchTerm)
-        .then(setSearchResults)
-        .finally(() => setIsLoadingSearch(false))
-    }
   }
 
   const onApply = () => {
@@ -81,6 +59,8 @@ const MediaModal: FC<MediaModalProps> = ({
       onClose()
     }
   }
+
+  const [selectedImageProvider, setSelectedImageProvider] = useState<string>()
 
   return (
     <Modal title={title || 'Add Media'} size="large" onClose={onClose} open>
@@ -125,48 +105,34 @@ const MediaModal: FC<MediaModalProps> = ({
         {internalType === MediaType.Image && (
           <>
             <div className={classNames(styles.column, styles.divider)} />
-            <div className={classNames(styles.column, styles.search)}>
-              <div className={styles.textFieldWrapper}>
-                <TextField
-                  id="image-search-textfield"
-                  type="text"
-                  kind="secondary"
-                  value={searchTerm}
-                  placeholder="Search"
-                  onChange={(value) => setSearchTerm(value as string)}
-                />
-              </div>
-              <Button
-                id="image-search-button"
-                type="button"
-                kind="call-to-action"
-                icon={faMagnifyingGlass}
-                loading={isLoadingSearch}
-                disabled={!searchTerm.trim().length}
-                onClick={handleSearch}
+            <div className={styles.column}>
+              <SegmentedControl
+                id="selected-provider-segmented-control"
+                kind="secondary"
+                size="small"
+                value={selectedImageProvider}
+                values={[
+                  {
+                    key: IMAGE_PROVIDER_PEXELS_VALUE,
+                    value: IMAGE_PROVIDER_PEXELS_VALUE,
+                    valueLabel: 'Pexels',
+                  },
+                  {
+                    key: IMAGE_PROVIDER_UPLOAD_VALUE,
+                    value: IMAGE_PROVIDER_UPLOAD_VALUE,
+                    valueLabel: 'Upload',
+                  },
+                ]}
+                onChange={setSelectedImageProvider}
               />
             </div>
 
-            {internalType === MediaType.Image &&
-              searchResults?.photos &&
-              !isLoadingSearch && (
-                <div
-                  className={classNames(styles.column, styles.resultsColumn)}>
-                  <div className={styles.resultsGrid}>
-                    {searchResults.photos.map((result) => (
-                      <button
-                        key={result.photoURL}
-                        className={styles.itemButton}
-                        onClick={() => setInternalURL(result.photoURL)}>
-                        <ResponsiveImage
-                          imageURL={result.thumbnailURL}
-                          noBorder
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {selectedImageProvider === IMAGE_PROVIDER_PEXELS_VALUE && (
+              <PexelsImageProvider onChange={setInternalURL} />
+            )}
+            {selectedImageProvider === IMAGE_PROVIDER_UPLOAD_VALUE && (
+              <UploadImageProvider />
+            )}
           </>
         )}
 

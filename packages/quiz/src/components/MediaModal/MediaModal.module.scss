@@ -134,6 +134,13 @@
       }
     }
 
+    &.upload {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     &.actions {
       display: flex;
       flex-direction: row;
