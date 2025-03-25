@@ -299,17 +299,23 @@
     border-radius: $mobile-control-normal-border-radius;
     padding: $mobile-control-normal-layout-gutter;
     column-gap: $mobile-control-normal-layout-gutter;
+
+    @include fontSize($mobile-control-small-font-size);
   }
 
   @include tablet {
     border-radius: $tablet-control-normal-border-radius;
     padding: $tablet-control-normal-layout-gutter;
     column-gap: $tablet-control-normal-layout-gutter;
+
+    @include fontSize($tablet-control-small-font-size);
   }
 
   @include desktop {
     border-radius: $desktop-control-normal-border-radius;
     padding: $desktop-control-normal-layout-gutter;
     column-gap: $desktop-control-normal-layout-gutter;
+
+    @include fontSize($desktop-control-small-font-size);
   }
 }

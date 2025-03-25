@@ -37,12 +37,14 @@
     }
 
     @include tablet {
+      max-height: 90%;
       padding: $tablet-narrow-layout-gutter;
       row-gap: $tablet-narrow-layout-gutter;
       border-radius: $tablet-border-radius;
     }
 
     @include desktop {
+      max-height: 80%;
       padding: $desktop-narrow-layout-gutter;
       row-gap: $desktop-narrow-layout-gutter;
       border-radius: $desktop-border-radius;
