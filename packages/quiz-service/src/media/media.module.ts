@@ -1,4 +1,4 @@
-import { extname, join } from 'path'
+import { extname } from 'path'
 
 import { HttpModule } from '@nestjs/axios'
 import { Logger, Module } from '@nestjs/common'
@@ -35,10 +35,7 @@ import { MediaService, PexelsMediaSearchService } from './services'
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<EnvironmentVariables>) => [
         {
-          rootPath: join(
-            process.cwd(),
-            configService.get<string>('UPLOAD_DIRECTORY'),
-          ),
+          rootPath: configService.get<string>('UPLOAD_DIRECTORY'),
           serveRoot: '/images',
         },
       ],

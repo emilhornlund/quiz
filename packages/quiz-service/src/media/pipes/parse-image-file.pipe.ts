@@ -45,10 +45,7 @@ export class ParseImageFilePipe
    * @returns The filename of the newly processed image.
    */
   async transform(file: Express.Multer.File): Promise<string> {
-    const outputDirectory = join(
-      process.cwd(),
-      this.configService.get<string>('UPLOAD_DIRECTORY'),
-    )
+    const outputDirectory = this.configService.get<string>('UPLOAD_DIRECTORY')
 
     const originalFilePath = join(outputDirectory, file.filename)
 
