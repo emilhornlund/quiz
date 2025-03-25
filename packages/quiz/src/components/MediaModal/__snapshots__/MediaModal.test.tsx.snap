@@ -174,6 +174,58 @@ exports[`MediaModal > should render a MediaModal with default props 1`] = `
             </div>
           </div>
           <div
+            class="column search"
+          >
+            <div
+              class="textFieldWrapper"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindSecondary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-image-search-textfield-textfield"
+                    id="image-search-textfield"
+                    name="image-search-textfield"
+                    placeholder="Search"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-image-search-button-button"
+                disabled=""
+                id="image-search-button"
+                name="image-search-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-magnifying-glass "
+                  data-icon="magnifying-glass"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
             class="column divider"
           />
           <div

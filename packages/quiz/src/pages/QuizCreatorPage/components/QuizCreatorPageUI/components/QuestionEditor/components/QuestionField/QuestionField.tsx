@@ -1,6 +1,5 @@
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import {
-  MediaType,
   QuestionMediaDto,
   QuestionMultiChoiceOptionDto,
   QuestionRangeAnswerMargin,
@@ -8,14 +7,12 @@ import {
   QUIZ_QUESTION_TEXT_MAX_LENGTH,
   QUIZ_QUESTION_TEXT_MIN_LENGTH,
   QUIZ_QUESTION_TEXT_REGEX,
-  URL_REGEX,
 } from '@quiz/common'
 import React, { FC, ReactNode } from 'react'
 
 import { Select, TextField } from '../../../../../../../../components'
 import IconTooltip from '../../../../../../../../components/IconTooltip'
 import {
-  MediaTypeLabels,
   QuestionRangeAnswerMarginLabels,
   QuestionTypeLabels,
 } from '../../../../../../../../models/labels.ts'
@@ -178,56 +175,13 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonMedia:
       return (
-        <>
-          <QuestionFieldWrapper layout="full">
-            <MediaQuestionField
-              value={props.value}
-              onChange={props.onChange}
-              onValid={props.onValid}
-            />
-          </QuestionFieldWrapper>
-          <QuestionFieldWrapper label="Media Type" layout="half">
-            <Select
-              id="media-type-select"
-              value={props.value?.type ?? 'none'}
-              values={[
-                { key: 'none', value: 'none', valueLabel: 'None' },
-                ...Object.values(MediaType).map((type) => ({
-                  key: type,
-                  value: type,
-                  valueLabel: MediaTypeLabels[type],
-                })),
-              ]}
-              onChange={(value) =>
-                props.onChange(
-                  value === 'none'
-                    ? undefined
-                    : { type: value as MediaType, url: props.value?.url || '' },
-                )
-              }
-              onValid={props.onValid}
-            />
-          </QuestionFieldWrapper>
-          <QuestionFieldWrapper label="Media URL" layout="half">
-            <TextField
-              id="media-url-textfield"
-              type="text"
-              placeholder="URL"
-              value={props.value?.url}
-              regex={{ value: URL_REGEX, message: 'Is not a valid URL' }}
-              required={!!props.value?.type && 'Media URL is required'}
-              disabled={!props.value?.type}
-              onChange={(value) =>
-                props.onChange(
-                  props.value?.type
-                    ? { type: props.value.type, url: value as string }
-                    : undefined,
-                )
-              }
-              onValid={props.onValid}
-            />
-          </QuestionFieldWrapper>
-        </>
+        <QuestionFieldWrapper layout="full">
+          <MediaQuestionField
+            value={props.value}
+            onChange={props.onChange}
+            onValid={props.onValid}
+          />
+        </QuestionFieldWrapper>
       )
     case QuestionFieldType.CommonPoints:
       return (

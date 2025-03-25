@@ -60,7 +60,9 @@ const MediaModal: FC<MediaModalProps> = ({
     }
   }
 
-  const [selectedImageProvider, setSelectedImageProvider] = useState<string>()
+  const [selectedImageProvider, setSelectedImageProvider] = useState<string>(
+    IMAGE_PROVIDER_PEXELS_VALUE,
+  )
 
   return (
     <Modal title={title || 'Add Media'} size="large" onClose={onClose} open>
