@@ -1,3 +1,4 @@
+import { LanguageCode, QuizCategory, QuizVisibility } from '@quiz/common'
 import { useCallback, useMemo, useState } from 'react'
 
 import {
@@ -18,9 +19,16 @@ type QuizSettingsDataSourceReturnType = {
 export const useQuizSettingsDataSource =
   (): QuizSettingsDataSourceReturnType => {
     const [model, setModel] = useState<QuizSettingsDataSourceValidationModel>({
-      data: {},
+      data: {
+        category: QuizCategory.Other,
+        visibility: QuizVisibility.Public,
+        languageCode: LanguageCode.English,
+      },
       validation: {
         title: false,
+        category: true,
+        visibility: true,
+        languageCode: true,
       },
     })
 

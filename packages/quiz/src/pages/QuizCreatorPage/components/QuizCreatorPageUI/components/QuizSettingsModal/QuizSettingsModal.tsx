@@ -146,15 +146,12 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
           <Select
             id="visibility-select"
             kind="secondary"
-            values={[
-              { key: 'none', value: 'none', valueLabel: 'None' },
-              ...Object.values(QuizVisibility).map((visibility) => ({
-                key: visibility,
-                value: visibility,
-                valueLabel: QuizVisibilityLabels[visibility],
-              })),
-            ]}
-            value={visibility || 'none'}
+            values={Object.values(QuizVisibility).map((visibility) => ({
+              key: visibility,
+              value: visibility,
+              valueLabel: QuizVisibilityLabels[visibility],
+            }))}
+            value={visibility}
             onChange={(value) =>
               onValueChange(
                 'visibility',
