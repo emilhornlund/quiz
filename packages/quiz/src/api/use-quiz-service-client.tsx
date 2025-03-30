@@ -2,6 +2,7 @@ import {
   AuthResponseDto,
   CreateGameResponseDto,
   FindGameResponseDto,
+  MediaUploadPhotoResponseDto,
   PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
   PlayerLinkCodeResponseDto,
@@ -412,6 +413,52 @@ export const useQuizServiceClient = () => {
       `/media/photos?search=${search}&offset=0&limit=50`,
     )
 
+  /**
+   * Uploads an image file with progress tracking.
+   *
+   * @param file - The image file to upload.
+   * @param onProgress - Callback that receives upload progress percentage (0–1).
+   *
+   * @returns A promise that resolves with the uploaded image response.
+   */
+  const uploadImage = async (
+    file: File,
+    onProgress: (progress: number) => void,
+  ): Promise<MediaUploadPhotoResponseDto> => {
+    const token = await getToken()
+
+    return new Promise((resolve, reject) => {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const xhr = new XMLHttpRequest()
+      xhr.responseType = 'json'
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100)
+          onProgress(progress)
+        }
+      }
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response as MediaUploadPhotoResponseDto)
+        } else {
+          reject(`Upload failed with status ${xhr.status}`)
+        }
+      }
+
+      xhr.onerror = () => {
+        reject('Upload failed due to a network error')
+      }
+
+      xhr.open('POST', resolveUrl('/media/photos'))
+      xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+      xhr.send(formData)
+    })
+  }
+
   return {
     getCurrentPlayer,
     updateCurrentPlayer,
@@ -431,5 +478,6 @@ export const useQuizServiceClient = () => {
     completeTask,
     submitQuestionAnswer,
     searchPhotos,
+    uploadImage,
   }
 }

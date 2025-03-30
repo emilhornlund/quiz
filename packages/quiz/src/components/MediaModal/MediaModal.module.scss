@@ -103,17 +103,17 @@
 
         @include mobile {
           gap: $mobile-control-normal-layout-gutter;
-          grid-template-columns: 1fr  1fr;
+          grid-template-columns: 1fr 1fr;
         }
 
         @include tablet {
           gap: $tablet-control-normal-layout-gutter;
-          grid-template-columns: 1fr 1fr  1fr;
+          grid-template-columns: 1fr 1fr 1fr;
         }
 
         @include desktop {
           gap: $desktop-control-normal-layout-gutter;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
+          grid-template-columns: 1fr 1fr 1fr;
         }
 
         .itemButton {

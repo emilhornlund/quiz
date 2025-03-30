@@ -65,7 +65,7 @@ const MediaModal: FC<MediaModalProps> = ({
   )
 
   return (
-    <Modal title={title || 'Add Media'} size="large" onClose={onClose} open>
+    <Modal title={title || 'Add Media'} size="normal" onClose={onClose} open>
       <div className={styles.mediaModal}>
         {!imageOnly && (
           <div className={classNames(styles.column, styles.half)}>
@@ -133,7 +133,7 @@ const MediaModal: FC<MediaModalProps> = ({
               <PexelsImageProvider onChange={setInternalURL} />
             )}
             {selectedImageProvider === IMAGE_PROVIDER_UPLOAD_VALUE && (
-              <UploadImageProvider />
+              <UploadImageProvider onChange={setInternalURL} />
             )}
           </>
         )}

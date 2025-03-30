@@ -15,7 +15,7 @@ exports[`MediaModal > should render a MediaModal with default props 1`] = `
     />
     <div
       aria-labelledby=":r2:"
-      class="modalContainer sizeLarge"
+      class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
       id=":r0:"
       role="dialog"

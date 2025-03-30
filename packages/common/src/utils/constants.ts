@@ -18,7 +18,8 @@ export const PLAYER_NICKNAME_REGEX = /^[\p{L}\p{N}_\p{Emoji}]{2,20}$/u
 
 /* URL */
 export const URL_REGEX =
-  /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/
+  /^(https?:\/\/)(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:\d+)?(\/[^\s]*)?$/
+// /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/
 
 /* Quiz Question General */
 export const QUIZ_QUESTION_MIN = 1
@@ -54,3 +55,8 @@ export const DEFAULT_QUIZ_PAGINATION_LIMIT = 5
 export const MEDIA_SEARCH_TERM_MIN_LENGTH = 2
 export const MEDIA_SEARCH_TERM_MAX_LENGTH = 20
 export const MEDIA_SEARCH_TERM_REGEX = /^[a-zA-Z0-9_ ]{2,20}$/
+
+/* Image Upload */
+export const UPLOAD_IMAGE_MIN_FILE_SIZE = 1 // 1 byte
+export const UPLOAD_IMAGE_MAX_FILE_SIZE = 5 * 1024 * 1024 // 5mb
+export const UPLOAD_IMAGE_MIMETYPE_REGEX = /^image\/(gif|jpeg|png|tiff|webp)$/

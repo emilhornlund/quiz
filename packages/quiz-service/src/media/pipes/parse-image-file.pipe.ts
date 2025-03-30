@@ -8,13 +8,15 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import {
+  UPLOAD_IMAGE_MAX_FILE_SIZE,
+  UPLOAD_IMAGE_MIMETYPE_REGEX,
+  UPLOAD_IMAGE_MIN_FILE_SIZE,
+} from '@quiz/common'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../app/config'
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5mb
-const MIMETYPE_REGEX = /^image\/(gif|jpeg|png|tiff|webp)$/
 
 /**
  * Pipe that validates, processes, and converts uploaded image files.
@@ -74,12 +76,19 @@ export class ParseImageFilePipe
    * @private
    */
   private validate(file: Express.Multer.File): void {
-    if (!('mimetype' in file) || !file.mimetype.match(MIMETYPE_REGEX)) {
+    if (
+      !('mimetype' in file) ||
+      !file.mimetype.match(UPLOAD_IMAGE_MIMETYPE_REGEX)
+    ) {
       this.logger.warn(`Invalid file type: ${file.mimetype}`)
       throw new UnprocessableEntityException('Unable to process image file')
     }
 
-    if (!('size' in file) || file.size > MAX_FILE_SIZE) {
+    if (
+      !('size' in file) ||
+      file.size < UPLOAD_IMAGE_MIN_FILE_SIZE ||
+      file.size > UPLOAD_IMAGE_MAX_FILE_SIZE
+    ) {
       this.logger.warn(`Invalid file size: ${file.size}`)
       throw new UnprocessableEntityException('Unable to process image file')
     }
