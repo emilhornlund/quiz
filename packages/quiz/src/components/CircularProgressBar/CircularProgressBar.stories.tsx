@@ -28,6 +28,15 @@ export const SmallCorrect = {
   },
 } satisfies Story
 
+export const SmallSecondary = {
+  args: {
+    progress: 65,
+    kind: CircularProgressBarKind.Secondary,
+    size: CircularProgressBarSize.Small,
+    showPercentage: true,
+  },
+} satisfies Story
+
 export const Medium = {
   args: {
     progress: 65,
@@ -45,6 +54,15 @@ export const MediumCorrect = {
   },
 } satisfies Story
 
+export const MediumSecondary = {
+  args: {
+    progress: 65,
+    kind: CircularProgressBarKind.Secondary,
+    size: CircularProgressBarSize.Medium,
+    showPercentage: true,
+  },
+} satisfies Story
+
 export const Large = {
   args: {
     progress: 65,
@@ -57,6 +75,15 @@ export const LargeCorrect = {
   args: {
     progress: 65,
     kind: CircularProgressBarKind.Correct,
+    size: CircularProgressBarSize.Large,
+    showPercentage: true,
+  },
+} satisfies Story
+
+export const LargeSecondary = {
+  args: {
+    progress: 65,
+    kind: CircularProgressBarKind.Secondary,
     size: CircularProgressBarSize.Large,
     showPercentage: true,
   },

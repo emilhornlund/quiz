@@ -14,6 +14,8 @@ const getCircularProgressBarKindClass = (
       return styles.default
     case CircularProgressBarKind.Correct:
       return styles.correct
+    case CircularProgressBarKind.Secondary:
+      return styles.secondary
   }
 }
 

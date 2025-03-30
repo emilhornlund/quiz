@@ -48,6 +48,18 @@
     }
   }
 
+  &.secondary {
+    .circleBackground {
+      stroke: $white;
+    }
+    .circleProgress {
+      stroke: $blue-1;
+    }
+    .progressText {
+      fill: $gray-2;
+    }
+  }
+
   &.small {
     @include mobile {
       .progressText {
