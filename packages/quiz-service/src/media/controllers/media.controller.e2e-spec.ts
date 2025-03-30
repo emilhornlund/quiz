@@ -79,7 +79,7 @@ describe('MediaController (e2e)', () => {
           .expect(201)
           .expect((res) => {
             expect(res.body).toEqual({
-              filename: expect.stringMatching(/^.*\.webp$/),
+              filename: expect.stringMatching(/^.*\/.*\.webp$/),
             })
             return unlink(
               join(

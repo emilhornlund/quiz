@@ -1,13 +1,18 @@
+import * as fs from 'fs'
 import { unlink } from 'node:fs/promises'
 import { join } from 'path'
 
 import {
+  Inject,
   Injectable,
   Logger,
   PipeTransform,
+  Scope,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { REQUEST } from '@nestjs/core'
 import {
   UPLOAD_IMAGE_MAX_FILE_SIZE,
   UPLOAD_IMAGE_MIMETYPE_REGEX,
@@ -17,6 +22,11 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../app/config'
+import { Client } from '../../client/services/models/schemas'
+
+interface ClientRequest extends Request {
+  client?: Client
+}
 
 /**
  * Pipe that validates, processes, and converts uploaded image files.
@@ -24,17 +34,19 @@ import { EnvironmentVariables } from '../../app/config'
  * It resizes the image based on orientation and converts it to WebP format.
  * The original file is removed after processing.
  */
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ParseImageFilePipe
   implements PipeTransform<Express.Multer.File, Promise<string>>
 {
   /**
    * Creates a new instance of ParseImageFilePipe.
    *
+   * @param request - description here.
    * @param configService - Service to access environment variables.
    * @param logger - Optional logger for error tracking.
    */
   constructor(
+    @Inject(REQUEST) private readonly request: Request,
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly logger: Logger = new Logger(ParseImageFilePipe.name),
   ) {}
@@ -51,7 +63,18 @@ export class ParseImageFilePipe
 
     const originalFilePath = join(outputDirectory, file.filename)
 
-    const newFileName = uuidv4() + '.webp'
+    const client = (this.request as ClientRequest).client
+
+    if (!client) {
+      throw new UnauthorizedException('Unauthorized')
+    }
+
+    const newOutputDirectory = join(outputDirectory, client._id)
+    if (!fs.existsSync(newOutputDirectory)) {
+      fs.mkdirSync(newOutputDirectory)
+    }
+
+    const newFileName = `${client._id}/${uuidv4()}.webp`
     const newFilePath = join(outputDirectory, newFileName)
 
     try {
