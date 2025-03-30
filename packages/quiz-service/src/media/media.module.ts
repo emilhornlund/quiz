@@ -36,7 +36,7 @@ import { MediaService, PexelsMediaSearchService } from './services'
       useFactory: (configService: ConfigService<EnvironmentVariables>) => [
         {
           rootPath: configService.get<string>('UPLOAD_DIRECTORY'),
-          serveRoot: '/images',
+          serveRoot: '/uploads/images',
         },
       ],
       inject: [ConfigService],

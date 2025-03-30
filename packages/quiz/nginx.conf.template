@@ -60,7 +60,7 @@ http {
       }
     }
 
-    location /images/ {
+    location /uploads/images/ {
       proxy_pass ${QUIZ_SERVICE_IMAGES_PROXY}/;
       add_header Access-Control-Allow-Origin *;
     }
