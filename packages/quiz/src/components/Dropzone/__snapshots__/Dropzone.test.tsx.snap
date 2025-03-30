@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dropzone > should render a Dropzone with default props 1`] = `
+<div>
+  <div
+    class="dropzone"
+  >
+    <div
+      class="base"
+      role="presentation"
+      tabindex="0"
+    >
+      <input
+        accept="image/gif,.gif,image/jpeg,.jpeg,.jpg,image/png,.png,image/tiff,.tiff,image/webp,.webp"
+        style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+        tabindex="-1"
+        type="file"
+      />
+      <span>
+        Drag 'n' drop a file here, or click to select one
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Dropzone > should render a Dropzone with progress bar 1`] = `
+<div>
+  <div
+    class="dropzone"
+  >
+    <div
+      class="base"
+      role="presentation"
+      tabindex="0"
+    >
+      <svg
+        class="circularProgressBar secondary medium"
+        height="100"
+        width="100"
+      >
+        <circle
+          class="circleBackground"
+          cx="50"
+          cy="50"
+          fill="transparent"
+          r="45"
+          stroke-width="10"
+        />
+        <circle
+          class="circleProgress"
+          cx="50"
+          cy="50"
+          fill="transparent"
+          r="45"
+          stroke-linecap="round"
+          stroke-width="10"
+          style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 141.3716694115407;"
+        />
+        <text
+          class="progressText"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          x="50%"
+          y="50%"
+        >
+          50
+          %
+        </text>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
