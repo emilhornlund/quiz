@@ -21,7 +21,7 @@ import {
   CLIENT_LOCAL_STORAGE_KEY,
   TOKEN_LOCAL_STORAGE_KEY,
 } from '../utils/constants'
-import { notifySuccess } from '../utils/notification.ts'
+import { notifyError, notifySuccess } from '../utils/notification.ts'
 
 import {
   ApiPostBody,
@@ -443,13 +443,16 @@ export const useQuizServiceClient = () => {
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
+          notifySuccess('Upload successful! Your photo has been uploaded.')
           resolve(xhr.response as MediaUploadPhotoResponseDto)
         } else {
+          notifyError(`Upload failed with status ${xhr.status}`)
           reject(`Upload failed with status ${xhr.status}`)
         }
       }
 
       xhr.onerror = () => {
+        notifyError('Upload failed due to a network error.')
         reject('Upload failed due to a network error')
       }
 

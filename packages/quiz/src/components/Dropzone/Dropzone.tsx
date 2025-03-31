@@ -6,6 +6,7 @@ import React, { FC, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { classNames } from '../../utils/helpers.ts'
+import { notifyWarning } from '../../utils/notification.ts'
 import CircularProgressBar, {
   CircularProgressBarKind,
 } from '../CircularProgressBar'
@@ -24,6 +25,10 @@ const Dropzone: FC<DropzoneProps> = ({ progress, onUpload }) => {
     },
     [onUpload],
   )
+
+  const onDropRejected = useCallback(() => {
+    notifyWarning('Upload failed. The file type or size may be invalid.')
+  }, [])
 
   const {
     getRootProps,
@@ -44,6 +49,7 @@ const Dropzone: FC<DropzoneProps> = ({ progress, onUpload }) => {
     maxSize: UPLOAD_IMAGE_MAX_FILE_SIZE,
     multiple: false,
     onDropAccepted,
+    onDropRejected,
   })
 
   return (
