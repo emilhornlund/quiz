@@ -1,5 +1,5 @@
-import { unlink } from 'node:fs/promises'
-import { join } from 'path'
+import { rm } from 'node:fs/promises'
+import { dirname, join } from 'path'
 
 import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
@@ -81,13 +81,14 @@ describe('MediaController (e2e)', () => {
             expect(res.body).toEqual({
               filename: expect.stringMatching(/^.*\/.*\.webp$/),
             })
-            return unlink(
+            return rm(
               join(
                 __dirname,
                 '../../../',
                 process.env.UPLOAD_DIRECTORY,
-                `/${res.body.filename}`,
+                `/${dirname(res.body.filename)}`,
               ),
+              { recursive: true, force: true },
             )
           })
       },
