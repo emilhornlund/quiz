@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { unlink } from 'node:fs/promises'
+import { rm, unlink } from 'node:fs/promises'
 import { join } from 'path'
 
 import {
@@ -69,9 +69,11 @@ export class ParseImageFilePipe
       throw new UnauthorizedException('Unauthorized')
     }
 
+    let isNewDirectory = false
     const newOutputDirectory = join(outputDirectory, client._id)
     if (!fs.existsSync(newOutputDirectory)) {
       fs.mkdirSync(newOutputDirectory)
+      isNewDirectory = true
     }
 
     const newFileName = `${client._id}/${uuidv4()}.webp`
@@ -81,6 +83,9 @@ export class ParseImageFilePipe
       this.validate(file)
       await this.resizeImage(originalFilePath, newFilePath)
     } catch (error) {
+      if (isNewDirectory) {
+        await rm(newOutputDirectory, { recursive: true, force: true })
+      }
       const { message, stack } = error as Error
       this.logger.error(`Unable to process image file: ${message}`, stack)
       throw new UnprocessableEntityException('Unable to process image file')
