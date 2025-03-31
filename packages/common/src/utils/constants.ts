@@ -58,5 +58,5 @@ export const MEDIA_SEARCH_TERM_REGEX = /^[a-zA-Z0-9_ ]{2,20}$/
 
 /* Image Upload */
 export const UPLOAD_IMAGE_MIN_FILE_SIZE = 1 // 1 byte
-export const UPLOAD_IMAGE_MAX_FILE_SIZE = 5 * 1024 * 1024 // 5mb
+export const UPLOAD_IMAGE_MAX_FILE_SIZE = 20 * 1024 * 1024 // 20mb
 export const UPLOAD_IMAGE_MIMETYPE_REGEX = /^image\/(gif|jpeg|png|tiff|webp)$/
