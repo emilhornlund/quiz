@@ -63,14 +63,14 @@ describe('MediaController (e2e)', () => {
     })
   })
 
-  describe('/api/media/photos (POST)', () => {
+  describe('/api/media/uploads/photos (POST)', () => {
     test.each([['gif'], ['jpeg'], ['jpg'], ['png'], ['tiff'], ['webp']])(
       'should succeed in uploading a %s image',
       async (extension) => {
         const { token } = await authService.authenticate({ clientId: uuidv4() })
 
         await supertest(app.getHttpServer())
-          .post('/api/media/photos')
+          .post('/api/media/uploads/photos')
           .set({ Authorization: `Bearer ${token}` })
           .attach(
             'file',
@@ -98,7 +98,7 @@ describe('MediaController (e2e)', () => {
       const { token } = await authService.authenticate({ clientId: uuidv4() })
 
       return supertest(app.getHttpServer())
-        .post('/api/media/photos')
+        .post('/api/media/uploads/photos')
         .set({ Authorization: `Bearer ${token}` })
         .attach('file', join(__dirname, '../../../test/assets/empty.txt'))
         .expect(422)
@@ -113,7 +113,7 @@ describe('MediaController (e2e)', () => {
 
     it('should return a 401 error when the request is unauthorized', async () => {
       return supertest(app.getHttpServer())
-        .post('/api/media/photos')
+        .post('/api/media/uploads/photos')
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({

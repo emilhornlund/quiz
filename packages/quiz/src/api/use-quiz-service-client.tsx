@@ -456,7 +456,7 @@ export const useQuizServiceClient = () => {
         reject('Upload failed due to a network error')
       }
 
-      xhr.open('POST', resolveUrl('/media/photos'))
+      xhr.open('POST', resolveUrl('/media/uploads/photos'))
       xhr.setRequestHeader('Authorization', `Bearer ${token}`)
       xhr.send(formData)
     })

@@ -88,7 +88,7 @@ export class MediaController {
    *
    * @returns An object containing the new filename of the uploaded and processed image.
    */
-  @Post('/photos')
+  @Post('/uploads/photos')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
     summary: 'Upload a photo',
