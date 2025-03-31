@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -14,6 +15,8 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -22,10 +25,16 @@ import {
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
 
+import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
+import { Client } from '../../client/services/models/schemas'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 
-import { ApiMediaPhotoSearchPageFilter } from './decorators/api'
+import {
+  ApiMediaPhotoSearchPageFilter,
+  ApiUploadedPhotoIdParam,
+} from './decorators/api'
+import { RouteUploadedPhotoIdParam } from './decorators/route'
 import { PaginatedMediaPhotoSearchResponse } from './models'
 import { MediaUploadPhotoResponse } from './models/media-upload-photo.response'
 
@@ -124,5 +133,34 @@ export class MediaController {
     @UploadedFile(ParseImageFilePipe) file: string,
   ): Promise<MediaUploadPhotoResponse> {
     return { filename: file }
+  }
+
+  /**
+   * Deletes an uploaded photo for the authenticated client.
+   *
+   * @param photoId - The unique ID of the uploaded photo to delete.
+   * @param client - The authenticated client requesting the deletion.
+   */
+  @Delete('/uploads/photos/:photoId')
+  @ApiUploadedPhotoIdParam()
+  @ApiOperation({
+    summary: 'Delete an uploaded photo',
+    description: 'Deletes an uploaded photo owned by the authenticated client.',
+  })
+  @ApiNoContentResponse({
+    description: 'Successfully deleted the uploaded photo.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access to the endpoint.',
+  })
+  @ApiNotFoundResponse({
+    description: 'The uploaded photo was not found.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async deleteUploadedPhoto(
+    @RouteUploadedPhotoIdParam() photoId: string,
+    @AuthorizedClientParam() client: Client,
+  ): Promise<void> {
+    return this.mediaService.deleteUploadPhoto(photoId, client)
   }
 }

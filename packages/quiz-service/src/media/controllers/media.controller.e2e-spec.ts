@@ -1,4 +1,4 @@
-import { rm } from 'node:fs/promises'
+import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { dirname, join } from 'path'
 
 import { INestApplication } from '@nestjs/common'
@@ -114,6 +114,67 @@ describe('MediaController (e2e)', () => {
     it('should return a 401 error when the request is unauthorized', async () => {
       return supertest(app.getHttpServer())
         .post('/api/media/uploads/photos')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
+  describe('/api/media/uploads/photos/:photoId (DELETE)', () => {
+    it('should succeed in deleting an uploaded photo', async () => {
+      const clientId = uuidv4()
+      const { token } = await authService.authenticate({ clientId })
+
+      const photoId = uuidv4()
+
+      const srcFile = join(__dirname, `../../../test/assets/photo.webp`)
+      const dstFile = join(
+        __dirname,
+        '../../../',
+        process.env.UPLOAD_DIRECTORY,
+        `/${clientId}/${photoId}.webp`,
+      )
+      await mkdir(dirname(dstFile))
+      await copyFile(srcFile, dstFile)
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/media/uploads/photos/${photoId}`)
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+          return rm(dirname(dstFile), { recursive: true, force: true })
+        })
+    })
+
+    it('should fail in deleting a non existing uploaded photo', async () => {
+      const { token } = await authService.authenticate({ clientId: uuidv4() })
+
+      const photoId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/media/uploads/photos/${photoId}`)
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Uploaded photo was not found by ID '${photoId}'`,
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return a 401 error when the request is unauthorized', async () => {
+      const photoId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/media/uploads/photos/${photoId}`)
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
