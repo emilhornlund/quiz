@@ -13,6 +13,15 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Quiz Service')
     .setVersion('1.0.0')
+    .addTag('auth', 'Operations for user authentication and authorization.')
+    .addTag(
+      'client',
+      'Operations related to client registration and profile management.',
+    )
+    .addTag('game', 'Operations for creating and managing quiz games.')
+    .addTag('media', 'Operations for uploading and retrieving media assets.')
+    .addTag('quiz', 'Operations for creating and managing quiz content.')
+    .addBearerAuth({ type: 'http', name: 'Authorization', in: 'header' })
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api_docs', app, document)

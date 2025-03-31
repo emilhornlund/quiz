@@ -30,7 +30,7 @@ import { PaginatedMediaPhotoSearchResponse } from './models'
 import { MediaUploadPhotoResponse } from './models/media-upload-photo.response'
 
 /**
- * Controller for managing quiz-related operations.
+ * Controller for managing media-related operations.
  */
 @ApiBearerAuth()
 @ApiTags('media')

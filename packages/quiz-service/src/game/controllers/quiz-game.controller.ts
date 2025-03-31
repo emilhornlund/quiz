@@ -1,5 +1,6 @@
 import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -20,6 +21,7 @@ import { CreateGameResponse } from './models/response/create-game.response'
 /**
  * Controller for managing quiz-game-related operations.
  */
+@ApiBearerAuth()
 @ApiTags('quiz', 'game')
 @Controller('/quizzes/:quizId/games')
 export class QuizGameController {

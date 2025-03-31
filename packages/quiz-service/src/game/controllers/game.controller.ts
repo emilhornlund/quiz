@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
@@ -59,6 +60,7 @@ import { FindGameResponse } from './models/response'
  *
  * - Uses the `LegacyAuth` decorator to indicate legacy authentication logic is used.
  */
+@ApiBearerAuth()
 @ApiExtraModels(
   SubmitMultiChoiceQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
