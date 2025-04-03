@@ -1,7 +1,12 @@
 import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../../exceptions'
-import { GameDocument, QuestionTaskAnswer, TaskType } from '../models/schemas'
+import {
+  GameDocument,
+  GameStatus,
+  QuestionTaskAnswer,
+  TaskType,
+} from '../models/schemas'
 
 import { getRedisPlayerParticipantAnswerKey } from './game-redis.utils'
 import { toQuestionTaskAnswerFromString } from './question-answer.utils'
@@ -225,4 +230,5 @@ export async function podiumTaskCompletedCallback(
 
   gameDocument.previousTasks.push(gameDocument.currentTask)
   gameDocument.currentTask = buildQuitTask()
+  gameDocument.status = GameStatus.Completed
 }
