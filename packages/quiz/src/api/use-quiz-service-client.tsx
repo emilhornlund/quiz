@@ -462,6 +462,16 @@ export const useQuizServiceClient = () => {
     })
   }
 
+  /**
+   * Deletes an uploaded photo by its ID.
+   *
+   * @param photoId - The ID of the uploaded photo to delete.
+   *
+   * @returns A promise that resolves when the uploaded photo has been successfully deleted.
+   */
+  const deleteUploadedPhoto = (photoId: string): Promise<void> =>
+    apiDelete<void>(`/media/uploads/photos/${photoId}`)
+
   return {
     getCurrentPlayer,
     updateCurrentPlayer,
@@ -482,5 +492,6 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     searchPhotos,
     uploadImage,
+    deleteUploadedPhoto,
   }
 }
