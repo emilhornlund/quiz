@@ -38,6 +38,12 @@ import {
 
 export type GameDocument = HydratedDocument<Game>
 
+export enum GameStatus {
+  Active = 'ACTIVE',
+  Completed = 'COMPLETED',
+  Expired = 'EXPIRED',
+}
+
 @Schema({ _id: true, collection: 'games' })
 export class Game {
   @Prop({ type: String, required: true })
@@ -48,6 +54,9 @@ export class Game {
 
   @Prop({ type: String, enum: GameMode, required: true })
   mode: GameMode
+
+  @Prop({ type: String, enum: GameStatus, required: true })
+  status: GameStatus
 
   @Prop({ type: String, required: true })
   pin: string

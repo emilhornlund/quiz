@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { Client } from '../../../client/services/models/schemas'
 import { Quiz } from '../../../quiz/services/models/schemas'
-import { Game } from '../models/schemas'
+import { Game, GameStatus } from '../models/schemas'
 
 import { buildLobbyTask } from './task.converter'
 
@@ -27,6 +27,7 @@ export function buildGameModel(
     _id: uuidv4(),
     name: quiz.title,
     mode: quiz.mode,
+    status: GameStatus.Active,
     pin: gamePIN,
     quiz,
     questions: quiz.questions,
