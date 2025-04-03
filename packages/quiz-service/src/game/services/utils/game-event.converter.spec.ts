@@ -416,7 +416,6 @@ function buildGameDocument(
     questions,
     currentTask,
     previousTasks: [],
-    expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
     created: new Date(Date.now()),
   } as GameDocument
 }

@@ -22,7 +22,7 @@ import { Client } from '../../client/services/models/schemas'
 import { Player } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { GameService } from '../services'
-import { Game, TaskType } from '../services/models/schemas'
+import { Game, GameStatus, TaskType } from '../services/models/schemas'
 import { buildLobbyTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {
@@ -106,7 +106,7 @@ describe('GameController (e2e)', () => {
         })
     })
 
-    it('should fail to retrieve a classic mode game if it was created more than 6 hours ago', async () => {
+    it('should fail to retrieve a classic mode game if it has expired', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
         hostClient.player,
@@ -114,9 +114,8 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(gameID, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
         .exec()
 
       const game = await gameModel.findById(gameID).exec()
@@ -135,7 +134,7 @@ describe('GameController (e2e)', () => {
         })
     })
 
-    it('should fail to retrieve a zero to one hundred mode game if it was created more than 6 hours ago', async () => {
+    it('should fail to retrieve a zero to one hundred mode game if it expired', async () => {
       const { id: quizId } = await quizService.createQuiz(
         zeroToOneHundredQuizRequest,
         hostClient.player,
@@ -143,9 +142,8 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(gameID, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
         .exec()
 
       const game = await gameModel.findById(gameID).exec()
@@ -325,9 +323,8 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      const outdatedDate = new Date(Date.now() - 1000) // 1 second ago
       await gameModel
-        .findByIdAndUpdate(gameID, { expires: outdatedDate })
+        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
         .exec()
 
       return supertest(app.getHttpServer())

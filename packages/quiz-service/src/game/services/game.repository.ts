@@ -11,7 +11,7 @@ import {
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
-import { Game, GameDocument } from './models/schemas'
+import { Game, GameDocument, GameStatus } from './models/schemas'
 import { buildGameModel } from './utils'
 
 /**
@@ -45,7 +45,7 @@ export class GameRepository {
     return this.gameModel
       .findOne({
         _id: gameID,
-        ...(active ? { expires: { $gt: new Date(Date.now()) } } : {}),
+        ...(active ? { status: GameStatus.Active } : {}),
       })
       .populate({
         path: 'participants',
@@ -97,7 +97,7 @@ export class GameRepository {
   ): Promise<GameDocument | null> {
     return this.gameModel.findOne({
       pin: gamePIN,
-      ...(active ? { expires: { $gt: new Date(Date.now()) } } : {}),
+      ...(active ? { status: { $eq: GameStatus.Active } } : {}),
     })
   }
 
@@ -150,8 +150,8 @@ export class GameRepository {
   }
 
   /**
-   * Generates a unique 6-digit game PIN. It checks the database to ensure that no other game
-   * with the same PIN was created within the last 6 hours. If such a game exists, it keeps generating
+   * Generates a unique 6-digit game PIN. It checks the database to ensure that no other active game
+   * with the same PIN exists. If such a game exists, it keeps generating
    * new PINs until a unique one is found.
    *
    * @returns {Promise<string>} A Promise that resolves with a unique 6-digit game PIN.

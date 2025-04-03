@@ -93,7 +93,7 @@ export class GameController {
   @ApiOperation({
     summary: 'Retrieve an active game by its PIN',
     description:
-      'Fetches an active game using the provided unique 6-digit game PIN. The game must have been created within the last 6 hours to be considered active.',
+      'Fetches an active game using the provided unique 6-digit game PIN.',
   })
   @ApiQuery({
     name: 'gamePIN',

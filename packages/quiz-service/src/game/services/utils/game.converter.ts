@@ -42,7 +42,6 @@ export function buildGameModel(
     ],
     currentTask: buildLobbyTask(),
     previousTasks: [],
-    expires: new Date(now + 6 * 60 * 60 * 1000),
     created: new Date(now),
   }
 }

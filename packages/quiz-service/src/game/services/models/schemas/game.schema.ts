@@ -101,9 +101,6 @@ export class Game {
     ))[]
 
   @Prop({ type: Date, required: true })
-  expires: Date
-
-  @Prop({ type: Date, required: true })
   created: Date
 }
 

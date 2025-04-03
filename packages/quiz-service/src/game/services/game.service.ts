@@ -91,17 +91,15 @@ export class GameService {
   /**
    * Finds an active game by its unique 6-digit game PIN.
    *
-   * This method searches for a game with the specified `gamePIN` that has been
-   * created within the last 6 hours. If an active game with the given PIN is
-   * found, its ID is returned. Otherwise, an `ActiveGameNotFoundException` is thrown.
+   * This method searches for a game with the specified `gamePIN`. If an active game with the given PIN is found, its
+   * ID is returned. Otherwise, an `ActiveGameNotFoundException` is thrown.
    *
    * @param {string} gamePIN - The unique 6-digit game PIN used to identify the game.
    *
    * @returns {Promise<FindGameResponseDto>} A Promise that resolves to a `FindGameResponseDto` containing the ID
    * of the active game if found.
    *
-   * @throws {ActiveGameNotFoundByGamePINException} if no active game with the specified
-   * `gamePIN` is found within the last 6 hours.
+   * @throws {ActiveGameNotFoundByGamePINException} if no active game with the specified `gamePIN` is found .
    */
   public async findActiveGameByGamePIN(
     gamePIN: string,
@@ -112,8 +110,8 @@ export class GameService {
   }
 
   /**
-   * Adds a player to an active game if the game is found within the last 6 hours and
-   * the nickname is not already taken. Generates a unique token for the joined player.
+   * Adds a player to an active game if the game is found and the nickname is not already taken.
+   * Generates a unique token for the joined player.
    *
    * @param {string} gameID - The unique identifier of the game the player wants to join.
    * @param {Client} client - The client object representing the player joining the game.
@@ -121,8 +119,7 @@ export class GameService {
    *
    * @returns {Promise<void>} A Promise that resolves when the player is successfully added to the game.
    *
-   * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID`
-   * was created in the last 6 hours.
+   * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID` exists.
    * @throws {ClientNotUniqueException} If the client has already joined the game.
    * @throws {NicknameNotUniqueException} If the provided `nickname` is already taken in the game.
    */
