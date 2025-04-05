@@ -1,85 +1,13 @@
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
-import { InjectRedis } from '@nestjs-modules/ioredis'
 import { Job, Queue } from 'bullmq'
-import { Redis } from 'ioredis'
 
+import { GameTaskTransitionService } from './game-task-transition.service'
 import { GameRepository } from './game.repository'
 import { GameDocument, TaskType } from './models/schemas'
-import {
-  getQuestionTaskActiveDuration,
-  getQuestionTaskPendingCallback,
-  getQuestionTaskPendingDuration,
-  leaderboardTaskCompletedCallback,
-  lobbyTaskCompletedCallback,
-  podiumTaskCompletedCallback,
-  questionResultTaskCompletedCallback,
-  questionTaskCompletedCallback,
-} from './utils'
 
 export const TASK_QUEUE_NAME = 'task'
 const TASK_TRANSITION_JOB_NAME = TASK_QUEUE_NAME + 'transition'
-
-type DelayHandler = ((gameDocument: GameDocument) => number) | number
-
-// Transition handlers configuration for each task type and status
-const TransitionHandlers: {
-  [key in TaskType]: {
-    [status in 'pending' | 'active' | 'completed']: {
-      callback?: (gameDocument: GameDocument, redis: Redis) => Promise<void>
-      delay?: DelayHandler
-    }
-  }
-} = {
-  [TaskType.Lobby]: {
-    pending: {
-      delay: 3000,
-    },
-    active: {},
-    completed: {
-      callback: lobbyTaskCompletedCallback,
-      delay: 3000,
-    },
-  },
-  [TaskType.Question]: {
-    pending: {
-      delay: getQuestionTaskPendingDuration,
-      callback: getQuestionTaskPendingCallback,
-    },
-    active: {
-      delay: getQuestionTaskActiveDuration,
-    },
-    completed: {
-      callback: questionTaskCompletedCallback,
-    },
-  },
-  [TaskType.QuestionResult]: {
-    pending: {},
-    active: {},
-    completed: {
-      callback: questionResultTaskCompletedCallback,
-    },
-  },
-  [TaskType.Leaderboard]: {
-    pending: {},
-    active: {},
-    completed: {
-      callback: leaderboardTaskCompletedCallback,
-    },
-  },
-  [TaskType.Podium]: {
-    pending: {},
-    active: {},
-    completed: {
-      callback: podiumTaskCompletedCallback,
-    },
-  },
-  [TaskType.Quit]: {
-    pending: {},
-    active: {},
-    completed: {},
-  },
-}
 
 /**
  * Service responsible for managing task transitions within a game.
@@ -96,14 +24,13 @@ export class GameTaskTransitionScheduler extends WorkerHost {
    *
    * @param taskQueue - Task queue for scheduling deferred transitions.
    * @param gameRepository - Repository for accessing and modifying game data.
-   * @param {Redis} redis - The Redis instance used for managing data synchronization and event handling.
+   * @param gameTaskTransitionService - Service containing logic for determining task callbacks and delays.
    */
   constructor(
     @InjectQueue(TASK_QUEUE_NAME)
     private taskQueue: Queue<GameDocument, void, string>,
     private gameRepository: GameRepository,
-    @InjectRedis()
-    private readonly redis: Redis,
+    private gameTaskTransitionService: GameTaskTransitionService,
   ) {
     super()
   }
@@ -121,15 +48,8 @@ export class GameTaskTransitionScheduler extends WorkerHost {
     const { currentTask } = gameDocument
     const { type, status } = currentTask
 
-    const transitionConfig = TransitionHandlers[type]?.[status]
-    if (!transitionConfig) {
-      this.logger.error(
-        `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${gameDocument._id}`,
-      )
-      return
-    }
-
-    const { delay: delayHandler, callback } = transitionConfig
+    const callback =
+      this.gameTaskTransitionService.getTaskTransitionCallback(gameDocument)
     const nextStatus = GameTaskTransitionScheduler.getNextTaskStatus(status)
 
     this.logger.log(
@@ -153,17 +73,11 @@ export class GameTaskTransitionScheduler extends WorkerHost {
         return
       }
     } else {
-      const delay = GameTaskTransitionScheduler.getDelay(
-        gameDocument,
-        delayHandler,
-      )
+      const delay =
+        this.gameTaskTransitionService.getTaskTransitionDelay(gameDocument)
 
       if (delay > 0) {
-        await this.scheduleDeferredTransition(
-          gameDocument,
-          delayHandler,
-          nextStatus,
-        )
+        await this.scheduleDeferredTransition(gameDocument, delay, nextStatus)
       } else {
         await this.performTransition(gameDocument, nextStatus, callback)
       }
@@ -175,23 +89,18 @@ export class GameTaskTransitionScheduler extends WorkerHost {
    * It sets up a job that will trigger the transition after the delay.
    *
    * @param gameDocument - The current game document.
-   * @param delayHandler - The delay in milliseconds or a function to compute the delay.
+   * @param delay - The transition delay for the current task.
    * @param nextStatus - The status to transition to.
    *
    * @private
    */
   private async scheduleDeferredTransition(
     gameDocument: GameDocument,
-    delayHandler: DelayHandler,
+    delay: number,
     nextStatus: 'active' | 'completed',
   ): Promise<void> {
     const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
-
-    const delay = GameTaskTransitionScheduler.getDelay(
-      gameDocument,
-      delayHandler,
-    )
 
     this.logger.debug(
       `Scheduling deferred transition for task ${type} from status ${status} to ${nextStatus} with delay: ${delay}ms for Game ID: ${_id}`,
@@ -226,7 +135,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
   private async performTransition(
     gameDocument: GameDocument,
     nextStatus: 'active' | 'completed' | undefined,
-    callback?: (gameDocument: GameDocument, redis: Redis) => Promise<void>,
+    callback?: (gameDocument: GameDocument) => Promise<void>,
   ): Promise<void> {
     const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
@@ -245,7 +154,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
             doc.currentTask.status = nextStatus
           }
           if (callback) {
-            await callback(doc, this.redis)
+            await callback(doc)
           }
           return doc
         },
@@ -299,18 +208,8 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       `Performing post-transition actions for task ${type} with status ${status} for Game ID: ${_id}`,
     )
 
-    const transitionConfig = TransitionHandlers[type]?.[status]
-    if (!transitionConfig) {
-      this.logger.error(
-        `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${_id}`,
-      )
-      return
-    }
-
-    const delay = GameTaskTransitionScheduler.getDelay(
-      gameDocument,
-      transitionConfig.delay,
-    )
+    const delay =
+      this.gameTaskTransitionService.getTaskTransitionDelay(gameDocument)
 
     try {
       if (
@@ -345,15 +244,8 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       const nextStatus = GameTaskTransitionScheduler.getNextTaskStatus(status)
 
       try {
-        const transitionConfig = TransitionHandlers[type]?.[status]
-        if (!transitionConfig) {
-          this.logger.error(
-            `No transition configuration found for task type: ${type}, status: ${status} for Game ID: ${gameDocument._id}`,
-          )
-          return
-        }
-
-        const { callback } = transitionConfig
+        const callback =
+          this.gameTaskTransitionService.getTaskTransitionCallback(gameDocument)
 
         this.logger.debug(
           `Executing timeout handler for task ${type} from status ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,
@@ -426,28 +318,5 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       case 'completed':
         return undefined
     }
-  }
-
-  /**
-   * Calculates the delay value based on the provided delay handler.
-   *
-   * If the delay handler is a number, it returns the number directly.
-   * If it's a function, it calls the function with the game document to compute the delay.
-   *
-   * @param gameDocument - The game document to be used when computing the delay.
-   * @param delayHandler - A number or a function that returns a number.
-   *
-   * @returns The calculated delay in milliseconds.
-   *
-   * @private
-   */
-  private static getDelay(
-    gameDocument: GameDocument,
-    delayHandler?: DelayHandler,
-  ): number {
-    if (typeof delayHandler === 'function') {
-      return Math.max(delayHandler(gameDocument) || 0, 0)
-    }
-    return Math.max(delayHandler || 0, 0)
   }
 }

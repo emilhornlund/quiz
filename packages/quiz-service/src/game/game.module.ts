@@ -15,6 +15,7 @@ import {
   GameRepository,
   GameService,
   GameTaskTransitionScheduler,
+  GameTaskTransitionService,
   TASK_QUEUE_NAME,
 } from './services'
 import { Game, GameSchema } from './services/models/schemas'
@@ -50,6 +51,7 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameService,
     GameEventPublisher,
     GameEventSubscriber,
+    GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
 })
