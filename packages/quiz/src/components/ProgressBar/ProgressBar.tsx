@@ -26,7 +26,6 @@ const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
   const clientToServerOffsetRef = useRef<number>(0)
   const expiryTimeRef = useRef<number>(0)
   const totalDurationRef = useRef<number>(0)
-  const isFirstEventRef = useRef<boolean>(true)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -48,11 +47,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
     )
 
     expiryTimeRef.current = expiryTime
-
-    if (isFirstEventRef.current) {
-      totalDurationRef.current = expiryTime - serverTime
-      isFirstEventRef.current = false
-    }
+    totalDurationRef.current = expiryTime - serverTime
   }, [countdown])
 
   useEffect(() => {

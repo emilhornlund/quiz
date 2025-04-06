@@ -45,7 +45,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
   public async scheduleTaskTransition(
     gameDocument: GameDocument,
   ): Promise<void> {
-    const { currentTask } = gameDocument
+    const { _id: gameID, currentTask } = gameDocument
     const { type, status } = currentTask
 
     const callback =
@@ -75,6 +75,15 @@ export class GameTaskTransitionScheduler extends WorkerHost {
     } else {
       const delay =
         this.gameTaskTransitionService.getTaskTransitionDelay(gameDocument)
+
+      await this.gameRepository.findAndSaveWithLock(gameID, async (doc) => {
+        const now = new Date()
+        doc.currentTask.currentTransitionInitiated = now
+        doc.currentTask.currentTransitionExpires = delay
+          ? new Date(now.getTime() + delay)
+          : undefined
+        return doc
+      })
 
       if (delay > 0) {
         await this.scheduleDeferredTransition(gameDocument, delay, nextStatus)

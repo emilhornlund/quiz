@@ -36,6 +36,12 @@ export class BaseTask {
   @Prop({ type: String, default: 'pending' })
   status: 'pending' | 'active' | 'completed'
 
+  @Prop({ type: Date, required: false })
+  currentTransitionInitiated?: Date
+
+  @Prop({ type: Date, required: false })
+  currentTransitionExpires?: Date
+
   @Prop({ type: Date, default: () => new Date() })
   created: Date
 }

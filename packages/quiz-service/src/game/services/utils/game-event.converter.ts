@@ -43,10 +43,6 @@ import {
 } from '../models/schemas'
 
 import {
-  getQuestionTaskActiveDuration,
-  getQuestionTaskPendingDuration,
-} from './gameplay.utils'
-import {
   isMultiChoiceAnswer,
   isRangeAnswer,
   isTrueFalseAnswer,
@@ -318,11 +314,8 @@ function buildGameQuestionPreviewCountdownEvent(
     currentTask: { type: TaskType.Question }
   },
 ): CountdownEvent {
-  const pendingDuration = Math.max(0, getQuestionTaskPendingDuration(document))
-  const createdTime = document.currentTask.created.getTime()
-
   return {
-    expiryTime: new Date(createdTime + pendingDuration).toISOString(),
+    expiryTime: document.currentTask.currentTransitionExpires?.toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
@@ -339,11 +332,8 @@ function buildGameQuestionCountdownEvent(
     currentTask: { type: TaskType.Question }
   },
 ): CountdownEvent {
-  const activeDuration = Math.max(0, getQuestionTaskActiveDuration(document))
-  const presentedTime = document.currentTask.presented.getTime()
-
   return {
-    expiryTime: new Date(presentedTime + activeDuration).toISOString(),
+    expiryTime: document.currentTask.currentTransitionExpires?.toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
