@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { GameMode, GameParticipantType, QuestionType } from '@quiz/common'
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose'
+import { HydratedDocument, Model, Schema as MongooseSchema } from 'mongoose'
 
 import {
   BaseQuestionDaoSchema,
@@ -101,8 +101,16 @@ export class Game {
     ))[]
 
   @Prop({ type: Date, required: true })
+  updated: Date
+
+  @Prop({ type: Date, required: true })
   created: Date
 }
+
+/**
+ * Mongoose model type for the Player schema.
+ */
+export type GameModel = Model<Game>
 
 export const GameSchema = SchemaFactory.createForClass(Game)
 

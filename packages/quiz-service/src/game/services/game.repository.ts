@@ -11,7 +11,7 @@ import {
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
-import { Game, GameDocument, GameStatus } from './models/schemas'
+import { Game, GameDocument, GameStatus, TaskType } from './models/schemas'
 import { buildGameModel } from './utils'
 
 /**
@@ -142,6 +142,7 @@ export class GameRepository {
     const gameDocument = await this.findGameByIDOrThrow(gameID)
 
     const updatedGameDocument = await callback(gameDocument)
+    updatedGameDocument.updated = new Date()
     const savedGameDocument = await updatedGameDocument.save()
 
     await this.gameEventPublisher.publish(savedGameDocument)
@@ -189,5 +190,47 @@ export class GameRepository {
     const game = buildGameModel(quiz, gamePIN, client)
 
     return new this.gameModel(game).save()
+  }
+
+  /**
+   * Marks stale games as 'Completed' if they:
+   * - Are still marked as 'Active'
+   * - Are currently in the 'Podium' task
+   * - Have not been updated in over 1 hour
+   *
+   * @returns Number of games successfully updated to 'Completed'
+   */
+  public async updateCompletedGames(): Promise<number> {
+    const filter = {
+      status: GameStatus.Active,
+      'currentTask.type': TaskType.Podium,
+      updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
+    }
+
+    const result = await this.gameModel.updateMany(filter, {
+      $set: { status: GameStatus.Completed },
+    })
+
+    return result.modifiedCount ?? 0
+  }
+
+  /**
+   * Deletes stale games if they:
+   * - Are marked as 'Active'
+   * - Have not been updated in over 1 hour
+   *
+   * These are considered abandoned sessions that were never completed.
+   *
+   * @returns Number of games successfully deleted
+   */
+  public async deleteExpiredGames(): Promise<number> {
+    const filter = {
+      status: GameStatus.Active,
+      updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
+    }
+
+    const result = await this.gameModel.deleteMany(filter)
+
+    return result.deletedCount ?? 0
   }
 }

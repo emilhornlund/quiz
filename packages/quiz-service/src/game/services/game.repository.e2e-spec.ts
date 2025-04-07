@@ -1,0 +1,187 @@
+import { INestApplication } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
+import { GameMode } from '@quiz/common'
+import { v4 as uuidv4 } from 'uuid'
+
+import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { Quiz } from '../../quiz/services/models/schemas'
+
+import { GameRepository } from './game.repository'
+import {
+  BaseTask,
+  Game,
+  GameModel,
+  GameStatus,
+  LeaderboardTask,
+  LobbyTask,
+  PodiumTask,
+  QuestionResultTask,
+  QuestionTask,
+  QuitTask,
+  TaskType,
+} from './models/schemas'
+
+const ONE_HOUR = 60 * 60 * 1000
+const ONE_SECOND = 1000
+const DATE_ONE_HOUR_ONE_SECOND_AGO = new Date(
+  Date.now() - ONE_HOUR - ONE_SECOND,
+)
+
+const DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO = new Date(
+  Date.now() - ONE_HOUR + ONE_SECOND,
+)
+
+describe('GameRepository (e2e)', () => {
+  let app: INestApplication
+  let gameRepository: GameRepository
+  let gameModel: GameModel
+
+  beforeEach(async () => {
+    app = await createTestApp()
+    gameRepository = app.get(GameRepository)
+    gameModel = app.get<GameModel>(getModelToken(Game.name))
+  })
+
+  afterEach(async () => {
+    await closeTestApp(app)
+  })
+
+  describe('updateCompletedGames', () => {
+    it('should mark active podium games older than 1 hour as completed', async () => {
+      const gameID = uuidv4()
+
+      await gameModel.create(
+        buildMockGame(
+          gameID,
+          buildMockPodiumTask(),
+          DATE_ONE_HOUR_ONE_SECOND_AGO,
+        ),
+      )
+
+      const actual = await gameRepository.updateCompletedGames()
+      expect(actual).toEqual(1)
+
+      const { status } = await gameModel.findById(gameID)
+      expect(status).toEqual(GameStatus.Completed)
+    })
+
+    it('should not mark active podium games not older than 1 hour as completed', async () => {
+      const gameID = uuidv4()
+
+      await gameModel.create(
+        buildMockGame(
+          gameID,
+          buildMockPodiumTask(),
+          DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO,
+        ),
+      )
+
+      const actual = await gameRepository.updateCompletedGames()
+      expect(actual).toEqual(0)
+
+      const { status } = await gameModel.findById(gameID)
+      expect(status).toEqual(GameStatus.Active)
+    })
+
+    it('should not mark active leaderboard games older than 1 hour as completed', async () => {
+      const gameID = uuidv4()
+
+      await gameModel.create(
+        buildMockGame(
+          gameID,
+          buildMockLeaderboardTask(),
+          DATE_ONE_HOUR_ONE_SECOND_AGO,
+        ),
+      )
+
+      const actual = await gameRepository.updateCompletedGames()
+      expect(actual).toEqual(0)
+
+      const { status } = await gameModel.findById(gameID)
+      expect(status).toEqual(GameStatus.Active)
+    })
+  })
+
+  describe('deleteExpiredGames', () => {
+    it('should delete active games older than 1 hour', async () => {
+      const gameID = uuidv4()
+
+      await gameModel.create(
+        buildMockGame(
+          gameID,
+          buildMockLeaderboardTask(),
+          DATE_ONE_HOUR_ONE_SECOND_AGO,
+        ),
+      )
+
+      const deletedCount = await gameRepository.deleteExpiredGames()
+      expect(deletedCount).toEqual(1)
+
+      const document = await gameModel.findById(gameID)
+      expect(document).toBeNull()
+    })
+
+    it('should not delete active games not older than 1 hour', async () => {
+      const gameID = uuidv4()
+
+      await gameModel.create(
+        buildMockGame(
+          gameID,
+          buildMockLeaderboardTask(),
+          DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO,
+        ),
+      )
+
+      const deletedCount = await gameRepository.deleteExpiredGames()
+      expect(deletedCount).toEqual(0)
+
+      const { status } = await gameModel.findById(gameID)
+      expect(status).toEqual(GameStatus.Active)
+    })
+  })
+})
+
+const buildMockLeaderboardTask = (): BaseTask & LeaderboardTask => ({
+  _id: uuidv4(),
+  type: TaskType.Leaderboard,
+  status: 'active',
+  questionIndex: 0,
+  leaderboard: [],
+  created: new Date(),
+})
+
+const buildMockPodiumTask = (): BaseTask & PodiumTask => ({
+  _id: uuidv4(),
+  type: TaskType.Podium,
+  status: 'active',
+  leaderboard: [],
+  created: new Date(),
+})
+
+const buildMockGame = (
+  gameID: string,
+  currentTask: BaseTask &
+    (
+      | LobbyTask
+      | QuestionTask
+      | QuestionResultTask
+      | LeaderboardTask
+      | PodiumTask
+      | QuitTask
+    ),
+  date: Date,
+): Game => ({
+  _id: gameID,
+  name: 'quiz.title',
+  mode: GameMode.Classic,
+  status: GameStatus.Active,
+  pin: '000000',
+  quiz: { _id: uuidv4() } as Quiz,
+  questions: [],
+  nextQuestion: 0,
+  participants: [],
+  currentTask: currentTask,
+  previousTasks: [],
+  updated: date,
+  created: date,
+})

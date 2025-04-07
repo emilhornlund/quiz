@@ -6,6 +6,7 @@ import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
+import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
@@ -113,6 +114,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       inject: [ConfigService],
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     ...(isTestEnv
       ? []
       : [

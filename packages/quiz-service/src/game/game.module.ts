@@ -12,6 +12,7 @@ import { GameController, QuizGameController } from './controllers'
 import {
   GameEventPublisher,
   GameEventSubscriber,
+  GameExpirySchedulerService,
   GameRepository,
   GameService,
   GameTaskTransitionScheduler,
@@ -51,6 +52,7 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameService,
     GameEventPublisher,
     GameEventSubscriber,
+    GameExpirySchedulerService,
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
