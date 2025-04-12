@@ -4,6 +4,7 @@ import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../exceptions'
 
+import { GameResultRepository } from './game-result.repository'
 import {
   GameDocument,
   GameStatus,
@@ -36,10 +37,12 @@ export class GameTaskTransitionService {
    * Constructs an instance of GameTaskTransitionService.
    *
    * @param {Redis} redis - The Redis instance used for managing data synchronization and event handling.
+   * @param gameResultRepository - Repository for accessing and modifying game result data.
    */
   constructor(
     @InjectRedis()
     private readonly redis: Redis,
+    private readonly gameResultRepository: GameResultRepository,
   ) {}
 
   /**
@@ -189,6 +192,7 @@ export class GameTaskTransitionService {
       gameDocument.currentTask = buildLeaderboardTask(gameDocument)
     } else {
       gameDocument.currentTask = buildPodiumTask(gameDocument)
+      await this.gameResultRepository.createGameResult(gameDocument)
     }
   }
 

@@ -1,0 +1,39 @@
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+
+import {
+  GameDocument,
+  GameResult,
+  GameResultDocument,
+  GameResultModel,
+} from './models/schemas'
+import { buildGameResultModel } from './utils'
+
+/**
+ * Repository service for creating and storing game result documents.
+ * Wraps access to the MongoDB GameResult collection.
+ */
+@Injectable()
+export class GameResultRepository {
+  /**
+   * Creates a new instance of the GameResultRepository.
+   *
+   * @param gameResultModel - The injected Mongoose model for interacting with GameResult documents.
+   */
+  constructor(
+    @InjectModel(GameResult.name) private gameResultModel: GameResultModel,
+  ) {}
+
+  /**
+   * Builds a game result from a completed game and persists it to the database.
+   *
+   * @param gameDocument - The full game document containing all tasks and participants.
+   * @returns A promise that resolves to the saved GameResult document.
+   */
+  public async createGameResult(
+    gameDocument: GameDocument,
+  ): Promise<GameResultDocument> {
+    const gameResult = buildGameResultModel(gameDocument)
+    return new this.gameResultModel(gameResult).save()
+  }
+}

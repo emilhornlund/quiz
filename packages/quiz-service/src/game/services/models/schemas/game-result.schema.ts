@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { QuestionType } from '@quiz/common'
+import { HydratedDocument, Model } from 'mongoose'
 
 import { Player } from '../../../../player/services/models/schemas'
 
@@ -29,7 +30,13 @@ export class PlayerMetric {
   correct: number
 
   /**
-   * The number of questions the player left unanswered.
+   * The total number of questions the player answered incorrectly.
+   */
+  @Prop({ type: Number, required: true })
+  incorrect: number
+
+  /**
+   * The total number of questions the player left unanswered.
    */
   @Prop({ type: Number, required: true })
   unanswered: number
@@ -166,3 +173,13 @@ export class GameResult {
  * Schema factory for the GameResult class.
  */
 export const GameResultSchema = SchemaFactory.createForClass(GameResult)
+
+/**
+ * Mongoose model type for the GameResult schema.
+ */
+export type GameResultModel = Model<GameResult>
+
+/**
+ * Mongoose hydrated document type for the GameResult schema.
+ */
+export type GameResultDocument = HydratedDocument<GameResult>

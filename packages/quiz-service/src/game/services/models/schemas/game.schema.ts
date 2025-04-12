@@ -108,7 +108,7 @@ export class Game {
 }
 
 /**
- * Mongoose model type for the Player schema.
+ * Mongoose model type for the Game schema.
  */
 export type GameModel = Model<Game>
 
