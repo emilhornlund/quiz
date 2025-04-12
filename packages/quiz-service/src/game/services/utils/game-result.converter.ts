@@ -1,4 +1,4 @@
-import { GameParticipantType } from '@quiz/common'
+import { GameMode, GameParticipantType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { QuestionDao } from '../../../quiz/services/models/schemas'
@@ -33,7 +33,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     )
   }
 
-  const { name, participants, currentTask, previousTasks, questions } =
+  const { mode, name, participants, currentTask, previousTasks, questions } =
     gameDocument
 
   const host = participants.find((p) => p.type === GameParticipantType.HOST)
@@ -66,6 +66,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     game: gameDocument,
     host,
     players: buildPlayerMetric(
+      mode,
       questions,
       questionTasks,
       currentTask.leaderboard,
@@ -73,6 +74,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
       playerParticipants,
     ),
     questions: buildQuestionMetric(
+      mode,
       questions,
       questionResultTasks,
       questionTasks,
@@ -86,6 +88,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
 /**
  * Builds player-specific metrics (e.g., correct answers, score, response times) for the final GameResult.
  *
+ * @param mode - The game mode to determine which metrics to calculate.
  * @param questions - The list of questions in the game.
  * @param questionTasks - All tasks where questions were presented to players.
  * @param leaderboard - Final leaderboard data from the Podium task.
@@ -94,55 +97,79 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
  * @returns An array of PlayerMetric objects containing stats for each player.
  */
 function buildPlayerMetric(
+  mode: GameMode,
   questions: QuestionDao[],
   questionTasks: (BaseTask & QuestionTask)[],
   leaderboard: LeaderboardTaskItem[],
   questionResultTasks: (BaseTask & QuestionResultTask)[],
   playerParticipants: (ParticipantBase & ParticipantPlayer)[],
 ): PlayerMetric[] {
-  return playerParticipants.map((player) => {
-    const { position: rank = 0, score = 0 } =
-      leaderboard.find(
-        ({ playerId }) => playerId === player.client.player._id,
-      ) || {}
-    return questionResultTasks.reduce(
-      (accumulator, { results }) => {
-        const { correct, answer, streak } = results.find(
+  return playerParticipants
+    .map((player) => {
+      const { position: rank = 0, score = 0 } =
+        leaderboard.find(
           ({ playerId }) => playerId === player.client.player._id,
-        )
-        return {
-          ...accumulator,
-          correct: accumulator.correct + (correct && answer ? 1 : 0),
-          incorrect: accumulator.incorrect + (!correct && answer ? 1 : 0),
-          unanswered: accumulator.unanswered + (answer ? 0 : 1),
-          averageResponseTime: calculateAverageResponseTimeByPlayer(
-            player,
-            questionTasks,
-            questions,
-          ),
-          longestCorrectStreak:
-            streak > accumulator.longestCorrectStreak
-              ? streak
-              : accumulator.longestCorrectStreak,
-        }
-      },
-      {
-        player: player.client.player,
-        rank,
-        correct: 0,
-        incorrect: 0,
-        unanswered: 0,
-        averageResponseTime: 0,
-        longestCorrectStreak: 0,
-        score,
-      },
-    )
-  })
+        ) || {}
+      return questionResultTasks.reduce(
+        (accumulator, { results }) => {
+          const { correct, answer, streak, lastScore } = results.find(
+            ({ playerId }) => playerId === player.client.player._id,
+          )
+          return {
+            ...accumulator,
+            correct:
+              mode === GameMode.Classic
+                ? accumulator.correct + (correct && answer ? 1 : 0)
+                : undefined,
+            incorrect:
+              mode === GameMode.Classic
+                ? accumulator.incorrect + (!correct && answer ? 1 : 0)
+                : undefined,
+            averagePrecision:
+              mode === GameMode.ZeroToOneHundred
+                ? accumulator.averagePrecision +
+                  (100 - Math.max(lastScore, 0)) / 100
+                : undefined,
+            unanswered: accumulator.unanswered + (answer ? 0 : 1),
+            averageResponseTime: calculateAverageResponseTimeByPlayer(
+              player,
+              questionTasks,
+              questions,
+            ),
+            longestCorrectStreak:
+              streak > accumulator.longestCorrectStreak
+                ? streak
+                : accumulator.longestCorrectStreak,
+          }
+        },
+        {
+          player: player.client.player,
+          rank,
+          correct: mode === GameMode.Classic ? 0 : undefined,
+          incorrect: mode === GameMode.Classic ? 0 : undefined,
+          averagePrecision: mode === GameMode.ZeroToOneHundred ? 0 : undefined,
+          unanswered: 0,
+          averageResponseTime: 0,
+          longestCorrectStreak: 0,
+          score,
+        },
+      )
+    })
+    .map((metric) => ({
+      ...metric,
+      averagePrecision:
+        mode === GameMode.ZeroToOneHundred
+          ? Number(
+              (metric.averagePrecision / questionResultTasks.length).toFixed(2),
+            )
+          : undefined,
+    }))
 }
 
 /**
  * Builds question-specific metrics (e.g., correct/incorrect counts, average response time) for the final GameResult.
  *
+ * @param mode - The game mode to determine which metrics to calculate.
  * @param questions - The list of all questions in the game.
  * @param questionResultTasks - Tasks containing answers and results for each question.
  * @param questionTasks - Tasks that define when each question was presented.
@@ -150,37 +177,60 @@ function buildPlayerMetric(
  * @returns An array of QuestionMetric objects representing question performance.
  */
 function buildQuestionMetric(
+  mode: GameMode,
   questions: QuestionDao[],
   questionResultTasks: (BaseTask & QuestionResultTask)[],
   questionTasks: (BaseTask & QuestionTask)[],
   playerParticipants: (ParticipantBase & ParticipantPlayer)[],
 ): QuestionMetric[] {
-  return questionResultTasks.map(({ results, questionIndex }) => {
-    const { text, type } = questions[questionIndex]
-    return results.reduce(
-      (accumulator, { correct, answer }) => ({
-        ...accumulator,
-        correct: accumulator.correct + (correct && answer ? 1 : 0),
-        incorrect: accumulator.incorrect + (!correct && answer ? 1 : 0),
-        unanswered:
-          accumulator.unanswered + (typeof answer === 'undefined' ? 1 : 0),
-      }),
-      {
-        text,
-        type,
-        correct: 0,
-        incorrect: 0,
-        unanswered: 0,
-        averageResponseTime: questionTasks[questionIndex]
-          ? calculateAverageResponseTimeByQuestion(
-              questionTasks[questionIndex],
-              questions,
-              playerParticipants,
+  return questionResultTasks
+    .map(({ results, questionIndex }) => {
+      const { text, type } = questions[questionIndex]
+      return results.reduce(
+        (accumulator, { correct, answer, lastScore }) => ({
+          ...accumulator,
+          correct:
+            mode === GameMode.Classic
+              ? accumulator.correct + (correct && answer ? 1 : 0)
+              : undefined,
+          incorrect:
+            mode === GameMode.Classic
+              ? accumulator.incorrect + (!correct && answer ? 1 : 0)
+              : undefined,
+          averagePrecision:
+            mode === GameMode.ZeroToOneHundred
+              ? accumulator.averagePrecision +
+                (100 - Math.max(lastScore, 0)) / 100
+              : undefined,
+          unanswered:
+            accumulator.unanswered + (typeof answer === 'undefined' ? 1 : 0),
+        }),
+        {
+          text,
+          type,
+          correct: mode === GameMode.Classic ? 0 : undefined,
+          incorrect: mode === GameMode.Classic ? 0 : undefined,
+          averagePrecision: mode === GameMode.ZeroToOneHundred ? 0 : undefined,
+          unanswered: 0,
+          averageResponseTime: questionTasks[questionIndex]
+            ? calculateAverageResponseTimeByQuestion(
+                questionTasks[questionIndex],
+                questions,
+                playerParticipants,
+              )
+            : 0,
+        },
+      )
+    })
+    .map((metric) => ({
+      ...metric,
+      averagePrecision:
+        mode === GameMode.ZeroToOneHundred
+          ? Number(
+              (metric.averagePrecision / playerParticipants.length).toFixed(2),
             )
-          : 0,
-      },
-    )
-  })
+          : undefined,
+    }))
 }
 
 /**

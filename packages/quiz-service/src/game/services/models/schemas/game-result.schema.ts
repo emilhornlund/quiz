@@ -26,14 +26,20 @@ export class PlayerMetric {
   /**
    * The total number of questions the player answered correctly.
    */
-  @Prop({ type: Number, required: true })
-  correct: number
+  @Prop({ type: Number, required: false })
+  correct?: number
 
   /**
    * The total number of questions the player answered incorrectly.
    */
-  @Prop({ type: Number, required: true })
-  incorrect: number
+  @Prop({ type: Number, required: false })
+  incorrect?: number
+
+  /**
+   * The player's average precision for range-based answers (0 = worst, 1 = best).
+   */
+  @Prop({ type: Number, required: false })
+  averagePrecision?: number
 
   /**
    * The total number of questions the player left unanswered.
@@ -88,14 +94,20 @@ export class QuestionMetric {
   /**
    * The number of players who answered the question correctly.
    */
-  @Prop({ type: Number, required: true })
-  correct: number
+  @Prop({ type: Number, required: false })
+  correct?: number
 
   /**
    * The number of players who answered the question incorrectly.
    */
-  @Prop({ type: Number, required: true })
-  incorrect: number
+  @Prop({ type: Number, required: false })
+  incorrect?: number
+
+  /**
+   * The average precision score across all player answers for this question.
+   */
+  @Prop({ type: Number, required: false })
+  averagePrecision?: number
 
   /**
    * The number of players who left the question unanswered.
