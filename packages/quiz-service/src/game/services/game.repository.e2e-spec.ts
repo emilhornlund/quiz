@@ -23,13 +23,14 @@ import {
 
 const ONE_HOUR = 60 * 60 * 1000
 const ONE_SECOND = 1000
-const DATE_ONE_HOUR_ONE_SECOND_AGO = new Date(
-  Date.now() - ONE_HOUR - ONE_SECOND,
-)
 
-const DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO = new Date(
-  Date.now() - ONE_HOUR + ONE_SECOND,
-)
+function calculateDateOneHourFiveSecondAgo(): Date {
+  return new Date(Date.now() - ONE_HOUR - ONE_SECOND * 5)
+}
+
+function calculateDateOneHourMinusFiveSecondAgo(): Date {
+  return new Date(Date.now() - ONE_HOUR + ONE_SECOND * 5)
+}
 
 describe('GameRepository (e2e)', () => {
   let app: INestApplication
@@ -54,7 +55,7 @@ describe('GameRepository (e2e)', () => {
         buildMockGame(
           gameID,
           buildMockPodiumTask(),
-          DATE_ONE_HOUR_ONE_SECOND_AGO,
+          calculateDateOneHourFiveSecondAgo(),
         ),
       )
 
@@ -72,7 +73,7 @@ describe('GameRepository (e2e)', () => {
         buildMockGame(
           gameID,
           buildMockPodiumTask(),
-          DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO,
+          calculateDateOneHourMinusFiveSecondAgo(),
         ),
       )
 
@@ -90,7 +91,7 @@ describe('GameRepository (e2e)', () => {
         buildMockGame(
           gameID,
           buildMockLeaderboardTask(),
-          DATE_ONE_HOUR_ONE_SECOND_AGO,
+          calculateDateOneHourFiveSecondAgo(),
         ),
       )
 
@@ -110,7 +111,7 @@ describe('GameRepository (e2e)', () => {
         buildMockGame(
           gameID,
           buildMockLeaderboardTask(),
-          DATE_ONE_HOUR_ONE_SECOND_AGO,
+          calculateDateOneHourFiveSecondAgo(),
         ),
       )
 
@@ -128,7 +129,7 @@ describe('GameRepository (e2e)', () => {
         buildMockGame(
           gameID,
           buildMockLeaderboardTask(),
-          DATE_ONE_HOUR_MINUS_ONE_SECOND_AGO,
+          calculateDateOneHourMinusFiveSecondAgo(),
         ),
       )
 
