@@ -73,7 +73,10 @@ export class QuestionMultiChoice implements QuestionMultiChoiceDto {
   /**
    * The type of the question, set to `MultiChoice`.
    */
-  @ApiQuestionTypeProperty(QuestionType.MultiChoice)
+  @ApiQuestionTypeProperty({
+    description: `The type of the question, which is set to ${QuestionType.MultiChoice} for this request.`,
+    explicitType: QuestionType.MultiChoice,
+  })
   type: QuestionType.MultiChoice
 
   /**
@@ -114,7 +117,10 @@ export class QuestionRange implements QuestionRangeDto {
   /**
    * The type of the question, set to `Range`.
    */
-  @ApiQuestionTypeProperty(QuestionType.Range)
+  @ApiQuestionTypeProperty({
+    description: `The type of the question, which is set to ${QuestionType.Range} for this request.`,
+    explicitType: QuestionType.Range,
+  })
   type: QuestionType.Range
 
   /**
@@ -187,7 +193,10 @@ export class QuestionZeroToOneHundredRange
   /**
    * The type of the question, set to `Range`.
    */
-  @ApiQuestionTypeProperty(QuestionType.Range)
+  @ApiQuestionTypeProperty({
+    description: `The type of the question, which is set to ${QuestionType.Range} for this request.`,
+    explicitType: QuestionType.Range,
+  })
   type: QuestionType.Range
 
   /**
@@ -233,7 +242,10 @@ export class QuestionTrueFalse implements QuestionTrueFalseDto {
   /**
    * The type of the question, set to `TrueFalse`.
    */
-  @ApiQuestionTypeProperty(QuestionType.TrueFalse)
+  @ApiQuestionTypeProperty({
+    description: `The type of the question, which is set to ${QuestionType.TrueFalse} for this request.`,
+    explicitType: QuestionType.TrueFalse,
+  })
   type: QuestionType.TrueFalse
 
   /**
@@ -274,7 +286,10 @@ export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
   /**
    * The type of the question, set to `TypeAnswer`.
    */
-  @ApiQuestionTypeProperty(QuestionType.TypeAnswer)
+  @ApiQuestionTypeProperty({
+    description: `The type of the question, which is set to ${QuestionType.TypeAnswer} for this request.`,
+    explicitType: QuestionType.TypeAnswer,
+  })
   type: QuestionType.TypeAnswer
 
   /**

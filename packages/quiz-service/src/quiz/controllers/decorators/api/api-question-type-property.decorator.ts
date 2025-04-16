@@ -18,7 +18,7 @@ import { IsEnum } from 'class-validator'
  * import { QuestionType } from '@quiz/common';
  *
  * export class QuestionRequest {
- *   @ApiQuestionTypeProperty(QuestionType.MultiChoice)
+ *   @ApiQuestionTypeProperty({ description: 'The type of the question.' })
  *   type: QuestionType.MultiChoice;
  * }
  * ```
@@ -27,16 +27,19 @@ import { IsEnum } from 'class-validator'
  * - `@ApiProperty` to include metadata in the OpenAPI documentation.
  * - `@IsEnum` to validate that the value matches a specific enum value.
  *
- * @param {QuestionType} type - The specific `QuestionType` value for this question.
+ * @param options - The options for this decorator.
  *
  * @returns {PropertyDecorator} The combined property decorator.
  */
-export function ApiQuestionTypeProperty(type: QuestionType): PropertyDecorator {
+export function ApiQuestionTypeProperty(options?: {
+  description?: string
+  explicitType?: QuestionType
+}): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
-      description: `The type of the question, which is set to ${type} for this request.`,
-      enum: [type],
-      example: type,
+      description: options?.description ?? 'The type of the question.',
+      enum: [options?.explicitType ?? QuestionType],
+      example: options?.explicitType ?? QuestionType.MultiChoice,
       required: true,
       type: String,
     }),

@@ -9,6 +9,7 @@ import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
 import { GameController, QuizGameController } from './controllers'
+import { GameResultController } from './controllers/game-result.controller'
 import {
   GameEventPublisher,
   GameEventSubscriber,
@@ -46,7 +47,7 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     ClientModule,
     QuizModule,
   ],
-  controllers: [GameController, QuizGameController],
+  controllers: [GameController, GameResultController, QuizGameController],
   providers: [
     Logger,
     GameRepository,
