@@ -315,6 +315,8 @@ function buildGameQuestionPreviewCountdownEvent(
   },
 ): CountdownEvent {
   return {
+    initiatedTime:
+      document.currentTask.currentTransitionInitiated?.toISOString(),
     expiryTime: document.currentTask.currentTransitionExpires?.toISOString(),
     serverTime: new Date().toISOString(),
   }
@@ -333,6 +335,8 @@ function buildGameQuestionCountdownEvent(
   },
 ): CountdownEvent {
   return {
+    initiatedTime:
+      document.currentTask.currentTransitionInitiated?.toISOString(),
     expiryTime: document.currentTask.currentTransitionExpires?.toISOString(),
     serverTime: new Date().toISOString(),
   }

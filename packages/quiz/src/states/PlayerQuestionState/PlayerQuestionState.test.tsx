@@ -2,11 +2,22 @@ import { GameEventType, MediaType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import PlayerQuestionState from './PlayerQuestionState'
 
+const now = Date.now()
+
 describe('PlayerQuestionState', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(now))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('should render PlayerQuestionState with question type multi-choice and two answers', () => {
     const { container } = render(
       <MemoryRouter>
@@ -31,8 +42,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}
@@ -69,8 +81,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}
@@ -109,8 +122,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}
@@ -141,8 +155,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}
@@ -169,8 +184,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}
@@ -197,8 +213,9 @@ describe('PlayerQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             pagination: { current: 1, total: 20 },
           }}

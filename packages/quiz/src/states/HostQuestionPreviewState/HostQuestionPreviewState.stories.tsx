@@ -27,6 +27,7 @@ export const Default = {
         question: 'Who painted The Starry Night?',
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },

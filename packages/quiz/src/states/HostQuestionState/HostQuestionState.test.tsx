@@ -2,11 +2,22 @@ import { GameEventType, MediaType, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import HostQuestionState from './HostQuestionState'
 
+const now = Date.now()
+
 describe('HostQuestionState', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(now))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('should render HostQuestionState with question type multi-choice and two answers', async () => {
     const { container } = render(
       <MemoryRouter>
@@ -30,8 +41,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
@@ -68,8 +80,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
@@ -108,8 +121,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
@@ -140,8 +154,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
@@ -168,8 +183,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },
@@ -196,8 +212,9 @@ describe('HostQuestionState', () => {
               duration: 30,
             },
             countdown: {
-              expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
-              serverTime: new Date().toISOString(),
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
             },
             submissions: { current: 3, total: 10 },
             pagination: { current: 1, total: 20 },

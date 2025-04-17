@@ -33,6 +33,7 @@ export const QuestionMultiTwoAnswers = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },
@@ -65,6 +66,7 @@ export const QuestionMultiFourAnswers = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },
@@ -99,6 +101,7 @@ export const QuestionMultiSixAnswers = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },
@@ -128,6 +131,7 @@ export const QuestionSlider = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },
@@ -154,6 +158,7 @@ export const QuestionTrueFalse = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },
@@ -176,6 +181,7 @@ export const QuestionTypeAnswer = {
         duration: 30,
       },
       countdown: {
+        initiatedTime: new Date().toISOString(),
         expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
         serverTime: new Date().toISOString(),
       },

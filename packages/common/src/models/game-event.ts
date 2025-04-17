@@ -3,6 +3,7 @@ import { MediaType } from './media-type.enum'
 import { QuestionType } from './question-type.enum'
 
 export type CountdownEvent = {
+  initiatedTime: string
   expiryTime: string
   serverTime: string
 }
