@@ -36,4 +36,44 @@ export class GameResultRepository {
     const gameResult = buildGameResultModel(gameDocument)
     return new this.gameResultModel(gameResult).save()
   }
+
+  /**
+   * Finds the result of a completed game by its game ID.
+   *
+   * @param gameID - The ID of the game to retrieve results for.
+   * @returns The GameResult document if found, otherwise null.
+   */
+  public async findGameResult(gameID: string): Promise<GameResult> {
+    return this.gameResultModel
+      .findOne({
+        game: { _id: gameID },
+      })
+      .populate([
+        {
+          path: 'game',
+          populate: {
+            path: 'participants',
+            populate: {
+              path: 'client',
+              model: 'Client',
+              populate: {
+                path: 'player',
+                model: 'Player',
+              },
+            },
+          },
+        },
+        {
+          path: 'host',
+          model: 'Player',
+        },
+        {
+          path: 'players',
+          populate: {
+            path: 'player',
+            model: 'Player',
+          },
+        },
+      ])
+  }
 }

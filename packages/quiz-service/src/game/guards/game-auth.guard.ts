@@ -56,7 +56,7 @@ export class GameAuthGuard implements CanActivate {
 
     const playerId = request.client.player._id as string
 
-    const game = await this.gameRepository.findGameByIDOrThrow(gameID, true)
+    const game = await this.gameRepository.findGameByIDOrThrow(gameID, false)
 
     const participant = game.participants.find(
       (participant) => participant.client.player._id === playerId,

@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  NotImplementedException,
-} from '@nestjs/common'
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common'
 import {
   ApiBearerAuth,
   ApiExtraModels,
@@ -16,6 +10,8 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+
+import { GameResultService } from '../services'
 
 import { GameIdParam } from './decorators'
 import { AuthorizedGame } from './decorators/auth'
@@ -43,6 +39,13 @@ import {
 )
 export class GameResultController {
   /**
+   * Creates a new instance of the GameResultController.
+   *
+   * @param gameResultService - Service for retrieving quiz game results.
+   */
+  constructor(private readonly gameResultService: GameResultService) {}
+
+  /**
    * Retrieves the results of a completed quiz game by its ID.
    *
    * This endpoint returns the final game outcome, including player rankings,
@@ -68,13 +71,10 @@ export class GameResultController {
     description:
       'Returns the final results of the game. The response structure depends on the game mode.',
     schema: {
-      type: 'array',
-      items: {
-        oneOf: [
-          { $ref: getSchemaPath(GameResultClassicModeResponse) },
-          { $ref: getSchemaPath(GameResultZeroToOneHundredModeResponse) },
-        ],
-      },
+      oneOf: [
+        { $ref: getSchemaPath(GameResultClassicModeResponse) },
+        { $ref: getSchemaPath(GameResultZeroToOneHundredModeResponse) },
+      ],
     },
   })
   @ApiUnauthorizedResponse({
@@ -89,11 +89,10 @@ export class GameResultController {
   })
   @HttpCode(HttpStatus.OK)
   public async getGameResults(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @RouteGameIdParam() gameID: string,
   ): Promise<
-    (GameResultClassicModeResponse | GameResultZeroToOneHundredModeResponse)[]
+    GameResultClassicModeResponse | GameResultZeroToOneHundredModeResponse
   > {
-    throw new NotImplementedException()
+    return this.gameResultService.getGameResult(gameID)
   }
 }

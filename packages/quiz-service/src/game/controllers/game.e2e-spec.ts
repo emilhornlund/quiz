@@ -653,7 +653,7 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${unknownGameID}`,
+            `Game not found by id '${unknownGameID}'`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -789,7 +789,7 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${unknownGameID}`,
+            `Game not found by id '${unknownGameID}'`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')

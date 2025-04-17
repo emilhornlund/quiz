@@ -1,5 +1,7 @@
 export * from './active-game-not-found.exception'
 export * from './client-not-unique.exception'
+export * from './game-not-found.exception'
+export * from './game-results-not-found.exception'
 export * from './illegal-task-type.exception'
 export * from './nickname-not-unique.exception'
 export * from './player-not-found.exception'

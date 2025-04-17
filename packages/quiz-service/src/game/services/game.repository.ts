@@ -8,6 +8,7 @@ import { Quiz } from '../../quiz/services/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
+  GameNotFoundException,
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
@@ -77,7 +78,10 @@ export class GameRepository {
     const gameDocument = await this.findGameByID(gameID, active)
 
     if (!gameDocument) {
-      throw new ActiveGameNotFoundByIDException(gameID)
+      if (active) {
+        throw new ActiveGameNotFoundByIDException(gameID)
+      }
+      throw new GameNotFoundException(gameID)
     }
 
     return gameDocument
