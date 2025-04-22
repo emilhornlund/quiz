@@ -24,6 +24,20 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
         class="side"
       >
         <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
+            type="button"
+          >
+            <span>
+              Results
+            </span>
+          </button>
+        </div>
+        <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
@@ -405,6 +419,20 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
       <div
         class="side"
       >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
+            type="button"
+          >
+            <span>
+              Results
+            </span>
+          </button>
+        </div>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
