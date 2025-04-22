@@ -389,36 +389,21 @@ export function buildQuestionResultTask(
     )
   }
 
-  const questionIndex = gameDocument.currentTask.questionIndex
-
+  const { questionIndex } = gameDocument.currentTask
   const question = gameDocument.questions[questionIndex]
 
   const results: QuestionResultTaskItem[] = gameDocument.participants
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .map((participant) => {
-      const player = participant.client.player
-
-      const answer = answers.find(({ playerId }) => playerId === player._id)
-
-      const correct = isQuestionAnswerCorrect(question, answer)
-
-      const presented = gameDocument.currentTask.presented
-
-      const lastScore =
-        gameDocument.mode === GameMode.Classic
-          ? calculateClassicModeScore(presented, question, answer)
-          : calculateZeroToOneHundredModeScore(question, answer)
-
-      return {
-        type: question.type,
-        playerId: player._id,
+      const answer = answers.find(
+        ({ playerId }) => playerId === participant.client.player._id,
+      )
+      return buildQuestionResultTaskItem(
+        gameDocument,
+        participant,
+        question,
         answer,
-        correct,
-        lastScore,
-        totalScore: participant.totalScore + lastScore,
-        position: 0,
-        streak: correct ? participant.currentStreak + 1 : 0,
-      }
+      )
     })
     .sort((a, b) =>
       gameDocument.mode === GameMode.Classic
@@ -434,6 +419,52 @@ export function buildQuestionResultTask(
     questionIndex,
     results,
     created: new Date(),
+  }
+}
+
+/**
+ * Builds a `QuestionResultTaskItem` for a given player and their answer.
+ *
+ * Calculates correctness, score, total score, and streak based on the provided game state.
+ *
+ * @param gameDocument - The current game document including task and mode information.
+ * @param participant - The player participant for whom the result is being calculated.
+ * @param question - The question associated with the current task.
+ * @param answer - The answer provided by the player to the current question.
+ * @returns A `QuestionResultTaskItem` containing the player's performance on the question.
+ */
+function buildQuestionResultTaskItem(
+  gameDocument: GameDocument & { currentTask: { type: TaskType.Question } },
+  participant: ParticipantBase & ParticipantPlayer,
+  question: QuestionDao,
+  answer: QuestionTaskAnswer,
+): QuestionResultTaskItem {
+  const { _id: playerId } = participant.client.player
+
+  const { presented } = gameDocument.currentTask
+
+  const { type } = question
+
+  const correct = isQuestionAnswerCorrect(question, answer)
+
+  const lastScore =
+    gameDocument.mode === GameMode.Classic
+      ? calculateClassicModeScore(presented, question, answer)
+      : calculateZeroToOneHundredModeScore(question, answer)
+
+  const totalScore = participant.totalScore + lastScore
+
+  const streak = correct ? participant.currentStreak + 1 : 0
+
+  return {
+    type,
+    playerId,
+    answer,
+    correct,
+    lastScore,
+    totalScore,
+    position: 0,
+    streak,
   }
 }
 
