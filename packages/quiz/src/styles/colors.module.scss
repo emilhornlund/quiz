@@ -1,0 +1,60 @@
+@import './colors';
+
+:export {
+  blue1: $blue-1;
+  blue2: $blue-2;
+
+  yellow1: $yellow-1;
+  yellow2: $yellow-2;
+
+  pink1: $pink-1;
+  pink2: $pink-2;
+
+  red1: $red-1;
+  red2: $red-2;
+
+  orange1: $orange-1;
+  orange2: $orange-2;
+
+  green1: $green-1;
+  green2: $green-2;
+
+  turquoise1: $turquoise-1;
+  turquoise2: $turquoise-2;
+
+  gray1: $gray-1;
+  gray2: $gray-2;
+  gray3: $gray-3;
+  gray4: $gray-4;
+
+  white: $white;
+  white1_50: $white-1-50;
+  white1_80: $white-1-80;
+
+  black1_10: $black-1-10;
+  black1_15: $black-1-15;
+  black1_50: $black-1-50;
+  black1_70: $black-1-70;
+  black1_80: $black-1-80;
+
+  gold: $gold;
+  silver: $silver;
+  bronze: $bronze;
+
+  controlPrimaryNormalColor: $control-primary-normal-color;
+  controlPrimarySuccessColor: $control-primary-success-color;
+  controlPrimaryCallToActionColor: $control-primary-call-to-action-color;
+  controlPrimaryDangerColor: $control-primary-danger-color;
+
+  controlSecondaryNormalColor: $control-secondary-normal-color;
+  controlSecondarySuccessColor: $control-secondary-success-color;
+  controlSecondaryDangerColor: $control-secondary-danger-color;
+
+  controlTextNormalColor: $control-text-normal-color;
+  controlTextContrastColor: $control-text-contrast-color;
+  controlTextSuccessColor: $control-text-success-color;
+  controlTextDangerColor: $control-text-danger-color;
+
+  controlPrimaryDisabledColor: $control-primary-disabled-color;
+  controlTextDisabledColor: $control-text-disabled-color;
+}

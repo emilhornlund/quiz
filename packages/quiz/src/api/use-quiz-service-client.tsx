@@ -2,6 +2,7 @@ import {
   AuthResponseDto,
   CreateGameResponseDto,
   FindGameResponseDto,
+  GameResultDto,
   MediaUploadPhotoResponseDto,
   PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
@@ -406,6 +407,23 @@ export const useQuizServiceClient = () => {
     await apiPost(`/games/${gameID}/answers`, requestBody)
   }
 
+  /**
+   * Fetches the results for a completed game by its ID.
+   *
+   * @param gameID - The unique identifier of the game to retrieve results for.
+   *
+   * @returns A promise that resolves with the game's result data.
+   */
+  const getGameResults = (gameID: string) =>
+    apiGet<GameResultDto>(`/games/${gameID}/results`)
+
+  /**
+   * Searches for media photos based on an optional search term.
+   *
+   * @param search - An optional search string to filter photo results.
+   *
+   * @returns A promise that resolves to a paginated list of matching media photos.
+   */
   const searchPhotos = (
     search?: string,
   ): Promise<PaginatedMediaPhotoSearchDto> =>
@@ -490,6 +508,7 @@ export const useQuizServiceClient = () => {
     leaveGame,
     completeTask,
     submitQuestionAnswer,
+    getGameResults,
     searchPhotos,
     uploadImage,
     deleteUploadedPhoto,

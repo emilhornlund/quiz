@@ -1,0 +1,172 @@
+@import '../../../../styles/colors';
+@import '../../../../styles/helpers';
+
+.gameResultsPage {
+  display: flex;
+  flex-direction: column;
+  row-gap: $desktop-layout-gutter;
+  width: 100%;
+  flex: 1;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    row-gap: $desktop-layout-gutter;
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $desktop-layout-gutter;
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        background-color: $white;
+        color: $gray-4;
+        padding: $desktop-narrow-layout-gutter;
+        border-radius: $desktop-border-radius;
+        @include fontSize(22px);
+
+        &.progress {
+          display: flex;
+          flex-direction: row;
+          column-gap: $desktop-narrow-layout-gutter;
+
+          .text {
+            flex: 1;
+          }
+        }
+
+        &.details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: $desktop-layout-gutter * 0.5;
+
+          .title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            column-gap: $desktop-narrow-layout-gutter;
+          }
+
+          .value {
+            font-weight: bold;
+            white-space: nowrap;
+            text-align: right;
+          }
+        }
+
+        &.metric {
+          row-gap: $desktop-narrow-layout-gutter * 0.5;
+
+          .value {
+            font-weight: bold;
+
+            @include fontSize(28px);
+          }
+
+          .nickname {
+            background-color: $blue-1;
+            color: $white;
+            height: pxToRem(34px);
+            border-radius: calc(34px / 2);
+            padding: 0 pxToRem(18px);
+
+            @include fontSize(22px);
+          }
+
+          .title {
+            text-transform: capitalize;
+
+            @include fontSize(22px);
+          }
+        }
+      }
+    }
+
+    .table {
+      display: flex;
+      flex-direction: column;
+      row-gap: $desktop-narrow-layout-gutter * 0.5;
+      color: $gray-4;
+
+      @include fontSize(22px);
+
+      .tableRow {
+        display: flex;
+        flex-direction: column;
+        background-color: $white;
+        padding: $desktop-layout-gutter * 0.35 $desktop-layout-gutter;
+        border-radius: $desktop-border-radius;
+        cursor: pointer;
+
+        .main {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          column-gap: $desktop-layout-gutter;
+
+          .badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: $gray-1;
+            font-weight: bold;
+            width: pxToRem(38px);
+            height: pxToRem(38px);
+          }
+
+          .value {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          column-gap: $desktop-layout-gutter;
+          row-gap: $desktop-layout-gutter * 0.5;
+          transition: all 0.25s linear;
+          overflow: hidden;
+          visibility: hidden;
+          opacity: 0;
+          height: 0;
+
+          @include fontSize(18px);
+
+          &.active {
+            visibility: visible;
+            opacity: 1;
+            height: auto;
+          }
+
+          .item {
+            display: flex;
+            flex-direction: row;
+            column-gap: $desktop-narrow-layout-gutter;
+            justify-content: space-between;
+
+            .title {
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+              align-items: center;
+              column-gap: $desktop-narrow-layout-gutter * 0.5;
+            }
+
+            .value {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}

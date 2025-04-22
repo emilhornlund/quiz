@@ -10,6 +10,7 @@ import {
   DiscoverPage,
   ErrorPage,
   GamePage,
+  GameResultsPage,
   HomePage,
   JoinPage,
   PlayerLinkPage,
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
             <GamePage />
           </GameContextProvider>
         ),
+      },
+      {
+        path: '/game/results/:gameID',
+        element: <GameResultsPage />,
       },
       {
         path: '/player/profile',
