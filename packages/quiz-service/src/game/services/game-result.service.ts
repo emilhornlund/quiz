@@ -1,20 +1,23 @@
-import { Injectable } from '@nestjs/common'
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable } from '@nestjs/common'
 import {
   GameMode,
-  GameResultClassicModeDto,
   GameResultClassicModeQuestionMetricDto,
+  GameResultDto,
   GameResultPlayerMetricDto,
   GameResultQuestionMetricDto,
-  GameResultZeroToOneHundredModeDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
 import { GameResultClassicModePlayerMetricDto } from '@quiz/common/dist/cjs/models/game-result'
 
+import { Cacheable } from '../../app/cache'
 import { GameResultsNotFoundException } from '../exceptions'
 
 import { GameResultRepository } from './game-result.repository'
 import { PlayerMetric, QuestionMetric } from './models/schemas'
+
+const CACHE_GAME_RESULTS_TTL = 60 * 60 // 1h in seconds
 
 /**
  * Service for retrieving and formatting quiz game results.
@@ -24,9 +27,13 @@ export class GameResultService {
   /**
    * Constructs a new GameResultService.
    *
+   * @param cacheManager - The cache manager used for caching responses.
    * @param gameResultRepository - Repository for accessing stored game results.
    */
-  constructor(private readonly gameResultRepository: GameResultRepository) {}
+  constructor(
+    @Inject(CACHE_MANAGER) public readonly cacheManager: Cache,
+    private readonly gameResultRepository: GameResultRepository,
+  ) {}
 
   /**
    * Retrieves the result of a completed quiz game.
@@ -35,9 +42,8 @@ export class GameResultService {
    * @returns The structured result of the game.
    * @throws GameResultsNotFoundException if the result is not found.
    */
-  public async getGameResult(
-    gameID: string,
-  ): Promise<GameResultClassicModeDto | GameResultZeroToOneHundredModeDto> {
+  @Cacheable(CACHE_GAME_RESULTS_TTL)
+  public async getGameResult(gameID: string): Promise<GameResultDto> {
     const gameResultDocument =
       await this.gameResultRepository.findGameResult(gameID)
 
