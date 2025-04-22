@@ -25,11 +25,11 @@ describe('Game Result Converter', () => {
           created: new Date('2025-04-09T14:45:53.482Z'),
           leaderboard: [
             {
-              playerId: 'c36386fd-34c9-4a93-b282-805c026fb62e',
-              position: 1,
-              nickname: 'CosmicScorpion',
-              score: 3891,
-              streaks: 4,
+              playerId: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1',
+              position: 3,
+              nickname: 'BraveStallion',
+              score: 948,
+              streaks: 0,
             },
             {
               playerId: 'dc74af58-f7d3-4116-9194-019674a607dc',
@@ -39,11 +39,11 @@ describe('Game Result Converter', () => {
               streaks: 2,
             },
             {
-              playerId: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1',
-              position: 3,
-              nickname: 'BraveStallion',
-              score: 948,
-              streaks: 0,
+              playerId: 'c36386fd-34c9-4a93-b282-805c026fb62e',
+              position: 1,
+              nickname: 'CosmicScorpion',
+              score: 3891,
+              streaks: 4,
             },
           ],
         },
@@ -672,10 +672,10 @@ describe('Game Result Converter', () => {
           created: new Date('2025-04-11T15:25:11.915Z'),
           leaderboard: [
             {
-              playerId: 'a145a38f-cb05-4ee5-b41a-6c4c16327321',
-              position: 1,
-              nickname: 'BraveBison',
-              score: 70,
+              playerId: '84aabd9d-e067-4930-b6d2-9048f295d190',
+              position: 3,
+              nickname: 'AtomicBasilisk',
+              score: 236,
               streaks: 0,
             },
             {
@@ -686,10 +686,10 @@ describe('Game Result Converter', () => {
               streaks: 0,
             },
             {
-              playerId: '84aabd9d-e067-4930-b6d2-9048f295d190',
-              position: 3,
-              nickname: 'AtomicBasilisk',
-              score: 236,
+              playerId: 'a145a38f-cb05-4ee5-b41a-6c4c16327321',
+              position: 1,
+              nickname: 'BraveBison',
+              score: 70,
               streaks: 0,
             },
           ],

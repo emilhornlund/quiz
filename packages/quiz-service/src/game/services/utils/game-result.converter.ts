@@ -65,7 +65,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     name,
     game: gameDocument,
     host,
-    players: buildPlayerMetric(
+    players: buildPlayerMetrics(
       mode,
       questions,
       questionTasks,
@@ -73,7 +73,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
       questionResultTasks,
       playerParticipants,
     ),
-    questions: buildQuestionMetric(
+    questions: buildQuestionMetrics(
       mode,
       questions,
       questionResultTasks,
@@ -96,7 +96,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
  * @param playerParticipants - All participants in the game with type PLAYER.
  * @returns An array of PlayerMetric objects containing stats for each player.
  */
-function buildPlayerMetric(
+function buildPlayerMetrics(
   mode: GameMode,
   questions: QuestionDao[],
   questionTasks: (BaseTask & QuestionTask)[],
@@ -164,6 +164,7 @@ function buildPlayerMetric(
             )
           : undefined,
     }))
+    .sort((lhs, rhs) => lhs.rank - rhs.rank)
 }
 
 /**
@@ -176,7 +177,7 @@ function buildPlayerMetric(
  * @param playerParticipants - All participants in the game with type PLAYER.
  * @returns An array of QuestionMetric objects representing question performance.
  */
-function buildQuestionMetric(
+function buildQuestionMetrics(
   mode: GameMode,
   questions: QuestionDao[],
   questionResultTasks: (BaseTask & QuestionResultTask)[],
