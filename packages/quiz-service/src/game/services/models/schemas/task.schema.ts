@@ -276,6 +276,95 @@ questionResultTaskItemSchema.discriminator(
 )
 
 /**
+ * QuestionResultTaskBaseCorrectAnswer
+ */
+
+@Schema({ _id: false, discriminatorKey: 'type' })
+export class QuestionResultTaskBaseCorrectAnswer {
+  @Prop({
+    enum: [
+      QuestionType.MultiChoice,
+      QuestionType.Range,
+      QuestionType.TrueFalse,
+      QuestionType.TypeAnswer,
+    ],
+    required: true,
+  })
+  type!:
+    | QuestionType.MultiChoice
+    | QuestionType.Range
+    | QuestionType.TrueFalse
+    | QuestionType.TypeAnswer
+}
+
+export const QuestionResultTaskBaseCorrectAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskBaseCorrectAnswer)
+
+/**
+ * QuestionResultTaskCorrectMultiChoiceAnswer
+ */
+
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectMultiChoiceAnswer {
+  @Prop({ type: Number, required: true })
+  index: number
+}
+
+export const QuestionResultTaskCorrectMultiChoiceAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectMultiChoiceAnswer)
+
+/**
+ * QuestionResultTaskCorrectRangeAnswer
+ */
+
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectRangeAnswer {
+  @Prop({ type: Number, required: true })
+  value: number
+}
+
+export const QuestionResultTaskCorrectRangeAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectRangeAnswer)
+
+/**
+ * QuestionResultTaskCorrectTrueFalseAnswer
+ */
+
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectTrueFalseAnswer {
+  @Prop({ type: Boolean, required: true })
+  value: boolean
+}
+
+export const QuestionResultTaskCorrectTrueFalseAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectTrueFalseAnswer)
+
+/**
+ * QuestionResultTaskCorrectTypeAnswer
+ */
+
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectTypeAnswer {
+  @Prop({ type: String, required: true })
+  value: string
+}
+
+export const QuestionResultTaskCorrectTypeAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectTypeAnswer)
+
+/**
+ * Represents a question result task correct answer with its specific discriminator type.
+ */
+export type QuestionResultTaskCorrectAnswer =
+  QuestionResultTaskBaseCorrectAnswer &
+    (
+      | QuestionResultTaskCorrectMultiChoiceAnswer
+      | QuestionResultTaskCorrectRangeAnswer
+      | QuestionResultTaskCorrectTrueFalseAnswer
+      | QuestionResultTaskCorrectTypeAnswer
+    )
+
+/**
  * QuestionResultTask
  */
 
@@ -286,12 +375,37 @@ export class QuestionResultTask {
   @Prop({ type: Number, required: true })
   questionIndex: number
 
+  @Prop({
+    type: [QuestionResultTaskBaseCorrectAnswerSchema],
+    required: true,
+  })
+  correctAnswers: QuestionResultTaskCorrectAnswer[]
+
   @Prop({ type: [QuestionResultTaskItemSchema], required: true })
   results: QuestionResultTaskItem[]
 }
 
 export const QuestionResultTaskSchema =
   SchemaFactory.createForClass(QuestionResultTask)
+
+const questionResultTaskSchema =
+  QuestionResultTaskSchema.path<MongooseSchema.Types.Array>('correctAnswers')
+questionResultTaskSchema.discriminator(
+  QuestionType.MultiChoice,
+  QuestionResultTaskCorrectMultiChoiceAnswerSchema,
+)
+questionResultTaskSchema.discriminator(
+  QuestionType.Range,
+  QuestionResultTaskCorrectRangeAnswerSchema,
+)
+questionResultTaskSchema.discriminator(
+  QuestionType.TrueFalse,
+  QuestionResultTaskCorrectTrueFalseAnswerSchema,
+)
+questionResultTaskSchema.discriminator(
+  QuestionType.TypeAnswer,
+  QuestionResultTaskCorrectTypeAnswerSchema,
+)
 
 /**
  * LeaderboardTaskItem

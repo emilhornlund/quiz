@@ -17,6 +17,7 @@ import {
   ParticipantBase,
   ParticipantPlayer,
   QuestionResultTask,
+  QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
   QuestionTaskMultiChoiceAnswer,
   QuestionTaskRangeAnswer,
@@ -63,29 +64,32 @@ describe('Game Event Converter', () => {
                 duration: 5,
               },
             ],
-            buildQuestionResultTask([
-              buildQuestionResultTaskItem(
-                QuestionType.MultiChoice,
-                PLAYER_01,
-                true,
-                1,
-                0,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.MultiChoice,
-                PLAYER_02,
-                true,
-                1,
-                0,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.MultiChoice,
-                PLAYER_03,
-                false,
-                1,
-                1,
-              ),
-            ]),
+            buildQuestionResultTask(
+              [{ type: QuestionType.MultiChoice, index: 0 }],
+              [
+                buildQuestionResultTaskItem(
+                  QuestionType.MultiChoice,
+                  PLAYER_01,
+                  true,
+                  1,
+                  0,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.MultiChoice,
+                  PLAYER_02,
+                  true,
+                  1,
+                  0,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.MultiChoice,
+                  PLAYER_03,
+                  false,
+                  1,
+                  1,
+                ),
+              ],
+            ),
           )
 
           const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
@@ -142,29 +146,32 @@ describe('Game Event Converter', () => {
                 duration: 30,
               },
             ],
-            buildQuestionResultTask([
-              buildQuestionResultTaskItem(
-                QuestionType.Range,
-                PLAYER_01,
-                true,
-                1,
-                50,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.Range,
-                PLAYER_02,
-                true,
-                1,
-                50,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.Range,
-                PLAYER_03,
-                false,
-                1,
-                45,
-              ),
-            ]),
+            buildQuestionResultTask(
+              [{ type: QuestionType.Range, value: 50 }],
+              [
+                buildQuestionResultTaskItem(
+                  QuestionType.Range,
+                  PLAYER_01,
+                  true,
+                  1,
+                  50,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.Range,
+                  PLAYER_02,
+                  true,
+                  1,
+                  50,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.Range,
+                  PLAYER_03,
+                  false,
+                  1,
+                  45,
+                ),
+              ],
+            ),
           )
 
           const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
@@ -217,29 +224,32 @@ describe('Game Event Converter', () => {
                 duration: 30,
               },
             ],
-            buildQuestionResultTask([
-              buildQuestionResultTaskItem(
-                QuestionType.TrueFalse,
-                PLAYER_01,
-                true,
-                1,
-                false,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.TrueFalse,
-                PLAYER_02,
-                true,
-                1,
-                false,
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.TrueFalse,
-                PLAYER_03,
-                false,
-                1,
-                true,
-              ),
-            ]),
+            buildQuestionResultTask(
+              [{ type: QuestionType.TrueFalse, value: false }],
+              [
+                buildQuestionResultTaskItem(
+                  QuestionType.TrueFalse,
+                  PLAYER_01,
+                  true,
+                  1,
+                  false,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.TrueFalse,
+                  PLAYER_02,
+                  true,
+                  1,
+                  false,
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.TrueFalse,
+                  PLAYER_03,
+                  false,
+                  1,
+                  true,
+                ),
+              ],
+            ),
           )
 
           const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
@@ -292,29 +302,32 @@ describe('Game Event Converter', () => {
                 duration: 30,
               },
             ],
-            buildQuestionResultTask([
-              buildQuestionResultTaskItem(
-                QuestionType.TypeAnswer,
-                PLAYER_01,
-                true,
-                1,
-                'Stockholm',
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.TypeAnswer,
-                PLAYER_02,
-                true,
-                1,
-                'Stockholm',
-              ),
-              buildQuestionResultTaskItem(
-                QuestionType.TypeAnswer,
-                PLAYER_03,
-                false,
-                1,
-                'Copenhagen',
-              ),
-            ]),
+            buildQuestionResultTask(
+              [{ type: QuestionType.TypeAnswer, value: 'stockholm' }],
+              [
+                buildQuestionResultTaskItem(
+                  QuestionType.TypeAnswer,
+                  PLAYER_01,
+                  true,
+                  1,
+                  'Stockholm',
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.TypeAnswer,
+                  PLAYER_02,
+                  true,
+                  1,
+                  'Stockholm',
+                ),
+                buildQuestionResultTaskItem(
+                  QuestionType.TypeAnswer,
+                  PLAYER_03,
+                  false,
+                  1,
+                  'Copenhagen',
+                ),
+              ],
+            ),
           )
 
           const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
@@ -421,6 +434,7 @@ function buildGameDocument(
 }
 
 function buildQuestionResultTask(
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   results: QuestionResultTaskItem[],
 ): BaseTask & QuestionResultTask {
   return {
@@ -428,6 +442,7 @@ function buildQuestionResultTask(
     type: TaskType.QuestionResult,
     status: 'active',
     questionIndex: 0,
+    correctAnswers,
     results,
     created: new Date(),
   }

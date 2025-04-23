@@ -367,6 +367,7 @@ function buildMockClassicModeGame(
         currentTransitionInitiated: offset(23.648),
         created: offset(21.797),
         questionIndex: 0,
+        correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
         results: [
           {
             type: QuestionType.MultiChoice,
@@ -426,6 +427,7 @@ function buildMockClassicModeGame(
         currentTransitionInitiated: offset(35.531),
         created: offset(33.236),
         questionIndex: 1,
+        correctAnswers: [{ type: QuestionType.Range, value: 50 }],
         results: [
           {
             type: QuestionType.Range,
@@ -485,6 +487,7 @@ function buildMockClassicModeGame(
         currentTransitionInitiated: offset(41.115),
         created: offset(39.451),
         questionIndex: 2,
+        correctAnswers: [{ type: QuestionType.TrueFalse, value: false }],
         results: [
           {
             type: QuestionType.TrueFalse,
@@ -544,6 +547,10 @@ function buildMockClassicModeGame(
         currentTransitionInitiated: offset(53.334),
         created: offset(52.133),
         questionIndex: 3,
+        correctAnswers: [
+          { type: QuestionType.TypeAnswer, value: 'Copenhagen' },
+          { type: QuestionType.TypeAnswer, value: 'Köpenhamn' },
+        ],
         results: [
           {
             type: QuestionType.TypeAnswer,
@@ -721,6 +728,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(30.141),
         created: offset(27.308),
         questionIndex: 0,
+        correctAnswers: [{ type: QuestionType.Range, value: 6 }],
         results: [
           {
             type: QuestionType.Range,
@@ -780,6 +788,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(42.38),
         created: offset(40.318),
         questionIndex: 1,
+        correctAnswers: [{ type: QuestionType.Range, value: 90 }],
         results: [
           {
             type: QuestionType.Range,
@@ -839,6 +848,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(52.797),
         created: offset(51.276),
         questionIndex: 2,
+        correctAnswers: [{ type: QuestionType.Range, value: 14 }],
         results: [
           {
             type: QuestionType.Range,
@@ -898,6 +908,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(72.279),
         created: offset(63.112),
         questionIndex: 3,
+        correctAnswers: [{ type: QuestionType.Range, value: 12 }],
         results: [
           {
             type: QuestionType.Range,

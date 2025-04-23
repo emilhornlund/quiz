@@ -2,6 +2,7 @@ import {
   GameMode,
   GameParticipantType,
   QuestionRangeAnswerMargin,
+  QuestionType,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -27,6 +28,7 @@ import {
   ParticipantPlayer,
   PodiumTask,
   QuestionResultTask,
+  QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
   QuestionTask,
   QuestionTaskAnswer,
@@ -125,19 +127,13 @@ export function calculateRangeMargin(
  * - Type answer questions: Compares the lowercased correct answer and provided answer.
  *
  * @param {QuestionDao} question - The question object to check against.
- * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
+ * @param {QuestionTaskAnswer} answer - The optional answer object to validate.
  *
  * @returns {boolean} Returns `true` if the answer is correct for the given question, otherwise `false`.
  */
 export function isQuestionAnswerCorrect(
   question: QuestionDao,
-  answer?: QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-    ),
+  answer?: QuestionTaskAnswer,
 ): boolean {
   if (isMultiChoiceQuestion(question) && isMultiChoiceAnswer(answer)) {
     const optionsIndex = answer.answer
@@ -369,18 +365,56 @@ export function calculateZeroToOneHundredModeScore(
 }
 
 /**
- * Constructs a new question result task based on the provided game document.
+ * Extracts the correct answer(s) for the current question in the game.
  *
- * @param {GameDocument} gameDocument - The current game document.
- * @param {QuestionTaskAnswer[]} answers - The list of answers submitted for the question task.
+ * Handles all supported question types (MultiChoice, Range, TrueFalse, TypeAnswer),
+ * returning a normalized representation of each correct answer for inclusion in the result task.
  *
- * @throws {IllegalTaskTypeException} If the current task type is not a question.
+ * @param gameDocument - The current game document, including the question task.
+ * @returns An array of `QuestionResultTaskCorrectAnswer` representing the correct answer(s).
+ */
+function buildInitialQuestionResultTaskCorrectAnswers(
+  gameDocument: GameDocument & { currentTask: { type: TaskType.Question } },
+): QuestionResultTaskCorrectAnswer[] {
+  const { questionIndex } = gameDocument.currentTask
+  const question = gameDocument.questions[questionIndex]
+
+  if (isMultiChoiceQuestion(question)) {
+    return question.options
+      .map((option, index) =>
+        option.correct ? { type: QuestionType.MultiChoice, index } : undefined,
+      )
+      .filter((option) => !!option)
+  }
+  if (isRangeQuestion(question)) {
+    return [{ type: QuestionType.Range, value: question.correct }]
+  }
+  if (isTrueFalseQuestion(question)) {
+    return [{ type: QuestionType.TrueFalse, value: question.correct }]
+  }
+  if (isTypeAnswerQuestion(question)) {
+    return question.options.map((option) => ({
+      type: QuestionType.TypeAnswer,
+      value: option,
+    }))
+  }
+
+  return []
+}
+
+/**
+ * Constructs a `QuestionResultTask` containing result data for all players in response to a question.
  *
- * @returns {BaseTask & QuestionResultTask} A new question result task object.
+ * Gathers answers from each player, evaluates correctness, computes scores and streaks, and
+ * includes the correct answer(s) for the current question.
+ *
+ * @param gameDocument - The current game document containing the active question task and participant answers.
+ * @returns A complete `QuestionResultTask` ready to be emitted to clients or stored.
+ *
+ * @throws {IllegalTaskTypeException} If the current task is not a question task.
  */
 export function buildQuestionResultTask(
   gameDocument: GameDocument,
-  answers: QuestionTaskAnswer[],
 ): BaseTask & QuestionResultTask {
   if (!isQuestionTask(gameDocument)) {
     throw new IllegalTaskTypeException(
@@ -392,10 +426,13 @@ export function buildQuestionResultTask(
   const { questionIndex } = gameDocument.currentTask
   const question = gameDocument.questions[questionIndex]
 
+  const correctAnswers =
+    buildInitialQuestionResultTaskCorrectAnswers(gameDocument)
+
   const results: QuestionResultTaskItem[] = gameDocument.participants
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .map((participant) => {
-      const answer = answers.find(
+      const answer = gameDocument.currentTask.answers.find(
         ({ playerId }) => playerId === participant.client.player._id,
       )
       return buildQuestionResultTaskItem(
@@ -417,6 +454,7 @@ export function buildQuestionResultTask(
     type: TaskType.QuestionResult,
     status: 'pending',
     questionIndex,
+    correctAnswers,
     results,
     created: new Date(),
   }

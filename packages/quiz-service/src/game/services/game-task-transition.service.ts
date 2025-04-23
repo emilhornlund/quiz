@@ -163,7 +163,7 @@ export class GameTaskTransitionService {
 
     gameDocument.currentTask.answers = answers
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = buildQuestionResultTask(gameDocument, answers)
+    gameDocument.currentTask = buildQuestionResultTask(gameDocument)
   }
 
   /**
