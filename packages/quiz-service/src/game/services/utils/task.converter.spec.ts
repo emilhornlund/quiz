@@ -99,336 +99,357 @@ describe('TaskConverter', () => {
   describe('isQuestionAnswerCorrect', () => {
     describe('QuestionType is Multi Choice', () => {
       it('should validate correct multi-choice answers', () => {
-        const question = {
-          type: QuestionType.MultiChoice,
-          options: [{ correct: true }, { correct: false }],
-        } as BaseQuestionDao & QuestionMultiChoiceDao
-
         const answer = {
           type: QuestionType.MultiChoice,
           answer: 0,
         } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer
-        expect(isQuestionAnswerCorrect(question, answer)).toBe(true)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.MultiChoice, index: 0 }],
+            answer,
+          ),
+        ).toBe(true)
 
         const wrongAnswer = {
           type: QuestionType.MultiChoice,
           answer: 1,
         } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer
-        expect(isQuestionAnswerCorrect(question, wrongAnswer)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.MultiChoice, index: 0 }],
+            wrongAnswer,
+          ),
+        ).toBe(false)
       })
 
       it('should handle out-of-bounds multi-choice answers', () => {
-        const question = {
-          type: QuestionType.MultiChoice,
-          options: [{ correct: true }, { correct: false }],
-        } as BaseQuestionDao & QuestionMultiChoiceDao
-
         const answer = {
           type: QuestionType.MultiChoice,
           answer: 2,
         } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer
-        expect(isQuestionAnswerCorrect(question, answer)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.MultiChoice, index: 0 }],
+            answer,
+          ),
+        ).toBe(false)
       })
 
       it('should handle undefined answer', () => {
-        const question = {
-          type: QuestionType.MultiChoice,
-          options: [{ correct: true }],
-        } as BaseQuestionDao & QuestionMultiChoiceDao
-
         expect(
-          isQuestionAnswerCorrect(question, {
-            type: QuestionType.MultiChoice,
-            answer: undefined,
-          } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer),
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.MultiChoice, index: 0 }],
+            {
+              type: QuestionType.MultiChoice,
+              answer: undefined,
+            } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer,
+          ),
         ).toBe(false)
 
-        expect(isQuestionAnswerCorrect(question, undefined)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.MultiChoice, index: 0 }],
+            undefined,
+          ),
+        ).toBe(false)
       })
     })
 
     describe('QuestionType is Range', () => {
       it('should validate range questions with exact match for None margin', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.None,
-        } as BaseQuestionDao & QuestionRangeDao
-
         const answer = {
           type: QuestionType.Range,
           answer: 100,
         } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-        expect(isQuestionAnswerCorrect(question, answer)).toBe(true)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.Range, value: 100 }],
+            answer,
+          ),
+        ).toBe(true)
 
         const wrongAnswer = {
           type: QuestionType.Range,
           answer: 101,
         } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-        expect(isQuestionAnswerCorrect(question, wrongAnswer)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.Range, value: 100 }],
+            wrongAnswer,
+          ),
+        ).toBe(false)
       })
 
       it('should validate range questions within Low margin', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.Low,
-        } as BaseQuestionDao & QuestionRangeDao
-
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 95,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 5% margin
+            QuestionRangeAnswerMargin.Low,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 105,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 5% margin
+            QuestionRangeAnswerMargin.Low,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 94,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 5% margin
+            QuestionRangeAnswerMargin.Low,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 106,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 5% margin
+            QuestionRangeAnswerMargin.Low,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within Medium margin', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.Medium,
-        } as BaseQuestionDao & QuestionRangeDao
-
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 90,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 10% margin
+            QuestionRangeAnswerMargin.Medium,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 110,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 10% margin
+            QuestionRangeAnswerMargin.Medium,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 89,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 10% margin
+            QuestionRangeAnswerMargin.Medium,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 111,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 10% margin
+            QuestionRangeAnswerMargin.Medium,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within High margin', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.High,
-        } as BaseQuestionDao & QuestionRangeDao
-
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 80,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 20% margin
+            QuestionRangeAnswerMargin.High,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 120,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 20% margin
+            QuestionRangeAnswerMargin.High,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 79,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 20% margin
+            QuestionRangeAnswerMargin.High,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 121,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 20% margin
+            QuestionRangeAnswerMargin.High,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within Maximum margin', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.Maximum,
-        } as BaseQuestionDao & QuestionRangeDao
-
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 0,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within maximum margin
+            QuestionRangeAnswerMargin.Maximum,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            question,
+            [{ type: QuestionType.Range, value: 100 }],
             {
               type: QuestionType.Range,
               answer: 100,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within maximum margin
+            QuestionRangeAnswerMargin.Maximum,
           ),
         ).toBe(true)
       })
 
       it('should handle undefined answer', () => {
-        const question = {
-          type: QuestionType.Range,
-          correct: 100,
-          margin: QuestionRangeAnswerMargin.None,
-        } as BaseQuestionDao & QuestionRangeDao
-
         expect(
-          isQuestionAnswerCorrect(question, {
-            type: QuestionType.Range,
-            answer: undefined,
-          } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer),
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.Range, value: 100 }],
+            {
+              type: QuestionType.Range,
+              answer: undefined,
+            } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
+            QuestionRangeAnswerMargin.None,
+          ),
         ).toBe(false)
 
-        expect(isQuestionAnswerCorrect(question, undefined)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.Range, value: 100 }],
+            undefined,
+          ),
+        ).toBe(false)
       })
     })
 
     describe('QuestionType is True/False', () => {
       it('should validate correct true/false answers', () => {
-        const question = {
-          type: QuestionType.TrueFalse,
-          correct: true,
-        } as BaseQuestionDao & QuestionTrueFalseDao
-
         const answer = {
           type: QuestionType.TrueFalse,
           answer: true,
         } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer
-        expect(isQuestionAnswerCorrect(question, answer)).toBe(true)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TrueFalse, value: true }],
+            answer,
+          ),
+        ).toBe(true)
 
         const wrongAnswer = {
           type: QuestionType.TrueFalse,
           answer: false,
         } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer
-        expect(isQuestionAnswerCorrect(question, wrongAnswer)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TrueFalse, value: true }],
+            wrongAnswer,
+          ),
+        ).toBe(false)
       })
 
       it('should handle undefined answer', () => {
-        const question = {
-          type: QuestionType.TrueFalse,
-          correct: true,
-        } as BaseQuestionDao & QuestionTrueFalseDao
-
         expect(
-          isQuestionAnswerCorrect(question, {
-            type: QuestionType.TrueFalse,
-            answer: undefined,
-          } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer),
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TrueFalse, value: true }],
+            {
+              type: QuestionType.TrueFalse,
+              answer: undefined,
+            } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer,
+          ),
         ).toBe(false)
 
-        expect(isQuestionAnswerCorrect(question, undefined)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TrueFalse, value: true }],
+            undefined,
+          ),
+        ).toBe(false)
       })
     })
 
     describe('QuestionType is Type Answer', () => {
       it('should validate type answer questions with case-insensitive match', () => {
-        const question = {
-          type: QuestionType.TypeAnswer,
-          options: ['OpenAI'],
-        } as BaseQuestionDao & QuestionTypeAnswerDao
-
         const answer = {
           type: QuestionType.TypeAnswer,
           answer: 'openai',
         } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer
-        expect(isQuestionAnswerCorrect(question, answer)).toBe(true)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TypeAnswer, value: 'OpenAI' }],
+            answer,
+          ),
+        ).toBe(true)
 
         const wrongAnswer = {
           type: QuestionType.TypeAnswer,
           answer: 'wrong',
         } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer
-        expect(isQuestionAnswerCorrect(question, wrongAnswer)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TypeAnswer, value: 'OpenAI' }],
+            wrongAnswer,
+          ),
+        ).toBe(false)
       })
 
       it('should handle undefined answer', () => {
-        const question = {
-          type: QuestionType.TypeAnswer,
-          options: ['OpenAI'],
-        } as BaseQuestionDao & QuestionTypeAnswerDao
-
         expect(
-          isQuestionAnswerCorrect(question, {
-            type: QuestionType.TypeAnswer,
-            answer: undefined,
-          } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer),
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TypeAnswer, value: 'OpenAI' }],
+            {
+              type: QuestionType.TypeAnswer,
+              answer: undefined,
+            } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer,
+          ),
         ).toBe(false)
 
-        expect(isQuestionAnswerCorrect(question, undefined)).toBe(false)
+        expect(
+          isQuestionAnswerCorrect(
+            [{ type: QuestionType.TypeAnswer, value: 'OpenAI' }],
+            undefined,
+          ),
+        ).toBe(false)
       })
     })
   })
@@ -573,6 +594,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -598,6 +620,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -623,6 +646,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -648,6 +672,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -673,6 +698,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -698,6 +724,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -723,6 +750,7 @@ describe('TaskConverter', () => {
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
       const score = calculateClassicModeRangeQuestionScore(
+        [{ type: QuestionType.Range, value: question.correct }],
         presented,
         question,
         answer,
@@ -751,7 +779,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.MultiChoice, index: 0 }],
+        answer,
+      )
       expect(score).toEqual(983) // Speed-based calculation
     })
 
@@ -774,7 +807,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.MultiChoice, index: 0 }],
+        answer,
+      )
       expect(score).toEqual(0)
     })
 
@@ -795,7 +833,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.Range, value: question.correct }],
+        answer,
+      )
       expect(score).toEqual(983) // Speed + precision-based calculation
     })
 
@@ -804,11 +847,17 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.TrueFalse,
+        correct: true,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionTrueFalseDao
 
-      const score = calculateClassicModeScore(presented, question, undefined)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.TrueFalse, value: true }],
+        undefined,
+      )
       expect(score).toEqual(0) // No answer provided
     })
 
@@ -829,7 +878,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 5000),
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.Range, value: question.correct }],
+        answer,
+      )
       expect(score).toEqual(0) // Outside margin
     })
 
@@ -849,7 +903,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.TrueFalse, value: question.correct }],
+        answer,
+      )
       expect(score).toEqual(983) // Speed-based calculation
     })
 
@@ -869,7 +928,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.TrueFalse, value: question.correct }],
+        answer,
+      )
       expect(score).toEqual(0)
     })
 
@@ -889,7 +953,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.TypeAnswer, value: 'correct answer' }],
+        answer,
+      )
       expect(score).toEqual(983) // Speed-based calculation
     })
 
@@ -909,7 +978,12 @@ describe('TaskConverter', () => {
         created: new Date(presented.getTime() + 1000),
       } as QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer // 1 second
 
-      const score = calculateClassicModeScore(presented, question, answer)
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [{ type: QuestionType.TypeAnswer, value: 'correct answer' }],
+        answer,
+      )
       expect(score).toEqual(0)
     })
   })
@@ -926,7 +1000,13 @@ describe('TaskConverter', () => {
         answer: 50,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(-10)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(-10)
     })
 
     it('should return absolute difference for incorrect answers within range', () => {
@@ -939,25 +1019,49 @@ describe('TaskConverter', () => {
         type: QuestionType.Range,
         answer: 55,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(5)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(5)
 
       answer = {
         type: QuestionType.Range,
         answer: 45,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(5)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(5)
 
       answer = {
         type: QuestionType.Range,
         answer: 0,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(50)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(50)
 
       answer = {
         type: QuestionType.Range,
         answer: 100,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(50)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(50)
     })
 
     it('should return 100 for out-of-range answers', () => {
@@ -970,13 +1074,25 @@ describe('TaskConverter', () => {
         type: QuestionType.Range,
         answer: -10,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(100)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(100)
 
       answer = {
         type: QuestionType.Range,
         answer: 120,
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(100)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: question.correct }],
+          question,
+          answer,
+        ),
+      ).toEqual(100)
     })
 
     it('should return 100 for invalid questions or answers', () => {
@@ -989,11 +1105,21 @@ describe('TaskConverter', () => {
         answer: 0,
       } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer
 
-      expect(calculateZeroToOneHundredModeScore(question, answer)).toEqual(100)
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: 0 }],
+          question,
+          answer,
+        ),
+      ).toEqual(100)
 
-      expect(calculateZeroToOneHundredModeScore(question, undefined)).toEqual(
-        100,
-      )
+      expect(
+        calculateZeroToOneHundredModeScore(
+          [{ type: QuestionType.Range, value: 0 }],
+          question,
+          undefined,
+        ),
+      ).toEqual(100)
     })
   })
 

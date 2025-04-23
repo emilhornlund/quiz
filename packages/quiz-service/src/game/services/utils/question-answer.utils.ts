@@ -8,6 +8,12 @@ import {
   Participant,
   ParticipantBase,
   ParticipantPlayer,
+  QuestionResultTaskBaseCorrectAnswer,
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskCorrectMultiChoiceAnswer,
+  QuestionResultTaskCorrectRangeAnswer,
+  QuestionResultTaskCorrectTrueFalseAnswer,
+  QuestionResultTaskCorrectTypeAnswer,
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
@@ -212,4 +218,68 @@ export function toPlayerQuestionPlayerEventMetaData(
       (answer) => answer.playerId === participant.client.player._id,
     ),
   }
+}
+
+/**
+ * Checks if the given correct answer is of type `MultiChoice`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `MultiChoice`, otherwise `false`.
+ */
+export function isMultiChoiceCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectMultiChoiceAnswer & {
+    type: QuestionType.MultiChoice
+  } {
+  return answer?.type === QuestionType.MultiChoice
+}
+
+/**
+ * Checks if the given correct answer is of type `Range`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `Range`, otherwise `false`.
+ */
+export function isRangeCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectRangeAnswer & {
+    type: QuestionType.Range
+  } {
+  return answer?.type === QuestionType.Range
+}
+
+/**
+ * Checks if the given correct answer is of type `TrueFalse`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `TrueFalse`, otherwise `false`.
+ */
+export function isTrueFalseCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectTrueFalseAnswer & {
+    type: QuestionType.TrueFalse
+  } {
+  return answer?.type === QuestionType.TrueFalse
+}
+
+/**
+ * Checks if the given correct answer is of type `TypeAnswer`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `TypeAnswer`, otherwise `false`.
+ */
+export function isTypeAnswerCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectTypeAnswer & {
+    type: QuestionType.TypeAnswer
+  } {
+  return answer?.type === QuestionType.TypeAnswer
 }

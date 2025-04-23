@@ -43,9 +43,13 @@ import {
 
 import {
   isMultiChoiceAnswer,
+  isMultiChoiceCorrectAnswer,
   isRangeAnswer,
+  isRangeCorrectAnswer,
   isTrueFalseAnswer,
+  isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
+  isTypeAnswerCorrectAnswer,
 } from './question-answer.utils'
 import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
@@ -119,53 +123,57 @@ export function calculateRangeMargin(
 }
 
 /**
- * Determines if the provided answer is correct for the given question.
+ * Determines if a player's answer is correct based on the provided correct answers.
  *
- * - Multi-choice questions: Validates that the selected option is correct.
- * - Range questions: Validates if the answer falls within the allowed margin.
- * - True/False questions: Checks if the answer matches the correct boolean value.
- * - Type answer questions: Compares the lowercased correct answer and provided answer.
+ * Handles all supported question types:
+ * - MultiChoice: Matches selected option index against correct indices.
+ * - Range: Compares numeric value with margin consideration.
+ * - TrueFalse: Matches boolean value.
+ * - TypeAnswer: Compares lowercase trimmed string values.
  *
- * @param {QuestionDao} question - The question object to check against.
- * @param {QuestionTaskAnswer} answer - The optional answer object to validate.
- *
- * @returns {boolean} Returns `true` if the answer is correct for the given question, otherwise `false`.
+ * @param correctAnswers - An array of correct answers for the current question.
+ * @param answer - The player's submitted answer.
+ * @param margin - Optional margin for range-type questions.
+ * @returns `true` if the answer is correct; otherwise `false`.
  */
 export function isQuestionAnswerCorrect(
-  question: QuestionDao,
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer?: QuestionTaskAnswer,
+  margin?: QuestionRangeAnswerMargin,
 ): boolean {
-  if (isMultiChoiceQuestion(question) && isMultiChoiceAnswer(answer)) {
-    const optionsIndex = answer.answer
-    if (optionsIndex >= 0 && optionsIndex < question.options.length) {
-      return question.options[optionsIndex].correct
-    }
+  if (isMultiChoiceAnswer(answer)) {
+    return correctAnswers
+      .filter(isMultiChoiceCorrectAnswer)
+      .some((correctAnswer) => correctAnswer.index === answer.answer)
   }
-  if (isRangeQuestion(question) && isRangeAnswer(answer)) {
-    const { margin, correct } = question
-    const { answer: playerAnswer } = answer
 
-    if (margin === QuestionRangeAnswerMargin.None) {
-      return correct === playerAnswer
-    }
-
-    const rangeMargin = calculateRangeMargin(margin, correct)
-
-    return Math.abs(correct - playerAnswer) <= rangeMargin
+  if (isRangeAnswer(answer)) {
+    return correctAnswers.filter(isRangeCorrectAnswer).some(({ value }) => {
+      if (!margin || margin === QuestionRangeAnswerMargin.None) {
+        return value === answer.answer
+      }
+      const rangeMargin = calculateRangeMargin(margin, value)
+      return Math.abs(value - answer.answer) <= rangeMargin
+    })
   }
-  if (isTrueFalseQuestion(question) && isTrueFalseAnswer(answer)) {
-    return question.correct === answer.answer
+
+  if (isTrueFalseAnswer(answer)) {
+    return correctAnswers
+      .filter(isTrueFalseCorrectAnswer)
+      .some(({ value }) => value === answer.answer)
   }
-  if (isTypeAnswerQuestion(question) && isTypeAnswerAnswer(answer)) {
-    return !!(
-      answer?.answer?.length &&
-      question.options.some(
-        (option) =>
-          !!option?.length &&
-          option.trim().toLowerCase() === answer.answer.trim().toLowerCase(),
+
+  if (isTypeAnswerAnswer(answer)) {
+    return correctAnswers
+      .filter(isTypeAnswerCorrectAnswer)
+      .some(
+        ({ value }) =>
+          !!value &&
+          !!answer?.answer &&
+          value.toLowerCase() === answer.answer.trim().toLowerCase(),
       )
-    )
   }
+
   return false
 }
 
@@ -226,30 +234,29 @@ export function calculateClassicModeRawScore(
 }
 
 /**
- * Calculates the total score for a range question in classic mode.
+ * Calculates the score for a Range question in Classic mode.
  *
- * The score is determined by two factors:
- * 1. **Speed-based score (20%)**: A portion of the score is derived from the speed of the user's response,
- *    as calculated by `calculateClassicModeRawScore`.
- * 2. **Precision-based score (80%)**: A portion of the score is based on how close the user's answer is
- *    to the correct answer, within the allowed margin.
+ * Score is a combination of:
+ * 1. Speed-based score (20% of total points)
+ * 2. Precision-based score (80%), reduced based on distance from the correct answer.
  *
- * @param {Date} presented - The time when the question was presented.
- * @param {BaseQuestionDao & QuestionRangeDao} question - The range question object, including the correct answer, margin, and points.
- * @param {QuestionTaskBaseAnswer & QuestionTaskRangeAnswer} answer - The user's range answer, including the provided answer value.
- *
- * @returns {number} - The calculated total score for the range question.
+ * @param correctAnswers - List of correct range values to compare against.
+ * @param presented - The timestamp when the question was presented.
+ * @param question - The range question object with correct value, margin, and points.
+ * @param answer - The player's submitted range answer.
+ * @returns The total score based on precision and response speed.
  */
 export function calculateClassicModeRangeQuestionScore(
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   presented: Date,
   question: BaseQuestionDao & QuestionRangeDao,
   answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
 ): number {
-  const { correct, margin, points } = question
+  const { margin, points } = question
   const { answer: userAnswer } = answer
 
   // If the answer is not correct based on the question logic, return 0
-  if (!isQuestionAnswerCorrect(question, answer)) {
+  if (!isQuestionAnswerCorrect(correctAnswers, answer, margin)) {
     return 0
   }
 
@@ -262,40 +269,42 @@ export function calculateClassicModeRangeQuestionScore(
     return Math.round(speedScore + points * 0.8) // Full precision score for exact matches
   }
 
-  // For other margins, calculate precision-based score (80%)
-  const difference = Math.abs(correct - userAnswer)
-  const rangeMargin = calculateRangeMargin(margin, correct)
+  const scores = correctAnswers
+    .filter(isRangeCorrectAnswer)
+    .map(({ value }) => {
+      // For other margins, calculate precision-based score (80%)
+      const difference = Math.abs(value - userAnswer)
+      const rangeMargin = calculateRangeMargin(margin, value)
 
-  const precisionMultiplier =
-    difference > rangeMargin ? 0 : 1 - difference / rangeMargin
+      const precisionMultiplier =
+        difference > rangeMargin ? 0 : 1 - difference / rangeMargin
 
-  const precisionScore = points * precisionMultiplier * 0.8
+      const precisionScore = points * precisionMultiplier * 0.8
 
-  // Total score: sum of speed and precision scores
-  return Math.round(speedScore + precisionScore)
+      // Total score: sum of speed and precision scores
+      return Math.round(speedScore + precisionScore)
+    })
+    .sort((lhs, rhs) => rhs - lhs)
+
+  return scores[0] ?? 0
 }
 
 /**
- * Calculates the player's score for Classic mode based on their response time and question type.
+ * Calculates the score for a player's answer in Classic mode.
  *
- * - For range questions, the score is calculated using `calculateClassicModeRangeQuestionScore`,
- *   which considers both speed and precision.
- * - For other question types, the score is calculated using `calculateClassicModeRawScore`,
- *   which only considers speed.
+ * - Range questions use a margin-based precision scoring function.
+ * - All other types use raw speed-based scoring after correctness validation.
  *
- * @param {Date} presented - The timestamp when the question was presented.
- * @param {QuestionDao} question - The question object to check against.
- * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
- *
- * @returns {number} - The player's calculated score, rounded to the nearest whole number.
- *
- * @remarks
- * - For range questions, the calculation includes a precision component.
- * - For other types, only response time affects the score.
+ * @param presented - The timestamp when the question was presented.
+ * @param question - The question being answered.
+ * @param correctAnswers - List of correct answers to validate against.
+ * @param answer - The player's submitted answer.
+ * @returns The computed score, or 0 if the answer is incorrect.
  */
 export function calculateClassicModeScore(
   presented: Date,
   question: QuestionDao,
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer?: QuestionTaskBaseAnswer &
     (
       | QuestionTaskMultiChoiceAnswer
@@ -305,10 +314,15 @@ export function calculateClassicModeScore(
     ),
 ): number {
   if (isRangeQuestion(question) && isRangeAnswer(answer)) {
-    return calculateClassicModeRangeQuestionScore(presented, question, answer)
+    return calculateClassicModeRangeQuestionScore(
+      correctAnswers,
+      presented,
+      question,
+      answer,
+    )
   }
 
-  if (!isQuestionAnswerCorrect(question, answer)) {
+  if (!isQuestionAnswerCorrect(correctAnswers, answer, undefined)) {
     return 0
   }
 
@@ -317,22 +331,19 @@ export function calculateClassicModeScore(
 }
 
 /**
- * Calculates the player's score for ZeroToOneHundred mode.
+ * Calculates the score for a Range question in "Zero to One Hundred" mode.
  *
- * - A correct answer gives a score of `-10` (lower score is better).
- * - For incorrect answers within the range [0, 100], the score is the absolute difference
- *   between the correct answer and the player's answer.
- * - Answers outside the range [0, 100] or invalid answers default to a score of `100`.
+ * - Returns -10 for exact matches.
+ * - Returns absolute difference for other answers within [0, 100].
+ * - Returns 100 for invalid or out-of-range answers.
  *
- * @param {QuestionDao} question - The question object to check against.
- * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer)} answer - The optional answer object to validate.
- *
- * @returns {number} - The player's score:
- *   - `-10` for correct answers.
- *   - Absolute difference for incorrect answers within [0, 100].
- *   - `100` for invalid or out-of-range answers.
+ * @param correctAnswers - List of correct numeric values to validate against.
+ * @param question - The question being answered.
+ * @param answer - The player's submitted answer.
+ * @returns A score between -10 and 100 based on proximity or correctness.
  */
 export function calculateZeroToOneHundredModeScore(
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   question: QuestionDao,
   answer?: QuestionTaskBaseAnswer &
     (
@@ -347,21 +358,26 @@ export function calculateZeroToOneHundredModeScore(
     return 100
   }
 
-  const { correct } = question
-  const { answer: playerAnswer } = answer
+  const scores = correctAnswers
+    .filter(isRangeCorrectAnswer)
+    .map(({ value }) => {
+      // Return max penalty if out of range
+      if (answer.answer < 0 || answer.answer > 100) {
+        return 100
+      }
 
-  // Return max penalty if out of range
-  if (playerAnswer < 0 || playerAnswer > 100) {
-    return 100
-  }
+      // Return -10 for exact match
+      if (answer.answer === value) {
+        return -10
+      }
 
-  // Return -10 for correct answers
-  if (playerAnswer === correct) {
-    return -10
-  }
+      // Return absolute difference otherwise
+      return Math.abs(answer.answer - value)
+    })
+    .sort((lhs, rhs) => lhs - rhs)
 
-  // Return absolute difference for incorrect answers within range
-  return Math.abs(playerAnswer - correct)
+  // Return lowest score or 100 if no scores available
+  return scores[0] ?? 100
 }
 
 /**
@@ -439,6 +455,7 @@ export function buildQuestionResultTask(
         gameDocument,
         participant,
         question,
+        correctAnswers,
         answer,
       )
     })
@@ -463,11 +480,12 @@ export function buildQuestionResultTask(
 /**
  * Builds a `QuestionResultTaskItem` for a given player and their answer.
  *
- * Calculates correctness, score, total score, and streak based on the provided game state.
+ * Evaluates correctness, calculates scores, and includes player-specific stats.
  *
  * @param gameDocument - The current game document including task and mode information.
  * @param participant - The player participant for whom the result is being calculated.
  * @param question - The question associated with the current task.
+ * @param correctAnswers - The list of correct answers for the question.
  * @param answer - The answer provided by the player to the current question.
  * @returns A `QuestionResultTaskItem` containing the player's performance on the question.
  */
@@ -475,6 +493,7 @@ function buildQuestionResultTaskItem(
   gameDocument: GameDocument & { currentTask: { type: TaskType.Question } },
   participant: ParticipantBase & ParticipantPlayer,
   question: QuestionDao,
+  correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer: QuestionTaskAnswer,
 ): QuestionResultTaskItem {
   const { _id: playerId } = participant.client.player
@@ -483,12 +502,14 @@ function buildQuestionResultTaskItem(
 
   const { type } = question
 
-  const correct = isQuestionAnswerCorrect(question, answer)
+  const margin = isRangeQuestion(question) ? question.margin : undefined
+
+  const correct = isQuestionAnswerCorrect(correctAnswers, answer, margin)
 
   const lastScore =
     gameDocument.mode === GameMode.Classic
-      ? calculateClassicModeScore(presented, question, answer)
-      : calculateZeroToOneHundredModeScore(question, answer)
+      ? calculateClassicModeScore(presented, question, correctAnswers, answer)
+      : calculateZeroToOneHundredModeScore(correctAnswers, question, answer)
 
   const totalScore = participant.totalScore + lastScore
 
