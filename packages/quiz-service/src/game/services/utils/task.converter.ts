@@ -24,6 +24,7 @@ import {
   LeaderboardTask,
   LeaderboardTaskItem,
   LobbyTask,
+  Participant,
   ParticipantBase,
   ParticipantPlayer,
   PodiumTask,
@@ -419,15 +420,16 @@ function buildInitialQuestionResultTaskCorrectAnswers(
 }
 
 /**
- * Constructs a `QuestionResultTask` containing result data for all players in response to a question.
+ * Constructs a new `QuestionResultTask` based on the current active question task.
  *
- * Gathers answers from each player, evaluates correctness, computes scores and streaks, and
- * includes the correct answer(s) for the current question.
+ * This function is typically used during normal gameplay after a question is completed.
+ * It evaluates all player answers, calculates scores and correctness, and assigns positions.
+ * The task includes the correct answers and is ready to be emitted or persisted.
  *
- * @param gameDocument - The current game document containing the active question task and participant answers.
- * @returns A complete `QuestionResultTask` ready to be emitted to clients or stored.
+ * @param gameDocument - The current game state containing the active question task and answers.
+ * @returns A fully populated `QuestionResultTask` with correct answers and scored results.
  *
- * @throws {IllegalTaskTypeException} If the current task is not a question task.
+ * @throws {IllegalTaskTypeException} If the current task is not of type `Question`.
  */
 export function buildQuestionResultTask(
   gameDocument: GameDocument,
@@ -439,32 +441,21 @@ export function buildQuestionResultTask(
     )
   }
 
-  const { questionIndex } = gameDocument.currentTask
-  const question = gameDocument.questions[questionIndex]
+  const { mode, questions, participants } = gameDocument
+  const { questionIndex, presented, answers } = gameDocument.currentTask
+  const question = questions[questionIndex]
 
   const correctAnswers =
     buildInitialQuestionResultTaskCorrectAnswers(gameDocument)
 
-  const results: QuestionResultTaskItem[] = gameDocument.participants
-    .filter((participant) => participant.type === GameParticipantType.PLAYER)
-    .map((participant) => {
-      const answer = gameDocument.currentTask.answers.find(
-        ({ playerId }) => playerId === participant.client.player._id,
-      )
-      return buildQuestionResultTaskItem(
-        gameDocument,
-        participant,
-        question,
-        correctAnswers,
-        answer,
-      )
-    })
-    .sort((a, b) =>
-      gameDocument.mode === GameMode.Classic
-        ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
-        : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
-    )
-    .map((item, index) => ({ ...item, position: index + 1 }))
+  const results = buildQuestionResultTaskResults({
+    mode,
+    participants,
+    question,
+    presented,
+    correctAnswers,
+    answers,
+  })
 
   return {
     _id: uuidv4(),
@@ -478,11 +469,117 @@ export function buildQuestionResultTask(
 }
 
 /**
+ * Recomputes the `results` of an existing `QuestionResultTask` using data from the preceding `Question` task.
+ *
+ * This function is useful when needing to restore or recalculate results from a previously created result task.
+ * It uses the preserved correct answers and answers from the previous task to regenerate the final result items.
+ *
+ * @param gameDocument - The game document where the current task is of type `QuestionResult`
+ *                       and the previous task is of type `Question`.
+ * @returns A `QuestionResultTask` with newly rebuilt results while preserving task metadata.
+ *
+ * @throws {IllegalTaskTypeException} If the current task is not a `QuestionResult` or the previous task is not a `Question`.
+ */
+export function rebuildQuestionResultTask(
+  gameDocument: GameDocument,
+): BaseTask & QuestionResultTask {
+  if (!isQuestionResultTask(gameDocument)) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.QuestionResult,
+    )
+  }
+
+  const { mode, questions, participants } = gameDocument
+
+  const previousTask =
+    gameDocument.previousTasks?.[gameDocument.previousTasks.length - 1]
+  if (previousTask?.type !== TaskType.Question) {
+    throw new IllegalTaskTypeException(
+      gameDocument.currentTask.type,
+      TaskType.Question,
+    )
+  }
+
+  const { questionIndex, presented, answers } = previousTask
+  const question = questions[questionIndex]
+
+  const { correctAnswers } = gameDocument.currentTask
+
+  const results = buildQuestionResultTaskResults({
+    mode,
+    participants,
+    question,
+    presented,
+    correctAnswers,
+    answers,
+  })
+
+  return {
+    ...gameDocument.currentTask,
+    results,
+  }
+}
+
+/**
+ * Builds and ranks the result items for each player in a question round.
+ *
+ * This function filters out player participants, retrieves their answers,
+ * evaluates correctness, computes scores, and assigns positional rankings.
+ *
+ * @param mode - The game mode (`Classic` or `ZeroToOneHundred`), which determines the scoring strategy.
+ * @param participants - All game participants; only players are included in the result.
+ * @param question - The current question being evaluated.
+ * @param presented - The timestamp when the question was shown.
+ * @param correctAnswers - The list of correct answers for the question.
+ * @param answers - All submitted player answers for the question.
+ * @returns A sorted list of `QuestionResultTaskItem`s with calculated scores and positions.
+ */
+function buildQuestionResultTaskResults({
+  mode,
+  participants,
+  question,
+  presented,
+  correctAnswers,
+  answers,
+}: {
+  mode: GameMode
+  participants: Participant[]
+  question: QuestionDao
+  presented: Date
+  correctAnswers: QuestionResultTaskCorrectAnswer[]
+  answers: QuestionTaskAnswer[]
+}): QuestionResultTaskItem[] {
+  return participants
+    .filter((participant) => participant.type === GameParticipantType.PLAYER)
+    .map((participant) => {
+      const answer = answers.find(
+        ({ playerId }) => playerId === participant.client.player._id,
+      )
+      return buildQuestionResultTaskItem(
+        mode,
+        presented,
+        participant,
+        question,
+        correctAnswers,
+        answer,
+      )
+    })
+    .sort((a, b) =>
+      mode === GameMode.Classic
+        ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
+        : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
+    )
+    .map((item, index) => ({ ...item, position: index + 1 }))
+}
+
+/**
  * Builds a `QuestionResultTaskItem` for a given player and their answer.
  *
  * Evaluates correctness, calculates scores, and includes player-specific stats.
  *
- * @param gameDocument - The current game document including task and mode information.
+ * @param mode - description here.
+ * @param presented - description here.
  * @param participant - The player participant for whom the result is being calculated.
  * @param question - The question associated with the current task.
  * @param correctAnswers - The list of correct answers for the question.
@@ -490,15 +587,14 @@ export function buildQuestionResultTask(
  * @returns A `QuestionResultTaskItem` containing the player's performance on the question.
  */
 function buildQuestionResultTaskItem(
-  gameDocument: GameDocument & { currentTask: { type: TaskType.Question } },
+  mode: GameMode,
+  presented: Date,
   participant: ParticipantBase & ParticipantPlayer,
   question: QuestionDao,
   correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer: QuestionTaskAnswer,
 ): QuestionResultTaskItem {
   const { _id: playerId } = participant.client.player
-
-  const { presented } = gameDocument.currentTask
 
   const { type } = question
 
@@ -507,7 +603,7 @@ function buildQuestionResultTaskItem(
   const correct = isQuestionAnswerCorrect(correctAnswers, answer, margin)
 
   const lastScore =
-    gameDocument.mode === GameMode.Classic
+    mode === GameMode.Classic
       ? calculateClassicModeScore(presented, question, correctAnswers, answer)
       : calculateZeroToOneHundredModeScore(correctAnswers, question, answer)
 

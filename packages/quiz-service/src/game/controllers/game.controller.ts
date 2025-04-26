@@ -38,6 +38,7 @@ import {
 import { Client } from '../../client/services/models/schemas'
 import { ApiPlayerIDParam } from '../../player/controller/decorators/api'
 import {
+  ParseCorrectAnswerRequestPipe,
   ParseGamePINPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
@@ -45,12 +46,17 @@ import { GameEventSubscriber, GameService } from '../services'
 
 import { GameIdParam } from './decorators'
 import { AuthorizedGame } from './decorators/auth'
+import { RouteGameIdParam } from './decorators/route'
 import {
   JoinGameRequest,
+  MultiChoiceQuestionCorrectAnswerRequest,
+  RangeQuestionCorrectAnswerRequest,
   SubmitMultiChoiceQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
+  TrueFalseQuestionCorrectAnswerRequest,
+  TypeAnswerQuestionCorrectAnswerRequest,
 } from './models/requests'
 import { FindGameResponse } from './models/response'
 
@@ -66,6 +72,10 @@ import { FindGameResponse } from './models/response'
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
+  MultiChoiceQuestionCorrectAnswerRequest,
+  RangeQuestionCorrectAnswerRequest,
+  TrueFalseQuestionCorrectAnswerRequest,
+  TypeAnswerQuestionCorrectAnswerRequest,
 )
 @ApiTags('game')
 @Controller('games')
@@ -272,6 +282,109 @@ export class GameController {
     @Param('gameID', ParseUUIDPipe) gameID: string,
   ): Promise<void> {
     await this.gameService.completeCurrentTask(gameID)
+  }
+
+  /**
+   * Adds a correct answer to the current question result task.
+   *
+   * Supports multiple correct answers for a single question by appending the provided answer
+   * to the list of accepted answers for the current question result.
+   * Only allowed when the current task is of type `QuestionResult` and not in an active state.
+   *
+   * @param gameID - The ID of the game.
+   * @param correctAnswerRequest - The correct answer to add. Type must match the question type.
+   */
+  @Post('/:gameID/tasks/current/correct_answers')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Add a correct answer to the current question result task',
+    description:
+      'Adds a new correct answer for the current question. Only applicable when the current task is of type "QuestionResult" and in active status. Multiple correct answers can be defined for supported question types.',
+  })
+  @ApiBody({
+    description: 'Request body for adding a correct answer.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(MultiChoiceQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(RangeQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(TrueFalseQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(TypeAnswerQuestionCorrectAnswerRequest) },
+      ],
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game ID.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Invalid game ID format or question result task not in active status.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access or invalid client role.',
+  })
+  @AuthorizedGame(GameParticipantType.HOST)
+  @GameIdParam()
+  public async addCorrectAnswer(
+    @RouteGameIdParam() gameID: string,
+    @Body(new ParseCorrectAnswerRequestPipe())
+    correctAnswerRequest:
+      | MultiChoiceQuestionCorrectAnswerRequest
+      | RangeQuestionCorrectAnswerRequest
+      | TrueFalseQuestionCorrectAnswerRequest
+      | TypeAnswerQuestionCorrectAnswerRequest,
+  ): Promise<void> {
+    return this.gameService.addCorrectAnswer(gameID, correctAnswerRequest)
+  }
+
+  /**
+   * Deletes a previously added correct answer from the current question result task.
+   *
+   * This operation removes a matching correct answer entry from the result task's list of correct answers.
+   * Only allowed when the current task is of type `QuestionResult` and not in an active state.
+   *
+   * @param gameID - The ID of the game.
+   * @param correctAnswerRequest - The correct answer to delete. Type must match the question type.
+   */
+  @Delete('/:gameID/tasks/current/correct_answers')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Delete a correct answer from the current question result task',
+    description:
+      'Deletes an existing correct answer from the current question result task. Only applicable when the current task is of type "QuestionResult" and in active status. Removes a matching entry from the list of accepted correct answers.',
+  })
+  @ApiBody({
+    description: 'Request body for deleting a correct answer.',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(MultiChoiceQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(RangeQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(TrueFalseQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(TypeAnswerQuestionCorrectAnswerRequest) },
+      ],
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game ID.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Invalid game ID format or question result task not in active status.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized access or invalid client role.',
+  })
+  @AuthorizedGame(GameParticipantType.HOST)
+  @GameIdParam()
+  public async deleteCorrectAnswer(
+    @RouteGameIdParam() gameID: string,
+    @Body(new ParseCorrectAnswerRequestPipe())
+    correctAnswerRequest:
+      | MultiChoiceQuestionCorrectAnswerRequest
+      | RangeQuestionCorrectAnswerRequest
+      | TrueFalseQuestionCorrectAnswerRequest
+      | TypeAnswerQuestionCorrectAnswerRequest,
+  ): Promise<void> {
+    return this.gameService.deleteCorrectAnswer(gameID, correctAnswerRequest)
   }
 
   /**

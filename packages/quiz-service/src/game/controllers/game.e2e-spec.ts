@@ -15,6 +15,20 @@ import { Model } from 'mongoose'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  createMockGameDocument,
+  createMockGameHostParticipantDocument,
+  createMockGamePlayerParticipantDocument,
+  createMockMultiChoiceQuestionDocument,
+  createMockQuestionResultTaskDocument,
+  createMockQuestionTaskDocument,
+  createMockRangeQuestionDocument,
+  createMockTrueFalseQuestionDocument,
+  createMockTypeAnswerQuestionDocument,
+  MOCK_TYPE_ANSWER_OPTION_VALUE,
+  MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+  offsetSeconds,
+} from '../../../test/data'
 import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
@@ -22,7 +36,19 @@ import { Client } from '../../client/services/models/schemas'
 import { Player } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { GameService } from '../services'
-import { Game, GameStatus, TaskType } from '../services/models/schemas'
+import {
+  BaseTask,
+  Game,
+  GameStatus,
+  QuestionResultTask,
+  QuestionResultTaskItem,
+  QuestionTaskBaseAnswer,
+  QuestionTaskMultiChoiceAnswer,
+  QuestionTaskRangeAnswer,
+  QuestionTaskTrueFalseAnswer,
+  QuestionTaskTypeAnswerAnswer,
+  TaskType,
+} from '../services/models/schemas'
 import { buildLobbyTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {
@@ -997,6 +1023,1145 @@ describe('GameController (e2e)', () => {
         })
     })
   })
+
+  describe('/api/games/:gameID/tasks/current/correct_answers (POST)', () => {
+    let secondPlayerClient: Client
+
+    beforeEach(async () => {
+      secondPlayerClient = await clientService.findOrCreateClient(uuidv4())
+    })
+
+    it('should add a correct multi-choice answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([
+        { type: QuestionType.MultiChoice, index: 0 },
+        { type: QuestionType.MultiChoice, index: 1 },
+      ])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.MultiChoice,
+              answer: 0,
+              created: offsetSeconds(3),
+            },
+            lastScore: 900,
+            totalScore: 900,
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.MultiChoice,
+              answer: 1,
+              created: offsetSeconds(4),
+            },
+            lastScore: 800,
+            totalScore: 800,
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should add a correct range answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockRangeQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [{ type: QuestionType.Range, value: 50 }],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.Range,
+                  answer: 50,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 997,
+                totalScore: 997,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: secondPlayerClient,
+                answer: {
+                  type: QuestionType.Range,
+                  answer: 40,
+                  created: offsetSeconds(4),
+                },
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.Range,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: 50,
+                },
+                {
+                  type: QuestionType.Range,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: 40,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.Range, value: 40 })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([
+        { type: QuestionType.Range, value: 50 },
+        { type: QuestionType.Range, value: 40 },
+      ])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.Range,
+              answer: 50,
+              created: offsetSeconds(3),
+            },
+            lastScore: 997,
+            totalScore: 997,
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.Range,
+              answer: 40,
+              created: offsetSeconds(4),
+            },
+            lastScore: 993,
+            totalScore: 993,
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should add a correct true-false answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockTrueFalseQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [{ type: QuestionType.TrueFalse, value: false }],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.TrueFalse,
+                  answer: false,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 983,
+                totalScore: 983,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: secondPlayerClient,
+                answer: {
+                  type: QuestionType.TrueFalse,
+                  answer: true,
+                  created: offsetSeconds(4),
+                },
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.TrueFalse,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: false,
+                },
+                {
+                  type: QuestionType.TrueFalse,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: true,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.TrueFalse, value: true })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([
+        { type: QuestionType.TrueFalse, value: false },
+        { type: QuestionType.TrueFalse, value: true },
+      ])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.TrueFalse,
+              answer: false,
+              created: offsetSeconds(3),
+            },
+            lastScore: 983,
+            totalScore: 983,
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.TrueFalse,
+              answer: true,
+              created: offsetSeconds(4),
+            },
+            lastScore: 967,
+            totalScore: 967,
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should add a correct type-answer answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockTypeAnswerQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [
+              {
+                type: QuestionType.TypeAnswer,
+                value: MOCK_TYPE_ANSWER_OPTION_VALUE,
+              },
+            ],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.TypeAnswer,
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 983,
+                totalScore: 983,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: secondPlayerClient,
+                answer: {
+                  type: QuestionType.TypeAnswer,
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+                  created: offsetSeconds(4),
+                },
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.TypeAnswer,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+                },
+                {
+                  type: QuestionType.TypeAnswer,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({
+          type: QuestionType.TypeAnswer,
+          value: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+        })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([
+        {
+          type: QuestionType.TypeAnswer,
+          value: MOCK_TYPE_ANSWER_OPTION_VALUE,
+        },
+        {
+          type: QuestionType.TypeAnswer,
+          value: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+        },
+      ])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.TypeAnswer,
+              answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+              created: offsetSeconds(3),
+            },
+            lastScore: 983,
+            totalScore: 983,
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildCorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.TypeAnswer,
+              answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+              created: offsetSeconds(4),
+            },
+            lastScore: 967,
+            totalScore: 967,
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should return 404 when adding a correct answer to a non-existing game', () => {
+      const gameID = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 0 })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Game not found by id '${gameID}'`,
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 403 when adding a correct answer as a player', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${playerClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 403 when adding a correct answer for a non-authorized game', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      const { token } = await authService.authenticate({
+        clientId: uuidv4(),
+      })
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 401 when adding a correct answer when missing authorization', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 400 when adding a correct answer when invalid result task status', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          game: {
+            currentTask: createMockQuestionResultTaskDocument({
+              status: 'pending',
+              correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
+              results: [
+                buildCorrectQuestionResultTaskItem({
+                  client: playerClient,
+                  answer: {
+                    type: QuestionType.MultiChoice,
+                    answer: 0,
+                    created: offsetSeconds(3),
+                  },
+                  lastScore: 900,
+                  totalScore: 900,
+                  position: 1,
+                }),
+                buildIncorrectQuestionResultTaskItem({
+                  client: secondPlayerClient,
+                  answer: {
+                    type: QuestionType.MultiChoice,
+                    answer: 1,
+                    created: offsetSeconds(4),
+                  },
+                }),
+              ],
+              created: offsetSeconds(4),
+            }),
+          },
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message:
+              'Current task is either not of question result type or not in active status',
+            status: 400,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 400 when adding a correct answer when wrong current task', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          game: {
+            currentTask: createMockQuestionTaskDocument(),
+          },
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message:
+              'Current task is either not of question result type or not in active status',
+            status: 400,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
+  describe('/api/games/:gameID/tasks/current/correct_answers (DELETE)', () => {
+    let secondPlayerClient: Client
+
+    beforeEach(async () => {
+      secondPlayerClient = await clientService.findOrCreateClient(uuidv4())
+    })
+
+    it('should delete a correct multi-choice answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 0 })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.MultiChoice,
+              answer: 0,
+              created: offsetSeconds(3),
+            },
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.MultiChoice,
+              answer: 1,
+              created: offsetSeconds(4),
+            },
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should delete a correct range answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockRangeQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [{ type: QuestionType.Range, value: 50 }],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.Range,
+                  answer: 50,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 997,
+                totalScore: 997,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: secondPlayerClient,
+                answer: {
+                  type: QuestionType.Range,
+                  answer: 40,
+                  created: offsetSeconds(4),
+                },
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.Range,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: 50,
+                },
+                {
+                  type: QuestionType.Range,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: 40,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.Range, value: 50 })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.Range,
+              answer: 50,
+              created: offsetSeconds(3),
+            },
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.Range,
+              answer: 40,
+              created: offsetSeconds(4),
+            },
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should delete a correct true-false answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockTrueFalseQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [{ type: QuestionType.TrueFalse, value: false }],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.TrueFalse,
+                  answer: false,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 983,
+                totalScore: 983,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: secondPlayerClient,
+                answer: {
+                  type: QuestionType.TrueFalse,
+                  answer: true,
+                  created: offsetSeconds(4),
+                },
+                position: 2,
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.TrueFalse,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: false,
+                },
+                {
+                  type: QuestionType.TrueFalse,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: true,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.TrueFalse, value: false })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.TrueFalse,
+              answer: false,
+              created: offsetSeconds(3),
+            },
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.TrueFalse,
+              answer: true,
+              created: offsetSeconds(4),
+            },
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should delete a correct type-answer answer successfully', async () => {
+      const gameDocument = await gameModel.create(
+        createMockGameDocument({
+          questions: [createMockTypeAnswerQuestionDocument()],
+          participants: [
+            createMockGameHostParticipantDocument({ client: hostClient }),
+            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGamePlayerParticipantDocument({
+              client: secondPlayerClient,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument({
+            status: 'active',
+            correctAnswers: [
+              {
+                type: QuestionType.TypeAnswer,
+                value: MOCK_TYPE_ANSWER_OPTION_VALUE,
+              },
+            ],
+            results: [
+              buildCorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.TypeAnswer,
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+                  created: offsetSeconds(3),
+                },
+                lastScore: 983,
+                totalScore: 983,
+                position: 1,
+              }),
+              buildIncorrectQuestionResultTaskItem({
+                client: playerClient,
+                answer: {
+                  type: QuestionType.TypeAnswer,
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+                  created: offsetSeconds(4),
+                },
+              }),
+            ],
+            created: offsetSeconds(4),
+          }),
+          previousTasks: [
+            createMockQuestionTaskDocument({
+              status: 'active',
+              answers: [
+                {
+                  type: QuestionType.TypeAnswer,
+                  playerId: playerClient.player._id,
+                  created: offsetSeconds(3),
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+                },
+                {
+                  type: QuestionType.TypeAnswer,
+                  playerId: secondPlayerClient.player._id,
+                  created: offsetSeconds(4),
+                  answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+                },
+              ],
+              presented: offsetSeconds(2),
+              created: offsetSeconds(1),
+            }),
+          ],
+        }),
+      )
+
+      await supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({
+          type: QuestionType.TypeAnswer,
+          value: MOCK_TYPE_ANSWER_OPTION_VALUE,
+        })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const { correctAnswers, results } = (
+        await gameModel.findById(gameDocument._id).exec()
+      ).currentTask as BaseTask & QuestionResultTask
+
+      expect(toPlain(correctAnswers)).toEqual([])
+
+      expect(toPlain(results)).toEqual([
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: playerClient,
+            answer: {
+              type: QuestionType.TypeAnswer,
+              answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+              created: offsetSeconds(3),
+            },
+            position: 1,
+          }),
+        ),
+        toPlain(
+          buildIncorrectQuestionResultTaskItem({
+            client: secondPlayerClient,
+            answer: {
+              type: QuestionType.TypeAnswer,
+              answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+              created: offsetSeconds(4),
+            },
+            position: 2,
+          }),
+        ),
+      ])
+    })
+
+    it('should return 404 when deleting a correct answer to a non-existing game', () => {
+      const gameID = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameID}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 0 })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Game not found by id '${gameID}'`,
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 403 when deleting a correct answer as a player', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${playerClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 403 when deleting a correct answer for a non-authorized game', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      const { token } = await authService.authenticate({
+        clientId: uuidv4(),
+      })
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 401 when deleting a correct answer when missing authorization', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 400 when deleting a correct answer when invalid result task status', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          game: {
+            currentTask: createMockQuestionResultTaskDocument({
+              status: 'pending',
+              correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
+              results: [
+                buildCorrectQuestionResultTaskItem({
+                  client: playerClient,
+                  answer: {
+                    type: QuestionType.MultiChoice,
+                    answer: 0,
+                    created: offsetSeconds(3),
+                  },
+                  lastScore: 900,
+                  totalScore: 900,
+                  position: 1,
+                }),
+                buildIncorrectQuestionResultTaskItem({
+                  client: secondPlayerClient,
+                  answer: {
+                    type: QuestionType.MultiChoice,
+                    answer: 1,
+                    created: offsetSeconds(4),
+                  },
+                }),
+              ],
+              created: offsetSeconds(4),
+            }),
+          },
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message:
+              'Current task is either not of question result type or not in active status',
+            status: 400,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 400 when deleting a correct answer when wrong current task', async () => {
+      const gameDocument = await gameModel.create(
+        buildMultiChoiceQuestionGameDocument({
+          game: {
+            currentTask: createMockQuestionTaskDocument(),
+          },
+          clients: {
+            hostClient,
+            playerClient,
+            secondPlayerClient,
+          },
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${hostClientToken}`)
+        .send({ type: QuestionType.MultiChoice, index: 1 })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message:
+              'Current task is either not of question result type or not in active status',
+            status: 400,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
 })
 
 const classicQuizRequest: QuizRequestDto = {
@@ -1095,4 +2260,135 @@ const zeroToOneHundredQuizRequest: QuizRequestDto = {
       duration: 30,
     },
   ],
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toPlain(instance: any): any {
+  return JSON.parse(JSON.stringify(instance))
+}
+
+function buildMultiChoiceQuestionGameDocument(options: {
+  game?: Partial<Game>
+  clients: {
+    hostClient: Client
+    playerClient: Client
+    secondPlayerClient: Client
+  }
+}): Game {
+  return createMockGameDocument({
+    questions: [createMockMultiChoiceQuestionDocument()],
+    participants: [
+      createMockGameHostParticipantDocument({
+        client: options.clients.hostClient,
+      }),
+      createMockGamePlayerParticipantDocument({
+        client: options.clients.playerClient,
+      }),
+      createMockGamePlayerParticipantDocument({
+        client: options.clients.secondPlayerClient,
+      }),
+    ],
+    currentTask: createMockQuestionResultTaskDocument({
+      status: 'active',
+      correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
+      results: [
+        buildCorrectQuestionResultTaskItem({
+          client: options.clients.playerClient,
+          answer: {
+            type: QuestionType.MultiChoice,
+            answer: 0,
+            created: offsetSeconds(3),
+          },
+          lastScore: 900,
+          totalScore: 900,
+          position: 1,
+        }),
+        buildIncorrectQuestionResultTaskItem({
+          client: options.clients.secondPlayerClient,
+          answer: {
+            type: QuestionType.MultiChoice,
+            answer: 1,
+            created: offsetSeconds(4),
+          },
+        }),
+      ],
+      created: offsetSeconds(4),
+    }),
+    previousTasks: [
+      createMockQuestionTaskDocument({
+        status: 'active',
+        answers: [
+          {
+            type: QuestionType.MultiChoice,
+            playerId: options.clients.playerClient.player._id,
+            created: offsetSeconds(3),
+            answer: 0,
+          },
+          {
+            type: QuestionType.MultiChoice,
+            playerId: options.clients.secondPlayerClient.player._id,
+            created: offsetSeconds(4),
+            answer: 1,
+          },
+        ],
+        presented: offsetSeconds(2),
+        created: offsetSeconds(1),
+      }),
+    ],
+    ...(options.game ?? {}),
+  })
+}
+
+function buildCorrectQuestionResultTaskItem(
+  options: {
+    client: Client
+    answer:
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
+  } & Pick<QuestionResultTaskItem, 'lastScore' | 'totalScore' | 'position'>,
+): QuestionResultTaskItem {
+  return {
+    type: options.answer.type,
+    playerId: options.client.player._id,
+    answer: {
+      type: options.answer.type,
+      playerId: options.client.player._id,
+      answer: options.answer.answer,
+      created: options.answer.created,
+    },
+    correct: true,
+    lastScore: options.lastScore,
+    totalScore: options.totalScore,
+    position: options.position,
+    streak: 1,
+  }
+}
+
+function buildIncorrectQuestionResultTaskItem(
+  options: {
+    client: Client
+    answer:
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
+  } & Partial<Pick<QuestionResultTaskItem, 'position'>>,
+): QuestionResultTaskItem {
+  return {
+    type: options.answer.type,
+    playerId: options.client.player._id,
+    answer: {
+      type: options.answer.type,
+      playerId: options.client.player._id,
+      answer: options.answer.answer,
+      created: options.answer.created,
+    },
+    correct: false,
+    lastScore: 0,
+    totalScore: 0,
+    position: options.position ?? 2,
+    streak: 0,
+  }
 }

@@ -149,3 +149,47 @@ export type QuestionDto =
   | QuestionTrueFalseDto
   | QuestionTypeAnswerDto
   | QuestionZeroToOneHundredRangeDto
+
+/**
+ * Represents the correct answer for a quiz question.
+ */
+export type QuestionCorrectAnswerDto = {
+  type: QuestionType
+} & (
+  | { type: QuestionType.MultiChoice; index: number }
+  | { type: QuestionType.Range; value: number }
+  | { type: QuestionType.TrueFalse; value: boolean }
+  | { type: QuestionType.TypeAnswer; value: string }
+)
+
+/**
+ * Data transfer object for a multi-choice correct answer.
+ */
+export type MultiChoiceQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.MultiChoice }
+>
+
+/**
+ * Data transfer object for a range correct answer.
+ */
+export type RangeQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.Range }
+>
+
+/**
+ * Data transfer object for a true-false correct answer.
+ */
+export type TrueFalseQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.TrueFalse }
+>
+
+/**
+ * Data transfer object for a type-answer correct answer.
+ */
+export type TypeAnswerQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.TypeAnswer }
+>

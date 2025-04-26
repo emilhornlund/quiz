@@ -9,7 +9,12 @@ import {
   CreateGameResponseDto,
   FindGameResponseDto,
   GameParticipantType,
+  MultiChoiceQuestionCorrectAnswerDto,
+  QuestionType,
+  RangeQuestionCorrectAnswerDto,
   SubmitQuestionAnswerRequestDto,
+  TrueFalseQuestionCorrectAnswerDto,
+  TypeAnswerQuestionCorrectAnswerDto,
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 
@@ -31,7 +36,13 @@ import {
   buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
   isClientUnique,
+  isMultiChoiceCorrectAnswer,
   isNicknameUnique,
+  isQuestionResultTask,
+  isRangeCorrectAnswer,
+  isTrueFalseCorrectAnswer,
+  isTypeAnswerCorrectAnswer,
+  rebuildQuestionResultTask,
   toQuestionTaskAnswer,
 } from './utils'
 
@@ -325,6 +336,152 @@ export class GameService {
       )
     } else {
       await this.gameEventPublisher.publish(gameDocument)
+    }
+  }
+
+  /**
+   * Adds a new correct answer to the current question result task.
+   *
+   * The provided answer is appended to the existing list of correct answers,
+   * and the question result task is rebuilt to reflect updated results.
+   *
+   * @param gameID - The ID of the game to update.
+   * @param correctAnswerRequest - The new correct answer to append.
+   * @throws {BadRequestException} If the current task is not a `QuestionResult` or not in active status.
+   */
+  public async addCorrectAnswer(
+    gameID: string,
+    correctAnswerRequest:
+      | MultiChoiceQuestionCorrectAnswerDto
+      | RangeQuestionCorrectAnswerDto
+      | TrueFalseQuestionCorrectAnswerDto
+      | TypeAnswerQuestionCorrectAnswerDto,
+  ): Promise<void> {
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
+
+    if (
+      isQuestionResultTask(gameDocument) &&
+      gameDocument.currentTask.status === 'active'
+    ) {
+      gameDocument.currentTask.correctAnswers = [
+        ...gameDocument.currentTask.correctAnswers,
+        ...(correctAnswerRequest.type === QuestionType.MultiChoice
+          ? [
+              {
+                type: QuestionType.MultiChoice,
+                index: correctAnswerRequest.index,
+              },
+            ]
+          : []),
+        ...(correctAnswerRequest.type === QuestionType.Range
+          ? [
+              {
+                type: QuestionType.Range,
+                value: correctAnswerRequest.value,
+              },
+            ]
+          : []),
+        ...(correctAnswerRequest.type === QuestionType.TrueFalse
+          ? [
+              {
+                type: QuestionType.TrueFalse,
+                value: correctAnswerRequest.value,
+              },
+            ]
+          : []),
+        ...(correctAnswerRequest.type === QuestionType.TypeAnswer
+          ? [
+              {
+                type: QuestionType.TypeAnswer,
+                value: correctAnswerRequest.value,
+              },
+            ]
+          : []),
+      ]
+
+      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
+
+      await this.gameRepository.findAndSaveWithLock(
+        gameID,
+        async (currentDocument) => {
+          currentDocument.currentTask = updatedQuestionResultTask
+          return currentDocument
+        },
+      )
+    } else {
+      throw new BadRequestException(
+        'Current task is either not of question result type or not in active status',
+      )
+    }
+  }
+
+  /**
+   * Deletes a specific correct answer from the current question result task.
+   *
+   * The provided answer is removed from the list of correct answers,
+   * and the question result task is rebuilt accordingly.
+   *
+   * @param gameID - The ID of the game to update.
+   * @param correctAnswerRequest - The correct answer to remove.
+   * @throws {BadRequestException} If the current task is not a `QuestionResult` or not active status.
+   */
+  public async deleteCorrectAnswer(
+    gameID: string,
+    correctAnswerRequest:
+      | MultiChoiceQuestionCorrectAnswerDto
+      | RangeQuestionCorrectAnswerDto
+      | TrueFalseQuestionCorrectAnswerDto
+      | TypeAnswerQuestionCorrectAnswerDto,
+  ): Promise<void> {
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
+
+    if (
+      isQuestionResultTask(gameDocument) &&
+      gameDocument.currentTask.status === 'active'
+    ) {
+      gameDocument.currentTask.correctAnswers =
+        gameDocument.currentTask.correctAnswers.filter((correctAnswer) => {
+          const isExistingCorrectMultiChoiceAnswer =
+            isMultiChoiceCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.MultiChoice &&
+            correctAnswer.index === correctAnswerRequest.index
+
+          const isExistingCorrectRangeAnswer =
+            isRangeCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.Range &&
+            correctAnswer.value === correctAnswerRequest.value
+
+          const isExistingCorrectTrueFalseAnswer =
+            isTrueFalseCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.TrueFalse &&
+            correctAnswer.value === correctAnswerRequest.value
+
+          const isExistingCorrectTypeAnswer =
+            isTypeAnswerCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.TypeAnswer &&
+            correctAnswer.value === correctAnswerRequest.value
+
+          return !(
+            isExistingCorrectMultiChoiceAnswer ||
+            isExistingCorrectRangeAnswer ||
+            isExistingCorrectTrueFalseAnswer ||
+            isExistingCorrectTypeAnswer
+          )
+        })
+
+      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
+
+      await this.gameRepository.findAndSaveWithLock(
+        gameID,
+        async (currentDocument) => {
+          currentDocument.currentTask = updatedQuestionResultTask
+          return currentDocument
+        },
+      )
+    } else {
+      throw new BadRequestException(
+        'Current task is either not of question result type or not in active status',
+      )
     }
   }
 }
