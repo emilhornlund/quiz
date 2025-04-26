@@ -243,7 +243,7 @@ describe('ClientController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
-            id: playerToLink.id,
+            id: playerToLink._id,
             nickname: 'FrostyBear',
             created: playerToLink.created.toISOString(),
             modified: playerToLink.modified.toISOString(),
@@ -468,7 +468,7 @@ describe('ClientController (e2e)', () => {
 
     const client = await clientService.findOrCreateClient(clientId)
 
-    const player = await playerModel.findByIdAndUpdate(client.player.id, {
+    const player = await playerModel.findByIdAndUpdate(client.player._id, {
       nickname,
     })
 

@@ -218,9 +218,9 @@ export class ClientController {
 
     await this.clientService.setPlayer(client, player)
 
-    const { id, nickname, created, modified } = player
+    const { _id, nickname, created, modified } = player
 
-    return { id, nickname, created, modified }
+    return { id: _id, nickname, created, modified }
   }
 
   /**

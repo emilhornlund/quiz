@@ -33,9 +33,9 @@ export class AuthService {
     authRequest: AuthRequestDto,
   ): Promise<AuthResponseDto> {
     const {
-      id: clientId,
+      _id: clientId,
       clientIdHash,
-      player: { id: playerId, nickname },
+      player: { _id: playerId, nickname },
     } = await this.clientService.findOrCreateClient(authRequest.clientId)
 
     const token = await this.jwtService.signAsync(

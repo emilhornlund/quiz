@@ -1,0 +1,229 @@
+import {
+  GameMode,
+  GameParticipantType,
+  MediaType,
+  QuestionRangeAnswerMargin,
+  QuestionType,
+} from '@quiz/common'
+import * as bcrypt from 'bcryptjs'
+import { v4 as uuidv4 } from 'uuid'
+
+import { Client } from '../../src/client/services/models/schemas'
+import {
+  BaseTask,
+  Game,
+  GameStatus,
+  Participant,
+  ParticipantBase,
+  ParticipantHost,
+  ParticipantPlayer,
+  QuestionResultTask,
+  QuestionTask,
+  TaskType,
+} from '../../src/game/services/models/schemas'
+import { buildLobbyTask } from '../../src/game/services/utils'
+import { Player } from '../../src/player/services/models/schemas'
+import {
+  BaseQuestionDao,
+  QuestionDao,
+  QuestionMultiChoiceDao,
+  QuestionRangeDao,
+  QuestionTrueFalseDao,
+  QuestionTypeAnswerDao,
+  Quiz,
+} from '../../src/quiz/services/models/schemas'
+
+import { offsetSeconds } from './helpers.utils'
+
+export function createMockGameDocument(game?: Partial<Game>): Game {
+  return {
+    _id: uuidv4(),
+    name: 'Trivia Battle',
+    mode: GameMode.Classic,
+    status: GameStatus.Active,
+    pin: '123456',
+    quiz: { _id: uuidv4() } as Quiz, //TODO: build mock quiz
+    questions: [],
+    nextQuestion: 0,
+    participants: [],
+    currentTask: buildLobbyTask(),
+    previousTasks: [],
+    updated: offsetSeconds(0),
+    created: offsetSeconds(0),
+    ...(game ?? {}),
+  }
+}
+
+export function createMockGameHostParticipantDocument(
+  participant?: Partial<ParticipantBase & ParticipantHost>,
+): Participant {
+  return {
+    type: GameParticipantType.HOST,
+    client: createMockClientDocument(),
+    updated: offsetSeconds(0),
+    created: offsetSeconds(0),
+    ...(participant ?? {}),
+  }
+}
+
+export function createMockGamePlayerParticipantDocument(
+  participant?: Partial<ParticipantBase & ParticipantPlayer>,
+): Participant {
+  return {
+    type: GameParticipantType.PLAYER,
+    client: createMockClientDocument(),
+    totalScore: 0,
+    currentStreak: 0,
+    updated: offsetSeconds(0),
+    created: offsetSeconds(0),
+    ...(participant ?? {}),
+  }
+}
+
+export function createMockClientDocument(client?: Partial<Client>): Client {
+  const clientId = uuidv4()
+
+  const salt = bcrypt.genSaltSync()
+  const clientIdHash = bcrypt.hashSync(clientId, salt)
+
+  return {
+    _id: clientId,
+    clientIdHash,
+    player: createMockPlayerDocument(client?.player),
+    created: offsetSeconds(0),
+    modified: offsetSeconds(0),
+    ...(client ?? {}),
+  }
+}
+
+export function createMockPlayerDocument(player?: Player): Player {
+  return {
+    _id: uuidv4(),
+    nickname: 'FrostyBear',
+    created: offsetSeconds(0),
+    modified: offsetSeconds(0),
+    ...(player ?? {}),
+  }
+}
+
+export function createMockMultiChoiceQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionMultiChoiceDao>,
+): QuestionDao {
+  return {
+    type: QuestionType.MultiChoice,
+    text: 'What is the capital of Sweden?',
+    media: {
+      type: MediaType.Image,
+      url: 'https://example.com/question-image.png',
+    },
+    options: [
+      {
+        value: 'Stockholm',
+        correct: true,
+      },
+      {
+        value: 'Paris',
+        correct: false,
+      },
+      {
+        value: 'London',
+        correct: false,
+      },
+      {
+        value: 'Berlin',
+        correct: false,
+      },
+    ],
+    points: 1000,
+    duration: 5,
+    ...(question ?? {}),
+  }
+}
+
+export function createMockRangeQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionRangeDao>,
+): QuestionDao {
+  return {
+    type: QuestionType.Range,
+    text: 'Guess the temperature of the hottest day ever recorded.',
+    media: {
+      type: MediaType.Image,
+      url: 'https://example.com/question-image.png',
+    },
+    min: 0,
+    max: 100,
+    margin: QuestionRangeAnswerMargin.Medium,
+    step: 1,
+    correct: 50,
+    points: 1000,
+    duration: 30,
+    ...(question ?? {}),
+  }
+}
+
+export function createMockTrueFalseQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionTrueFalseDao>,
+): QuestionDao {
+  return {
+    type: QuestionType.TrueFalse,
+    text: 'The earth is flat.',
+    media: {
+      type: MediaType.Image,
+      url: 'https://example.com/question-image.png',
+    },
+    correct: false,
+    points: 1000,
+    duration: 30,
+    ...(question ?? {}),
+  }
+}
+
+export const MOCK_TYPE_ANSWER_OPTION_VALUE = 'copenhagen'
+export const MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE = 'köpenhamn'
+
+export function createMockTypeAnswerQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionTypeAnswerDao>,
+): QuestionDao {
+  return {
+    type: QuestionType.TypeAnswer,
+    text: 'What is the capital of Denmark?',
+    media: {
+      type: MediaType.Image,
+      url: 'https://example.com/question-image.png',
+    },
+    options: [MOCK_TYPE_ANSWER_OPTION_VALUE],
+    points: 1000,
+    duration: 30,
+    ...(question ?? {}),
+  }
+}
+
+export function createMockQuestionTaskDocument(
+  task?: Partial<BaseTask & QuestionTask>,
+): BaseTask & QuestionTask {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Question,
+    status: 'pending',
+    questionIndex: 0,
+    answers: [],
+    presented: offsetSeconds(0),
+    created: offsetSeconds(0),
+    ...(task ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskDocument(
+  task?: Partial<BaseTask & QuestionResultTask>,
+): BaseTask & QuestionResultTask {
+  return {
+    _id: uuidv4(),
+    type: TaskType.QuestionResult,
+    status: 'pending',
+    questionIndex: 0,
+    correctAnswers: [],
+    results: [],
+    created: new Date(),
+    ...(task ?? {}),
+  }
+}
