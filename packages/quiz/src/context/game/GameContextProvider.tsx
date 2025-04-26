@@ -1,3 +1,4 @@
+import { QuestionCorrectAnswerDto } from '@quiz/common'
 import React, { FC, ReactNode, useMemo } from 'react'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
@@ -27,8 +28,13 @@ export interface GameContextProviderProps {
 const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
   const [gameID] = useGameIDQueryParam()
 
-  const { completeTask, submitQuestionAnswer, leaveGame } =
-    useQuizServiceClient()
+  const {
+    completeTask,
+    submitQuestionAnswer,
+    leaveGame,
+    addCorrectAnswer,
+    deleteCorrectAnswer,
+  } = useQuizServiceClient()
 
   /**
    * Memoized value for the `GameContext`, containing the current game ID
@@ -42,8 +48,19 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
       leaveGame: (playerID: string) =>
         gameID ? leaveGame(gameID, playerID) : Promise.reject(),
+      addCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
+        gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
+      deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
+        gameID ? deleteCorrectAnswer(gameID, answer) : Promise.reject(),
     }),
-    [gameID, completeTask, submitQuestionAnswer, leaveGame],
+    [
+      gameID,
+      completeTask,
+      submitQuestionAnswer,
+      leaveGame,
+      addCorrectAnswer,
+      deleteCorrectAnswer,
+    ],
   )
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>

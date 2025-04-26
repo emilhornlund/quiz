@@ -584,20 +584,21 @@ function buildGameEventQuestionResults(
     type DistributionItem = Distribution[number]
 
     const initial: DistributionItem[] = question.options
-      .filter(({ correct }) => correct)
-      .map(({ value, correct }) => ({
+      .map(({ value, correct }, index) => ({
         value,
         count: 0,
         correct,
+        index,
       }))
+      .filter(({ correct }) => correct)
 
     const distribution: Distribution = document.currentTask.results.reduce(
       (prev, current) => {
         if (isMultiChoiceAnswer(current.answer)) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const answer = (current.answer as any).toObject().answer
-          if (answer >= 0 && answer < question.options.length) {
-            const optionsValue = question.options[answer].value
+          const optionIndex = (current.answer as any).toObject().answer
+          if (optionIndex >= 0 && optionIndex < question.options.length) {
+            const optionsValue = question.options[optionIndex].value
             const index = prev.findIndex(({ value }) => value === optionsValue)
             if (index >= 0) {
               prev[index] = { ...prev[index], count: prev[index].count + 1 }
@@ -606,6 +607,7 @@ function buildGameEventQuestionResults(
                 value: optionsValue,
                 count: 1,
                 correct: current.correct,
+                index: optionIndex,
               })
             }
           }

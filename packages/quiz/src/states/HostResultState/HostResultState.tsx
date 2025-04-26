@@ -1,4 +1,4 @@
-import { GameResultHostEvent } from '@quiz/common'
+import { GameResultHostEvent, QuestionCorrectAnswerDto } from '@quiz/common'
 import React, { FC, useState } from 'react'
 
 import {
@@ -24,12 +24,29 @@ const HostResultState: FC<HostResultStateProps> = ({
 }) => {
   const [isInitiatingLeaderboardTask, setIsInitiatingLeaderboardTask] =
     useState<boolean>(false)
+  const [isProcessingCorrectAnswer, setIsProcessingCorrectAnswer] =
+    useState(false)
 
-  const { completeTask } = useGameContext()
+  const { completeTask, addCorrectAnswer, deleteCorrectAnswer } =
+    useGameContext()
 
   const handleInitiatingLeaderboardTask = () => {
     setIsInitiatingLeaderboardTask(true)
     completeTask?.().finally(() => setIsInitiatingLeaderboardTask(false))
+  }
+
+  const handleAddCorrectAnswer = (answer: QuestionCorrectAnswerDto) => {
+    setIsProcessingCorrectAnswer(true)
+    addCorrectAnswer?.(answer).finally(() =>
+      setIsProcessingCorrectAnswer(false),
+    )
+  }
+
+  const handleDeleteCorrectAnswer = (answer: QuestionCorrectAnswerDto) => {
+    setIsProcessingCorrectAnswer(true)
+    deleteCorrectAnswer?.(answer).finally(() =>
+      setIsProcessingCorrectAnswer(false),
+    )
   }
 
   return (
@@ -55,7 +72,12 @@ const HostResultState: FC<HostResultStateProps> = ({
         />
       }>
       <Typography variant="subtitle">{questionValue}</Typography>
-      <QuestionResults results={results} />
+      <QuestionResults
+        results={results}
+        loading={isProcessingCorrectAnswer}
+        onAddCorrectAnswer={handleAddCorrectAnswer}
+        onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
+      />
     </Page>
   )
 }

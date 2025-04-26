@@ -1,4 +1,7 @@
-import { SubmitQuestionAnswerRequestDto } from '@quiz/common'
+import {
+  QuestionCorrectAnswerDto,
+  SubmitQuestionAnswerRequestDto,
+} from '@quiz/common'
 import { createContext } from 'react'
 
 /**
@@ -16,6 +19,8 @@ export type GameContextType = {
     request: SubmitQuestionAnswerRequestDto,
   ) => Promise<void>
   leaveGame?: (playerID: string) => Promise<void>
+  addCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
+  deleteCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
 }
 
 /**

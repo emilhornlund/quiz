@@ -161,7 +161,12 @@ export type GameAwaitingResultPlayerEvent = {
 
 export type GameEventQuestionResultsMultiChoice = {
   type: QuestionType.MultiChoice
-  distribution: { value: string; count: number; correct: boolean }[]
+  distribution: {
+    index: number
+    value: string
+    count: number
+    correct: boolean
+  }[]
 }
 
 export type GameEventQuestionResultsRange = {

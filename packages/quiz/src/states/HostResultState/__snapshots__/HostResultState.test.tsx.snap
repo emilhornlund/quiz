@@ -91,6 +91,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               3
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -119,6 +138,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               5
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -143,6 +181,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               2
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -167,6 +224,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               0
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -323,6 +399,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -351,6 +446,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               4
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -375,6 +489,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               3
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -399,6 +532,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               2
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -423,6 +575,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               0
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -447,6 +618,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               0
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -603,6 +793,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               3
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -631,6 +840,25 @@ exports[`HostResultState > should render HostResultState with question type mult
                
               7
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -787,6 +1015,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               2
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -815,6 +1062,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -839,6 +1105,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -863,6 +1148,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -887,6 +1191,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -911,6 +1234,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -935,6 +1277,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -959,6 +1320,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -983,6 +1363,25 @@ exports[`HostResultState > should render HostResultState with question type rang
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -1139,6 +1538,25 @@ exports[`HostResultState > should render HostResultState with question type true
                
               4
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -1167,6 +1585,25 @@ exports[`HostResultState > should render HostResultState with question type true
                
               6
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -1323,6 +1760,25 @@ exports[`HostResultState > should render HostResultState with question type type
                
               2
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-xmark icon"
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
         <div
@@ -1351,6 +1807,25 @@ exports[`HostResultState > should render HostResultState with question type type
                
               4
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -1375,6 +1850,25 @@ exports[`HostResultState > should render HostResultState with question type type
                
               3
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
           <div
             class="chip incorrect"
@@ -1399,6 +1893,25 @@ exports[`HostResultState > should render HostResultState with question type type
                
               1
             </span>
+            <button
+              class="buttonOverlay"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check icon"
+                data-icon="circle-check"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

@@ -110,11 +110,13 @@ describe('Game Event Converter', () => {
                   value: 'Stockholm',
                   count: 2,
                   correct: true,
+                  index: 0,
                 },
                 {
                   value: 'Paris',
                   count: 1,
                   correct: false,
+                  index: 1,
                 },
               ],
             },

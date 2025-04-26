@@ -8,6 +8,7 @@ import {
   PaginatedQuizResponseDto,
   PlayerLinkCodeResponseDto,
   PlayerResponseDto,
+  QuestionCorrectAnswerDto,
   QuestionDto,
   QuestionType,
   QuizRequestDto,
@@ -178,10 +179,13 @@ export const useQuizServiceClient = () => {
    *
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
+   * @param requestBody - The request body to be sent in the DELETE request.
    * @returns A promise resolving to the API response as type `T`.
    */
-  const apiDelete = <T extends object | void>(path: string) =>
-    apiFetch<T>('DELETE', path, undefined)
+  const apiDelete = <T extends object | void>(
+    path: string,
+    requestBody?: ApiPostBody,
+  ) => apiFetch<T>('DELETE', path, requestBody)
 
   /**
    * Retrieves information about the current player.
@@ -408,6 +412,36 @@ export const useQuizServiceClient = () => {
   }
 
   /**
+   * Adds a correct answer to the current task in the specified game.
+   *
+   * @param gameID - The ID of the game where the correct answer should be added.
+   * @param answer - The correct answer data to add to the current task.
+   * @returns A promise that resolves when the correct answer has been successfully added.
+   */
+  const addCorrectAnswer = (
+    gameID: string,
+    answer: QuestionCorrectAnswerDto,
+  ): Promise<void> =>
+    apiPost(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
+      () => {},
+    )
+
+  /**
+   * Deletes a correct answer from the current task in the specified game.
+   *
+   * @param gameID - The ID of the game where the correct answer should be deleted.
+   * @param answer - The correct answer data to delete from the current task.
+   * @returns A promise that resolves when the correct answer has been successfully deleted.
+   */
+  const deleteCorrectAnswer = (
+    gameID: string,
+    answer: QuestionCorrectAnswerDto,
+  ): Promise<void> =>
+    apiDelete(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
+      () => {},
+    )
+
+  /**
    * Fetches the results for a completed game by its ID.
    *
    * @param gameID - The unique identifier of the game to retrieve results for.
@@ -508,6 +542,8 @@ export const useQuizServiceClient = () => {
     leaveGame,
     completeTask,
     submitQuestionAnswer,
+    addCorrectAnswer,
+    deleteCorrectAnswer,
     getGameResults,
     searchPhotos,
     uploadImage,
