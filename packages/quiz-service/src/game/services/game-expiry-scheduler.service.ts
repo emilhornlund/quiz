@@ -28,7 +28,7 @@ export class GameExpirySchedulerService {
    *
    * Ensures the following:
    * - Games in 'Podium' task with 'Active' status and no updates in over an hour are marked as 'Completed'.
-   * - Games stuck in 'Active' state without updates for over an hour are deleted.
+   * - Games in 'Active' status that are not in 'Podium' or 'Quit' tasks and have not been updated in over an hour are marked as 'Expired'.
    *
    * Uses a MurLock to guarantee single-instance execution across a distributed environment.
    */
@@ -38,7 +38,7 @@ export class GameExpirySchedulerService {
     const completed = await this.gameRepository.updateCompletedGames()
     this.logger.log(`Updated ${completed} completed games.`)
 
-    const deleted = await this.gameRepository.deleteExpiredGames()
-    this.logger.log(`Deleted ${deleted} expired games.`)
+    const expired = await this.gameRepository.updateExpiredGames()
+    this.logger.log(`Updated ${expired} expired games.`)
   }
 }

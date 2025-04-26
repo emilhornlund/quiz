@@ -219,22 +219,24 @@ export class GameRepository {
   }
 
   /**
-   * Deletes stale games if they:
-   * - Are marked as 'Active'
+   * Marks stale games as 'Expired' if they:
+   * - Are still marked as 'Active'
+   * - Are currently not in the 'Podium' or 'Quit' task
    * - Have not been updated in over 1 hour
    *
-   * These are considered abandoned sessions that were never completed.
-   *
-   * @returns Number of games successfully deleted
+   * @returns Number of games successfully updated to 'Expired'
    */
-  public async deleteExpiredGames(): Promise<number> {
+  public async updateExpiredGames(): Promise<number> {
     const filter = {
       status: GameStatus.Active,
+      'currentTask.type': { $nin: [TaskType.Podium, TaskType.Quit] },
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const result = await this.gameModel.deleteMany(filter)
+    const result = await this.gameModel.updateMany(filter, {
+      $set: { status: GameStatus.Expired },
+    })
 
-    return result.deletedCount ?? 0
+    return result.modifiedCount ?? 0
   }
 }

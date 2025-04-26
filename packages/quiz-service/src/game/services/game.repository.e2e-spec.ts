@@ -103,8 +103,8 @@ describe('GameRepository (e2e)', () => {
     })
   })
 
-  describe('deleteExpiredGames', () => {
-    it('should delete active games older than 1 hour', async () => {
+  describe('updateExpiredGames', () => {
+    it('should update active games older than 1 hour', async () => {
       const gameID = uuidv4()
 
       await gameModel.create(
@@ -115,14 +115,14 @@ describe('GameRepository (e2e)', () => {
         ),
       )
 
-      const deletedCount = await gameRepository.deleteExpiredGames()
-      expect(deletedCount).toEqual(1)
+      const expiredCount = await gameRepository.updateExpiredGames()
+      expect(expiredCount).toEqual(1)
 
-      const document = await gameModel.findById(gameID)
-      expect(document).toBeNull()
+      const { status } = await gameModel.findById(gameID)
+      expect(status).toEqual(GameStatus.Expired)
     })
 
-    it('should not delete active games not older than 1 hour', async () => {
+    it('should not update active games not older than 1 hour', async () => {
       const gameID = uuidv4()
 
       await gameModel.create(
@@ -133,8 +133,8 @@ describe('GameRepository (e2e)', () => {
         ),
       )
 
-      const deletedCount = await gameRepository.deleteExpiredGames()
-      expect(deletedCount).toEqual(0)
+      const expiredCount = await gameRepository.updateExpiredGames()
+      expect(expiredCount).toEqual(0)
 
       const { status } = await gameModel.findById(gameID)
       expect(status).toEqual(GameStatus.Active)
