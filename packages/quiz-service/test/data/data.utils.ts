@@ -1,6 +1,7 @@
 import {
   GameMode,
   GameParticipantType,
+  GameStatus,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -12,7 +13,6 @@ import { Client } from '../../src/client/services/models/schemas'
 import {
   BaseTask,
   Game,
-  GameStatus,
   Participant,
   ParticipantBase,
   ParticipantHost,

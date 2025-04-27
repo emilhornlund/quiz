@@ -1,9 +1,9 @@
-import { GameParticipantType } from '@quiz/common'
+import { GameParticipantType, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Client } from '../../../client/services/models/schemas'
 import { Quiz } from '../../../quiz/services/models/schemas'
-import { Game, GameStatus } from '../models/schemas'
+import { Game } from '../models/schemas'
 
 import { buildLobbyTask } from './task.converter'
 

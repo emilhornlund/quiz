@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   GameParticipantType,
+  GameStatus,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -17,12 +18,7 @@ import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
 import { Player } from '../../player/services/models/schemas'
 import { Quiz } from '../../quiz/services/models/schemas'
-import {
-  Game,
-  GameResult,
-  GameStatus,
-  TaskType,
-} from '../services/models/schemas'
+import { Game, GameResult, TaskType } from '../services/models/schemas'
 
 describe('GameResultController (e2e)', () => {
   let app: INestApplication

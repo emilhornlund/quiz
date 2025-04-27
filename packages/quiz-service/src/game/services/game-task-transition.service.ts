@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRedis } from '@nestjs-modules/ioredis'
+import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../exceptions'
 
 import { GameResultRepository } from './game-result.repository'
-import {
-  GameDocument,
-  GameStatus,
-  QuestionTaskAnswer,
-  TaskType,
-} from './models/schemas'
+import { GameDocument, QuestionTaskAnswer, TaskType } from './models/schemas'
 import {
   buildLeaderboardTask,
   buildPodiumTask,

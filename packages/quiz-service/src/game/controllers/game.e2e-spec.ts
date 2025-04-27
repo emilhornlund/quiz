@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   GameParticipantType,
+  GameStatus,
   LanguageCode,
   MediaType,
   QuestionRangeAnswerMargin,
@@ -39,7 +40,6 @@ import { GameService } from '../services'
 import {
   BaseTask,
   Game,
-  GameStatus,
   QuestionResultTask,
   QuestionResultTaskItem,
   QuestionTaskBaseAnswer,

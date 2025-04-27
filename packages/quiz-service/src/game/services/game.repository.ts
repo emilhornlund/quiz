@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { GameStatus } from '@quiz/common'
 import { Model } from 'mongoose'
 import { MurLock } from 'murlock'
 
@@ -12,7 +13,7 @@ import {
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
-import { Game, GameDocument, GameStatus, TaskType } from './models/schemas'
+import { Game, GameDocument, TaskType } from './models/schemas'
 import { buildGameModel } from './utils'
 
 /**

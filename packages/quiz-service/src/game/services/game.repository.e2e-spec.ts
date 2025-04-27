@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import { GameMode } from '@quiz/common'
+import { GameMode, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { closeTestApp, createTestApp } from '../../app/utils/test'
@@ -11,7 +11,6 @@ import {
   BaseTask,
   Game,
   GameModel,
-  GameStatus,
   LeaderboardTask,
   LobbyTask,
   PodiumTask,

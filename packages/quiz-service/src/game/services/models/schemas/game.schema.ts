@@ -1,5 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { GameMode, GameParticipantType, QuestionType } from '@quiz/common'
+import {
+  GameMode,
+  GameParticipantType,
+  GameStatus,
+  QuestionType,
+} from '@quiz/common'
 import { HydratedDocument, Model, Schema as MongooseSchema } from 'mongoose'
 
 import {
@@ -37,12 +42,6 @@ import {
 } from './task.schema'
 
 export type GameDocument = HydratedDocument<Game>
-
-export enum GameStatus {
-  Active = 'ACTIVE',
-  Completed = 'COMPLETED',
-  Expired = 'EXPIRED',
-}
 
 @Schema({ _id: true, collection: 'games' })
 export class Game {

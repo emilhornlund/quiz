@@ -1,13 +1,14 @@
 import {
   GameMode,
   GameParticipantType,
+  GameStatus,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameDocument, GameStatus, TaskType } from '../models/schemas'
+import { GameDocument, TaskType } from '../models/schemas'
 
 import { buildGameResultModel } from './game-result.converter'
 
