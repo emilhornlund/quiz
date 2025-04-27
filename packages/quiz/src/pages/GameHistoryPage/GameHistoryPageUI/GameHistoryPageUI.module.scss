@@ -1,0 +1,18 @@
+@import '../../../styles/helpers';
+
+.gettingStarted {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    row-gap: $mobile-narrow-layout-gutter * 0.5;
+  }
+
+  @include tablet {
+    row-gap: $tablet-narrow-layout-gutter * 0.5;
+  }
+
+  @include desktop {
+    row-gap: $desktop-narrow-layout-gutter * 0.5;
+  }
+}

@@ -1,0 +1,713 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GameHistoryPageUI > should render GameHistoryPageUI with no results 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          href="/discover"
+        >
+          Discover
+        </a>
+        <div
+          class="avatar"
+        >
+          <button
+            type="button"
+          >
+            <img
+              alt="Profile"
+              src="/src/assets/images/avatar.svg"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content mediumWidth fullHeight startAlign"
+    >
+      <div
+        class="typography subtitle full"
+      >
+        You Haven't Played Any Games Yet
+      </div>
+      <div
+        class="typography text full"
+      >
+        Once you play or host a game, it will appear here.
+      </div>
+      <div
+        class="gettingStarted"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-discover-quizzes-button-button"
+            id="discover-quizzes-button"
+            name="discover-quizzes-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-magnifying-glass "
+              data-icon="magnifying-glass"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Discover Existing Quizzes
+            </span>
+          </button>
+        </div>
+        <div
+          class="typography link full"
+        >
+          or
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-create-quiz-button-button"
+            id="create-quiz-button"
+            name="create-quiz-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-plus "
+              data-icon="plus"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Create New Quiz
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <span
+          class="icon"
+        />
+        <span
+          class="text"
+        >
+          Quiz
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          href="/discover"
+        >
+          Discover
+        </a>
+        <div
+          class="avatar"
+        >
+          <button
+            type="button"
+          >
+            <img
+              alt="Profile"
+              src="/src/assets/images/avatar.svg"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content mediumWidth fullHeight startAlign"
+    >
+      <div
+        class="typography subtitle full"
+      >
+        Game History
+      </div>
+      <div
+        class="typography text full"
+      >
+        Review your past games and track your performance.
+      </div>
+      <div
+        class="gameTable"
+      >
+        <div
+          class="rows"
+        >
+          <a
+            class="row"
+            href="/game/1de06ead-16f0-47af-b8ba-63279267ffd3"
+          >
+            <img
+              alt="image"
+              class="svg"
+              src="/src/assets/images/picture.svg"
+            />
+            <div
+              class="metadata"
+            >
+              <div
+                class="name"
+              >
+                Math Marathon
+              </div>
+              <div
+                class="details"
+              >
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-gamepad "
+                    color="gray2"
+                    data-icon="gamepad"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 640 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  0 to 100
+                </span>
+                <span
+                  title="2025-04-27 11:49:14"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-clock "
+                    color="gray2"
+                    data-icon="clock"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  5 minutes ago
+                </span>
+              </div>
+            </div>
+            <div
+              class="active"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-play "
+                color="white"
+                data-icon="circle-play"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"
+                  fill="currentColor"
+                />
+              </svg>
+              Ongoing...
+            </div>
+          </a>
+          <a
+            class="row"
+            href="/game/results/70f14923-6ae9-4daa-950d-56e2e0084c32"
+          >
+            <img
+              alt="image"
+              class="svg"
+              src="/src/assets/images/picture.svg"
+            />
+            <div
+              class="metadata"
+            >
+              <div
+                class="name"
+              >
+                Science Challenge
+              </div>
+              <div
+                class="details"
+              >
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-gamepad "
+                    color="gray2"
+                    data-icon="gamepad"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 640 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  0 to 100
+                </span>
+                <span
+                  title="2025-04-27 11:42:14"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-clock "
+                    color="gray2"
+                    data-icon="clock"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  12 minutes ago
+                </span>
+              </div>
+            </div>
+            <div
+              class="host"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-user-tie "
+                color="white"
+                data-icon="user-tie"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 128a128 128 0 1 0 256 0A128 128 0 1 0 96 128zm94.5 200.2l18.6 31L175.8 483.1l-36-146.9c-2-8.1-9.8-13.4-17.9-11.3C51.9 342.4 0 405.8 0 481.3c0 17 13.8 30.7 30.7 30.7l131.7 0c0 0 0 0 .1 0l5.5 0 112 0 5.5 0c0 0 0 0 .1 0l131.7 0c17 0 30.7-13.8 30.7-30.7c0-75.5-51.9-138.9-121.9-156.4c-8.1-2-15.9 3.3-17.9 11.3l-36 146.9L238.9 359.2l18.6-31c6.4-10.7-1.3-24.2-13.7-24.2L224 304l-19.7 0c-12.4 0-20.1 13.6-13.7 24.2z"
+                  fill="currentColor"
+                />
+              </svg>
+              Host
+            </div>
+          </a>
+          <a
+            class="row"
+            href="/game/results/4c14c469-dad1-4f32-8138-d251e8bf60cb"
+          >
+            <img
+              alt="image"
+              class="svg"
+              src="/src/assets/images/picture.svg"
+            />
+            <div
+              class="metadata"
+            >
+              <div
+                class="name"
+              >
+                World History Battle
+              </div>
+              <div
+                class="details"
+              >
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-gamepad "
+                    color="gray2"
+                    data-icon="gamepad"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 640 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Classic
+                </span>
+                <span
+                  title="2025-04-27 09:54:14"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-clock "
+                    color="gray2"
+                    data-icon="clock"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  2 hours ago
+                </span>
+              </div>
+            </div>
+            <div
+              class="stats"
+            >
+              <div
+                class="score"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-star icon"
+                  data-icon="star"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 576 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"
+                    fill="currentColor"
+                  />
+                </svg>
+                9200
+              </div>
+              <div
+                class="badge small gold"
+              >
+                1
+              </div>
+            </div>
+          </a>
+          <a
+            class="row"
+            href="/game/results/233f79b2-1b26-42eb-86bf-3097d3df789b"
+          >
+            <img
+              alt="image"
+              class="svg"
+              src="/src/assets/images/picture.svg"
+            />
+            <div
+              class="metadata"
+            >
+              <div
+                class="name"
+              >
+                General Knowledge Quiz
+              </div>
+              <div
+                class="details"
+              >
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-gamepad "
+                    color="gray2"
+                    data-icon="gamepad"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 640 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Classic
+                </span>
+                <span
+                  title="2025-04-27 07:54:14"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-clock "
+                    color="gray2"
+                    data-icon="clock"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  4 hours ago
+                </span>
+              </div>
+            </div>
+            <div
+              class="stats"
+            >
+              <div
+                class="score"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-star icon"
+                  data-icon="star"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 576 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"
+                    fill="currentColor"
+                  />
+                </svg>
+                8500
+              </div>
+              <div
+                class="badge small silver"
+              >
+                2
+              </div>
+            </div>
+          </a>
+          <a
+            class="row"
+            href="/game/results/c5598fc1-3c15-45a7-83c8-55c1a1b7b8e9"
+          >
+            <img
+              alt="image"
+              class="svg"
+              src="/src/assets/images/picture.svg"
+            />
+            <div
+              class="metadata"
+            >
+              <div
+                class="name"
+              >
+                Geography Explorer
+              </div>
+              <div
+                class="details"
+              >
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-gamepad "
+                    color="gray2"
+                    data-icon="gamepad"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 640 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Classic
+                </span>
+                <span
+                  title="2025-03-18 10:54:14"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-clock "
+                    color="gray2"
+                    data-icon="clock"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  1 month ago
+                </span>
+              </div>
+            </div>
+            <div
+              class="stats"
+            >
+              <div
+                class="score"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-star icon"
+                  data-icon="star"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 576 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"
+                    fill="currentColor"
+                  />
+                </svg>
+                4200
+              </div>
+              <div
+                class="badge small white"
+              >
+                5
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div
+        class="pagination"
+      >
+        <div
+          class="navigation"
+        >
+          <div
+            class="buttonInputContainer buttonInputKindPrimary"
+          >
+            <button
+              data-testid="test-prev-page-button-button"
+              disabled=""
+              id="prev-page-button"
+              name="prev-page-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-arrow-left "
+                data-icon="arrow-left"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          class="page"
+        >
+          Page 
+          1
+           of 
+          2
+        </div>
+        <div
+          class="navigation"
+        >
+          <div
+            class="buttonInputContainer buttonInputKindPrimary"
+          >
+            <button
+              data-testid="test-next-page-button-button"
+              id="next-page-button"
+              name="next-page-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-arrow-right "
+                data-icon="arrow-right"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

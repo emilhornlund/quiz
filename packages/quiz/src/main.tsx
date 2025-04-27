@@ -9,6 +9,7 @@ import GameContextProvider from './context/game'
 import {
   DiscoverPage,
   ErrorPage,
+  GameHistoryPage,
   GamePage,
   GameResultsPage,
   HomePage,
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             <GamePage />
           </GameContextProvider>
         ),
+      },
+      {
+        path: '/game/history',
+        element: <GameHistoryPage />,
       },
       {
         path: '/game/results/:gameID',

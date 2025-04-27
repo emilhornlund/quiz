@@ -1,5 +1,6 @@
 export { default as DiscoverPage } from './DiscoverPage'
 export { default as ErrorPage } from './ErrorPage'
+export { default as GameHistoryPage } from './GameHistoryPage'
 export { default as GamePage } from './GamePage'
 export { default as GameResultsPage } from './GameResultsPage'
 export { default as HomePage } from './HomePage'
