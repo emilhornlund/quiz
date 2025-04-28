@@ -35,7 +35,7 @@ export function buildGameModel(
     participants: [
       {
         type: GameParticipantType.HOST,
-        client,
+        player: client.player,
         created: new Date(now),
         updated: new Date(now),
       },

@@ -215,7 +215,7 @@ export function toPlayerQuestionPlayerEventMetaData(
 ): Partial<GameEventMetaData> {
   return {
     hasPlayerAnswerSubmission: !!answers?.find(
-      (answer) => answer.playerId === participant.client.player._id,
+      (answer) => answer.playerId === participant.player._id,
     ),
   }
 }

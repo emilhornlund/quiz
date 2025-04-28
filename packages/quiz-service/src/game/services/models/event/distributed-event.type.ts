@@ -1,6 +1,6 @@
 import { GameEvent } from '@quiz/common'
 
 export type DistributedEvent = {
-  clientId?: string
+  playerId?: string
   event: GameEvent
 }

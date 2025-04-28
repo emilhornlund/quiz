@@ -23,21 +23,21 @@ import { Client } from '../../client/services/models/schemas'
 import { PlayerService } from '../../player/services'
 import { QuizService } from '../../quiz/services'
 import {
-  ClientNotUniqueException,
   NicknameNotUniqueException,
   PlayerNotFoundException,
+  PlayerNotUniqueException,
 } from '../exceptions'
 
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { GameRepository } from './game.repository'
-import { ParticipantBase, ParticipantPlayer, TaskType } from './models/schemas'
+import { TaskType } from './models/schemas'
 import {
   buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
-  isClientUnique,
   isMultiChoiceCorrectAnswer,
   isNicknameUnique,
+  isPlayerUnique,
   isQuestionResultTask,
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
@@ -131,42 +131,39 @@ export class GameService {
    * @returns {Promise<void>} A Promise that resolves when the player is successfully added to the game.
    *
    * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID` exists.
-   * @throws {ClientNotUniqueException} If the client has already joined the game.
    * @throws {NicknameNotUniqueException} If the provided `nickname` is already taken in the game.
    */
   public async joinGame(
     gameID: string,
-    { _id: clientId, player: { _id: playerId } }: Client,
+    { player: { _id: playerId } }: Client,
     nickname: string,
   ): Promise<void> {
-    await this.playerService.updatePlayer(playerId, nickname)
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 
-    const client = await this.clientService.findByClientIdOrThrow(clientId)
+    if (!isPlayerUnique(gameDocument.participants, playerId)) {
+      throw new PlayerNotUniqueException()
+    }
+
+    if (!isNicknameUnique(gameDocument.participants, nickname)) {
+      throw new NicknameNotUniqueException(nickname)
+    }
+
+    const player = await this.playerService.updatePlayer(playerId, nickname)
 
     const now = new Date()
-
-    const newParticipant: ParticipantBase & ParticipantPlayer = {
-      type: GameParticipantType.PLAYER,
-      client,
-      totalScore: 0,
-      currentStreak: 0,
-      created: now,
-      updated: now,
-    }
 
     await this.gameRepository.findAndSaveWithLock(
       gameID,
       async (currentDocument) => {
-        if (!isClientUnique(currentDocument.participants, clientId)) {
-          throw new ClientNotUniqueException()
-        }
-
-        if (!isNicknameUnique(currentDocument.participants, nickname)) {
-          throw new NicknameNotUniqueException(nickname)
-        }
-
-        currentDocument.participants.push(newParticipant)
-
+        currentDocument.participants.push({
+          type: GameParticipantType.PLAYER,
+          player,
+          nickname,
+          totalScore: 0,
+          currentStreak: 0,
+          created: now,
+          updated: now,
+        })
         return currentDocument
       },
     )
@@ -195,12 +192,12 @@ export class GameService {
   ): Promise<void> {
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 
-    const clientParticipant = gameDocument.participants.find(
-      (participant) => participant.client._id === client._id,
+    const currentParticipant = gameDocument.participants.find(
+      (participant) => participant.player._id === client.player._id,
     )
 
     const participantToRemove = gameDocument.participants.find(
-      (participant) => participant.client.player._id === playerID,
+      (participant) => participant.player._id === playerID,
     )
 
     if (!participantToRemove) {
@@ -208,9 +205,9 @@ export class GameService {
     }
 
     if (
-      !clientParticipant ||
+      !currentParticipant ||
       participantToRemove.type !== GameParticipantType.PLAYER ||
-      (clientParticipant.type === GameParticipantType.PLAYER &&
+      (currentParticipant.type === GameParticipantType.PLAYER &&
         client.player._id !== playerID)
     ) {
       throw new ForbiddenException('Forbidden to remove player')
@@ -220,13 +217,13 @@ export class GameService {
       gameID,
       async (currentDocument) => {
         currentDocument.participants = currentDocument.participants.filter(
-          (participant) => participant.client.player._id !== playerID,
+          (participant) => participant.player._id !== playerID,
         )
         return currentDocument
       },
     )
 
-    if (clientParticipant.type === GameParticipantType.HOST) {
+    if (currentParticipant.type === GameParticipantType.HOST) {
       await this.gameEventPublisher.publishParticipantEvent(
         participantToRemove,
         buildGameQuitEvent(),

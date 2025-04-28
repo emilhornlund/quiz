@@ -51,14 +51,12 @@ export class GameRepository {
       })
       .populate({
         path: 'participants',
-        populate: {
-          path: 'client',
-          model: 'Client',
-          populate: {
+        populate: [
+          {
             path: 'player',
             model: 'Player',
           },
-        },
+        ],
       })
   }
 

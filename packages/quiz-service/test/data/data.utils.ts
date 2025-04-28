@@ -13,7 +13,6 @@ import { Client } from '../../src/client/services/models/schemas'
 import {
   BaseTask,
   Game,
-  Participant,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
@@ -34,6 +33,8 @@ import {
 } from '../../src/quiz/services/models/schemas'
 
 import { offsetSeconds } from './helpers.utils'
+
+export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
 
 export function createMockGameDocument(game?: Partial<Game>): Game {
   return {
@@ -56,10 +57,10 @@ export function createMockGameDocument(game?: Partial<Game>): Game {
 
 export function createMockGameHostParticipantDocument(
   participant?: Partial<ParticipantBase & ParticipantHost>,
-): Participant {
+): ParticipantBase & ParticipantHost {
   return {
     type: GameParticipantType.HOST,
-    client: createMockClientDocument(),
+    player: createMockPlayerDocument(),
     updated: offsetSeconds(0),
     created: offsetSeconds(0),
     ...(participant ?? {}),
@@ -68,10 +69,11 @@ export function createMockGameHostParticipantDocument(
 
 export function createMockGamePlayerParticipantDocument(
   participant?: Partial<ParticipantBase & ParticipantPlayer>,
-): Participant {
+): ParticipantBase & ParticipantPlayer {
   return {
     type: GameParticipantType.PLAYER,
-    client: createMockClientDocument(),
+    player: createMockPlayerDocument(),
+    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     totalScore: 0,
     currentStreak: 0,
     updated: offsetSeconds(0),
@@ -99,7 +101,7 @@ export function createMockClientDocument(client?: Partial<Client>): Client {
 export function createMockPlayerDocument(player?: Player): Player {
   return {
     _id: uuidv4(),
-    nickname: 'FrostyBear',
+    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     created: offsetSeconds(0),
     modified: offsetSeconds(0),
     ...(player ?? {}),

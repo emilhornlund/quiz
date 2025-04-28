@@ -16,7 +16,7 @@ import {
 const REDIS_PUBSUB_CHANNEL = 'events'
 
 /**
- * GameEventPublisher is responsible for broadcasting game events to connected clients
+ * GameEventPublisher is responsible for broadcasting game events to connected players
  * using Redis Pub/Sub for distributed event handling.
  */
 @Injectable()
@@ -31,7 +31,7 @@ export class GameEventPublisher {
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
   /**
-   * Publishes game events to relevant clients for a given game document.
+   * Publishes game events to relevant players for a given game document.
    *
    * @param {GameDocument} document - The game document whose events are to be published.
    *
@@ -78,7 +78,7 @@ export class GameEventPublisher {
     event: GameEvent,
   ): Promise<void> {
     return this.publishDistributedEvent({
-      clientId: participant.client.player._id,
+      playerId: participant.player._id,
       event,
     })
   }
@@ -96,10 +96,10 @@ export class GameEventPublisher {
     try {
       const message = JSON.stringify(event)
       await this.redis.publish(REDIS_PUBSUB_CHANNEL, message)
-      if (event.clientId) {
-        this.logger.log(`Published event for clientId: ${event.clientId}`)
+      if (event.playerId) {
+        this.logger.log(`Published event for playerId: ${event.playerId}`)
       } else {
-        this.logger.log('Published event for all clients')
+        this.logger.log('Published event for all players')
       }
     } catch (error) {
       this.logger.error('Error publishing event:', error)

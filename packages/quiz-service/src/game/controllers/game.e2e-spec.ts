@@ -26,6 +26,7 @@ import {
   createMockRangeQuestionDocument,
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
+  MOCK_DEFAULT_PLAYER_NICKNAME,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
   offsetSeconds,
@@ -228,7 +229,7 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
@@ -242,7 +243,9 @@ describe('GameController (e2e)', () => {
       )
 
       await playerModel
-        .findByIdAndUpdate(hostClient.player._id, { nickname: 'FrostyBear' })
+        .findByIdAndUpdate(hostClient.player._id, {
+          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+        })
         .exec()
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -250,14 +253,14 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
         })
     })
 
-    it('should fail in joining client has already joined', async () => {
+    it('should fail in joining when a player has already joined', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
         hostClient.player,
@@ -270,7 +273,8 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.PLAYER,
-              client: playerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -283,11 +287,11 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(409)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Client has already joined this game',
+            message: 'Player has already joined this game',
             status: 409,
             timestamp: expect.anything(),
           })
@@ -307,7 +311,7 @@ describe('GameController (e2e)', () => {
 
       await playerModel
         .findByIdAndUpdate(secondPlayerClient.player._id, {
-          nickname: 'FrostyBear',
+          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
         })
         .exec()
 
@@ -316,7 +320,8 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.PLAYER,
-              client: secondPlayerClient,
+              player: secondPlayerClient.player,
+              nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -329,7 +334,7 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(409)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -356,7 +361,7 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -374,7 +379,7 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameID}/players`)
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -390,7 +395,7 @@ describe('GameController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post('/api/games/non-uuid/players')
         .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: 'FrostyBear' })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -417,13 +422,14 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.HOST,
-              client: hostClient,
+              player: hostClient.player,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              client: playerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -455,13 +461,14 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.HOST,
-              client: hostClient,
+              player: hostClient.player,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              client: playerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -493,7 +500,7 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.HOST,
-              client: hostClient,
+              player: hostClient.player,
               created: new Date(),
               updated: new Date(),
             },
@@ -527,7 +534,7 @@ describe('GameController (e2e)', () => {
 
       await playerModel
         .findByIdAndUpdate(secondPlayerClient.player._id, {
-          nickname: 'FrostyBear',
+          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
         })
         .exec()
 
@@ -536,13 +543,14 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.HOST,
-              client: hostClient,
+              player: hostClient.player,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              client: playerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -550,7 +558,8 @@ describe('GameController (e2e)', () => {
             },
             {
               type: GameParticipantType.PLAYER,
-              client: secondPlayerClient,
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -586,7 +595,7 @@ describe('GameController (e2e)', () => {
           participants: [
             {
               type: GameParticipantType.HOST,
-              client: hostClient,
+              player: hostClient.player,
               created: new Date(),
               updated: new Date(),
             },
@@ -637,7 +646,11 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
+      await gameService.joinGame(
+        gameID,
+        playerClient,
+        MOCK_DEFAULT_PLAYER_NICKNAME,
+      )
 
       const response = supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/events`)
@@ -858,7 +871,11 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
+      await gameService.joinGame(
+        gameID,
+        playerClient,
+        MOCK_DEFAULT_PLAYER_NICKNAME,
+      )
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -924,7 +941,11 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
+      await gameService.joinGame(
+        gameID,
+        playerClient,
+        MOCK_DEFAULT_PLAYER_NICKNAME,
+      )
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -962,7 +983,11 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
+      await gameService.joinGame(
+        gameID,
+        playerClient,
+        MOCK_DEFAULT_PLAYER_NICKNAME,
+      )
 
       await gameModel
         .findByIdAndUpdate(gameID, { currentTask: buildLobbyTask() })
@@ -991,7 +1016,11 @@ describe('GameController (e2e)', () => {
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
-      await gameService.joinGame(gameID, playerClient, 'FrostyBear')
+      await gameService.joinGame(
+        gameID,
+        playerClient,
+        MOCK_DEFAULT_PLAYER_NICKNAME,
+      )
 
       await gameModel
         .findByIdAndUpdate(gameID, {
@@ -1095,10 +1124,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockRangeQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1204,10 +1239,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockTrueFalseQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1313,10 +1354,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockTypeAnswerQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1674,10 +1721,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockRangeQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1776,10 +1829,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockTrueFalseQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1879,10 +1938,16 @@ describe('GameController (e2e)', () => {
         createMockGameDocument({
           questions: [createMockTypeAnswerQuestionDocument()],
           participants: [
-            createMockGameHostParticipantDocument({ client: hostClient }),
-            createMockGamePlayerParticipantDocument({ client: playerClient }),
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
             createMockGamePlayerParticipantDocument({
-              client: secondPlayerClient,
+              player: playerClient.player,
+              nickname: playerClient.player.nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              player: secondPlayerClient.player,
+              nickname: secondPlayerClient.player.nickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -2279,13 +2344,15 @@ function buildMultiChoiceQuestionGameDocument(options: {
     questions: [createMockMultiChoiceQuestionDocument()],
     participants: [
       createMockGameHostParticipantDocument({
-        client: options.clients.hostClient,
+        player: options.clients.hostClient.player,
       }),
       createMockGamePlayerParticipantDocument({
-        client: options.clients.playerClient,
+        player: options.clients.playerClient.player,
+        nickname: options.clients.playerClient.player.nickname,
       }),
       createMockGamePlayerParticipantDocument({
-        client: options.clients.secondPlayerClient,
+        player: options.clients.secondPlayerClient.player,
+        nickname: options.clients.secondPlayerClient.player.nickname,
       }),
     ],
     currentTask: createMockQuestionResultTaskDocument({

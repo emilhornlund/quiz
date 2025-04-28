@@ -1,7 +1,6 @@
 import {
   GameEventType,
   GameMode,
-  GameParticipantType,
   GameResultHostEvent,
   MediaType,
   QuestionRangeAnswerMargin,
@@ -9,8 +8,10 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Client } from '../../../client/services/models/schemas'
-import { Player } from '../../../player/services/models/schemas'
+import {
+  createMockGameHostParticipantDocument,
+  createMockGamePlayerParticipantDocument,
+} from '../../../../test/data'
 import {
   BaseTask,
   GameDocument,
@@ -371,49 +372,26 @@ describe('Game Event Converter', () => {
   })
 })
 
-const PLAYER_01: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
-  'ShadowCyborg',
-  18456,
-  2,
-)
+const PLAYER_01: ParticipantBase & ParticipantPlayer =
+  createMockGamePlayerParticipantDocument({
+    nickname: 'ShadowCyborg',
+    totalScore: 18456,
+    currentStreak: 2,
+  })
 
-const PLAYER_02: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
-  'Radar',
-  18398,
-  0,
-)
+const PLAYER_02: ParticipantBase & ParticipantPlayer =
+  createMockGamePlayerParticipantDocument({
+    nickname: 'Radar',
+    totalScore: 18398,
+    currentStreak: 0,
+  })
 
-const PLAYER_03: ParticipantBase & ParticipantPlayer = buildParticipantPlayer(
-  'ShadowWhirlwind',
-  15492,
-  0,
-)
-
-function buildParticipantPlayer(
-  nickname: string,
-  totalScore: number,
-  currentStreak: number,
-): ParticipantBase & ParticipantPlayer {
-  return {
-    type: GameParticipantType.PLAYER,
-    client: mockMongooseDocument({
-      _id: uuidv4(),
-      clientIdHash: '',
-      player: mockMongooseDocument({
-        _id: uuidv4(),
-        nickname,
-        created: new Date(),
-        modified: new Date(),
-      } as Player),
-      created: new Date(),
-      modified: new Date(),
-    } as Client),
-    totalScore,
-    currentStreak,
-    created: new Date(),
-    updated: new Date(),
-  }
-}
+const PLAYER_03: ParticipantBase & ParticipantPlayer =
+  createMockGamePlayerParticipantDocument({
+    nickname: 'ShadowWhirlwind',
+    totalScore: 15492,
+    currentStreak: 0,
+  })
 
 function buildGameDocument(
   questions: GameDocument['questions'],
@@ -425,9 +403,7 @@ function buildGameDocument(
     mode: GameMode.Classic,
     pin: '123456',
     nextQuestion: 0,
-    participants: [
-      { type: GameParticipantType.HOST, client: { player: { _id: uuidv4() } } },
-    ],
+    participants: [createMockGameHostParticipantDocument()],
     questions,
     currentTask,
     previousTasks: [],
@@ -464,10 +440,10 @@ function buildQuestionResultTaskItem(
 ): QuestionResultTaskItem {
   return {
     type,
-    playerId: participantPlayer.client.player._id,
+    playerId: participantPlayer.player._id,
     answer: mockMongooseDocument({
       type,
-      playerId: participantPlayer.client.player._id,
+      playerId: participantPlayer.player._id,
       answer,
       created: new Date(),
     }),

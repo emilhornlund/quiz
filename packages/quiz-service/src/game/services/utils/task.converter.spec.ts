@@ -1519,23 +1519,23 @@ function buildGameDocument(
     participants: [
       {
         type: GameParticipantType.HOST,
-        client: { player: { _id: uuidv4() } },
+        player: { _id: uuidv4() },
       },
       {
         type: GameParticipantType.PLAYER,
-        client: { player: { _id: PARTICIPANT_PLAYER_ID_01 } },
+        player: { _id: PARTICIPANT_PLAYER_ID_01 },
         totalScore: 0,
         currentStreak: 0,
       },
       {
         type: GameParticipantType.PLAYER,
-        client: { player: { _id: PARTICIPANT_PLAYER_ID_02 } },
+        player: { _id: PARTICIPANT_PLAYER_ID_02 },
         totalScore: 0,
         currentStreak: 0,
       },
       {
         type: GameParticipantType.PLAYER,
-        client: { player: { _id: PARTICIPANT_PLAYER_ID_03 } },
+        player: { _id: PARTICIPANT_PLAYER_ID_03 },
         totalScore: 0,
         currentStreak: 0,
       },

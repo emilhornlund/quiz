@@ -311,13 +311,14 @@ function buildMockClassicModeGame(
     participants: [
       {
         type: GameParticipantType.HOST,
-        client: hostClient,
+        player: hostClient.player,
         created: offset(0),
         updated: offset(0),
       },
       {
         type: GameParticipantType.PLAYER,
-        client: playerClient,
+        player: playerClient.player,
+        nickname: playerClient.player.nickname,
         created: offset(10.921),
         updated: offset(10.921),
         totalScore: 3846,
@@ -672,13 +673,14 @@ function buildMockZeroToOneHundredModeGame(
     participants: [
       {
         type: GameParticipantType.HOST,
-        client: hostClient,
+        player: hostClient.player,
         created: offset(0),
         updated: offset(0),
       },
       {
         type: GameParticipantType.PLAYER,
-        client: playerClient,
+        player: playerClient.player,
+        nickname: playerClient.player.nickname,
         created: offset(10.463),
         updated: offset(10.463),
         totalScore: 26,

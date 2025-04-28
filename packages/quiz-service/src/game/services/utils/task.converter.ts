@@ -554,7 +554,7 @@ function buildQuestionResultTaskResults({
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .map((participant) => {
       const answer = answers.find(
-        ({ playerId }) => playerId === participant.client.player._id,
+        ({ playerId }) => playerId === participant.player._id,
       )
       return buildQuestionResultTaskItem(
         mode,
@@ -580,7 +580,7 @@ function buildQuestionResultTaskResults({
  *
  * @param mode - description here.
  * @param presented - description here.
- * @param participant - The player participant for whom the result is being calculated.
+ * @param participantPlayer - The player participant for whom the result is being calculated.
  * @param question - The question associated with the current task.
  * @param correctAnswers - The list of correct answers for the question.
  * @param answer - The answer provided by the player to the current question.
@@ -589,12 +589,16 @@ function buildQuestionResultTaskResults({
 function buildQuestionResultTaskItem(
   mode: GameMode,
   presented: Date,
-  participant: ParticipantBase & ParticipantPlayer,
+  participantPlayer: ParticipantBase & ParticipantPlayer,
   question: QuestionDao,
   correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer: QuestionTaskAnswer,
 ): QuestionResultTaskItem {
-  const { _id: playerId } = participant.client.player
+  const {
+    player: { _id: playerId },
+    totalScore: previousScore,
+    currentStreak,
+  } = participantPlayer
 
   const { type } = question
 
@@ -607,9 +611,9 @@ function buildQuestionResultTaskItem(
       ? calculateClassicModeScore(presented, question, correctAnswers, answer)
       : calculateZeroToOneHundredModeScore(correctAnswers, question, answer)
 
-  const totalScore = participant.totalScore + lastScore
+  const totalScore = previousScore + lastScore
 
-  const streak = correct ? participant.currentStreak + 1 : 0
+  const streak = correct ? currentStreak + 1 : 0
 
   return {
     type,
@@ -724,13 +728,23 @@ function buildLeaderboardItems(
         ? compareSortClassicModePlayersByScore(a, b)
         : compareZeroToOneHundredModePlayersByScore(a, b),
     )
-    .map((participant, index) => ({
-      playerId: participant.client.player._id,
-      nickname: participant.client.player.nickname,
-      position: index + 1,
-      score: participant.totalScore,
-      streaks: participant.currentStreak,
-    }))
+    .map(
+      (
+        {
+          player: { _id: playerId },
+          nickname,
+          totalScore: score,
+          currentStreak: streaks,
+        },
+        index,
+      ) => ({
+        playerId,
+        nickname,
+        position: index + 1,
+        score,
+        streaks,
+      }),
+    )
 }
 
 /**
@@ -749,7 +763,7 @@ function applyLastScore(
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .forEach((participant) => {
       const resultEntry = gameDocument.currentTask.results.find(
-        ({ playerId }) => playerId === participant.client.player._id,
+        ({ playerId }) => playerId === participant.player._id,
       )
       if (resultEntry) {
         participant.totalScore = resultEntry.totalScore

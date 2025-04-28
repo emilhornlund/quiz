@@ -54,19 +54,14 @@ describe('Game Result Converter', () => {
         participants: [
           {
             type: GameParticipantType.HOST,
-            client: {
-              _id: 'c976f0ae-219c-4687-bf3a-7ec91f534763',
-              player: { _id: uuidv4() },
-            },
+            player: { _id: uuidv4() },
             created: new Date('2025-04-09T14:43:03.687Z'),
             updated: new Date('2025-04-09T14:43:03.687Z'),
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: 'd2f3dccc-0d29-474f-bacf-c92f664211af',
-              player: { _id: 'c36386fd-34c9-4a93-b282-805c026fb62e' },
-            },
+            player: { _id: 'c36386fd-34c9-4a93-b282-805c026fb62e' },
+            nickname: 'CosmicScorpion',
             created: new Date('2025-04-09T14:43:15.956Z'),
             updated: new Date('2025-04-09T14:43:15.956Z'),
             totalScore: 3891,
@@ -74,10 +69,8 @@ describe('Game Result Converter', () => {
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: '474dddd2-e793-40f0-84dc-e81bd0c9d34f',
-              player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
-            },
+            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
+            nickname: 'FieryBear',
             created: new Date('2025-04-09T14:43:25.876Z'),
             updated: new Date('2025-04-09T14:43:25.876Z'),
             totalScore: 2742,
@@ -85,10 +78,8 @@ describe('Game Result Converter', () => {
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: '8259a14b-24a3-4437-bd2e-573960a83bc3',
-              player: { _id: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1' },
-            },
+            player: { _id: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1' },
+            nickname: 'BraveStallion',
             created: new Date('2025-04-09T14:43:38.314Z'),
             updated: new Date('2025-04-09T14:43:38.314Z'),
             totalScore: 948,
@@ -701,19 +692,14 @@ describe('Game Result Converter', () => {
         participants: [
           {
             type: GameParticipantType.HOST,
-            client: {
-              _id: 'c976f0ae-219c-4687-bf3a-7ec91f534763',
-              player: { _id: uuidv4() },
-            },
+            player: { _id: uuidv4() },
             created: new Date('2025-04-11T15:21:00.069Z'),
             updated: new Date('2025-04-11T15:21:00.069Z'),
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: 'd3a3990b-261e-4c00-afb4-931b47331648',
-              player: { _id: 'a145a38f-cb05-4ee5-b41a-6c4c16327321' },
-            },
+            player: { _id: 'a145a38f-cb05-4ee5-b41a-6c4c16327321' },
+            nickname: 'BraveBison',
             created: new Date('2025-04-11T15:21:13.166Z'),
             updated: new Date('2025-04-11T15:21:13.166Z'),
             totalScore: 70,
@@ -721,10 +707,8 @@ describe('Game Result Converter', () => {
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: '474dddd2-e793-40f0-84dc-e81bd0c9d34f',
-              player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
-            },
+            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
+            nickname: 'FieryBear',
             created: new Date('2025-04-11T15:21:22.480Z'),
             updated: new Date('2025-04-11T15:21:22.480Z'),
             totalScore: 118,
@@ -732,10 +716,8 @@ describe('Game Result Converter', () => {
           },
           {
             type: GameParticipantType.PLAYER,
-            client: {
-              _id: '163c67f4-1676-4096-9a82-8e6558606dae',
-              player: { _id: '84aabd9d-e067-4930-b6d2-9048f295d190' },
-            },
+            player: { _id: '84aabd9d-e067-4930-b6d2-9048f295d190' },
+            nickname: 'AtomicBasilisk',
             created: new Date('2025-04-11T15:21:36.885Z'),
             updated: new Date('2025-04-11T15:21:36.885Z'),
             totalScore: 236,

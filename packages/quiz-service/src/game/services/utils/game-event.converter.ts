@@ -167,9 +167,9 @@ export function buildPlayerGameEvent(
       case 'pending':
         return buildGameLoadingEvent()
       case 'active':
-        return buildGameLobbyPlayerEvent(document, participantPlayer)
+        return buildGameLobbyPlayerEvent(participantPlayer)
       case 'completed':
-        return buildGameBeginPlayerEvent(document, participantPlayer)
+        return buildGameBeginPlayerEvent(participantPlayer)
     }
   }
 
@@ -250,9 +250,9 @@ function buildGameLobbyHostEvent(
     game: { id: document._id, pin: document.pin },
     players: document.participants
       .filter((participant) => participant.type === GameParticipantType.PLAYER)
-      .map((participant) => ({
-        id: participant.client.player._id,
-        nickname: participant.client.player.nickname,
+      .map(({ player: { _id: id }, nickname }) => ({
+        id,
+        nickname,
       })),
   }
 }
@@ -260,18 +260,17 @@ function buildGameLobbyHostEvent(
 /**
  * Builds a lobby event for a player.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
  * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameLobbyPlayerEvent} A lobby event containing the player's nickname.
  */
 function buildGameLobbyPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Lobby } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameLobbyPlayerEvent {
+  const { nickname } = participantPlayer
   return {
     type: GameEventType.GameLobbyPlayer,
-    player: { nickname: participantPlayer.client.player.nickname },
+    player: { nickname },
   }
 }
 
@@ -287,18 +286,17 @@ function buildGameBeginHostEvent(): GameBeginHostEvent {
 /**
  * Builds an event to signal the start of the game for a player.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Lobby } }} document - The game document with a lobby task type.
  * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
  *
  * @returns {GameBeginPlayerEvent} An event indicating the game has started for the player.
  */
 function buildGameBeginPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Lobby } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameBeginPlayerEvent {
+  const { nickname } = participantPlayer
   return {
     type: GameEventType.GameBeginPlayer,
-    player: { nickname: participantPlayer.client.player.nickname },
+    player: { nickname },
   }
 }
 
@@ -399,12 +397,7 @@ function buildGameQuestionPreviewPlayerEvent(
   const { type, text: question } =
     document.questions[document.currentTask.questionIndex]
 
-  const {
-    client: {
-      player: { nickname },
-    },
-    totalScore: score,
-  } = participantPlayer
+  const { nickname, totalScore: score } = participantPlayer
 
   return {
     type: GameEventType.GameQuestionPreviewPlayer,
@@ -511,12 +504,7 @@ function buildGameQuestionPlayerEvent(
 ): GameQuestionPlayerEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
 
-  const {
-    client: {
-      player: { nickname },
-    },
-    totalScore: total,
-  } = participantPlayer
+  const { nickname, totalScore: total } = participantPlayer
 
   return {
     type: GameEventType.GameQuestionPlayer,
@@ -544,12 +532,7 @@ function buildGameAwaitingResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameAwaitingResultPlayerEvent {
-  const {
-    client: {
-      player: { nickname },
-    },
-    totalScore: total,
-  } = participantPlayer
+  const { nickname, totalScore: total } = participantPlayer
 
   return {
     type: GameEventType.GameAwaitingResultPlayer,
@@ -763,7 +746,7 @@ function buildGameResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameResultPlayerEvent {
-  const player = participantPlayer.client.player
+  const { nickname, player } = participantPlayer
 
   const resultsEntry = document.currentTask.results.find(
     ({ playerId }) => playerId === player._id,
@@ -774,7 +757,7 @@ function buildGameResultPlayerEvent(
     return {
       type: GameEventType.GameResultPlayer,
       player: {
-        nickname: player.nickname,
+        nickname,
         score: {
           correct: false,
           last: 0,
@@ -800,7 +783,7 @@ function buildGameResultPlayerEvent(
   return {
     type: GameEventType.GameResultPlayer,
     player: {
-      nickname: player.nickname,
+      nickname,
       score: {
         correct,
         last,
@@ -848,7 +831,7 @@ function buildGameLeaderboardPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameLeaderboardPlayerEvent {
-  const player = participantPlayer.client.player
+  const { player, nickname } = participantPlayer
 
   const leaderboardEntry = document.currentTask.leaderboard.find(
     ({ playerId }) => playerId === player._id,
@@ -861,7 +844,7 @@ function buildGameLeaderboardPlayerEvent(
   return {
     type: GameEventType.GameLeaderboardPlayer,
     player: {
-      nickname: player.nickname,
+      nickname,
       score: {
         position,
         score,
@@ -902,7 +885,7 @@ function buildGamePodiumPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Podium } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GamePodiumPlayerEvent {
-  const player = participantPlayer.client.player
+  const { player, nickname } = participantPlayer
 
   const leaderboardEntry = document.currentTask.leaderboard.find(
     ({ playerId }) => playerId === player._id,
@@ -918,7 +901,7 @@ function buildGamePodiumPlayerEvent(
       name: document.name,
     },
     player: {
-      nickname: player.nickname,
+      nickname,
       score: {
         total,
         position,

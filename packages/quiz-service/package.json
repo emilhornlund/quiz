@@ -91,6 +91,9 @@
     "testEnvironment": "node",
     "transformIgnorePatterns": [
       "/node_modules/(?!@quiz/common)"
-    ]
+    ],
+    "detectOpenHandles": true,
+    "forceExit": true,
+    "maxWorkers": 1
   }
 }

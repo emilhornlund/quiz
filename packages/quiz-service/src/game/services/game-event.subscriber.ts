@@ -30,14 +30,14 @@ const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
 
 /**
  * GameEventSubscriber listens for game events from Redis and relays them
- * to connected clients using EventEmitter for local broadcasting.
+ * to connected players using EventEmitter for local broadcasting.
  */
 @Injectable()
 export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(GameEventSubscriber.name)
   private readonly heartbeatIntervalId: NodeJS.Timeout
   private readonly redisSubscriber: Redis
-  private activeClients = new Set<string>()
+  private activePlayers = new Set<string>()
 
   /**
    * Constructs an instance of GameEventSubscriber.
@@ -106,16 +106,16 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Subscribes to the observable stream of events for a game by its ID and client ID,
-   * ensuring that only events relevant to the client are provided.
+   * Subscribes to the observable stream of events for a game by its ID and player ID,
+   * ensuring that only events relevant to the player are provided.
    *
    * @param {string} gameID - The unique identifier of the game.
    * @param {string} playerId - The ID of the player subscribing to the game events.
    *
-   * @returns {Promise<Observable<MessageEvent>>} An observable of MessageEvent for the client.
+   * @returns {Promise<Observable<MessageEvent>>} An observable of MessageEvent for the player.
    *
    * @throws {ActiveGameNotFoundByIDException} if no active game is found.
-   * @throws {PlayerNotFoundException} if the client is not the host or a player in the game.
+   * @throws {PlayerNotFoundException} if the player is not the host or a player in the game.
    */
   public async subscribe(
     gameID: string,
@@ -124,15 +124,15 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
     const document = await this.gameRepository.findGameByIDOrThrow(gameID)
 
     const participant = document.participants.find(
-      (participant) => participant.client.player._id === playerId,
+      (participant) => participant.player._id === playerId,
     )
 
     if (!participant) {
       throw new PlayerNotFoundException(playerId)
     }
 
-    if (!this.activeClients.has(playerId)) {
-      this.activeClients.add(playerId)
+    if (!this.activePlayers.has(playerId)) {
+      this.activePlayers.add(playerId)
     }
 
     const source = fromEvent(
@@ -151,7 +151,7 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
     )
 
     const initialEvent: DistributedEvent = {
-      clientId: playerId,
+      playerId,
       event:
         participant.type === GameParticipantType.PLAYER
           ? buildPlayerGameEvent(document, participant, {
@@ -165,10 +165,10 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     return concat(from([initialEvent]), source).pipe(
       filter(
-        (event) => event.clientId === undefined || event.clientId === playerId,
+        (event) => event.playerId === undefined || event.playerId === playerId,
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),
-      finalize(() => this.activeClients.delete(playerId)),
+      finalize(() => this.activePlayers.delete(playerId)),
     )
   }
 }
