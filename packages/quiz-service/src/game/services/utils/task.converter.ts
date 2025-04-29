@@ -766,6 +766,7 @@ function applyLastScore(
         ({ playerId }) => playerId === participant.player._id,
       )
       if (resultEntry) {
+        participant.rank = resultEntry.position
         participant.totalScore = resultEntry.totalScore
         participant.currentStreak = resultEntry.streak
       }

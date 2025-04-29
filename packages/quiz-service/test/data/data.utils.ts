@@ -74,6 +74,7 @@ export function createMockGamePlayerParticipantDocument(
     type: GameParticipantType.PLAYER,
     player: createMockPlayerDocument(),
     nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+    rank: 0,
     totalScore: 0,
     currentStreak: 0,
     updated: offsetSeconds(0),

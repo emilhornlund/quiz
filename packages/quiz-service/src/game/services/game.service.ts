@@ -159,6 +159,7 @@ export class GameService {
           type: GameParticipantType.PLAYER,
           player,
           nickname,
+          rank: 0,
           totalScore: 0,
           currentStreak: 0,
           created: now,

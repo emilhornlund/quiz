@@ -79,6 +79,12 @@ export class ParticipantPlayer {
   nickname: string
 
   /**
+   * The player's current rank in the game (1 = first place, etc.).
+   */
+  @Prop({ type: Number, required: true })
+  rank: number
+
+  /**
    * The total score accumulated by the player during the game.
    */
   @Prop({ type: Number, required: true })
