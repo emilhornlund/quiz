@@ -10,6 +10,7 @@ import {
   FindGameResponseDto,
   GameParticipantType,
   MultiChoiceQuestionCorrectAnswerDto,
+  PaginatedGameHistoryDto,
   QuestionType,
   RangeQuestionCorrectAnswerDto,
   SubmitQuestionAnswerRequestDto,
@@ -118,6 +119,53 @@ export class GameService {
     const gameDocument = await this.gameRepository.findGameByPINOrThrow(gamePIN)
 
     return { id: gameDocument._id }
+  }
+
+  /**
+   * Retrieves games where the given player has participated.
+   *
+   * @param playerId - The ID of the player whose games should be fetched.
+   * @param offset - The number of games to skip for pagination.
+   * @param limit - The maximum number of games to return.
+   * @returns A paginated list of game history DTOs.
+   */
+  public async findGamesByPlayerId(
+    playerId: string,
+    offset: number = 0,
+    limit: number = 5,
+  ): Promise<PaginatedGameHistoryDto> {
+    const { results, total } = await this.gameRepository.findGamesByPlayerId(
+      playerId,
+      offset,
+      limit,
+    )
+
+    return {
+      results: results.map((gameDocument) => {
+        const participant = gameDocument.participants?.find(
+          ({ player }) => player._id === playerId,
+        )
+
+        return {
+          id: gameDocument._id,
+          name: gameDocument.name,
+          mode: gameDocument.mode,
+          status: gameDocument.status,
+          imageCoverURL: gameDocument.quiz?.imageCoverURL,
+          created: gameDocument.created,
+          ...(participant.type === GameParticipantType.HOST
+            ? { participantType: GameParticipantType.HOST }
+            : {
+                participantType: GameParticipantType.PLAYER,
+                rank: participant.rank,
+                score: participant.totalScore,
+              }),
+        }
+      }),
+      total,
+      limit,
+      offset,
+    }
   }
 
   /**

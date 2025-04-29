@@ -18,6 +18,7 @@ import {
   ParticipantPlayer,
   QuestionResultTask,
   QuestionTask,
+  QuitTask,
   TaskType,
 } from '../../src/game/services/models/schemas'
 import { buildLobbyTask } from '../../src/game/services/utils'
@@ -227,6 +228,18 @@ export function createMockQuestionResultTaskDocument(
     correctAnswers: [],
     results: [],
     created: new Date(),
+    ...(task ?? {}),
+  }
+}
+
+export function createMockQuitTaskDocument(
+  task?: Partial<BaseTask & QuitTask>,
+): BaseTask & QuitTask {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Quit,
+    status: 'completed',
+    created: offsetSeconds(0),
     ...(task ?? {}),
   }
 }

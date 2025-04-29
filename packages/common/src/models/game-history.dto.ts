@@ -69,3 +69,19 @@ export type GameHistoryDto = {
       score: number
     }
 )
+
+/**
+ * Data transfer object for game history host object.
+ */
+export type GameHistoryHostDto = Extract<
+  GameHistoryDto,
+  { participantType: GameParticipantType.HOST }
+>
+
+/**
+ * Data transfer object for game history player object.
+ */
+export type GameHistoryPlayerDto = Extract<
+  GameHistoryDto,
+  { participantType: GameParticipantType.PLAYER }
+>

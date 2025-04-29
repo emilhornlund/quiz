@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
-import { Model } from 'mongoose'
+import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { Client } from '../../client/services/models/schemas'
@@ -49,15 +49,19 @@ export class GameRepository {
         _id: gameID,
         ...(active ? { status: GameStatus.Active } : {}),
       })
-      .populate({
-        path: 'participants',
-        populate: [
-          {
+      .populate([
+        {
+          path: 'quiz',
+          model: 'Quiz',
+        },
+        {
+          path: 'participants',
+          populate: {
             path: 'player',
             model: 'Player',
           },
-        ],
-      })
+        },
+      ])
   }
 
   /**
@@ -98,10 +102,24 @@ export class GameRepository {
     gamePIN: string,
     active: boolean = true,
   ): Promise<GameDocument | null> {
-    return this.gameModel.findOne({
-      pin: gamePIN,
-      ...(active ? { status: { $eq: GameStatus.Active } } : {}),
-    })
+    return this.gameModel
+      .findOne({
+        pin: gamePIN,
+        ...(active ? { status: { $eq: GameStatus.Active } } : {}),
+      })
+      .populate([
+        {
+          path: 'quiz',
+          model: 'Quiz',
+        },
+        {
+          path: 'participants',
+          populate: {
+            path: 'player',
+            model: 'Player',
+          },
+        },
+      ])
   }
 
   /**
@@ -151,6 +169,54 @@ export class GameRepository {
     await this.gameEventPublisher.publish(savedGameDocument)
 
     return savedGameDocument
+  }
+
+  /**
+   * Finds games associated with a specific player ID.
+   *
+   * @param playerId - The ID of the player.
+   * @param offset - The number of games to skip for pagination.
+   * @param limit - The maximum number of games to return.
+   * @returns An object containing the list of games and the total number of matching games.
+   */
+  public async findGamesByPlayerId(
+    playerId: string,
+    offset: number = 0,
+    limit: number = 5,
+  ): Promise<{
+    results: GameDocument[]
+    total: number
+  }> {
+    const filter: RootFilterQuery<Game> = {
+      status: { $in: [GameStatus.Completed, GameStatus.Active] },
+      'participants.player': playerId,
+    }
+
+    const total = await this.gameModel.countDocuments(filter)
+
+    const results = await this.gameModel
+      .find(filter)
+      .sort({ status: 1, created: 'desc' })
+      .skip(offset)
+      .limit(limit)
+      .populate([
+        {
+          path: 'quiz',
+          model: 'Quiz',
+        },
+        {
+          path: 'participants',
+          populate: {
+            path: 'player',
+            model: 'Player',
+          },
+        },
+      ])
+
+    return {
+      results,
+      total,
+    }
   }
 
   /**
