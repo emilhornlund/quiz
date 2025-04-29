@@ -37,7 +37,12 @@ const GameTableItem: FC<GameTableItemProps> = (props) => {
 
   return (
     <Link to={link} className={styles.row}>
-      <img src={imageCoverURL ?? Picture} className={styles.svg} alt="image" />
+      {' '}
+      <img
+        src={imageCoverURL ?? Picture}
+        className={imageCoverURL ? undefined : styles.placeholder}
+        alt="image"
+      />
       <div className={styles.metadata}>
         <div className={styles.name}>{name}</div>
         <div className={styles.details}>

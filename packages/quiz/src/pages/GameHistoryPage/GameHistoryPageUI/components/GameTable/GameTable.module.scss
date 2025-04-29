@@ -91,6 +91,10 @@
 
           @include image-size(118px);
         }
+
+        &.placeholder {
+          filter: invert(54%) sepia(7%) saturate(725%) hue-rotate(167deg) brightness(102%) contrast(90%);
+        }
       }
 
       .metadata {
