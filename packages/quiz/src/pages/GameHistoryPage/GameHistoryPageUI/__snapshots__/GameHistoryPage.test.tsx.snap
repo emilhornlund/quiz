@@ -190,7 +190,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
         >
           <a
             class="row"
-            href="/game/1de06ead-16f0-47af-b8ba-63279267ffd3"
+            href="/game?gameID=1de06ead-16f0-47af-b8ba-63279267ffd3"
           >
             <img
               alt="image"

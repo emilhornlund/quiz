@@ -29,7 +29,9 @@ const GameTableItem: FC<GameTableItemProps> = (props) => {
 
   const link = useMemo(
     () =>
-      status === GameStatus.Completed ? `/game/results/${id}` : `/game/${id}`,
+      status === GameStatus.Completed
+        ? `/game/results/${id}`
+        : `/game?gameID=${id}`,
     [id, status],
   )
 

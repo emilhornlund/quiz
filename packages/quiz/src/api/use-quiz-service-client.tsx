@@ -4,6 +4,7 @@ import {
   FindGameResponseDto,
   GameResultDto,
   MediaUploadPhotoResponseDto,
+  PaginatedGameHistoryDto,
   PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
   PlayerLinkCodeResponseDto,
@@ -442,6 +443,20 @@ export const useQuizServiceClient = () => {
     )
 
   /**
+   * Retrieves the game history associated with the current player.
+   *
+   * @param options.limit - The maximum number of games to retrieve per page.
+   * @param options.offset - The number of games to skip before starting retrieval.
+   *
+   * @returns A promise that resolves to a paginated list of past games.
+   */
+  const getPaginatedGameHistory = (options: {
+    limit: number
+    offset: number
+  }): Promise<PaginatedGameHistoryDto> =>
+    apiGet<PaginatedGameHistoryDto>(`/client/games${parseQueryParams(options)}`)
+
+  /**
    * Fetches the results for a completed game by its ID.
    *
    * @param gameID - The unique identifier of the game to retrieve results for.
@@ -544,6 +559,7 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     addCorrectAnswer,
     deleteCorrectAnswer,
+    getPaginatedGameHistory,
     getGameResults,
     searchPhotos,
     uploadImage,

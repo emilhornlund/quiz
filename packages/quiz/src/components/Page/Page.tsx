@@ -1,4 +1,8 @@
-import { faLink, faUser } from '@fortawesome/free-solid-svg-icons'
+import {
+  faClockRotateLeft,
+  faLink,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons'
 import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -59,6 +63,9 @@ const Page: React.FC<PageProps> = ({
                 onClose={() => setProfileMenuOpen(false)}>
                 <MenuItem icon={faUser} link="/player/profile">
                   Profile
+                </MenuItem>
+                <MenuItem icon={faClockRotateLeft} link="/game/history">
+                  History
                 </MenuItem>
                 <MenuItem icon={faLink} link="/player/link">
                   Link

@@ -1,6 +1,10 @@
-export function formatTimeAgo(date: Date): string {
+export function formatTimeAgo(date?: Date | string): string {
+  const time = (
+    date instanceof Date ? date : new Date(date as string)
+  ).getTime()
+
   const now = new Date()
-  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+  const seconds = Math.floor((now.getTime() - time) / 1000)
 
   const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(minutes / 60)
