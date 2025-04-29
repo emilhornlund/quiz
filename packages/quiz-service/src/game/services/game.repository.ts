@@ -14,7 +14,7 @@ import {
 
 import { GameEventPublisher } from './game-event.publisher'
 import { Game, GameDocument, TaskType } from './models/schemas'
-import { buildGameModel } from './utils'
+import { buildGameModel, buildQuitTask } from './utils'
 
 /**
  * Repository for interacting with the Game collection in the database.
@@ -276,9 +276,19 @@ export class GameRepository {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const result = await this.gameModel.updateMany(filter, {
-      $set: { status: GameStatus.Completed },
-    })
+    const quitTask = buildQuitTask()
+
+    const result = await this.gameModel.updateMany(filter, [
+      {
+        $set: {
+          previousTasks: {
+            $concatArrays: ['$previousTasks', ['$currentTask']],
+          },
+          currentTask: quitTask,
+          status: GameStatus.Completed,
+        },
+      },
+    ])
 
     return result.modifiedCount ?? 0
   }
@@ -298,9 +308,19 @@ export class GameRepository {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const result = await this.gameModel.updateMany(filter, {
-      $set: { status: GameStatus.Expired },
-    })
+    const quitTask = buildQuitTask()
+
+    const result = await this.gameModel.updateMany(filter, [
+      {
+        $set: {
+          previousTasks: {
+            $concatArrays: ['$previousTasks', ['$currentTask']],
+          },
+          currentTask: quitTask,
+          status: GameStatus.Expired,
+        },
+      },
+    ])
 
     return result.modifiedCount ?? 0
   }
