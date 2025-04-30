@@ -29,8 +29,8 @@ export const QuestionMultiTwoAnswers = {
       results: {
         type: QuestionType.MultiChoice,
         distribution: [
-          { value: 'Vincent van Gogh', count: 3, correct: true },
-          { value: 'Pablo Picasso', count: 7, correct: false },
+          { value: 'Vincent van Gogh', count: 3, correct: true, index: 0 },
+          { value: 'Pablo Picasso', count: 7, correct: false, index: 0 },
         ],
       },
       pagination: {
@@ -55,10 +55,10 @@ export const QuestionMultiFourAnswers = {
       results: {
         type: QuestionType.MultiChoice,
         distribution: [
-          { value: 'Vincent van Gogh', count: 3, correct: true },
-          { value: 'Pablo Picasso', count: 2, correct: false },
-          { value: 'Leonardo da Vinci', count: 0, correct: false },
-          { value: 'Claude Monet', count: 5, correct: false },
+          { value: 'Vincent van Gogh', count: 3, correct: true, index: 0 },
+          { value: 'Pablo Picasso', count: 2, correct: false, index: 0 },
+          { value: 'Leonardo da Vinci', count: 0, correct: false, index: 0 },
+          { value: 'Claude Monet', count: 5, correct: false, index: 0 },
         ],
       },
       pagination: {
@@ -83,12 +83,12 @@ export const QuestionMultiSixAnswers = {
       results: {
         type: QuestionType.MultiChoice,
         distribution: [
-          { value: 'Vincent van Gogh', count: 1, correct: true },
-          { value: 'Pablo Picasso', count: 2, correct: false },
-          { value: 'Leonardo da Vinci', count: 4, correct: false },
-          { value: 'Claude Monet', count: 0, correct: false },
-          { value: 'Michelangelo', count: 0, correct: false },
-          { value: 'Rembrandt', count: 3, correct: false },
+          { value: 'Vincent van Gogh', count: 1, correct: true, index: 0 },
+          { value: 'Pablo Picasso', count: 2, correct: false, index: 0 },
+          { value: 'Leonardo da Vinci', count: 4, correct: false, index: 0 },
+          { value: 'Claude Monet', count: 0, correct: false, index: 0 },
+          { value: 'Michelangelo', count: 0, correct: false, index: 0 },
+          { value: 'Rembrandt', count: 3, correct: false, index: 0 },
         ],
       },
       pagination: {
