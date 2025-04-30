@@ -6,9 +6,6 @@ import {
   GameEvent,
   GameEventQuestion,
   GameEventQuestionResults,
-  GameEventQuestionResultsRange,
-  GameEventQuestionResultsTrueFalse,
-  GameEventQuestionResultsTypeAnswer,
   GameEventType,
   GameLeaderboardHostEvent,
   GameLoadingEvent,
@@ -26,7 +23,6 @@ import {
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
-import { GameEventQuestionResultsMultiChoice } from '@quiz/common/dist/cjs/models/game-event'
 import { GameLeaderboardPlayerEvent, GameQuitEvent } from '@quiz/common/src'
 
 import {
@@ -44,9 +40,13 @@ import {
 
 import {
   isMultiChoiceAnswer,
+  isMultiChoiceCorrectAnswer,
   isRangeAnswer,
+  isRangeCorrectAnswer,
   isTrueFalseAnswer,
+  isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
+  isTypeAnswerCorrectAnswer,
 } from './question-answer.utils'
 import {
   isLeaderboardTask,
@@ -561,152 +561,176 @@ function buildGameEventQuestionResults(
   const question = document.questions[document.currentTask.questionIndex]
 
   if (isMultiChoiceQuestion(question)) {
-    const type = question.type
-
-    type Distribution = GameEventQuestionResultsMultiChoice['distribution']
-    type DistributionItem = Distribution[number]
-
-    const initial: DistributionItem[] = question.options
-      .map(({ value, correct }, index) => ({
-        value,
-        count: 0,
-        correct,
-        index,
-      }))
-      .filter(({ correct }) => correct)
-
-    const distribution: Distribution = document.currentTask.results.reduce(
-      (prev, current) => {
-        if (isMultiChoiceAnswer(current.answer)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const optionIndex = (current.answer as any).toObject().answer
-          if (optionIndex >= 0 && optionIndex < question.options.length) {
-            const optionsValue = question.options[optionIndex].value
-            const index = prev.findIndex(({ value }) => value === optionsValue)
-            if (index >= 0) {
-              prev[index] = { ...prev[index], count: prev[index].count + 1 }
-            } else {
-              prev.push({
-                value: optionsValue,
-                count: 1,
-                correct: current.correct,
-                index: optionIndex,
-              })
+    return {
+      type: QuestionType.MultiChoice,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isMultiChoiceAnswer(playerResultItem.answer)) {
+              const optionIndex = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.index === optionIndex,
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else if (
+                optionIndex >= 0 &&
+                optionIndex < question.options.length
+              ) {
+                prev.push({
+                  value: question.options[optionIndex].value,
+                  count: 1,
+                  correct: playerResultItem.correct,
+                  index: optionIndex,
+                })
+              }
             }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isMultiChoiceCorrectAnswer)
+            .map(({ index: optionIndex }) =>
+              optionIndex >= 0 && optionIndex < question.options.length
+                ? {
+                    value: question.options[optionIndex].value,
+                    count: 0,
+                    correct: true,
+                    index: optionIndex,
+                  }
+                : undefined,
+            )
+            .filter((item) => !!item),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
           }
-        }
-        return prev
-      },
-      initial,
-    )
-
-    return { type, distribution }
+          if (a.count !== b.count) {
+            return b.count - a.count
+          }
+          return a.index - b.index
+        }),
+    }
   }
 
   if (isRangeQuestion(question)) {
-    const type = question.type
-
-    type Distribution = GameEventQuestionResultsRange['distribution']
-    type DistributionItem = Distribution[number]
-
-    const initial: DistributionItem[] = [
-      { value: question.correct, count: 0, correct: true },
-    ]
-
-    const distribution: Distribution = document.currentTask.results.reduce(
-      (prev, current) => {
-        if (isRangeAnswer(current.answer)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const answer = (current.answer as any).toObject().answer
-          const index = prev.findIndex(({ value }) => value === answer)
-          if (index >= 0) {
-            prev[index] = { ...prev[index], count: prev[index].count + 1 }
-          } else {
-            prev.push({
-              value: answer,
-              count: 1,
-              correct: current.correct,
-            })
+    return {
+      type: QuestionType.Range,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isRangeAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.value === answer,
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else if (answer >= question.min && answer <= question.max) {
+                prev.push({
+                  value: answer,
+                  count: 1,
+                  correct: playerResultItem.correct,
+                })
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isRangeCorrectAnswer)
+            .map(({ value }) => ({
+              value,
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
           }
-        }
-        return prev
-      },
-      initial,
-    )
-
-    return { type, distribution }
+          return b.count - a.count
+        }),
+    }
   }
 
   if (isTrueFalseQuestion(question)) {
-    const type = question.type
-
-    type Distribution = GameEventQuestionResultsTrueFalse['distribution']
-    type DistributionItem = Distribution[number]
-
-    const initial: DistributionItem[] = [
-      { value: question.correct, count: 0, correct: true },
-    ]
-
-    const distribution: Distribution = document.currentTask.results.reduce(
-      (prev, current) => {
-        if (isTrueFalseAnswer(current.answer)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const answer = (current.answer as any).toObject().answer
-          const index = prev.findIndex(({ value }) => value === answer)
-          if (index >= 0) {
-            prev[index] = { ...prev[index], count: prev[index].count + 1 }
-          } else {
-            prev.push({
-              value: answer,
-              count: 1,
-              correct: current.correct,
-            })
+    return {
+      type: QuestionType.TrueFalse,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isTrueFalseAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.value === answer,
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else {
+                prev.push({
+                  value: answer,
+                  count: 1,
+                  correct: playerResultItem.correct,
+                })
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isTrueFalseCorrectAnswer)
+            .map(({ value }) => ({
+              value,
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
           }
-        }
-        return prev
-      },
-      initial,
-    )
-
-    return { type, distribution }
+          return b.count - a.count
+        }),
+    }
   }
 
   if (isTypeAnswerQuestion(question)) {
-    const type = question.type
-
-    type Distribution = GameEventQuestionResultsTypeAnswer['distribution']
-    type DistributionItem = Distribution[number]
-
-    const initial: DistributionItem[] = question.options.map((option) => ({
-      value: option,
-      count: 0,
-      correct: true,
-    }))
-
-    const distribution: Distribution = document.currentTask.results.reduce(
-      (prev, current) => {
-        if (isTypeAnswerAnswer(current.answer)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const answer = (current.answer as any).toObject().answer.toLowerCase()
-          const index = prev.findIndex(
-            ({ value }) => value.toLowerCase() === answer,
-          )
-          if (index >= 0) {
-            prev[index] = { ...prev[index], count: prev[index].count + 1 }
-          } else {
-            prev.push({
-              value: answer,
-              count: 1,
-              correct: current.correct,
-            })
+    return {
+      type: QuestionType.TypeAnswer,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isTypeAnswerAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.value.toLowerCase() === answer.toLowerCase(),
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else if (answer?.length > 0) {
+                prev.push({
+                  value: answer.toLowerCase(),
+                  count: 1,
+                  correct: playerResultItem.correct,
+                })
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isTypeAnswerCorrectAnswer)
+            .map(({ value }) => ({
+              value: value.toLowerCase(),
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
           }
-        }
-        return prev
-      },
-      initial,
-    )
-
-    return { type, distribution }
+          return b.count - a.count
+        }),
+    }
   }
 
   throw new Error('Question type is undefined or invalid.')

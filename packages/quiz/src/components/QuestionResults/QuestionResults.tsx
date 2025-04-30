@@ -170,8 +170,12 @@ const QuestionResults: FC<QuestionResultsProps> = ({
   )
   return (
     <div className={styles.questionResults}>
-      <div className={styles.chips}>{correctElements}</div>
-      <div className={styles.chips}>{incorrectElements}</div>
+      {correctElements?.length > 0 && (
+        <div className={styles.chips}>{correctElements}</div>
+      )}
+      {incorrectElements?.length > 0 && (
+        <div className={styles.chips}>{incorrectElements}</div>
+      )}
     </div>
   )
 }

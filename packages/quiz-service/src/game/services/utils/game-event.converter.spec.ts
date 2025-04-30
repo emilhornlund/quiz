@@ -1,463 +1,579 @@
 import {
+  GameEventQuestionResults,
+  GameEventQuestionResultsMultiChoice,
+  GameEventQuestionResultsRange,
+  GameEventQuestionResultsTrueFalse,
+  GameEventQuestionResultsTypeAnswer,
   GameEventType,
-  GameMode,
   GameResultHostEvent,
-  MediaType,
-  QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
-import { v4 as uuidv4 } from 'uuid'
 
 import {
-  createMockGameHostParticipantDocument,
-  createMockGamePlayerParticipantDocument,
+  createMockGameDocument,
+  createMockMultiChoiceQuestionDocument,
+  createMockQuestionResultTaskDocument,
+  createMockQuestionResultTaskItemDocument,
+  createMockQuestionTaskMultiChoiceAnswer,
+  createMockQuestionTaskRangeAnswer,
+  createMockQuestionTaskTrueFalseAnswer,
+  createMockQuestionTaskTypeAnswer,
+  createMockRangeQuestionDocument,
+  createMockTrueFalseQuestionDocument,
+  createMockTypeAnswerQuestionDocument,
+  MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+  MOCK_TYPE_ANSWER_OPTION_VALUE,
+  MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
 } from '../../../../test/data'
-import {
-  BaseTask,
-  GameDocument,
-  ParticipantBase,
-  ParticipantPlayer,
-  QuestionResultTask,
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-  QuestionTaskMultiChoiceAnswer,
-  QuestionTaskRangeAnswer,
-  QuestionTaskTrueFalseAnswer,
-  QuestionTaskTypeAnswerAnswer,
-  TaskType,
-} from '../models/schemas'
+import { Game, GameDocument } from '../models/schemas'
 
 import { buildHostGameEvent } from './game-event.converter'
 
 describe('Game Event Converter', () => {
   describe('buildHostGameEvent', () => {
-    describe('for task type QuestionResult', () => {
-      describe('for status active', () => {
-        it('should correctly aggregate answer distribution for MultiChoice questions', () => {
-          const gameDocument: GameDocument = buildGameDocument(
-            [
-              {
-                type: QuestionType.MultiChoice,
-                text: 'What is the capital of Sweden?',
-                media: {
-                  type: MediaType.Image,
-                  url: 'https://example.com/question-image.png',
-                },
-                options: [
-                  {
-                    value: 'Stockholm',
-                    correct: true,
-                  },
-                  {
-                    value: 'Paris',
-                    correct: false,
-                  },
-                  {
-                    value: 'London',
-                    correct: false,
-                  },
-                  {
-                    value: 'Berlin',
-                    correct: false,
-                  },
-                ],
-                points: 1000,
-                duration: 5,
-              },
-            ],
-            buildQuestionResultTask(
-              [{ type: QuestionType.MultiChoice, index: 0 }],
-              [
-                buildQuestionResultTaskItem(
-                  QuestionType.MultiChoice,
-                  PLAYER_01,
-                  true,
-                  1,
-                  0,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.MultiChoice,
-                  PLAYER_02,
-                  true,
-                  1,
-                  0,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.MultiChoice,
-                  PLAYER_03,
-                  false,
-                  1,
-                  1,
-                ),
-              ],
-            ),
-          )
+    describe('aggregates MultiChoice distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createMultiChoiceGame([0, 1, 0], [0])
 
-          const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
 
-          const expected: GameResultHostEvent = {
-            type: GameEventType.GameResultHost,
-            game: {
-              pin: gameDocument.pin,
-            },
-            question: {
-              type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].text,
-            },
-            results: {
-              type: QuestionType.MultiChoice,
-              distribution: [
-                {
-                  value: 'Stockholm',
-                  count: 2,
-                  correct: true,
-                  index: 0,
-                },
-                {
-                  value: 'Paris',
-                  count: 1,
-                  correct: false,
-                  index: 1,
-                },
-              ],
-            },
-            pagination: {
-              current: 1,
-              total: 1,
-            },
-          }
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 2, correct: true, index: 0 },
+          { value: 'Paris', count: 1, correct: false, index: 1 },
+        ])
 
-          expect(actual).toEqual(expected)
-        })
+        expect(actual).toEqual(expected)
+      })
 
-        it('should correctly aggregate answer distribution for Range questions', () => {
-          const gameDocument: GameDocument = buildGameDocument(
-            [
-              {
-                type: QuestionType.Range,
-                text: 'Guess the temperature of the hottest day ever recorded.',
-                media: {
-                  type: MediaType.Image,
-                  url: 'https://example.com/question-image.png',
-                },
-                min: 0,
-                max: 100,
-                margin: QuestionRangeAnswerMargin.Medium,
-                step: 1,
-                correct: 50,
-                points: 1000,
-                duration: 30,
-              },
-            ],
-            buildQuestionResultTask(
-              [{ type: QuestionType.Range, value: 50 }],
-              [
-                buildQuestionResultTaskItem(
-                  QuestionType.Range,
-                  PLAYER_01,
-                  true,
-                  1,
-                  50,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.Range,
-                  PLAYER_02,
-                  true,
-                  1,
-                  50,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.Range,
-                  PLAYER_03,
-                  false,
-                  1,
-                  45,
-                ),
-              ],
-            ),
-          )
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createMultiChoiceGame([0, 2, 2, 1], [0, 2])
 
-          const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
 
-          const expected: GameResultHostEvent = {
-            type: GameEventType.GameResultHost,
-            game: {
-              pin: gameDocument.pin,
-            },
-            question: {
-              type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].text,
-            },
-            results: {
-              type: QuestionType.Range,
-              distribution: [
-                {
-                  value: 50,
-                  count: 2,
-                  correct: true,
-                },
-                {
-                  value: 45,
-                  count: 1,
-                  correct: false,
-                },
-              ],
-            },
-            pagination: {
-              current: 1,
-              total: 1,
-            },
-          }
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'London', count: 2, correct: true, index: 2 },
+          { value: 'Stockholm', count: 1, correct: true, index: 0 },
+          { value: 'Paris', count: 1, correct: false, index: 1 },
+        ])
 
-          expect(actual).toEqual(expected)
-        })
+        expect(actual).toEqual(expected)
+      })
 
-        it('should correctly aggregate answer distribution for TrueFalse questions', () => {
-          const gameDocument: GameDocument = buildGameDocument(
-            [
-              {
-                type: QuestionType.TrueFalse,
-                text: 'The earth is flat.',
-                media: {
-                  type: MediaType.Image,
-                  url: 'https://example.com/question-image.png',
-                },
-                correct: false,
-                points: 1000,
-                duration: 30,
-              },
-            ],
-            buildQuestionResultTask(
-              [{ type: QuestionType.TrueFalse, value: false }],
-              [
-                buildQuestionResultTaskItem(
-                  QuestionType.TrueFalse,
-                  PLAYER_01,
-                  true,
-                  1,
-                  false,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.TrueFalse,
-                  PLAYER_02,
-                  true,
-                  1,
-                  false,
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.TrueFalse,
-                  PLAYER_03,
-                  false,
-                  1,
-                  true,
-                ),
-              ],
-            ),
-          )
+      it('should handle all answers being correct', () => {
+        const gameDocument = createMultiChoiceGame([0, 0, 0], [0])
 
-          const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
 
-          const expected: GameResultHostEvent = {
-            type: GameEventType.GameResultHost,
-            game: {
-              pin: gameDocument.pin,
-            },
-            question: {
-              type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].text,
-            },
-            results: {
-              type: QuestionType.TrueFalse,
-              distribution: [
-                {
-                  value: false,
-                  count: 2,
-                  correct: true,
-                },
-                {
-                  value: true,
-                  count: 1,
-                  correct: false,
-                },
-              ],
-            },
-            pagination: {
-              current: 1,
-              total: 1,
-            },
-          }
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 3, correct: true, index: 0 },
+        ])
 
-          expect(actual).toEqual(expected)
-        })
+        expect(actual).toEqual(expected)
+      })
 
-        it('should correctly aggregate answer distribution for TypeAnswer questions', () => {
-          const gameDocument: GameDocument = buildGameDocument(
-            [
-              {
-                type: QuestionType.TypeAnswer,
-                text: 'What is the capital of Sweden?',
-                media: {
-                  type: MediaType.Image,
-                  url: 'https://example.com/question-image.png',
-                },
-                options: ['stockholm'],
-                points: 1000,
-                duration: 30,
-              },
-            ],
-            buildQuestionResultTask(
-              [{ type: QuestionType.TypeAnswer, value: 'stockholm' }],
-              [
-                buildQuestionResultTaskItem(
-                  QuestionType.TypeAnswer,
-                  PLAYER_01,
-                  true,
-                  1,
-                  'Stockholm',
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.TypeAnswer,
-                  PLAYER_02,
-                  true,
-                  1,
-                  'Stockholm',
-                ),
-                buildQuestionResultTaskItem(
-                  QuestionType.TypeAnswer,
-                  PLAYER_03,
-                  false,
-                  1,
-                  'Copenhagen',
-                ),
-              ],
-            ),
-          )
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createMultiChoiceGame([1, 1, 2], [0])
 
-          const actual = buildHostGameEvent(gameDocument) as GameResultHostEvent
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
 
-          const expected: GameResultHostEvent = {
-            type: GameEventType.GameResultHost,
-            game: {
-              pin: gameDocument.pin,
-            },
-            question: {
-              type: gameDocument.questions[0].type,
-              question: gameDocument.questions[0].text,
-            },
-            results: {
-              type: QuestionType.TypeAnswer,
-              distribution: [
-                {
-                  value: 'stockholm',
-                  count: 2,
-                  correct: true,
-                },
-                {
-                  value: 'copenhagen',
-                  count: 1,
-                  correct: false,
-                },
-              ],
-            },
-            pagination: {
-              current: 1,
-              total: 1,
-            },
-          }
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 0, correct: true, index: 0 },
+          { value: 'Paris', count: 2, correct: false, index: 1 },
+          { value: 'London', count: 1, correct: false, index: 2 },
+        ])
 
-          expect(actual).toEqual(expected)
-        })
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createMultiChoiceGame([], [0])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 0, correct: true, index: 0 },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no correct answers', () => {
+        const gameDocument = createMultiChoiceGame([0, 1, 2, 3], [])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 1, correct: false, index: 0 },
+          { value: 'Paris', count: 1, correct: false, index: 1 },
+          { value: 'London', count: 1, correct: false, index: 2 },
+          { value: 'Berlin', count: 1, correct: false, index: 3 },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should ignore out-of-bounds indexes', () => {
+        const gameDocument = createMultiChoiceGame([0, 5, 1], [0])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedMultiChoiceDistribution(gameDocument, [
+          { value: 'Stockholm', count: 1, correct: true, index: 0 },
+          { value: 'Paris', count: 1, correct: false, index: 1 },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('aggregates Range distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createRangeGame([50, 40, 50], [50])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 2, correct: true },
+          { value: 40, count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createRangeGame([40, 50, 50, 60], [50, 60])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 2, correct: true },
+          { value: 60, count: 1, correct: true },
+          { value: 40, count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being correct', () => {
+        const gameDocument = createRangeGame([50, 50, 50], [50])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 3, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createRangeGame([40, 40, 60], [50])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 0, correct: true },
+          { value: 40, count: 2, correct: false },
+          { value: 60, count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createRangeGame([], [50])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no correct answers', () => {
+        const gameDocument = createRangeGame([40, 50, 60], [])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 40, count: 1, correct: false },
+          { value: 50, count: 1, correct: false },
+          { value: 60, count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should ignore out-of-bounds answers', () => {
+        const gameDocument = createRangeGame([-1, 101], [50])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedRangeDistribution(gameDocument, [
+          { value: 50, count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('aggregates True/False distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createTrueFalseGame([false, true, false], [false])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTrueFalseDistribution(gameDocument, [
+          { value: false, count: 2, correct: true },
+          { value: true, count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createTrueFalseGame(
+          [false, false, true],
+          [false, true],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTrueFalseDistribution(gameDocument, [
+          { value: false, count: 2, correct: true },
+          { value: true, count: 1, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being correct', () => {
+        const gameDocument = createTrueFalseGame([false, false], [false])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTrueFalseDistribution(gameDocument, [
+          { value: false, count: 2, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createTrueFalseGame([true, true], [false])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTrueFalseDistribution(gameDocument, [
+          { value: false, count: 0, correct: true },
+          { value: true, count: 2, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createTrueFalseGame([], [false])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTrueFalseDistribution(gameDocument, [
+          { value: false, count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('aggregates Type Answer distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createTypeAnswerGame(
+          [
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE.toUpperCase(),
+          ],
+          [MOCK_TYPE_ANSWER_OPTION_VALUE],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 2, correct: true },
+          {
+            value: MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            count: 1,
+            correct: false,
+          },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createTypeAnswerGame(
+          [
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE.toUpperCase(),
+          ],
+          [
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+          ],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 2, correct: true },
+          {
+            value: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
+            count: 1,
+            correct: true,
+          },
+          {
+            value: MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            count: 1,
+            correct: false,
+          },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being correct', () => {
+        const gameDocument = createTypeAnswerGame(
+          [
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_OPTION_VALUE,
+          ],
+          [MOCK_TYPE_ANSWER_OPTION_VALUE],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 3, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createTypeAnswerGame(
+          [
+            MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+          ],
+          [MOCK_TYPE_ANSWER_OPTION_VALUE],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 0, correct: true },
+          {
+            value: MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
+            count: 3,
+            correct: false,
+          },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createTypeAnswerGame(
+          [],
+          [MOCK_TYPE_ANSWER_OPTION_VALUE],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should ignore empty or whitespace-only answers', () => {
+        const gameDocument = createTypeAnswerGame(
+          [''],
+          [MOCK_TYPE_ANSWER_OPTION_VALUE],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedTypeAnswerDistribution(gameDocument, [
+          { value: MOCK_TYPE_ANSWER_OPTION_VALUE, count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
       })
     })
   })
 })
 
-const PLAYER_01: ParticipantBase & ParticipantPlayer =
-  createMockGamePlayerParticipantDocument({
-    nickname: 'ShadowCyborg',
-    totalScore: 18456,
-    currentStreak: 2,
+function createMultiChoiceGame(answers: number[], correctIndexes?: number[]) {
+  return createMockGameDocument({
+    questions: [createMockMultiChoiceQuestionDocument()],
+    currentTask: withMultiChoiceAnswers(answers, correctIndexes),
   })
-
-const PLAYER_02: ParticipantBase & ParticipantPlayer =
-  createMockGamePlayerParticipantDocument({
-    nickname: 'Radar',
-    totalScore: 18398,
-    currentStreak: 0,
-  })
-
-const PLAYER_03: ParticipantBase & ParticipantPlayer =
-  createMockGamePlayerParticipantDocument({
-    nickname: 'ShadowWhirlwind',
-    totalScore: 15492,
-    currentStreak: 0,
-  })
-
-function buildGameDocument(
-  questions: GameDocument['questions'],
-  currentTask: GameDocument['currentTask'],
-): GameDocument {
-  return {
-    _id: uuidv4(),
-    name: 'Trivia Battle',
-    mode: GameMode.Classic,
-    pin: '123456',
-    nextQuestion: 0,
-    participants: [createMockGameHostParticipantDocument()],
-    questions,
-    currentTask,
-    previousTasks: [],
-    created: new Date(Date.now()),
-  } as GameDocument
 }
 
-function buildQuestionResultTask(
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  results: QuestionResultTaskItem[],
-): BaseTask & QuestionResultTask {
-  return {
-    _id: uuidv4(),
-    type: TaskType.QuestionResult,
+function withMultiChoiceAnswers(answers: number[], correctIndexes: number[]) {
+  return createMockQuestionResultTaskDocument({
     status: 'active',
-    questionIndex: 0,
-    correctAnswers,
+    correctAnswers: correctIndexes.map((index) => ({
+      type: QuestionType.MultiChoice,
+      index,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.MultiChoice,
+        answer: createMockQuestionTaskMultiChoiceAnswer({ answer }),
+        correct: correctIndexes.includes(answer),
+      }),
+    ),
+  })
+}
+
+function createRangeGame(answers: number[], correctValues?: number[]) {
+  return createMockGameDocument({
+    questions: [createMockRangeQuestionDocument()],
+    currentTask: withRangeAnswers(answers, correctValues),
+  })
+}
+
+function withRangeAnswers(answers: number[], correctValues: number[]) {
+  return createMockQuestionResultTaskDocument({
+    status: 'active',
+    correctAnswers: correctValues.map((value) => ({
+      type: QuestionType.Range,
+      value,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.MultiChoice,
+        answer: createMockQuestionTaskRangeAnswer({ answer }),
+        correct: correctValues.includes(answer),
+      }),
+    ),
+  })
+}
+
+function createTrueFalseGame(answers: boolean[], correctValues?: boolean[]) {
+  return createMockGameDocument({
+    questions: [createMockTrueFalseQuestionDocument()],
+    currentTask: withTrueFalseAnswers(answers, correctValues),
+  })
+}
+
+function withTrueFalseAnswers(answers: boolean[], correctValues: boolean[]) {
+  return createMockQuestionResultTaskDocument({
+    status: 'active',
+    correctAnswers: correctValues.map((value) => ({
+      type: QuestionType.TrueFalse,
+      value,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.TrueFalse,
+        answer: createMockQuestionTaskTrueFalseAnswer({ answer }),
+        correct: correctValues.includes(answer),
+      }),
+    ),
+  })
+}
+
+function createTypeAnswerGame(answers: string[], correctValues?: string[]) {
+  return createMockGameDocument({
+    questions: [createMockTypeAnswerQuestionDocument()],
+    currentTask: withTypeAnswers(answers, correctValues),
+  })
+}
+
+function withTypeAnswers(answers: string[], correctValues: string[]) {
+  return createMockQuestionResultTaskDocument({
+    status: 'active',
+    correctAnswers: correctValues.map((value) => ({
+      type: QuestionType.TypeAnswer,
+      value,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.TypeAnswer,
+        answer: createMockQuestionTaskTypeAnswer({ answer }),
+        correct: correctValues.includes(answer),
+      }),
+    ),
+  })
+}
+
+function buildExpectedMultiChoiceDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsMultiChoice['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.MultiChoice,
+    distribution,
+  })
+}
+
+function buildExpectedRangeDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsRange['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.Range,
+    distribution,
+  })
+}
+
+function buildExpectedTrueFalseDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsTrueFalse['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.TrueFalse,
+    distribution,
+  })
+}
+
+function buildExpectedTypeAnswerDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsTypeAnswer['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.TypeAnswer,
+    distribution,
+  })
+}
+
+function expectGameResultHostEvent(
+  game: Game,
+  results: GameEventQuestionResults,
+): GameResultHostEvent {
+  return {
+    type: GameEventType.GameResultHost,
+    game: {
+      pin: game.pin,
+    },
+    question: {
+      type: game.questions[0].type,
+      question: game.questions[0].text,
+    },
     results,
-    created: new Date(),
-  }
-}
-
-function buildQuestionResultTaskItem(
-  type: QuestionType,
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-  correct: boolean,
-  position: number,
-  answer: (
-    | QuestionTaskMultiChoiceAnswer
-    | QuestionTaskRangeAnswer
-    | QuestionTaskTrueFalseAnswer
-    | QuestionTaskTypeAnswerAnswer
-  )['answer'],
-): QuestionResultTaskItem {
-  return {
-    type,
-    playerId: participantPlayer.player._id,
-    answer: mockMongooseDocument({
-      type,
-      playerId: participantPlayer.player._id,
-      answer,
-      created: new Date(),
-    }),
-    correct,
-    lastScore: correct ? 1000 : 0,
-    totalScore: participantPlayer.totalScore,
-    position: position,
-    streak: participantPlayer.currentStreak,
-  }
-}
-
-function mockMongooseDocument<T>(doc: T): T & { toObject: () => T } {
-  return {
-    ...doc,
-    toObject: () => doc,
+    pagination: {
+      current: 1,
+      total: 1,
+    },
   }
 }

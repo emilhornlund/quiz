@@ -17,7 +17,13 @@ import {
   ParticipantHost,
   ParticipantPlayer,
   QuestionResultTask,
+  QuestionResultTaskItem,
   QuestionTask,
+  QuestionTaskBaseAnswer,
+  QuestionTaskMultiChoiceAnswer,
+  QuestionTaskRangeAnswer,
+  QuestionTaskTrueFalseAnswer,
+  QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
 } from '../../src/game/services/models/schemas'
@@ -34,8 +40,6 @@ import {
 } from '../../src/quiz/services/models/schemas'
 
 import { offsetSeconds } from './helpers.utils'
-
-export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
 
 export function createMockGameDocument(game?: Partial<Game>): Game {
   return {
@@ -99,6 +103,9 @@ export function createMockClientDocument(client?: Partial<Client>): Client {
     ...(client ?? {}),
   }
 }
+
+export const MOCK_DEFAULT_PLAYER_ID = uuidv4()
+export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
 
 export function createMockPlayerDocument(player?: Player): Player {
   return {
@@ -184,6 +191,7 @@ export function createMockTrueFalseQuestionDocument(
 
 export const MOCK_TYPE_ANSWER_OPTION_VALUE = 'copenhagen'
 export const MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE = 'köpenhamn'
+export const MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE = 'stockholm'
 
 export function createMockTypeAnswerQuestionDocument(
   question?: Partial<BaseQuestionDao & QuestionTypeAnswerDao>,
@@ -227,8 +235,72 @@ export function createMockQuestionResultTaskDocument(
     questionIndex: 0,
     correctAnswers: [],
     results: [],
-    created: new Date(),
+    created: offsetSeconds(0),
     ...(task ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskItemDocument(
+  taskItem?: Partial<QuestionResultTaskItem>,
+): QuestionResultTaskItem {
+  return {
+    type: QuestionType.MultiChoice,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: createMockQuestionTaskMultiChoiceAnswer(),
+    correct: true,
+    lastScore: 1337,
+    totalScore: 1337,
+    position: 1,
+    streak: 1,
+    ...(taskItem ?? {}),
+  }
+}
+
+export function createMockQuestionTaskMultiChoiceAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer {
+  return {
+    type: QuestionType.MultiChoice,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: 0,
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionTaskRangeAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskRangeAnswer {
+  return {
+    type: QuestionType.Range,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: 0,
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionTaskTrueFalseAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer {
+  return {
+    type: QuestionType.TrueFalse,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: true,
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionTaskTypeAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer {
+  return {
+    type: QuestionType.TypeAnswer,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
   }
 }
 
