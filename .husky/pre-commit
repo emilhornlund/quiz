@@ -1,2 +1,3 @@
 yarn lint
 yarn test
+yarn workspace @quiz/quiz-service check-circular-deps

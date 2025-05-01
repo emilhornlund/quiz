@@ -5,6 +5,7 @@ import { CacheModule } from '@nestjs/cache-manager'
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
@@ -57,6 +58,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       }),
       isGlobal: true,
     }),
+    EventEmitterModule.forRoot(),
     RedisModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService<EnvironmentVariables>) => ({

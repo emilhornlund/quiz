@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bullmq'
-import { forwardRef, Logger, Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
@@ -14,6 +14,7 @@ import {
   QuizGameController,
 } from './controllers'
 import { GameResultController } from './controllers/game-result.controller'
+import { GameListener } from './handlers'
 import {
   GameEventPublisher,
   GameEventSubscriber,
@@ -35,7 +36,7 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
  */
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
+    EventEmitterModule,
     BullModule.registerQueue({ name: TASK_QUEUE_NAME }),
     MongooseModule.forFeature([
       {
@@ -47,10 +48,10 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
         schema: GameResultSchema,
       },
     ]),
-    forwardRef(() => AuthModule),
-    forwardRef(() => PlayerModule),
-    forwardRef(() => ClientModule),
-    forwardRef(() => QuizModule),
+    AuthModule,
+    PlayerModule,
+    ClientModule,
+    QuizModule,
   ],
   controllers: [
     GameController,
@@ -65,11 +66,11 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameEventPublisher,
     GameEventSubscriber,
     GameExpirySchedulerService,
+    GameListener,
     GameResultRepository,
     GameResultService,
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
-  exports: [GameService],
 })
 export class GameModule {}
