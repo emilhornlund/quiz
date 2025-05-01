@@ -1,6 +1,7 @@
 import {
   faCircleQuestion,
   faClock,
+  faGamepad,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,6 +19,7 @@ import {
   CircularProgressBarKind,
   CircularProgressBarSize,
 } from '../../../../../components'
+import { GameModeLabels } from '../../../../../models'
 import { classNames } from '../../../../../utils/helpers.ts'
 import styles from '../GameResultsPageUI.module.scss'
 import {
@@ -116,20 +118,25 @@ const SummarySection: FC<SummarySectionProps> = ({
         </div>
 
         <div className={classNames(styles.card, styles.details)}>
-          <div className={styles.title}>
-            <FontAwesomeIcon icon={faUser} />
-            Players
+          <div className={styles.icon}>
+            <FontAwesomeIcon icon={faGamepad} />
           </div>
+          <div className={styles.title}>Game Mode</div>
+          <div className={styles.value}>{GameModeLabels[mode]}</div>
+          <div className={styles.icon}>
+            <FontAwesomeIcon icon={faUser} className={styles.icon} />
+          </div>
+          <div className={styles.title}>Players</div>
           <div className={styles.value}>{playerMetrics.length}</div>
-          <div className={styles.title}>
-            <FontAwesomeIcon icon={faCircleQuestion} />
-            Questions
+          <div className={styles.icon}>
+            <FontAwesomeIcon icon={faCircleQuestion} className={styles.icon} />
           </div>
+          <div className={styles.title}>Questions</div>
           <div className={styles.value}>{questionMetrics.length}</div>
-          <div className={styles.title}>
-            <FontAwesomeIcon icon={faClock} />
-            Time
+          <div className={styles.icon}>
+            <FontAwesomeIcon icon={faClock} className={styles.icon} />
           </div>
+          <div className={styles.title}>Time</div>
           <div className={styles.value}>{formatRoundedDuration(duration)}</div>
         </div>
 

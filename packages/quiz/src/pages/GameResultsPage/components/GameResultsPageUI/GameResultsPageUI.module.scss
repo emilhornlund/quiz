@@ -4,19 +4,21 @@
 .gameResultsPage {
   display: flex;
   flex-direction: column;
-  width: 100%;
   flex: 1;
 
   @include mobile {
     row-gap: $mobile-layout-gutter;
+    width: 100%;
   }
 
   @include tablet {
     row-gap: $tablet-layout-gutter;
+    width: 100%;
   }
 
   @include desktop {
     row-gap: $desktop-layout-gutter;
+    width: $desktop-width * 0.8;
   }
 
   section {
@@ -110,18 +112,27 @@
 
         &.details {
           display: grid;
-          grid-template-columns: 1fr 1fr;
 
           @include mobile {
+            grid-template-columns: $mobile-layout-gutter 1fr 1fr;
             gap: $mobile-layout-gutter * 0.5;
           }
 
           @include tablet {
+            grid-template-columns: $tablet-layout-gutter 1fr 1fr;
             gap: $tablet-layout-gutter * 0.5;
           }
 
           @include desktop {
+            grid-template-columns: $desktop-layout-gutter 1fr 1fr;
             gap: $desktop-layout-gutter * 0.5;
+          }
+
+          .icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
           }
 
           .title {
@@ -330,21 +341,21 @@
             column-gap: $mobile-layout-gutter;
             row-gap: $mobile-layout-gutter * 0.5;
 
-            @include fontSize(14px);
+            @include fontSize(16px);
           }
 
           @include tablet {
             column-gap: $tablet-layout-gutter;
             row-gap: $tablet-layout-gutter * 0.5;
 
-            @include fontSize(16px);
+            @include fontSize(18px);
           }
 
           @include desktop {
             column-gap: $desktop-layout-gutter;
             row-gap: $desktop-layout-gutter * 0.5;
 
-            @include fontSize(18px);
+            @include fontSize(20px);
           }
 
           &.active {
