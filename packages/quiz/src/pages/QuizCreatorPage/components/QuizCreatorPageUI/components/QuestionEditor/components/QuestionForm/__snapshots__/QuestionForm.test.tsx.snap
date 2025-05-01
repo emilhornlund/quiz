@@ -516,9 +516,24 @@ exports[`QuestionForm > renders a classic multi choice option question form 1`] 
                 5 seconds
               </option>
               <option
+                value="10"
+              >
+                10 seconds
+              </option>
+              <option
+                value="20"
+              >
+                20 seconds
+              </option>
+              <option
                 value="30"
               >
                 30 seconds
+              </option>
+              <option
+                value="45"
+              >
+                45 seconds
               </option>
               <option
                 value="60"
@@ -526,9 +541,24 @@ exports[`QuestionForm > renders a classic multi choice option question form 1`] 
                 1 minute
               </option>
               <option
+                value="90"
+              >
+                1 minute 30 seconds
+              </option>
+              <option
                 value="120"
               >
                 2 minutes
+              </option>
+              <option
+                value="180"
+              >
+                3 minutes
+              </option>
+              <option
+                value="240"
+              >
+                4 minutes
               </option>
             </select>
             <svg
@@ -1071,9 +1101,24 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
                 5 seconds
               </option>
               <option
+                value="10"
+              >
+                10 seconds
+              </option>
+              <option
+                value="20"
+              >
+                20 seconds
+              </option>
+              <option
                 value="30"
               >
                 30 seconds
+              </option>
+              <option
+                value="45"
+              >
+                45 seconds
               </option>
               <option
                 value="60"
@@ -1081,9 +1126,24 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
                 1 minute
               </option>
               <option
+                value="90"
+              >
+                1 minute 30 seconds
+              </option>
+              <option
                 value="120"
               >
                 2 minutes
+              </option>
+              <option
+                value="180"
+              >
+                3 minutes
+              </option>
+              <option
+                value="240"
+              >
+                4 minutes
               </option>
             </select>
             <svg
@@ -1483,9 +1543,24 @@ exports[`QuestionForm > renders a classic true or false question form 1`] = `
                 5 seconds
               </option>
               <option
+                value="10"
+              >
+                10 seconds
+              </option>
+              <option
+                value="20"
+              >
+                20 seconds
+              </option>
+              <option
                 value="30"
               >
                 30 seconds
+              </option>
+              <option
+                value="45"
+              >
+                45 seconds
               </option>
               <option
                 value="60"
@@ -1493,9 +1568,24 @@ exports[`QuestionForm > renders a classic true or false question form 1`] = `
                 1 minute
               </option>
               <option
+                value="90"
+              >
+                1 minute 30 seconds
+              </option>
+              <option
                 value="120"
               >
                 2 minutes
+              </option>
+              <option
+                value="180"
+              >
+                3 minutes
+              </option>
+              <option
+                value="240"
+              >
+                4 minutes
               </option>
             </select>
             <svg
@@ -1916,9 +2006,24 @@ exports[`QuestionForm > renders a classic type answer question form 1`] = `
                 5 seconds
               </option>
               <option
+                value="10"
+              >
+                10 seconds
+              </option>
+              <option
+                value="20"
+              >
+                20 seconds
+              </option>
+              <option
                 value="30"
               >
                 30 seconds
+              </option>
+              <option
+                value="45"
+              >
+                45 seconds
               </option>
               <option
                 value="60"
@@ -1926,9 +2031,24 @@ exports[`QuestionForm > renders a classic type answer question form 1`] = `
                 1 minute
               </option>
               <option
+                value="90"
+              >
+                1 minute 30 seconds
+              </option>
+              <option
                 value="120"
               >
                 2 minutes
+              </option>
+              <option
+                value="180"
+              >
+                3 minutes
+              </option>
+              <option
+                value="240"
+              >
+                4 minutes
               </option>
             </select>
             <svg
@@ -2201,9 +2321,24 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
                 5 seconds
               </option>
               <option
+                value="10"
+              >
+                10 seconds
+              </option>
+              <option
+                value="20"
+              >
+                20 seconds
+              </option>
+              <option
                 value="30"
               >
                 30 seconds
+              </option>
+              <option
+                value="45"
+              >
+                45 seconds
               </option>
               <option
                 value="60"
@@ -2211,9 +2346,24 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
                 1 minute
               </option>
               <option
+                value="90"
+              >
+                1 minute 30 seconds
+              </option>
+              <option
                 value="120"
               >
                 2 minutes
+              </option>
+              <option
+                value="180"
+              >
+                3 minutes
+              </option>
+              <option
+                value="240"
+              >
+                4 minutes
               </option>
             </select>
             <svg

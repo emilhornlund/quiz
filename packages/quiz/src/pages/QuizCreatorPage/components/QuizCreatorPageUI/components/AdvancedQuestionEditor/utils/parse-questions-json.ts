@@ -176,9 +176,9 @@ const assertPointsType = (points: number, fieldName: string) => {
 const assertDurationType = (duration: number, fieldName: string) => {
   return assertType<number>(duration, 'number', fieldName, {
     validate: (points: number): boolean | string => {
-      const valid = [5, 30, 60, 120].includes(points)
+      const valid = [5, 10, 20, 30, 45, 60, 90, 120, 180, 240].includes(points)
       if (!valid) {
-        return 'Expected 5, 30, 60 or 120.'
+        return 'Expected 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240.'
       }
       return true
     },

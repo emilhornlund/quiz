@@ -68,11 +68,11 @@ describe('parseQuestionsJson', () => {
             { value: 'Berlin', correct: false },
           ],
           points: 1000,
-          duration: 10, // Invalid duration
+          duration: 15, // Invalid duration
         },
       ]
       expect(() => parseQuestionsJson(parsedJson, GameMode.Classic)).toThrow(
-        "Invalid value for field '[0].duration'. Expected 5, 30, 60 or 120.",
+        "Invalid value for field '[0].duration'. Expected 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240.",
       )
     })
 
@@ -162,13 +162,13 @@ describe('parseQuestionsJson', () => {
           },
           correct: 56,
           points: 1000,
-          duration: 10, // Invalid duration
+          duration: 15, // Invalid duration
         },
       ]
       expect(() =>
         parseQuestionsJson(parsedJson, GameMode.ZeroToOneHundred),
       ).toThrow(
-        "Invalid value for field '[0].duration'. Expected 5, 30, 60 or 120.",
+        "Invalid value for field '[0].duration'. Expected 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240.",
       )
     })
   })

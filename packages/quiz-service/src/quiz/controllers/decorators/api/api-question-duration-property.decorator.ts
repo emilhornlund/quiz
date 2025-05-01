@@ -9,7 +9,7 @@ import { IsIn, IsNumber } from 'class-validator'
  * It ensures that the property:
  * - Is required.
  * - Is a number.
- * - Is one of the allowed values: 5, 30, 60, or 120 seconds.
+ * - Is one of the allowed values: 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240 seconds.
  *
  * Example usage:
  * ```typescript
@@ -32,12 +32,12 @@ export function ApiQuestionDurationProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
       description:
-        'The time limit for answering the question, in seconds. The allowed values are 5, 30, 60, or 120.',
+        'The time limit for answering the question, in seconds. The allowed values are 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240.',
       example: '30',
       required: true,
-      enum: [5, 30, 60, 120],
+      enum: [5, 10, 20, 30, 45, 60, 90, 120, 180, 240],
     }),
     IsNumber(),
-    IsIn([5, 30, 60, 120]),
+    IsIn([5, 10, 20, 30, 45, 60, 90, 120, 180, 240]),
   )
 }

@@ -137,9 +137,15 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               The time limit for answering the question. The allowed values are:
               <ul>
                 <li>5 seconds</li>
+                <li>10 seconds</li>
+                <li>20 seconds</li>
                 <li>30 seconds</li>
+                <li>45 seconds</li>
                 <li>1 minute</li>
+                <li>1 minute 30 seconds</li>
                 <li>2 minutes</li>
+                <li>3 minutes</li>
+                <li>4 minutes</li>
               </ul>
             </>
           }>
@@ -153,9 +159,24 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 valueLabel: '5 seconds',
               },
               {
+                key: '10',
+                value: '10',
+                valueLabel: '10 seconds',
+              },
+              {
+                key: '20',
+                value: '20',
+                valueLabel: '20 seconds',
+              },
+              {
                 key: '30',
                 value: '30',
                 valueLabel: '30 seconds',
+              },
+              {
+                key: '45',
+                value: '45',
+                valueLabel: '45 seconds',
               },
               {
                 key: '60',
@@ -163,9 +184,24 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 valueLabel: '1 minute',
               },
               {
+                key: '90',
+                value: '90',
+                valueLabel: '1 minute 30 seconds',
+              },
+              {
                 key: '120',
                 value: '120',
                 valueLabel: '2 minutes',
+              },
+              {
+                key: '180',
+                value: '180',
+                valueLabel: '3 minutes',
+              },
+              {
+                key: '240',
+                value: '240',
+                valueLabel: '4 minutes',
               },
             ]}
             onChange={(value) => props.onChange(parseInt(value))}
