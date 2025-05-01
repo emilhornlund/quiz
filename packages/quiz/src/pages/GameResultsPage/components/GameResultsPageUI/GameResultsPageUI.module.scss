@@ -4,19 +4,58 @@
 .gameResultsPage {
   display: flex;
   flex-direction: column;
-  row-gap: $desktop-layout-gutter;
   width: 100%;
   flex: 1;
+
+  @include mobile {
+    row-gap: $mobile-layout-gutter;
+  }
+
+  @include tablet {
+    row-gap: $tablet-layout-gutter;
+  }
+
+  @include desktop {
+    row-gap: $desktop-layout-gutter;
+  }
 
   section {
     display: flex;
     flex-direction: column;
-    row-gap: $desktop-layout-gutter;
+    flex: 1;
+
+    @include mobile {
+      max-width: $mobile-width;
+      row-gap: $mobile-layout-gutter;
+    }
+
+    @include tablet {
+      max-width: $tablet-width;
+      row-gap: $tablet-layout-gutter;
+    }
+
+    @include desktop {
+      max-width: $desktop-width;
+      row-gap: $desktop-layout-gutter;
+    }
 
     .cards {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: $desktop-layout-gutter;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+        gap: $mobile-layout-gutter;
+      }
+
+      @include tablet {
+        grid-template-columns: 1fr 1fr;
+        gap: $tablet-layout-gutter;
+      }
+
+      @include desktop {
+        grid-template-columns: 1fr 1fr;
+        gap: $desktop-layout-gutter;
+      }
 
       .card {
         display: flex;
@@ -26,14 +65,43 @@
         flex: 1;
         background-color: $white;
         color: $gray-4;
-        padding: $desktop-narrow-layout-gutter;
-        border-radius: $desktop-border-radius;
-        @include fontSize(22px);
+
+        @include mobile {
+          padding: $mobile-narrow-layout-gutter;
+          border-radius: $mobile-border-radius;
+
+          @include fontSize(18px);
+        }
+
+        @include tablet {
+          padding: $tablet-narrow-layout-gutter;
+          border-radius: $tablet-border-radius;
+
+          @include fontSize(20px);
+        }
+
+        @include desktop {
+          padding: $desktop-narrow-layout-gutter;
+          border-radius: $desktop-border-radius;
+
+          @include fontSize(22px);
+        }
 
         &.progress {
           display: flex;
           flex-direction: row;
-          column-gap: $desktop-narrow-layout-gutter;
+
+          @include mobile {
+            column-gap: $mobile-narrow-layout-gutter;
+          }
+
+          @include tablet {
+            column-gap: $tablet-narrow-layout-gutter;
+          }
+
+          @include desktop {
+            column-gap: $desktop-narrow-layout-gutter;
+          }
 
           .text {
             flex: 1;
@@ -43,13 +111,35 @@
         &.details {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: $desktop-layout-gutter * 0.5;
+
+          @include mobile {
+            gap: $mobile-layout-gutter * 0.5;
+          }
+
+          @include tablet {
+            gap: $tablet-layout-gutter * 0.5;
+          }
+
+          @include desktop {
+            gap: $desktop-layout-gutter * 0.5;
+          }
 
           .title {
             display: flex;
             flex-direction: row;
             align-items: center;
-            column-gap: $desktop-narrow-layout-gutter;
+
+            @include mobile {
+              column-gap: $mobile-narrow-layout-gutter;
+            }
+
+            @include tablet {
+              column-gap: $tablet-narrow-layout-gutter;
+            }
+
+            @include desktop {
+              column-gap: $desktop-narrow-layout-gutter;
+            }
           }
 
           .value {
@@ -60,28 +150,80 @@
         }
 
         &.metric {
-          row-gap: $desktop-narrow-layout-gutter * 0.5;
+          @include mobile {
+            row-gap: $mobile-narrow-layout-gutter * 0.5;
+          }
+
+          @include tablet {
+            row-gap: $tablet-narrow-layout-gutter * 0.5;
+          }
+
+          @include desktop {
+            row-gap: $desktop-narrow-layout-gutter * 0.5;
+          }
 
           .value {
             font-weight: bold;
 
-            @include fontSize(28px);
+            @include mobile {
+              @include fontSize(24px);
+            }
+
+            @include tablet {
+              @include fontSize(26px);
+            }
+
+            @include desktop {
+              @include fontSize(28px);
+            }
           }
 
           .nickname {
+            display: flex;
             background-color: $blue-1;
             color: $white;
-            height: pxToRem(34px);
-            border-radius: calc(34px / 2);
-            padding: 0 pxToRem(18px);
+            justify-content: center;
+            align-items: center;
 
-            @include fontSize(22px);
+            @include mobile {
+              height: pxToRem(30px);
+              border-radius: calc(30px / 2);
+              padding: 0 pxToRem(calc(30px / 2));
+
+              @include fontSize(18px);
+            }
+
+            @include tablet {
+              height: pxToRem(32px);
+              border-radius: calc(32px / 2);
+              padding: 0 pxToRem(calc(32px / 2));
+
+              @include fontSize(20px);
+            }
+
+            @include desktop {
+              height: pxToRem(34px);
+              border-radius: calc(34px / 2);
+              padding: 0 pxToRem(calc(34px / 2));
+
+              @include fontSize(22px);
+            }
           }
 
           .title {
             text-transform: capitalize;
 
-            @include fontSize(22px);
+            @include mobile {
+              @include fontSize(18px);
+            }
+
+            @include tablet {
+              @include fontSize(20px);
+            }
+
+            @include desktop {
+              @include fontSize(22px);
+            }
           }
         }
       }
@@ -90,24 +232,60 @@
     .table {
       display: flex;
       flex-direction: column;
-      row-gap: $desktop-narrow-layout-gutter * 0.5;
       color: $gray-4;
 
-      @include fontSize(22px);
+      @include mobile {
+        row-gap: $mobile-narrow-layout-gutter * 0.5;
+        @include fontSize(18px);
+      }
+
+      @include tablet {
+        row-gap: $tablet-narrow-layout-gutter * 0.5;
+        @include fontSize(20px);
+      }
+
+      @include desktop {
+        row-gap: $desktop-narrow-layout-gutter * 0.5;
+        @include fontSize(22px);
+      }
 
       .tableRow {
         display: flex;
         flex-direction: column;
         background-color: $white;
-        padding: $desktop-layout-gutter * 0.35 $desktop-layout-gutter;
-        border-radius: $desktop-border-radius;
         cursor: pointer;
+
+        @include mobile {
+          padding: $mobile-layout-gutter * 0.35 $mobile-layout-gutter;
+          border-radius: $mobile-border-radius;
+        }
+
+        @include tablet {
+          padding: $tablet-layout-gutter * 0.35 $tablet-layout-gutter;
+          border-radius: $tablet-border-radius;
+        }
+
+        @include desktop {
+          padding: $desktop-layout-gutter * 0.35 $desktop-layout-gutter;
+          border-radius: $desktop-border-radius;
+        }
 
         .main {
           display: flex;
           flex-direction: row;
           align-items: center;
-          column-gap: $desktop-layout-gutter;
+
+          @include mobile {
+            column-gap: $mobile-layout-gutter;
+          }
+
+          @include tablet {
+            column-gap: $tablet-layout-gutter;
+          }
+
+          @include desktop {
+            column-gap: $desktop-layout-gutter;
+          }
 
           .badge {
             display: flex;
@@ -116,49 +294,112 @@
             border-radius: 50%;
             background-color: $gray-1;
             font-weight: bold;
-            width: pxToRem(38px);
-            height: pxToRem(38px);
+
+            @include mobile {
+              width: pxToRem(30px);
+              height: pxToRem(30px);
+            }
+
+            @include tablet {
+              width: pxToRem(34px);
+              height: pxToRem(34px);
+            }
+
+            @include desktop {
+              width: pxToRem(38px);
+              height: pxToRem(38px);
+            }
           }
 
           .value {
             flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            flex-wrap: wrap;
           }
         }
 
         .details {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          column-gap: $desktop-layout-gutter;
-          row-gap: $desktop-layout-gutter * 0.5;
           transition: all 0.25s linear;
           overflow: hidden;
           visibility: hidden;
           opacity: 0;
           height: 0;
 
-          @include fontSize(18px);
+          @include mobile {
+            column-gap: $mobile-layout-gutter;
+            row-gap: $mobile-layout-gutter * 0.5;
+
+            @include fontSize(14px);
+          }
+
+          @include tablet {
+            column-gap: $tablet-layout-gutter;
+            row-gap: $tablet-layout-gutter * 0.5;
+
+            @include fontSize(16px);
+          }
+
+          @include desktop {
+            column-gap: $desktop-layout-gutter;
+            row-gap: $desktop-layout-gutter * 0.5;
+
+            @include fontSize(18px);
+          }
 
           &.active {
             visibility: visible;
             opacity: 1;
             height: auto;
+
+            @include mobile {
+              padding-top: $mobile-narrow-layout-gutter;
+            }
+
+            @include tablet {
+              padding-top: $tablet-narrow-layout-gutter;
+            }
+
+            @include desktop {
+              padding-top: $desktop-narrow-layout-gutter;
+            }
           }
 
           .item {
             display: flex;
             flex-direction: row;
-            column-gap: $desktop-narrow-layout-gutter;
             justify-content: space-between;
+            align-items: center;
+
+            @include mobile {
+              column-gap: $mobile-narrow-layout-gutter;
+            }
+
+            @include tablet {
+              column-gap: $tablet-narrow-layout-gutter;
+            }
+
+            @include desktop {
+              column-gap: $desktop-narrow-layout-gutter;
+            }
 
             .title {
               display: flex;
               flex-direction: row;
               justify-content: center;
               align-items: center;
-              column-gap: $desktop-narrow-layout-gutter * 0.5;
+
+              @include mobile {
+                column-gap: $mobile-narrow-layout-gutter * 0.5;
+              }
+
+              @include tablet {
+                column-gap: $tablet-narrow-layout-gutter * 0.5;
+              }
+
+              @include desktop {
+                column-gap: $desktop-narrow-layout-gutter * 0.5;
+              }
             }
 
             .value {
