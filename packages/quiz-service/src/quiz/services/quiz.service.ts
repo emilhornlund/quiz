@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import {
   GameMode,
@@ -20,6 +20,7 @@ import {
 import { RootFilterQuery } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
+import { GameService } from '../../game/services'
 import { Player } from '../../player/services/models/schemas'
 import { QuizNotFoundException } from '../exceptions'
 
@@ -43,11 +44,14 @@ export class QuizService {
   /**
    * Initializes the QuizService.
    *
-   * @param {QuizModel} quizModel - The Mongoose model for quizzes.
-   * @param {Logger} logger - Logger instance for logging operations.
+   * @param quizModel - The Mongoose model for quizzes.
+   * @param gameService - Service responsible for managing related game entities.
+   * @param logger - Logger instance for logging operations.
    */
   constructor(
     @InjectModel(Quiz.name) private quizModel: QuizModel,
+    @Inject(forwardRef(() => GameService))
+    private readonly gameService: GameService,
     private readonly logger: Logger = new Logger(QuizService.name),
   ) {}
 
@@ -286,6 +290,10 @@ export class QuizService {
       this.logger.warn(`Quiz was not found by id '${quizId}.`)
       throw new QuizNotFoundException(quizId)
     }
+
+    this.logger.log(`Deleted quiz by id '${quizId}'.`)
+
+    await this.gameService.deleteQuiz(quizId)
   }
 
   /**

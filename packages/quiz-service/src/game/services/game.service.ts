@@ -530,4 +530,17 @@ export class GameService {
       )
     }
   }
+
+  /**
+   * Deletes all games that are associated with the given quiz ID.
+   *
+   * @param {string} quizId - The unique identifier of the quiz.
+   * @returns {Promise<void>} - Confirms successful deletion of the games.
+   */
+  public async deleteQuiz(quizId: string): Promise<void> {
+    const deletedCount = await this.gameRepository.deleteGamesByQuizId(quizId)
+    this.logger.log(
+      `Deleted '${deletedCount}' games by their quizId '${quizId}'.`,
+    )
+  }
 }

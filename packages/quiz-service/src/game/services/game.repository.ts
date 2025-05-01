@@ -324,4 +324,18 @@ export class GameRepository {
 
     return result.modifiedCount ?? 0
   }
+
+  /**
+   * Deletes all games that are associated with the given quiz ID.
+   *
+   * @param {string} quizId - The unique identifier of the quiz.
+   * @returns {Promise<number>} - The number of deleted game documents.
+   */
+  public async deleteGamesByQuizId(quizId: string): Promise<number> {
+    const result = await this.gameModel.deleteMany({
+      quiz: quizId,
+    })
+
+    return result.deletedCount ?? 0
+  }
 }

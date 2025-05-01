@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bullmq'
-import { Logger, Module } from '@nestjs/common'
+import { forwardRef, Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
@@ -47,10 +47,10 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
         schema: GameResultSchema,
       },
     ]),
-    AuthModule,
-    PlayerModule,
-    ClientModule,
-    QuizModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => PlayerModule),
+    forwardRef(() => ClientModule),
+    forwardRef(() => QuizModule),
   ],
   controllers: [
     GameController,
@@ -70,5 +70,6 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
+  exports: [GameService],
 })
 export class GameModule {}
