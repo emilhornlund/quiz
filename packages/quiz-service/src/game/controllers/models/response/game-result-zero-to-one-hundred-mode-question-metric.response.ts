@@ -36,6 +36,7 @@ export class GameResultZeroToOneHundredModeQuestionMetricResponse
    * The average precision score across all player answers for this question.
    */
   @ApiProperty({
+    title: 'Average Precision',
     description:
       'The average precision score across all player answers for this question.',
     required: true,

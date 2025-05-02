@@ -6,10 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   MessageEvent,
-  Param,
-  ParseUUIDPipe,
   Post,
-  Query,
   Sse,
 } from '@nestjs/common'
 import {
@@ -37,16 +34,16 @@ import {
 } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
 import { ApiPlayerIDParam } from '../../player/controller/decorators/api'
+import { RoutePlayerIdParam } from '../../player/controller/decorators/params'
 import {
   ParseCorrectAnswerRequestPipe,
-  ParseGamePINPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
 import { ApiGameIdParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
-import { RouteGameIdParam } from './decorators/route'
+import { QueryGameIdParam, RouteGameIdParam } from './decorators/params'
 import {
   JoinGameRequest,
   MultiChoiceQuestionCorrectAnswerRequest,
@@ -120,7 +117,7 @@ export class GameController {
     description: 'No active game found with the specified game PIN.',
   })
   async findGame(
-    @Query('gamePIN', new ParseGamePINPipe()) gamePIN: string,
+    @QueryGameIdParam() gamePIN: string,
   ): Promise<FindGameResponse> {
     return this.gameService.findActiveGameByGamePIN(gamePIN)
   }
@@ -198,7 +195,7 @@ export class GameController {
   async leaveGame(
     @AuthorizedClientParam() client: Client,
     @RouteGameIdParam() gameID: string,
-    @Param('playerID', ParseUUIDPipe) playerID: string,
+    @RoutePlayerIdParam() playerID: string,
   ): Promise<void> {
     return this.gameService.leaveGame(client, gameID, playerID)
   }

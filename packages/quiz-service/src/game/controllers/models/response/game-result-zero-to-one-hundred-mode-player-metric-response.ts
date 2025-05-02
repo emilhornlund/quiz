@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { GameResultZeroToOneHundredModePlayerMetricDto } from '@quiz/common'
-import { IsNumber } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsNumber, ValidateNested } from 'class-validator'
 
 import {
-  ApiGameParticipantProperty,
   ApiGameResultPlayerMetricAverageResponseTimeProperty,
   ApiGameResultPlayerMetricLongestCorrectStreakProperty,
   ApiGameResultPlayerMetricRankProperty,
@@ -22,9 +22,14 @@ export class GameResultZeroToOneHundredModePlayerMetricResponse
   /**
    * The player who participated in the game.
    */
-  @ApiGameParticipantProperty({
+  @ApiProperty({
+    title: 'Player',
     description: 'The player who participated in the game.',
+    required: true,
+    type: GameResultParticipantResponse,
   })
+  @Type(() => GameResultParticipantResponse)
+  @ValidateNested({ each: true })
   player: GameResultParticipantResponse
 
   /**
@@ -37,6 +42,7 @@ export class GameResultZeroToOneHundredModePlayerMetricResponse
    * The player's average precision for range-based answers (0 = worst, 1 = best).
    */
   @ApiProperty({
+    title: 'Average Precision',
     description:
       "The player's average precision for range-based answers (0 = worst, 1 = best).",
     required: true,

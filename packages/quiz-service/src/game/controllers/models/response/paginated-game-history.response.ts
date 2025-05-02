@@ -14,6 +14,7 @@ export class PaginatedGameHistoryResponse implements PaginatedGameHistoryDto {
    * The list of game history results for the current page.
    */
   @ApiProperty({
+    title: 'Results',
     description: 'The list of game history results for the current page.',
     type: 'array',
     items: {
@@ -31,6 +32,7 @@ export class PaginatedGameHistoryResponse implements PaginatedGameHistoryDto {
    * The total number of game history results available.
    */
   @ApiProperty({
+    title: 'Total',
     description: 'The total number of game history results available.',
     type: Number,
     minimum: 0,
@@ -45,6 +47,7 @@ export class PaginatedGameHistoryResponse implements PaginatedGameHistoryDto {
    * The maximum number of game history results returned per page.
    */
   @ApiProperty({
+    title: 'Limit',
     description:
       'The maximum number of game history results returned per page.',
     type: Number,
@@ -62,6 +65,7 @@ export class PaginatedGameHistoryResponse implements PaginatedGameHistoryDto {
    * The offset from the start of the total game history results.
    */
   @ApiProperty({
+    title: 'Offset',
     description: 'The offset from the start of the total game history results.',
     type: Number,
     minimum: 0,

@@ -4,18 +4,20 @@ import { GAME_MAX_PLAYERS, GAME_MIN_PLAYERS } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for documenting and validating a participant's rank.
+ * Decorator for documenting and validating the `rank` property of a participant.
  *
  * Applies:
  * - `@ApiProperty` for Swagger documentation.
- * - `@IsNumber` to validate the property as a number.
- * - `@Min` to validate the minimum allowed rank.
- * - `@Max` to validate the maximum allowed rank.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce the minimum value.
+ * - `@Max` to enforce the maximum value.
  */
 export function ApiGameParticipantRankProperty() {
   return applyDecorators(
     ApiProperty({
-      description: 'description here',
+      title: 'Rank',
+      description:
+        'The final placement of the participant, starting at 1 for the winner.',
       required: true,
       type: Number,
       minimum: GAME_MIN_PLAYERS,

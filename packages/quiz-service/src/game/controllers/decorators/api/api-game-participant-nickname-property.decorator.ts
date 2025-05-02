@@ -8,16 +8,19 @@ import {
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 /**
- * Decorator for documenting and validating a participant's nickname.
+ * Decorator for documenting and validating the `nickname` property of a participant.
  *
- * Enforces:
- * - Minimum and maximum length.
- * - Allowed characters via regex.
- * - Swagger schema definition.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsString` to ensure the value is a string.
+ * - `@MinLength` to enforce the minimum length.
+ * - `@MaxLength` to enforce the maximum length.
+ * - `@Matches` to enforce the regex pattern.
  */
 export function ApiGameParticipantNicknameProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Nickname',
       description: 'The nickname of the participant.',
       required: true,
       type: String,

@@ -12,6 +12,7 @@ import { IsDateString } from 'class-validator'
 export function ApiGameCreatedProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Created',
       description: 'The date and time when the game was created.',
       type: Date,
       format: 'date-time',

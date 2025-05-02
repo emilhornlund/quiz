@@ -1,7 +1,6 @@
 export * from './api-game-created-property.decorator'
 export * from './api-game-id-param.decorator'
 export * from './api-game-name-property.decorator'
-export * from './api-game-participant.property.decorator'
 export * from './api-game-participant-id.property.decorator'
 export * from './api-game-participant-nickname-property.decorator'
 export * from './api-game-participant-rank.property.decorator'

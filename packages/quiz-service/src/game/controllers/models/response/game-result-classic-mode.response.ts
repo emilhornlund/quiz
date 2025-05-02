@@ -14,7 +14,6 @@ import { ApiModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
-  ApiGameParticipantProperty,
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
 } from '../../decorators/api'
@@ -50,15 +49,21 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
   /**
    * The participant who created and hosted the game.
    */
-  @ApiGameParticipantProperty({
+  @ApiProperty({
+    title: 'Host',
     description: 'The participant who created and hosted the game.',
+    required: true,
+    type: GameResultParticipantResponse,
   })
+  @Type(() => GameResultParticipantResponse)
+  @ValidateNested({ each: true })
   host: GameResultParticipantResponse
 
   /**
    * A list of players and their final performance metrics for a classic mode game.
    */
   @ApiProperty({
+    title: 'Player Metrics',
     description:
       'A list of players and their final performance metrics for a classic mode game.',
     required: true,
@@ -74,6 +79,7 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
    * A list of questions and their aggregated response metrics for a classic mode game.
    */
   @ApiProperty({
+    title: 'Question Metrics',
     description:
       'A list of questions and their aggregated response metrics for a classic mode game.',
     required: true,

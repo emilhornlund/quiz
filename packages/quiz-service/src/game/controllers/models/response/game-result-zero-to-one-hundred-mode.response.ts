@@ -14,7 +14,6 @@ import { ApiModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
-  ApiGameParticipantProperty,
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
 } from '../../decorators/api'
@@ -52,15 +51,21 @@ export class GameResultZeroToOneHundredModeResponse
   /**
    * The participant who created and hosted the game.
    */
-  @ApiGameParticipantProperty({
+  @ApiProperty({
+    title: 'Host',
     description: 'The participant who created and hosted the game.',
+    required: true,
+    type: GameResultParticipantResponse,
   })
+  @Type(() => GameResultParticipantResponse)
+  @ValidateNested({ each: true })
   host: GameResultParticipantResponse
 
   /**
    * A list of players and their final performance metrics for a zero to one hundred mode game.
    */
   @ApiProperty({
+    title: 'Player Metrics',
     description:
       'A list of players and their final performance metrics for a zero to one hundred mode game.',
     required: true,
@@ -76,6 +81,7 @@ export class GameResultZeroToOneHundredModeResponse
    * A list of questions and their aggregated response metrics for a zero to one hundred mode game.
    */
   @ApiProperty({
+    title: 'Question Metrics',
     description:
       'A list of questions and their aggregated response metrics for a zero to one hundred mode game.',
     required: true,

@@ -3,13 +3,18 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for the average response time field in a player's performance metrics.
+ * Decorator for documenting and validating the `averageResponseTime` metric for a player.
  *
- * Validates that the value is a number and provides Swagger documentation.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce a minimum of 0 milliseconds.
+ * - `@Max` to enforce a maximum of 600000 milliseconds.
  */
 export function ApiGameResultPlayerMetricAverageResponseTimeProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Average Response Time',
       description:
         'The average time (in milliseconds) the player took to answer questions.',
       required: true,

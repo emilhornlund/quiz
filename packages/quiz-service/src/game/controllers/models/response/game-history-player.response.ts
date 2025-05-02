@@ -65,13 +65,13 @@ export class GameHistoryPlayerResponse implements GameHistoryPlayerDto {
    * The player's final rank in the game.
    */
   @ApiGameParticipantRankProperty()
-  rank: number
+  readonly rank: number
 
   /**
    * The player's final score in the game.
    */
   @ApiGameParticipantScoreProperty()
-  score: number
+  readonly score: number
 
   /**
    * The date and time when the game was created.

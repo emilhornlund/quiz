@@ -7,9 +7,20 @@ import {
 } from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
+/**
+ * Decorator for documenting and validating the `value` property of a typed answer.
+ *
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsString` to ensure the value is a string.
+ * - `@MinLength` to enforce the minimum length.
+ * - `@MaxLength` to enforce the maximum length.
+ * - `@Matches` to enforce the allowed character pattern.
+ */
 export function ApiGameQuestionTypeAnswerValue() {
   return applyDecorators(
     ApiProperty({
+      title: 'Value',
       description: 'The submitted answer to the type answer question.',
       example: 'Stockholm',
       required: true,

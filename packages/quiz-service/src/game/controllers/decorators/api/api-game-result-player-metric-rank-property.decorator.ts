@@ -4,13 +4,18 @@ import { GAME_MAX_PLAYERS, GAME_MIN_PLAYERS } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for the rank field in a player's performance metrics.
+ * Decorator for documenting and validating the `rank` metric for a player.
  *
- * Validates that the value is a number and provides Swagger documentation.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce the minimum player count.
+ * - `@Max` to enforce the maximum player count.
  */
 export function ApiGameResultPlayerMetricRankProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Rank',
       description:
         "The player's final rank in the game (1 = first place, etc.).",
       required: true,

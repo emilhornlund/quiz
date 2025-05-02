@@ -4,13 +4,18 @@ import { QUIZ_QUESTION_MAX, QUIZ_QUESTION_MIN } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for the unanswered field in a question's aggregated metrics.
+ * Decorator for documenting and validating the `unanswered` player count for a question.
  *
- * Validates the number value and generates Swagger documentation.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce the minimum player count.
+ * - `@Max` to enforce the maximum player count.
  */
 export function ApiGameResultQuestionMetricUnansweredProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Unanswered',
       description: 'The number of players who left the question unanswered.',
       required: true,
       type: Number,

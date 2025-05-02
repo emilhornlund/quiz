@@ -40,6 +40,7 @@ export class MultiChoiceQuestionCorrectAnswerRequest
   type: QuestionType.MultiChoice
 
   @ApiProperty({
+    title: 'Index',
     description: 'The correct index for the multi-choice answer.',
     required: true,
     minimum: 0,
@@ -71,6 +72,7 @@ export class RangeQuestionCorrectAnswerRequest
   type: QuestionType.Range
 
   @ApiProperty({
+    title: 'Value',
     description: 'The correct value for the range answer.',
     required: true,
     minimum: -10000,
@@ -102,6 +104,7 @@ export class TrueFalseQuestionCorrectAnswerRequest
   type: QuestionType.TrueFalse
 
   @ApiProperty({
+    title: 'Value',
     description: 'The correct value for the true-false answer.',
     required: true,
     type: Boolean,
@@ -129,6 +132,7 @@ export class TypeAnswerQuestionCorrectAnswerRequest
   type: QuestionType.TypeAnswer
 
   @ApiProperty({
+    title: 'Value',
     description: 'The correct value for the type-answer.',
     example: 'Stockholm',
     required: true,

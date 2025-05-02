@@ -4,15 +4,16 @@ import { GameStatus } from '@quiz/common'
 import { IsEnum } from 'class-validator'
 
 /**
- * Decorator for documenting and validating a game's status.
+ * Decorator for documenting and validating the `status` property of a game.
  *
  * Applies:
  * - `@ApiProperty` for Swagger documentation.
- * - `@IsEnum` to validate that the property is one of the defined enum values.
+ * - `@IsEnum` to ensure the value is a valid game status.
  */
 export function ApiGameStatusProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Status',
       description: 'The status of the game.',
       enum: GameStatus,
       required: true,

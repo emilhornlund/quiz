@@ -4,13 +4,18 @@ import { QUIZ_QUESTION_MAX } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for the score field in a player's performance metrics.
+ * Decorator for documenting and validating the `score` metric for a player.
  *
- * Validates that the value is a number and provides Swagger documentation.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce a minimum of 0.
+ * - `@Max` to enforce a maximum based on quiz configuration.
  */
 export function ApiGameResultPlayerMetricScoreProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Score',
       description: "The player's total score at the end of the game.",
       required: true,
       type: Number,

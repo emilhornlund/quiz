@@ -8,18 +8,19 @@ import {
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 /**
- * Decorator for documenting and validating the game's name.
+ * Decorator for documenting and validating the `name` property of a game.
  *
  * Applies:
- * - `@ApiProperty` to define the OpenAPI documentation for the property.
- * - `@IsString` to ensure the property is a string.
- * - `@MinLength` to enforce a minimum length for the title.
- * - `@MaxLength` to enforce a maximum length for the title.
- * - `@Matches` to ensure the name matches the specified regex pattern.
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsString` to ensure the value is a string.
+ * - `@MinLength` to enforce the minimum length.
+ * - `@MaxLength` to enforce the maximum length.
+ * - `@Matches` to enforce the regex pattern.
  */
 export function ApiGameNameProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Name',
       description: 'The name of the game.',
       minLength: QUIZ_TITLE_MIN_LENGTH,
       maxLength: QUIZ_TITLE_MAX_LENGTH,

@@ -3,13 +3,18 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
- * Decorator for the `duration` field in game result responses.
+ * Decorator for documenting and validating the `duration` property of a game result.
  *
- * Validates that the duration is a number (in seconds) and documents it in Swagger.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to ensure the value is a number.
+ * - `@Min` to enforce the minimum value of 0.
+ * - `@Max` to enforce the maximum value of 7200.
  */
 export function ApiGameResultDurationProperty() {
   return applyDecorators(
     ApiProperty({
+      title: 'Duration',
       description: 'The duration in seconds the game session was active.',
       required: true,
       type: Number,

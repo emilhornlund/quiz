@@ -36,6 +36,7 @@ export class GameResultClassicModeQuestionMetricResponse
    * The number of players who answered the question correctly.
    */
   @ApiProperty({
+    title: 'Correct',
     description: 'The number of players who answered the question correctly.',
     required: true,
     type: Number,
@@ -47,6 +48,7 @@ export class GameResultClassicModeQuestionMetricResponse
    * The number of players who answered the question incorrectly.
    */
   @ApiProperty({
+    title: 'Incorrect',
     description: 'The number of players who answered the question incorrectly.',
     required: true,
     type: Number,

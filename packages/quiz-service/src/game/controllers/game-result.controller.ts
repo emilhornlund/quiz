@@ -15,7 +15,7 @@ import { GameResultService } from '../services'
 
 import { ApiGameIdParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
-import { RouteGameIdParam } from './decorators/route'
+import { RouteGameIdParam } from './decorators/params'
 import {
   GameResultClassicModeResponse,
   GameResultZeroToOneHundredModeResponse,

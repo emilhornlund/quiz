@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { GameResultClassicModePlayerMetricDto } from '@quiz/common'
-import { IsNumber } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsNumber, ValidateNested } from 'class-validator'
 
 import {
-  ApiGameParticipantProperty,
   ApiGameResultPlayerMetricAverageResponseTimeProperty,
   ApiGameResultPlayerMetricLongestCorrectStreakProperty,
   ApiGameResultPlayerMetricRankProperty,
@@ -22,9 +22,14 @@ export class GameResultClassicModePlayerMetricResponse
   /**
    * The player who participated in the game.
    */
-  @ApiGameParticipantProperty({
+  @ApiProperty({
+    title: 'Player',
     description: 'The player who participated in the game.',
+    required: true,
+    type: GameResultParticipantResponse,
   })
+  @Type(() => GameResultParticipantResponse)
+  @ValidateNested({ each: true })
   player: GameResultParticipantResponse
 
   /**
@@ -37,6 +42,7 @@ export class GameResultClassicModePlayerMetricResponse
    * The total number of questions the player answered correctly.
    */
   @ApiProperty({
+    title: 'Correct',
     description: 'The total number of questions the player answered correctly.',
     required: true,
     type: Number,
@@ -48,6 +54,7 @@ export class GameResultClassicModePlayerMetricResponse
    * The total number of questions the player answered incorrectly.
    */
   @ApiProperty({
+    title: 'Incorrect',
     description:
       'The total number of questions the player answered incorrectly.',
     required: true,

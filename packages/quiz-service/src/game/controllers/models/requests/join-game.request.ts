@@ -9,6 +9,7 @@ import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 export class JoinGameRequest implements JoinGameRequestDto {
   @ApiProperty({
+    title: 'Nickname',
     description:
       'A nickname chosen by the player, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
     required: true,
