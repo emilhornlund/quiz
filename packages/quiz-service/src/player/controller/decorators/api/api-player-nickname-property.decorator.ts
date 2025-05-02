@@ -7,7 +7,7 @@ import {
 } from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
-export function PlayerNicknameProperty() {
+export function ApiPlayerNicknameProperty() {
   return applyDecorators(
     ApiProperty({
       description:

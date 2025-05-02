@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 
-export function GameIdProperty(options?: { description: string }) {
+export function ApiGameIdProperty(options?: { description: string }) {
   return applyDecorators(
     ApiProperty({
       description: options?.description,

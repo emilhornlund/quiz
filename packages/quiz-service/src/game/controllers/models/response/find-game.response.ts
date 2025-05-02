@@ -1,9 +1,9 @@
 import { FindGameResponseDto } from '@quiz/common'
 
-import { GameIdProperty } from '../../decorators'
+import { ApiGameIdProperty } from '../../decorators/api'
 
 export class FindGameResponse implements FindGameResponseDto {
-  @GameIdProperty({
+  @ApiGameIdProperty({
     description: 'The unique identifier for the active game.',
   })
   id: string

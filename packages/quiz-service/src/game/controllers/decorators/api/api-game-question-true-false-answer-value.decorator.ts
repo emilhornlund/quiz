@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsBoolean } from 'class-validator'
 
-export function GameQuestionTrueFalseAnswerValue() {
+export function ApiGameQuestionTrueFalseAnswerValue() {
   return applyDecorators(
     ApiProperty({
       description: 'The submitted answer to the true false question.',

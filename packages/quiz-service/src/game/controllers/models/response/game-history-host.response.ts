@@ -9,9 +9,9 @@ import {
   ApiModeProperty,
   ApiQuizImageCoverProperty,
 } from '../../../../quiz/controllers/decorators/api'
-import { GameIdProperty } from '../../decorators'
 import {
   ApiGameCreatedProperty,
+  ApiGameIdProperty,
   ApiGameNameProperty,
   ApiGameParticipantTypeProperty,
   ApiGameStatusProperty,
@@ -24,7 +24,7 @@ export class GameHistoryHostResponse implements GameHistoryHostDto {
   /**
    * The unique identifier for the game.
    */
-  @GameIdProperty({
+  @ApiGameIdProperty({
     description: 'The unique identifier for the game.',
   })
   readonly id: string

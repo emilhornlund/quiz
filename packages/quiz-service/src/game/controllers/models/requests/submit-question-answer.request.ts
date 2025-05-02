@@ -7,12 +7,12 @@ import {
 } from '@quiz/common'
 
 import {
-  GameQuestionMultiChoiceAnswerOptionIndex,
-  GameQuestionRangeAnswerValue,
-  GameQuestionTrueFalseAnswerValue,
-  GameQuestionTypeAnswerValue,
-  GameQuestionTypeProperty,
-} from '../../decorators'
+  ApiGameQuestionMultiChoiceAnswerOptionIndex,
+  ApiGameQuestionRangeAnswerValue,
+  ApiGameQuestionTrueFalseAnswerValue,
+  ApiGameQuestionTypeAnswerValue,
+  ApiGameQuestionTypeProperty,
+} from '../../decorators/api'
 
 /**
  * DTO for submitting an answer to a multi-choice question.
@@ -20,10 +20,10 @@ import {
 export class SubmitMultiChoiceQuestionAnswerRequest
   implements SubmitMultiChoiceQuestionAnswerRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.MultiChoice)
+  @ApiGameQuestionTypeProperty(QuestionType.MultiChoice)
   type: QuestionType.MultiChoice
 
-  @GameQuestionMultiChoiceAnswerOptionIndex()
+  @ApiGameQuestionMultiChoiceAnswerOptionIndex()
   optionIndex: number
 }
 
@@ -33,10 +33,10 @@ export class SubmitMultiChoiceQuestionAnswerRequest
 export class SubmitRangeQuestionAnswerRequest
   implements SubmitRangeQuestionAnswerRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.Range)
+  @ApiGameQuestionTypeProperty(QuestionType.Range)
   type: QuestionType.Range
 
-  @GameQuestionRangeAnswerValue()
+  @ApiGameQuestionRangeAnswerValue()
   value: number
 }
 
@@ -46,10 +46,10 @@ export class SubmitRangeQuestionAnswerRequest
 export class SubmitTrueFalseQuestionAnswerRequest
   implements SubmitTrueFalseQuestionAnswerRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.TrueFalse)
+  @ApiGameQuestionTypeProperty(QuestionType.TrueFalse)
   type: QuestionType.TrueFalse
 
-  @GameQuestionTrueFalseAnswerValue()
+  @ApiGameQuestionTrueFalseAnswerValue()
   value: boolean
 }
 
@@ -59,9 +59,9 @@ export class SubmitTrueFalseQuestionAnswerRequest
 export class SubmitTypeAnswerQuestionAnswerRequest
   implements SubmitTypeAnswerQuestionAnswerRequestDto
 {
-  @GameQuestionTypeProperty(QuestionType.TypeAnswer)
+  @ApiGameQuestionTypeProperty(QuestionType.TypeAnswer)
   type: QuestionType.TypeAnswer
 
-  @GameQuestionTypeAnswerValue()
+  @ApiGameQuestionTypeAnswerValue()
   value: string
 }

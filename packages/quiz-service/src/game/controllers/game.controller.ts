@@ -44,7 +44,7 @@ import {
 } from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
-import { GameIdParam } from './decorators'
+import { ApiGameIdParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
 import { RouteGameIdParam } from './decorators/route'
 import {
@@ -155,10 +155,10 @@ export class GameController {
   @ApiNotFoundResponse({
     description: 'No game found with the specified unique identifier.',
   })
-  @GameIdParam()
+  @ApiGameIdParam()
   async joinGame(
     @AuthorizedClientParam() client: Client,
-    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @RouteGameIdParam() gameID: string,
     @Body() request: JoinGameRequest,
   ): Promise<void> {
     return this.gameService.joinGame(gameID, client, request.nickname)
@@ -193,11 +193,11 @@ export class GameController {
       'No game or player found with the specified unique identifier.',
   })
   @AuthorizedGame()
-  @GameIdParam()
+  @ApiGameIdParam()
   @ApiPlayerIDParam()
   async leaveGame(
     @AuthorizedClientParam() client: Client,
-    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @RouteGameIdParam() gameID: string,
     @Param('playerID', ParseUUIDPipe) playerID: string,
   ): Promise<void> {
     return this.gameService.leaveGame(client, gameID, playerID)
@@ -242,11 +242,11 @@ export class GameController {
     description: 'Invalid game ID format or missing authorization token.',
   })
   @AuthorizedGame()
-  @GameIdParam()
+  @ApiGameIdParam()
   @SkipThrottle()
   public async getEventStream(
     @AuthorizedPlayerIdParam() playerId: string,
-    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @RouteGameIdParam() gameID: string,
   ): Promise<Observable<MessageEvent>> {
     return this.gameEventSubscriber.subscribe(gameID, playerId)
   }
@@ -277,10 +277,8 @@ export class GameController {
     description: 'Unauthorized access or invalid client role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
-  @GameIdParam()
-  public async completeTask(
-    @Param('gameID', ParseUUIDPipe) gameID: string,
-  ): Promise<void> {
+  @ApiGameIdParam()
+  public async completeTask(@RouteGameIdParam() gameID: string): Promise<void> {
     await this.gameService.completeCurrentTask(gameID)
   }
 
@@ -323,7 +321,7 @@ export class GameController {
     description: 'Unauthorized access or invalid client role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
-  @GameIdParam()
+  @ApiGameIdParam()
   public async addCorrectAnswer(
     @RouteGameIdParam() gameID: string,
     @Body(new ParseCorrectAnswerRequestPipe())
@@ -374,7 +372,7 @@ export class GameController {
     description: 'Unauthorized access or invalid client role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
-  @GameIdParam()
+  @ApiGameIdParam()
   public async deleteCorrectAnswer(
     @RouteGameIdParam() gameID: string,
     @Body(new ParseCorrectAnswerRequestPipe())
@@ -418,10 +416,10 @@ export class GameController {
     description: 'The answer has been successfully submitted.',
   })
   @AuthorizedGame(GameParticipantType.PLAYER)
-  @GameIdParam()
+  @ApiGameIdParam()
   public async submitQuestionAnswer(
     @AuthorizedPlayerIdParam() playerId: string,
-    @Param('gameID', ParseUUIDPipe) gameID: string,
+    @RouteGameIdParam() gameID: string,
     @Body(new ParseSubmitQuestionAnswerRequestPipe())
     submitQuestionAnswerRequest:
       | SubmitMultiChoiceQuestionAnswerRequest

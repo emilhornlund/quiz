@@ -2,18 +2,18 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min } from 'class-validator'
 
-export function GameQuestionRangeAnswerValue() {
+export function ApiGameQuestionMultiChoiceAnswerOptionIndex() {
   return applyDecorators(
     ApiProperty({
-      description: 'The submitted value for the range question.',
-      example: 50,
+      description: 'The submitted option index for the multi option question.',
+      example: 0,
       required: true,
-      minimum: -10000,
-      maximum: 10000,
+      minimum: 0,
+      maximum: 5,
       type: Number,
     }),
     IsNumber(),
-    Min(-10000),
-    Max(10000),
+    Min(0),
+    Max(5),
   )
 }

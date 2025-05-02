@@ -7,7 +7,7 @@ import {
 } from '@quiz/common'
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
-export function GameQuestionTypeAnswerValue() {
+export function ApiGameQuestionTypeAnswerValue() {
   return applyDecorators(
     ApiProperty({
       description: 'The submitted answer to the type answer question.',

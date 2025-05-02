@@ -11,8 +11,8 @@ import { Type } from 'class-transformer'
 import { Max, Min, ValidateNested } from 'class-validator'
 
 import { ApiModeProperty } from '../../../../quiz/controllers/decorators/api'
-import { GameIdProperty } from '../../decorators'
 import {
+  ApiGameIdProperty,
   ApiGameNameProperty,
   ApiGameParticipantProperty,
   ApiGameResultCreatedProperty,
@@ -30,7 +30,7 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
   /**
    * The unique identifier for the game.
    */
-  @GameIdProperty({
+  @ApiGameIdProperty({
     description: 'The unique identifier for the game.',
   })
   id: string

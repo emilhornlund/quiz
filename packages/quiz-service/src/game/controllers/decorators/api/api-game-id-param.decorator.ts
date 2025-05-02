@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiParam } from '@nestjs/swagger'
 
-export function GameIdParam() {
+export function ApiGameIdParam() {
   return applyDecorators(
     ApiParam({
       name: 'gameID',

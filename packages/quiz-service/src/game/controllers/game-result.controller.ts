@@ -13,7 +13,7 @@ import {
 
 import { GameResultService } from '../services'
 
-import { GameIdParam } from './decorators'
+import { ApiGameIdParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
 import { RouteGameIdParam } from './decorators/route'
 import {
@@ -66,7 +66,7 @@ export class GameResultController {
     description:
       'Returns performance metrics for players and questions based on the game mode (classic or zero to one hundred).',
   })
-  @GameIdParam()
+  @ApiGameIdParam()
   @ApiOkResponse({
     description:
       'Returns the final results of the game. The response structure depends on the game mode.',
