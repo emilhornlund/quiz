@@ -8,34 +8,18 @@ import {
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `value` property in a question option.
+ * Decorator for documenting and validating the `value` property of a multiple choice option.
  *
- * This decorator applies validation and API documentation to the value field,
- * which represents the text of a possible answer.
- * It ensures that the property:
- * - Is required.
- * - Is a string between 1 and 75 characters long.
- *
- * Example usage:
- * ```typescript
- * import { QuestionOptionValueProperty } from './decorators';
- *
- * export class QuestionOptionRequest {
- *   @QuestionOptionValueProperty()
- *   value: string;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsString` to enforce the value must be a string.
- * - `@MinLength` and `@MaxLength` to constrain the length of the string.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsString` to validate the value as a string.
+ * - `@MinLength` and `@MaxLength` to enforce length constraints.
+ * - `@Matches` to validate against the allowed character pattern.
  */
 export function QuestionOptionValueProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Value',
       description:
         'The text of the answer. Must be between 1 and 75 characters long.',
       example: 'Paris',

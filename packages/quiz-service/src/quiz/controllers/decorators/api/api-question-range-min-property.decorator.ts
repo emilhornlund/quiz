@@ -5,35 +5,17 @@ import { IsNumber, Max, Min, Validate } from 'class-validator'
 import { MinMaxValidator } from './min-max-validator.dectorator'
 
 /**
- * Decorator for Swagger documentation of the `min` property in range questions.
+ * Decorator for documenting and validating the `min` property of a range question.
  *
- * This decorator applies validation and API documentation to the `min` field,
- * which specifies the minimum possible value for the range question.
- * It ensures that the property:
- * - Is required.
- * - Is a number between -10000 and 10000.
- * - Is less than or equal to the `max` value.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionRangeMinProperty } from './decorators';
- *
- * export class QuestionRangeRequest {
- *   @ApiQuestionRangeMinProperty()
- *   min: number;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsNumber`, `@Min`, and `@Max` to validate numerical constraints.
- * - `@Validate` with `MinMaxValidator` to ensure `min` is less than or equal to `max`.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber`, `@Min`, and `@Max` to validate the numeric range.
+ * - `@Validate` to ensure min is less than or equal to max.
  */
 export function ApiQuestionRangeMinProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Min Range',
       description: 'The minimum possible value for the range.',
       example: 0,
       required: true,

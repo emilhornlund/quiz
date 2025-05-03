@@ -8,7 +8,7 @@ import {
 } from '@quiz/common'
 
 import {
-  ApiModeProperty,
+  ApiGameModeProperty,
   ApiQuizCategoryProperty,
   ApiQuizCreatedProperty,
   ApiQuizDescriptionProperty,
@@ -45,9 +45,9 @@ export class QuizResponse implements QuizResponseDto {
   description?: string
 
   /**
-   * description
+   * The game mode of this quiz.
    */
-  @ApiModeProperty()
+  @ApiGameModeProperty()
   mode: GameMode
 
   /**

@@ -3,43 +3,16 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsOptional, IsUrl } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `imageCoverURL` property.
+ * Decorator for documenting and validating the optional `imageCover` property of a quiz.
  *
- * This decorator applies validation and API documentation to the `imageCoverURL` field of a quiz.
- * It ensures that the property:
- * - Is a valid URL.
- * - Uses either the `http` or `https` protocol.
- *
- * Example usage:
- * ```typescript
- * import { QuizImageCoverProperty } from './decorators';
- *
- * export class CreateQuizDto {
- *   @QuizImageCoverProperty()
- *   imageCoverURL: string;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to define the OpenAPI documentation for the property.
- * - `@IsUrl` to ensure the property is a valid URL with specific protocol validation.
- *
- * Description:
- * - The `imageCoverURL` property represents the URL of the cover image for the quiz.
- *
- * Validation:
- * - The property must be a valid URL.
- * - The URL must use the `http` or `https` protocol.
- * - Includes a custom validation message if the value is not a valid URL.
- *
- * Example value:
- * - `https://example.com/question-cover-image.png`
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsOptional` and `@IsUrl` for URL validation.
  */
 export function ApiQuizImageCoverProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Image Cover URL',
       description: 'The URL of the cover image for the quiz.',
       example: 'https://example.com/question-cover-image.png',
       required: false,

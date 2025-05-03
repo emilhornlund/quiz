@@ -6,7 +6,7 @@ import {
 } from '@quiz/common'
 
 import {
-  ApiModeProperty,
+  ApiGameModeProperty,
   ApiQuizImageCoverProperty,
 } from '../../../../quiz/controllers/decorators/api'
 import {
@@ -38,9 +38,9 @@ export class GameHistoryPlayerResponse implements GameHistoryPlayerDto {
   readonly name: string
 
   /**
-   * The actual game mode.
+   * The game mode of the game.
    */
-  @ApiModeProperty()
+  @ApiGameModeProperty()
   readonly mode: GameMode
 
   /**

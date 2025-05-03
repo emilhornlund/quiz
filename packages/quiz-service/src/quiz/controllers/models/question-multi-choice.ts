@@ -34,13 +34,13 @@ export class QuestionMultiChoice implements QuestionMultiChoiceDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty()
+  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
   media?: QuestionMedia
 
   /**
    * The list of options for the question.
    */
-  @ApiQuestionOptionsProperty()
+  @ApiQuestionOptionsProperty({ type: () => QuestionMultiChoiceOption })
   options: QuestionMultiChoiceOption[]
 
   /**

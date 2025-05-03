@@ -3,32 +3,16 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsUUID } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `id` property.
+ * Decorator for documenting and validating the `id` property of a quiz.
  *
- * This decorator applies validation and API documentation to the quiz ID field.
- * It ensures that the property:
- * - Is required.
- * - Is a valid UUID string.
- *
- * Example usage:
- * ```typescript
- * import { QuizIdProperty } from './decorators';
- *
- * export class QuizDto {
- *   @QuizIdProperty()
- *   quizId: string;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsUUID` to enforce the value must be a valid UUID string.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsUUID` to ensure the value is a valid UUID.
  */
 export function ApiQuizIdProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Quiz ID',
       description: 'The unique identifier of the quiz.',
       required: true,
       type: String,

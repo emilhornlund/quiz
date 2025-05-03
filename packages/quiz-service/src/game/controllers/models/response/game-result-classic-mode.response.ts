@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer'
 import { Max, Min, ValidateNested } from 'class-validator'
 
-import { ApiModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
@@ -37,7 +37,7 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
   /**
    * The classic game mode of the quiz.
    */
-  @ApiModeProperty(GameMode.Classic)
+  @ApiGameModeProperty(GameMode.Classic)
   mode: GameMode.Classic
 
   /**

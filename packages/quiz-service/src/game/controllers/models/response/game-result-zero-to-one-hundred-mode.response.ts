@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer'
 import { Max, Min, ValidateNested } from 'class-validator'
 
-import { ApiModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
@@ -39,7 +39,7 @@ export class GameResultZeroToOneHundredModeResponse
   /**
    * The zero to one hundred game mode of the quiz.
    */
-  @ApiModeProperty(GameMode.ZeroToOneHundred)
+  @ApiGameModeProperty(GameMode.ZeroToOneHundred)
   mode: GameMode.ZeroToOneHundred
 
   /**

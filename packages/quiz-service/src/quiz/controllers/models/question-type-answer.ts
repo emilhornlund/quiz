@@ -33,7 +33,7 @@ export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty()
+  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
   media?: QuestionMedia
 
   /**

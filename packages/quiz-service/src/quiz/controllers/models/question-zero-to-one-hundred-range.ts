@@ -35,7 +35,7 @@ export class QuestionZeroToOneHundredRange
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty()
+  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
   media?: QuestionMedia
 
   /**

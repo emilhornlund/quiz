@@ -4,15 +4,22 @@ import {
   GameMode,
   LanguageCode,
   QuestionType,
+  QUIZ_QUESTION_MAX,
+  QUIZ_QUESTION_MIN,
   QuizCategory,
   QuizVisibility,
   QuizZeroToOneHundredModeRequestDto,
 } from '@quiz/common'
 import { plainToInstance, Transform } from 'class-transformer'
-import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  ValidateNested,
+} from 'class-validator'
 
 import {
-  ApiModeProperty,
+  ApiGameModeProperty,
   ApiQuizCategoryProperty,
   ApiQuizDescriptionProperty,
   ApiQuizImageCoverProperty,
@@ -77,9 +84,9 @@ export class QuizZeroToOneHundredRequest
   languageCode: LanguageCode
 
   /**
-   *
+   * The zero to one hundred game mode of this quiz.
    */
-  @ApiModeProperty(GameMode.ZeroToOneHundred)
+  @ApiGameModeProperty(GameMode.ZeroToOneHundred)
   mode: GameMode.ZeroToOneHundred
 
   /**
@@ -93,7 +100,8 @@ export class QuizZeroToOneHundredRequest
     oneOf: [{ $ref: getSchemaPath(QuestionZeroToOneHundredRange) }],
   })
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(QUIZ_QUESTION_MIN)
+  @ArrayMaxSize(QUIZ_QUESTION_MAX)
   @ValidateNested({ each: true })
   @Transform(
     ({ value }) => value.map(transformQuestionZeroToOneHundredBasedOnType),

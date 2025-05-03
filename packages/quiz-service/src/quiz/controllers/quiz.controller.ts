@@ -31,7 +31,7 @@ import { QuizService } from '../services'
 
 import { ApiQuizIdParam } from './decorators/api'
 import { AuthorizedQuiz } from './decorators/auth'
-import { RouteQuizIdParam } from './decorators/route'
+import { RouteQuizIdParam } from './decorators/params'
 import {
   PaginatedQuizResponse,
   PublicQuizPageFilter,

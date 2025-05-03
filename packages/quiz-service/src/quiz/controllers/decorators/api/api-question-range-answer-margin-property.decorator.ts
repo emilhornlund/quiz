@@ -4,33 +4,16 @@ import { QuestionRangeAnswerMargin } from '@quiz/common'
 import { IsEnum } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `margin` property in range questions.
+ * Decorator for documenting and validating the `margin` property of a range question.
  *
- * This decorator applies validation and API documentation to the `margin` field,
- * which specifies the allowed margin of error for a range question.
- * It ensures that the property:
- * - Is required.
- * - Matches one of the values in the `QuestionRangeAnswerMargin` enum.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionRangeAnswerMarginProperty } from './decorators';
- *
- * export class QuestionRangeRequest {
- *   @ApiQuestionRangeAnswerMarginProperty()
- *   margin: QuestionRangeAnswerMargin;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsEnum` to validate that the value matches a specific enum value.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsEnum` to validate the value as a range answer margin type.
  */
 export function ApiQuestionRangeAnswerMarginProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Range Margin',
       description:
         'Specifies the margin of error allowed for a range question. Determines how close a player’s answer must be to the correct value to be considered correct or partially correct. The margin can be one of the following:\n' +
         '- `None`: Only the exact correct answer is accepted.\n' +

@@ -3,34 +3,17 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsString, MaxLength, MinLength } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `question` property.
+ * Decorator for documenting and validating the `text` property of a question.
  *
- * This decorator applies validation and API documentation to the `question` field,
- * which represents the text of the question.
- * It ensures that the property:
- * - Is required.
- * - Is a string between 3 and 120 characters long.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionProperty } from './decorators';
- *
- * export class QuestionRequest {
- *   @ApiQuestionProperty()
- *   question: string;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsString` to enforce the value must be a string.
- * - `@MinLength` and `@MaxLength` to constrain the length of the string.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsString` to validate the value as a string.
+ * - `@MinLength` and `@MaxLength` to enforce character limits.
  */
 export function ApiQuestionProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      name: 'Text',
       description:
         'The actual question text. Must be between 3 and 120 characters long.',
       example: 'What is the capital of Sweden?',

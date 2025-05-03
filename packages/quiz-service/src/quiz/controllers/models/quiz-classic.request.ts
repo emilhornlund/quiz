@@ -4,15 +4,22 @@ import {
   GameMode,
   LanguageCode,
   QuestionType,
+  QUIZ_QUESTION_MAX,
+  QUIZ_QUESTION_MIN,
   QuizCategory,
   QuizClassicModeRequestDto,
   QuizVisibility,
 } from '@quiz/common'
 import { plainToInstance, Transform } from 'class-transformer'
-import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  ValidateNested,
+} from 'class-validator'
 
 import {
-  ApiModeProperty,
+  ApiGameModeProperty,
   ApiQuizCategoryProperty,
   ApiQuizDescriptionProperty,
   ApiQuizImageCoverProperty,
@@ -89,9 +96,9 @@ export class QuizClassicRequest implements QuizClassicModeRequestDto {
   languageCode: LanguageCode
 
   /**
-   * The game mode of the quiz.
+   * The classic game mode of the quiz.
    */
-  @ApiModeProperty(GameMode.Classic)
+  @ApiGameModeProperty(GameMode.Classic)
   mode: GameMode.Classic
 
   /**
@@ -110,7 +117,8 @@ export class QuizClassicRequest implements QuizClassicModeRequestDto {
     ],
   })
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(QUIZ_QUESTION_MIN)
+  @ArrayMaxSize(QUIZ_QUESTION_MAX)
   @ValidateNested({ each: true })
   @Transform(({ value }) => value.map(transformQuestionClassicBasedOnType), {
     toClassOnly: true,

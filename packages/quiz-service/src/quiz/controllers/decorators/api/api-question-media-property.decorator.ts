@@ -1,44 +1,33 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
+import { TypeHelpOptions } from 'class-transformer/types/interfaces'
 import { IsObject, IsOptional, ValidateNested } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `media` property.
+ * Decorator for documenting and validating the optional `media` property of a question.
  *
- * This decorator applies validation and API documentation to the media field associated with a question.
- * It ensures that the property:
- * - Is optional.
- * - Is an object containing details about the media.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionMediaProperty } from './decorators';
- *
- * export class QuestionDto {
- *   @ApiQuestionMediaProperty()
- *   media?: QuestionMediaRequest;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsObject` to enforce the value must be an object.
- * - `@IsOptional` to mark the field as optional.
- * - `@ValidateNested` to validate nested fields in the media object.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsObject` to validate that the value is an object.
+ * - `@IsOptional` to mark the property as optional.
+ * - `@ValidateNested` and `@Type` for class transformation and validation.
  */
-export function ApiQuestionMediaProperty(): PropertyDecorator {
+export function ApiQuestionMediaProperty(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  options: { type?: (type?: TypeHelpOptions) => Function },
+): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Media',
       description:
         'Optional media (image, audio, or video) associated with the question.',
       required: false,
-      // type: () => QuestionMediaRequest,
+      type: options.type,
     }),
     IsObject(),
     IsOptional(),
     ValidateNested(),
-    // Type(() => QuestionMediaRequest),
+    Type(options.type),
   )
 }

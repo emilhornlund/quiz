@@ -3,34 +3,17 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsIn, IsNumber } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `duration` property.
+ * Decorator for documenting and validating the `duration` property of a question.
  *
- * This decorator applies validation and API documentation to the question duration field.
- * It ensures that the property:
- * - Is required.
- * - Is a number.
- * - Is one of the allowed values: 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240 seconds.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionDurationProperty } from './decorators';
- *
- * export class QuestionDto {
- *   @ApiQuestionDurationProperty()
- *   duration: number;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsNumber` to enforce the value must be a number.
- * - `@IsIn` to restrict the value to a predefined set of allowed values.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to validate the value as a number.
+ * - `@IsIn` to restrict the value to a predefined set.
  */
 export function ApiQuestionDurationProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Duration',
       description:
         'The time limit for answering the question, in seconds. The allowed values are 5, 10, 20, 30, 45, 60, 90, 120, 180 or 240.',
       example: '30',

@@ -3,32 +3,16 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsUrl } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `url` property in media.
+ * Decorator for documenting and validating the `url` property of a question's media.
  *
- * This decorator applies validation and API documentation to the media URL field.
- * It ensures that the property:
- * - Is required.
- * - Is a valid URL string.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionMediaUrlProperty } from './decorators';
- *
- * export class QuestionMediaRequest {
- *   @ApiQuestionMediaUrlProperty()
- *   url: string;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsUrl` to enforce the value must be a valid URL string.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsUrl` to validate the value as a valid URL.
  */
 export function ApiQuestionMediaUrlProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Media URL',
       description: 'The URL of the media. Must be a valid URL.',
       example: 'https://example.com/question-image.png',
       required: true,

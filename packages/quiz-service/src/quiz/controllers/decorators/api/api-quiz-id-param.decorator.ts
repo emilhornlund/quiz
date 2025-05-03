@@ -2,21 +2,10 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiParam } from '@nestjs/swagger'
 
 /**
- * Decorator for Swagger documentation of the `quizId` route parameter.
+ * Decorator for documenting the `quizId` params parameter.
  *
- * Usage:
- * ```typescript
- * @Put(':quizId')
- * @ApiQuizIdParam()
- * public async updateQuiz(
- *   @RouteQuizIdParam() quizId: string,
- *   @Body() quizRequest: QuizRequest,
- * ): Promise<QuizResponse> {
- *   // Your logic here
- * }
- * ```
- *
- * @returns {MethodDecorator} The Swagger API parameter decorator.
+ * Applies:
+ * - `@ApiParam` for Swagger documentation.
  */
 export function ApiQuizIdParam(): MethodDecorator {
   return applyDecorators(

@@ -13,7 +13,7 @@ import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
 import { ApiQuizIdParam } from '../../quiz/controllers/decorators/api'
 import { AuthorizedQuiz } from '../../quiz/controllers/decorators/auth'
-import { RouteQuizIdParam } from '../../quiz/controllers/decorators/route'
+import { RouteQuizIdParam } from '../../quiz/controllers/decorators/params'
 import { GameService } from '../services'
 
 import { CreateGameResponse } from './models/response/create-game.response'

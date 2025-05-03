@@ -3,34 +3,17 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsIn, IsNumber } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `points` property.
+ * Decorator for documenting and validating the `points` property of a question.
  *
- * This decorator applies validation and API documentation to the question points field.
- * It ensures that the property:
- * - Is required.
- * - Is a number.
- * - Is one of the allowed values: 0, 1000, or 2000 points.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionPointsProperty } from './decorators';
- *
- * export class QuestionDto {
- *   @ApiQuestionPointsProperty()
- *   points: number;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsNumber` to enforce the value must be a number.
- * - `@IsIn` to restrict the value to a predefined set of allowed values.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsNumber` to validate the value as a number.
+ * - `@IsIn` to restrict the value to one of the allowed point values.
  */
 export function ApiQuestionPointsProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Points',
       description:
         'The number of points awarded for a correct answer. The allowed values are 0, 1000, or 2000.',
       example: '1000',

@@ -4,44 +4,16 @@ import { LanguageCode } from '@quiz/common'
 import { IsEnum } from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `languageCode` property.
+ * Decorator for documenting and validating the `languageCode` property of a quiz.
  *
- * This decorator applies validation and API documentation to the `languageCode` field of a quiz.
- * It ensures that the property:
- * - Is a valid enum value from the `LanguageCode` enum.
- *
- * Example usage:
- * ```typescript
- * import { QuizLanguageCodeProperty } from './decorators';
- *
- * export class CreateQuizDto {
- *   @QuizLanguageCodeProperty()
- *   languageCode: LanguageCode;
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to define the OpenAPI documentation for the property.
- * - `@IsEnum` to validate that the property is one of the defined enum values.
- *
- * Description:
- * - The `languageCode` property specifies the language in which the quiz is written.
- *
- * Validation:
- * - The property must be a valid enum value of the `LanguageCode` enum.
- * - Includes a custom validation message if the value is not valid.
- *
- * Example value:
- * - `LanguageCode.English`
- *
- * OpenAPI Enum:
- * - The available values for the `languageCode` field are dynamically derived from the `LanguageCode` enum.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsEnum` to ensure the value is a valid `LanguageCode`.
  */
 export function ApiQuizLanguageCodeProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Language Code',
       description: 'The language code of the quiz.',
       enum: Object.values(LanguageCode),
       required: true,

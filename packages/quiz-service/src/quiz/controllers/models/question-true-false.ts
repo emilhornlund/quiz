@@ -33,7 +33,7 @@ export class QuestionTrueFalse implements QuestionTrueFalseDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty()
+  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
   media?: QuestionMedia
 
   /**

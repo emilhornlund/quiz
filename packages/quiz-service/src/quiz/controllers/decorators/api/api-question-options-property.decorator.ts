@@ -1,42 +1,43 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, ValidateNested } from 'class-validator'
+import {
+  QUIZ_MULTI_CHOICE_OPTIONS_MAX,
+  QUIZ_MULTI_CHOICE_OPTIONS_MIN,
+} from '@quiz/common'
+import { Type } from 'class-transformer'
+import { TypeHelpOptions } from 'class-transformer/types/interfaces'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  ValidateNested,
+} from 'class-validator'
 
 /**
- * Decorator for Swagger documentation of the `options` property.
+ * Decorator for documenting and validating the `options` property of a multiple choice question.
  *
- * This decorator applies validation and API documentation to the options field,
- * which contains a list of possible answers for a question.
- * It ensures that the property:
- * - Is required.
- * - Is an array of nested `QuestionOptionRequest` objects.
- *
- * Example usage:
- * ```typescript
- * import { ApiQuestionOptionsProperty } from './decorators';
- *
- * export class QuestionDto {
- *   @ApiQuestionOptionsProperty()
- *   options: QuestionOptionRequest[];
- * }
- * ```
- *
- * Applied decorators:
- * - `@ApiProperty` to include metadata in the OpenAPI documentation.
- * - `@IsArray` to enforce the value must be an array.
- * - `@ValidateNested` to validate each object within the array.
- *
- * @returns {PropertyDecorator} The combined property decorator.
+ * Applies:
+ * - `@ApiProperty` for Swagger documentation.
+ * - `@IsArray` to validate the value as an array.
+ * - `@ArrayMinSize` and `@ArrayMaxSize` to enforce array size limits.
+ * - `@ValidateNested` to validate each item in the array.
+ * - `@Type` to transform each entry into a `QuestionMultiChoiceOption` instance.
  */
-export function ApiQuestionOptionsProperty(): PropertyDecorator {
+export function ApiQuestionOptionsProperty(options: {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  type?: (type?: TypeHelpOptions) => Function
+}): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
+      title: 'Options',
       description: 'The list of possible answers for a question.',
       required: true,
-      // type: () => [QuestionOptionRequest],
+      type: () => [options.type],
     }),
     IsArray(),
+    ArrayMinSize(QUIZ_MULTI_CHOICE_OPTIONS_MIN),
+    ArrayMaxSize(QUIZ_MULTI_CHOICE_OPTIONS_MAX),
     ValidateNested({ each: true }),
-    // Type(() => [QuestionOptionRequest]),
+    Type(options.type),
   )
 }

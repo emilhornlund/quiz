@@ -42,7 +42,7 @@ export class QuestionRange implements QuestionRangeDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty()
+  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
   media?: QuestionMedia
 
   /**
