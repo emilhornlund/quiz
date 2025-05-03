@@ -20,8 +20,8 @@ import {
   QUIZ_QUESTION_TEXT_REGEX,
   QUIZ_TYPE_ANSWER_OPTIONS_MAX,
   QUIZ_TYPE_ANSWER_OPTIONS_MIN,
-  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
-  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
   URL_REGEX,
 } from '@quiz/common'
@@ -341,8 +341,8 @@ export const parseQuestionsJson = (
                     'string',
                     `[${questionIndex}].options[${optionsIndex}]`,
                     {
-                      minLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN,
-                      maxLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX,
+                      minLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
+                      maxLength: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
                       regex: QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
                     },
                   ),
