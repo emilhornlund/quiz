@@ -19,7 +19,7 @@ import {
 /**
  * Represents the query parameters used to filter and paginate photos.
  */
-export class ApiMediaPhotoSearchPageFilter {
+export class MediaPhotoSearchPageFilter {
   /**
    * A search term to filter photos by name or tags.
    */

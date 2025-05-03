@@ -30,13 +30,13 @@ import { Client } from '../../client/services/models/schemas'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 
-import {
-  ApiMediaPhotoSearchPageFilter,
-  ApiUploadedPhotoIdParam,
-} from './decorators/api'
+import { ApiUploadedPhotoIdParam } from './decorators/api'
 import { RouteUploadedPhotoIdParam } from './decorators/route'
-import { PaginatedMediaPhotoSearchResponse } from './models'
-import { MediaUploadPhotoResponse } from './models/media-upload-photo.response'
+import {
+  MediaPhotoSearchPageFilter,
+  MediaUploadPhotoResponse,
+  PaginatedMediaPhotoSearchResponse,
+} from './models'
 
 /**
  * Controller for managing media-related operations.
@@ -80,7 +80,7 @@ export class MediaController {
   })
   public searchPhotos(
     @Query(new ValidationPipe({ transform: true }))
-    filter: ApiMediaPhotoSearchPageFilter,
+    filter: MediaPhotoSearchPageFilter,
   ): Promise<PaginatedMediaPhotoSearchResponse> {
     return this.mediaService.searchPhotos(
       filter.search,
