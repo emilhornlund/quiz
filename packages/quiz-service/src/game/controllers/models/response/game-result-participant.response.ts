@@ -1,6 +1,6 @@
 import { GameResultParticipantDto } from '@quiz/common'
 
-import { ApiPlayerNicknameProperty } from '../../../../player/controller/decorators/api'
+import { ApiPlayerNicknameProperty } from '../../../../player/controllers/decorators/api'
 import { ApiGameParticipantIdProperty } from '../../decorators/api'
 
 /**

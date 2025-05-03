@@ -107,9 +107,11 @@ export function createMockClientDocument(client?: Partial<Client>): Client {
 export const MOCK_DEFAULT_PLAYER_ID = uuidv4()
 export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
 
-export function createMockPlayerDocument(player?: Player): Player {
+export const MOCK_SECONDARY_PLAYER_NICKNAME = 'WhiskerFox'
+
+export function createMockPlayerDocument(player?: Partial<Player>): Player {
   return {
-    _id: uuidv4(),
+    _id: MOCK_DEFAULT_PLAYER_ID,
     nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     created: offsetSeconds(0),
     modified: offsetSeconds(0),

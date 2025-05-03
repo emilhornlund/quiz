@@ -1,10 +1,8 @@
 import { INestApplication } from '@nestjs/common'
-import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   LanguageCode,
   MediaType,
-  PLAYER_LINK_CODE_REGEX,
   QuestionType,
   QuizCategory,
   QuizVisibility,
@@ -14,18 +12,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
-import { PlayerService } from '../../player/services'
-import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { ClientService } from '../services'
-import { Client } from '../services/models/schemas'
 
 describe('ClientController (e2e)', () => {
   let app: INestApplication
   let authService: AuthService
   let clientService: ClientService
-  let playerModel: PlayerModel
-  let playerService: PlayerService
   let quizService: QuizService
 
   beforeEach(async () => {
@@ -33,280 +26,11 @@ describe('ClientController (e2e)', () => {
 
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
-    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
-    playerService = app.get(PlayerService)
     quizService = app.get(QuizService)
   })
 
   afterEach(async () => {
     await closeTestApp(app)
-  })
-
-  describe('/api/client/player (GET)', () => {
-    it('should succeed in retrieving the associated player from a new authenticated client', async () => {
-      const clientId = uuidv4()
-
-      const {
-        token,
-        player: { id, nickname },
-      } = await authService.authenticate({ clientId })
-
-      return supertest(app.getHttpServer())
-        .get('/api/client/player')
-        .set({ Authorization: `Bearer ${token}` })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            id,
-            nickname,
-            created: expect.anything(),
-            modified: expect.anything(),
-          })
-        })
-    })
-
-    it('should succeed in retrieving the associated player from an existing authenticated client', async () => {
-      const clientId = uuidv4()
-      const nickname = 'FrostyBear'
-      const created = new Date()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      await playerModel
-        .findByIdAndUpdate(client.player._id, {
-          nickname,
-          created,
-          modified: created,
-        })
-        .exec()
-
-      return supertest(app.getHttpServer())
-        .get('/api/client/player')
-        .set({ Authorization: `Bearer ${token}` })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            id: client.player._id,
-            nickname,
-            created: created.toISOString(),
-            modified: created.toISOString(),
-          })
-        })
-    })
-
-    it('should fail in retrieving the associated player without authorization', async () => {
-      return supertest(app.getHttpServer())
-        .get('/api/client/player')
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized')
-          expect(res.body).toHaveProperty('status', 401)
-          expect(res.body).toHaveProperty('timestamp')
-        })
-    })
-  })
-
-  describe('/api/client/player (PUT)', () => {
-    it('should update player nickname successfully', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
-
-      return supertest(app.getHttpServer())
-        .put('/api/client/player')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ nickname: 'FrostyBear' })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            id: expect.anything(),
-            nickname: 'FrostyBear',
-            created: expect.anything(),
-            modified: expect.anything(),
-          })
-        })
-    })
-
-    it('should update player nickname containing emojis successfully', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
-
-      return supertest(app.getHttpServer())
-        .put('/api/client/player')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ nickname: '🥶🐻' })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            id: expect.anything(),
-            nickname: '🥶🐻',
-            created: expect.anything(),
-            modified: expect.anything(),
-          })
-        })
-    })
-
-    it('should handle validation errors for invalid nickname', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
-
-      return supertest(app.getHttpServer())
-        .put('/api/client/player')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ nickname: undefined })
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Validation failed',
-            status: 400,
-            timestamp: expect.anything(),
-            validationErrors: [
-              {
-                constraints: {
-                  isString: 'nickname must be a string',
-                  matches:
-                    'Nickname can only contain letters, numbers, and underscores.',
-                  maxLength:
-                    'nickname must be shorter than or equal to 20 characters',
-                  minLength:
-                    'nickname must be longer than or equal to 2 characters',
-                },
-                property: 'nickname',
-              },
-            ],
-          })
-        })
-    })
-
-    it('should return 401 if client is unauthorized', async () => {
-      return supertest(app.getHttpServer())
-        .put('/api/client/player')
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Unauthorized',
-            status: 401,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-  })
-
-  describe('/api/client/player/link (GET)', () => {
-    it('should succeed in retrieving the client associated players link code', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
-
-      return supertest(app.getHttpServer())
-        .get('/api/client/player/link')
-        .set({ Authorization: `Bearer ${token}` })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            code: expect.stringMatching(PLAYER_LINK_CODE_REGEX),
-            expires: expect.anything(),
-          })
-        })
-    })
-
-    it('should fail in retrieving the client associated players link code without a token', async () => {
-      return supertest(app.getHttpServer())
-        .get('/api/client/player/link')
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Unauthorized',
-            status: 401,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-  })
-
-  describe('/api/client/player/link (POST)', () => {
-    it('should succeed in associating a player from a valid link code', async () => {
-      const { token } = await authenticate('ShadowWhirlwind')
-
-      const { client, player: playerToLink } = await authenticate('FrostyBear')
-
-      const { code } = await playerService.generateLinkCode(client)
-
-      return supertest(app.getHttpServer())
-        .post('/api/client/player/link')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ code })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            id: playerToLink._id,
-            nickname: 'FrostyBear',
-            created: playerToLink.created.toISOString(),
-            modified: playerToLink.modified.toISOString(),
-          })
-        })
-    })
-
-    it('should fail in associating a player from an unknown link code', async () => {
-      const { token } = await authenticate('ShadowWhirlwind')
-
-      return supertest(app.getHttpServer())
-        .post('/api/client/player/link')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ code: 'XXXX-XXXX' })
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Player link code was not found',
-            status: 404,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-
-    it('should fail in associating a player from an invalid link code', async () => {
-      const { token } = await authenticate('ShadowWhirlwind')
-
-      return supertest(app.getHttpServer())
-        .post('/api/client/player/link')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({ code: '' })
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Validation failed',
-            validationErrors: [
-              {
-                property: 'code',
-                constraints: {
-                  isNotEmpty: 'code should not be empty',
-                  matches: `The code must match the pattern ${PLAYER_LINK_CODE_REGEX}`,
-                },
-              },
-            ],
-            status: 400,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-
-    it('should fail in associating a player without a token', async () => {
-      return supertest(app.getHttpServer())
-        .post('/api/client/player/link')
-        .send({ code: 'XXXX-XXXX' })
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Unauthorized',
-            status: 401,
-            timestamp: expect.anything(),
-          })
-        })
-    })
   })
 
   describe('/api/client/quizzes (GET)', () => {
@@ -455,25 +179,4 @@ describe('ClientController (e2e)', () => {
         })
     })
   })
-
-  /**
-   * description here.
-   *
-   * @param nickname
-   */
-  async function authenticate(
-    nickname: string,
-  ): Promise<{ token: string; client: Client; player: Player }> {
-    const clientId = uuidv4()
-
-    const client = await clientService.findOrCreateClient(clientId)
-
-    const player = await playerModel.findByIdAndUpdate(client.player._id, {
-      nickname,
-    })
-
-    const { token } = await authService.authenticate({ clientId })
-
-    return { token, client, player }
-  }
 })

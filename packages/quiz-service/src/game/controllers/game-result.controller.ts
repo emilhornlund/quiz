@@ -27,7 +27,7 @@ import {
  * Handles the retrieval of final game data after a quiz has been completed.
  * Supports multiple game modes, each with their corresponding result structures.
  *
- * All endpoints in this controller require authentication and client-level authorization
+ * All endpoints in this controllers require authentication and client-level authorization
  * to access the results of a specific game session.
  */
 @ApiBearerAuth()

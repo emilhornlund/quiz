@@ -28,13 +28,11 @@ import { SkipThrottle } from '@nestjs/throttler'
 import { GameParticipantType } from '@quiz/common'
 import { Observable } from 'rxjs'
 
-import {
-  AuthorizedClientParam,
-  AuthorizedPlayerIdParam,
-} from '../../client/controllers/decorators/auth'
+import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
-import { ApiPlayerIDParam } from '../../player/controller/decorators/api'
-import { RoutePlayerIdParam } from '../../player/controller/decorators/params'
+import { ApiPlayerIDParam } from '../../player/controllers/decorators/api'
+import { AuthorizedPlayerIdParam } from '../../player/controllers/decorators/auth'
+import { RoutePlayerIdParam } from '../../player/controllers/decorators/params'
 import {
   ParseCorrectAnswerRequestPipe,
   ParseSubmitQuestionAnswerRequestPipe,

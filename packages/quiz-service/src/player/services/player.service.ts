@@ -5,8 +5,8 @@ import { PlayerLinkCodeResponseDto } from '@quiz/common'
 import { Redis } from 'ioredis'
 import { v4 as uuidv4 } from 'uuid'
 
-import { PlayerLinkCodeNotFoundException } from '../../client/exceptions'
 import { Client } from '../../client/services/models/schemas'
+import { PlayerLinkCodeNotFoundException } from '../exceptions'
 import { PlayerNotFoundException } from '../exceptions'
 
 import { Player, PlayerModel } from './models/schemas'
