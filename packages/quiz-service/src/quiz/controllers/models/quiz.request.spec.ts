@@ -8,7 +8,7 @@ import {
 } from '@quiz/common'
 import { validate } from 'class-validator'
 
-import { QuizClassicRequest } from './quiz.request'
+import { QuizClassicRequest } from './quiz-classic.request'
 
 describe('QuizRequest', () => {
   const validData = {
