@@ -11,7 +11,7 @@ import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 /**
  * Represents query parameters for paginated quiz retrieval.
  */
-export class ApiQuizPageQueryFilter {
+export class QuizPageQueryFilter {
   /**
    * A search term to filter quizzes by their titles.
    */

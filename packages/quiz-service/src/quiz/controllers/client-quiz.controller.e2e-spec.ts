@@ -12,10 +12,10 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
-import { QuizService } from '../../quiz/services'
-import { ClientService } from '../services'
+import { ClientService } from '../../client/services'
+import { QuizService } from '../services'
 
-describe('ClientController (e2e)', () => {
+describe('ClientQuizController (e2e)', () => {
   let app: INestApplication
   let authService: AuthService
   let clientService: ClientService

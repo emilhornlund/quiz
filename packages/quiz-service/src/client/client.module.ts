@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
-import { ClientController } from './controllers'
 import { ClientListener } from './handlers'
 import { ClientService } from './services'
 import { Client, ClientSchema } from './services/models/schemas'
@@ -28,7 +27,7 @@ import { Client, ClientSchema } from './services/models/schemas'
     PlayerModule,
     QuizModule,
   ],
-  controllers: [ClientController],
+  controllers: [],
   providers: [Logger, ClientService, ClientListener],
   exports: [ClientService],
 })

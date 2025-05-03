@@ -7,22 +7,21 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-import { PaginatedQuizResponse } from '../../quiz/controllers/models'
-import { QuizService } from '../../quiz/services'
-import { Client } from '../services/models/schemas'
+import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
+import { Client } from '../../client/services/models/schemas'
+import { QuizService } from '../services'
 
-import { ApiQuizPageQueryFilter } from './decorators/api'
-import { AuthorizedClientParam } from './decorators/auth'
+import { PaginatedQuizResponse, QuizPageQueryFilter } from './models'
 
 /**
  * Controller for managing client-related operations.
  */
 @ApiBearerAuth()
-@ApiTags('client')
+@ApiTags('client', 'quiz')
 @Controller('client')
-export class ClientController {
+export class ClientQuizController {
   /**
-   * Initializes the ClientController.
+   * Initializes the ClientQuizController.
    *
    * @param {QuizService} quizService - Service responsible for managing quiz-related operations.
    */
@@ -33,7 +32,7 @@ export class ClientController {
    *
    * @param {Client} client - The authenticated client making the request.
    *
-   * @param {ApiQuizPageQueryFilter} queryParams - The pagination and filtering query parameters for retrieving quizzes.
+   * @param {QuizPageQueryFilter} queryParams - The pagination and filtering query parameters for retrieving quizzes.
    *
    * @returns {Promise<PaginatedQuizResponse>} A paginated response containing the client's associated quizzes.
    */
@@ -53,7 +52,7 @@ export class ClientController {
   public async getClientAssociatedQuizzes(
     @AuthorizedClientParam() client: Client,
     @Query(new ValidationPipe({ transform: true }))
-    queryParams: ApiQuizPageQueryFilter,
+    queryParams: QuizPageQueryFilter,
   ): Promise<PaginatedQuizResponse> {
     return this.quizService.findQuizzesByOwnerId(
       client.player._id,
