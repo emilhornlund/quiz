@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
 import { ClientService } from '../../client/services'
-import { IS_PUBLIC_KEY } from '../decorators'
+import { IS_PUBLIC_KEY } from '../controllers/decorators'
 import { AuthService } from '../services'
 
 /**
