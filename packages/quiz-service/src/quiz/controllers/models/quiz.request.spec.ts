@@ -4,14 +4,16 @@ import {
   MediaType,
   QuestionType,
   QuizCategory,
+  QuizClassicModeRequestDto,
   QuizVisibility,
 } from '@quiz/common'
+import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
 import { QuizClassicRequest } from './quiz-classic.request'
 
 describe('QuizRequest', () => {
-  const validData = {
+  const validData: QuizClassicModeRequestDto = {
     title: 'Trivia Battle',
     description: 'A fun and engaging trivia quiz for all ages.',
     mode: GameMode.Classic,
@@ -52,13 +54,13 @@ describe('QuizRequest', () => {
   }
 
   it('should pass validation with valid data', async () => {
-    const response = Object.assign(new QuizClassicRequest(), validData)
-    const errors = await validate(response)
+    const response = plainToInstance(QuizClassicRequest, validData)
+    const errors = await validate(response, { whitelist: true })
     expect(errors).toHaveLength(0)
   })
 
   it('should fail if `title` is too short', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       title: 'Hi',
     })
@@ -69,7 +71,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `title` exceeds the maximum length', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       title: 'A'.repeat(96),
     })
@@ -80,7 +82,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `title` does not match the regex pattern', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       title: 'Invalid<>Title!!',
     })
@@ -91,7 +93,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `description` exceeds 500 characters', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       description: 'A'.repeat(501),
     })
@@ -102,7 +104,7 @@ describe('QuizRequest', () => {
   })
 
   it('should pass if `description` is optional', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       description: undefined,
     })
@@ -111,7 +113,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `visibility` is not valid', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       visibility: 'not-valid',
     })
@@ -121,7 +123,7 @@ describe('QuizRequest', () => {
   })
 
   it('should pass if `imageCoverURL` is optional', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       imageCoverURL: undefined,
     })
@@ -130,7 +132,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `imageCoverURL` is not a valid URL', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       imageCoverURL: 'not-a-valid-url',
     })
@@ -140,7 +142,7 @@ describe('QuizRequest', () => {
   })
 
   it('should fail if `languageCode` is not a valid enum value', async () => {
-    const response = Object.assign(new QuizClassicRequest(), {
+    const response = plainToInstance(QuizClassicRequest, {
       ...validData,
       languageCode: 'INVALID_LANGUAGE',
     })
