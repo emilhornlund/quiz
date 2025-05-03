@@ -1,9 +1,7 @@
 import { GameResultParticipantDto } from '@quiz/common'
 
-import {
-  ApiGameParticipantIdProperty,
-  ApiGameParticipantNicknameProperty,
-} from '../../decorators/api'
+import { ApiPlayerNicknameProperty } from '../../../../player/controller/decorators/api'
+import { ApiGameParticipantIdProperty } from '../../decorators/api'
 
 /**
  * Response model representing a participant (either host or player) in a game result.
@@ -18,6 +16,6 @@ export class GameResultParticipantResponse implements GameResultParticipantDto {
   /**
    * The nickname of the participant.
    */
-  @ApiGameParticipantNicknameProperty()
+  @ApiPlayerNicknameProperty()
   nickname: string
 }

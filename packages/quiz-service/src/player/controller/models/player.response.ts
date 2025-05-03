@@ -1,5 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger'
 import { PlayerResponseDto } from '@quiz/common'
+
+import {
+  ApiPlayerCreatedProperty,
+  ApiPlayerIdProperty,
+  ApiPlayerModifiedProperty,
+  ApiPlayerNicknameProperty,
+} from '../decorators/api'
 
 /**
  * Represents the response object for a player.
@@ -8,42 +14,24 @@ export class PlayerResponse implements PlayerResponseDto {
   /**
    * The unique identifier of the player.
    */
-  @ApiProperty({
-    title: 'Player ID',
-    description: 'The unique identifier of the player.',
-    type: String,
-    format: 'uuid',
-  })
+  @ApiPlayerIdProperty()
   id: string
 
   /**
    * The nickname of the player.
    */
-  @ApiProperty({
-    title: 'Nickname',
-    description: 'The nickname of the player.',
-    type: String,
-    example: 'FrostyBear',
-  })
+  @ApiPlayerNicknameProperty()
   nickname: string
 
   /**
    * The date and time when the player was created.
    */
-  @ApiProperty({
-    title: 'Created',
-    description: 'The date and time when the player was created.',
-    type: Date,
-  })
+  @ApiPlayerCreatedProperty()
   created: Date
 
   /**
    * The date and time when the player record was last modified.
    */
-  @ApiProperty({
-    title: 'Modified',
-    description: 'The date and time when the player record was last modified.',
-    type: Date,
-  })
+  @ApiPlayerModifiedProperty()
   modified: Date
 }
