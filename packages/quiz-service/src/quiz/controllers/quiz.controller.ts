@@ -29,11 +29,12 @@ import { Client } from '../../client/services/models/schemas'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
-import { ApiPublicQuizPageFilter, ApiQuizIdParam } from './decorators/api'
+import { ApiQuizIdParam } from './decorators/api'
 import { AuthorizedQuiz } from './decorators/auth'
 import { RouteQuizIdParam } from './decorators/route'
 import {
   PaginatedQuizResponse,
+  PublicQuizPageFilter,
   QuestionMultiChoice,
   QuestionRange,
   QuestionTrueFalse,
@@ -135,7 +136,7 @@ export class QuizController {
   @HttpCode(HttpStatus.OK)
   public async getPublicQuizzes(
     @Query(new ValidationPipe({ transform: true }))
-    queryParams: ApiPublicQuizPageFilter,
+    queryParams: PublicQuizPageFilter,
   ): Promise<PaginatedQuizResponse> {
     return this.quizService.findPublicQuizzes(
       queryParams.search,

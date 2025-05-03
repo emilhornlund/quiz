@@ -6,7 +6,7 @@ import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 /**
  * Represents the query parameters used to filter, sort, and paginate public quizzes.
  */
-export class ApiPublicQuizPageFilter {
+export class PublicQuizPageFilter {
   /**
    * A search term to filter quizzes by their titles.
    */

@@ -1,4 +1,5 @@
 export * from './paginated-quiz.response'
+export * from './public-quiz-page.filter'
 export * from './question'
 export * from './quiz.request'
 export * from './quiz.response'
