@@ -3,8 +3,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
   Query,
+  ValidationPipe,
 } from '@nestjs/common'
 import {
   ApiBearerAuth,
@@ -20,6 +20,7 @@ import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
 import { Client } from '../../client/services/models/schemas'
 import { GameService } from '../services'
 
+import { GameHistoryPageFilter } from './models'
 import {
   GameHistoryHostResponse,
   GameHistoryPlayerResponse,
@@ -45,8 +46,7 @@ export class ClientGameController {
    * Retrieves the games associated with the authenticated client.
    *
    * @param client - The authenticated client making the request.
-   * @param offset - Query param for the number of games to skip before starting retrieval.
-   * @param limit - Query param for the maximum number of games to retrieve per page.
+   * @param filter - The pagination parameters.
    * @returns A paginated list of games where the client is a participant.
    */
   @Get()
@@ -79,13 +79,13 @@ export class ClientGameController {
   @HttpCode(HttpStatus.OK)
   public async getClientAssociatedGames(
     @AuthorizedClientParam() client: Client,
-    @Query('offset', new ParseIntPipe({ optional: true })) offset: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query(new ValidationPipe({ transform: true }))
+    filter: GameHistoryPageFilter,
   ): Promise<PaginatedGameHistoryResponse> {
     return this.gameService.findGamesByPlayerId(
       client.player._id,
-      offset,
-      limit,
+      filter.offset ?? 0,
+      filter.limit ?? 5,
     )
   }
 }
