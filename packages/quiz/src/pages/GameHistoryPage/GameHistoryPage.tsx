@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
-import { LoadingSpinner } from '../../components'
+import { LoadingSpinner, Page } from '../../components'
 
 import GameHistoryPageUI from './GameHistoryPageUI'
 
@@ -29,7 +29,11 @@ const GameHistoryPage: FC = () => {
   }, [isError, navigate])
 
   if (isLoading || !data) {
-    return <LoadingSpinner />
+    return (
+      <Page align="center" discover profile>
+        <LoadingSpinner />
+      </Page>
+    )
   }
 
   return (
