@@ -18,6 +18,7 @@ import {
   ProfilePage,
   QuizCreatorPage,
   QuizDetailsPage,
+  QuizzesPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: '/player/profile',
         element: <ProfilePage />,
+      },
+      {
+        path: '/player/quizzes',
+        element: <QuizzesPage />,
       },
       {
         path: '/player/link',

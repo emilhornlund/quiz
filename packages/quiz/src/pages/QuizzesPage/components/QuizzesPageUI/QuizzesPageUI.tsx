@@ -11,12 +11,13 @@ import React, { FC, useState } from 'react'
 import {
   Button,
   LoadingSpinner,
+  Page,
   QuizTable,
   Typography,
-} from '../../../../../../components'
-import QuizTableFilter from '../../../../../../components/QuizTableFilter'
+} from '../../../../components'
+import QuizTableFilter from '../../../../components/QuizTableFilter'
 
-type SearchParams = {
+export interface QuizzesPageUISearchParams {
   search?: string
   visibility?: QuizVisibility
   category?: QuizCategory
@@ -28,16 +29,16 @@ type SearchParams = {
   offset?: number
 }
 
-export interface ProfileQuizzesProps {
+export interface QuizzesPageUIProps {
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  onChangeSearchParams: (params: SearchParams) => void
+  onChangeSearchParams: (params: QuizzesPageUISearchParams) => void
   onCreateQuiz: () => void
 }
 
-const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
+const QuizzesPageUI: FC<QuizzesPageUIProps> = ({
   quizzes,
   pagination,
   isLoading,
@@ -47,7 +48,7 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
 }) => {
   const [hasSearchFilter, setHasSearchFilter] = useState<boolean>(false)
 
-  const handleSearchFilterChange = (params: SearchParams) => {
+  const handleSearchFilterChange = (params: QuizzesPageUISearchParams) => {
     onChangeSearchParams({ ...params, offset: 0 })
     setHasSearchFilter(
       !!params.search?.length ||
@@ -58,7 +59,7 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
   }
 
   return (
-    <>
+    <Page align="center" discover profile>
       <Typography variant="subtitle">
         {quizzes.length || hasSearchFilter
           ? 'Your Quizzes'
@@ -101,8 +102,8 @@ const ProfileQuizzes: FC<ProfileQuizzesProps> = ({
       ) : (
         <LoadingSpinner />
       )}
-    </>
+    </Page>
   )
 }
 
-export default ProfileQuizzes
+export default QuizzesPageUI

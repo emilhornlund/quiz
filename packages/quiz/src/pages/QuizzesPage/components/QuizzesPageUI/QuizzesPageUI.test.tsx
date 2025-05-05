@@ -10,20 +10,23 @@ import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 
-import ProfileQuizzes from './ProfileQuizzes'
+import { Player } from '../../../../models'
 
-const PlayerID = uuidv4()
+import QuizzesPageUI from './QuizzesPageUI'
 
-const updated = new Date('2025-02-14T15:31:14.000Z')
+const player: Player = {
+  id: uuidv4(),
+  nickname: 'FrostyBear',
+}
 
-describe('ProfileQuizzes', () => {
-  it('should render ProfileQuizzes', async () => {
+describe('QuizzesPageUI', () => {
+  it('should render QuizzesPageUI', async () => {
     const { container } = render(
       <MemoryRouter>
-        <ProfileQuizzes
+        <QuizzesPageUI
           quizzes={[
             {
-              id: 'e314f952-6480-4fef-9553-4df0527800d4',
+              id: 'c2c3d5cc-63c0-4f70-8665-6dacbd1796f9',
               title: 'The Ultimate Geography Challenge',
               description:
                 'Test your knowledge of world capitals, landmarks, and continents in this fun and educational geography quiz.',
@@ -33,12 +36,12 @@ describe('ProfileQuizzes', () => {
               imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
               languageCode: LanguageCode.English,
               numberOfQuestions: 14,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
-              updated,
+              updated: new Date(),
             },
             {
-              id: 'a1acbaff-8d97-45b2-89a3-906ff8aa8d88',
+              id: 'cb9e0c33-3f19-4b93-a976-acba28db8f82',
               title: 'Pop Culture Trivia',
               description:
                 'How well do you know movies, music, and celebrity gossip? Find out with this entertaining pop culture quiz.',
@@ -47,12 +50,12 @@ describe('ProfileQuizzes', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 20,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
-              updated,
+              updated: new Date(),
             },
             {
-              id: 'fc71c63b-4dd5-4813-9106-abeeaba60c08',
+              id: '8b6323a1-21ab-467b-b0d2-b835d7831ba7',
               title: 'History Through the Ages',
               description:
                 'Explore key moments in history, from ancient civilizations to modern events, and see how much you remember.',
@@ -61,12 +64,12 @@ describe('ProfileQuizzes', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 16,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
-              updated,
+              updated: new Date(),
             },
             {
-              id: 'bb3ca2ea-a8f4-4b74-95de-d90ea7e8de36',
+              id: 'cc11c2f4-7d2d-4630-8780-d3e4e2dae743',
               title: 'Science Facts and Myths',
               description:
                 'Separate fact from fiction as you answer questions about physics, biology, chemistry, and other scientific wonders.',
@@ -75,12 +78,12 @@ describe('ProfileQuizzes', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 28,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
-              updated,
+              updated: new Date(),
             },
             {
-              id: '02cd1f62-024b-4962-ba1b-0c7c12ab2b18',
+              id: 'c3550303-7f77-48bf-b114-e0d0c1152c0f',
               title: 'Literary Legends',
               description:
                 'Dive into the world of books, famous authors, and classic stories in this quiz for literature enthusiasts.',
@@ -89,9 +92,9 @@ describe('ProfileQuizzes', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 24,
-              author: { id: PlayerID, name: 'FrostyBear' },
+              author: { id: player.id, name: 'FrostyBear' },
               created: new Date(),
-              updated,
+              updated: new Date(),
             },
           ]}
           pagination={{ total: 10, limit: 5, offset: 0 }}

@@ -1,5 +1,6 @@
 import {
   faClockRotateLeft,
+  faLightbulb,
   faLink,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -63,6 +64,9 @@ const Page: React.FC<PageProps> = ({
                 onClose={() => setProfileMenuOpen(false)}>
                 <MenuItem icon={faUser} link="/player/profile">
                   Profile
+                </MenuItem>
+                <MenuItem icon={faLightbulb} link="/player/quizzes">
+                  Quizzes
                 </MenuItem>
                 <MenuItem icon={faClockRotateLeft} link="/game/history">
                   History

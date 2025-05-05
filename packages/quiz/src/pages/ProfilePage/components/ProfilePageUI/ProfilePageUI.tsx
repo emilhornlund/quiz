@@ -1,61 +1,78 @@
+import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons'
 import {
-  GameMode,
-  LanguageCode,
-  QuizCategory,
-  QuizResponseDto,
-  QuizVisibility,
+  PLAYER_NICKNAME_MAX_LENGTH,
+  PLAYER_NICKNAME_MIN_LENGTH,
+  PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, FormEvent, useEffect, useState } from 'react'
 
-import { Page, PageDivider } from '../../../../components'
+import { Button, Page, TextField, Typography } from '../../../../components'
 import { Player } from '../../../../models'
+import { classNames } from '../../../../utils/helpers.ts'
 
-import ProfileDetails from './components/ProfileDetails'
-import ProfileQuizzes from './components/ProfileQuizzes'
+import styles from './ProfilePageUI.module.scss'
 
 export interface ProfilePageUIProps {
   player?: Player
-  quizzes: QuizResponseDto[]
-  pagination: { total: number; limit: number; offset: number }
-  isLoading: boolean
-  isError: boolean
   onNicknameChange: (nickname: string) => void
-  onChangeSearchParams: (params: {
-    search?: string
-    visibility?: QuizVisibility
-    category?: QuizCategory
-    languageCode?: LanguageCode
-    mode?: GameMode
-    sort?: 'title' | 'created' | 'updated'
-    order?: 'asc' | 'desc'
-    limit?: number
-    offset?: number
-  }) => void
-  onCreateQuiz: () => void
 }
 
 const ProfilePageUI: FC<ProfilePageUIProps> = ({
   player,
-  quizzes,
-  pagination,
-  isLoading,
-  isError,
   onNicknameChange,
-  onChangeSearchParams,
-  onCreateQuiz,
-}) => (
-  <Page align="start" discover profile>
-    <ProfileDetails nickname={player?.nickname} onChange={onNicknameChange} />
-    <PageDivider />
-    <ProfileQuizzes
-      quizzes={quizzes}
-      pagination={pagination}
-      isLoading={isLoading}
-      isError={isError}
-      onChangeSearchParams={onChangeSearchParams}
-      onCreateQuiz={onCreateQuiz}
-    />
-  </Page>
-)
+}) => {
+  const [tmpNickname, setTmpNickname] = useState<string | undefined>(
+    player?.nickname,
+  )
+  const [tmpNicknameValid, setTmpNicknameValid] = useState<boolean>(false)
+
+  useEffect(() => {
+    setTmpNickname(player?.nickname)
+  }, [player])
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+
+    if (tmpNickname) {
+      onNicknameChange(tmpNickname)
+    }
+  }
+
+  return (
+    <Page align="center" discover profile>
+      <Typography variant="subtitle">Update Your Profile</Typography>
+      <Typography variant="text" size="medium">
+        Customize your player profile by updating your nickname. Your nickname
+        is how other players will see you in quizzes.
+      </Typography>
+      <form className={styles.profileDetailsForm} onSubmit={handleSubmit}>
+        <div className={classNames(styles.column, styles.full)}>
+          <TextField
+            id="nickname"
+            type="text"
+            placeholder="Nickname"
+            value={tmpNickname ?? ''}
+            minLength={PLAYER_NICKNAME_MIN_LENGTH}
+            maxLength={PLAYER_NICKNAME_MAX_LENGTH}
+            regex={PLAYER_NICKNAME_REGEX}
+            onChange={(value) => setTmpNickname(value as string)}
+            onValid={setTmpNicknameValid}
+            required
+          />
+        </div>
+        <div className={styles.column}>
+          <Button
+            id="update-player-button"
+            type="submit"
+            kind="call-to-action"
+            size="normal"
+            icon={faFloppyDisk}
+            disabled={!tmpNicknameValid}
+          />
+        </div>
+      </form>
+    </Page>
+  )
+}
 
 export default ProfilePageUI
