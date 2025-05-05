@@ -101,7 +101,7 @@ exports[`should render Page with profile 1`] = `
         class="side"
       >
         <div
-          class="avatar"
+          class="menuButtonWrapper"
         >
           <button
             type="button"

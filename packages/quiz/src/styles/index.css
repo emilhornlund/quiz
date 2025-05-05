@@ -24,6 +24,7 @@ a {
   font-weight: 500;
   color: white;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 a:hover {
   color: white;

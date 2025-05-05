@@ -151,8 +151,8 @@
 
       a {
         font-weight: bold;
-        text-decoration: none;
         color: $white;
+
 
         @include mobile {
           @include fontSize(16px);
@@ -165,11 +165,7 @@
         }
       }
 
-      a:hover {
-        text-decoration: underline;
-      }
-
-      .avatar {
+      .menuButtonWrapper {
         display: flex;
         flex-direction: column;
         align-items: center;

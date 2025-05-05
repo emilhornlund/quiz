@@ -48,4 +48,15 @@
       }
     }
   }
+
+  .menuSeparator {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - ($desktop-narrow-layout-gutter * 2));
+    appearance: none;
+    margin: 0 $desktop-narrow-layout-gutter;
+    border: none;
+    border-bottom: 1px dashed $gray-2;
+    outline: none;
+  }
 }

@@ -40,6 +40,8 @@ export const MenuItem: FC<MenuItemProps> = ({
   )
 }
 
+export const MenuSeparator: FC = () => <div className={styles.menuSeparator} />
+
 export interface MenuProps {
   anchorRef: React.RefObject<HTMLElement>
   isOpen: boolean

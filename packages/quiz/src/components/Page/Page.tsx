@@ -1,15 +1,18 @@
 import {
+  faBinoculars,
   faClockRotateLeft,
   faLightbulb,
   faLink,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
+import Bars from '../../assets/images/bars.svg'
 import { classNames } from '../../utils/helpers'
-import { Menu, MenuItem } from '../Menu'
+import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { Menu, MenuItem, MenuSeparator } from '../Menu'
 
 import styles from './Page.module.scss'
 
@@ -38,10 +41,40 @@ const Page: React.FC<PageProps> = ({
 }) => {
   const navigate = useNavigate()
 
+  const deviceType = useDeviceSizeType()
+  const isMobile = useMemo(() => deviceType === DeviceType.Mobile, [deviceType])
+
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
-  const profileButtonRef = useRef<HTMLDivElement>(null)
+  const profileMenuButtonRef = useRef<HTMLDivElement>(null)
 
   const toggleProfileMenu = () => setProfileMenuOpen((prev) => !prev)
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const mobileMenuButtonRef = useRef<HTMLDivElement>(null)
+
+  const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev)
+
+  const profileMenuItems = useMemo(() => {
+    if (!profile) {
+      return null
+    }
+    return (
+      <>
+        <MenuItem icon={faUser} link="/player/profile">
+          Profile
+        </MenuItem>
+        <MenuItem icon={faLightbulb} link="/player/quizzes">
+          Quizzes
+        </MenuItem>
+        <MenuItem icon={faClockRotateLeft} link="/game/history">
+          History
+        </MenuItem>
+        <MenuItem icon={faLink} link="/player/link">
+          Link
+        </MenuItem>
+      </>
+    )
+  }, [profile])
 
   return (
     <div className={styles.main}>
@@ -51,29 +84,39 @@ const Page: React.FC<PageProps> = ({
           <span className={styles.text}>Quiz</span>
         </button>
         <div className={styles.side}>
-          {discover && <Link to="/discover">Discover</Link>}
+          {discover && !isMobile && <Link to="/discover">Discover</Link>}
           {header}
-          {profile && (
-            <div className={styles.avatar} ref={profileButtonRef}>
+          {profile && !isMobile && (
+            <div
+              className={styles.menuButtonWrapper}
+              ref={profileMenuButtonRef}>
               <button onClick={toggleProfileMenu} type="button">
                 <img src={Avatar} alt="Profile" />
               </button>
               <Menu
-                anchorRef={profileButtonRef}
+                anchorRef={profileMenuButtonRef}
                 isOpen={profileMenuOpen}
                 onClose={() => setProfileMenuOpen(false)}>
-                <MenuItem icon={faUser} link="/player/profile">
-                  Profile
-                </MenuItem>
-                <MenuItem icon={faLightbulb} link="/player/quizzes">
-                  Quizzes
-                </MenuItem>
-                <MenuItem icon={faClockRotateLeft} link="/game/history">
-                  History
-                </MenuItem>
-                <MenuItem icon={faLink} link="/player/link">
-                  Link
-                </MenuItem>
+                {profileMenuItems}
+              </Menu>
+            </div>
+          )}
+          {isMobile && (discover || profile) && (
+            <div className={styles.menuButtonWrapper} ref={mobileMenuButtonRef}>
+              <button onClick={toggleMobileMenu} type="button">
+                <img src={Bars} alt="Menu" />
+              </button>
+              <Menu
+                anchorRef={mobileMenuButtonRef}
+                isOpen={mobileMenuOpen}
+                onClose={() => setMobileMenuOpen(false)}>
+                {discover && (
+                  <MenuItem icon={faBinoculars} link="/discover">
+                    Discover
+                  </MenuItem>
+                )}
+                <MenuSeparator />
+                {profileMenuItems}
               </Menu>
             </div>
           )}

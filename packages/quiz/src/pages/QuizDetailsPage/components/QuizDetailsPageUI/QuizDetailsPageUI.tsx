@@ -29,7 +29,7 @@ import {
   LanguageLabels,
   QuizCategoryLabels,
   QuizVisibilityLabels,
-} from '../../../../models/labels.ts'
+} from '../../../../models'
 
 import styles from './QuizDetailsPageUI.module.scss'
 

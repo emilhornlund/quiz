@@ -29,7 +29,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
           Discover
         </a>
         <div
-          class="avatar"
+          class="menuButtonWrapper"
         >
           <button
             type="button"
@@ -340,7 +340,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
           Discover
         </a>
         <div
-          class="avatar"
+          class="menuButtonWrapper"
         >
           <button
             type="button"

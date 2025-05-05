@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import QuizDetailsPageUI from './QuizDetailsPageUI'
 
 const meta = {
-  title: 'Pages/QuizDetailsPageUI',
+  title: 'Pages/QuizDetailsPage',
   component: QuizDetailsPageUI,
   decorators: [withRouter],
   parameters: {
@@ -40,6 +40,7 @@ export const Default = {
       created: new Date(),
       updated: new Date(),
     },
+    isOwner: true,
     isLoadingQuiz: false,
     isHostGameLoading: false,
     isDeleteQuizLoading: false,

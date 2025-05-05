@@ -58,7 +58,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
           </button>
         </div>
         <div
-          class="avatar"
+          class="menuButtonWrapper"
         >
           <button
             type="button"

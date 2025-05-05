@@ -29,7 +29,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
           Discover
         </a>
         <div
-          class="avatar"
+          class="menuButtonWrapper"
         >
           <button
             type="button"
