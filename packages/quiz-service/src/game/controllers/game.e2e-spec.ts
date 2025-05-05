@@ -236,6 +236,33 @@ describe('GameController (e2e)', () => {
         })
     })
 
+    it('should succeed in joining an existing active classic mode game when not on question task', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: createMockQuestionTaskDocument(),
+        })
+        .exec()
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/players`)
+        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+
+      const updatedDocument = await gameModel.findById(gameID)
+      expect(updatedDocument.participants).toHaveLength(2)
+    })
+
     it('should succeed in joining when nickname equals host player name', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
