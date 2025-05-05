@@ -39,7 +39,7 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
   }
 
   return (
-    <Page align="center" discover profile>
+    <Page align="start" discover profile>
       <Typography variant="subtitle">Update Your Profile</Typography>
       <Typography variant="text" size="medium">
         Customize your player profile by updating your nickname. Your nickname

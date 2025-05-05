@@ -43,7 +43,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content fullWidth startAlign"
     >
       <div
         class="typography subtitle full"

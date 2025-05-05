@@ -59,7 +59,7 @@ const QuizzesPageUI: FC<QuizzesPageUIProps> = ({
   }
 
   return (
-    <Page align="center" discover profile>
+    <Page align="start" discover profile>
       <Typography variant="subtitle">
         {quizzes.length || hasSearchFilter
           ? 'Your Quizzes'

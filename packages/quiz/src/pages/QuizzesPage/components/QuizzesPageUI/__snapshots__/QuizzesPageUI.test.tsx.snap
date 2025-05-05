@@ -43,7 +43,7 @@ exports[`QuizzesPageUI > should render QuizzesPageUI 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content fullWidth startAlign"
     >
       <div
         class="typography subtitle full"
