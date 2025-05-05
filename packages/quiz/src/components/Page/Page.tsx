@@ -115,7 +115,7 @@ const Page: React.FC<PageProps> = ({
                     Discover
                   </MenuItem>
                 )}
-                <MenuSeparator />
+                {discover && <MenuSeparator />}
                 {profileMenuItems}
               </Menu>
             </div>
