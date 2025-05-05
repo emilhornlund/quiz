@@ -31,16 +31,6 @@
   -webkit-user-select: none;
   user-select: none;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter
-  }
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter
-  }
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter;
-  }
-
   .header {
     display: flex;
     flex-direction: row;
@@ -147,6 +137,22 @@
       }
       @include desktop {
         column-gap: $desktop-narrow-layout-gutter;
+      }
+
+      .verticalLine {
+        border-left-style: solid;
+        border-left-color: white;
+        height: 70%;
+
+        @include mobile {
+          border-left-width: 1px;
+        }
+        @include tablet {
+          border-left-width: 2px;
+        }
+        @include desktop {
+          border-left-width: 2px;
+        }
       }
 
       a {

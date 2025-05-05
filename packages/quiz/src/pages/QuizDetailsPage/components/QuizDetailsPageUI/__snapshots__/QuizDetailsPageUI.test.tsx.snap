@@ -29,6 +29,9 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
           Discover
         </a>
         <div
+          class="verticalLine"
+        />
+        <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
@@ -258,39 +261,6 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             />
           </svg>
           FrostyBear
-        </div>
-      </div>
-      <div
-        class="actions"
-      >
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-host-game-button-button"
-            id="host-game-button"
-            name="host-game-button"
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-play "
-              data-icon="play"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 384 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"
-                fill="currentColor"
-              />
-            </svg>
-            <span>
-              Host Game
-            </span>
-          </button>
         </div>
       </div>
     </div>

@@ -85,6 +85,9 @@ const Page: React.FC<PageProps> = ({
         </button>
         <div className={styles.side}>
           {discover && !isMobile && <Link to="/discover">Discover</Link>}
+          {discover && header && !isMobile && (
+            <div className={styles.verticalLine} />
+          )}
           {header}
           {profile && !isMobile && (
             <div

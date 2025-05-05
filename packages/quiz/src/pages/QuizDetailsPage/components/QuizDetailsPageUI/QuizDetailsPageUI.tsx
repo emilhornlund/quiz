@@ -163,17 +163,6 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
         </div>
       </div>
 
-      <div className={styles.actions}>
-        <Button
-          id="host-game-button"
-          type="button"
-          kind="call-to-action"
-          value="Host Game"
-          icon={faPlay}
-          onClick={() => setShowConfirmHostGameModal(true)}
-        />
-      </div>
-
       <ConfirmDialog
         title="Host Game"
         message="Are you sure you want to start hosting a new game? Players will be able to join as soon as the game starts."
