@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, GameMode, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -20,11 +20,13 @@ export const Default = {
     event: {
       type: GameEventType.GameQuestionPreviewHost,
       game: {
+        mode: GameMode.Classic,
         pin: '123456',
       },
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
+        points: 1000,
       },
       countdown: {
         initiatedTime: new Date().toISOString(),

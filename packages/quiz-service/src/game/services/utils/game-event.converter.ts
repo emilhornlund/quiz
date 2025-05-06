@@ -366,16 +366,21 @@ function buildPaginationEvent(
 function buildGameQuestionPreviewHostEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
 ): GameQuestionPreviewHostEvent {
-  const { type, text: question } =
-    document.questions[document.currentTask.questionIndex]
+  const {
+    type,
+    text: question,
+    points,
+  } = document.questions[document.currentTask.questionIndex]
   return {
     type: GameEventType.GameQuestionPreviewHost,
     game: {
+      mode: document.mode,
       pin: document.pin,
     },
     question: {
       type,
       question,
+      points,
     },
     countdown: buildGameQuestionPreviewCountdownEvent(document),
     pagination: buildPaginationEvent(document),

@@ -1,7 +1,13 @@
-import { GameQuestionPreviewHostEvent } from '@quiz/common'
+import { faQuestionCircle, faStar } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GameMode, GameQuestionPreviewHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { HostGameFooter, Page, ProgressBar, Typography } from '../../components'
+import { QuestionTypeLabels } from '../../models'
+import colors from '../../styles/colors.module.scss'
+
+import styles from './HostQuestionPreviewState.module.scss'
 
 export interface HostQuestionPreviewStateProps {
   event: GameQuestionPreviewHostEvent
@@ -9,8 +15,12 @@ export interface HostQuestionPreviewStateProps {
 
 const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
   event: {
-    game: { pin: gamePIN },
-    question: { type: questionType, question: questionValue },
+    game: { mode, pin: gamePIN },
+    question: {
+      type: questionType,
+      question: questionValue,
+      points: questionPoints,
+    },
     countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -24,7 +34,20 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
         totalQuestions={totalQuestions}
       />
     }>
-    <div>{questionType}</div>
+    {mode === GameMode.Classic && (
+      <div className={styles.chip}>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faQuestionCircle} color={colors.white} />
+          {QuestionTypeLabels[questionType]}
+        </div>
+        <div className={styles.item}>
+          <FontAwesomeIcon icon={faStar} color={colors.yellow2} />
+          {questionPoints === 0 && 'Zero Points'}
+          {questionPoints === 1000 && 'Standard Points'}
+          {questionPoints === 2000 && 'Double Points'}
+        </div>
+      </div>
+    )}
     <Typography variant="title" size="medium">
       {questionValue}
     </Typography>

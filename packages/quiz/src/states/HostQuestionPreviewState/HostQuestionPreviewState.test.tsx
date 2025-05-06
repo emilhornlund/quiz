@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, GameMode, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -25,11 +25,13 @@ describe('HostQuestionPreviewState', () => {
           event={{
             type: GameEventType.GameQuestionPreviewHost,
             game: {
+              mode: GameMode.Classic,
               pin: '123456',
             },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
+              points: 1000,
             },
             countdown: {
               initiatedTime: new Date(now).toISOString(),

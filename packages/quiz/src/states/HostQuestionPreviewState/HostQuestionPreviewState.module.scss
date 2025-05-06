@@ -1,0 +1,58 @@
+@import '../../styles/colors';
+@import '../../styles/helpers';
+
+.chip {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: $white-1-50;
+  font-weight: bold;
+  position: relative;
+
+  @include mobile {
+    column-gap: $mobile-layout-gutter;
+    padding: 0 pxToRem(16px);
+    border-radius: calc(34px / 2);
+    height: 34px;
+
+    @include fontSize(14px);
+  }
+
+  @include tablet {
+    column-gap: $tablet-layout-gutter;
+    padding: 0 pxToRem(20px);
+    border-radius: calc(41px / 2);
+    height: 41px;
+
+    @include fontSize(18px);
+  }
+
+  @include desktop {
+    column-gap: $desktop-layout-gutter;
+    padding: 0 pxToRem(24px);
+    border-radius: calc(48px / 2);
+    height: 48px;
+
+    @include fontSize(22px);
+  }
+
+  .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    @include mobile {
+      column-gap: $mobile-narrow-layout-gutter * 0.5;
+    }
+
+    @include tablet {
+      column-gap: $tablet-narrow-layout-gutter * 0.5;
+    }
+
+    @include desktop {
+      column-gap: $desktop-narrow-layout-gutter * 0.5;
+    }
+  }
+}

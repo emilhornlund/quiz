@@ -1,4 +1,5 @@
 import { GameEventType } from './game-event-type.enum'
+import { GameMode } from './game-mode.enum'
 import { MediaType } from './media-type.enum'
 import { QuestionType } from './question-type.enum'
 
@@ -59,11 +60,13 @@ export type GameBeginPlayerEvent = {
 export type GameQuestionPreviewHostEvent = {
   type: GameEventType.GameQuestionPreviewHost
   game: {
+    mode: GameMode
     pin: string
   }
   question: {
     type: QuestionType
     question: string
+    points?: number
   }
   countdown: CountdownEvent
   pagination: PaginationEvent
