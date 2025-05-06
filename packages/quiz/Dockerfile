@@ -8,7 +8,7 @@ COPY ../../ ./
 RUN yarn install --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
 
 RUN yarn workspace @quiz/common build
-RUN yarn workspace @quiz/quiz build
+RUN yarn workspace @quiz/quiz build --mode production
 
 # Production Stage
 FROM nginx:alpine
