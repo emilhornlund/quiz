@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-      open: true,
+      open: mode === 'development',
       host: true,
       port: parseInt(env.SERVER_PORT ?? '80', 10),
       proxy: {
