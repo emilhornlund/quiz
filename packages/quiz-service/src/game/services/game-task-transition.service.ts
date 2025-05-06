@@ -14,6 +14,7 @@ import {
   buildQuestionTask,
   buildQuitTask,
   getRedisPlayerParticipantAnswerKey,
+  isParticipantPlayer,
   toQuestionTaskAnswerFromString,
 } from './utils'
 
@@ -188,7 +189,9 @@ export class GameTaskTransitionService {
       gameDocument.currentTask = buildLeaderboardTask(gameDocument)
     } else {
       gameDocument.currentTask = buildPodiumTask(gameDocument)
-      await this.gameResultRepository.createGameResult(gameDocument)
+      if (gameDocument.participants.filter(isParticipantPlayer).length > 0) {
+        await this.gameResultRepository.createGameResult(gameDocument)
+      }
     }
   }
 
@@ -237,7 +240,10 @@ export class GameTaskTransitionService {
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
     gameDocument.currentTask = buildQuitTask()
-    gameDocument.status = GameStatus.Completed
+    gameDocument.status =
+      gameDocument.participants.filter(isParticipantPlayer).length > 0
+        ? GameStatus.Completed
+        : GameStatus.Expired
   }
 
   /**

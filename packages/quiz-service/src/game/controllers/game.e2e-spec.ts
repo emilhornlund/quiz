@@ -12,7 +12,6 @@ import {
   QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
-import { Model } from 'mongoose'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -20,7 +19,10 @@ import {
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
+  createMockLeaderboardTaskItem,
   createMockMultiChoiceQuestionDocument,
+  createMockPlayerDocument,
+  createMockPodiumTaskDocument,
   createMockQuestionResultTaskDocument,
   createMockQuestionTaskDocument,
   createMockRangeQuestionDocument,
@@ -35,12 +37,13 @@ import { closeTestApp, createTestApp } from '../../app/utils/test'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
-import { Player } from '../../player/services/models/schemas'
+import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
 import { GameService } from '../services'
 import {
   BaseTask,
   Game,
+  GameModel,
   QuestionResultTask,
   QuestionResultTaskItem,
   QuestionTaskBaseAnswer,
@@ -55,8 +58,8 @@ import { buildLobbyTask } from '../services/utils'
 describe('GameController (e2e)', () => {
   let app: INestApplication
   let gameService: GameService
-  let gameModel: Model<Game>
-  let playerModel: Model<Player>
+  let gameModel: GameModel
+  let playerModel: PlayerModel
   let authService: AuthService
   let clientService: ClientService
   let quizService: QuizService
@@ -69,8 +72,8 @@ describe('GameController (e2e)', () => {
   beforeEach(async () => {
     app = await createTestApp()
     gameService = app.get(GameService)
-    gameModel = app.get<Model<Game>>(getModelToken(Game.name))
-    playerModel = app.get<Model<Player>>(getModelToken(Player.name))
+    gameModel = app.get<GameModel>(getModelToken(Game.name))
+    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
     quizService = app.get(QuizService)
@@ -773,6 +776,79 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toStrictEqual({})
         })
+    })
+
+    it('should succeed in completing the current podium task with players', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      const player = await playerModel.create(createMockPlayerDocument())
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: createMockPodiumTaskDocument({
+            status: 'active',
+            leaderboard: [
+              createMockLeaderboardTaskItem({ playerId: player._id }),
+            ],
+          }),
+          participants: [
+            createMockGameHostParticipantDocument({
+              player: hostClient.player,
+            }),
+            createMockGamePlayerParticipantDocument({ player }),
+          ],
+        })
+        .exec()
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toStrictEqual({})
+        })
+
+      const {
+        status,
+        currentTask: { type },
+      } = await gameModel.findById(gameID)
+      expect(type).toEqual(TaskType.Quit)
+      expect(status).toEqual(GameStatus.Completed)
+    })
+
+    it('should succeed in completing the current podium task without players', async () => {
+      const { id: quizId } = await quizService.createQuiz(
+        classicQuizRequest,
+        hostClient.player,
+      )
+
+      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+
+      await gameModel
+        .findByIdAndUpdate(gameID, {
+          currentTask: createMockPodiumTaskDocument({ status: 'active' }),
+        })
+        .exec()
+
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toStrictEqual({})
+        })
+
+      const {
+        status,
+        currentTask: { type },
+      } = await gameModel.findById(gameID)
+      expect(type).toEqual(TaskType.Quit)
+      expect(status).toEqual(GameStatus.Expired)
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {

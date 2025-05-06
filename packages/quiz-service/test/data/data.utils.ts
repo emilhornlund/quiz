@@ -13,9 +13,11 @@ import { Client } from '../../src/client/services/models/schemas'
 import {
   BaseTask,
   Game,
+  LeaderboardTaskItem,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
+  PodiumTask,
   QuestionResultTask,
   QuestionResultTaskItem,
   QuestionTask,
@@ -303,6 +305,32 @@ export function createMockQuestionTaskTypeAnswer(
     answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
     created: offsetSeconds(0),
     ...(answer ?? {}),
+  }
+}
+
+export function createMockLeaderboardTaskItem(
+  item?: Partial<LeaderboardTaskItem>,
+): LeaderboardTaskItem {
+  return {
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    position: 1,
+    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+    score: 1337,
+    streaks: 3,
+    ...(item ?? {}),
+  }
+}
+
+export function createMockPodiumTaskDocument(
+  task?: Partial<BaseTask & PodiumTask>,
+): BaseTask & PodiumTask {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Podium,
+    status: 'pending',
+    leaderboard: [],
+    created: offsetSeconds(0),
+    ...(task ?? {}),
   }
 }
 
