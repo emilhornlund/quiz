@@ -1,0 +1,29 @@
+@import '../../styles/helpers';
+@import '../../styles/variables';
+
+.leaveModalActionButtons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  width: 100%;
+  max-width: $mobile-width;
+
+  @include mobile {
+    column-gap: $mobile-control-normal-layout-gutter;
+  }
+
+  @include tablet {
+    column-gap: $tablet-control-normal-layout-gutter;
+  }
+
+  @include desktop {
+    column-gap: $desktop-control-normal-layout-gutter;
+  }
+
+  div[class*="buttonInputContainer"] {
+    flex: 1;
+  }
+}

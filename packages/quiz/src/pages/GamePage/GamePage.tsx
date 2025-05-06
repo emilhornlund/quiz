@@ -1,8 +1,9 @@
 import { GameEventType } from '@quiz/common'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
-import { LoadingSpinner, Page } from '../../components'
+import { LoadingSpinner, Modal, Page } from '../../components'
+import Button from '../../components/Button'
 import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import {
@@ -31,6 +32,8 @@ import {
   ConnectionStatus,
   useEventSource,
 } from '../../utils/use-event-source.tsx'
+
+import styles from './GamePage.module.scss'
 
 /**
  * Represents the main game page.
@@ -72,6 +75,17 @@ const GamePage = () => {
       }
     }
   }, [connectionStatus, hasReconnected])
+
+  const shouldBlock = useCallback<BlockerFunction>(
+    () =>
+      !(
+        event?.type === GameEventType.GamePodiumHost ||
+        event?.type === GameEventType.GamePodiumPlayer ||
+        event?.type === GameEventType.GameQuitEvent
+      ),
+    [event],
+  )
+  const blocker = useBlocker(shouldBlock)
 
   useEffect(() => {
     if (event?.type === GameEventType.GameQuitEvent) {
@@ -124,7 +138,33 @@ const GamePage = () => {
     }
   }, [event])
 
-  return <>{stateComponent}</>
+  return (
+    <>
+      {stateComponent}
+      {blocker.state === 'blocked' && (
+        <Modal title="Leave Game" open>
+          Leaving now will disconnect you from the game. Are you sure you want
+          to continue?
+          <div className={styles.leaveModalActionButtons}>
+            <Button
+              id="cancel-button"
+              type="button"
+              kind="secondary"
+              value="Cancel"
+              onClick={() => blocker.reset()}
+            />
+            <Button
+              id="proceed-button"
+              type="button"
+              kind="call-to-action"
+              value="Proceed"
+              onClick={() => blocker.proceed()}
+            />
+          </div>
+        </Modal>
+      )}
+    </>
+  )
 }
 
 export default GamePage
