@@ -5,13 +5,13 @@ import {
 import React, { FC, useState } from 'react'
 
 import {
-  Page,
   PlayerGameFooter,
   ProgressBar,
   QuestionAnswerPicker,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
+import { GamePage } from '../common'
 
 export interface PlayerQuestionStateProps {
   event: GameQuestionPlayerEvent
@@ -43,7 +43,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
   }
 
   return (
-    <Page
+    <GamePage
       height="full"
       footer={
         <PlayerGameFooter
@@ -62,7 +62,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
         loading={isSubmittingQuestionAnswer}
         onChange={handleSubmitQuestionAnswer}
       />
-    </Page>
+    </GamePage>
   )
 }
 

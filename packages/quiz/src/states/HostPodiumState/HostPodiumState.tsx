@@ -4,11 +4,11 @@ import React, { FC, useState } from 'react'
 import {
   IconButtonArrowRight,
   Leaderboard,
-  Page,
   Podium,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
+import { GamePage } from '../common'
 
 export interface HostPodiumStateProps {
   event: GamePodiumHostEvent
@@ -27,7 +27,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
   }
 
   return (
-    <Page
+    <GamePage
       width="medium"
       height="full"
       align="start"
@@ -45,7 +45,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
       <Typography variant="subtitle">Podium</Typography>
       <Podium values={leaderboard} />
       <Leaderboard values={leaderboard} includePodium={false} />
-    </Page>
+    </GamePage>
   )
 }
 

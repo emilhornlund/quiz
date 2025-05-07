@@ -5,10 +5,10 @@ import {
   HostGameFooter,
   IconButtonArrowRight,
   Leaderboard,
-  Page,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
+import { GamePage } from '../common'
 
 export interface HostLeaderboardStateProps {
   event: GameLeaderboardHostEvent
@@ -32,7 +32,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
   }
 
   return (
-    <Page
+    <GamePage
       width="medium"
       height="full"
       align="start"
@@ -56,7 +56,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
       }>
       <Typography variant="subtitle">Leaderboard</Typography>
       <Leaderboard values={leaderboard} />
-    </Page>
+    </GamePage>
   )
 }
 

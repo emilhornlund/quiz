@@ -1,14 +1,15 @@
 import { GameBeginHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { LoadingSpinner, Page, Typography } from '../../components'
+import { LoadingSpinner, Typography } from '../../components'
+import { GamePage } from '../common'
 
 export interface HostGameBeginStateProps {
   event: GameBeginHostEvent
 }
 
 const HostGameBeginState: FC<HostGameBeginStateProps> = () => (
-  <Page>
+  <GamePage>
     <Typography variant="title" size="medium">
       Loading Game
     </Typography>
@@ -16,7 +17,7 @@ const HostGameBeginState: FC<HostGameBeginStateProps> = () => (
       The game starts any second
     </Typography>
     <LoadingSpinner />
-  </Page>
+  </GamePage>
 )
 
 export default HostGameBeginState

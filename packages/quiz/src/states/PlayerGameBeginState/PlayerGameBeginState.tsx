@@ -1,12 +1,8 @@
 import { GameBeginPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import {
-  LoadingSpinner,
-  NicknameChip,
-  Page,
-  Typography,
-} from '../../components'
+import { LoadingSpinner, NicknameChip, Typography } from '../../components'
+import { GamePage } from '../common'
 
 export interface PlayerGameBeginStateProps {
   event: GameBeginPlayerEvent
@@ -17,7 +13,7 @@ const PlayerGameBeginState: FC<PlayerGameBeginStateProps> = ({
     player: { nickname },
   },
 }) => (
-  <Page>
+  <GamePage>
     <Typography variant="title" size="medium">
       Get ready!
     </Typography>
@@ -26,7 +22,7 @@ const PlayerGameBeginState: FC<PlayerGameBeginStateProps> = ({
     </Typography>
     <NicknameChip value={nickname} />
     <LoadingSpinner />
-  </Page>
+  </GamePage>
 )
 
 export default PlayerGameBeginState

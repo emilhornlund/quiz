@@ -5,11 +5,11 @@ import React, { FC, useMemo } from 'react'
 
 import {
   Badge,
-  Page,
   PlayerGameFooter,
   StreakBadge,
   Typography,
 } from '../../components'
+import { GamePage } from '../common'
 
 import { getPositionMessage } from './messages.ts'
 import styles from './PlayerResultState.module.scss'
@@ -32,7 +32,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
   }, [position, correct])
 
   return (
-    <Page
+    <GamePage
       footer={
         <PlayerGameFooter
           currentQuestion={currentQuestion}
@@ -52,7 +52,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
       <Typography variant="text" size="small">
         {message}
       </Typography>
-    </Page>
+    </GamePage>
   )
 }
 

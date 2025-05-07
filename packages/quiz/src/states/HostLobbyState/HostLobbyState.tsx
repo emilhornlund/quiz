@@ -6,11 +6,11 @@ import {
   ConfirmDialog,
   IconButtonArrowRight,
   NicknameChip,
-  Page,
 } from '../../components'
 import config from '../../config'
 import { useGameContext } from '../../context/game'
 import { classNames, extractUrl } from '../../utils/helpers.ts'
+import GamePage from '../common/GamePage'
 
 import styles from './HostLobbyState.module.scss'
 
@@ -52,7 +52,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
 
   return (
     <>
-      <Page
+      <GamePage
         width="medium"
         header={
           <IconButtonArrowRight
@@ -92,7 +92,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
             ))}
           </div>
         </div>
-      </Page>
+      </GamePage>
       <ConfirmDialog
         title="Confirm Remove Player"
         message={`Are you sure you want to remove ${playerToRemove?.nickname} from the game? Once removed, they will need to rejoin to participate again.`}

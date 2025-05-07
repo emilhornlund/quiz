@@ -4,11 +4,11 @@ import React, { FC, useState } from 'react'
 import {
   HostGameFooter,
   IconButtonArrowRight,
-  Page,
   QuestionResults,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
+import { GamePage } from '../common'
 
 export interface HostResultStateProps {
   event: GameResultHostEvent
@@ -50,7 +50,7 @@ const HostResultState: FC<HostResultStateProps> = ({
   }
 
   return (
-    <Page
+    <GamePage
       height="full"
       align="start"
       header={
@@ -78,7 +78,7 @@ const HostResultState: FC<HostResultStateProps> = ({
         onAddCorrectAnswer={handleAddCorrectAnswer}
         onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
       />
-    </Page>
+    </GamePage>
   )
 }
 

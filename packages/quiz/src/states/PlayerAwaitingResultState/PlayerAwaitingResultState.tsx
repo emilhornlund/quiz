@@ -3,11 +3,11 @@ import React, { FC } from 'react'
 
 import {
   LoadingSpinner,
-  Page,
   PlayerGameFooter,
   RocketImage,
   Typography,
 } from '../../components'
+import { GamePage } from '../common'
 
 export interface PlayerAwaitingResultStateProps {
   event: GameAwaitingResultPlayerEvent
@@ -22,7 +22,7 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
-  <Page
+  <GamePage
     footer={
       <PlayerGameFooter
         currentQuestion={currentQuestion}
@@ -36,7 +36,7 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
       Waiting for other players
     </Typography>
     <LoadingSpinner />
-  </Page>
+  </GamePage>
 )
 
 export default PlayerAwaitingResultState

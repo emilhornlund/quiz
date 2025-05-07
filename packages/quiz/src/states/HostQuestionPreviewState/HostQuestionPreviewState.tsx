@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameMode, GameQuestionPreviewHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { HostGameFooter, Page, ProgressBar, Typography } from '../../components'
+import { HostGameFooter, ProgressBar, Typography } from '../../components'
 import { QuestionTypeLabels } from '../../models'
 import colors from '../../styles/colors.module.scss'
+import { GamePage } from '../common'
 
 import styles from './HostQuestionPreviewState.module.scss'
 
@@ -25,7 +26,7 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
-  <Page
+  <GamePage
     align="space-between"
     footer={
       <HostGameFooter
@@ -52,7 +53,7 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
       {questionValue}
     </Typography>
     <ProgressBar countdown={countdown} />
-  </Page>
+  </GamePage>
 )
 
 export default HostQuestionPreviewState

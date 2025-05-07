@@ -14,6 +14,8 @@ import { createContext } from 'react'
  */
 export type GameContextType = {
   gameID?: string
+  isFullscreenActive: boolean
+  toggleFullscreen: () => Promise<void>
   completeTask?: () => Promise<void>
   submitQuestionAnswer?: (
     request: SubmitQuestionAnswerRequestDto,
@@ -26,4 +28,7 @@ export type GameContextType = {
 /**
  * React context for managing the state and actions of a game session.
  */
-export const GameContext = createContext<GameContextType>({})
+export const GameContext = createContext<GameContextType>({
+  isFullscreenActive: false,
+  toggleFullscreen: () => Promise.resolve(),
+})

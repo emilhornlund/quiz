@@ -6,7 +6,6 @@ import React, { FC, useState } from 'react'
 import {
   HostGameFooter,
   IconButtonArrowRight,
-  Page,
   ProgressBar,
   QuestionAnswerPicker,
   Typography,
@@ -15,6 +14,7 @@ import ResponsiveImage from '../../components/ResponsiveImage'
 import ResponsivePlayer from '../../components/ResponsivePlayer'
 import { useGameContext } from '../../context/game'
 import { classNames } from '../../utils/helpers.ts'
+import { GamePage } from '../common'
 
 import styles from './HostQuestionState.module.scss'
 
@@ -41,7 +41,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
   }
 
   return (
-    <Page
+    <GamePage
       height="full"
       align="space-between"
       header={
@@ -99,7 +99,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
         <QuestionAnswerPicker question={question} interactive={false} />
       </div>
       <ProgressBar countdown={countdown} />
-    </Page>
+    </GamePage>
   )
 }
 

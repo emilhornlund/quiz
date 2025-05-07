@@ -7,9 +7,9 @@ import {
   getBadgePositionBackgroundColor,
   IconButtonArrowLeft,
   NicknameChip,
-  Page,
   Typography,
 } from '../../components'
+import { GamePage } from '../common'
 
 import { getPodiumPositionMessage } from './messages.ts'
 import styles from './PlayerPodiumState.module.scss'
@@ -34,7 +34,7 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
   }, [position])
 
   return (
-    <Page
+    <GamePage
       height="full"
       align="start"
       header={
@@ -64,7 +64,7 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
           {message}
         </Typography>
       </div>
-    </Page>
+    </GamePage>
   )
 }
 

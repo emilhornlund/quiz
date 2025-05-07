@@ -1,5 +1,6 @@
 import { QuestionCorrectAnswerDto } from '@quiz/common'
 import React, { FC, ReactNode, useMemo } from 'react'
+import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
@@ -36,6 +37,8 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
     deleteCorrectAnswer,
   } = useQuizServiceClient()
 
+  const fullScreenHandle = useFullScreenHandle()
+
   /**
    * Memoized value for the `GameContext`, containing the current game ID
    * and methods for completing tasks and submitting question answers.
@@ -43,6 +46,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
   const value = useMemo<GameContextType>(
     () => ({
       gameID,
+      isFullscreenActive: fullScreenHandle.active,
       completeTask: () => (gameID ? completeTask(gameID) : Promise.reject()),
       submitQuestionAnswer: (request) =>
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
@@ -52,9 +56,13 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
         gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? deleteCorrectAnswer(gameID, answer) : Promise.reject(),
+      toggleFullscreen: fullScreenHandle.active
+        ? fullScreenHandle.exit
+        : fullScreenHandle.enter,
     }),
     [
       gameID,
+      fullScreenHandle,
       completeTask,
       submitQuestionAnswer,
       leaveGame,
@@ -63,7 +71,11 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
     ],
   )
 
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>
+  return (
+    <GameContext.Provider value={value}>
+      <FullScreen handle={fullScreenHandle}>{children}</FullScreen>
+    </GameContext.Provider>
+  )
 }
 
 export default GameContextProvider

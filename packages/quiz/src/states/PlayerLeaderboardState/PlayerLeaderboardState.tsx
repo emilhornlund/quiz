@@ -5,10 +5,10 @@ import {
   Badge,
   getBadgePositionBackgroundColor,
   NicknameChip,
-  Page,
   PlayerGameFooter,
   StreakBadge,
 } from '../../components'
+import { GamePage } from '../common'
 
 export interface PlayerLeaderboardStateProps {
   event: GameLeaderboardPlayerEvent
@@ -24,7 +24,7 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
   },
 }) => {
   return (
-    <Page
+    <GamePage
       footer={
         <PlayerGameFooter
           currentQuestion={currentQuestion}
@@ -40,7 +40,7 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
       </Badge>
       <NicknameChip value={nickname} />
       <StreakBadge streak={streaks}>Streak</StreakBadge>
-    </Page>
+    </GamePage>
   )
 }
 

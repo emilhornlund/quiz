@@ -7,12 +7,12 @@ import {
   ConfirmDialog,
   IconButtonArrowLeft,
   NicknameChip,
-  Page,
   RocketImage,
   Typography,
 } from '../../components'
 import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
+import { GamePage } from '../common'
 
 const MESSAGES = [
   'Get ready, the questions are coming! Sharpen your mind.',
@@ -57,7 +57,7 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
 
   return (
     <>
-      <Page
+      <GamePage
         header={
           <IconButtonArrowLeft
             id="leave-game-button"
@@ -77,7 +77,7 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
         <Typography variant="text" size="small">
           {message}
         </Typography>
-      </Page>
+      </GamePage>
       <ConfirmDialog
         title="Confirm Leave Game"
         message="Are you sure you want to leave the game? Once you leave, you will need to rejoin to participate again."
