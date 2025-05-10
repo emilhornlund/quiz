@@ -1,5 +1,8 @@
-@import '../../styles/inputs';
-@import '../../styles/loading';
+@use '../../styles/inputs';
+@use '../../styles/loading';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .buttonInputContainer {
   @extend .input;
@@ -8,19 +11,19 @@
     .loadingSpinner {
       @extend .loading-spinner;
 
-      @include mobile {
-        $--mobile-loading-spinner-size: calc($mobile-control-normal-height * 0.9);
-        @include loading-spinner-dimensions($--mobile-loading-spinner-size, $gray-4, button-mobile-normal);
+      @include helpers.mobile {
+        $--mobile-loading-spinner-size: calc(#{variables.$mobile-control-normal-height} * 0.9);
+        @include loading.loading-spinner-dimensions($--mobile-loading-spinner-size, colors.$gray-4, button-mobile-normal);
       }
 
-      @include tablet {
-        $--tablet-loading-spinner-size: calc($tablet-control-normal-height * 0.9);
-        @include loading-spinner-dimensions($--tablet-loading-spinner-size, $gray-4, button-tablet-normal);
+      @include helpers.tablet {
+        $--tablet-loading-spinner-size: calc(#{variables.$tablet-control-normal-height} * 0.9);
+        @include loading.loading-spinner-dimensions($--tablet-loading-spinner-size, colors.$gray-4, button-tablet-normal);
       }
 
-      @include desktop {
-        $--desktop-loading-spinner-size: calc($desktop-control-normal-height * 0.9);
-        @include loading-spinner-dimensions($--desktop-loading-spinner-size, $gray-4, button-desktop-normal);
+      @include helpers.desktop {
+        $--desktop-loading-spinner-size: calc(#{variables.$desktop-control-normal-height} * 0.9);
+        @include loading.loading-spinner-dimensions($--desktop-loading-spinner-size, colors.$gray-4, button-desktop-normal);
       }
     }
   }
@@ -54,19 +57,19 @@
 
     button {
       .loadingSpinner {
-        @include mobile {
-          $--mobile-loading-spinner-size: calc($mobile-control-small-height * 0.9);
-          @include loading-spinner-dimensions($--mobile-loading-spinner-size, $gray-4, button-mobile-small);
+        @include helpers.mobile {
+          $--mobile-loading-spinner-size: calc(#{variables.$mobile-control-small-height} * 0.9);
+          @include loading.loading-spinner-dimensions($--mobile-loading-spinner-size, colors.$gray-4, button-mobile-small);
         }
 
-        @include tablet {
-          $--tablet-loading-spinner-size: calc($tablet-control-small-height * 0.9);
-          @include loading-spinner-dimensions($--tablet-loading-spinner-size, $gray-4, button-tablet-small);
+        @include helpers.tablet {
+          $--tablet-loading-spinner-size: calc(#{variables.$tablet-control-small-height} * 0.9);
+          @include loading.loading-spinner-dimensions($--tablet-loading-spinner-size, colors.$gray-4, button-tablet-small);
         }
 
-        @include desktop {
-          $--desktop-loading-spinner-size: calc($desktop-control-small-height * 0.9);
-          @include loading-spinner-dimensions($--desktop-loading-spinner-size, $gray-4, button-desktop-small);
+        @include helpers.desktop {
+          $--desktop-loading-spinner-size: calc(#{variables.$desktop-control-small-height} * 0.9);
+          @include loading.loading-spinner-dimensions($--desktop-loading-spinner-size, colors.$gray-4, button-desktop-small);
         }
       }
     }

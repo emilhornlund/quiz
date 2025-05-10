@@ -1,5 +1,6 @@
-@import '../../../../styles/colors';
-@import '../../../../styles/helpers';
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
 .main {
   display: flex;
@@ -12,16 +13,16 @@
     justify-content: center;
     flex: 1;
 
-    @include mobile {
-      row-gap: $mobile-layout-gutter;
+    @include helpers.mobile {
+      row-gap: variables.$mobile-layout-gutter;
     }
 
-    @include tablet {
-      row-gap: $tablet-layout-gutter;
+    @include helpers.tablet {
+      row-gap: variables.$tablet-layout-gutter;
     }
 
-    @include desktop {
-      row-gap: $desktop-layout-gutter;
+    @include helpers.desktop {
+      row-gap: variables.$desktop-layout-gutter;
     }
 
     input[type=range] {
@@ -33,61 +34,61 @@
       appearance: none;
       -webkit-appearance: none;
       box-sizing: border-box;
-      background-color: $yellow-2;
+      background-color: colors.$yellow-2;
 
-      @include mobile {
-        height: pxToRem(14px);
-        border-radius: pxToRem(calc(14px / 2));
-        -webkit-box-shadow: inset 0 0 0 pxToRem(2px) $white;
-        -moz-box-shadow: inset 0 0 0 pxToRem(2px) $white;
-        box-shadow: inset 0 0 0 pxToRem(2px) $white;
+      @include helpers.mobile {
+        height: helpers.pxToRem(14px);
+        border-radius: helpers.pxToRem(calc(14px / 2));
+        -webkit-box-shadow: inset 0 0 0 helpers.pxToRem(2px) colors.$white;
+        -moz-box-shadow: inset 0 0 0 helpers.pxToRem(2px) colors.$white;
+        box-shadow: inset 0 0 0 helpers.pxToRem(2px) colors.$white;
       }
 
-      @include tablet {
-        height: pxToRem(18px);
-        border-radius: pxToRem(calc(18px / 2));
-        -webkit-box-shadow: inset 0 0 0 pxToRem(4px) $white;
-        -moz-box-shadow: inset 0 0 0 pxToRem(4px) $white;
-        box-shadow: inset 0 0 0 pxToRem(4px) $white;
+      @include helpers.tablet {
+        height: helpers.pxToRem(18px);
+        border-radius: helpers.pxToRem(calc(18px / 2));
+        -webkit-box-shadow: inset 0 0 0 helpers.pxToRem(4px) colors.$white;
+        -moz-box-shadow: inset 0 0 0 helpers.pxToRem(4px) colors.$white;
+        box-shadow: inset 0 0 0 helpers.pxToRem(4px) colors.$white;
       }
 
-      @include desktop {
-        height: pxToRem(22px);
-        border-radius: pxToRem(calc(22px / 2));
-        -webkit-box-shadow: inset 0 0 0 pxToRem(6px) $white;
-        -moz-box-shadow: inset 0 0 0 pxToRem(6px) $white;
-        box-shadow: inset 0 0 0 pxToRem(6px) $white;
+      @include helpers.desktop {
+        height: helpers.pxToRem(22px);
+        border-radius: helpers.pxToRem(calc(22px / 2));
+        -webkit-box-shadow: inset 0 0 0 helpers.pxToRem(6px) colors.$white;
+        -moz-box-shadow: inset 0 0 0 helpers.pxToRem(6px) colors.$white;
+        box-shadow: inset 0 0 0 helpers.pxToRem(6px) colors.$white;
       }
 
       &::-webkit-slider-thumb, &::-moz-range-thumb {
         -webkit-appearance: none;
         appearance: none;
-        background: $yellow-2;
+        background: colors.$yellow-2;
         cursor: pointer;
         transition: 0.1s ease-in-out;
         border-style: solid;
-        border-color: $white;
+        border-color: colors.$white;
         box-sizing: border-box;
 
-        @include mobile {
-          width: pxToRem(30px);
-          height: pxToRem(30px);
-          border-radius: pxToRem(15px);
-          border-width: pxToRem(4px);
+        @include helpers.mobile {
+          width: helpers.pxToRem(30px);
+          height: helpers.pxToRem(30px);
+          border-radius: helpers.pxToRem(15px);
+          border-width: helpers.pxToRem(4px);
         }
 
-        @include tablet {
-          width: pxToRem(40px);
-          height: pxToRem(40px);
-          border-radius: pxToRem(20px);
-          border-width: pxToRem(6px);
+        @include helpers.tablet {
+          width: helpers.pxToRem(40px);
+          height: helpers.pxToRem(40px);
+          border-radius: helpers.pxToRem(20px);
+          border-width: helpers.pxToRem(6px);
         }
 
-        @include desktop {
-          width: pxToRem(50px);
-          height: pxToRem(50px);
-          border-radius: pxToRem(25px);
-          border-width: pxToRem(8px);
+        @include helpers.desktop {
+          width: helpers.pxToRem(50px);
+          height: helpers.pxToRem(50px);
+          border-radius: helpers.pxToRem(25px);
+          border-width: helpers.pxToRem(8px);
         }
       }
     }
@@ -98,16 +99,16 @@
       justify-content: center;
       align-items: center;
 
-      @include mobile {
-        column-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        column-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        column-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
       }
 
       div:first-child {
@@ -121,41 +122,41 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: $turquoise-2;
+    background-color: colors.$turquoise-2;
     flex: 1;
 
-    @include mobile {
-      column-gap: $mobile-layout-gutter;
-      padding: $mobile-layout-gutter;
-      border-radius: pxToRem(8px);
+    @include helpers.mobile {
+      column-gap: variables.$mobile-layout-gutter;
+      padding: variables.$mobile-layout-gutter;
+      border-radius: helpers.pxToRem(8px);
     }
 
-    @include tablet {
-      column-gap: $tablet-layout-gutter;
-      padding: $tablet-layout-gutter;
-      border-radius: pxToRem(12px);
+    @include helpers.tablet {
+      column-gap: variables.$tablet-layout-gutter;
+      padding: variables.$tablet-layout-gutter;
+      border-radius: helpers.pxToRem(12px);
     }
 
-    @include desktop {
-      column-gap: $desktop-layout-gutter;
-      padding: $desktop-layout-gutter;
-      border-radius: pxToRem(16px);
+    @include helpers.desktop {
+      column-gap: variables.$desktop-layout-gutter;
+      padding: variables.$desktop-layout-gutter;
+      border-radius: helpers.pxToRem(16px);
     }
 
     svg {
       display: flex;
       flex-direction: column;
 
-      @include mobile {
-        @include fontSize(28px);
+      @include helpers.mobile {
+        @include helpers.fontSize(28px);
       }
 
-      @include tablet {
-        @include fontSize(38px);
+      @include helpers.tablet {
+        @include helpers.fontSize(38px);
       }
 
-      @include desktop {
-        @include fontSize(48px);
+      @include helpers.desktop {
+        @include helpers.fontSize(48px);
       }
     }
 
@@ -166,16 +167,16 @@
       width: 100%;
       flex: 1;
 
-      @include mobile {
-        @include fontSize(18px);
+      @include helpers.mobile {
+        @include helpers.fontSize(18px);
       }
 
-      @include tablet {
-        @include fontSize(28px);
+      @include helpers.tablet {
+        @include helpers.fontSize(28px);
       }
 
-      @include desktop {
-        @include fontSize(38px);
+      @include helpers.desktop {
+        @include helpers.fontSize(38px);
       }
     }
   }

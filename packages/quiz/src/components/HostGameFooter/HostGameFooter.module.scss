@@ -1,41 +1,42 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 $--mobile-font-size: 16px;
-$--mobile-line-height: pxToRem($--mobile-font-size);
+$--mobile-line-height: helpers.pxToRem($--mobile-font-size);
 
 $--tablet-font-size: 20px;
-$--tablet-line-height: pxToRem($--tablet-font-size);
+$--tablet-line-height: helpers.pxToRem($--tablet-font-size);
 
 $--desktop-font-size: 24px;
-$--desktop-line-height: pxToRem($--desktop-font-size);
+$--desktop-line-height: helpers.pxToRem($--desktop-font-size);
 
 .main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: $white-1-50;
+  background-color: colors.$white-1-50;
 
-  @include mobile {
-    border-radius: $mobile-narrow-layout-gutter;
-    padding: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    border-radius: variables.$mobile-narrow-layout-gutter;
+    padding: variables.$mobile-narrow-layout-gutter;
     width: 100%;
-    max-height: calc($mobile-narrow-layout-gutter * 2 + $--mobile-line-height);
+    max-height: calc(#{variables.$mobile-narrow-layout-gutter} * 2 + $--mobile-line-height);
   }
 
-  @include tablet {
-    border-radius: $tablet-narrow-layout-gutter;
-    padding: $tablet-narrow-layout-gutter;
-    width: $tablet-width;
-    max-height: calc($tablet-narrow-layout-gutter * 2 + $--tablet-line-height);
+  @include helpers.tablet {
+    border-radius: variables.$tablet-narrow-layout-gutter;
+    padding: variables.$tablet-narrow-layout-gutter;
+    width: variables.$tablet-width;
+    max-height: calc(#{variables.$tablet-narrow-layout-gutter} * 2 + $--tablet-line-height);
   }
 
-  @include desktop {
-    border-radius: $desktop-narrow-layout-gutter;
-    padding: $desktop-narrow-layout-gutter;
-    width: $desktop-width;
-    max-height: calc($desktop-narrow-layout-gutter * 2 + $--desktop-line-height);
+  @include helpers.desktop {
+    border-radius: variables.$desktop-narrow-layout-gutter;
+    padding: variables.$desktop-narrow-layout-gutter;
+    width: variables.$desktop-width;
+    max-height: calc(#{variables.$desktop-narrow-layout-gutter} * 2 + $--desktop-line-height);
   }
 
   .questions, .gamePIN {
@@ -45,25 +46,25 @@ $--desktop-line-height: pxToRem($--desktop-font-size);
     align-items: center;
     flex: 1;
 
-    @include mobile {
-      column-gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
       line-height: $--mobile-line-height;
 
-      @include fontSize($--mobile-font-size);
+      @include helpers.fontSize($--mobile-font-size);
     }
 
-    @include tablet {
-      column-gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
       line-height: $--tablet-line-height;
 
-      @include fontSize($--tablet-font-size);
+      @include helpers.fontSize($--tablet-font-size);
     }
 
-    @include desktop {
-      column-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
       line-height: $--desktop-line-height;
 
-      @include fontSize($--desktop-font-size);
+      @include helpers.fontSize($--desktop-font-size);
     }
 
     span {
@@ -86,16 +87,16 @@ $--desktop-line-height: pxToRem($--desktop-font-size);
     align-items: center;
     flex: 1;
 
-    @include mobile {
-      column-gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      column-gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      column-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
     }
   }
 }

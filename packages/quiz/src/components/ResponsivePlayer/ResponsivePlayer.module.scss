@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .playerWrapper {
   display: flex;
@@ -10,21 +11,21 @@
   height: 100%;
   overflow: hidden;
   border-style: solid;
-  border-color: $white-1-50;
-  background-color: $white-1-50;
+  border-color: colors.$white-1-50;
+  background-color: colors.$white-1-50;
 
-  @include mobile {
-    border-width: pxToRem(2px);
-    border-radius: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    border-width: helpers.pxToRem(2px);
+    border-radius: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    border-width: pxToRem(3px);
-    border-radius: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    border-width: helpers.pxToRem(3px);
+    border-radius: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    border-width: pxToRem(4px);
-    border-radius: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    border-width: helpers.pxToRem(4px);
+    border-radius: variables.$desktop-narrow-layout-gutter;
   }
 }

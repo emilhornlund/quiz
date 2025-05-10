@@ -1,38 +1,38 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
 
 .main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: $white-1-50;
+  background-color: colors.$white-1-50;
   font-weight: bold;
   position: relative;
   overflow: hidden;
 
-  @include mobile {
-    padding: 0 pxToRem(16px);
+  @include helpers.mobile {
+    padding: 0 helpers.pxToRem(16px);
     border-radius: calc(34px / 2);
     height: 34px;
 
-    @include fontSize(14px);
+    @include helpers.fontSize(14px);
   }
 
-  @include tablet {
-    padding: 0 pxToRem(20px);
+  @include helpers.tablet {
+    padding: 0 helpers.pxToRem(20px);
     border-radius: calc(41px / 2);
     height: 41px;
 
-    @include fontSize(18px);
+    @include helpers.fontSize(18px);
   }
 
-  @include desktop {
-    padding: 0 pxToRem(24px);
+  @include helpers.desktop {
+    padding: 0 helpers.pxToRem(24px);
     border-radius: calc(48px / 2);
     height: 48px;
 
-    @include fontSize(22px);
+    @include helpers.fontSize(22px);
   }
 
   &:hover {
@@ -46,7 +46,7 @@
     -webkit-appearance: none;
     align-items: center;
     appearance: none;
-    background-color: $black-1-50;
+    background-color: colors.$black-1-50;
     border: none;
     box-shadow: none;
     cursor: pointer;
@@ -62,16 +62,16 @@
     position: absolute;
     width: 100%;
 
-    @include mobile {
-      @include fontSize(20px);
+    @include helpers.mobile {
+      @include helpers.fontSize(20px);
     }
 
-    @include tablet {
-      @include fontSize(24px);
+    @include helpers.tablet {
+      @include helpers.fontSize(24px);
     }
 
-    @include desktop {
-      @include fontSize(28px);
+    @include helpers.desktop {
+      @include helpers.fontSize(28px);
     }
   }
 }

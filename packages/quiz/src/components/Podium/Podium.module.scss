@@ -1,11 +1,12 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .main {
   display: flex;
   flex-direction: row;
   column-gap: 0;
-  border-bottom: pxToRem(4px) solid $white;
+  border-bottom: helpers.pxToRem(4px) solid colors.$white;
   width: 100%;
 
   .column {
@@ -16,16 +17,16 @@
     justify-content: flex-start;
     align-items: center;
 
-    @include mobile {
-      row-gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      row-gap: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      row-gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      row-gap: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      row-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      row-gap: variables.$desktop-narrow-layout-gutter;
     }
 
     .spacer {
@@ -33,15 +34,15 @@
       flex-direction: column;
       width: 100%;
 
-      @include mobile {
+      @include helpers.mobile {
         height: 30px;
       }
 
-      @include tablet {
+      @include helpers.tablet {
         height: 40px;
       }
 
-      @include desktop {
+      @include helpers.desktop {
         height: 50px;
       }
     }
@@ -63,7 +64,7 @@
       div {
         position: absolute;
         bottom: 0;
-        z-index: $podium-z-index;
+        z-index: variables.$podium-z-index;
       }
     }
 
@@ -74,19 +75,19 @@
       width: 100%;
       flex: 1;
 
-      @include mobile {
-        padding: $mobile-layout-gutter 0 $mobile-layout-gutter * 4 0;
-        row-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        padding: variables.$mobile-layout-gutter 0 calc(#{variables.$mobile-layout-gutter} * 4) 0;
+        row-gap: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        padding: $tablet-layout-gutter 0 $tablet-layout-gutter * 4 0;
-        row-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        padding: variables.$tablet-layout-gutter 0 calc(#{variables.$tablet-layout-gutter} * 4) 0;
+        row-gap: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        padding: $desktop-layout-gutter 0 $desktop-layout-gutter * 4 0;
-        row-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        padding: variables.$desktop-layout-gutter 0 calc(#{variables.$desktop-layout-gutter} * 4) 0;
+        row-gap: variables.$desktop-narrow-layout-gutter;
       }
 
       .position {
@@ -96,23 +97,23 @@
         align-items: center;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
-        background-color: $white-1-50;
-        color: $black-1-50;
+        background-color: colors.$white-1-50;
+        color: colors.$black-1-50;
         font-weight: bolder;
 
-        @include mobile {
+        @include helpers.mobile {
           padding: 0.1rem;
-          @include fontSize(26px);
+          @include helpers.fontSize(26px);
         }
 
-        @include tablet {
+        @include helpers.tablet {
           padding: 0.2rem;
-          @include fontSize(36px);
+          @include helpers.fontSize(36px);
         }
 
-        @include desktop {
+        @include helpers.desktop {
           padding: 0.3rem;
-          @include fontSize(46px);
+          @include helpers.fontSize(46px);
         }
       }
 
@@ -122,48 +123,48 @@
         justify-content: center;
         align-items: center;
         font-weight: bold;
-        color: $black-1-50;
+        color: colors.$black-1-50;
 
-        @include mobile {
-          @include fontSize(16px);
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
         }
 
-        @include tablet {
-          @include fontSize(26px);
+        @include helpers.tablet {
+          @include helpers.fontSize(26px);
         }
 
-        @include desktop {
-          @include fontSize(36px);
+        @include helpers.desktop {
+          @include helpers.fontSize(36px);
         }
       }
     }
 
     &:nth-child(1) {
       .stack {
-        border-radius: pxToRem(12px) 0 0 0;
-        background-color: $silver;
+        border-radius: helpers.pxToRem(12px) 0 0 0;
+        background-color: colors.$silver;
 
-        box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
-        -webkit-box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
-        -moz-box-shadow: pxToRem(-5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        -webkit-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        -moz-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
       }
     }
 
     &:nth-child(2) {
       .stack {
-        border-radius: pxToRem(12px) pxToRem(12px) 0 0;
-        background-color: $gold;
+        border-radius: helpers.pxToRem(12px) helpers.pxToRem(12px) 0 0;
+        background-color: colors.$gold;
       }
     }
 
     &:nth-child(3) {
       .stack {
-        border-radius: 0 pxToRem(12px) 0 0;
-        background-color: $bronze;
+        border-radius: 0 helpers.pxToRem(12px) 0 0;
+        background-color: colors.$bronze;
 
-        box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
-        -webkit-box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
-        -moz-box-shadow: pxToRem(5px) 0 pxToRem(5px) 0 $black-1-15 inset;
+        box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        -webkit-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        -moz-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
       }
     }
   }

@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .row {
   display: flex;
@@ -7,16 +8,16 @@
   justify-content: center;
   align-items: center;
 
-  @include mobile {
-    gap: $mobile-layout-gutter;
+  @include helpers.mobile {
+    gap: variables.$mobile-layout-gutter;
   }
 
-  @include tablet {
-    gap: $tablet-layout-gutter;
+  @include helpers.tablet {
+    gap: variables.$tablet-layout-gutter;
   }
 
-  @include desktop {
-    gap: $desktop-layout-gutter;
+  @include helpers.desktop {
+    gap: variables.$desktop-layout-gutter;
   }
 
   &.flexibleHeight {
@@ -44,7 +45,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      background-color: $white-1-50;
+      background-color: colors.$white-1-50;
       font-weight: bold;
 
       @mixin info-dimensions($size) {
@@ -54,24 +55,24 @@
         border-radius: calc($size / 2);
 
         svg {
-          @include fontSize($size * 0.5);
+          @include helpers.fontSize($size * 0.5);
         }
 
         span {
           margin-top: -($size * 0.075);
-          @include fontSize($size * 0.6);
+          @include helpers.fontSize($size * 0.6);
         }
       }
 
-      @include mobile {
+      @include helpers.mobile {
         @include info-dimensions(26px);
       }
 
-      @include tablet {
+      @include helpers.tablet {
         @include info-dimensions(36px);
       }
 
-      @include desktop {
+      @include helpers.desktop {
         @include info-dimensions(46px);
       }
     }
@@ -83,36 +84,36 @@
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       font-weight: bold;
-      background-color: $white-1-50;
+      background-color: colors.$white-1-50;
 
-      @include mobile {
+      @include helpers.mobile {
         padding: 0;
-        @include fontSize(16px);
+        @include helpers.fontSize(16px);
       }
 
-      @include tablet {
+      @include helpers.tablet {
         padding: 0.25rem;
-        @include fontSize(26px);
+        @include helpers.fontSize(26px);
       }
 
-      @include desktop {
+      @include helpers.desktop {
         padding: 0.5rem;
-        @include fontSize(36px);
+        @include helpers.fontSize(36px);
       }
 
       &.fullWidth {
         width: 100%;
 
-        @include mobile {
-          @include fontSize(16px);
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
         }
 
-        @include tablet {
-          @include fontSize(36px);
+        @include helpers.tablet {
+          @include helpers.fontSize(36px);
         }
 
-        @include desktop {
-          @include fontSize(46px);
+        @include helpers.desktop {
+          @include helpers.fontSize(46px);
         }
       }
     }

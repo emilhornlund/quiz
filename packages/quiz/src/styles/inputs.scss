@@ -1,18 +1,20 @@
-@import './colors';
-@import './helpers';
+@use 'sass:color';
+@use './colors';
+@use './helpers';
+@use './variables';
 
 .input {
   align-items: center;
-  border: $control-outside-border-width solid transparent;
+  border: variables.$control-outside-border-width solid transparent;
   display: flex;
   flex-direction: row;
   flex-grow: 0;
   flex-shrink: 1;
   justify-content: center;
-  margin: calc($control-outside-border-width * 2);
-  outline-offset: $control-outside-border-width;
+  margin: calc(#{variables.$control-outside-border-width} * 2);
+  outline-offset: variables.$control-outside-border-width;
   outline-style: solid;
-  outline-width: $control-outside-border-width;
+  outline-width: variables.$control-outside-border-width;
   overflow: hidden;
   position: relative;
 
@@ -39,22 +41,22 @@
     justify-content: center;
     min-width: 0;
 
-    @include mobile {
-      column-gap: $mobile-control-normal-layout-gutter;
+    @include helpers.mobile {
+      column-gap: variables.$mobile-control-normal-layout-gutter;
 
-      @include fontSize($mobile-control-normal-font-size);
+      @include helpers.fontSize(variables.$mobile-control-normal-font-size);
     }
 
-    @include tablet {
-      column-gap: $tablet-control-normal-layout-gutter;
+    @include helpers.tablet {
+      column-gap: variables.$tablet-control-normal-layout-gutter;
 
-      @include fontSize($tablet-control-normal-font-size);
+      @include helpers.fontSize(variables.$tablet-control-normal-font-size);
     }
 
-    @include desktop {
-      column-gap: $desktop-control-normal-layout-gutter;
+    @include helpers.desktop {
+      column-gap: variables.$desktop-control-normal-layout-gutter;
 
-      @include fontSize($desktop-control-normal-font-size);
+      @include helpers.fontSize(variables.$desktop-control-normal-font-size);
     }
   }
 
@@ -85,144 +87,144 @@
   }
   /* end button overrides */
 
-  @include mobile {
-    border-radius: $mobile-control-normal-border-radius;
-    min-height: $mobile-control-normal-height;
-    padding: 0 $mobile-control-normal-layout-gutter;
+  @include helpers.mobile {
+    border-radius: variables.$mobile-control-normal-border-radius;
+    min-height: variables.$mobile-control-normal-height;
+    padding: 0 variables.$mobile-control-normal-layout-gutter;
 
     &:has(> textarea) {
-      padding: $mobile-control-normal-layout-gutter;
+      padding: variables.$mobile-control-normal-layout-gutter;
     }
   }
 
-  @include tablet {
-    border-radius: $tablet-control-normal-border-radius;
-    min-height: $tablet-control-normal-height;
-    padding: 0 $tablet-control-normal-layout-gutter;
+  @include helpers.tablet {
+    border-radius: variables.$tablet-control-normal-border-radius;
+    min-height: variables.$tablet-control-normal-height;
+    padding: 0 variables.$tablet-control-normal-layout-gutter;
 
     &:has(> textarea) {
-      padding: $tablet-control-normal-layout-gutter;
+      padding: variables.$tablet-control-normal-layout-gutter;
     }
   }
 
-  @include desktop {
-    border-radius: $desktop-control-normal-border-radius;
-    min-height: $desktop-control-normal-height;
-    padding: 0 $desktop-control-normal-layout-gutter;
+  @include helpers.desktop {
+    border-radius: variables.$desktop-control-normal-border-radius;
+    min-height: variables.$desktop-control-normal-height;
+    padding: 0 variables.$desktop-control-normal-layout-gutter;
 
     &:has(> textarea) {
-      padding: $desktop-control-normal-layout-gutter;
+      padding: variables.$desktop-control-normal-layout-gutter;
     }
   }
 }
 
 .input-kind-primary {
-  outline-color: $control-primary-normal-color;
-  background-color: $control-primary-normal-color;
+  outline-color: colors.$control-primary-normal-color;
+  background-color: colors.$control-primary-normal-color;
 
   &:has(> button) {
-    background-color: $control-primary-normal-color;
+    background-color: colors.$control-primary-normal-color;
   }
   input, select, textarea, button {
-    color: $control-text-normal-color;
+    color: colors.$control-text-normal-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: mix($white, $control-primary-normal-color, 30%);
-    outline-color: mix($white, $control-primary-normal-color, 30%);
+    background-color: color.mix(colors.$white, colors.$control-primary-normal-color, 30%);
+    outline-color: color.mix(colors.$white, colors.$control-primary-normal-color, 30%);
 
     button {
-      color: mix($white, $control-text-normal-color, 30%);
+      color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
     }
   }
 }
 
 .input-kind-secondary {
-  outline-color: $control-secondary-normal-color;
+  outline-color: colors.$control-secondary-normal-color;
 
   &:has(> button) {
-    background-color: $control-secondary-normal-color;
+    background-color: colors.$control-secondary-normal-color;
   }
   button {
-    color: $control-text-normal-color;
+    color: colors.$control-text-normal-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: mix($white, $control-secondary-normal-color, 30%);
-    outline-color: mix($white, $control-secondary-normal-color, 30%);
+    background-color: color.mix(colors.$white, colors.$control-secondary-normal-color, 30%);
+    outline-color: color.mix(colors.$white, colors.$control-secondary-normal-color, 30%);
 
     button {
-      color: mix($white, $control-text-normal-color, 30%);
+      color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
     }
   }
 }
 
 .inout-kind-disabled {
-  background-color: $control-primary-disabled-color;
-  outline-color: $control-primary-disabled-color;
+  background-color: colors.$control-primary-disabled-color;
+  outline-color: colors.$control-primary-disabled-color;
 
   input, select, textarea, button {
-    color: $control-text-disabled-color;
+    color: colors.$control-text-disabled-color;
     cursor: default;
   }
 }
 
 .input-kind-call-to-action {
-  outline-color: $control-primary-call-to-action-color;
+  outline-color: colors.$control-primary-call-to-action-color;
 
   &:has(> button) {
-    background-color: $control-primary-call-to-action-color;
+    background-color: colors.$control-primary-call-to-action-color;
   }
   button {
-    color: $control-text-normal-color;
+    color: colors.$control-text-normal-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: mix($white, $control-primary-call-to-action-color, 30%);
-    outline-color: mix($white, $control-primary-call-to-action-color, 30%);
+    background-color: color.mix(colors.$white, colors.$control-primary-call-to-action-color, 30%);
+    outline-color: color.mix(colors.$white, colors.$control-primary-call-to-action-color, 30%);
 
     button {
-      color: mix($white, $control-text-normal-color, 30%);
+      color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
     }
   }
 }
 
 .input-kind-success {
-  outline-color: $control-primary-success-color;
+  outline-color: colors.$control-primary-success-color;
 
   &:has(> button) {
-    background-color: $control-primary-success-color;
+    background-color: colors.$control-primary-success-color;
   }
   button {
-    color: $control-text-contrast-color;
+    color: colors.$control-text-contrast-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: mix($white, $control-primary-success-color, 30%);
-    outline-color: mix($white, $control-primary-success-color, 30%);
+    background-color: color.mix(colors.$white, colors.$control-primary-success-color, 30%);
+    outline-color: color.mix(colors.$white, colors.$control-primary-success-color, 30%);
 
     button {
-      color: mix($white, $control-text-contrast-color, 30%);
+      color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
     }
   }
 }
 
 .input-kind-destructive {
-  outline-color: $control-primary-danger-color;
+  outline-color: colors.$control-primary-danger-color;
 
   &:has(> button) {
-    background-color: $control-primary-danger-color;
+    background-color: colors.$control-primary-danger-color;
   }
   button {
-    color: $control-text-contrast-color;
+    color: colors.$control-text-contrast-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: mix($white, $control-primary-danger-color, 30%);
-    outline-color: mix($white, $control-primary-danger-color, 30%);
+    background-color: color.mix(colors.$white, colors.$control-primary-danger-color, 30%);
+    outline-color: color.mix(colors.$white, colors.$control-primary-danger-color, 30%);
 
     button {
-      color: mix($white, $control-text-contrast-color, 30%);
+      color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
     }
   }
 }
@@ -234,7 +236,7 @@
   input, select, textarea, button {
     background-color: transparent;
     outline-color: transparent;
-    color: $white;
+    color: colors.$white;
   }
 
   &:has(> button:hover, button:disabled) {
@@ -242,80 +244,80 @@
     outline-color: transparent;
 
     button {
-      color: mix($white, $gray-1, 30%);
+      color: color.mix(colors.$white, colors.$gray-1, 30%);
     }
   }
 }
 
 .input-size-small {
-  @include mobile {
-    border-radius: $mobile-control-small-border-radius;
-    min-height: $mobile-control-small-height;
-    padding: 0 $mobile-control-small-layout-gutter;
+  @include helpers.mobile {
+    border-radius: variables.$mobile-control-small-border-radius;
+    min-height: variables.$mobile-control-small-height;
+    padding: 0 variables.$mobile-control-small-layout-gutter;
 
     input, select, textarea, button {
-      column-gap: $mobile-control-small-layout-gutter;
+      column-gap: variables.$mobile-control-small-layout-gutter;
 
-      @include fontSize($mobile-control-small-font-size);
+      @include helpers.fontSize(variables.$mobile-control-small-font-size);
     }
   }
 
-  @include tablet {
-    border-radius: $tablet-control-small-border-radius;
-    min-height: $tablet-control-small-height;
-    padding: 0 $tablet-control-small-layout-gutter;
+  @include helpers.tablet {
+    border-radius: variables.$tablet-control-small-border-radius;
+    min-height: variables.$tablet-control-small-height;
+    padding: 0 variables.$tablet-control-small-layout-gutter;
 
     input, select, textarea, button {
-      column-gap: $tablet-control-small-layout-gutter;
+      column-gap: variables.$tablet-control-small-layout-gutter;
 
-      @include fontSize($tablet-control-small-font-size);
+      @include helpers.fontSize(variables.$tablet-control-small-font-size);
     }
   }
 
-  @include desktop {
-    border-radius: $desktop-control-small-border-radius;
-    min-height: $desktop-control-small-height;
-    padding: 0 $desktop-control-small-layout-gutter;
+  @include helpers.desktop {
+    border-radius: variables.$desktop-control-small-border-radius;
+    min-height: variables.$desktop-control-small-height;
+    padding: 0 variables.$desktop-control-small-layout-gutter;
 
     input, select, textarea, button {
-      column-gap: $desktop-control-small-layout-gutter;
+      column-gap: variables.$desktop-control-small-layout-gutter;
 
-      @include fontSize($desktop-control-small-font-size);
+      @include helpers.fontSize(variables.$desktop-control-small-font-size);
     }
   }
 }
 
 .input-error {
   align-items: center;
-  background-color: $yellow-2;
-  color: $gray-4;
+  background-color: colors.$yellow-2;
+  color: colors.$gray-4;
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   font-weight: bold;
   justify-content: flex-start;
 
-  @include mobile {
-    border-radius: $mobile-control-normal-border-radius;
-    padding: $mobile-control-normal-layout-gutter;
-    column-gap: $mobile-control-normal-layout-gutter;
+  @include helpers.mobile {
+    border-radius: variables.$mobile-control-normal-border-radius;
+    padding: variables.$mobile-control-normal-layout-gutter;
+    column-gap: variables.$mobile-control-normal-layout-gutter;
 
-    @include fontSize($mobile-control-small-font-size);
+    @include helpers.fontSize(variables.$mobile-control-small-font-size);
   }
 
-  @include tablet {
-    border-radius: $tablet-control-normal-border-radius;
-    padding: $tablet-control-normal-layout-gutter;
-    column-gap: $tablet-control-normal-layout-gutter;
+  @include helpers.tablet {
+    border-radius: variables.$tablet-control-normal-border-radius;
+    padding: variables.$tablet-control-normal-layout-gutter;
+    column-gap: variables.$tablet-control-normal-layout-gutter;
 
-    @include fontSize($tablet-control-small-font-size);
+    @include helpers.fontSize(variables.$tablet-control-small-font-size);
   }
 
-  @include desktop {
-    border-radius: $desktop-control-normal-border-radius;
-    padding: $desktop-control-normal-layout-gutter;
-    column-gap: $desktop-control-normal-layout-gutter;
+  @include helpers.desktop {
+    border-radius: variables.$desktop-control-normal-border-radius;
+    padding: variables.$desktop-control-normal-layout-gutter;
+    column-gap: variables.$desktop-control-normal-layout-gutter;
 
-    @include fontSize($desktop-control-small-font-size);
+    @include helpers.fontSize(variables.$desktop-control-small-font-size);
   }
 }

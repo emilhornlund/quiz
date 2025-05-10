@@ -1,25 +1,26 @@
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .pageDivider {
   display: flex;
   flex-direction: column;
-  border-width: pxToRem(1px);
+  border-width: helpers.pxToRem(1px);
   border-style: solid;
-  border-color: $white;
+  border-color: colors.$white;
 
-  @include mobile {
+  @include helpers.mobile {
     width: 100%;
-    margin: $mobile-layout-gutter 0;
+    margin: variables.$mobile-layout-gutter 0;
   }
 
-  @include tablet {
-    width: $tablet-width;
-    margin: $tablet-layout-gutter 0;
+  @include helpers.tablet {
+    width: variables.$tablet-width;
+    margin: variables.$tablet-layout-gutter 0;
   }
 
-  @include desktop {
-    width: $tablet-width;
-    margin: $desktop-layout-gutter 0;
+  @include helpers.desktop {
+    width: variables.$tablet-width;
+    margin: variables.$desktop-layout-gutter 0;
   }
 }

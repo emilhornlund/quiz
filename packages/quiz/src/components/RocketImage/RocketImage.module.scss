@@ -1,4 +1,4 @@
-@import '../../styles/helpers';
+@use '../../styles/helpers';
 
 .main {
   display: flex;
@@ -6,17 +6,17 @@
   justify-content: center;
 
   > img {
-    @include mobile {
+    @include helpers.mobile {
       width: 140px;
       height: 140px;
     }
 
-    @include tablet {
+    @include helpers.tablet {
       width: 200px;
       height: 200px;
     }
 
-    @include desktop {
+    @include helpers.desktop {
       width: 256px;
       height: 256px;
     }

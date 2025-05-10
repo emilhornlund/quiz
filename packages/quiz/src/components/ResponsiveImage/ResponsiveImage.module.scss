@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .container {
   display: flex;
@@ -14,20 +15,20 @@
     max-width: 100%;
     min-height: 100%;
     box-sizing: border-box;
-    border: pxToRem(4px) solid $white-1-50;
-    background-color: $white-1-50;
+    border: helpers.pxToRem(4px) solid colors.$white-1-50;
+    background-color: colors.$white-1-50;
     object-fit: contain;
 
-    @include mobile {
-      border-radius: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      border-radius: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      border-radius: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      border-radius: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      border-radius: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      border-radius: variables.$desktop-narrow-layout-gutter;
     }
   }
 }

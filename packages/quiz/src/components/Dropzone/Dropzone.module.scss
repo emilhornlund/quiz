@@ -1,5 +1,7 @@
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use 'sass:color';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .dropzone {
   display: flex;
@@ -13,46 +15,46 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-color: $gray-1;
+    border-color: colors.$gray-1;
     border-style: dashed;
-    background-color: mix($white, $gray-1, 75%);
-    color: $gray-2;
+    background-color: color.mix(colors.$white, colors.$gray-1, 75%);
+    color: colors.$gray-2;
     text-align: center;
     outline: none;
     transition: border .24s ease-in-out;
     cursor: pointer;
 
-    @include mobile {
-      padding: $mobile-control-normal-layout-gutter * 2 $mobile-control-normal-layout-gutter;
-      border-width: $control-outside-border-width;
-      border-radius: $mobile-control-normal-border-radius;
+    @include helpers.mobile {
+      padding: calc(#{variables.$mobile-control-normal-layout-gutter} * 2) #{variables.$mobile-control-normal-layout-gutter};
+      border-width: variables.$control-outside-border-width;
+      border-radius: variables.$mobile-control-normal-border-radius;
       min-height: 120px;
     }
 
-    @include tablet {
-      padding: $tablet-control-normal-layout-gutter * 2 $tablet-control-normal-layout-gutter;
-      border-width: $control-outside-border-width;
-      border-radius: $tablet-control-normal-border-radius;
+    @include helpers.tablet {
+      padding: calc(#{variables.$tablet-control-normal-layout-gutter} * 2) #{variables.$tablet-control-normal-layout-gutter};
+      border-width: variables.$control-outside-border-width;
+      border-radius: variables.$tablet-control-normal-border-radius;
       min-height: 140px;
     }
 
-    @include desktop {
-      padding: $desktop-control-normal-layout-gutter * 2 $desktop-control-normal-layout-gutter;
-      border-width: $control-outside-border-width;
-      border-radius: $desktop-control-normal-border-radius;
+    @include helpers.desktop {
+      padding: calc(#{variables.$desktop-control-normal-layout-gutter} * 2) #{variables.$desktop-control-normal-layout-gutter};
+      border-width: variables.$control-outside-border-width;
+      border-radius: variables.$desktop-control-normal-border-radius;
       min-height: 160px;
     }
   }
 
   .focused {
-    border-color: $blue-1;
+    border-color: colors.$blue-1;
   }
 
   .accept {
-    border-color: $green-1;
+    border-color: colors.$green-1;
   }
 
   .reject {
-    border-color: $red-1;
+    border-color: colors.$red-1;
   }
 }

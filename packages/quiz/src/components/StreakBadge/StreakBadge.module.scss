@@ -1,4 +1,5 @@
-@import '../../styles/helpers';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .streakBadge {
   display: flex;
@@ -6,18 +7,18 @@
   justify-content: center;
   align-items: center;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
-    @include fontSize($mobile-text-font-size);
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
+    @include helpers.fontSize(variables.$mobile-text-font-size);
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
-    @include fontSize($tablet-text-font-size);
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
+    @include helpers.fontSize(variables.$tablet-text-font-size);
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
-    @include fontSize($desktop-text-font-size);
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
+    @include helpers.fontSize(variables.$desktop-text-font-size);
   }
 }

@@ -1,21 +1,22 @@
-@import '../../styles/helpers';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .joinForm {
   display: flex;
   flex-direction: column;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter;
     width: 100%;
   }
 
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter;
-    width: $mobile-width;
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter;
+    width: variables.$mobile-width;
   }
 
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter;
-    width: $mobile-width;
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter;
+    width: variables.$mobile-width;
   }
 }

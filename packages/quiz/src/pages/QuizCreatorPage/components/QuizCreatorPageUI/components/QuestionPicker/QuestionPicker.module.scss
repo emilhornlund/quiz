@@ -1,7 +1,8 @@
-@import '../../../../../../styles/colors';
-@import '../../../../../../styles/helpers';
+@use '../../../../../../styles/colors';
+@use '../../../../../../styles/helpers';
+@use '../../../../../../styles/variables';
 
-$outline-offset: pxToRem(2px);
+$outline-offset: helpers.pxToRem(2px);
 
 .questionPickerWrapper {
   display: flex;
@@ -9,16 +10,16 @@ $outline-offset: pxToRem(2px);
   justify-content: center;
   align-items: center;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .questionPickerItemContainer {
@@ -27,28 +28,28 @@ $outline-offset: pxToRem(2px);
     overflow-x: auto;
     overflow-y: hidden;
     position: relative;
-    background-color: $white;
-    outline: $white solid $outline-offset;
+    background-color: colors.$white;
+    outline: colors.$white solid $outline-offset;
     outline-offset: $outline-offset;
     border: $outline-offset solid transparent;
     margin: calc($outline-offset * 2);
 
-    @include mobile {
-      column-gap: $mobile-narrow-layout-gutter * 0.5;
-      padding: $mobile-narrow-layout-gutter;
-      border-radius: $mobile-border-radius;
+    @include helpers.mobile {
+      column-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+      padding: variables.$mobile-narrow-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
     }
 
-    @include tablet {
-      column-gap: $tablet-narrow-layout-gutter * 0.5;
-      padding: $tablet-narrow-layout-gutter;
-      border-radius: $tablet-border-radius;
+    @include helpers.tablet {
+      column-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+      padding: variables.$tablet-narrow-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
     }
 
-    @include desktop {
-      column-gap: $desktop-narrow-layout-gutter;
-      padding: $desktop-narrow-layout-gutter;
-      border-radius: $desktop-border-radius;
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
+      padding: variables.$desktop-narrow-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
     }
   }
 
@@ -61,24 +62,24 @@ $outline-offset: pxToRem(2px);
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      outline: $yellow-2 solid $outline-offset;
+      outline: colors.$yellow-2 solid $outline-offset;
       border: $outline-offset solid transparent;
       border-radius: 50%;
       padding: 0;
       background-color: transparent;
-      color: $yellow-2;
+      color: colors.$yellow-2;
       cursor: pointer;
 
-      @include mobile {
-        @include fontSize(28px);
+      @include helpers.mobile {
+        @include helpers.fontSize(28px);
       }
 
-      @include tablet {
-        @include fontSize(32px);
+      @include helpers.tablet {
+        @include helpers.fontSize(32px);
       }
 
-      @include desktop {
-        @include fontSize(32px);
+      @include helpers.desktop {
+        @include helpers.fontSize(32px);
       }
     }
   }

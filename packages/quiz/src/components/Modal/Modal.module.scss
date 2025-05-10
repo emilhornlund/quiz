@@ -1,80 +1,81 @@
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .floatingOverlay {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: $black-1-80;
-  z-index: $modal-z-index;
+  background-color: colors.$black-1-80;
+  z-index: variables.$modal-z-index;
 
-  @include mobile {
-    padding: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    padding: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    padding: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    padding: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    padding: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    padding: variables.$desktop-narrow-layout-gutter;
   }
 
   .modalContainer {
     display: flex;
     flex-direction: column;
-    background-color: $white;
-    color: $gray-4;
-    width: $mobile-width;
+    background-color: colors.$white;
+    color: colors.$gray-4;
+    width: variables.$mobile-width;
     max-height: 100%;
     overflow: hidden;
 
-    @include mobile {
-      padding: $mobile-narrow-layout-gutter;
-      row-gap: $mobile-narrow-layout-gutter;
-      border-radius: $mobile-border-radius;
+    @include helpers.mobile {
+      padding: variables.$mobile-narrow-layout-gutter;
+      row-gap: variables.$mobile-narrow-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
     }
 
-    @include tablet {
+    @include helpers.tablet {
       max-height: 90%;
-      padding: $tablet-narrow-layout-gutter;
-      row-gap: $tablet-narrow-layout-gutter;
-      border-radius: $tablet-border-radius;
+      padding: variables.$tablet-narrow-layout-gutter;
+      row-gap: variables.$tablet-narrow-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
     }
 
-    @include desktop {
+    @include helpers.desktop {
       max-height: 80%;
-      padding: $desktop-narrow-layout-gutter;
-      row-gap: $desktop-narrow-layout-gutter;
-      border-radius: $desktop-border-radius;
+      padding: variables.$desktop-narrow-layout-gutter;
+      row-gap: variables.$desktop-narrow-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
     }
 
     &.sizeNormal {
-      @include mobile {
+      @include helpers.mobile {
         width: 100%;
       }
 
-      @include tablet {
-        width: $mobile-width;
+      @include helpers.tablet {
+        width: variables.$mobile-width;
       }
 
-      @include desktop {
-        width: $mobile-width;
+      @include helpers.desktop {
+        width: variables.$mobile-width;
       }
     }
 
     &.sizeLarge {
-      @include mobile {
+      @include helpers.mobile {
         width: 100%;
       }
 
-      @include tablet {
-        width: $tablet-width;
+      @include helpers.tablet {
+        width: variables.$tablet-width;
       }
 
-      @include desktop {
-        width: $tablet-width;
+      @include helpers.desktop {
+        width: variables.$tablet-width;
       }
     }
 
@@ -89,16 +90,16 @@
         font-weight: bold;
         flex: 1;
 
-        @include mobile {
-          @include fontSize(16px);
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
         }
 
-        @include tablet {
-          @include fontSize(20px);
+        @include helpers.tablet {
+          @include helpers.fontSize(20px);
         }
 
-        @include desktop {
-          @include fontSize(24px);
+        @include helpers.desktop {
+          @include helpers.fontSize(24px);
         }
       }
     }
@@ -109,22 +110,22 @@
       overflow-y: auto;
       overflow-x: hidden;
 
-      @include mobile {
-        row-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        row-gap: variables.$mobile-narrow-layout-gutter;
 
-        @include fontSize(16px);
+        @include helpers.fontSize(16px);
       }
 
-      @include tablet {
-        row-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        row-gap: variables.$tablet-narrow-layout-gutter;
 
-        @include fontSize(18px);
+        @include helpers.fontSize(18px);
       }
 
-      @include desktop {
-        row-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        row-gap: variables.$desktop-narrow-layout-gutter;
 
-        @include fontSize(20px);
+        @include helpers.fontSize(20px);
       }
     }
   }

@@ -1,20 +1,21 @@
-@import '../../../../../../../../styles/colors.scss';
-@import '../../../../../../../../styles/helpers.scss';
+@use '../../../../../../../../styles/colors';
+@use '../../../../../../../../styles/helpers';
+@use '../../../../../../../../styles/variables';
 
 .questionFieldContainer {
   display: flex;
   flex-direction: column;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter * 0.5;
+  @include helpers.mobile {
+    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
   }
 
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter * 0.5;
+  @include helpers.tablet {
+    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
   }
 
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter * 0.5;
+  @include helpers.desktop {
+    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
   }
 
   &.layoutFull {
@@ -22,16 +23,16 @@
   }
 
   &.layoutHalf {
-    @include mobile {
+    @include helpers.mobile {
       width: 100%;
     }
 
-    @include tablet {
-      width: calc(50% - ($desktop-narrow-layout-gutter * 0.5));
+    @include helpers.tablet {
+      width: calc(50% - (#{variables.$desktop-narrow-layout-gutter} * 0.5));
     }
 
-    @include desktop {
-      width: calc(50% - ($desktop-narrow-layout-gutter * 0.5));
+    @include helpers.desktop {
+      width: calc(50% - (#{variables.$desktop-narrow-layout-gutter} * 0.5));
     }
   }
 
@@ -41,22 +42,22 @@
     align-items: center;
     font-weight: bold;
 
-    @include mobile {
-      @include fontSize(14px);
+    @include helpers.mobile {
+      @include helpers.fontSize(14px);
 
-      column-gap: $mobile-narrow-layout-gutter * 0.5;
+      column-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
     }
 
-    @include tablet {
-      @include fontSize(16px);
+    @include helpers.tablet {
+      @include helpers.fontSize(16px);
 
-      column-gap: $tablet-narrow-layout-gutter * 0.5;
+      column-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
     }
 
-    @include desktop {
-      @include fontSize(18px);
+    @include helpers.desktop {
+      @include helpers.fontSize(18px);
 
-      column-gap: $desktop-narrow-layout-gutter * 0.5;
+      column-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
     }
   }
 
@@ -71,19 +72,19 @@
   flex-direction: row;
   flex-wrap: wrap;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter * 0.5;
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+    column-gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter * 0.5;
-    column-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+    column-gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter * 0.5;
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+    column-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .option {
@@ -91,16 +92,16 @@
     display: flex;
     flex-direction: column;
 
-    @include mobile {
-      width: calc(50% - $mobile-narrow-layout-gutter * 0.5);
+    @include helpers.mobile {
+      width: calc(50% - #{variables.$mobile-narrow-layout-gutter} * 0.5);
     }
 
-    @include tablet {
-      width: calc(50% - $tablet-narrow-layout-gutter * 0.5);
+    @include helpers.tablet {
+      width: calc(50% - #{variables.$tablet-narrow-layout-gutter} * 0.5);
     }
 
-    @include desktop {
-      width: calc(50% - $desktop-narrow-layout-gutter * 0.5);
+    @include helpers.desktop {
+      width: calc(50% - #{variables.$desktop-narrow-layout-gutter} * 0.5);
     }
   }
 }

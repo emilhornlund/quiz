@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .score {
   display: flex;
@@ -7,26 +8,26 @@
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  background-color: $white-1-50;
+  background-color: colors.$white-1-50;
   font-weight: bold;
 
   @mixin score-dimensions($size, $layout-gutter) {
-    padding: calc($layout-gutter * 0.5) calc($layout-gutter * 2);
+    padding: calc(#{$layout-gutter} * 0.5) calc(#{$layout-gutter} * 2);
     border-radius: calc($size / 2);
     line-height: $size * 0.7;
 
-    @include fontSize($size * 0.7);
+    @include helpers.fontSize($size * 0.7);
   }
 
-  @include mobile {
-    @include score-dimensions(42px, $mobile-narrow-layout-gutter);
+  @include helpers.mobile {
+    @include score-dimensions(42px, variables.$mobile-narrow-layout-gutter);
   }
 
-  @include tablet {
-    @include score-dimensions(52px, $tablet-narrow-layout-gutter);
+  @include helpers.tablet {
+    @include score-dimensions(52px, variables.$tablet-narrow-layout-gutter);
   }
 
-  @include desktop {
-    @include score-dimensions(62px, $desktop-narrow-layout-gutter);
+  @include helpers.desktop {
+    @include score-dimensions(62px, variables.$desktop-narrow-layout-gutter);
   }
 }

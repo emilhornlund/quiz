@@ -1,13 +1,13 @@
 @use 'sass:math';
 
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use '../../styles/colors';
+@use '../../styles/helpers';
 
 .circularProgressBar {
   display: block;
 
   .circleBackground {
-    stroke: $red-2;
+    stroke: colors.$red-2;
   }
 
   .circleProgress {
@@ -15,107 +15,107 @@
     transform-origin: 50% 50%;
     transition: stroke-dashoffset 0.35s;
 
-    stroke: $green-2;
+    stroke: colors.$green-2;
   }
 
   .progressText {
     font-family: inherit;
     font-weight: bold;
-    fill: $white;
+    fill: colors.$white;
   }
 
   &.default {
     .circleBackground {
-      stroke: $white;
+      stroke: colors.$white;
     }
     .circleProgress {
-      stroke: $orange-2;
+      stroke: colors.$orange-2;
     }
     .progressText {
-      fill: $white;
+      fill: colors.$white;
     }
   }
 
   &.correct {
     .circleBackground {
-      stroke: $red-2;
+      stroke: colors.$red-2;
     }
     .circleProgress {
-      stroke: $green-2;
+      stroke: colors.$green-2;
     }
     .progressText {
-      fill: $gray-4;
+      fill: colors.$gray-4;
     }
   }
 
   &.secondary {
     .circleBackground {
-      stroke: $white;
+      stroke: colors.$white;
     }
     .circleProgress {
-      stroke: $blue-1;
+      stroke: colors.$blue-1;
     }
     .progressText {
-      fill: $gray-2;
+      fill: colors.$gray-2;
     }
   }
 
   &.small {
-    @include mobile {
+    @include helpers.mobile {
       .progressText {
-        @include fontSize(10px)
+        @include helpers.fontSize(10px)
       }
     }
 
-    @include tablet {
+    @include helpers.tablet {
       .progressText {
-        @include fontSize(12px)
+        @include helpers.fontSize(12px)
       }
     }
 
-    @include desktop {
+    @include helpers.desktop {
       .progressText {
-        @include fontSize(14px)
+        @include helpers.fontSize(14px)
       }
     }
   }
 
   &.medium {
-    @include mobile {
+    @include helpers.mobile {
       .progressText {
-        @include fontSize(14px)
+        @include helpers.fontSize(14px)
       }
     }
 
-    @include tablet {
+    @include helpers.tablet {
       .progressText {
-        @include fontSize(16px)
+        @include helpers.fontSize(16px)
       }
     }
 
-    @include desktop {
+    @include helpers.desktop {
       .progressText {
-        @include fontSize(18px)
+        @include helpers.fontSize(18px)
       }
     }
   }
 
   &.large {
-    @include mobile {
+    @include helpers.mobile {
       .progressText {
-        @include fontSize(18px)
+        @include helpers.fontSize(18px)
       }
     }
 
-    @include tablet {
+    @include helpers.tablet {
       .progressText {
-        @include fontSize(20px)
+        @include helpers.fontSize(20px)
       }
     }
 
-    @include desktop {
+    @include helpers.desktop {
       .progressText {
-        @include fontSize(22px)
+        @include helpers.fontSize(22px)
       }
     }
   }

@@ -1,6 +1,8 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
-@import '../../styles/loading';
+@use 'sass:color';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/loading';
+@use '../../styles/variables';
 
 .questionResults {
   display: flex;
@@ -9,16 +11,16 @@
   align-items: center;
   flex: 1;
 
-  @include mobile {
-    gap: $mobile-layout-gutter;
+  @include helpers.mobile {
+    gap: variables.$mobile-layout-gutter;
   }
 
-  @include tablet {
-    gap: $tablet-layout-gutter;
+  @include helpers.tablet {
+    gap: variables.$tablet-layout-gutter;
   }
 
-  @include desktop {
-    gap: $desktop-layout-gutter;
+  @include helpers.desktop {
+    gap: variables.$desktop-layout-gutter;
   }
 
   .chips {
@@ -28,16 +30,16 @@
     align-items: center;
     flex-wrap: wrap;
 
-    @include mobile {
-      gap: $mobile-layout-gutter;
+    @include helpers.mobile {
+      gap: variables.$mobile-layout-gutter;
     }
 
-    @include tablet {
-      gap: $tablet-layout-gutter;
+    @include helpers.tablet {
+      gap: variables.$tablet-layout-gutter;
     }
 
-    @include desktop {
-      gap: $desktop-layout-gutter;
+    @include helpers.desktop {
+      gap: variables.$desktop-layout-gutter;
     }
 
     .chip {
@@ -49,43 +51,43 @@
       font-weight: bold;
       overflow: hidden;
 
-      @include mobile {
-        padding: $mobile-narrow-layout-gutter $mobile-layout-gutter;
-        column-gap: $mobile-layout-gutter;
-        border-radius: $mobile-layout-gutter;
+      @include helpers.mobile {
+        padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+        column-gap: variables.$mobile-layout-gutter;
+        border-radius: variables.$mobile-layout-gutter;
 
-        @include fontSize(16px);
+        @include helpers.fontSize(16px);
       }
 
-      @include tablet {
-        padding: $tablet-narrow-layout-gutter $tablet-layout-gutter;
-        column-gap: $tablet-layout-gutter;
-        border-radius: $tablet-layout-gutter;
+      @include helpers.tablet {
+        padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+        column-gap: variables.$tablet-layout-gutter;
+        border-radius: variables.$tablet-layout-gutter;
 
-        @include fontSize(22px);
+        @include helpers.fontSize(22px);
       }
 
-      @include desktop {
-        padding: $desktop-narrow-layout-gutter $desktop-layout-gutter;
-        column-gap: $desktop-layout-gutter;
-        border-radius: $desktop-layout-gutter;
+      @include helpers.desktop {
+        padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+        column-gap: variables.$desktop-layout-gutter;
+        border-radius: variables.$desktop-layout-gutter;
 
-        @include fontSize(28px);
+        @include helpers.fontSize(28px);
       }
 
       &.correct {
-        background-color: $green-1;
+        background-color: colors.$green-1;
 
         span {
-          background-color: $green-2;
+          background-color: colors.$green-2;
         }
       }
 
       &.incorrect {
-        background-color: $red-1;
+        background-color: colors.$red-1;
 
         span {
-          background-color: mix($gray-4, $red-2, 10%);
+          background-color: color.mix(colors.$gray-4, colors.$red-2, 10%);
         }
       }
 
@@ -94,33 +96,33 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        color: $white;
+        color: colors.$white;
 
-        @include mobile {
-          height: pxToRem(30px);
-          border-radius: pxToRem(calc(30px / 2));
-          padding: $mobile-layout-gutter;
-          column-gap: $mobile-narrow-layout-gutter;
+        @include helpers.mobile {
+          height: helpers.pxToRem(30px);
+          border-radius: helpers.pxToRem(calc(30px / 2));
+          padding: variables.$mobile-layout-gutter;
+          column-gap: variables.$mobile-narrow-layout-gutter;
 
-          @include fontSize(14px);
+          @include helpers.fontSize(14px);
         }
 
-        @include tablet {
-          height: pxToRem(40px);
-          border-radius: pxToRem(calc(40px / 2));
-          padding: $tablet-layout-gutter;
-          column-gap: $tablet-narrow-layout-gutter;
+        @include helpers.tablet {
+          height: helpers.pxToRem(40px);
+          border-radius: helpers.pxToRem(calc(40px / 2));
+          padding: variables.$tablet-layout-gutter;
+          column-gap: variables.$tablet-narrow-layout-gutter;
 
-          @include fontSize(18px);
+          @include helpers.fontSize(18px);
         }
 
-        @include desktop {
-          height: pxToRem(50px);
-          border-radius: pxToRem(calc(50px / 2));
-          padding: $desktop-layout-gutter;
-          column-gap: $desktop-narrow-layout-gutter;
+        @include helpers.desktop {
+          height: helpers.pxToRem(50px);
+          border-radius: helpers.pxToRem(calc(50px / 2));
+          padding: variables.$desktop-layout-gutter;
+          column-gap: variables.$desktop-narrow-layout-gutter;
 
-          @include fontSize(22px);
+          @include helpers.fontSize(22px);
         }
       }
 
@@ -129,7 +131,7 @@
         display: none;
         width: 100%;
         height: 100%;
-        background-color: $black-1-50;
+        background-color: colors.$black-1-50;
         font-family: inherit;
         appearance: none;
         -o-appearance: none;
@@ -152,33 +154,33 @@
         .loadingSpinner {
           @extend .loading-spinner;
 
-          @include mobile {
-            $--mobile-loading-spinner-size: calc($mobile-control-normal-height * 1.5);
-            @include loading-spinner-dimensions($--mobile-loading-spinner-size, $white, button-mobile-normal);
+          @include helpers.mobile {
+            $--mobile-loading-spinner-size: calc(#{variables.$mobile-control-normal-height} * 1.5);
+            @include loading.loading-spinner-dimensions($--mobile-loading-spinner-size, colors.$white, button-mobile-normal);
           }
 
-          @include tablet {
-            $--tablet-loading-spinner-size: calc($tablet-control-normal-height * 1.5);
-            @include loading-spinner-dimensions($--tablet-loading-spinner-size, $white, button-tablet-normal);
+          @include helpers.tablet {
+            $--tablet-loading-spinner-size: calc(#{variables.$tablet-control-normal-height} * 1.5);
+            @include loading.loading-spinner-dimensions($--tablet-loading-spinner-size, colors.$white, button-tablet-normal);
           }
 
-          @include desktop {
-            $--desktop-loading-spinner-size: calc($desktop-control-normal-height * 1.5);
-            @include loading-spinner-dimensions($--desktop-loading-spinner-size, $white, button-desktop-normal);
+          @include helpers.desktop {
+            $--desktop-loading-spinner-size: calc(#{variables.$desktop-control-normal-height} * 1.5);
+            @include loading.loading-spinner-dimensions($--desktop-loading-spinner-size, colors.$white, button-desktop-normal);
           }
         }
 
         .icon {
-          @include mobile {
-            @include fontSize(28px);
+          @include helpers.mobile {
+            @include helpers.fontSize(28px);
           }
 
-          @include tablet {
-            @include fontSize(33px);
+          @include helpers.tablet {
+            @include helpers.fontSize(33px);
           }
 
-          @include desktop {
-            @include fontSize(38px);
+          @include helpers.desktop {
+            @include helpers.fontSize(38px);
           }
         }
       }

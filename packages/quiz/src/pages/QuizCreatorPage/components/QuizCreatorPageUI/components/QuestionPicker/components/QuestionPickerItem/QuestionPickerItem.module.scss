@@ -1,14 +1,16 @@
-@import '../../../../../../../../styles/colors';
-@import '../../../../../../../../styles/helpers';
+@use 'sass:color';
+@use '../../../../../../../../styles/colors';
+@use '../../../../../../../../styles/helpers';
+@use '../../../../../../../../styles/variables';
 
-$small-question-picker-item-width: pxToRem(120px);
-$normal-question-picker-item-width: pxToRem(160px);
+$small-question-picker-item-width: helpers.pxToRem(120px);
+$normal-question-picker-item-width: helpers.pxToRem(160px);
 
-$small-question-picker-item-border-width: pxToRem(2px);
-$normal-question-picker-item-border-width: pxToRem(3px);
+$small-question-picker-item-border-width: helpers.pxToRem(2px);
+$normal-question-picker-item-border-width: helpers.pxToRem(3px);
 
-$small-question-picker-item-indicator-size: pxToRem(16px);
-$normal-question-picker-item-indicator-size: pxToRem(22px);
+$small-question-picker-item-indicator-size: helpers.pxToRem(16px);
+$normal-question-picker-item-indicator-size: helpers.pxToRem(22px);
 
 .questionPickerItemWrapper {
   position: relative;
@@ -17,22 +19,22 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
   justify-content: center;
   align-items: center;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
     min-width: $small-question-picker-item-width;
     max-width: $small-question-picker-item-width;
     height: $small-question-picker-item-width * 0.7;
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
     min-width: $normal-question-picker-item-width;
     max-width: $normal-question-picker-item-width;
     height: $normal-question-picker-item-width * 0.7;
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
     min-width: $normal-question-picker-item-width;
     max-width: $normal-question-picker-item-width;
     height: $normal-question-picker-item-width * 0.7;
@@ -42,41 +44,41 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: $gray-2;
+    color: colors.$gray-2;
     border-style: solid;
-    border-color: $gray-2;
+    border-color: colors.$gray-2;
     cursor: pointer;
-    background-color: $white;
+    background-color: colors.$white;
     appearance: none;
     width: 100%;
     height: 100%;
 
-    @include mobile {
-      row-gap: $mobile-narrow-layout-gutter * 0.5;
-      padding: pxToRem(10px) pxToRem(3px);
+    @include helpers.mobile {
+      row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+      padding: helpers.pxToRem(10px) helpers.pxToRem(3px);
       border-width: $small-question-picker-item-border-width;
-      border-radius: $mobile-border-radius * 0.5;
+      border-radius: calc(#{variables.$mobile-border-radius} * 0.5);
       height: $small-question-picker-item-width * 0.7;
     }
 
-    @include tablet {
-      row-gap: $tablet-narrow-layout-gutter * 0.5;
-      padding: pxToRem(16px) pxToRem(6px);
+    @include helpers.tablet {
+      row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+      padding: helpers.pxToRem(16px) helpers.pxToRem(6px);
       border-width: $normal-question-picker-item-border-width;
-      border-radius: $tablet-border-radius * 0.5;
+      border-radius: calc(#{variables.$tablet-border-radius} * 0.5);
     }
 
-    @include desktop {
-      row-gap: $desktop-narrow-layout-gutter * 0.5;
-      padding: pxToRem(16px) pxToRem(6px);
+    @include helpers.desktop {
+      row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+      padding: helpers.pxToRem(16px) helpers.pxToRem(6px);
       border-width: $normal-question-picker-item-border-width;
-      border-radius: $desktop-border-radius * 0.5;
+      border-radius: calc(#{variables.$desktop-border-radius} * 0.5);
     }
 
     &.questionPickerItemActive, &:hover {
-      border-color: $blue-2;
-      background-color: mix($white, $blue-2, 85%);
-      color: $gray-4;
+      border-color: colors.$blue-2;
+      background-color: color.mix(colors.$white, colors.$blue-2, 85%);
+      color: colors.$gray-4;
     }
 
     &.questionPickerItemActive {
@@ -84,32 +86,32 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
     }
 
     .questionPickerItemText {
-      @include mobile {
-        @include fontSize(10px);
+      @include helpers.mobile {
+        @include helpers.fontSize(10px);
       }
 
-      @include tablet {
-        @include fontSize(12px);
+      @include helpers.tablet {
+        @include helpers.fontSize(12px);
       }
 
-      @include desktop {
-        @include fontSize(12px);
+      @include helpers.desktop {
+        @include helpers.fontSize(12px);
       }
     }
 
     .questionPickerItemType {
       font-weight: bold;
 
-      @include mobile {
-        @include fontSize(8px);
+      @include helpers.mobile {
+        @include helpers.fontSize(8px);
       }
 
-      @include tablet {
-        @include fontSize(10px);
+      @include helpers.tablet {
+        @include helpers.fontSize(10px);
       }
 
-      @include desktop {
-        @include fontSize(10px);
+      @include helpers.desktop {
+        @include helpers.fontSize(10px);
       }
 
     }
@@ -124,15 +126,15 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
     pointer-events: none;
     width: 100%;
 
-    @include mobile {
+    @include helpers.mobile {
       height: calc(100% + $small-question-picker-item-indicator-size - $small-question-picker-item-border-width * 2);
     }
 
-    @include tablet {
+    @include helpers.tablet {
       height: calc(100% + $normal-question-picker-item-indicator-size - $normal-question-picker-item-border-width * 2);
     }
 
-    @include desktop {
+    @include helpers.desktop {
       height: calc(100% + $normal-question-picker-item-indicator-size - $normal-question-picker-item-border-width * 2);
     }
 
@@ -150,17 +152,17 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
         align-items: center;
         border-radius: 50%;
 
-        @include mobile {
+        @include helpers.mobile {
           width: $small-question-picker-item-indicator-size;
           height: $small-question-picker-item-indicator-size;
         }
 
-        @include tablet {
+        @include helpers.tablet {
           width: $normal-question-picker-item-indicator-size;
           height: $normal-question-picker-item-indicator-size;
         }
 
-        @include desktop {
+        @include helpers.desktop {
           width: $normal-question-picker-item-indicator-size;
           height: $normal-question-picker-item-indicator-size;
         }
@@ -169,24 +171,24 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
 
     .questionPickerItemOverlayTop {
       .questionPickerItemOverlayNumber {
-        background-color: $gray-2;
-        color: $white;
+        background-color: colors.$gray-2;
+        color: colors.$white;
         font-weight: bold;
 
-        @include mobile {
-          @include fontSize(10px);
+        @include helpers.mobile {
+          @include helpers.fontSize(10px);
         }
 
-        @include tablet {
-          @include fontSize(12px);
+        @include helpers.tablet {
+          @include helpers.fontSize(12px);
         }
 
-        @include desktop {
-          @include fontSize(12px);
+        @include helpers.desktop {
+          @include helpers.fontSize(12px);
         }
 
         &.questionPickerItemActive {
-          background-color: $blue-2;
+          background-color: colors.$blue-2;
         }
       }
     }
@@ -198,37 +200,37 @@ $normal-question-picker-item-indicator-size: pxToRem(22px);
         appearance: none;
         pointer-events: auto;
         cursor: pointer;
-        color: $white;
-        background-color: $gray-2;
+        color: colors.$white;
+        background-color: colors.$gray-2;
 
-        @include mobile {
-          @include fontSize(10px);
+        @include helpers.mobile {
+          @include helpers.fontSize(10px);
         }
 
-        @include tablet {
-          @include fontSize(12px);
+        @include helpers.tablet {
+          @include helpers.fontSize(12px);
         }
 
-        @include desktop {
-          @include fontSize(12px);
+        @include helpers.desktop {
+          @include helpers.fontSize(12px);
         }
       }
 
       .questionPickerItemOverlayError {
-        color: $orange-2;
-        background-color: $white;
+        color: colors.$orange-2;
+        background-color: colors.$white;
         pointer-events: auto;
 
-        @include mobile {
-          @include fontSize(16px);
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
         }
 
-        @include tablet {
-          @include fontSize(22px);
+        @include helpers.tablet {
+          @include helpers.fontSize(22px);
         }
 
-        @include desktop {
-          @include fontSize(22px);
+        @include helpers.desktop {
+          @include helpers.fontSize(22px);
         }
       }
     }

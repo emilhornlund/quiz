@@ -1,5 +1,6 @@
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .iconTooltipButton {
   -moz-appearance: none;
@@ -11,49 +12,49 @@
   font-family: inherit;
   outline: none;
 
-  @include mobile {
-    @include fontSize($mobile-control-normal-font-size);
+  @include helpers.mobile {
+    @include helpers.fontSize(variables.$mobile-control-normal-font-size);
   }
 
-  @include tablet {
-    @include fontSize($tablet-control-normal-font-size);
+  @include helpers.tablet {
+    @include helpers.fontSize(variables.$tablet-control-normal-font-size);
   }
 
-  @include desktop {
-    @include fontSize($desktop-control-normal-font-size);
+  @include helpers.desktop {
+    @include helpers.fontSize(variables.$desktop-control-normal-font-size);
   }
 }
 
 .iconTooltip {
   display: flex;
   flex-direction: column;
-  color: $gray-4;
-  z-index: $tooltip-z-index;
-  background-color: $turquoise-1;
-  max-width: $mobile-width;
+  color: colors.$gray-4;
+  z-index: variables.$tooltip-z-index;
+  background-color: colors.$turquoise-1;
+  max-width: variables.$mobile-width;
 
-  @include mobile {
-    @include fontSize($mobile-control-normal-font-size);
+  @include helpers.mobile {
+    @include helpers.fontSize(variables.$mobile-control-normal-font-size);
 
-    row-gap: $mobile-narrow-layout-gutter * 0.5;
-    padding: $mobile-narrow-layout-gutter * 0.5 $mobile-narrow-layout-gutter;
-    border-radius: $mobile-control-small-border-radius;
+    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+    padding: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5) variables.$mobile-narrow-layout-gutter;
+    border-radius: variables.$mobile-control-small-border-radius;
   }
 
-  @include tablet {
-    @include fontSize($tablet-control-normal-font-size);
+  @include helpers.tablet {
+    @include helpers.fontSize(variables.$tablet-control-normal-font-size);
 
-    row-gap: $tablet-narrow-layout-gutter * 0.5;
-    padding: $tablet-narrow-layout-gutter * 0.5 $tablet-narrow-layout-gutter;
-    border-radius: $tablet-control-small-border-radius;
+    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+    padding: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5) variables.$tablet-narrow-layout-gutter;
+    border-radius: variables.$tablet-control-small-border-radius;
   }
 
-  @include desktop {
-    @include fontSize($desktop-control-normal-font-size);
+  @include helpers.desktop {
+    @include helpers.fontSize(variables.$desktop-control-normal-font-size);
 
-    row-gap: $desktop-narrow-layout-gutter * 0.5;
-    padding: $desktop-narrow-layout-gutter * 0.5 $desktop-narrow-layout-gutter;
-    border-radius: $desktop-control-small-border-radius;
+    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+    padding: variables.$desktop-narrow-layout-gutter * 0.5 variables.$desktop-narrow-layout-gutter;
+    border-radius: variables.$desktop-control-small-border-radius;
   }
 
   ul {

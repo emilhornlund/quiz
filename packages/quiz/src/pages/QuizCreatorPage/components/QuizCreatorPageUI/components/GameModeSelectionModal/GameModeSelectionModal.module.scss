@@ -1,22 +1,24 @@
-@import '../../../../../../styles/colors.scss';
-@import '../../../../../../styles/helpers.scss';
+@use 'sass:color';
+@use '../../../../../../styles/colors';
+@use '../../../../../../styles/helpers';
+@use '../../../../../../styles/variables';
 
-$outline-offset: pxToRem(2px);
+$outline-offset: helpers.pxToRem(2px);
 
 .gameModeSelectionModalWrapper {
   display: flex;
   flex-direction: row;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .classic, .zeroToOneHundred {
@@ -24,46 +26,46 @@ $outline-offset: pxToRem(2px);
     flex-direction: column;
     flex: 1;
     appearance: none;
-    background-color: mix($white, $blue-2, 75%);
-    outline: mix($white, $blue-2, 75%) solid $outline-offset;
+    background-color: color.mix(colors.$white, colors.$blue-2, 75%);
+    outline: color.mix(colors.$white, colors.$blue-2, 75%) solid $outline-offset;
     outline-offset: $outline-offset;
     border: $outline-offset solid transparent;
     margin: calc($outline-offset * 2);
-    color: $gray-4;
+    color: colors.$gray-4;
     font-weight: bold;
     cursor: pointer;
 
-    @include mobile {
-      row-gap: $mobile-narrow-layout-gutter * 0.5;
-      padding: pxToRem(10px) pxToRem(2px);
-      border-width: pxToRem(1px);
-      border-radius: $mobile-border-radius;
+    @include helpers.mobile {
+      row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+      padding: helpers.pxToRem(10px) helpers.pxToRem(2px);
+      border-width: helpers.pxToRem(1px);
+      border-radius: variables.$mobile-border-radius;
 
-      @include fontSize(16px);
+      @include helpers.fontSize(16px);
     }
 
-    @include tablet {
-      row-gap: $tablet-narrow-layout-gutter * 0.5;
-      padding: pxToRem(13px) pxToRem(4px);
-      border-width: pxToRem(2px);
-      border-radius: $tablet-border-radius;
+    @include helpers.tablet {
+      row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+      padding: helpers.pxToRem(13px) helpers.pxToRem(4px);
+      border-width: helpers.pxToRem(2px);
+      border-radius: variables.$tablet-border-radius;
 
-      @include fontSize(18px);
+      @include helpers.fontSize(18px);
     }
 
-    @include desktop {
-      row-gap: $desktop-narrow-layout-gutter * 0.5;
-      padding: pxToRem(16px) pxToRem(6px);
-      border-width: pxToRem(3px);
-      border-radius: $desktop-border-radius;
+    @include helpers.desktop {
+      row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+      padding: helpers.pxToRem(16px) helpers.pxToRem(6px);
+      border-width: helpers.pxToRem(3px);
+      border-radius: variables.$desktop-border-radius;
 
-      @include fontSize(20px);
+      @include helpers.fontSize(20px);
     }
 
     &:hover {
-      background-color: mix($white, $blue-2, 85%);
-      outline-color: mix($white, $blue-2, 85%);
-      color: mix($white, $gray-4, 30%);
+      background-color: color.mix(colors.$white, colors.$blue-2, 85%);
+      outline-color: color.mix(colors.$white, colors.$blue-2, 85%);
+      color: color.mix(colors.$white, colors.$gray-4, 30%);
     }
 
     .description {
@@ -74,22 +76,22 @@ $outline-offset: pxToRem(2px);
       align-items: center;
       font-weight: normal;
 
-      @include mobile {
-        line-height: pxToRem(18px);
+      @include helpers.mobile {
+        line-height: helpers.pxToRem(18px);
 
-        @include fontSize(12px);
+        @include helpers.fontSize(12px);
       }
 
-      @include tablet {
-        line-height: pxToRem(21px);
+      @include helpers.tablet {
+        line-height: helpers.pxToRem(21px);
 
-        @include fontSize(14px);
+        @include helpers.fontSize(14px);
       }
 
-      @include desktop {
-        line-height: pxToRem(24px);
+      @include helpers.desktop {
+        line-height: helpers.pxToRem(24px);
 
-        @include fontSize(16px);
+        @include helpers.fontSize(16px);
       }
     }
   }

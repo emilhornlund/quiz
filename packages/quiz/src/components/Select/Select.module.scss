@@ -1,8 +1,11 @@
-@import '../../styles/inputs';
+@use '../../styles/inputs';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
-$mobile-select-normal-size: calc($mobile-control-normal-height * 0.4);
-$tablet-select-normal-size: calc($tablet-control-normal-height * 0.4);
-$desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
+$mobile-select-normal-size: calc(#{variables.$mobile-control-normal-height} * 0.4);
+$tablet-select-normal-size: calc(#{variables.$tablet-control-normal-height} * 0.4);
+$desktop-select-normal-size: calc(#{variables.$desktop-control-normal-height} * 0.4);
 
 .inputContainer {
   display: flex;
@@ -13,30 +16,30 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
 
     .selectIcon {
       position: absolute;
-      color: $control-text-normal-color;
+      color: colors.$control-text-normal-color;
 
-      @include mobile {
+      @include helpers.mobile {
         width: $mobile-select-normal-size;
         height: $mobile-select-normal-size;
-        right: $mobile-control-normal-layout-gutter;
+        right: variables.$mobile-control-normal-layout-gutter;
       }
 
-      @include tablet {
+      @include helpers.tablet {
         width: $tablet-select-normal-size;
         height: $tablet-select-normal-size;
-        right: $tablet-control-normal-layout-gutter;
+        right: variables.$tablet-control-normal-layout-gutter;
       }
 
-      @include desktop {
+      @include helpers.desktop {
         width: $desktop-select-normal-size;
         height: $desktop-select-normal-size;
-        right: $desktop-control-normal-layout-gutter;
+        right: variables.$desktop-control-normal-layout-gutter;
       }
     }
 
     &:has(> select:disabled) {
       .selectIcon {
-        color: $control-text-disabled-color;
+        color: colors.$control-text-disabled-color;
       }
     }
 
@@ -57,15 +60,15 @@ $desktop-select-normal-size: calc($desktop-control-normal-height * 0.4);
     @extend .input-error;
   }
 
-  @include mobile {
-    row-gap: $mobile-control-normal-layout-gutter;
+  @include helpers.mobile {
+    row-gap: variables.$mobile-control-normal-layout-gutter;
   }
 
-  @include tablet {
-    row-gap: $tablet-control-normal-layout-gutter;
+  @include helpers.tablet {
+    row-gap: variables.$tablet-control-normal-layout-gutter;
   }
 
-  @include desktop {
-    row-gap: $desktop-control-normal-layout-gutter;
+  @include helpers.desktop {
+    row-gap: variables.$desktop-control-normal-layout-gutter;
   }
 }

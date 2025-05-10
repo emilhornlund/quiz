@@ -1,6 +1,6 @@
-@use "sass:math";
-
-@import './variables.scss';
+@use 'sass:math';
+@use 'sass:color';
+@use './variables';
 
 @function pxToRem($size) {
   @return math.div($size, 16px) * 1rem;
@@ -12,24 +12,19 @@
 }
 
 @mixin mobile {
-  @media (max-width: #{$tablet-width - 1px}) {
+  @media (max-width: #{variables.$tablet-width - 1px}) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+  @media (min-width: #{variables.$tablet-width}) and (max-width: #{variables.$desktop-width - 1px}) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: #{$desktop-width}) {
+  @media (min-width: #{variables.$desktop-width}) {
     @content;
   }
-}
-
-@mixin recolor($color: #000, $opacity: 1) {
-  $lightness: lightness($color);
-  filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
 }

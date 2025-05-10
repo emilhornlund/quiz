@@ -1,36 +1,37 @@
-@import '../../../../styles/colors';
-@import '../../../../styles/helpers';
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
 .filterModalContainer {
   display: flex;
   flex-direction: column;
 
-  @include mobile {
-    gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .row {
     display: flex;
     flex-direction: column;
 
-    @include mobile {
-      row-gap: $mobile-narrow-layout-gutter * 0.5;
+    @include helpers.mobile {
+      row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
     }
 
-    @include tablet {
-      row-gap: $tablet-narrow-layout-gutter * 0.5;
+    @include helpers.tablet {
+      row-gap: calc(#{variables.$tablet-narrow-layout-gutter * 0.5});
     }
 
-    @include desktop {
-      row-gap: $desktop-narrow-layout-gutter * 0.5;
+    @include helpers.desktop {
+      row-gap: calc(#{variables.$desktop-narrow-layout-gutter * 0.5});
     }
 
     .label {
@@ -38,16 +39,16 @@
       flex-direction: column;
       font-weight: 700;
 
-      @include mobile {
-        @include fontSize(14px);
+      @include helpers.mobile {
+        @include helpers.fontSize(14px);
       }
 
-      @include tablet {
-        @include fontSize(16px);
+      @include helpers.tablet {
+        @include helpers.fontSize(16px);
       }
 
-      @include desktop {
-        @include fontSize(18px);
+      @include helpers.desktop {
+        @include helpers.fontSize(18px);
       }
     }
 
@@ -55,16 +56,16 @@
       display: flex;
       flex-direction: row;
 
-      @include mobile {
-        column-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        column-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        column-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
       }
 
       > div {

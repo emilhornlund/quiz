@@ -1,64 +1,65 @@
-@import '../../../../styles/colors';
-@import '../../../../styles/helpers';
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
 .details {
   display: grid;
   border-style: solid;
-  border-color: $white-1-50;
-  background-color: $white-1-80;
+  border-color: colors.$white-1-50;
+  background-color: colors.$white-1-80;
 
-  @include mobile {
+  @include helpers.mobile {
     grid-template-columns: 1fr 1fr;
-    gap: $mobile-narrow-layout-gutter;
+    gap: variables.$mobile-narrow-layout-gutter;
     width: 100%;
-    border-width: pxToRem(2px);
-    border-radius: $mobile-narrow-layout-gutter;
-    padding: $mobile-narrow-layout-gutter;
+    border-width: helpers.pxToRem(2px);
+    border-radius: variables.$mobile-narrow-layout-gutter;
+    padding: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
+  @include helpers.tablet {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: $tablet-narrow-layout-gutter;
-    width: $tablet-width;
-    border-width: pxToRem(3px);
-    border-radius: $tablet-narrow-layout-gutter;
-    padding: $tablet-narrow-layout-gutter;
+    gap: variables.$tablet-narrow-layout-gutter;
+    width: variables.$tablet-width;
+    border-width: helpers.pxToRem(3px);
+    border-radius: variables.$tablet-narrow-layout-gutter;
+    padding: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
+  @include helpers.desktop {
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: $desktop-narrow-layout-gutter;
-    width: $tablet-width;
-    border-width: pxToRem(4px);
-    border-radius: $desktop-narrow-layout-gutter;
-    padding: $desktop-narrow-layout-gutter;
+    gap: variables.$desktop-narrow-layout-gutter;
+    width: variables.$tablet-width;
+    border-width: helpers.pxToRem(4px);
+    border-radius: variables.$desktop-narrow-layout-gutter;
+    padding: variables.$desktop-narrow-layout-gutter;
   }
 
   .item {
     display: flex;
     flex-direction: column;
-    color: $gray-4;
+    color: colors.$gray-4;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    @include mobile {
-      gap: calc($mobile-narrow-layout-gutter * 0.5);
+    @include helpers.mobile {
+      gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
 
-      @include fontSize(16px);
+      @include helpers.fontSize(16px);
     }
 
-    @include tablet {
-      gap: calc($tablet-narrow-layout-gutter * 0.5);
+    @include helpers.tablet {
+      gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
 
-      @include fontSize(20px);
+      @include helpers.fontSize(20px);
     }
 
-    @include desktop {
-      gap: calc($desktop-narrow-layout-gutter * 0.5);
+    @include helpers.desktop {
+      gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
 
-      @include fontSize(18px);
+      @include helpers.fontSize(18px);
     }
   }
 }

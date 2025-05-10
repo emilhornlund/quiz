@@ -1,22 +1,23 @@
-@import '../../../../styles/helpers';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
 .profileDetailsForm {
   display: flex;
   flex-direction: row;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
     width: 100%;
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
-    width: $mobile-width;
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
+    width: variables.$mobile-width;
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
-    width: $mobile-width;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
+    width: variables.$mobile-width;
   }
 
   .column {

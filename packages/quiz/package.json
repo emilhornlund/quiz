@@ -63,7 +63,7 @@
     "jsdom": "^25.0.1",
     "msw": "^2.4.9",
     "prop-types": "^15.8.1",
-    "sass": "^1.79.4",
+    "sass": "^1.87.0",
     "storybook": "^8.3.3",
     "storybook-addon-remix-react-router": "^3.0.1",
     "vite": "^5.4.1",

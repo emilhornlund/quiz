@@ -1,5 +1,5 @@
-@import './colors';
-@import './helpers';
+@use './colors';
+@use './helpers';
 
 @mixin loading-spinner-dimensions($size, $color, $unique-name) {
   width: $size;
@@ -41,15 +41,15 @@
 
     &:nth-child(1) {
       animation-delay: -0.24s;
-      left: $--loading-spinner-bar-left * 1;
+      left: calc($--loading-spinner-bar-left * 1);
     }
     &:nth-child(2) {
       animation-delay: -0.12s;
-      left: $--loading-spinner-bar-left * 4;
+      left: calc($--loading-spinner-bar-left * 4);
     }
     &:nth-child(3) {
       animation-delay: 0s;
-      left: $--loading-spinner-bar-left * 7;
+      left: calc($--loading-spinner-bar-left * 7);
     }
   }
 }

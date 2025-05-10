@@ -1,6 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
-@import '../../styles/variables';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .typography {
   display: flex;
@@ -12,98 +12,98 @@
   &.title {
     font-weight: 900;
 
-    @include mobile {
+    @include helpers.mobile {
       line-height: 4rem;
 
-      @include fontSize($mobile-title-font-size);
+      @include helpers.fontSize(variables.$mobile-title-font-size);
     }
 
-    @include tablet {
+    @include helpers.tablet {
       line-height: 6rem;
 
-      @include fontSize($tablet-title-font-size);
+      @include helpers.fontSize(variables.$tablet-title-font-size);
     }
 
-    @include desktop {
+    @include helpers.desktop {
       line-height: 8rem;
 
-      @include fontSize($desktop-title-font-size);
+      @include helpers.fontSize(variables.$desktop-title-font-size);
     }
   }
 
   &.subtitle {
     font-weight: 700;
 
-    @include mobile {
-      @include fontSize($mobile-subtitle-font-size);
+    @include helpers.mobile {
+      @include helpers.fontSize(variables.$mobile-subtitle-font-size);
     }
 
-    @include tablet {
-      @include fontSize($tablet-subtitle-font-size);
+    @include helpers.tablet {
+      @include helpers.fontSize(variables.$tablet-subtitle-font-size);
     }
 
-    @include desktop {
-      @include fontSize($desktop-subtitle-font-size);
+    @include helpers.desktop {
+      @include helpers.fontSize(variables.$desktop-subtitle-font-size);
     }
   }
 
   &.text {
     font-weight: 400;
 
-    @include mobile {
-      @include fontSize($mobile-text-font-size);
+    @include helpers.mobile {
+      @include helpers.fontSize(variables.$mobile-text-font-size);
     }
 
-    @include tablet {
-      @include fontSize($tablet-text-font-size);
+    @include helpers.tablet {
+      @include helpers.fontSize(variables.$tablet-text-font-size);
     }
 
-    @include desktop {
-      @include fontSize($desktop-text-font-size);
+    @include helpers.desktop {
+      @include helpers.fontSize(variables.$desktop-text-font-size);
     }
   }
 
   &.link {
     font-weight: 400;
 
-    @include mobile {
-      @include fontSize($mobile-link-font-size);
+    @include helpers.mobile {
+      @include helpers.fontSize(variables.$mobile-link-font-size);
     }
 
-    @include tablet {
-      @include fontSize($tablet-link-font-size);
+    @include helpers.tablet {
+      @include helpers.fontSize(variables.$tablet-link-font-size);
     }
 
-    @include desktop {
-      @include fontSize($desktop-link-font-size);
+    @include helpers.desktop {
+      @include helpers.fontSize(variables.$desktop-link-font-size);
     }
   }
 
   &.small {
-    @include mobile {
+    @include helpers.mobile {
       width: 100%;
     }
 
-    @include tablet {
-      width: $mobile-width;
+    @include helpers.tablet {
+      width: variables.$mobile-width;
     }
 
-    @include desktop {
-      width: $mobile-width;
+    @include helpers.desktop {
+      width: variables.$mobile-width;
     }
   }
 
   &.medium {
-    @include mobile {
+    @include helpers.mobile {
       width: 100%;
     }
 
-    @include tablet {
-      width: $tablet-width;
+    @include helpers.tablet {
+      width: variables.$tablet-width;
     }
 
-    @include desktop {
-      width: $tablet-width;
+    @include helpers.desktop {
+      width: variables.$tablet-width;
     }
   }
 

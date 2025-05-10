@@ -1,5 +1,6 @@
-@import '../../../../styles/colors';
-@import '../../../../styles/helpers';
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
 .quizCreatorPageHeader {
   display: flex;
@@ -7,16 +8,16 @@
   justify-content: flex-end;
   flex: 1;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
   }
 }
 
@@ -27,39 +28,39 @@
   width: 100%;
   height: 100%;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter
   }
 
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter
   }
 
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .editorToggleSection {
     display: flex;
     flex-direction: column;
-    row-gap: $desktop-narrow-layout-gutter;
+    row-gap: variables.$desktop-narrow-layout-gutter;
 
-    @include mobile {
-      padding-bottom: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      padding-bottom: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      padding-bottom: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      padding-bottom: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      padding-bottom: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      padding-bottom: variables.$desktop-narrow-layout-gutter;
     }
 
     .divider {
       display: flex;
       flex-direction: column;
-      border: 1px solid $white;
+      border: 1px solid colors.$white;
     }
 
     .toggleButtonWrapper {

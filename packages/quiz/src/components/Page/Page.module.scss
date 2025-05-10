@@ -1,20 +1,21 @@
-@import '../../styles/colors.scss';
-@import '../../styles/helpers.scss';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 @mixin iconSize() {
-  @include mobile {
-    width: pxToRem(40px);
-    height: pxToRem(40px);
+  @include helpers.mobile {
+    width: helpers.pxToRem(40px);
+    height: helpers.pxToRem(40px);
   }
 
-  @include tablet {
-    width: pxToRem(42px);
-    height: pxToRem(42px);
+  @include helpers.tablet {
+    width: helpers.pxToRem(42px);
+    height: helpers.pxToRem(42px);
   }
 
-  @include desktop {
-    width: pxToRem(44px);
-    height: pxToRem(44px);
+  @include helpers.desktop {
+    width: helpers.pxToRem(44px);
+    height: helpers.pxToRem(44px);
   }
 }
 
@@ -25,8 +26,8 @@
   height: 100vh;
   max-height: 100dvh;
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-  background: $blue-1;
-  background: linear-gradient(180deg, $blue-1 25%, 75%, $blue-2);
+  background: colors.$blue-1;
+  background: linear-gradient(180deg, colors.$blue-1 25%, 75%, colors.$blue-2);
   overflow: hidden;
   -webkit-user-select: none;
   user-select: none;
@@ -37,17 +38,17 @@
     justify-content: space-between;
     width: 100%;
 
-    @include mobile {
-      padding: $mobile-narrow-layout-gutter $mobile-narrow-layout-gutter 0 $mobile-narrow-layout-gutter;
-      column-gap: $mobile-narrow-layout-gutter
+    @include helpers.mobile {
+      padding: variables.$mobile-narrow-layout-gutter variables.$mobile-narrow-layout-gutter 0 variables.$mobile-narrow-layout-gutter;
+      column-gap: variables.$mobile-narrow-layout-gutter
     }
-    @include tablet {
-      padding: $tablet-narrow-layout-gutter $tablet-narrow-layout-gutter 0 $tablet-narrow-layout-gutter;
-      column-gap: $tablet-narrow-layout-gutter
+    @include helpers.tablet {
+      padding: variables.$tablet-narrow-layout-gutter variables.$tablet-narrow-layout-gutter 0 variables.$tablet-narrow-layout-gutter;
+      column-gap: variables.$tablet-narrow-layout-gutter
     }
-    @include desktop {
-      padding: $desktop-narrow-layout-gutter $desktop-narrow-layout-gutter 0 $desktop-narrow-layout-gutter;
-      column-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      padding: variables.$desktop-narrow-layout-gutter variables.$desktop-narrow-layout-gutter 0 variables.$desktop-narrow-layout-gutter;
+      column-gap: variables.$desktop-narrow-layout-gutter;
     }
 
     .logo {
@@ -71,53 +72,53 @@
 
       .text {
         position: relative;
-        @include fontSize(20px);
+        @include helpers.fontSize(20px);
         font-weight: bolder;
-        color: $white;
-        top: pxToRem(-1px);
+        color: colors.$white;
+        top: helpers.pxToRem(-1px);
       }
 
-      @include mobile {
-        column-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter;
 
         .icon {
-          border-radius: pxToRem(10px);
+          border-radius: helpers.pxToRem(10px);
 
           &::after {
-            @include fontSize(24px);
+            @include helpers.fontSize(24px);
           }
         }
       }
 
-      @include tablet {
-        column-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter;
 
         .icon {
-          border-radius: pxToRem(12px);
+          border-radius: helpers.pxToRem(12px);
 
           &::after {
-            @include fontSize(28px);
-          }
-        }
-
-        .text {
-          @include fontSize(24px);
-        }
-      }
-
-      @include desktop {
-        column-gap: $desktop-narrow-layout-gutter;
-
-        .icon {
-          border-radius: pxToRem(14px);
-
-          &::after {
-            @include fontSize(32px);
+            @include helpers.fontSize(28px);
           }
         }
 
         .text {
-          @include fontSize(27px);
+          @include helpers.fontSize(24px);
+        }
+      }
+
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
+
+        .icon {
+          border-radius: helpers.pxToRem(14px);
+
+          &::after {
+            @include helpers.fontSize(32px);
+          }
+        }
+
+        .text {
+          @include helpers.fontSize(27px);
         }
       }
     }
@@ -129,14 +130,14 @@
       align-items: center;
       flex: 1;
 
-      @include mobile {
-        column-gap: $mobile-narrow-layout-gutter
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter
       }
-      @include tablet {
-        column-gap: $tablet-narrow-layout-gutter
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter
       }
-      @include desktop {
-        column-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
       }
 
       .verticalLine {
@@ -144,30 +145,30 @@
         border-left-color: white;
         height: 70%;
 
-        @include mobile {
+        @include helpers.mobile {
           border-left-width: 1px;
         }
-        @include tablet {
+        @include helpers.tablet {
           border-left-width: 2px;
         }
-        @include desktop {
+        @include helpers.desktop {
           border-left-width: 2px;
         }
       }
 
       a {
         font-weight: bold;
-        color: $white;
+        color: colors.$white;
 
 
-        @include mobile {
-          @include fontSize(16px);
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
         }
-        @include tablet {
-          @include fontSize(18px);
+        @include helpers.tablet {
+          @include helpers.fontSize(18px);
         }
-        @include desktop {
-          @include fontSize(20px);
+        @include helpers.desktop {
+          @include helpers.fontSize(20px);
         }
       }
 
@@ -189,10 +190,10 @@
           padding: 0;
 
           img {
-            @include recolor($white);
+            filter: brightness(0) saturate(100%) invert(100%) sepia(4%) saturate(1%) hue-rotate(271deg) brightness(104%) contrast(100%);
 
             &:hover {
-              @include recolor($white, 0.8);
+              filter: brightness(0) saturate(100%) invert(93%) sepia(16%) saturate(219%) hue-rotate(181deg) brightness(95%) contrast(86%);
             }
 
             @include iconSize();
@@ -201,14 +202,14 @@
       }
     }
 
-    @include tablet {
+    @include helpers.tablet {
       &:not(&.fullWidth) {
-        width: $tablet-width;
+        width: variables.$tablet-width;
       }
     }
-    @include desktop {
+    @include helpers.desktop {
       &:not(&.fullWidth) {
-        width: $desktop-width;
+        width: variables.$desktop-width;
       }
     }
   }
@@ -250,43 +251,43 @@
       height: 100%;
     }
 
-    @include mobile {
-      row-gap: $mobile-layout-gutter * 0.5;
-      padding: $mobile-layout-gutter;
+    @include helpers.mobile {
+      row-gap: calc(#{variables.$mobile-layout-gutter} * 0.5);
+      padding: variables.$mobile-layout-gutter;
       width: 100%;
     }
 
-    @include tablet {
-      row-gap: $tablet-layout-gutter;
-      padding: $tablet-layout-gutter;
+    @include helpers.tablet {
+      row-gap: variables.$tablet-layout-gutter;
+      padding: variables.$tablet-layout-gutter;
 
       &.smallWidth {
-        width: $mobile-width;
+        width: variables.$mobile-width;
       }
 
       &.mediumWidth {
-        width: $tablet-width;
+        width: variables.$tablet-width;
       }
 
       &.fullWidth {
-        width: $tablet-width;
+        width: variables.$tablet-width;
       }
     }
 
-    @include desktop {
-      row-gap: $desktop-layout-gutter;
-      padding: $desktop-layout-gutter;
+    @include helpers.desktop {
+      row-gap: variables.$desktop-layout-gutter;
+      padding: variables.$desktop-layout-gutter;
 
       &.smallWidth {
-        width: $mobile-width;
+        width: variables.$mobile-width;
       }
 
       &.mediumWidth {
-        width: $tablet-width;
+        width: variables.$tablet-width;
       }
 
       &.fullWidth {
-        width: $desktop-width;
+        width: variables.$desktop-width;
       }
     }
   }
@@ -297,28 +298,28 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    color: $white;
+    color: colors.$white;
 
-    @include mobile() {
-      padding: 0 $mobile-narrow-layout-gutter $mobile-narrow-layout-gutter $mobile-narrow-layout-gutter;
-      column-gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile() {
+      padding: 0 variables.$mobile-narrow-layout-gutter variables.$mobile-narrow-layout-gutter variables.$mobile-narrow-layout-gutter;
+      column-gap: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      padding: 0 $tablet-narrow-layout-gutter $tablet-narrow-layout-gutter $tablet-narrow-layout-gutter;
-      column-gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      padding: 0 variables.$tablet-narrow-layout-gutter variables.$tablet-narrow-layout-gutter variables.$tablet-narrow-layout-gutter;
+      column-gap: variables.$tablet-narrow-layout-gutter;
 
       &:not(&.fullWidth) {
-        width: $tablet-width;
+        width: variables.$tablet-width;
       }
     }
 
-    @include desktop {
-      padding: 0 $desktop-narrow-layout-gutter $desktop-narrow-layout-gutter $desktop-narrow-layout-gutter;
-      column-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      padding: 0 variables.$desktop-narrow-layout-gutter variables.$desktop-narrow-layout-gutter variables.$desktop-narrow-layout-gutter;
+      column-gap: variables.$desktop-narrow-layout-gutter;
 
       &:not(&.fullWidth) {
-        width: $desktop-width;
+        width: variables.$desktop-width;
       }
     }
   }

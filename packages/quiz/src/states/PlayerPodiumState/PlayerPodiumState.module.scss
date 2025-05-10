@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .content {
   display: flex;
@@ -8,15 +9,15 @@
   align-items: center;
   flex: 1;
 
-  @include mobile {
-    row-gap: $mobile-layout-gutter;
+  @include helpers.mobile {
+    row-gap: variables.$mobile-layout-gutter;
   }
 
-  @include tablet {
-    row-gap: $tablet-layout-gutter;
+  @include helpers.tablet {
+    row-gap: variables.$tablet-layout-gutter;
   }
 
-  @include desktop {
-    row-gap: $desktop-layout-gutter;
+  @include helpers.desktop {
+    row-gap: variables.$desktop-layout-gutter;
   }
 }

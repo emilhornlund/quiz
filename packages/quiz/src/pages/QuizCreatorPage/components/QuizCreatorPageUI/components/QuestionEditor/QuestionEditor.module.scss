@@ -1,20 +1,21 @@
-@import '../../../../../../styles/colors.scss';
-@import '../../../../../../styles/helpers.scss';
+@use '../../../../../../styles/colors';
+@use '../../../../../../styles/helpers';
+@use '../../../../../../styles/variables';
 
 .questionEditorContainer, .section {
   display: flex;
   flex-direction: column;
 
-  @include mobile {
-    row-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    row-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    row-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .section {
@@ -22,16 +23,16 @@
     flex-direction: row;
     flex-wrap: wrap;
 
-    @include mobile {
-      gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      gap: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      gap: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      gap: variables.$desktop-narrow-layout-gutter;
     }
   }
 }

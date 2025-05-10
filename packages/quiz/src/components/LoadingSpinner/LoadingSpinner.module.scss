@@ -1,22 +1,22 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
-@import '../../styles/loading';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/loading';
 
 .loadingSpinnerContainer {
   @extend .loading-spinner;
 
-  @include mobile {
-    $--mobile-loading-spinner-size: pxToRem(80px);
-    @include loading-spinner-dimensions($--mobile-loading-spinner-size, $white, default-mobile);
+  @include helpers.mobile {
+    $--mobile-loading-spinner-size: helpers.pxToRem(80px);
+    @include loading.loading-spinner-dimensions($--mobile-loading-spinner-size, colors.$white, default-mobile);
   }
 
-  @include tablet {
-    $--tablet-loading-spinner-size: pxToRem(100px);
-    @include loading-spinner-dimensions($--tablet-loading-spinner-size, $white, default-tablet);
+  @include helpers.tablet {
+    $--tablet-loading-spinner-size: helpers.pxToRem(100px);
+    @include loading.loading-spinner-dimensions($--tablet-loading-spinner-size, colors.$white, default-tablet);
   }
 
-  @include desktop {
-    $--desktop-loading-spinner-size: pxToRem(120px);
-    @include loading-spinner-dimensions($--desktop-loading-spinner-size, $white, default-desktop);
+  @include helpers.desktop {
+    $--desktop-loading-spinner-size: helpers.pxToRem(120px);
+    @include loading.loading-spinner-dimensions($--desktop-loading-spinner-size, colors.$white, default-desktop);
   }
 }

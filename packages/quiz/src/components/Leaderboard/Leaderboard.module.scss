@@ -1,5 +1,6 @@
-@import '../../styles/colors';
-@import '../../styles/helpers';
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .main {
   display: grid;
@@ -11,54 +12,54 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: $white;
+    background-color: colors.$white;
     border-radius: 0;
-    color: $black-1-70;
+    color: colors.$black-1-70;
 
-    @include mobile {
-      @include fontSize(16px);
+    @include helpers.mobile {
+      @include helpers.fontSize(16px);
 
-      padding: $mobile-narrow-layout-gutter;
+      padding: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      @include fontSize(22px);
+    @include helpers.tablet {
+      @include helpers.fontSize(22px);
 
-      padding: $tablet-narrow-layout-gutter;
+      padding: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      @include fontSize(28px);
+    @include helpers.desktop {
+      @include helpers.fontSize(28px);
 
-      padding: $desktop-narrow-layout-gutter;
+      padding: variables.$desktop-narrow-layout-gutter;
     }
 
     &.podium:nth-child(-n+3) {
-      background-color: $gold;
+      background-color: colors.$gold;
     }
 
     &.podium:nth-child(n+4):nth-child(-n+6) {
-      background-color: $silver;
+      background-color: colors.$silver;
     }
 
     &.podium:nth-child(n+7):nth-child(-n+9) {
-      background-color: $bronze;
+      background-color: colors.$bronze;
     }
 
     &:nth-child(3n+1) {
-      @include mobile {
-        border-top-left-radius: $mobile-narrow-layout-gutter;
-        border-bottom-left-radius: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        border-top-left-radius: variables.$mobile-narrow-layout-gutter;
+        border-bottom-left-radius: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        border-top-left-radius: $tablet-narrow-layout-gutter;
-        border-bottom-left-radius: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        border-top-left-radius: variables.$tablet-narrow-layout-gutter;
+        border-bottom-left-radius: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        border-top-left-radius: $desktop-narrow-layout-gutter;
-        border-bottom-left-radius: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        border-top-left-radius: variables.$desktop-narrow-layout-gutter;
+        border-bottom-left-radius: variables.$desktop-narrow-layout-gutter;
       }
     }
 
@@ -66,19 +67,19 @@
       align-items: flex-end;
       font-weight: bold;
 
-      @include mobile {
-        border-top-right-radius: $mobile-narrow-layout-gutter;
-        border-bottom-right-radius: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        border-top-right-radius: variables.$mobile-narrow-layout-gutter;
+        border-bottom-right-radius: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        border-top-right-radius: $tablet-narrow-layout-gutter;
-        border-bottom-right-radius: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        border-top-right-radius: variables.$tablet-narrow-layout-gutter;
+        border-bottom-right-radius: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        border-top-right-radius: $desktop-narrow-layout-gutter;
-        border-bottom-right-radius: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        border-top-right-radius: variables.$desktop-narrow-layout-gutter;
+        border-bottom-right-radius: variables.$desktop-narrow-layout-gutter;
       }
     }
 
@@ -92,29 +93,29 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background-color: $black-1-10;
-        color: $black-1-70;
+        background-color: colors.$black-1-10;
+        color: colors.$black-1-70;
         font-weight: bold;
 
-        @include mobile {
-          width: pxToRem(30px);
-          height: pxToRem(30px);
+        @include helpers.mobile {
+          width: helpers.pxToRem(30px);
+          height: helpers.pxToRem(30px);
           padding: 0.2rem;
-          @include fontSize(16px);
+          @include helpers.fontSize(16px);
         }
 
-        @include tablet {
-          width: pxToRem(40px);
-          height: pxToRem(40px);
+        @include helpers.tablet {
+          width: helpers.pxToRem(40px);
+          height: helpers.pxToRem(40px);
           padding: 0.2rem;
-          @include fontSize(22px);
+          @include helpers.fontSize(22px);
         }
 
-        @include desktop {
-          width: pxToRem(50px);
-          height: pxToRem(50px);
+        @include helpers.desktop {
+          width: helpers.pxToRem(50px);
+          height: helpers.pxToRem(50px);
           padding: 0.2rem;
-          @include fontSize(28px);
+          @include helpers.fontSize(28px);
         }
       }
     }
@@ -125,16 +126,16 @@
       justify-content: flex-start;
       align-items: center;
 
-      @include mobile {
-        column-gap: $mobile-narrow-layout-gutter;
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter;
       }
 
-      @include tablet {
-        column-gap: $tablet-narrow-layout-gutter;
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter;
       }
 
-      @include desktop {
-        column-gap: $desktop-narrow-layout-gutter;
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
       }
     }
 
@@ -142,22 +143,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: $black-1-10;
-      color: $black-1-80;
+      background-color: colors.$black-1-10;
+      color: colors.$black-1-80;
 
-      @include mobile {
-        padding: 0 $mobile-narrow-layout-gutter;
-        border-radius: pxToRem(8px);
+      @include helpers.mobile {
+        padding: 0 variables.$mobile-narrow-layout-gutter;
+        border-radius: helpers.pxToRem(8px);
       }
 
-      @include tablet {
-        padding: 0 $tablet-narrow-layout-gutter;
-        border-radius: pxToRem(10px);
+      @include helpers.tablet {
+        padding: 0 variables.$tablet-narrow-layout-gutter;
+        border-radius: helpers.pxToRem(10px);
       }
 
-      @include desktop {
-        padding: 0 $desktop-narrow-layout-gutter;
-        border-radius: pxToRem(12px);
+      @include helpers.desktop {
+        padding: 0 variables.$desktop-narrow-layout-gutter;
+        border-radius: helpers.pxToRem(12px);
       }
     }
   }

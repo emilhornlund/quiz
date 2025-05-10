@@ -23,6 +23,13 @@ export default defineConfig(({ mode }) => {
       },
     },
     base: env.VITE_BASE_URL,
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern',
+        },
+      },
+    },
     test: {
       environment: 'jsdom',
       globals: true,

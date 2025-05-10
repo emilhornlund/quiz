@@ -1,4 +1,5 @@
-@import '../../styles/helpers.scss';
+@use '../../styles/helpers';
+@use '../../styles/variables';
 
 .pagination {
   display: flex;
@@ -7,16 +8,16 @@
   align-items: center;
   width: 100%;
 
-  @include mobile {
-    column-gap: $mobile-narrow-layout-gutter;
+  @include helpers.mobile {
+    column-gap: variables.$mobile-narrow-layout-gutter;
   }
 
-  @include tablet {
-    column-gap: $tablet-narrow-layout-gutter;
+  @include helpers.tablet {
+    column-gap: variables.$tablet-narrow-layout-gutter;
   }
 
-  @include desktop {
-    column-gap: $desktop-narrow-layout-gutter;
+  @include helpers.desktop {
+    column-gap: variables.$desktop-narrow-layout-gutter;
   }
 
   .navigation {
@@ -31,16 +32,16 @@
       justify-content: flex-end;
     }
 
-    @include mobile {
-      column-gap: $mobile-narrow-layout-gutter;
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
     }
 
-    @include tablet {
-      column-gap: $tablet-narrow-layout-gutter;
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
     }
 
-    @include desktop {
-      column-gap: $desktop-narrow-layout-gutter;
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
     }
   }
 
@@ -50,16 +51,16 @@
     justify-content: center;
     flex: 1;
 
-    @include mobile {
-      @include fontSize(16px);
+    @include helpers.mobile {
+      @include helpers.fontSize(16px);
     }
 
-    @include tablet {
-      @include fontSize(18px);
+    @include helpers.tablet {
+      @include helpers.fontSize(18px);
     }
 
-    @include desktop {
-      @include fontSize(20px);
+    @include helpers.desktop {
+      @include helpers.fontSize(20px);
     }
   }
 }
