@@ -36,7 +36,7 @@ spec:
             - name: VITE_QUIZ_SERVICE_URL
               value: "/quiz-service/api"
             - name: VITE_BASE_URL
-              value: "https://quiz.emilhornlund.com"
+              value: "https://klurigo.com"
             - name: QUIZ_SERVICE_PROXY
               value: "http://quiz-service.quiz.svc.cluster.local:8080/api"
           ports:
