@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    base: env.VITE_BASE_URL,
+    base: '/',
     css: {
       preprocessorOptions: {
         scss: {
