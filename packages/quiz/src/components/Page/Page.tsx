@@ -82,7 +82,7 @@ const Page: React.FC<PageProps> = ({
       <div className={classNames(styles.header)}>
         <button className={styles.logo} onClick={() => navigate('/')}>
           <img className={styles.icon} src={KlurigoIcon} alt="Klurigo" />
-          <span className={styles.text}>Quiz</span>
+          <span className={styles.text}>Klurigo</span>
         </button>
         <div className={styles.side}>
           {discover && !isMobile && <Link to="/discover">Discover</Link>}

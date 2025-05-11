@@ -19,7 +19,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1047,7 +1047,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1208,7 +1208,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1369,7 +1369,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1532,7 +1532,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

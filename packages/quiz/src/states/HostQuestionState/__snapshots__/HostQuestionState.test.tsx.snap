@@ -19,7 +19,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -283,7 +283,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -565,7 +565,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -811,7 +811,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1051,7 +1051,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1287,7 +1287,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

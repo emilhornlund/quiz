@@ -19,7 +19,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -332,7 +332,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

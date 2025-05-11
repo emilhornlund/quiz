@@ -19,7 +19,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with no results 1`]
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -148,7 +148,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

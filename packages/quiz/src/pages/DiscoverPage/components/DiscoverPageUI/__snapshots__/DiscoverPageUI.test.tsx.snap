@@ -19,7 +19,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

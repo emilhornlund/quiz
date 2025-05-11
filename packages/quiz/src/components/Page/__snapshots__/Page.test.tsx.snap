@@ -19,7 +19,7 @@ exports[`should render Page with default props 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -54,7 +54,7 @@ exports[`should render Page with header 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -100,7 +100,7 @@ exports[`should render Page with profile 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

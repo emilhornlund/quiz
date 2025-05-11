@@ -19,7 +19,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

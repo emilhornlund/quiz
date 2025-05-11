@@ -19,7 +19,7 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

@@ -19,7 +19,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -182,7 +182,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -361,7 +361,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -508,7 +508,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -685,7 +685,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -832,7 +832,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

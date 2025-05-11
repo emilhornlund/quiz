@@ -19,7 +19,7 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div

@@ -19,7 +19,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -355,7 +355,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -777,7 +777,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1027,7 +1027,7 @@ exports[`HostResultState > should render HostResultState with question type rang
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1578,7 +1578,7 @@ exports[`HostResultState > should render HostResultState with question type true
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
@@ -1828,7 +1828,7 @@ exports[`HostResultState > should render HostResultState with question type type
         <span
           class="text"
         >
-          Quiz
+          Klurigo
         </span>
       </button>
       <div
