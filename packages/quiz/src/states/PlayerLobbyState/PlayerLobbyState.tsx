@@ -3,11 +3,12 @@ import React, { FC, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import HourglassIcon from '../../assets/images/hourglass-icon.svg'
 import {
   ConfirmDialog,
   IconButtonArrowLeft,
   NicknameChip,
-  RocketImage,
+  PageProminentIcon,
   Typography,
 } from '../../components'
 import { useAuthContext } from '../../context/auth'
@@ -69,7 +70,7 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
             onClick={() => setShowConfirmLeaveGameDialog(true)}
           />
         }>
-        <RocketImage />
+        <PageProminentIcon src={HourglassIcon} alt="Hourglass" />
         <NicknameChip value={nickname} />
         <Typography variant="title" size="medium">
           You’re in the waiting room

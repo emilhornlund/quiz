@@ -11,8 +11,10 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -54,6 +56,14 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
     <div
       class="content fullWidth centerAlign"
     >
+      <div
+        class="main"
+      >
+        <img
+          alt="Megaphone"
+          src="/src/assets/images/megaphone-icon.svg"
+        />
+      </div>
       <div
         class="typography title medium"
       >

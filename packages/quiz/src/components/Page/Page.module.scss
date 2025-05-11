@@ -64,10 +64,17 @@
       padding: 0;
 
       .icon {
-        background-image: url(../../assets/images/logo-small.svg);
-        background-size: 100% auto;
+        @include helpers.mobile {
+          height: helpers.pxToRem(40px);
+        }
 
-        @include iconSize();
+        @include helpers.tablet {
+          height: helpers.pxToRem(42px);
+        }
+
+        @include helpers.desktop {
+          height: helpers.pxToRem(44px);
+        }
       }
 
       .text {
@@ -80,26 +87,10 @@
 
       @include helpers.mobile {
         column-gap: variables.$mobile-narrow-layout-gutter;
-
-        .icon {
-          border-radius: helpers.pxToRem(10px);
-
-          &::after {
-            @include helpers.fontSize(24px);
-          }
-        }
       }
 
       @include helpers.tablet {
         column-gap: variables.$tablet-narrow-layout-gutter;
-
-        .icon {
-          border-radius: helpers.pxToRem(12px);
-
-          &::after {
-            @include helpers.fontSize(28px);
-          }
-        }
 
         .text {
           @include helpers.fontSize(24px);
@@ -108,14 +99,6 @@
 
       @include helpers.desktop {
         column-gap: variables.$desktop-narrow-layout-gutter;
-
-        .icon {
-          border-radius: helpers.pxToRem(14px);
-
-          &::after {
-            @include helpers.fontSize(32px);
-          }
-        }
 
         .text {
           @include helpers.fontSize(27px);

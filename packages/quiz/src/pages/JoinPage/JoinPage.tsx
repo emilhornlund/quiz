@@ -7,10 +7,12 @@ import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import UsersIcon from '../../assets/images/users-icon.svg'
 import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
   Page,
+  PageProminentIcon,
   TextField,
   Typography,
 } from '../../components'
@@ -70,6 +72,7 @@ const JoinPage: FC = () => {
           onClick={() => navigate(-1)}
         />
       }>
+      <PageProminentIcon src={UsersIcon} alt="Users" />
       <Typography variant="title" size="medium">
         {title}
       </Typography>

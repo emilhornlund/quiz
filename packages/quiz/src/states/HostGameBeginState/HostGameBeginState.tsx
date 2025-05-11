@@ -1,7 +1,8 @@
 import { GameBeginHostEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { LoadingSpinner, Typography } from '../../components'
+import MegaphoneIcon from '../../assets/images/megaphone-icon.svg'
+import { LoadingSpinner, PageProminentIcon, Typography } from '../../components'
 import { GamePage } from '../common'
 
 export interface HostGameBeginStateProps {
@@ -10,6 +11,7 @@ export interface HostGameBeginStateProps {
 
 const HostGameBeginState: FC<HostGameBeginStateProps> = () => (
   <GamePage>
+    <PageProminentIcon src={MegaphoneIcon} alt="Megaphone" />
     <Typography variant="title" size="medium">
       Loading Game
     </Typography>

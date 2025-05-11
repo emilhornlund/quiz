@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
 import Bars from '../../assets/images/bars.svg'
+import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import { classNames } from '../../utils/helpers'
 import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
 import { Menu, MenuItem, MenuSeparator } from '../Menu'
@@ -80,7 +81,7 @@ const Page: React.FC<PageProps> = ({
     <div className={styles.main}>
       <div className={classNames(styles.header)}>
         <button className={styles.logo} onClick={() => navigate('/')}>
-          <span className={styles.icon} />
+          <img className={styles.icon} src={KlurigoIcon} alt="Klurigo" />
           <span className={styles.text}>Quiz</span>
         </button>
         <div className={styles.side}>

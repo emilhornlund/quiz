@@ -11,8 +11,10 @@ exports[`HostResultState > should render HostResultState with question type mult
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -345,8 +347,10 @@ exports[`HostResultState > should render HostResultState with question type mult
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -765,8 +769,10 @@ exports[`HostResultState > should render HostResultState with question type mult
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1013,8 +1019,10 @@ exports[`HostResultState > should render HostResultState with question type rang
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1562,8 +1570,10 @@ exports[`HostResultState > should render HostResultState with question type true
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1810,8 +1820,10 @@ exports[`HostResultState > should render HostResultState with question type type
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"

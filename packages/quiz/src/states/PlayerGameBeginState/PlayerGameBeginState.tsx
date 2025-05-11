@@ -1,7 +1,13 @@
 import { GameBeginPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { LoadingSpinner, NicknameChip, Typography } from '../../components'
+import BellRingIcon from '../../assets/images/bell-ring-icon.svg'
+import {
+  LoadingSpinner,
+  NicknameChip,
+  PageProminentIcon,
+  Typography,
+} from '../../components'
 import { GamePage } from '../common'
 
 export interface PlayerGameBeginStateProps {
@@ -14,13 +20,14 @@ const PlayerGameBeginState: FC<PlayerGameBeginStateProps> = ({
   },
 }) => (
   <GamePage>
+    <PageProminentIcon src={BellRingIcon} alt="BellRing" />
+    <NicknameChip value={nickname} />
     <Typography variant="title" size="medium">
       Get ready!
     </Typography>
     <Typography variant="text" size="small">
       The game starts any second
     </Typography>
-    <NicknameChip value={nickname} />
     <LoadingSpinner />
   </GamePage>
 )

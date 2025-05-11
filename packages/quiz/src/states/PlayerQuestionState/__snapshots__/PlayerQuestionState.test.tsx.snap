@@ -11,8 +11,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -172,8 +174,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -349,8 +353,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -494,8 +500,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -669,8 +677,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -814,8 +824,10 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"

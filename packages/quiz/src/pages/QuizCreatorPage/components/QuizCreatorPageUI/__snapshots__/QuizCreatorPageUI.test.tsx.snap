@@ -11,8 +11,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1037,8 +1039,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1196,8 +1200,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1355,8 +1361,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -1516,8 +1524,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"

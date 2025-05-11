@@ -11,8 +11,10 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -58,8 +60,8 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
         class="main"
       >
         <img
-          alt="rocket"
-          src="/src/assets/images/rocket.svg"
+          alt="Hourglass"
+          src="/src/assets/images/hourglass-icon.svg"
         />
       </div>
       <div

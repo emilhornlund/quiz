@@ -11,8 +11,10 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"
@@ -322,8 +324,10 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"

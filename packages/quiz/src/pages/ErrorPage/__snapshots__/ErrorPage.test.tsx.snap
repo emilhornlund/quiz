@@ -11,8 +11,10 @@ exports[`ErrorPage > should match snapshot 1`] = `
       <button
         class="logo"
       >
-        <span
+        <img
+          alt="Klurigo"
           class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
         />
         <span
           class="text"

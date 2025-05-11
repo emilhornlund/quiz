@@ -3,10 +3,11 @@ import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
   IconButtonArrowRight,
   Page,
-  RocketImage,
+  PageProminentIcon,
   TextField,
   Typography,
 } from '../../components'
@@ -51,7 +52,7 @@ const HomePage: FC = () => {
 
   return (
     <Page discover profile>
-      <RocketImage />
+      <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
       <Typography variant="title" size="medium">
         Let’s play
       </Typography>

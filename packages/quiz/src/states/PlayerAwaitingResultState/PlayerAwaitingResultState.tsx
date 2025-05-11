@@ -1,10 +1,11 @@
 import { GameAwaitingResultPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
+import HourglassIcon from '../../assets/images/hourglass-icon.svg'
 import {
   LoadingSpinner,
+  PageProminentIcon,
   PlayerGameFooter,
-  RocketImage,
   Typography,
 } from '../../components'
 import { GamePage } from '../common'
@@ -31,7 +32,7 @@ const PlayerAwaitingResultState: FC<PlayerAwaitingResultStateProps> = ({
         totalScore={totalScore}
       />
     }>
-    <RocketImage />
+    <PageProminentIcon src={HourglassIcon} alt="Hourglass" />
     <Typography variant="title" size="medium">
       Waiting for other players
     </Typography>
