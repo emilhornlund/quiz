@@ -158,11 +158,11 @@ const QuizCreatorPage: FC = () => {
 
     if (quizId) {
       updateQuiz(quizId, requestData)
-        .then(() => navigate('/player/profile'))
+        .then(() => navigate('/player/quizzes'))
         .finally(() => setIsSavingQuiz(false))
     } else {
       createQuiz(requestData)
-        .then(() => navigate('/player/profile'))
+        .then(() => navigate('/player/quizzes'))
         .finally(() => setIsSavingQuiz(false))
     }
   }
