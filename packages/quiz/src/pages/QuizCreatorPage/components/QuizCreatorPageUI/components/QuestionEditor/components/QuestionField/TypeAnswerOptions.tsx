@@ -1,4 +1,7 @@
-import { QUIZ_TYPE_ANSWER_OPTIONS_MAX } from '@quiz/common'
+import {
+  QUIZ_TYPE_ANSWER_OPTIONS_MAX,
+  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
+} from '@quiz/common'
 import React, {
   FC,
   useCallback,
@@ -98,6 +101,7 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
             type="text"
             placeholder={`Option ${index + 1}`}
             value={option}
+            regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
             onChange={(newValue) => handleChange(index, newValue as string)}
             onValid={(newValid) => handleValidChange(index, newValid)}
             required={isRequired(index)}

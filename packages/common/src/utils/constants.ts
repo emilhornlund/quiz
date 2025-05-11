@@ -45,7 +45,8 @@ export const QUIZ_TYPE_ANSWER_OPTIONS_MIN = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_MAX = 4
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH = 20
-export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX = /^[\p{L}\p{N}\p{P}]{1,20}$/u
+export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX =
+  /^[\p{L}\p{N}\p{P}\p{Zs}]{1,20}$/u
 
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/

@@ -1,5 +1,6 @@
 import {
   QuestionMultiChoiceOptionDto,
+  QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX,
   QUIZ_MULTI_CHOICE_OPTIONS_MAX,
 } from '@quiz/common'
 import React, {
@@ -117,6 +118,7 @@ const MultiChoiceOptions: FC<MultiChoiceOptionsProps> = ({
             placeholder={`Option ${index + 1}`}
             value={option.value}
             checked={option.correct}
+            regex={QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX}
             onChange={(newValue) =>
               handleChange(index, newValue as string, undefined)
             }
