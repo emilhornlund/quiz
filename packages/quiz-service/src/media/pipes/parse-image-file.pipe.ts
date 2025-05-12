@@ -87,7 +87,7 @@ export class ParseImageFilePipe
         await rm(newOutputDirectory, { recursive: true, force: true })
       }
       const { message, stack } = error as Error
-      this.logger.error(`Unable to process image file: ${message}`, stack)
+      this.logger.log(`Unable to process image file: ${message}`, stack)
       throw new UnprocessableEntityException('Unable to process image file')
     } finally {
       await unlink(originalFilePath)
