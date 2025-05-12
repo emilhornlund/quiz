@@ -20,12 +20,12 @@ export function ApiGameParticipantRankProperty() {
         'The final placement of the participant, starting at 1 for the winner.',
       required: true,
       type: Number,
-      minimum: GAME_MIN_PLAYERS,
+      minimum: GAME_MIN_PLAYERS + 1,
       maximum: GAME_MAX_PLAYERS,
       example: 1,
     }),
     IsNumber(),
-    Min(GAME_MIN_PLAYERS),
+    Min(GAME_MIN_PLAYERS + 1),
     Max(GAME_MAX_PLAYERS),
   )
 }

@@ -29,8 +29,8 @@ export function QuestionOptionValueProperty(): PropertyDecorator {
       type: String,
     }),
     IsString(),
-    MinLength(1),
-    MaxLength(75),
+    MinLength(QUIZ_MULTI_CHOICE_OPTION_VALUE_MIN_LENGTH),
+    MaxLength(QUIZ_MULTI_CHOICE_OPTION_VALUE_MAX_LENGTH),
     Matches(QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX),
   )
 }

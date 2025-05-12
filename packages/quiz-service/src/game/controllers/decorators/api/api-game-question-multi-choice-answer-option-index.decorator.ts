@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
+import { QUIZ_MULTI_CHOICE_OPTIONS_MAX } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
 /**
@@ -19,11 +20,11 @@ export function ApiGameQuestionMultiChoiceAnswerOptionIndex() {
       example: 0,
       required: true,
       minimum: 0,
-      maximum: 5,
+      maximum: QUIZ_MULTI_CHOICE_OPTIONS_MAX - 1,
       type: Number,
     }),
     IsNumber(),
     Min(0),
-    Max(5),
+    Max(QUIZ_MULTI_CHOICE_OPTIONS_MAX - 1),
   )
 }

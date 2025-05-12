@@ -48,6 +48,12 @@ export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH = 20
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX =
   /^[\p{L}\p{N}\p{P}\p{Zs}]{1,20}$/u
 
+export const QUIZ_ZERO_POINTS = 0
+export const QUIZ_STANDARD_POINTS = 1000
+export const QUIZ_DOUBLE_POINTS = 2000
+export const QUIZ_MIN_POINTS = QUIZ_ZERO_POINTS
+export const QUIZ_MAX_POINTS = QUIZ_DOUBLE_POINTS
+
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/
 

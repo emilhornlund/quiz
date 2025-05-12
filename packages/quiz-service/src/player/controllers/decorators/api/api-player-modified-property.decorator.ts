@@ -23,7 +23,7 @@ export function ApiPlayerModifiedProperty(): PropertyDecorator {
     IsDateString(
       {},
       {
-        message: 'The created date must be a valid ISO 8601 date string.',
+        message: 'The modified date must be a valid ISO 8601 date string.',
       },
     ),
   )
