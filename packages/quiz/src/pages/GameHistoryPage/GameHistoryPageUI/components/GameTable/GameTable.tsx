@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameHistoryDto, GameParticipantType, GameStatus } from '@quiz/common'
 import { format } from 'date-fns'
+import { toZonedTime } from 'date-fns-tz'
 import React, { FC, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -50,7 +51,7 @@ const GameTableItem: FC<GameTableItemProps> = (props) => {
             <FontAwesomeIcon icon={faGamepad} color={colors.gray2} />
             {GameModeLabels[mode]}
           </span>
-          <span title={format(created, 'y-LL-dd HH:mm:ss')}>
+          <span title={format(toZonedTime(created, 'UTC'), 'y-LL-dd HH:mm:ss')}>
             <FontAwesomeIcon icon={faClock} color={colors.gray2} />
             {formatTimeAgo(created)}
           </span>

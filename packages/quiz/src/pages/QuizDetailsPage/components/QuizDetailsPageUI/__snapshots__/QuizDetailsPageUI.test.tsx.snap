@@ -205,7 +205,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
         </div>
         <div
           class="item"
-          title="Created 2025-02-14 16:31:14"
+          title="Created 2025-02-14 15:31:14"
         >
           <svg
             aria-hidden="true"
@@ -222,11 +222,11 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
               fill="currentColor"
             />
           </svg>
-          2025-02-14 16:31
+          2025-02-14 15:31
         </div>
         <div
           class="item"
-          title="Updated 2025-03-08 16:31:14"
+          title="Updated 2025-03-08 15:31:14"
         >
           <svg
             aria-hidden="true"
@@ -243,7 +243,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
               fill="currentColor"
             />
           </svg>
-          2025-03-08 16:31
+          2025-03-08 15:31
         </div>
         <div
           class="item"

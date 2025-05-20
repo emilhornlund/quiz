@@ -236,7 +236,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
                   0 to 100
                 </span>
                 <span
-                  title="2025-04-27 11:49:14"
+                  title="2025-04-27 09:49:14"
                 >
                   <svg
                     aria-hidden="true"
@@ -322,7 +322,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
                   0 to 100
                 </span>
                 <span
-                  title="2025-04-27 11:42:14"
+                  title="2025-04-27 09:42:14"
                 >
                   <svg
                     aria-hidden="true"
@@ -408,7 +408,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
                   Classic
                 </span>
                 <span
-                  title="2025-04-27 09:54:14"
+                  title="2025-04-27 07:54:14"
                 >
                   <svg
                     aria-hidden="true"
@@ -502,7 +502,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
                   Classic
                 </span>
                 <span
-                  title="2025-04-27 07:54:14"
+                  title="2025-04-27 05:54:14"
                 >
                   <svg
                     aria-hidden="true"
@@ -596,7 +596,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = 
                   Classic
                 </span>
                 <span
-                  title="2025-03-18 10:54:14"
+                  title="2025-03-18 09:54:14"
                 >
                   <svg
                     aria-hidden="true"

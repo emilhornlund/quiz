@@ -1,5 +1,7 @@
 # Quiz
 
+[![CI](https://github.com/emilhornlund/quiz/actions/workflows/ci.yaml/badge.svg)](https://github.com/emilhornlund/quiz/actions/workflows/ci.yaml)
+
 A full-stack quiz game platform built with a modern monorepo setup. It features a shared type system, a NestJS backend, and a Vite-powered React frontend.
 
 ## Monorepo Structure

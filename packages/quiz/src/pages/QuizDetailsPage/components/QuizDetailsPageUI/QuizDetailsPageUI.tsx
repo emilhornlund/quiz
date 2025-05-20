@@ -14,6 +14,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { QuizResponseDto } from '@quiz/common'
 import { format } from 'date-fns'
+import { toZonedTime } from 'date-fns-tz'
 import React, { FC, useState } from 'react'
 
 import {
@@ -147,15 +148,15 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
         </div>
         <div
           className={styles.item}
-          title={`Created ${format(quiz.created, 'y-LL-dd HH:mm:ss')}`}>
+          title={`Created ${format(toZonedTime(quiz.created, 'UTC'), 'y-LL-dd HH:mm:ss')}`}>
           <FontAwesomeIcon icon={faCalendarPlus} />
-          {format(quiz.created, 'y-LL-dd HH:mm')}
+          {format(toZonedTime(quiz.created, 'UTC'), 'y-LL-dd HH:mm')}
         </div>
         <div
           className={styles.item}
-          title={`Updated ${format(quiz.updated, 'y-LL-dd HH:mm:ss')}`}>
+          title={`Updated ${format(toZonedTime(quiz.updated, 'UTC'), 'y-LL-dd HH:mm:ss')}`}>
           <FontAwesomeIcon icon={faCalendarCheck} />
-          {format(quiz.updated, 'y-LL-dd HH:mm')}
+          {format(toZonedTime(quiz.updated, 'UTC'), 'y-LL-dd HH:mm')}
         </div>
         <div className={styles.item}>
           <FontAwesomeIcon icon={faUser} />
