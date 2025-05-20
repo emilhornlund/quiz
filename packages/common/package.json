@@ -11,7 +11,5 @@
     "build": "yarn clean && tsc --build",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix"
-  },
-  "devDependencies": {
   }
 }

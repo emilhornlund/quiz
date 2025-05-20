@@ -7,16 +7,16 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "clean": "yarn workspaces run clean",
-    "build": "yarn workspaces run build",
+    "clean": "yarn workspaces foreach --all -pt run clean",
+    "build": "yarn workspaces foreach --all -pt run build",
     "dev": "concurrently \"yarn quiz-service:dev\" \"yarn quiz:dev\" \"yarn quiz:storybook\"",
     "quiz:dev": "yarn workspace @quiz/quiz dev",
     "quiz:storybook": "yarn workspace @quiz/quiz storybook",
     "quiz-service:dev": "yarn workspace @quiz/quiz-service dev",
     "serve": "concurrently \"yarn workspace @quiz/quiz-service serve\" \"yarn workspace @quiz/quiz serve\"",
-    "lint": "yarn workspaces run lint",
-    "lint:fix": "yarn workspaces run lint:fix",
-    "test": "concurrently \"yarn workspace @quiz/quiz-service test\" \"yarn workspace @quiz/quiz test\""
+    "lint": "yarn workspaces foreach --all -pt run lint",
+    "lint:fix": "yarn workspaces foreach --all -pt run lint:fix",
+    "test": "yarn workspaces foreach --all -pt run test"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -31,5 +31,6 @@
     "rimraf": "^6.0.1",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.7.0"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }

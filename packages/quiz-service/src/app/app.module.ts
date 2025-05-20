@@ -1,4 +1,4 @@
-import { createKeyv } from '@keyv/redis'
+import KeyvRedis from '@keyv/redis'
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import { BullModule } from '@nestjs/bullmq'
 import { CacheModule } from '@nestjs/cache-manager'
@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { RedisModule } from '@nestjs-modules/ioredis'
 import Joi from 'joi'
+import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { AuthModule } from '../auth'
@@ -107,10 +108,12 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       imports: [ConfigModule],
       useFactory: (config: ConfigService<EnvironmentVariables>) => ({
         stores: [
-          createKeyv({
-            url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
-            database: Number(config.get('REDIS_DB')),
-          }),
+          new Keyv(
+            new KeyvRedis({
+              url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+              database: Number(config.get('REDIS_DB')),
+            }),
+          ),
         ],
       }),
       inject: [ConfigService],
