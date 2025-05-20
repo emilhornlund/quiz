@@ -1640,10 +1640,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
             tabindex="0"
           />
           <div
-            aria-labelledby=":r2:"
+            aria-labelledby="«r2»"
             class="modalContainer sizeNormal"
             data-floating-ui-focusable=""
-            id=":r0:"
+            id="«r0»"
             role="dialog"
             tabindex="-1"
           >
@@ -1652,7 +1652,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
             >
               <div
                 class="title"
-                id=":r2:"
+                id="«r2»"
               >
                 Choose Your Game Mode
               </div>

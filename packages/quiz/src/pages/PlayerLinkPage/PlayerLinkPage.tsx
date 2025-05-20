@@ -15,7 +15,7 @@ const PlayerLinkPage: FC = () => {
   const { data: { code } = {} } = useQuery({
     queryKey: ['linkCode'],
     queryFn: getLinkCode,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     staleTime: 10 * 60 * 1000,
   })
 

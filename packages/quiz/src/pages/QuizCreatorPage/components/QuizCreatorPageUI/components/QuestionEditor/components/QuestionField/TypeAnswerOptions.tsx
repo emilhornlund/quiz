@@ -82,7 +82,7 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
     [validOptions],
   )
 
-  const previousValid = useRef<boolean>()
+  const previousValid = useRef<boolean | undefined>(undefined)
 
   useEffect(() => {
     const isValid = validOptions.every((valid) => valid)

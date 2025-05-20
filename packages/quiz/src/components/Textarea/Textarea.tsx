@@ -87,7 +87,7 @@ const Textarea: FC<TextareaProps> = ({
     onAdditionalValidation,
   ])
 
-  const prevValid = useRef<boolean>()
+  const prevValid = useRef<boolean | undefined>(undefined)
 
   const handleValidChange = useCallback(() => {
     if (prevValid.current !== valid) {

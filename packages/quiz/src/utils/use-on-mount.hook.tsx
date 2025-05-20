@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
  * @param callback - A function to be executed on mount.
  */
 const useOnMount = (callback: () => void) => {
-  const didMount = useRef<boolean>()
+  const didMount = useRef<boolean | undefined>(undefined)
   useEffect(() => {
     if (callback && !didMount.current) {
       didMount.current = true

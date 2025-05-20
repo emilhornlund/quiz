@@ -62,7 +62,7 @@ exports[`ErrorPage > should match snapshot 1`] = `
           >
             <img
               alt="Profile"
-              src="/src/assets/images/avatar.svg"
+              src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='-0.03%20-0.03%20512.03%20512.03'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M399%20384.2C376.9%20345.8%20335.4%20320%20288%20320l-64%200c-47.4%200-88.9%2025.8-111%2064.2c35.2%2039.2%2086.2%2063.8%20143%2063.8s107.8-24.7%20143-63.8zM0%20256a256%20256%200%201%201%20512%200A256%20256%200%201%201%200%20256zm256%2016a72%2072%200%201%200%200-144%2072%2072%200%201%200%200%20144z'%20/%3e%3c/svg%3e"
             />
           </button>
         </div>

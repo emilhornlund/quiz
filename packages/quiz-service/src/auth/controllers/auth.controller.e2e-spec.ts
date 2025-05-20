@@ -71,20 +71,36 @@ describe('AuthController (e2e)', () => {
     it('should fail in authenticating without a client id', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth')
+        .send({})
         .expect(400)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Validation failed')
-          expect(res.body).toHaveProperty('status', 400)
-          expect(res.body).toHaveProperty('timestamp')
-          expect(res.body).toHaveProperty('validationErrors', [
-            {
-              property: 'clientId',
-              constraints: {
-                isNotEmpty: 'clientId should not be empty',
-                isUuid: 'clientId must be a UUID',
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.anything(),
+            validationErrors: [
+              {
+                property: 'clientId',
+                constraints: {
+                  isNotEmpty: 'clientId should not be empty',
+                  isUuid: 'clientId must be a UUID',
+                },
               },
-            },
-          ])
+            ],
+          })
+        })
+    })
+
+    it('should fail in authenticating without a request body', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth')
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Missing request payload',
+            status: 400,
+            timestamp: expect.anything(),
+          })
         })
     })
 

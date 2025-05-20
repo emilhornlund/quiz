@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-function-type */
-import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common'
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common'
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
@@ -13,6 +18,9 @@ export class ValidationPipe implements PipeTransform<any> {
       return value
     }
     const object = plainToInstance(metatype, value)
+    if (!object || typeof object !== 'object') {
+      throw new BadRequestException('Missing request payload')
+    }
     const errors = await validate(object)
     if (errors.length > 0) {
       throw new ValidationException(errors)

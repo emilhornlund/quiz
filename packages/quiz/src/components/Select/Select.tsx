@@ -79,7 +79,7 @@ const Select: FC<SelectProps> = ({
     return [tmpValid, tmpErrorMessage]
   }, [internalValue, disabled, required, onAdditionalValidation])
 
-  const prevValid = useRef<boolean>()
+  const prevValid = useRef<boolean | undefined>(undefined)
 
   const handleValidChange = useCallback(() => {
     if (prevValid.current !== valid) {

@@ -9,6 +9,7 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
       class="rows"
     >
       <a
+        data-discover="true"
         href="/quiz/details/1"
       >
         <div
@@ -132,6 +133,7 @@ exports[`QuizTable > calls onPagination when navigating to the next page 1`] = `
         </div>
       </a>
       <a
+        data-discover="true"
         href="/quiz/details/2"
       >
         <div
@@ -341,6 +343,7 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
       class="rows"
     >
       <a
+        data-discover="true"
         href="/quiz/details/1"
       >
         <div
@@ -464,6 +467,7 @@ exports[`QuizTable > calls onPagination when navigating to the previous page 1`]
         </div>
       </a>
       <a
+        data-discover="true"
         href="/quiz/details/2"
       >
         <div
@@ -672,6 +676,7 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
       class="rows"
     >
       <a
+        data-discover="true"
         href="/quiz/details/1"
       >
         <div
@@ -795,6 +800,7 @@ exports[`QuizTable > disables the next button on the last page 1`] = `
         </div>
       </a>
       <a
+        data-discover="true"
         href="/quiz/details/2"
       >
         <div
@@ -1004,6 +1010,7 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
       class="rows"
     >
       <a
+        data-discover="true"
         href="/quiz/details/1"
       >
         <div
@@ -1127,6 +1134,7 @@ exports[`QuizTable > disables the previous button on the first page 1`] = `
         </div>
       </a>
       <a
+        data-discover="true"
         href="/quiz/details/2"
       >
         <div
@@ -1421,6 +1429,7 @@ exports[`QuizTable > renders the table with items 1`] = `
       class="rows"
     >
       <a
+        data-discover="true"
         href="/quiz/details/1"
       >
         <div
@@ -1544,6 +1553,7 @@ exports[`QuizTable > renders the table with items 1`] = `
         </div>
       </a>
       <a
+        data-discover="true"
         href="/quiz/details/2"
       >
         <div

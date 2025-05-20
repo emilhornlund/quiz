@@ -26,6 +26,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
         class="side"
       >
         <a
+          data-discover="true"
           href="/discover"
         >
           Discover
@@ -38,7 +39,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
           >
             <img
               alt="Profile"
-              src="/src/assets/images/avatar.svg"
+              src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='-0.03%20-0.03%20512.03%20512.03'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M399%20384.2C376.9%20345.8%20335.4%20320%20288%20320l-64%200c-47.4%200-88.9%2025.8-111%2064.2c35.2%2039.2%2086.2%2063.8%20143%2063.8s107.8-24.7%20143-63.8zM0%20256a256%20256%200%201%201%20512%200A256%20256%200%201%201%200%20256zm256%2016a72%2072%200%201%200%200-144%2072%2072%200%201%200%200%20144z'%20/%3e%3c/svg%3e"
             />
           </button>
         </div>
@@ -151,6 +152,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
           class="rows"
         >
           <a
+            data-discover="true"
             href="/quiz/details/66e89e5d-4e27-4864-8020-790428f94d0e"
           >
             <div
@@ -256,6 +258,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
             </div>
           </a>
           <a
+            data-discover="true"
             href="/quiz/details/59d4f710-a451-45c7-8fa9-91e1abda506a"
           >
             <div
@@ -264,7 +267,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
               <img
                 alt="image"
                 class="svg"
-                src="/src/assets/images/picture.svg"
+                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%2032%20512%20448'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M0%2096C0%2060.7%2028.7%2032%2064%2032l384%200c35.3%200%2064%2028.7%2064%2064l0%20320c0%2035.3-28.7%2064-64%2064L64%20480c-35.3%200-64-28.7-64-64L0%2096zM323.8%20202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4%203.9-19.8%2010.5l-87%20127.6L170.7%20297c-4.6-5.7-11.5-9-18.7-9s-14.2%203.3-18.7%209l-64%2080c-5.8%207.2-6.9%2017.1-2.9%2025.4s12.4%2013.6%2021.6%2013.6l96%200%2032%200%20208%200c8.9%200%2017.1-4.9%2021.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112%20192a48%2048%200%201%200%200-96%2048%2048%200%201%200%200%2096z'/%3e%3c/svg%3e"
               />
               <div
                 class="content"
@@ -362,6 +365,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
             </div>
           </a>
           <a
+            data-discover="true"
             href="/quiz/details/085726dd-f6f4-4984-baed-6225b11f4164"
           >
             <div
@@ -370,7 +374,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
               <img
                 alt="image"
                 class="svg"
-                src="/src/assets/images/picture.svg"
+                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%2032%20512%20448'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M0%2096C0%2060.7%2028.7%2032%2064%2032l384%200c35.3%200%2064%2028.7%2064%2064l0%20320c0%2035.3-28.7%2064-64%2064L64%20480c-35.3%200-64-28.7-64-64L0%2096zM323.8%20202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4%203.9-19.8%2010.5l-87%20127.6L170.7%20297c-4.6-5.7-11.5-9-18.7-9s-14.2%203.3-18.7%209l-64%2080c-5.8%207.2-6.9%2017.1-2.9%2025.4s12.4%2013.6%2021.6%2013.6l96%200%2032%200%20208%200c8.9%200%2017.1-4.9%2021.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112%20192a48%2048%200%201%200%200-96%2048%2048%200%201%200%200%2096z'/%3e%3c/svg%3e"
               />
               <div
                 class="content"
@@ -468,6 +472,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
             </div>
           </a>
           <a
+            data-discover="true"
             href="/quiz/details/bd07a122-bcc3-4298-94c3-b5375169615d"
           >
             <div
@@ -476,7 +481,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
               <img
                 alt="image"
                 class="svg"
-                src="/src/assets/images/picture.svg"
+                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%2032%20512%20448'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M0%2096C0%2060.7%2028.7%2032%2064%2032l384%200c35.3%200%2064%2028.7%2064%2064l0%20320c0%2035.3-28.7%2064-64%2064L64%20480c-35.3%200-64-28.7-64-64L0%2096zM323.8%20202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4%203.9-19.8%2010.5l-87%20127.6L170.7%20297c-4.6-5.7-11.5-9-18.7-9s-14.2%203.3-18.7%209l-64%2080c-5.8%207.2-6.9%2017.1-2.9%2025.4s12.4%2013.6%2021.6%2013.6l96%200%2032%200%20208%200c8.9%200%2017.1-4.9%2021.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112%20192a48%2048%200%201%200%200-96%2048%2048%200%201%200%200%2096z'/%3e%3c/svg%3e"
               />
               <div
                 class="content"
@@ -574,6 +579,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
             </div>
           </a>
           <a
+            data-discover="true"
             href="/quiz/details/ec05918c-be05-495d-b122-0f6576e25388"
           >
             <div
@@ -582,7 +588,7 @@ exports[`DiscoverPageUI > should render DiscoverPageUI 1`] = `
               <img
                 alt="image"
                 class="svg"
-                src="/src/assets/images/picture.svg"
+                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%2032%20512%20448'%3e%3c!--!Font%20Awesome%20Free%206.7.1%20by%20@fontawesome%20-%20https://fontawesome.com%20License%20-%20https://fontawesome.com/license/free%20Copyright%202024%20Fonticons,%20Inc.--%3e%3cpath%20d='M0%2096C0%2060.7%2028.7%2032%2064%2032l384%200c35.3%200%2064%2028.7%2064%2064l0%20320c0%2035.3-28.7%2064-64%2064L64%20480c-35.3%200-64-28.7-64-64L0%2096zM323.8%20202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4%203.9-19.8%2010.5l-87%20127.6L170.7%20297c-4.6-5.7-11.5-9-18.7-9s-14.2%203.3-18.7%209l-64%2080c-5.8%207.2-6.9%2017.1-2.9%2025.4s12.4%2013.6%2021.6%2013.6l96%200%2032%200%20208%200c8.9%200%2017.1-4.9%2021.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112%20192a48%2048%200%201%200%200-96%2048%2048%200%201%200%200%2096z'/%3e%3c/svg%3e"
               />
               <div
                 class="content"
