@@ -47,10 +47,13 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         SERVER_ALLOW_ORIGIN: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().port().required(),
+        REDIS_PASSWORD: Joi.string().optional(),
         REDIS_DB: Joi.number().default(0),
         MONGODB_HOST: Joi.string().required(),
         MONGODB_PORT: Joi.number().port().required(),
-        MONGODB_DB: Joi.string().default('quiz_service'),
+        MONGODB_USERNAME: Joi.string().optional(),
+        MONGODB_PASSWORD: Joi.string().optional(),
+        MONGODB_DB: Joi.string().required(),
         JWT_SECRET: Joi.string(),
         JWT_PRIVATE_KEY_PATH: Joi.string(),
         JWT_PUBLIC_KEY_PATH: Joi.string(),
@@ -65,7 +68,10 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       useFactory: (config: ConfigService<EnvironmentVariables>) => ({
         type: 'single',
         url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
-        options: { db: Number(config.get('REDIS_DB')) },
+        options: {
+          password: config.get('REDIS_PASSWORD'),
+          db: Number(config.get('REDIS_DB')),
+        },
       }),
       inject: [ConfigService],
     }),
@@ -74,6 +80,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
       useFactory: (config: ConfigService<EnvironmentVariables>) => ({
         redisOptions: {
           url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+          password: config.get('REDIS_PASSWORD'),
           database: Number(config.get('REDIS_DB')),
         },
         wait: 1000,
@@ -90,6 +97,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         connection: {
           host: config.get('REDIS_HOST'),
           port: config.get('REDIS_PORT'),
+          password: config.get('REDIS_PASSWORD'),
           db: Number(config.get('REDIS_DB')),
         },
       }),
@@ -98,6 +106,13 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (config: ConfigService<EnvironmentVariables>) => {
+        const username = config.get('MONGODB_USERNAME')
+        const password = config.get('MONGODB_PASSWORD')
+        if (username && password) {
+          return {
+            uri: `mongodb://${username}:${password}@${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
+          }
+        }
         return {
           uri: `mongodb://${config.get('MONGODB_HOST')}:${config.get('MONGODB_PORT')}/${config.get('MONGODB_DB')}`,
         }
@@ -111,6 +126,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           new Keyv(
             new KeyvRedis({
               url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+              password: config.get('REDIS_PASSWORD'),
               database: Number(config.get('REDIS_DB')),
             }),
           ),
@@ -147,6 +163,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
               storage: new ThrottlerStorageRedisService({
                 host: config.get('REDIS_HOST'),
                 port: config.get('REDIS_PORT'),
+                password: config.get('REDIS_PASSWORD'),
                 db: Number(config.get('REDIS_DB')),
               }),
             }),

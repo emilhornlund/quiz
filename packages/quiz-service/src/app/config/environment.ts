@@ -3,9 +3,12 @@ export interface EnvironmentVariables {
   SERVER_ALLOW_ORIGIN: string
   REDIS_HOST: string
   REDIS_PORT: number
+  REDIS_PASSWORD: string
   REDIS_DB: number
   MONGODB_HOST: string
   MONGODB_PORT: number
+  MONGODB_USERNAME: string
+  MONGODB_PASSWORD: string
   MONGODB_DB: string
   JWT_SECRET: string
   JWT_PRIVATE_KEY_PATH: string
