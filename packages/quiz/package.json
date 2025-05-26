@@ -64,9 +64,11 @@
     "jsdom": "^26.1.0",
     "msw": "^2.8.4",
     "prop-types": "^15.8.1",
+    "rimraf": "^6.0.1",
     "sass": "^1.89.0",
     "storybook": "^8.6.14",
     "storybook-addon-remix-react-router": "^4.0.0",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vitest": "^3.1.4"
   }

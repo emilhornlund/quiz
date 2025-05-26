@@ -1,11 +1,13 @@
 # Build Stage
-FROM node:22-alpine AS build
+FROM node:22 AS build
 
 WORKDIR /app
 
+RUN corepack enable
+
 COPY ../../ ./
 
-RUN yarn install --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
+RUN yarn install --immutable
 
 RUN yarn workspace @quiz/common build
 RUN yarn workspace @quiz/quiz build --mode production
