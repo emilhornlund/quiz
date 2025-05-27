@@ -3,7 +3,8 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - 'main'
+      - 'release/**'
   pull_request:
     branches:
       - '**'
@@ -11,26 +12,17 @@ on:
 jobs:
   build:
     name: Build & Test
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
+    environment: test
+    env:
+      REDIS_HOST: 'emils-nuc-server'
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      MONGODB_HOST: 'emils-nuc-server'
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_DB: 'klurigo_test'
     outputs:
       cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
-    services:
-      mongodb:
-        image: mongo:7
-        ports: [ 27017:27017 ]
-        options: >-
-          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:7
-        ports: [ 6379:6379 ]
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - uses: actions/checkout@v4
 
