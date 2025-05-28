@@ -1,19 +1,17 @@
 # Build Stage
-FROM node:22-slim AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
-RUN corepack enable
-
 COPY ../../ ./
 
-RUN yarn install --immutable
+RUN yarn install --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
 
 RUN yarn workspace @quiz/common build
 RUN yarn workspace @quiz/quiz-service build
 
 # Optimize Stage
-FROM node:22-slim AS optimize
+FROM node:22-alpine AS optimize
 
 WORKDIR /app
 
@@ -33,7 +31,7 @@ COPY --from=build /app/packages/quiz-service/.env.production ./packages/quiz-ser
 COPY --from=build /app/packages/quiz-service/dist ./packages/quiz-service/dist
 
 # Production Stage
-FROM node:22-slim
+FROM node:22-alpine
 
 WORKDIR /app
 
