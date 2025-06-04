@@ -1,34 +1,23 @@
-name: CI
-
+name: Build
 on:
-  push:
-    branches:
-      - 'main'
-      - 'release/**'
-  pull_request:
-    branches:
-      - '**'
+  workflow_call:
 
 jobs:
-  build:
+  build-test:
     name: Build & Test
     runs-on: [self-hosted]
-    environment: test
     env:
-      REDIS_HOST: 'emils-nuc-server'
+      REDIS_HOST: redis
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-      MONGODB_HOST: 'emils-nuc-server'
+      MONGODB_HOST: mongodb
       MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
       MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-      MONGODB_DB: 'klurigo_test'
-    outputs:
-      cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
+      MONGODB_DB: klurigo_test
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+        with: { node-version: '22' }
 
       - name: Install Yarn
         run: npm install -g yarn@1.22.22
@@ -39,17 +28,16 @@ jobs:
         with:
           path: ~/.cache/yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Lint
-        run: yarn lint
-
       - name: Build
         run: yarn build
+
+      - name: Lint
+        run: yarn lint
 
       - name: Test
         run: yarn test
