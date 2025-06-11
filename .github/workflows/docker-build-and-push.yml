@@ -1,5 +1,7 @@
 # .github/workflows/docker-build-and-push.yml
 name: Build & Push Docker Image
+permissions:
+  contents: read
 on:
   workflow_call:
     secrets:

@@ -1,5 +1,6 @@
 # .github/workflows/main.yml
 name: Main
+permissions: {}
 on:
   push:
     branches:
@@ -21,7 +22,10 @@ jobs:
     with:
       target_env: beta
       tag: ${{ needs.docker-build-and-push.outputs.short_sha }}
-    secrets: inherit
+    secrets:
+      INFRA_REPO_PAT: ${{ secrets.INFRA_REPO_PAT }}
+      QUIZ_PORTAINER_BETA_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_BETA_WEBHOOK }}
+      QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK }}
 
   deploy-production:
     needs:
@@ -31,4 +35,7 @@ jobs:
     with:
       target_env: prod
       tag: ${{ needs.docker-build-and-push.outputs.short_sha }}
-    secrets: inherit
+    secrets:
+      INFRA_REPO_PAT: ${{ secrets.INFRA_REPO_PAT }}
+      QUIZ_PORTAINER_PRODUCTION_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_PRODUCTION_WEBHOOK }}
+      QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK }}

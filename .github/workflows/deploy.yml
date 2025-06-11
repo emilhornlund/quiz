@@ -1,5 +1,6 @@
 # .github/workflows/deploy.yml
 name: Deploy
+permissions: {}
 on:
   workflow_call:
     inputs:
