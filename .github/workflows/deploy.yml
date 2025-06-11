@@ -1,0 +1,90 @@
+# .github/workflows/deploy.yml
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      target_env:
+        description: "Either 'beta' or 'prod'"
+        required: true
+        type: string
+      tag:
+        description: "The Docker image tag (short SHA) to deploy"
+        required: true
+        type: string
+    secrets:
+      INFRA_REPO_PAT:
+        required: true
+      QUIZ_PORTAINER_BETA_WEBHOOK:
+        required: true
+      QUIZ_PORTAINER_PRODUCTION_WEBHOOK:
+        required: true
+      QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK:
+        required: true
+      QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: ${{ inputs.target_env }}
+    env:
+      REGISTRY_HOST: emils-nuc-server:5000
+      TAG: ${{ inputs.tag }}
+
+    strategy:
+      matrix:
+        include:
+          - service: quiz
+            beta_webhook_secret: QUIZ_PORTAINER_BETA_WEBHOOK
+            prod_webhook_secret: QUIZ_PORTAINER_PRODUCTION_WEBHOOK
+          - service: quiz-service
+            beta_webhook_secret: QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK
+            prod_webhook_secret: QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK
+
+    steps:
+      - name: Checkout infra repo
+        uses: actions/checkout@v4
+        with:
+          repository: emilhornlund/infra
+          path: infra
+          ref: main
+          token: ${{ secrets.INFRA_REPO_PAT }}
+
+      - name: Update image tag in compose
+        run: |
+          ENV="${{ inputs.target_env }}"
+          SVC="${{ matrix.service }}"
+          STACK="infra/stacks/${SVC}/docker-compose.${ENV}.yaml"
+          IMAGE="${{ env.REGISTRY_HOST }}/${SVC}:${{ env.TAG }}"
+
+          echo "Setting services.${ENV}-${SVC}.image → ${IMAGE} in ${STACK}"
+          yq -i ".services.\"${ENV}-${SVC}\".image = \"${IMAGE}\"" "${STACK}"
+
+      - name: Commit & push infra change
+        working-directory: infra
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "actions@github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          ENV="${{ inputs.target_env }}"
+          SVC="${{ matrix.service }}"
+          TAG="${{ inputs.tag }}"
+
+          git commit -am "deploy(${ENV}-${SVC}): ${TAG}"
+          git push
+
+      - name: Call Portainer webhook
+        run: |
+          if [ "${{ inputs.target_env }}" = "beta" ]; then
+            URL="${{ secrets[matrix.beta_webhook_secret] }}"
+          else
+            URL="${{ secrets[matrix.prod_webhook_secret] }}"
+          fi
+
+          HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${URL}")
+          echo "Portainer webhook returned HTTP ${HTTP_CODE}"

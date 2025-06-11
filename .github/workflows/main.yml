@@ -1,16 +1,34 @@
+# .github/workflows/main.yml
 name: Main
 on:
   push:
     branches:
-      - 'main'
-      - 'release/**'
+      - main
 
 jobs:
   build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
-  release:
+  docker-build-and-push:
     needs: build
-    uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/docker-build-and-push.yml
+    secrets: inherit
+
+  deploy-beta:
+    needs: docker-build-and-push
+    uses: ./.github/workflows/deploy.yml
+    with:
+      target_env: beta
+      tag: ${{ needs.docker-build-and-push.outputs.short_sha }}
+    secrets: inherit
+
+  deploy-production:
+    needs:
+      - docker-build-and-push
+      - deploy-beta
+    uses: ./.github/workflows/deploy.yml
+    with:
+      target_env: prod
+      tag: ${{ needs.docker-build-and-push.outputs.short_sha }}
     secrets: inherit
