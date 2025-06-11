@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "yarn"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    security-updates-only: false
+
+  - package-ecosystem: "yarn"
+    directory: "/packages/common"
+    schedule:
+      interval: "weekly"
+    security-updates-only: false
+
+  - package-ecosystem: "yarn"
+    directory: "/packages/quiz"
+    schedule:
+      interval: "weekly"
+    security-updates-only: false
+
+  - package-ecosystem: "yarn"
+    directory: "/packages/quiz-service"
+    schedule:
+      interval: "weekly"
+    security-updates-only: false
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
