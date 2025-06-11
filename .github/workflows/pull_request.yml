@@ -1,4 +1,7 @@
+# .github/workflows/pull_request.yml
 name: Pull-Request
+permissions:
+  contents: read
 on:
   pull_request:
     branches:
