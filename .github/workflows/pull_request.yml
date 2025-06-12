@@ -1,7 +1,6 @@
 # .github/workflows/pull_request.yml
 name: Pull-Request
-permissions:
-  contents: read
+permissions: {}
 on:
   pull_request:
     branches:
@@ -9,5 +8,7 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: read
     uses: ./.github/workflows/build.yml
     secrets: inherit
