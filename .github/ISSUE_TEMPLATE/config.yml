@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📫 Security vulnerability
+    url: mailto:security@klurigo.com
+    about: Please report security vulnerabilities via email, not in public issues.
