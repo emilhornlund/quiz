@@ -8,7 +8,7 @@ import {
   PlayerGameFooter,
   StreakBadge,
 } from '../../components'
-import { GamePage } from '../common'
+import { GamePage, PointsBehindIndicator } from '../common'
 
 export interface PlayerLeaderboardStateProps {
   event: GameLeaderboardPlayerEvent
@@ -19,6 +19,7 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
     player: {
       nickname,
       score: { position, score, streaks },
+      behind,
     },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -40,6 +41,7 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
       </Badge>
       <NicknameChip value={nickname} />
       <StreakBadge streak={streaks}>Streak</StreakBadge>
+      {behind && <PointsBehindIndicator {...behind} />}
     </GamePage>
   )
 }

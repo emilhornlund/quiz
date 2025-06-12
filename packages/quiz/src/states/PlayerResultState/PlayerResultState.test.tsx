@@ -22,6 +22,10 @@ describe('PlayerResultState', () => {
                 position: 1,
                 streak: 3,
               },
+              behind: {
+                points: 123,
+                nickname: 'WhiskerFox',
+              },
             },
             pagination: {
               current: 1,

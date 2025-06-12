@@ -217,6 +217,10 @@ export type GameResultPlayerEvent = {
       position: number
       streak: number
     }
+    behind?: {
+      points: number
+      nickname: string
+    }
   }
   pagination: PaginationEvent
 }
@@ -243,6 +247,10 @@ export type GameLeaderboardPlayerEvent = {
       position: number
       score: number
       streaks: number
+    }
+    behind?: {
+      points: number
+      nickname: string
     }
   }
   pagination: PaginationEvent

@@ -33,8 +33,10 @@ import {
 } from '../../../quiz/services/utils'
 import {
   GameDocument,
+  LeaderboardTaskItem,
   ParticipantBase,
   ParticipantPlayer,
+  QuestionResultTaskItem,
   TaskType,
 } from '../models/schemas'
 
@@ -777,10 +779,11 @@ function buildGameResultPlayerEvent(
 ): GameResultPlayerEvent {
   const { nickname, player } = participantPlayer
 
-  const resultsEntry = document.currentTask.results.find(
+  const resultsEntryIndex = document.currentTask.results.findIndex(
     ({ playerId }) => playerId === player._id,
   )
 
+  const resultsEntry = document.currentTask.results?.[resultsEntryIndex]
   if (!resultsEntry) {
     // TODO: throw exception here instead
     return {
@@ -801,6 +804,11 @@ function buildGameResultPlayerEvent(
     }
   }
 
+  const previousResultsEntry: QuestionResultTaskItem | undefined =
+    resultsEntryIndex > 0
+      ? document.currentTask.results?.[resultsEntryIndex - 1]
+      : undefined
+
   const {
     correct,
     lastScore: last,
@@ -820,6 +828,15 @@ function buildGameResultPlayerEvent(
         position,
         streak,
       },
+      behind: previousResultsEntry
+        ? {
+            points: previousResultsEntry.totalScore - total,
+            nickname:
+              document.participants.find(
+                ({ player: { _id } }) => _id === previousResultsEntry.playerId,
+              )?.player?.nickname ?? 'Unknown',
+          }
+        : undefined,
     },
     pagination: buildPaginationEvent(document),
   }
@@ -862,13 +879,21 @@ function buildGameLeaderboardPlayerEvent(
 ): GameLeaderboardPlayerEvent {
   const { player, nickname } = participantPlayer
 
-  const leaderboardEntry = document.currentTask.leaderboard.find(
+  const leaderboardIndex = document.currentTask.leaderboard.findIndex(
     ({ playerId }) => playerId === player._id,
   )
+
+  const leaderboardEntry = document.currentTask.leaderboard?.[leaderboardIndex]
   if (!leaderboardEntry) {
     throw new Error(`Player not found in leaderboard: ${player._id}`)
   }
+
   const { position, score, streaks } = leaderboardEntry
+
+  const previousLeaderboardEntry: LeaderboardTaskItem | undefined =
+    leaderboardIndex > 0
+      ? document.currentTask.leaderboard?.[leaderboardIndex - 1]
+      : undefined
 
   return {
     type: GameEventType.GameLeaderboardPlayer,
@@ -879,6 +904,12 @@ function buildGameLeaderboardPlayerEvent(
         score,
         streaks,
       },
+      behind: previousLeaderboardEntry
+        ? {
+            points: previousLeaderboardEntry.score - score,
+            nickname: previousLeaderboardEntry.nickname,
+          }
+        : undefined,
     },
     pagination: buildPaginationEvent(document),
   }

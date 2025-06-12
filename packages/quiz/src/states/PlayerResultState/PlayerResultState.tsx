@@ -9,7 +9,7 @@ import {
   StreakBadge,
   Typography,
 } from '../../components'
-import { GamePage } from '../common'
+import { GamePage, PointsBehindIndicator } from '../common'
 
 import { getPositionMessage } from './messages.ts'
 import styles from './PlayerResultState.module.scss'
@@ -23,6 +23,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
     player: {
       nickname,
       score: { correct, last: lastScore, total: totalScore, position, streak },
+      behind,
     },
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -52,6 +53,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
       <Typography variant="text" size="small">
         {message}
       </Typography>
+      {behind && <PointsBehindIndicator {...behind} />}
     </GamePage>
   )
 }
