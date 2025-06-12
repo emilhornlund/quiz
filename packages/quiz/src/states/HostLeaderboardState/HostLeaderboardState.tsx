@@ -35,7 +35,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
     <GamePage
       width="medium"
       height="full"
-      align="start"
+      align="center"
       header={
         <IconButtonArrowRight
           id={'next-button'}

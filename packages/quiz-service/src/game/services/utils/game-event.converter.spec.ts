@@ -5,13 +5,18 @@ import {
   GameEventQuestionResultsTrueFalse,
   GameEventQuestionResultsTypeAnswer,
   GameEventType,
+  GameLeaderboardHostEvent,
+  GamePodiumHostEvent,
   GameResultHostEvent,
   QuestionType,
 } from '@quiz/common'
 
 import {
   createMockGameDocument,
+  createMockLeaderboardTaskDocument,
+  createMockLeaderboardTaskItem,
   createMockMultiChoiceQuestionDocument,
+  createMockPodiumTaskDocument,
   createMockQuestionResultTaskDocument,
   createMockQuestionResultTaskItemDocument,
   createMockQuestionTaskMultiChoiceAnswer,
@@ -25,7 +30,8 @@ import {
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
 } from '../../../../test/data'
-import { Game, GameDocument } from '../models/schemas'
+import { generateNickname } from '../../../player/services/utils'
+import { Game, GameDocument, LeaderboardTaskItem } from '../models/schemas'
 
 import { buildHostGameEvent } from './game-event.converter'
 
@@ -418,6 +424,94 @@ describe('Game Event Converter', () => {
         expect(actual).toEqual(expected)
       })
     })
+
+    describe('buildGameLeaderboardHostEvent', () => {
+      it('should not include more than 5 players in the leaderboard', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockLeaderboardTaskDocument({
+            status: 'active',
+            questionIndex: 0,
+            leaderboard: buildLeaderboard(6),
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        expect(actual.type).toEqual(GameEventType.GameLeaderboardHost)
+        expectLeaderboard(actual as GamePodiumHostEvent, 5)
+      })
+
+      it('should include exactly 5 players as-is without trimming', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockLeaderboardTaskDocument({
+            status: 'active',
+            questionIndex: 0,
+            leaderboard: buildLeaderboard(5),
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        expect(actual.type).toEqual(GameEventType.GameLeaderboardHost)
+        expectLeaderboard(actual as GamePodiumHostEvent, 5)
+      })
+
+      it('should return an empty leaderboard if none is provided', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockLeaderboardTaskDocument({
+            status: 'active',
+            questionIndex: 0,
+            leaderboard: [],
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+        expectLeaderboard(actual as GamePodiumHostEvent, 0)
+      })
+    })
+
+    describe('buildGamePodiumHostEvent', () => {
+      it('should not include more than 5 players in the leaderboard', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockPodiumTaskDocument({
+            status: 'active',
+            leaderboard: buildLeaderboard(6),
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+        expectLeaderboard(actual as GamePodiumHostEvent, 5)
+      })
+
+      it('should include exactly 5 players as-is without trimming', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockPodiumTaskDocument({
+            status: 'active',
+            leaderboard: buildLeaderboard(5),
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+        expectLeaderboard(actual as GamePodiumHostEvent, 5)
+      })
+
+      it('should return an empty leaderboard if none is provided', () => {
+        const gameDocument = createMockGameDocument({
+          currentTask: createMockPodiumTaskDocument({
+            status: 'active',
+            leaderboard: [],
+          }),
+        })
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+        expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+        expectLeaderboard(actual as GamePodiumHostEvent, 0)
+      })
+    })
   })
 })
 
@@ -576,4 +670,23 @@ function expectGameResultHostEvent(
       total: 1,
     },
   }
+}
+
+function buildLeaderboard(count: number): LeaderboardTaskItem[] {
+  return Array.from({ length: count }, (_, i) =>
+    createMockLeaderboardTaskItem({
+      position: i + 1,
+      nickname: generateNickname(),
+      score: Math.round((10000 / (i + 1)) * 10) / 10,
+      streaks: i % 2 === 0 ? 3 : 0,
+    }),
+  )
+}
+
+function expectLeaderboard(
+  event: GameLeaderboardHostEvent | GamePodiumHostEvent,
+  expectedLength: number,
+) {
+  expect(event.leaderboard).toHaveLength(expectedLength)
+  expect(event.leaderboard.every((p) => p.position <= 5)).toBe(true)
 }
