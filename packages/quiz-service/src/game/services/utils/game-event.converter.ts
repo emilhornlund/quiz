@@ -838,14 +838,14 @@ function buildGameLeaderboardHostEvent(
     game: {
       pin: document.pin,
     },
-    leaderboard: document.currentTask.leaderboard.map(
-      ({ position, nickname, score, streaks }) => ({
+    leaderboard: document.currentTask.leaderboard
+      .slice(0, 5)
+      .map(({ position, nickname, score, streaks }) => ({
         position,
         nickname,
         score,
         streaks,
-      }),
-    ),
+      })),
     pagination: buildPaginationEvent(document),
   }
 }
@@ -894,13 +894,13 @@ function buildGamePodiumHostEvent(
 ): GamePodiumHostEvent {
   return {
     type: GameEventType.GamePodiumHost,
-    leaderboard: document.currentTask.leaderboard.map(
-      ({ position, nickname, score }) => ({
+    leaderboard: document.currentTask.leaderboard
+      .slice(0, 5)
+      .map(({ position, nickname, score }) => ({
         position,
         nickname,
         score,
-      }),
-    ),
+      })),
   }
 }
 

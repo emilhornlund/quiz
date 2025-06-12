@@ -13,6 +13,7 @@ import { Client } from '../../src/client/services/models/schemas'
 import {
   BaseTask,
   Game,
+  LeaderboardTask,
   LeaderboardTaskItem,
   ParticipantBase,
   ParticipantHost,
@@ -318,6 +319,20 @@ export function createMockLeaderboardTaskItem(
     score: 1337,
     streaks: 3,
     ...(item ?? {}),
+  }
+}
+
+export function createMockLeaderboardTaskDocument(
+  task?: Partial<BaseTask & LeaderboardTask>,
+): BaseTask & LeaderboardTask {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Leaderboard,
+    status: 'pending',
+    questionIndex: 1,
+    leaderboard: [],
+    created: new Date(),
+    ...(task ?? {}),
   }
 }
 
