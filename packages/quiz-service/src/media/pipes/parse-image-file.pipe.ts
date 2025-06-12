@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { rm, unlink } from 'node:fs/promises'
-import { join } from 'path'
+import { basename, join, resolve, sep } from 'path'
 
 import {
   Inject,
@@ -59,9 +59,14 @@ export class ParseImageFilePipe
    * @returns The filename of the newly processed image.
    */
   async transform(file: Express.Multer.File): Promise<string> {
-    const outputDirectory = this.configService.get<string>('UPLOAD_DIRECTORY')
+    const configuredDir = this.configService.get<string>('UPLOAD_DIRECTORY')!
+    const baseDir = resolve(configuredDir)
+    const safeFilename = basename(file.filename)
 
-    const originalFilePath = join(outputDirectory, file.filename)
+    const originalFilePath = resolve(baseDir, safeFilename)
+    if (!originalFilePath.startsWith(baseDir + sep)) {
+      throw new UnprocessableEntityException('Unable to process image file')
+    }
 
     const client = (this.request as ClientRequest).client
 
@@ -70,14 +75,14 @@ export class ParseImageFilePipe
     }
 
     let isNewDirectory = false
-    const newOutputDirectory = join(outputDirectory, client._id)
+    const newOutputDirectory = join(baseDir, client._id)
     if (!fs.existsSync(newOutputDirectory)) {
       fs.mkdirSync(newOutputDirectory)
       isNewDirectory = true
     }
 
     const newFileName = `${client._id}/${uuidv4()}.webp`
-    const newFilePath = join(outputDirectory, newFileName)
+    const newFilePath = join(baseDir, newFileName)
 
     try {
       this.validate(file)
@@ -90,7 +95,10 @@ export class ParseImageFilePipe
       this.logger.log(`Unable to process image file: ${message}`, stack)
       throw new UnprocessableEntityException('Unable to process image file')
     } finally {
-      await unlink(originalFilePath)
+      const toDelete = resolve(baseDir, safeFilename)
+      if (toDelete.startsWith(baseDir + sep)) {
+        await unlink(toDelete)
+      }
     }
 
     return newFileName

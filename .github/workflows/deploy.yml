@@ -16,13 +16,13 @@ on:
       INFRA_REPO_PAT:
         required: true
       QUIZ_PORTAINER_BETA_WEBHOOK:
-        required: true
+        required: false
       QUIZ_PORTAINER_PRODUCTION_WEBHOOK:
-        required: true
+        required: false
       QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK:
-        required: true
+        required: false
       QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK:
-        required: true
+        required: false
 
 jobs:
   deploy:
@@ -79,13 +79,34 @@ jobs:
           git commit -am "deploy(${ENV}-${SVC}): ${TAG}"
           git push
 
-      - name: Call Portainer webhook
+      - name: Notify Portainer (quiz, beta)
+        if: ${{ inputs.target_env == 'beta' && matrix.service == 'quiz' }}
+        env:
+          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_BETA_WEBHOOK }}
         run: |
-          if [ "${{ inputs.target_env }}" = "beta" ]; then
-            URL="${{ secrets[matrix.beta_webhook_secret] }}"
-          else
-            URL="${{ secrets[matrix.prod_webhook_secret] }}"
-          fi
+          HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
+          echo "Portainer quiz (beta) returned HTTP ${HTTP_CODE}"
 
+      - name: Notify Portainer (quiz-service, beta)
+        if: ${{ inputs.target_env == 'beta' && matrix.service == 'quiz-service' }}
+        env:
+          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK }}
+        run: |
+          HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
+          echo "Portainer quiz-service (beta) returned HTTP ${HTTP_CODE}"
+
+      - name: Notify Portainer (quiz, prod)
+        if: ${{ inputs.target_env == 'prod' && matrix.service == 'quiz' }}
+        env:
+          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_PRODUCTION_WEBHOOK }}
+        run: |
+          HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
+          echo "Portainer quiz (prod) returned HTTP ${HTTP_CODE}"
+
+      - name: Notify Portainer (quiz-service, prod)
+        if: ${{ inputs.target_env == 'prod' && matrix.service == 'quiz-service' }}
+        env:
+          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK }}
+        run: |
           HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${URL}")
           echo "Portainer webhook returned HTTP ${HTTP_CODE}"
