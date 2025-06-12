@@ -1,0 +1,15 @@
+@use '../../../styles/helpers';
+
+.pointsBehindIndicator {
+  @include helpers.mobile {
+    @include helpers.fontSize(14px);
+  }
+
+  @include helpers.tablet {
+    @include helpers.fontSize(18px);
+  }
+
+  @include helpers.desktop {
+    @include helpers.fontSize(22px);
+  }
+}

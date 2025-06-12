@@ -28,6 +28,10 @@ export const Correct = {
           position: 1,
           streak: 3,
         },
+        behind: {
+          points: 123,
+          nickname: 'WhiskerFox',
+        },
       },
       pagination: {
         current: 1,
@@ -49,6 +53,10 @@ export const Incorrect = {
           total: 10458,
           position: 1,
           streak: 0,
+        },
+        behind: {
+          points: 123,
+          nickname: 'WhiskerFox',
         },
       },
       pagination: {

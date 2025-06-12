@@ -26,6 +26,10 @@ export const Default = {
           score: 10458,
           streaks: 3,
         },
+        behind: {
+          points: 123,
+          nickname: 'WhiskerFox',
+        },
       },
       pagination: {
         current: 1,
