@@ -4,25 +4,21 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    security-updates-only: false
 
   - package-ecosystem: "npm"
     directory: "/packages/common"
     schedule:
       interval: "weekly"
-    security-updates-only: false
 
   - package-ecosystem: "npm"
     directory: "/packages/quiz"
     schedule:
       interval: "weekly"
-    security-updates-only: false
 
   - package-ecosystem: "npm"
     directory: "/packages/quiz-service"
     schedule:
       interval: "weekly"
-    security-updates-only: false
 
   - package-ecosystem: "github-actions"
     directory: "/"
