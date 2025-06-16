@@ -1,24 +1,24 @@
 version: 2
 updates:
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     security-updates-only: false
 
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/packages/common"
     schedule:
       interval: "weekly"
     security-updates-only: false
 
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/packages/quiz"
     schedule:
       interval: "weekly"
     security-updates-only: false
 
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/packages/quiz-service"
     schedule:
       interval: "weekly"
