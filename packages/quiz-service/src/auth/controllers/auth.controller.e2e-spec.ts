@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { ClientService } from '../../client/services'
 
 describe('AuthController (e2e)', () => {

@@ -14,7 +14,7 @@ import {
   createMockQuitTaskDocument,
   offsetSeconds,
 } from '../../../test/data'
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { AuthService } from '../../auth/services'
 import { Client, ClientModel } from '../../client/services/models/schemas'
 import { Player, PlayerModel } from '../../player/services/models/schemas'

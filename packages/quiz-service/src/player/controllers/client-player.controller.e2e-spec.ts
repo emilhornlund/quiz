@@ -11,7 +11,7 @@ import {
   MOCK_DEFAULT_PLAYER_NICKNAME,
   MOCK_SECONDARY_PLAYER_NICKNAME,
 } from '../../../test/data'
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { AuthService } from '../../auth/services'
 import { Client, ClientModel } from '../../client/services/models/schemas'
 import { PlayerService } from '../services'
