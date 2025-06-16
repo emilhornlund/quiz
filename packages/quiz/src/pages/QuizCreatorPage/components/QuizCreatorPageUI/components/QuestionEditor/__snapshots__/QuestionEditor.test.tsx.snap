@@ -1113,6 +1113,11 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
             </div>
           </div>
         </div>
+        <div
+          class="footer"
+        >
+          Answers between 63 and 79 will be considered correct.
+        </div>
       </div>
     </div>
     <div

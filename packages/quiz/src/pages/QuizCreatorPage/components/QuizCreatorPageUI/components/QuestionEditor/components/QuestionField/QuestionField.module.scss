@@ -7,15 +7,15 @@
   flex-direction: column;
 
   @include helpers.mobile {
-    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.3);
   }
 
   @include helpers.tablet {
-    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.3);
   }
 
   @include helpers.desktop {
-    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.3);
   }
 
   &.layoutFull {
@@ -64,6 +64,11 @@
   .content {
     display: flex;
     flex-direction: column;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
   }
 }
 

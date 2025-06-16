@@ -15,7 +15,7 @@ import IconTooltip from '../../../../../../../../components/IconTooltip'
 import {
   QuestionRangeAnswerMarginLabels,
   QuestionTypeLabels,
-} from '../../../../../../../../models/labels.ts'
+} from '../../../../../../../../models'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
 
 import MediaQuestionField from './MediaQuestionField'
@@ -25,7 +25,7 @@ import TrueFalseOptions from './TrueFalseOptions.tsx'
 import TypeAnswerOptions from './TypeAnswerOptions.tsx'
 import { QuestionFieldType } from './types.ts'
 
-export type QuestionFieldProps =
+export type QuestionFieldProps = (
   | {
       type: QuestionFieldType.CommonDuration
       value?: number
@@ -100,14 +100,16 @@ export type QuestionFieldProps =
       onChange: (values?: string[]) => void
       onValid: (valid: boolean) => void
     }
+) & { footer?: string }
 
 const QuestionFieldWrapper: FC<{
   label?: string
+  footer?: string
   layout?: 'full' | 'half'
   info?: ReactNode | ReactNode[] | string
   className?: string
   children: ReactNode
-}> = ({ label, layout = 'full', info, className, children }) => (
+}> = ({ label, footer, layout = 'full', info, className, children }) => (
   <div
     className={classNames(
       styles.questionFieldContainer,
@@ -122,6 +124,7 @@ const QuestionFieldWrapper: FC<{
       {info && <IconTooltip icon={faCircleInfo}>{info}</IconTooltip>}
     </div>
     <div className={classNames(styles.content, className)}>{children}</div>
+    {footer && <div className={styles.footer}>{footer}</div>}
   </div>
 )
 
@@ -148,7 +151,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 <li>4 minutes</li>
               </ul>
             </>
-          }>
+          }
+          footer={props.footer}>
           <Select
             id="duration-select"
             value={props.value !== undefined ? `${props.value}` : '30'}
@@ -211,7 +215,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonMedia:
       return (
-        <QuestionFieldWrapper layout="full">
+        <QuestionFieldWrapper layout="full" footer={props.footer}>
           <MediaQuestionField
             value={props.value}
             onChange={props.onChange}
@@ -234,7 +238,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 <li>Double Points (2000)</li>
               </ul>
             </>
-          }>
+          }
+          footer={props.footer}>
           <Select
             id="points-select"
             value={props.value !== undefined ? `${props.value}` : '1000'}
@@ -262,7 +267,10 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonQuestion:
       return (
-        <QuestionFieldWrapper label="Question" layout="full">
+        <QuestionFieldWrapper
+          label="Question"
+          layout="full"
+          footer={props.footer}>
           <TextField
             id="question-text-textfield"
             type="text"
@@ -280,7 +288,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonType:
       return (
-        <QuestionFieldWrapper label="Type" layout="half">
+        <QuestionFieldWrapper label="Type" layout="half" footer={props.footer}>
           <Select
             id="question-type-select"
             value={props.value}
@@ -299,7 +307,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Options"
           layout="full"
-          info="The list of possible answers for a question.">
+          info="The list of possible answers for a question."
+          footer={props.footer}>
           <MultiChoiceOptions {...props} />
         </QuestionFieldWrapper>
       )
@@ -308,7 +317,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Correct"
           layout="half"
-          info="The correct value for the range question, which must be within the range of min and max.">
+          info="The correct value for the range question, which must be within the range of min and max."
+          footer={props.footer}>
           <TextField
             id="range-correct-textfield"
             type="number"
@@ -341,7 +351,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 <li>Maximum: Any answer is considered correct.</li>
               </ul>
             </>
-          }>
+          }
+          footer={props.footer}>
           <Select
             id="range-margin-select"
             value={props.value}
@@ -362,7 +373,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Max"
           layout="half"
-          info="The maximum possible value for the range question.">
+          info="The maximum possible value for the range question."
+          footer={props.footer}>
           <TextField
             id="range-max-textfield"
             type="number"
@@ -379,7 +391,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Min"
           layout="half"
-          info="The minimum possible value for the range question.">
+          info="The minimum possible value for the range question."
+          footer={props.footer}>
           <TextField
             id="range-min-textfield"
             type="number"
@@ -397,6 +410,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Options"
           layout="full"
+          footer={props.footer}
           className={styles.optionsContainer}>
           <TrueFalseOptions {...props} />
         </QuestionFieldWrapper>
@@ -407,6 +421,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           label="Options"
           layout="full"
           info="The list of allowed typed answers for a question."
+          footer={props.footer}
           className={styles.optionsContainer}>
           <TypeAnswerOptions {...props} />
         </QuestionFieldWrapper>

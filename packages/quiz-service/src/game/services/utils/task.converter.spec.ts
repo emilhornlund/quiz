@@ -1,4 +1,5 @@
 import {
+  calculateRangeMargin,
   GameMode,
   GameParticipantType,
   MediaType,
@@ -31,7 +32,6 @@ import {
   calculateClassicModeRangeQuestionScore,
   calculateClassicModeRawScore,
   calculateClassicModeScore,
-  calculateRangeMargin,
   calculateZeroToOneHundredModeScore,
   isQuestionAnswerCorrect,
 } from './task.converter'
