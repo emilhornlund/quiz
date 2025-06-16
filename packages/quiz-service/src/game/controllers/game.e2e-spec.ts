@@ -33,7 +33,7 @@ import {
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
   offsetSeconds,
 } from '../../../test/data'
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'

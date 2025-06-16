@@ -5,7 +5,7 @@ import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { AuthService } from '../../auth/services'
 
 describe('MediaController (e2e)', () => {

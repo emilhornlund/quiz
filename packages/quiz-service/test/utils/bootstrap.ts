@@ -5,10 +5,9 @@ import { getRedisConnectionToken } from '@nestjs-modules/ioredis'
 import { Redis } from 'ioredis'
 import { Connection } from 'mongoose'
 
-import { PexelsMediaSearchService } from '../../media/services'
-import { AppModule } from '../app.module'
-
-import { configureApp } from './bootstrap'
+import { AppModule } from '../../src/app'
+import { configureApp } from '../../src/app/utils'
+import { PexelsMediaSearchService } from '../../src/media/services'
 
 const mockPexelsMediaSearchService = {
   searchPhotos: async () =>
@@ -44,7 +43,11 @@ export async function createTestApp(): Promise<INestApplication> {
 }
 
 export async function closeTestApp(app: INestApplication): Promise<void> {
-  await (app.get(getConnectionToken()) as Connection).db.dropDatabase()
+  const connection = app.get(getConnectionToken()) as Connection
+  const collections = await connection.listCollections()
+  await Promise.all(
+    collections.map(({ name }) => connection.dropCollection(name)),
+  )
 
   const redis = app.get<Redis>(getRedisConnectionToken())
   await redis.flushdb()

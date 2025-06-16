@@ -10,7 +10,7 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../app/utils/test'
+import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { QuizService } from '../services'
