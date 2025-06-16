@@ -831,10 +831,7 @@ function buildGameResultPlayerEvent(
       behind: previousResultsEntry
         ? {
             points: previousResultsEntry.totalScore - total,
-            nickname:
-              document.participants.find(
-                ({ player: { _id } }) => _id === previousResultsEntry.playerId,
-              )?.player?.nickname ?? 'Unknown',
+            nickname: previousResultsEntry.nickname,
           }
         : undefined,
     },

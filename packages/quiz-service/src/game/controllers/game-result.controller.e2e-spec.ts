@@ -370,6 +370,7 @@ function buildMockClassicModeGame(
           {
             type: QuestionType.MultiChoice,
             playerId: playerClient.player._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.MultiChoice,
               playerId: playerClient.player._id,
@@ -430,6 +431,7 @@ function buildMockClassicModeGame(
           {
             type: QuestionType.Range,
             playerId: playerClient.player._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.Range,
               playerId: playerClient.player._id,
@@ -490,6 +492,7 @@ function buildMockClassicModeGame(
           {
             type: QuestionType.TrueFalse,
             playerId: playerClient.player._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.TrueFalse,
               playerId: playerClient.player._id,
@@ -553,6 +556,7 @@ function buildMockClassicModeGame(
           {
             type: QuestionType.TypeAnswer,
             playerId: playerClient.player._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.TypeAnswer,
               playerId: playerClient.player._id,
@@ -733,6 +737,7 @@ function buildMockZeroToOneHundredModeGame(
           {
             type: QuestionType.Range,
             playerId: playerClient._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.Range,
               playerId: playerClient._id,
@@ -793,6 +798,7 @@ function buildMockZeroToOneHundredModeGame(
           {
             type: QuestionType.Range,
             playerId: playerClient._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.Range,
               playerId: playerClient._id,
@@ -853,6 +859,7 @@ function buildMockZeroToOneHundredModeGame(
           {
             type: QuestionType.Range,
             playerId: playerClient._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.Range,
               playerId: playerClient._id,
@@ -913,6 +920,7 @@ function buildMockZeroToOneHundredModeGame(
           {
             type: QuestionType.Range,
             playerId: playerClient._id,
+            nickname: playerClient.player.nickname,
             answer: {
               type: QuestionType.Range,
               playerId: playerClient._id,

@@ -2522,6 +2522,7 @@ function buildCorrectQuestionResultTaskItem(
   return {
     type: options.answer.type,
     playerId: options.client.player._id,
+    nickname: options.client.player.nickname,
     answer: {
       type: options.answer.type,
       playerId: options.client.player._id,
@@ -2549,6 +2550,7 @@ function buildIncorrectQuestionResultTaskItem(
   return {
     type: options.answer.type,
     playerId: options.client.player._id,
+    nickname: options.client.player.nickname,
     answer: {
       type: options.answer.type,
       playerId: options.client.player._id,
