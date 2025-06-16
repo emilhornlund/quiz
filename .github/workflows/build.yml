@@ -44,3 +44,6 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: Check for circular dependencies
+        run: yarn workspace @quiz/quiz-service check-circular-deps

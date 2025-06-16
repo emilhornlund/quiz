@@ -99,6 +99,7 @@ Clone the repo and install dependencies:
 git clone git@github.com:emilhornlund/quiz.git
 cd quiz
 yarn install
+yarn workspace @quiz/common build
 ```
 
 To start everything in dev mode:
