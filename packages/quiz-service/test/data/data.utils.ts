@@ -251,6 +251,7 @@ export function createMockQuestionResultTaskItemDocument(
   return {
     type: QuestionType.MultiChoice,
     playerId: MOCK_DEFAULT_PLAYER_ID,
+    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     answer: createMockQuestionTaskMultiChoiceAnswer(),
     correct: true,
     lastScore: 1337,

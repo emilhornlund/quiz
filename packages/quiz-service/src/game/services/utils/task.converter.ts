@@ -596,6 +596,7 @@ function buildQuestionResultTaskItem(
 ): QuestionResultTaskItem {
   const {
     player: { _id: playerId },
+    nickname,
     totalScore: previousScore,
     currentStreak,
   } = participantPlayer
@@ -618,6 +619,7 @@ function buildQuestionResultTaskItem(
   return {
     type,
     playerId,
+    nickname,
     answer,
     correct,
     lastScore,

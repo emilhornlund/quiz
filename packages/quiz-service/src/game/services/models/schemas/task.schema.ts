@@ -227,6 +227,9 @@ export class QuestionResultTaskItem {
   @Prop({ type: String, required: true })
   playerId: string
 
+  @Prop({ type: String, required: true })
+  nickname: string
+
   @Prop({ type: QuestionTaskBaseAnswerSchema, required: false })
   answer?: QuestionTaskBaseAnswer &
     (
