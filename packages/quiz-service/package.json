@@ -36,7 +36,7 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@quiz/common": "1.0.0",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "bullmq": "^5.52.3",
     "cache-manager": "^6.4.3",
