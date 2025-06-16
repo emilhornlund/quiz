@@ -12,6 +12,14 @@ updates:
           - "*"
     ignore:
       - dependency-name: "@quiz/common"
+      - dependency-name: "@storybook/*"
+        update-types: [ "version-update:semver-major" ]
+      - dependency-name: "@chromatic-com/storybook"
+        update-types: [ "version-update:semver-major" ]
+      - dependency-name: "storybook"
+        update-types: [ "version-update:semver-major" ]
+      - dependency-name: "storybook-addon-remix-react-router"
+        update-types: [ "version-update:semver-major" ]
 
   - package-ecosystem: "github-actions"
     directory: "/"
