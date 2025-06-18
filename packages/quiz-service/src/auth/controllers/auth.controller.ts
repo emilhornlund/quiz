@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  NotImplementedException,
+  Post,
+} from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -10,7 +17,13 @@ import {
 import { AuthService } from '../services'
 
 import { Public } from './decorators'
-import { LegacyAuthRequest, LegacyAuthResponse } from './models'
+import {
+  AuthLoginRequest,
+  AuthLoginResponse,
+  AuthRefreshRequest,
+  LegacyAuthRequest,
+  LegacyAuthResponse,
+} from './models'
 
 /**
  * Controller for managing authentication.
@@ -24,6 +37,73 @@ export class AuthController {
    * @param {AuthService} authService - The service handling authentication logic.
    */
   constructor(private readonly authService: AuthService) {}
+
+  /**
+   * Authenticates a user by verifying their email and password,
+   * then issues a new access token and refresh token.
+   *
+   * @param authLoginRequest - Request containing the user's email and password.
+   * @returns Promise resolving to an AuthLoginResponse with both tokens.
+   */
+  @Public()
+  @Post('/login')
+  @ApiOperation({
+    summary: 'Authenticate with email and password',
+    description:
+      'Verifies user credentials and issues a new access token and refresh token.',
+  })
+  @ApiBody({
+    description: 'Payload containing the user’s email and password.',
+    type: AuthLoginRequest,
+  })
+  @ApiOkResponse({
+    description: 'Returns the issued access and refresh tokens.',
+    type: AuthLoginResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Validation failed or credentials are incorrect.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async login(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() authLoginRequest: AuthLoginRequest,
+  ): Promise<AuthLoginResponse> {
+    throw new NotImplementedException()
+  }
+
+  /**
+   * Validates the provided refresh token and issues a new access token
+   * (and rotates the refresh token if applicable).
+   *
+   * @param authRefreshRequest - Request containing the existing refresh token.
+   * @returns Promise resolving to an AuthLoginResponse with new tokens.
+   */
+  @Public()
+  @Post('/refresh')
+  @ApiOperation({
+    summary: 'Refresh access token using a refresh token',
+    description:
+      'Validates the provided refresh token and issues a new access token (and optionally a new refresh token).',
+  })
+  @ApiBody({
+    description: 'Payload containing the existing refresh token.',
+    type: AuthRefreshRequest,
+  })
+  @ApiOkResponse({
+    description:
+      'Returns a new access token and, if rotated, a new refresh token.',
+    type: AuthLoginResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Validation failed or refresh token is invalid/expired.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async refresh(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() authRefreshRequest: AuthRefreshRequest,
+  ): Promise<AuthLoginResponse> {
+    throw new NotImplementedException()
+  }
 
   /**
    * Authenticates a client and returns a JWT token.
