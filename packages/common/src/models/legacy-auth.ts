@@ -1,7 +1,7 @@
 /**
  * Data transfer object for authentication requests.
  */
-export interface AuthRequestDto {
+export interface LegacyAuthRequestDto {
   /**
    * The unique identifier of the client.
    * - Format: UUID
@@ -12,7 +12,7 @@ export interface AuthRequestDto {
 /**
  * Data transfer object for authentication responses.
  */
-export interface AuthResponseDto {
+export interface LegacyAuthResponseDto {
   /**
    * The JWT token issued to the client.
    */
@@ -21,18 +21,18 @@ export interface AuthResponseDto {
   /**
    * The client.
    */
-  client: AuthClientResponseDto
+  client: LegacyAuthClientResponseDto
 
   /**
    * The player.
    */
-  player: AuthPlayerResponseDto
+  player: LegacyAuthPlayerResponseDto
 }
 
 /**
  * Data transfer object for authentication client responses.
  */
-export interface AuthClientResponseDto {
+export interface LegacyAuthClientResponseDto {
   /**
    * The unique identifier of the client.
    */
@@ -47,7 +47,7 @@ export interface AuthClientResponseDto {
 /**
  * Data transfer object for authentication player responses.
  */
-export interface AuthPlayerResponseDto {
+export interface LegacyAuthPlayerResponseDto {
   /**
    * The unique identifier of the player.
    */

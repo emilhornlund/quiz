@@ -1,6 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { AuthRequestDto, AuthResponseDto, TokenDto } from '@quiz/common'
+import {
+  LegacyAuthRequestDto,
+  LegacyAuthResponseDto,
+  TokenDto,
+} from '@quiz/common'
 
 import { ClientService } from '../../client/services'
 
@@ -24,14 +28,14 @@ export class AuthService {
   /**
    * Authenticates a client by generating a JWT token.
    *
-   * @param {AuthRequestDto} authRequest - The request containing the client's unique identifier.
+   * @param {LegacyAuthRequestDto} authRequest - The request containing the client's unique identifier.
    *
-   * @returns {Promise<AuthResponseDto>} A promise resolving to an `AuthResponseDto`, which includes
+   * @returns {Promise<LegacyAuthResponseDto>} A promise resolving to an `LegacyAuthResponseDto`, which includes
    *          the generated JWT token, client information, and player information.
    */
   public async authenticate(
-    authRequest: AuthRequestDto,
-  ): Promise<AuthResponseDto> {
+    authRequest: LegacyAuthRequestDto,
+  ): Promise<LegacyAuthResponseDto> {
     const {
       _id: clientId,
       clientIdHash,
