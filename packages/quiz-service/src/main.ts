@@ -19,8 +19,11 @@ async function bootstrap() {
       'Operations related to client registration and profile management.',
     )
     .addTag('game', 'Operations for creating and managing quiz games.')
+    .addTag('health', 'Operations determining service health.')
     .addTag('media', 'Operations for uploading and retrieving media assets.')
+    .addTag('player', 'Operations for managing players.')
     .addTag('quiz', 'Operations for creating and managing quiz content.')
+    .addTag('user', 'Operations for creating and managing users.')
     .addBearerAuth({ type: 'http', name: 'Authorization', in: 'header' })
     .build()
   const document = SwaggerModule.createDocument(app, config)
