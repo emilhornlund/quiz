@@ -21,6 +21,7 @@ import { HealthModule } from '../health'
 import { MediaModule } from '../media'
 import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
+import { UserModule } from '../user'
 
 import { EnvironmentVariables } from './config'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
@@ -176,6 +177,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     MediaModule,
     PlayerModule,
     QuizModule,
+    UserModule,
   ],
   controllers: [],
   providers: [
