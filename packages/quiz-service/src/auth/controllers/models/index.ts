@@ -1,3 +1,4 @@
-export * from './auth.request'
-export * from './auth.response'
-export * from './auth-player.response'
+export * from './legacy-auth.request'
+export * from './legacy-auth.response'
+export * from './legacy-auth-client.response'
+export * from './legacy-auth-player.response'

@@ -10,7 +10,7 @@ import {
 import { AuthService } from '../services'
 
 import { Public } from './decorators'
-import { AuthRequest, AuthResponse } from './models'
+import { LegacyAuthRequest, LegacyAuthResponse } from './models'
 
 /**
  * Controller for managing authentication.
@@ -28,9 +28,9 @@ export class AuthController {
   /**
    * Authenticates a client and returns a JWT token.
    *
-   * @param {AuthRequest} authRequest - The client authentication request.
+   * @param {LegacyAuthRequest} authRequest - The client authentication request.
    *
-   * @returns {Promise<AuthResponse>} The authentication response containing a token.
+   * @returns {Promise<LegacyAuthResponse>} The authentication response containing a token.
    */
   @Public()
   @Post()
@@ -38,14 +38,15 @@ export class AuthController {
     summary: 'Authenticate a client',
     description:
       'Generates a JWT token for a client identified by a unique client ID.',
+    deprecated: true,
   })
   @ApiBody({
     description: 'Client ID for authentication',
-    type: AuthRequest,
+    type: LegacyAuthRequest,
   })
   @ApiOkResponse({
     description: 'Client successfully authenticated',
-    type: AuthResponse,
+    type: LegacyAuthResponse,
   })
   @ApiBadRequestResponse({
     description: 'Invalid client ID or validation failure',
@@ -53,8 +54,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async authenticate(
     @Body()
-    authRequest: AuthRequest,
-  ): Promise<AuthResponse> {
+    authRequest: LegacyAuthRequest,
+  ): Promise<LegacyAuthResponse> {
     return this.authService.authenticate(authRequest)
   }
 }
