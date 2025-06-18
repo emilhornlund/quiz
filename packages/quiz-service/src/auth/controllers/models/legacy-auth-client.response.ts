@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AuthClientResponseDto } from '@quiz/common'
+import { LegacyAuthClientResponseDto } from '@quiz/common'
 
 /**
  * Response object for client authentication.
  */
-export class AuthClientResponse implements AuthClientResponseDto {
+export class LegacyAuthClientResponse implements LegacyAuthClientResponseDto {
   /**
    * The unique identifier of the client.
    */

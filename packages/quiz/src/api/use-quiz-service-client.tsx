@@ -1,8 +1,8 @@
 import {
-  AuthResponseDto,
   CreateGameResponseDto,
   FindGameResponseDto,
   GameResultDto,
+  LegacyAuthResponseDto,
   MediaUploadPhotoResponseDto,
   PaginatedGameHistoryDto,
   PaginatedMediaPhotoSearchDto,
@@ -68,7 +68,7 @@ export const useQuizServiceClient = () => {
    *
    * @returns A promise resolving to the authentication response containing the client and player details.
    */
-  const authenticate = async (): Promise<AuthResponseDto> => {
+  const authenticate = async (): Promise<LegacyAuthResponseDto> => {
     const clientId = getClientId()
 
     const options = {
@@ -83,7 +83,7 @@ export const useQuizServiceClient = () => {
     const response = await fetch(resolveUrl('/auth'), options)
 
     const parsedResponse =
-      await parseResponseAndHandleError<AuthResponseDto>(response)
+      await parseResponseAndHandleError<LegacyAuthResponseDto>(response)
 
     setClient(parsedResponse.client)
     setPlayer(parsedResponse.player)
