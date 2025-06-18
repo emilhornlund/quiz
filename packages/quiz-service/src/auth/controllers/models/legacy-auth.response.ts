@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AuthResponseDto } from '@quiz/common'
+import { LegacyAuthResponseDto } from '@quiz/common'
 
-import { AuthClientResponse } from './auth-client.response'
-import { AuthPlayerResponse } from './auth-player.response'
+import { LegacyAuthClientResponse } from './legacy-auth-client.response'
+import { LegacyAuthPlayerResponse } from './legacy-auth-player.response'
 
 /**
  * Response object for client authentication.
  */
-export class AuthResponse implements AuthResponseDto {
+export class LegacyAuthResponse implements LegacyAuthResponseDto {
   /**
    * JWT token generated for the authenticated client.
    * - Format: Bearer token
@@ -25,11 +25,11 @@ export class AuthResponse implements AuthResponseDto {
    * Response object for client authentication.
    */
   @ApiProperty()
-  client: AuthClientResponse
+  client: LegacyAuthClientResponse
 
   /**
    * Response object for player authentication.
    */
   @ApiProperty()
-  player: AuthPlayerResponse
+  player: LegacyAuthPlayerResponse
 }
