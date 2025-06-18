@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AuthPlayerResponseDto } from '@quiz/common'
+import { LegacyAuthPlayerResponseDto } from '@quiz/common'
 
 /**
  * Response object for player authentication.
  */
-export class AuthPlayerResponse implements AuthPlayerResponseDto {
+export class LegacyAuthPlayerResponse implements LegacyAuthPlayerResponseDto {
   /**
    * The unique identifier of the player.
    */

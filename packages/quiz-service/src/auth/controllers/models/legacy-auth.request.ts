@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AuthRequestDto } from '@quiz/common'
+import { LegacyAuthRequestDto } from '@quiz/common'
 import { IsNotEmpty, IsUUID } from 'class-validator'
 
 /**
  * Request object for client authentication.
  */
-export class AuthRequest implements AuthRequestDto {
+export class LegacyAuthRequest implements LegacyAuthRequestDto {
   /**
    * The unique identifier of the client.
    * - Format: UUID
