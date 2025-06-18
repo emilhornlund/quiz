@@ -81,3 +81,15 @@ export const EMAIL_MIN_LENGTH = 6
 export const EMAIL_MAX_LENGTH = 128
 export const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+// Given (first) name: 1–64 characters, no leading/trailing separators
+export const GIVEN_NAME_MIN_LENGTH = 1
+export const GIVEN_NAME_MAX_LENGTH = 64
+export const GIVEN_NAME_REGEX =
+  /^(?=.{1,64}$)[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u
+
+// Family (last) name: 1–64 characters, no leading/trailing separators
+export const FAMILY_NAME_MIN_LENGTH = 1
+export const FAMILY_NAME_MAX_LENGTH = 64
+export const FAMILY_NAME_REGEX =
+  /^(?=.{1,64}$)[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u
