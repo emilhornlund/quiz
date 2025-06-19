@@ -5,8 +5,9 @@ import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
-import { AuthService } from '../../auth/services'
+import { AuthService } from '../src/auth/services'
+
+import { closeTestApp, createTestApp } from './utils/bootstrap'
 
 describe('MediaController (e2e)', () => {
   let app: INestApplication
@@ -72,10 +73,7 @@ describe('MediaController (e2e)', () => {
         await supertest(app.getHttpServer())
           .post('/api/media/uploads/photos')
           .set({ Authorization: `Bearer ${token}` })
-          .attach(
-            'file',
-            join(__dirname, `../../../test/assets/photo.${extension}`),
-          )
+          .attach('file', join(__dirname, `./assets/photo.${extension}`))
           .expect(201)
           .expect((res) => {
             expect(res.body).toEqual({
@@ -84,7 +82,7 @@ describe('MediaController (e2e)', () => {
             return rm(
               join(
                 __dirname,
-                '../../../',
+                '../',
                 process.env.UPLOAD_DIRECTORY,
                 `/${dirname(res.body.filename)}`,
               ),
@@ -100,7 +98,7 @@ describe('MediaController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post('/api/media/uploads/photos')
         .set({ Authorization: `Bearer ${token}` })
-        .attach('file', join(__dirname, '../../../test/assets/empty.txt'))
+        .attach('file', join(__dirname, './assets/empty.txt'))
         .expect(422)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -132,10 +130,10 @@ describe('MediaController (e2e)', () => {
 
       const photoId = uuidv4()
 
-      const srcFile = join(__dirname, `../../../test/assets/photo.webp`)
+      const srcFile = join(__dirname, `./assets/photo.webp`)
       const dstFile = join(
         __dirname,
-        '../../../',
+        '../',
         process.env.UPLOAD_DIRECTORY,
         `/${clientId}/${photoId}.webp`,
       )

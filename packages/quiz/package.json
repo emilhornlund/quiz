@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "TZ=UTC vitest run",
+    "test:coverage": "TZ=UTC vitest run --coverage",
     "test:watch": "TZ=UTC vitest watch",
     "test:update": "TZ=UTC vitest --update",
     "storybook": "storybook dev -p 6006",
@@ -58,6 +59,7 @@
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.4.1",
+    "@vitest/coverage-istanbul": "^3.2.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -68,6 +70,6 @@
     "storybook": "^8.6.14",
     "storybook-addon-remix-react-router": "^4.0.0",
     "vite": "^6.3.5",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.4"
   }
 }
