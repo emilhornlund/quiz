@@ -1,6 +1,7 @@
 # Klurigo – formerly “Quiz”
 
 [![Main](https://github.com/emilhornlund/quiz/actions/workflows/main.yml/badge.svg)](https://github.com/emilhornlund/quiz/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/emilhornlund/quiz/graph/badge.svg?token=TO2S69Y1MZ)](https://codecov.io/gh/emilhornlund/quiz)
 
 > **Branding update:** The game platform is now branded **Klurigo**, even though the repository, packages, and build artefacts still use the original *quiz* namespace.
 >
