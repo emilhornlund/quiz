@@ -37,6 +37,23 @@ export default defineConfig(({ mode }) => {
       css: {
         modules: { classNameStrategy: 'non-scoped' },
       },
+      coverage: {
+        provider: 'istanbul',
+        all: true,
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: [
+          'node_modules/**',
+          'coverage',
+          'public/**',
+          '**/*{.,-}test.ts',
+          '**/*{.,-}spec.ts',
+          '**/vite.config.ts',
+          '**/src/*.d.ts',
+          '**/src/main.ts',
+        ],
+        reporter: ['text', 'lcov', 'html'],
+        reportsDirectory: 'coverage',
+      },
     },
   }
 })

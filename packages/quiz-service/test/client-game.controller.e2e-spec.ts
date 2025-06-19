@@ -4,6 +4,11 @@ import { GameMode, GameParticipantType, GameStatus } from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
+import { AuthService } from '../src/auth/services'
+import { Client, ClientModel } from '../src/client/services/models/schemas'
+import { Game, GameModel } from '../src/game/services/models/schemas'
+import { Player, PlayerModel } from '../src/player/services/models/schemas'
+
 import {
   createMockClientDocument,
   createMockGameDocument,
@@ -13,12 +18,8 @@ import {
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
   offsetSeconds,
-} from '../../../test/data'
-import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { Client, ClientModel } from '../../client/services/models/schemas'
-import { Player, PlayerModel } from '../../player/services/models/schemas'
-import { Game, GameModel } from '../services/models/schemas'
+} from './data'
+import { closeTestApp, createTestApp } from './utils/bootstrap'
 
 describe('ClientGameController (e2e)', () => {
   let app: INestApplication

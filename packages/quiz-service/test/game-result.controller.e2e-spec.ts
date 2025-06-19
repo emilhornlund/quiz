@@ -12,13 +12,14 @@ import { Model } from 'mongoose'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
-import { Client } from '../../client/services/models/schemas'
-import { Player } from '../../player/services/models/schemas'
-import { Quiz } from '../../quiz/services/models/schemas'
-import { Game, GameResult, TaskType } from '../services/models/schemas'
+import { AuthService } from '../src/auth/services'
+import { ClientService } from '../src/client/services'
+import { Client } from '../src/client/services/models/schemas'
+import { Game, GameResult, TaskType } from '../src/game/services/models/schemas'
+import { Player } from '../src/player/services/models/schemas'
+import { Quiz } from '../src/quiz/services/models/schemas'
+
+import { closeTestApp, createTestApp } from './utils/bootstrap'
 
 describe('GameResultController (e2e)', () => {
   let app: INestApplication

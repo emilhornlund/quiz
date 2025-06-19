@@ -3,10 +3,7 @@ import { getModelToken } from '@nestjs/mongoose'
 import { GameMode, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { closeTestApp, createTestApp } from '../../../test/utils/bootstrap'
-import { Quiz } from '../../quiz/services/models/schemas'
-
-import { GameRepository } from './game.repository'
+import { GameRepository } from '../src/game/services'
 import {
   BaseTask,
   Game,
@@ -18,7 +15,10 @@ import {
   QuestionTask,
   QuitTask,
   TaskType,
-} from './models/schemas'
+} from '../src/game/services/models/schemas'
+import { Quiz } from '../src/quiz/services/models/schemas'
+
+import { closeTestApp, createTestApp } from './utils/bootstrap'
 
 const ONE_HOUR = 60 * 60 * 1000
 const ONE_SECOND = 1000

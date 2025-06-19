@@ -1,0 +1,21 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testRegex": ".*\\.e2e-spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@quiz/common(.*)$": "<rootDir>/../../common/src$1"
+  },
+  "collectCoverageFrom": [
+    "**/*.(t|j)s"
+  ],
+  "coverageDirectory": "../coverage",
+  "testEnvironment": "node",
+  "transformIgnorePatterns": [
+    "/node_modules/(?!@quiz/common)"
+  ],
+  "detectOpenHandles": true,
+  "maxWorkers": 1
+}

@@ -11,8 +11,8 @@
     "serve": "node dist/main",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "jest --runInBand --detectOpenHandles --forceExit --testTimeout=30000",
-    "test:watch": "jest --watch",
+    "test": "jest --config ./jest.json",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:coverage": "jest --coverage",
     "check-circular-deps": "./scripts/check_circular_deps.sh 0"
   },
@@ -71,31 +71,5 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.(e2e-)?spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "^@quiz/common(.*)$": "<rootDir>/../../common/src$1"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!@quiz/common)"
-    ],
-    "detectOpenHandles": true,
-    "forceExit": true,
-    "maxWorkers": 1
   }
 }
