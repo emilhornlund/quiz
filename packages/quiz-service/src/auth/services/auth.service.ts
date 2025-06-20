@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import {
+  Authorities,
   LegacyAuthRequestDto,
   LegacyAuthResponseDto,
   TokenDto,
@@ -33,7 +34,7 @@ export class AuthService {
    * @returns {Promise<LegacyAuthResponseDto>} A promise resolving to an `LegacyAuthResponseDto`, which includes
    *          the generated JWT token, client information, and player information.
    */
-  public async authenticate(
+  public async legacyAuthenticate(
     authRequest: LegacyAuthRequestDto,
   ): Promise<LegacyAuthResponseDto> {
     const {
@@ -43,7 +44,7 @@ export class AuthService {
     } = await this.clientService.findOrCreateClient(authRequest.clientId)
 
     const token = await this.jwtService.signAsync(
-      {},
+      { authorities: [Authorities.LegacyAuth] },
       { subject: clientIdHash, expiresIn: '1h' },
     )
 
