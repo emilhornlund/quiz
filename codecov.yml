@@ -1,0 +1,24 @@
+comment:
+  layout: "reach, diff, flags, coverage"
+  behavior: default
+  require_changes: true
+
+component_management:
+  individual_components:
+    - component_id: quiz
+      name: quiz
+      paths:
+        - packages/quiz/**
+    - component_id: quiz-service
+      name: quiz-service
+      paths:
+        - packages/quiz-service/**
+
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
