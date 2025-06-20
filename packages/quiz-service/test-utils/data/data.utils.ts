@@ -361,3 +361,8 @@ export function createMockQuitTaskDocument(
     ...(task ?? {}),
   }
 }
+
+export const MOCK_DEFAULT_USER_EMAIL = 'user@example.com'
+export const MOCK_DEFAULT_USER_PASSWORD = '%AD2W!o#iGPoa7wd'
+export const MOCK_DEFAULT_USER_GIVEN_NAME = 'John'
+export const MOCK_DEFAULT_USER_FAMILY_NAME = 'Appleseed'
