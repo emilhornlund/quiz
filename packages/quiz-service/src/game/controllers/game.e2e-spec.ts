@@ -83,14 +83,14 @@ describe('GameController (e2e)', () => {
 
     const hostClientId = uuidv4()
     hostClient = await clientService.findOrCreateClient(hostClientId)
-    const hostAuthResponse = await authService.authenticate({
+    const hostAuthResponse = await authService.legacyAuthenticate({
       clientId: hostClientId,
     })
     hostClientToken = hostAuthResponse.token
 
     const playerClientId = uuidv4()
     playerClient = await clientService.findOrCreateClient(playerClientId)
-    const playerAuthResponse = await authService.authenticate({
+    const playerAuthResponse = await authService.legacyAuthenticate({
       clientId: playerClientId,
     })
     playerClientToken = playerAuthResponse.token
@@ -1637,7 +1637,7 @@ describe('GameController (e2e)', () => {
         }),
       )
 
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: uuidv4(),
       })
 
@@ -2208,7 +2208,7 @@ describe('GameController (e2e)', () => {
         }),
       )
 
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: uuidv4(),
       })
 
