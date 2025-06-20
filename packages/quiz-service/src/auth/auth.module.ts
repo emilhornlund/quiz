@@ -13,12 +13,6 @@ import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
 import { AuthService } from './services'
 
-const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
-  algorithm: 'HS256',
-  issuer: 'quiz',
-  audience: process.env.NODE_ENV || 'development',
-}
-
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -30,6 +24,12 @@ const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
         const jwtSecret = configService.get('JWT_SECRET')
         const jwtPrivateKeyPath = configService.get('JWT_PRIVATE_KEY_PATH')
         const jwtPublicKeyPath = configService.get('JWT_PUBLIC_KEY_PATH')
+
+        const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
+          algorithm: 'HS256',
+          issuer: 'quiz',
+          audience: `${configService.get('ENVIRONMENT')}-quiz`,
+        }
 
         return {
           global: true,

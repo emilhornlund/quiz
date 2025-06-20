@@ -43,6 +43,9 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test')
           .default('development'),
+        ENVIRONMENT: Joi.string()
+          .valid('local', 'beta', 'prod', 'test')
+          .required(),
         SERVER_PORT: Joi.number().port().default(8080),
         SERVER_ALLOW_ORIGIN: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
