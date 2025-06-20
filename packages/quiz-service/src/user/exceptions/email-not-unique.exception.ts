@@ -7,6 +7,6 @@ import { ConflictException } from '@nestjs/common'
  */
 export class EmailNotUniqueException extends ConflictException {
   constructor(email: string) {
-    super(`Email "${email}" is not unique`)
+    super(`Email '${email}' is not unique`)
   }
 }
