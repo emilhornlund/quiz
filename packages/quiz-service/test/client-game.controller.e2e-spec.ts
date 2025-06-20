@@ -48,7 +48,7 @@ describe('ClientGameController (e2e)', () => {
         createMockClientDocument({ player }),
       )
 
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId,
       })
 
@@ -120,7 +120,7 @@ describe('ClientGameController (e2e)', () => {
         createMockClientDocument({ player }),
       )
 
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId,
       })
 
@@ -172,7 +172,7 @@ describe('ClientGameController (e2e)', () => {
         createMockClientDocument({ player }),
       )
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/client/games')

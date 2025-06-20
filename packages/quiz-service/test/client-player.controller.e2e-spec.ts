@@ -47,7 +47,7 @@ describe('ClientPlayerController (e2e)', () => {
       const {
         token,
         player: { id, nickname },
-      } = await authService.authenticate({ clientId: client._id })
+      } = await authService.legacyAuthenticate({ clientId: client._id })
 
       return supertest(app.getHttpServer())
         .get('/api/client/player')
@@ -64,7 +64,9 @@ describe('ClientPlayerController (e2e)', () => {
     })
 
     it('should succeed in retrieving the associated player from an existing authenticated client', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .get('/api/client/player')
@@ -96,7 +98,9 @@ describe('ClientPlayerController (e2e)', () => {
 
   describe('/api/client/player (PUT)', () => {
     it('should update player nickname successfully', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .put('/api/client/player')
@@ -114,7 +118,9 @@ describe('ClientPlayerController (e2e)', () => {
     })
 
     it('should update player nickname containing emojis successfully', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .put('/api/client/player')
@@ -132,7 +138,9 @@ describe('ClientPlayerController (e2e)', () => {
     })
 
     it('should handle validation errors for invalid nickname', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .put('/api/client/player')
@@ -178,7 +186,9 @@ describe('ClientPlayerController (e2e)', () => {
 
   describe('/api/client/player/link (GET)', () => {
     it('should succeed in retrieving the client associated players link code', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .get('/api/client/player/link')
@@ -208,7 +218,9 @@ describe('ClientPlayerController (e2e)', () => {
 
   describe('/api/client/player/link (POST)', () => {
     it('should succeed in associating a player from a valid link code', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       const anotherPlayer = await playerModel.create(
         createMockPlayerDocument({
@@ -244,7 +256,9 @@ describe('ClientPlayerController (e2e)', () => {
     })
 
     it('should fail in associating a player from an unknown link code', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .post('/api/client/player/link')
@@ -261,7 +275,9 @@ describe('ClientPlayerController (e2e)', () => {
     })
 
     it('should fail in associating a player from an invalid link code', async () => {
-      const { token } = await authService.authenticate({ clientId: client._id })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: client._id,
+      })
 
       return supertest(app.getHttpServer())
         .post('/api/client/player/link')
