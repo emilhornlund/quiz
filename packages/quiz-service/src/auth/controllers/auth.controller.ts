@@ -136,6 +136,6 @@ export class AuthController {
     @Body()
     authRequest: LegacyAuthRequest,
   ): Promise<LegacyAuthResponse> {
-    return this.authService.authenticate(authRequest)
+    return this.authService.legacyAuthenticate(authRequest)
   }
 }
