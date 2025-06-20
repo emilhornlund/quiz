@@ -151,7 +151,7 @@ describe('QuizController (e2e)', () => {
     it('should succeed in creating a new quiz', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .post('/api/quizzes')
@@ -187,7 +187,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
@@ -228,7 +228,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       await Promise.all([
         ...[...Array(10).keys()].map(() =>
@@ -264,7 +264,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       await Promise.all(
         [...Array(10).keys()].map(() =>
@@ -307,7 +307,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
@@ -339,7 +339,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
@@ -372,7 +372,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
@@ -403,7 +403,7 @@ describe('QuizController (e2e)', () => {
     it('should return an empty list when no quizzes exists', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes')
@@ -435,7 +435,7 @@ describe('QuizController (e2e)', () => {
     it('should validate query parameters and return a 400 error for invalid input', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?limit=X&offset=X&mode=X&sort=X&order=X')
@@ -495,7 +495,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const originalQuiz = await quizService.createQuiz(
         originalData,
@@ -539,7 +539,7 @@ describe('QuizController (e2e)', () => {
       const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quizId}`)
@@ -570,7 +570,9 @@ describe('QuizController (e2e)', () => {
         updated,
       } = await quizService.createQuiz(originalData, client.player)
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${id}`)
@@ -604,7 +606,9 @@ describe('QuizController (e2e)', () => {
         client.player,
       )
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${id}`)
@@ -624,7 +628,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const originalQuiz = await quizService.createQuiz(
         originalData,
@@ -665,7 +669,7 @@ describe('QuizController (e2e)', () => {
       const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .put(`/api/quizzes/${quizId}`)
@@ -686,7 +690,9 @@ describe('QuizController (e2e)', () => {
       const client = await clientService.findOrCreateClient(uuidv4())
       const { id } = await quizService.createQuiz(originalData, client.player)
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .put(`/api/quizzes/${id}`)
@@ -707,7 +713,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const originalQuiz = await quizService.createQuiz(
         originalData,
@@ -727,7 +733,7 @@ describe('QuizController (e2e)', () => {
       const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .delete(`/api/quizzes/${quizId}`)
@@ -747,7 +753,9 @@ describe('QuizController (e2e)', () => {
       const client = await clientService.findOrCreateClient(uuidv4())
       const { id } = await quizService.createQuiz(originalData, client.player)
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .delete(`/api/quizzes/${id}`)
@@ -767,7 +775,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const quiz = await quizService.createQuiz(originalData, client.player)
 
@@ -785,7 +793,7 @@ describe('QuizController (e2e)', () => {
 
       const client = await clientService.findOrCreateClient(clientId)
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const quiz = await quizService.createQuiz(updatedData, client.player)
 
@@ -801,7 +809,9 @@ describe('QuizController (e2e)', () => {
     it('should fail in retrieving all questions for a non existing quiz', async () => {
       const unknownQuizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${unknownQuizId}/questions`)
@@ -824,7 +834,9 @@ describe('QuizController (e2e)', () => {
 
       const quiz = await quizService.createQuiz(originalData, client.player)
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quiz.id}/questions`)

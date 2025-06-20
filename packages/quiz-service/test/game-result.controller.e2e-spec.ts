@@ -48,7 +48,7 @@ describe('GameResultController (e2e)', () => {
 
   describe('/api/games/:gameID/results (GET)', () => {
     it('should succeed in retrieving game results for a classic mode game', async () => {
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: hostClient._id,
       })
 
@@ -133,7 +133,7 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should succeed in retrieving game results for a zero to one hundred mode game', async () => {
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: hostClient._id,
       })
 
@@ -213,7 +213,7 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 404 error when a game result was not found', async () => {
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: hostClient._id,
       })
 
@@ -235,7 +235,7 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 404 error when a game was not found', async () => {
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: hostClient._id,
       })
 
@@ -256,7 +256,7 @@ describe('GameResultController (e2e)', () => {
 
     it('should return a 403 forbidden error when player is not a participant of an existing game', async () => {
       const anotherClientId = uuidv4()
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: anotherClientId,
       })
 

@@ -38,7 +38,7 @@ describe('ClientQuizController (e2e)', () => {
     it('should succeed in retrieving an empty page of associated quizzes from a new authenticated client', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/client/quizzes')
@@ -125,7 +125,7 @@ describe('ClientQuizController (e2e)', () => {
         client2.player,
       )
 
-      const { token } = await authService.authenticate({
+      const { token } = await authService.legacyAuthenticate({
         clientId: client1._id,
       })
 

@@ -26,7 +26,7 @@ describe('MediaController (e2e)', () => {
     it('should succeed in retrieving photos', async () => {
       const clientId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       return supertest(app.getHttpServer())
         .get('/api/media/photos?search=nature&limit=10&offset=0')
@@ -68,7 +68,9 @@ describe('MediaController (e2e)', () => {
     test.each([['gif'], ['jpeg'], ['jpg'], ['png'], ['tiff'], ['webp']])(
       'should succeed in uploading a %s image',
       async (extension) => {
-        const { token } = await authService.authenticate({ clientId: uuidv4() })
+        const { token } = await authService.legacyAuthenticate({
+          clientId: uuidv4(),
+        })
 
         await supertest(app.getHttpServer())
           .post('/api/media/uploads/photos')
@@ -93,7 +95,9 @@ describe('MediaController (e2e)', () => {
     )
 
     it('should fail in uploading a non image file', async () => {
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       return supertest(app.getHttpServer())
         .post('/api/media/uploads/photos')
@@ -126,7 +130,7 @@ describe('MediaController (e2e)', () => {
   describe('/api/media/uploads/photos/:photoId (DELETE)', () => {
     it('should succeed in deleting an uploaded photo', async () => {
       const clientId = uuidv4()
-      const { token } = await authService.authenticate({ clientId })
+      const { token } = await authService.legacyAuthenticate({ clientId })
 
       const photoId = uuidv4()
 
@@ -151,7 +155,9 @@ describe('MediaController (e2e)', () => {
     })
 
     it('should fail in deleting a non existing uploaded photo', async () => {
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { token } = await authService.legacyAuthenticate({
+        clientId: uuidv4(),
+      })
 
       const photoId = uuidv4()
 
