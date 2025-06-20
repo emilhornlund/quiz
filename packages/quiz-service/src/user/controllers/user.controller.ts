@@ -3,6 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiConflictResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -49,9 +50,12 @@ export class UserController {
     type: CreateUserResponse,
   })
   @ApiBadRequestResponse({
-    description: 'Invalid input or user already exists.',
+    description: 'Invalid input.',
   })
-  @HttpCode(HttpStatus.OK)
+  @ApiConflictResponse({
+    description: 'User already exists.',
+  })
+  @HttpCode(HttpStatus.CREATED)
   public async createUser(
     @Body() createUserRequest: CreateUserRequest,
   ): Promise<CreateUserResponse> {
