@@ -40,7 +40,7 @@ export class AuthLoginRequest implements AuthLoginRequestDto {
       'User password; 8–128 chars, min 2 uppercase, 2 lowercase, 2 digits, 2 symbols.',
     type: String,
     pattern: `${PASSWORD_REGEX}`,
-    example: 'Super#SecretPassw0rd123',
+    example: 'Super#SecretPa$$w0rd123',
   })
   @MinLength(PASSWORD_MIN_LENGTH)
   @MaxLength(PASSWORD_MAX_LENGTH)

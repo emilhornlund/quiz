@@ -45,7 +45,7 @@ export class CreateUserRequest implements CreateUserRequestDto {
     description: 'Strong password meeting complexity requirements.',
     type: String,
     pattern: PASSWORD_REGEX.source,
-    example: 'Super#SecretPassw0rd123',
+    example: 'Super#SecretPa$$w0rd123',
   })
   @MinLength(PASSWORD_MIN_LENGTH)
   @MaxLength(PASSWORD_MAX_LENGTH)
