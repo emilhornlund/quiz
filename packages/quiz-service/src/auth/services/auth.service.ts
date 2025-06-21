@@ -4,11 +4,11 @@ import {
   AuthLoginRequestDto,
   AuthLoginResponseDto,
   Authorities,
+  AuthRefreshRequestDto,
   LegacyAuthRequestDto,
   LegacyAuthResponseDto,
   TokenDto,
 } from '@quiz/common'
-import { AuthRefreshRequestDto } from '@quiz/common/src'
 
 import { ClientService } from '../../client/services'
 import { UserService } from '../../user/services'

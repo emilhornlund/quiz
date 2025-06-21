@@ -69,7 +69,8 @@ export class UserService {
   public async createUser(
     requestDto: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
-    const { email, password, givenName, familyName } = requestDto
+    const { email, password, givenName, familyName, defaultNickname } =
+      requestDto
 
     this.logger.debug(`Creating new user with email: '${email}'.`)
 
@@ -78,12 +79,19 @@ export class UserService {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    const createdUser = await this.userRepository.createLocalUser({
+    const details: Pick<
+      CreateUserRequestDto,
+      'email' | 'givenName' | 'familyName' | 'defaultNickname'
+    > &
+      Pick<LocalUser, 'hashedPassword'> = {
       email,
       hashedPassword,
       givenName,
       familyName,
-    })
+      defaultNickname,
+    }
+
+    const createdUser = await this.userRepository.createLocalUser(details)
 
     this.logger.log(`Created a new user with email: '${email}'.`)
 
@@ -101,14 +109,22 @@ export class UserService {
   private static toCreateUserResponse(
     createdUser: User,
   ): CreateUserResponseDto {
-    const { _id, email, givenName, familyName, createdAt, updatedAt } =
-      createdUser
+    const {
+      _id,
+      email,
+      givenName,
+      familyName,
+      defaultNickname,
+      createdAt,
+      updatedAt,
+    } = createdUser
 
     return {
       id: _id,
       email,
       givenName,
       familyName,
+      defaultNickname,
       created: createdAt,
       updated: updatedAt,
     }
