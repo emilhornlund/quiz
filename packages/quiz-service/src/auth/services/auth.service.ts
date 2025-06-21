@@ -7,11 +7,14 @@ import {
   LegacyAuthRequestDto,
   LegacyAuthResponseDto,
   TokenDto,
+  TokenScope,
 } from '@quiz/common'
 import { AuthRefreshRequestDto } from '@quiz/common/src'
 
 import { ClientService } from '../../client/services'
 import { UserService } from '../../user/services'
+
+import { getTokenAuthorities, getTokenExpiresIn } from './utils'
 
 /**
  * Service responsible for authenticating users and clients
@@ -93,16 +96,8 @@ export class AuthService {
    * @private
    */
   private async signTokenPair(userId: string): Promise<AuthLoginResponseDto> {
-    const accessToken = await this.jwtService.signAsync(
-      { authorities: [] },
-      { subject: userId, expiresIn: '15m' },
-    )
-
-    const refreshToken = await this.jwtService.signAsync(
-      { authorities: [Authorities.RefreshAuth] },
-      { subject: userId, expiresIn: '30d' },
-    )
-
+    const accessToken = await this.signToken(TokenScope.User, false, userId)
+    const refreshToken = await this.signToken(TokenScope.User, true, userId)
     return { accessToken, refreshToken }
   }
 
@@ -123,10 +118,7 @@ export class AuthService {
       player: { _id: playerId, nickname },
     } = await this.clientService.findOrCreateClient(authRequest.clientId)
 
-    const token = await this.jwtService.signAsync(
-      { authorities: [Authorities.LegacyAuth] },
-      { subject: clientIdHash, expiresIn: '1h' },
-    )
+    const token = await this.signToken(TokenScope.Client, false, clientIdHash)
 
     return {
       token,
@@ -150,5 +142,34 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException()
     }
+  }
+
+  /**
+   * Signs a JWT for the specified scope and token type.
+   *
+   * @param scope - The broad area of the API this token grants access to (e.g. Client, Game, User).
+   * @param isRefreshToken - If true, issues a refresh token (long-lived); otherwise an access token (short-lived).
+   * @param subject - The JWT “sub” claim, typically a user ID or client ID.
+   * @returns A promise resolving to the signed JWT string.
+   * @private
+   */
+  private async signToken(
+    scope: TokenScope,
+    isRefreshToken: boolean,
+    subject: string,
+  ): Promise<string> {
+    const authorities = getTokenAuthorities(scope, isRefreshToken)
+    const expiresIn = getTokenExpiresIn(scope, isRefreshToken)
+
+    return this.jwtService.signAsync(
+      {
+        scope,
+        authorities,
+      },
+      {
+        subject,
+        expiresIn,
+      },
+    )
   }
 }

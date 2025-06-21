@@ -1,0 +1,52 @@
+import { Authorities, TokenScope } from '@quiz/common'
+
+/**
+ * Returns the list of Authorities that should be embedded in a token
+ * for the given scope and token type.
+ *
+ * @param scope - The logical API area (Client, Game, or User) for this token.
+ * @param isRefreshToken - Whether this token is a refresh token.
+ * @returns Array of Authorities to include in the JWT payload.
+ */
+export function getTokenAuthorities(
+  scope: TokenScope,
+  isRefreshToken: boolean,
+): Authorities[] {
+  if (isRefreshToken) {
+    return [Authorities.RefreshAuth]
+  }
+
+  switch (scope) {
+    case TokenScope.Client:
+      return []
+    case TokenScope.Game:
+      return []
+    case TokenScope.User:
+      return []
+  }
+}
+
+/**
+ * Determines the expiration duration string for a token of the given
+ * scope and type.
+ *
+ * @param scope - The logical API area (Client, Game, or User) for this token.
+ * @param isRefreshToken - Whether this token is a refresh token.
+ * @returns A string value (e.g. '15m', '1h', or '30d').
+ */
+export function getTokenExpiresIn(
+  scope: TokenScope,
+  isRefreshToken: boolean,
+): string {
+  if (isRefreshToken) {
+    return '30d'
+  }
+
+  switch (scope) {
+    case TokenScope.Client:
+      return '1h'
+    case TokenScope.Game:
+    case TokenScope.User:
+      return '15m'
+  }
+}
