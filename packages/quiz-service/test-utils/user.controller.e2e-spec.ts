@@ -7,6 +7,7 @@ import {
   MOCK_DEFAULT_USER_EMAIL,
   MOCK_DEFAULT_USER_FAMILY_NAME,
   MOCK_DEFAULT_USER_GIVEN_NAME,
+  MOCK_DEFAULT_USER_HASHED_PASSWORD,
   MOCK_DEFAULT_USER_PASSWORD,
 } from './data'
 import { closeTestApp, createTestApp } from './utils/bootstrap'
@@ -104,7 +105,7 @@ describe('GameResultController (e2e)', () => {
     it('should return 409 conflict error when user already exists', async () => {
       await userRepository.createLocalUser({
         email: MOCK_DEFAULT_USER_EMAIL,
-        hashedPassword: MOCK_DEFAULT_USER_PASSWORD,
+        hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
         givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
         familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
       })
