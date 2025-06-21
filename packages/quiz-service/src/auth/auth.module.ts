@@ -8,6 +8,7 @@ import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
 import { ClientModule } from '../client'
+import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
@@ -46,6 +47,7 @@ import { AuthService } from './services'
       },
     }),
     ClientModule,
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [
