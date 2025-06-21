@@ -2,8 +2,11 @@ import { Injectable, Logger } from '@nestjs/common'
 import { CreateUserRequestDto, CreateUserResponseDto } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 
-import { User } from './models/schemas'
+import { BadCredentialsException } from '../exceptions'
+
+import { AuthProvider, LocalUser, User } from './models/schemas'
 import { UserRepository } from './user.repository'
+import { isLocalUser } from './utils'
 
 /**
  * Service responsible for creating and retrieving user accounts.
@@ -21,6 +24,43 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   /**
+   * Verifies a local‐auth user's credentials.
+   *
+   * @param email - The email address of the user.
+   * @param password - The plaintext password to verify.
+   * @returns Promise resolving to the User & LocalUser data when valid.
+   * @throws BadCredentialsException if email not found, provider mismatch, or password incorrect.
+   */
+  public async verifyUserCredentialsOrThrow(
+    email: string,
+    password: string,
+  ): Promise<User & LocalUser> {
+    const user = await this.userRepository.findUserByEmail(email)
+    if (!user) {
+      this.logger.debug(
+        `Failed to successfully verify user credentials, email '${email}' not found.`,
+      )
+      throw new BadCredentialsException()
+    }
+
+    if (isLocalUser(user)) {
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        user.hashedPassword,
+      )
+      if (isPasswordCorrect) {
+        return user
+      }
+    }
+
+    this.logger.debug(
+      `Unable to verify user credentials since provider is not '${AuthProvider.Local}'.`,
+    )
+
+    throw new BadCredentialsException()
+  }
+
+  /**
    * Creates and persists a new user record.
    *
    * @param requestDto Data for the new user (email, password, optional names).
@@ -31,7 +71,7 @@ export class UserService {
   ): Promise<CreateUserResponseDto> {
     const { email, password, givenName, familyName } = requestDto
 
-    this.logger.debug(`Creating new user with email: "${email}".`)
+    this.logger.debug(`Creating new user with email: '${email}'.`)
 
     await this.userRepository.verifyUniqueEmail(email)
 
@@ -45,7 +85,7 @@ export class UserService {
       familyName,
     })
 
-    this.logger.log(`Created a new user with email: "${email}".`)
+    this.logger.log(`Created a new user with email: '${email}'.`)
 
     return UserService.toCreateUserResponse(createdUser)
   }

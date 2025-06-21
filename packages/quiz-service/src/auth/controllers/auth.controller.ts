@@ -1,17 +1,11 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  NotImplementedException,
-  Post,
-} from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
 import { AuthService } from '../services'
@@ -65,10 +59,9 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   public async login(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() authLoginRequest: AuthLoginRequest,
   ): Promise<AuthLoginResponse> {
-    throw new NotImplementedException()
+    return this.authService.login(authLoginRequest)
   }
 
   /**
@@ -95,14 +88,16 @@ export class AuthController {
     type: AuthLoginResponse,
   })
   @ApiBadRequestResponse({
-    description: 'Validation failed or refresh token is invalid/expired.',
+    description: 'Validation failed.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid/expired.',
   })
   @HttpCode(HttpStatus.OK)
   public async refresh(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() authRefreshRequest: AuthRefreshRequest,
   ): Promise<AuthLoginResponse> {
-    throw new NotImplementedException()
+    return this.authService.refresh(authRefreshRequest)
   }
 
   /**
