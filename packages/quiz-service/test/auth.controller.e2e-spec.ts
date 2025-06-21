@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { Authorities, TokenDto } from '@quiz/common'
+import { Authorities, TokenDto, TokenScope } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
 import supertest from 'supertest'
@@ -233,14 +233,7 @@ describe('AuthController (e2e)', () => {
         .send({ clientId })
         .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual({
-            token: expect.anything(),
-            client: { id: clientId, name: '' },
-            player: { id: expect.anything(), nickname: expect.anything() },
-          })
-          const { sub } = jwtService.verify(res.body.token)
-          const isMatch = bcrypt.compareSync(clientId, sub)
-          expect(isMatch).toBe(true)
+          expectLegacyAuthResponseDto(res, clientId)
         })
     })
 
@@ -259,14 +252,7 @@ describe('AuthController (e2e)', () => {
         .send({ clientId })
         .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual({
-            token: expect.anything(),
-            client: { id: clientId, name: '' },
-            player: { id: playerId, nickname },
-          })
-          const { sub } = jwtService.verify(res.body.token)
-          const isMatch = bcrypt.compareSync(_id, sub)
-          expect(isMatch).toBe(true)
+          expectLegacyAuthResponseDto(res, clientId, playerId, nickname)
         })
     })
 
@@ -337,12 +323,37 @@ describe('AuthController (e2e)', () => {
       response.body.accessToken,
     )
     expect(accessTokenDto.sub).toEqual(userId)
+    expect(accessTokenDto.scope).toEqual(TokenScope.User)
     expect(accessTokenDto.authorities).toEqual([])
 
     const refreshTokenDto = jwtService.verify<TokenDto>(
       response.body.refreshToken,
     )
     expect(refreshTokenDto.sub).toEqual(userId)
+    expect(refreshTokenDto.scope).toEqual(TokenScope.User)
     expect(refreshTokenDto.authorities).toEqual([Authorities.RefreshAuth])
+  }
+
+  function expectLegacyAuthResponseDto(
+    res: Response,
+    clientId: string,
+    playerId?: string,
+    nickname?: string,
+  ) {
+    expect(res.body).toEqual({
+      token: expect.any(String),
+      client: { id: clientId, name: '' },
+      player: {
+        id: playerId || expect.any(String),
+        nickname: nickname || expect.any(String),
+      },
+    })
+    const { sub, scope, authorities } = jwtService.verify<TokenDto>(
+      res.body.token,
+    )
+    const isMatch = bcrypt.compareSync(clientId, sub)
+    expect(isMatch).toBe(true)
+    expect(scope).toEqual(TokenScope.Client)
+    expect(authorities).toEqual([])
   }
 })
