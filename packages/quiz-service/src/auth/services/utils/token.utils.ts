@@ -1,19 +1,19 @@
-import { Authorities, TokenScope } from '@quiz/common'
+import { Authority, TokenScope } from '@quiz/common'
 
 /**
- * Returns the list of Authorities that should be embedded in a token
+ * Returns the list of Authority that should be embedded in a token
  * for the given scope and token type.
  *
  * @param scope - The logical API area (Client, Game, or User) for this token.
  * @param isRefreshToken - Whether this token is a refresh token.
- * @returns Array of Authorities to include in the JWT payload.
+ * @returns Array of Authority to include in the JWT payload.
  */
 export function getTokenAuthorities(
   scope: TokenScope,
   isRefreshToken: boolean,
-): Authorities[] {
+): Authority[] {
   if (isRefreshToken) {
-    return [Authorities.RefreshAuth]
+    return [Authority.RefreshAuth]
   }
 
   switch (scope) {

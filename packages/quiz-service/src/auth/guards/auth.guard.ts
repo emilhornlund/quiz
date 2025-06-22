@@ -1,22 +1,71 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import { Authority, TokenDto, TokenScope } from '@quiz/common'
 import { Request } from 'express'
 
 import { ClientService } from '../../client/services'
+import { Client } from '../../client/services/models/schemas'
 import { IS_PUBLIC_KEY } from '../controllers/decorators'
+import {
+  REQUIRED_AUTHORITIES_KEY,
+  REQUIRED_SCOPES_KEY,
+} from '../controllers/decorators'
 import { AuthService } from '../services'
 
 /**
- * Custom authorization guard that ensures requests are authenticated.
+ * Extended Express Request that includes authentication state
+ * set by the AuthGuard.
+ */
+export interface AuthGuardRequest extends Request {
+  /**
+   * The broad API area this request is operating under,
+   * taken from the JWT’s `scope` claim.
+   */
+  scope: TokenScope
+
+  /**
+   * The list of authorities (permissions) granted by the JWT,
+   * taken from the JWT’s `authorities` claim.
+   */
+  authorities: Authority[]
+
+  /**
+   * The authenticated user’s ID, populated when `scope` is
+   * `User` or `Game`.
+   */
+  userId?: string
+
+  /**
+   * The authenticated client record, populated when `scope`
+   * is `Client`. Loaded by clientService.findByClientIdHashOrThrow().
+   */
+  client?: Client
+}
+
+/**
+ * Guard that enforces JWT‐based authentication and authorization.
  *
- * This guard checks if the request contains a valid JWT token in the
- * Authorization header. For public routes marked with the `@Public`
- * decorator, the guard allows access without requiring authentication.
+ * - Skips auth for routes marked `@Public()`.
+ * - Extracts & validates a Bearer JWT.
+ * - Reads `{ sub, scope, authorities }` from token.
+ * - Verifies route‐level `@RequiresScopes()` and `@RequiresAuthorities()`.
+ * - Attaches to the request:
+ *    - `scope: TokenScope`
+ *    - `authorities: Authority[]`
+ *    - `userId` (if scope is User or Game)
+ *    - `client` (if scope is Client)
+ *
+ * The incoming `Request` is assumed to be an `AuthGuardRequest`.
+ *
+ * @throws {UnauthorizedException} if missing/invalid token or client lookup fails.
+ * @throws {ForbiddenException} if the token’s scope or authorities don’t match
+ *         the route’s requirements.
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -35,17 +84,21 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   /**
-   * Determines whether the current request is authorized.
+   * Determines whether a request is allowed to proceed.
    *
-   * If the route is public, the method allows access without further checks.
-   * Otherwise, it verifies the JWT token and ensures the client exists in the system.
+   * Steps:
+   * 1. If `@Public()` metadata is present, allow immediately.
+   * 2. Extract and verify the Bearer token.
+   * 3. Check that `scope` from token is allowed for this handler.
+   * 4. Check that `authorities` from token include any required authorities.
+   * 5. Attach `scope` and `authorities` to `request`.
+   * 6. If `scope` is `User` or `Game`, attach `request.userId = sub`.
+   * 7. If `scope` is `Client`, look up and attach `request.client`.
    *
-   * @param context - The execution context of the current request.
-   * @returns A promise that resolves to `true` if the request is authorized,
-   *          otherwise throws an `UnauthorizedException`.
-   *
-   * @throws UnauthorizedException if the token is missing, invalid, or
-   *         if the associated client cannot be found.
+   * @param context  The current request execution context.
+   * @returns `true` if all checks pass.
+   * @throws {UnauthorizedException} if authentication fails.
+   * @throws {ForbiddenException} if authorization fails.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -56,32 +109,107 @@ export class AuthGuard implements CanActivate {
       return true
     }
 
-    const request = context.switchToHttp().getRequest()
+    const request = context.switchToHttp().getRequest<AuthGuardRequest>()
+    const { sub, scope, authorities } = await this.verifyTokenOrThrow(request)
 
-    const token = this.extractTokenFromHeader(request)
+    this.verifyAuthorizedScopesOrThrows(scope, context)
+    this.verifyAuthorizedAuthoritiesOrThrows(authorities, context)
 
-    if (!token) {
-      throw new UnauthorizedException()
+    request.scope = scope
+    request.authorities = authorities
+
+    if (scope === TokenScope.User || scope === TokenScope.Game) {
+      request.userId = sub
     }
 
-    try {
-      const { sub } = await this.authService.verifyToken(token)
-
-      request['client'] =
-        await this.clientService.findByClientIdHashOrThrow(sub)
-    } catch {
-      throw new UnauthorizedException()
+    if (scope === TokenScope.Client) {
+      request.client = await this.clientService.findByClientIdHashOrThrow(sub)
     }
 
     return true
   }
 
   /**
-   * Extracts the JWT token from the Authorization header of the HTTP request.
+   * Ensures that the token’s authorities meet any `@RequiresAuthorities(...)` metadata.
    *
-   * @param request - The incoming HTTP request.
-   * @returns The extracted token as a string if the header is present and valid;
-   *          otherwise, `undefined`.
+   * @param authorities  The list from the decoded token.
+   * @param context      The execution context (to read metadata).
+   * @throws {UnauthorizedException} if the token did not include any authorities.
+   * @throws {ForbiddenException}    if the token is missing any required authority.
+   * @private
+   */
+  private verifyAuthorizedAuthoritiesOrThrows(
+    authorities: Authority[],
+    context: ExecutionContext,
+  ): void {
+    if (!authorities) {
+      throw new UnauthorizedException('No authorities in token')
+    }
+
+    const required = this.reflector.get<Authority[]>(
+      REQUIRED_AUTHORITIES_KEY,
+      context.getHandler(),
+    )
+
+    if (required?.length && !required.every((r) => authorities.includes(r))) {
+      throw new ForbiddenException('Insufficient authorities')
+    }
+  }
+
+  /**
+   * Ensures that the token’s scope meets any `@RequiresScopes(...)` metadata.
+   *
+   * @param scope    The scope from the decoded token.
+   * @param context  The execution context (to read metadata).
+   * @throws {UnauthorizedException} if no scope is present.
+   * @throws {ForbiddenException}    if the token’s scope is not one of the required scopes.
+   * @private
+   */
+  private verifyAuthorizedScopesOrThrows(
+    scope: TokenScope,
+    context: ExecutionContext,
+  ): void {
+    if (!scope) {
+      throw new UnauthorizedException('No scope in token')
+    }
+
+    const required = this.reflector.get<TokenScope[]>(
+      REQUIRED_SCOPES_KEY,
+      context.getHandler(),
+    )
+
+    if (required?.length && !required.includes(scope)) {
+      throw new ForbiddenException(`Scope '${scope}' not allowed`)
+    }
+  }
+
+  /**
+   * Extracts and verifies the JWT from the request.
+   *
+   * @param request  The incoming HTTP request.
+   * @returns The decoded TokenDto.
+   * @throws {UnauthorizedException} if the token is missing or invalid.
+   * @private
+   */
+  private async verifyTokenOrThrow(request: Request): Promise<TokenDto> {
+    const token = this.extractTokenFromHeader(request)
+    if (!token) {
+      throw new UnauthorizedException('Missing Authorization header')
+    }
+
+    try {
+      return await this.authService.verifyToken(token)
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token')
+    }
+  }
+
+  /**
+   * Pulls the Bearer token out of the `Authorization` header.
+   *
+   * @param request  The incoming HTTP request.
+   * @returns The raw token string, or `undefined` if not present or malformed.
+   * @private
    */
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? []
