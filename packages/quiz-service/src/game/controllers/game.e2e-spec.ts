@@ -15,27 +15,6 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { AuthService } from '../src/auth/services'
-import { ClientService } from '../src/client/services'
-import { Client } from '../src/client/services/models/schemas'
-import { GameService } from '../src/game/services'
-import {
-  BaseTask,
-  Game,
-  GameModel,
-  QuestionResultTask,
-  QuestionResultTaskItem,
-  QuestionTaskBaseAnswer,
-  QuestionTaskMultiChoiceAnswer,
-  QuestionTaskRangeAnswer,
-  QuestionTaskTrueFalseAnswer,
-  QuestionTaskTypeAnswerAnswer,
-  TaskType,
-} from '../src/game/services/models/schemas'
-import { buildLobbyTask } from '../src/game/services/utils'
-import { Player, PlayerModel } from '../src/player/services/models/schemas'
-import { QuizService } from '../src/quiz/services'
-
 import {
   createMockGameDocument,
   createMockGameHostParticipantDocument,
@@ -53,8 +32,31 @@ import {
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
   offsetSeconds,
-} from './data'
-import { closeTestApp, createTestApp } from './utils/bootstrap'
+} from '../../../test-utils/data'
+import {
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils/bootstrap'
+import { AuthService } from '../../auth/services'
+import { ClientService } from '../../client/services'
+import { Client } from '../../client/services/models/schemas'
+import { Player, PlayerModel } from '../../player/services/models/schemas'
+import { QuizService } from '../../quiz/services'
+import { GameService } from '../services'
+import {
+  BaseTask,
+  Game,
+  GameModel,
+  QuestionResultTask,
+  QuestionResultTaskItem,
+  QuestionTaskBaseAnswer,
+  QuestionTaskMultiChoiceAnswer,
+  QuestionTaskRangeAnswer,
+  QuestionTaskTrueFalseAnswer,
+  QuestionTaskTypeAnswerAnswer,
+  TaskType,
+} from '../services/models/schemas'
+import { buildLobbyTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {
   let app: INestApplication

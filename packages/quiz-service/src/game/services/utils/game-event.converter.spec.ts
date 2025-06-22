@@ -29,7 +29,7 @@ import {
   MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
-} from '../../../../test/data'
+} from '../../../../test-utils/data'
 import { generateNickname } from '../../../player/services/utils'
 import { Game, GameDocument, LeaderboardTaskItem } from '../models/schemas'
 

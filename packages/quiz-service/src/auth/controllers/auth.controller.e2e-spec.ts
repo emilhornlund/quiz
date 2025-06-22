@@ -4,9 +4,11 @@ import * as bcrypt from 'bcryptjs'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ClientService } from '../src/client/services'
-
-import { closeTestApp, createTestApp } from './utils/bootstrap'
+import {
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils/bootstrap'
+import { ClientService } from '../../client/services'
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication

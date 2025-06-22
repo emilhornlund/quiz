@@ -4,19 +4,21 @@ import { PLAYER_LINK_CODE_REGEX } from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { AuthService } from '../src/auth/services'
-import { Client, ClientModel } from '../src/client/services/models/schemas'
-import { PlayerService } from '../src/player/services'
-import { Player, PlayerModel } from '../src/player/services/models/schemas'
-
 import {
   createMockClientDocument,
   createMockPlayerDocument,
   MOCK_DEFAULT_PLAYER_ID,
   MOCK_DEFAULT_PLAYER_NICKNAME,
   MOCK_SECONDARY_PLAYER_NICKNAME,
-} from './data'
-import { closeTestApp, createTestApp } from './utils/bootstrap'
+} from '../../../test-utils/data'
+import {
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils/bootstrap'
+import { AuthService } from '../../auth/services'
+import { Client, ClientModel } from '../../client/services/models/schemas'
+import { PlayerService } from '../services'
+import { Player, PlayerModel } from '../services/models/schemas'
 
 describe('ClientPlayerController (e2e)', () => {
   let app: INestApplication

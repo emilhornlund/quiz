@@ -10,11 +10,13 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { AuthService } from '../src/auth/services'
-import { ClientService } from '../src/client/services'
-import { QuizService } from '../src/quiz/services'
-
-import { closeTestApp, createTestApp } from './utils/bootstrap'
+import {
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils/bootstrap'
+import { AuthService } from '../../auth/services'
+import { ClientService } from '../../client/services'
+import { QuizService } from '../services'
 
 describe('ClientQuizController (e2e)', () => {
   let app: INestApplication
