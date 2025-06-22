@@ -1,5 +1,5 @@
 export * from './auth'
-export * from './authorities.enum'
+export * from './authority.enum'
 export * from './find-game-response.dto'
 export * from './game.dto'
 export * from './game-event'
