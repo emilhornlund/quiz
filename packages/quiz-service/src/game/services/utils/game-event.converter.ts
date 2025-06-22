@@ -8,6 +8,7 @@ import {
   GameEventQuestionResults,
   GameEventType,
   GameLeaderboardHostEvent,
+  GameLeaderboardPlayerEvent,
   GameLoadingEvent,
   GameLobbyHostEvent,
   GameLobbyPlayerEvent,
@@ -18,12 +19,12 @@ import {
   GameQuestionPlayerEvent,
   GameQuestionPreviewHostEvent,
   GameQuestionPreviewPlayerEvent,
+  GameQuitEvent,
   GameResultHostEvent,
   GameResultPlayerEvent,
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
-import { GameLeaderboardPlayerEvent, GameQuitEvent } from '@quiz/common/src'
 
 import {
   isMultiChoiceQuestion,
