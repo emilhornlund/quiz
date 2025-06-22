@@ -17,7 +17,6 @@
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
     "test": "concurrently \"yarn workspace @quiz/quiz-service test\" \"yarn workspace @quiz/quiz test\"",
-    "test:e2e": "concurrently \"yarn workspace @quiz/quiz-service test:e2e\"",
     "test:coverage": "concurrently \"yarn workspace @quiz/quiz-service test:coverage\" \"yarn workspace @quiz/quiz test:coverage\""
   },
   "devDependencies": {

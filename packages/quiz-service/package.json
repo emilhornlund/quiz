@@ -11,9 +11,8 @@
     "serve": "node dist/main",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
-    "test": "jest --config ./jest.json",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:coverage": "jest --coverage",
+    "test": "jest --runInBand",
+    "test:coverage": "yarn test --coverage",
     "check-circular-deps": "./scripts/check_circular_deps.sh 0"
   },
   "dependencies": {
