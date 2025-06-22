@@ -57,6 +57,12 @@ export class User {
   familyName?: string
 
   /**
+   * Optional default nickname of the user used for when participating in games.
+   */
+  @Prop({ type: String, required: false })
+  defaultNickname?: string
+
+  /**
    * Timestamp when the user was created (ISO-8601 string).
    */
   @Prop({ type: Date, default: now() })

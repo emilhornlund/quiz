@@ -59,6 +59,7 @@ export class UserRepository {
     hashedPassword: string
     givenName?: string
     familyName?: string
+    defaultNickname?: string
   }): Promise<User> {
     return new this.userModel({
       _id: uuidv4(),
