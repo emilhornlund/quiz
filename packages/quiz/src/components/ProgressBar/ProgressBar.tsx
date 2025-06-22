@@ -1,4 +1,4 @@
-import { CountdownEvent } from '@quiz/common/src'
+import { CountdownEvent } from '@quiz/common'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import styles from './ProgressBar.module.scss'
