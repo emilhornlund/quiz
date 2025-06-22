@@ -1,8 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 
-import { UserRepository } from '../src/user/services'
-
 import {
   MOCK_DEFAULT_PLAYER_NICKNAME,
   MOCK_DEFAULT_USER_EMAIL,
@@ -10,8 +8,12 @@ import {
   MOCK_DEFAULT_USER_GIVEN_NAME,
   MOCK_DEFAULT_USER_HASHED_PASSWORD,
   MOCK_DEFAULT_USER_PASSWORD,
-} from './data'
-import { closeTestApp, createTestApp } from './utils/bootstrap'
+} from '../../../test-utils/data'
+import {
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils/bootstrap'
+import { UserRepository } from '../services'
 
 describe('UserController (e2e)', () => {
   let app: INestApplication
