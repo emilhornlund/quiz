@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { Authorities, TokenDto, TokenScope } from '@quiz/common'
+import { Authority, TokenDto, TokenScope } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
 import supertest from 'supertest'
@@ -161,7 +161,7 @@ describe('AuthController (e2e)', () => {
 
     it('should return 400 bad request when token has expired', async () => {
       const refreshToken = await jwtService.signAsync(
-        { authorities: [Authorities.RefreshAuth] },
+        { authorities: [Authority.RefreshAuth] },
         { subject: uuidv4(), expiresIn: '-1d' },
       )
 
@@ -333,7 +333,7 @@ describe('AuthController (e2e)', () => {
     )
     expect(refreshTokenDto.sub).toEqual(userId)
     expect(refreshTokenDto.scope).toEqual(TokenScope.User)
-    expect(refreshTokenDto.authorities).toEqual([Authorities.RefreshAuth])
+    expect(refreshTokenDto.authorities).toEqual([Authority.RefreshAuth])
   }
 
   function expectLegacyAuthResponseDto(

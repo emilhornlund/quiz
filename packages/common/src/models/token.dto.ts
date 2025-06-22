@@ -1,4 +1,4 @@
-import { Authorities } from './authorities.enum'
+import { Authority } from './authority.enum'
 
 /**
  * The functional area of the application that this token is intended for.
@@ -45,5 +45,5 @@ export interface TokenDto {
    * The list of authorities (permissions or scopes) granted to the token holder.
    * Determines which actions or endpoints the bearer is allowed to access.
    */
-  authorities: Authorities[]
+  authorities: Authority[]
 }

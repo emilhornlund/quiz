@@ -709,7 +709,10 @@ describe('GameController (e2e)', () => {
         .get(`/api/games/${gameID}/events`)
         .expect(401)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized')
+          expect(res.body).toHaveProperty(
+            'message',
+            'Missing Authorization header',
+          )
           expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
         })
@@ -918,7 +921,10 @@ describe('GameController (e2e)', () => {
         .post(`/api/games/${gameID}/tasks/current/complete`)
         .expect(401)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized')
+          expect(res.body).toHaveProperty(
+            'message',
+            'Missing Authorization header',
+          )
           expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
         })
@@ -1672,7 +1678,7 @@ describe('GameController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
@@ -2243,7 +2249,7 @@ describe('GameController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
