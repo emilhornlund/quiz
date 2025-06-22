@@ -13,6 +13,9 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
+  PLAYER_NICKNAME_MAX_LENGTH,
+  PLAYER_NICKNAME_MIN_LENGTH,
+  PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
 import { IsOptional, Matches, MaxLength, MinLength } from 'class-validator'
 
@@ -92,4 +95,26 @@ export class CreateUserRequest implements CreateUserRequestDto {
       'Family name must be 1–64 characters of letters/marks, and may include internal spaces, apostrophes or hyphens (no leading/trailing separators).',
   })
   readonly familyName?: string
+
+  /**
+   * Optional default nickname of the user used for when participating in games.
+   */
+  @ApiPropertyOptional({
+    title: 'Default Nickname',
+    description:
+      'A nickname chosen by the player, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
+    required: true,
+    type: String,
+    minLength: PLAYER_NICKNAME_MIN_LENGTH,
+    maxLength: PLAYER_NICKNAME_MAX_LENGTH,
+    pattern: PLAYER_NICKNAME_REGEX.source,
+    example: 'FrostyBear',
+  })
+  @IsOptional()
+  @MinLength(PLAYER_NICKNAME_MIN_LENGTH)
+  @MaxLength(PLAYER_NICKNAME_MAX_LENGTH)
+  @Matches(PLAYER_NICKNAME_REGEX, {
+    message: 'Nickname can only contain letters, numbers, and underscores.',
+  })
+  readonly defaultNickname?: string
 }

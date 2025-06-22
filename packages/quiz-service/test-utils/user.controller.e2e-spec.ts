@@ -4,6 +4,7 @@ import supertest from 'supertest'
 import { UserRepository } from '../src/user/services'
 
 import {
+  MOCK_DEFAULT_PLAYER_NICKNAME,
   MOCK_DEFAULT_USER_EMAIL,
   MOCK_DEFAULT_USER_FAMILY_NAME,
   MOCK_DEFAULT_USER_GIVEN_NAME,
@@ -12,7 +13,7 @@ import {
 } from './data'
 import { closeTestApp, createTestApp } from './utils/bootstrap'
 
-describe('GameResultController (e2e)', () => {
+describe('UserController (e2e)', () => {
   let app: INestApplication
   let userRepository: UserRepository
 
@@ -34,6 +35,7 @@ describe('GameResultController (e2e)', () => {
           password: MOCK_DEFAULT_USER_PASSWORD,
           givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
           familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
+          defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
         })
         .expect(201)
         .expect((res) => {
@@ -42,6 +44,7 @@ describe('GameResultController (e2e)', () => {
             email: MOCK_DEFAULT_USER_EMAIL,
             givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
             familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
+            defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
             created: expect.any(String),
             updated: expect.any(String),
           })
@@ -54,6 +57,7 @@ describe('GameResultController (e2e)', () => {
         .send({
           givenName: '#',
           familyName: '#',
+          defaultNickname: '#',
         })
         .expect(400)
         .expect((res) => {
@@ -97,6 +101,15 @@ describe('GameResultController (e2e)', () => {
                 },
                 property: 'familyName',
               },
+              {
+                constraints: {
+                  matches:
+                    'Nickname can only contain letters, numbers, and underscores.',
+                  minLength:
+                    'defaultNickname must be longer than or equal to 2 characters',
+                },
+                property: 'defaultNickname',
+              },
             ],
           })
         })
@@ -108,6 +121,7 @@ describe('GameResultController (e2e)', () => {
         hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
         givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
         familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
+        defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
       })
 
       return supertest(app.getHttpServer())
@@ -117,6 +131,7 @@ describe('GameResultController (e2e)', () => {
           password: MOCK_DEFAULT_USER_PASSWORD,
           givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
           familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
+          defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
         })
         .expect(409)
         .expect((res) => {

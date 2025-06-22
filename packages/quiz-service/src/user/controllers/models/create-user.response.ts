@@ -4,6 +4,9 @@ import {
   EMAIL_REGEX,
   FAMILY_NAME_REGEX,
   GIVEN_NAME_REGEX,
+  PLAYER_NICKNAME_MAX_LENGTH,
+  PLAYER_NICKNAME_MIN_LENGTH,
+  PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
 
 /**
@@ -56,6 +59,22 @@ export class CreateUserResponse implements CreateUserResponseDto {
     example: 'Appleseed',
   })
   readonly familyName?: string
+
+  /**
+   * The new user’s default nickname, if provided.
+   */
+  @ApiPropertyOptional({
+    title: 'Default Nickname',
+    description:
+      'A nickname chosen by the player, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
+    required: true,
+    type: String,
+    minLength: PLAYER_NICKNAME_MIN_LENGTH,
+    maxLength: PLAYER_NICKNAME_MAX_LENGTH,
+    pattern: PLAYER_NICKNAME_REGEX.source,
+    example: 'FrostyBear',
+  })
+  readonly defaultNickname?: string
 
   /**
    * ISO 8601 timestamp when the user was created.
