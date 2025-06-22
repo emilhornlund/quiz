@@ -174,7 +174,10 @@ describe('ClientQuizController (e2e)', () => {
         .get('/api/client/quizzes')
         .expect(401)
         .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Unauthorized')
+          expect(res.body).toHaveProperty(
+            'message',
+            'Missing Authorization header',
+          )
           expect(res.body).toHaveProperty('status', 401)
           expect(res.body).toHaveProperty('timestamp')
         })
