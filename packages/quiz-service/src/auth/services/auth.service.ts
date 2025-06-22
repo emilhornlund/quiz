@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import {
   AuthLoginRequestDto,
   AuthLoginResponseDto,
-  Authorities,
+  Authority,
   LegacyAuthRequestDto,
   LegacyAuthResponseDto,
   TokenDto,
@@ -77,9 +77,9 @@ export class AuthService {
       throw new UnauthorizedException()
     }
 
-    if (!result.authorities.includes(Authorities.RefreshAuth)) {
+    if (!result.authorities.includes(Authority.RefreshAuth)) {
       this.logger.debug(
-        `Failed to refresh token since missing '${Authorities.RefreshAuth}' authority.`,
+        `Failed to refresh token since missing '${Authority.RefreshAuth}' authority.`,
       )
       throw new UnauthorizedException()
     }
