@@ -88,7 +88,7 @@ describe('ClientPlayerController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
@@ -176,7 +176,7 @@ describe('ClientPlayerController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
@@ -208,7 +208,7 @@ describe('ClientPlayerController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
@@ -309,7 +309,7 @@ describe('ClientPlayerController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
