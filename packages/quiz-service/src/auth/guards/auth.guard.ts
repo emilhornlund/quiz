@@ -11,6 +11,8 @@ import { Request } from 'express'
 
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
+import { UserRepository } from '../../user/services'
+import { User } from '../../user/services/models/schemas'
 import { IS_PUBLIC_KEY } from '../controllers/decorators'
 import {
   REQUIRED_AUTHORITIES_KEY,
@@ -36,10 +38,10 @@ export interface AuthGuardRequest extends Request {
   authorities: Authority[]
 
   /**
-   * The authenticated user’s ID, populated when `scope` is
-   * `User` or `Game`.
+   * The authenticated user record, populated when `scope` is `User` or `Game`.
+   * Fetched via `UserRepository.findUserByIdOrThrow(sub)`.
    */
-  userId?: string
+  user?: User
 
   /**
    * The authenticated client record, populated when `scope`
@@ -75,12 +77,14 @@ export class AuthGuard implements CanActivate {
    * @param reflector - Used to retrieve metadata such as the `IS_PUBLIC_KEY`
    *                    to determine if the route is public.
    * @param authService - Service for validating and decoding game tokens.
+   * @param userRepository - Repository for accessing user data.
    * @param clientService - Service for retrieving client information.
    */
   constructor(
-    private reflector: Reflector,
-    private authService: AuthService,
-    private clientService: ClientService,
+    private readonly reflector: Reflector,
+    private readonly authService: AuthService,
+    private readonly userRepository: UserRepository,
+    private readonly clientService: ClientService,
   ) {}
 
   /**
@@ -119,7 +123,11 @@ export class AuthGuard implements CanActivate {
     request.authorities = authorities
 
     if (scope === TokenScope.User || scope === TokenScope.Game) {
-      request.userId = sub
+      try {
+        request.user = await this.userRepository.findUserByIdOrThrow(sub)
+      } catch {
+        throw new UnauthorizedException()
+      }
     }
 
     if (scope === TokenScope.Client) {
@@ -146,9 +154,9 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('No authorities in token')
     }
 
-    const required = this.reflector.get<Authority[]>(
+    const required = this.reflector.getAllAndMerge<Authority[]>(
       REQUIRED_AUTHORITIES_KEY,
-      context.getHandler(),
+      [context.getHandler(), context.getClass()],
     )
 
     if (required?.length && !required.every((r) => authorities.includes(r))) {
@@ -173,9 +181,9 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('No scope in token')
     }
 
-    const required = this.reflector.get<TokenScope[]>(
+    const required = this.reflector.getAllAndMerge<TokenScope[]>(
       REQUIRED_SCOPES_KEY,
-      context.getHandler(),
+      [context.getHandler(), context.getClass()],
     )
 
     if (required?.length && !required.includes(scope)) {

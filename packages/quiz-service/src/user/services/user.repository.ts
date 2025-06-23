@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { EmailNotUniqueException } from '../exceptions'
+import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
 
 import { AuthProvider, User, UserModel } from './models/schemas'
 
@@ -22,6 +22,31 @@ export class UserRepository {
   public constructor(
     @InjectModel(User.name) private readonly userModel: UserModel,
   ) {}
+
+  /**
+   * Retrieves a user document by its unique identifier.
+   *
+   * @param id – The unique identifier to search for.
+   * @returns The matching User document, or `null` if none exists.
+   */
+  public async findUserById(id: string): Promise<User> {
+    return this.userModel.findById(id).exec()
+  }
+
+  /**
+   * Retrieves a user document by its unique identifier, or throws if not found.
+   *
+   * @param id – The unique identifier to search for.
+   * @returns The matching User document.
+   * @throws UserNotFoundException if no user exists with the given `id`.
+   */
+  public async findUserByIdOrThrow(id: string): Promise<User> {
+    const user = await this.findUserById(id)
+    if (!user) {
+      throw new UserNotFoundException(id)
+    }
+    return user
+  }
 
   /**
    * Finds a user document by email.
