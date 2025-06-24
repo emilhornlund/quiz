@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Authority, TokenDto, TokenScope } from '@quiz/common'
+import { TokenDto, TokenScope } from '@quiz/common'
 
 import { ClientService } from '../../client/services'
 import { UserRepository } from '../../user/services'
@@ -14,6 +14,7 @@ import {
   REQUIRED_SCOPES_KEY,
 } from '../controllers/decorators'
 import { AuthService } from '../services'
+import { DEFAULT_USER_AUTHORITIES } from '../services/utils'
 
 import { AuthGuard, AuthGuardRequest } from './auth.guard'
 
@@ -111,7 +112,7 @@ describe('AuthGuard', () => {
         key === REQUIRED_SCOPES_KEY
           ? []
           : key === REQUIRED_AUTHORITIES_KEY
-            ? [Authority.RefreshAuth]
+            ? DEFAULT_USER_AUTHORITIES
             : [],
       )
     const req = { headers: { authorization: 'Bearer ok' } }
