@@ -24,9 +24,14 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
+import { Authority, TokenScope } from '@quiz/common'
 
-import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
-import { Client } from '../../client/services/models/schemas'
+import {
+  Principal,
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
+import { User } from '../../user/services/models/schemas'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 
@@ -43,6 +48,8 @@ import {
  */
 @ApiBearerAuth()
 @ApiTags('media')
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Media)
 @Controller('media')
 export class MediaController {
   /**
@@ -136,16 +143,16 @@ export class MediaController {
   }
 
   /**
-   * Deletes an uploaded photo for the authenticated client.
+   * Deletes an uploaded photo for the authenticated user.
    *
    * @param photoId - The unique ID of the uploaded photo to delete.
-   * @param client - The authenticated client requesting the deletion.
+   * @param user - The authenticated user requesting the deletion.
    */
   @Delete('/uploads/photos/:photoId')
   @ApiUploadedPhotoIdParam()
   @ApiOperation({
     summary: 'Delete an uploaded photo',
-    description: 'Deletes an uploaded photo owned by the authenticated client.',
+    description: 'Deletes an uploaded photo owned by the authenticated user.',
   })
   @ApiNoContentResponse({
     description: 'Successfully deleted the uploaded photo.',
@@ -159,8 +166,8 @@ export class MediaController {
   @HttpCode(HttpStatus.NO_CONTENT)
   public async deleteUploadedPhoto(
     @RouteUploadedPhotoIdParam() photoId: string,
-    @AuthorizedClientParam() client: Client,
+    @Principal() user: User,
   ): Promise<void> {
-    return this.mediaService.deleteUploadPhoto(photoId, client)
+    return this.mediaService.deleteUploadPhoto(photoId, user._id)
   }
 }
