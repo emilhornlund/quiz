@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { Authority, TokenDto, TokenScope } from '@quiz/common'
+import { TokenDto, TokenScope } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
 import supertest from 'supertest'
@@ -14,13 +14,14 @@ import {
   MOCK_DEFAULT_USER_INVALID_PASSWORD,
   MOCK_DEFAULT_USER_PASSWORD,
 } from '../../../test-utils/data'
-import {
-  closeTestApp,
-  createTestApp,
-} from '../../../test-utils/utils/bootstrap'
+import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { ClientService } from '../../client/services'
 import { UserRepository } from '../../user/services'
 import { AuthService } from '../services'
+import {
+  DEFAULT_REFRESH_AUTHORITIES,
+  DEFAULT_USER_AUTHORITIES,
+} from '../services/utils'
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication
@@ -161,7 +162,7 @@ describe('AuthController (e2e)', () => {
 
     it('should return 400 bad request when token has expired', async () => {
       const refreshToken = await jwtService.signAsync(
-        { authorities: [Authority.RefreshAuth] },
+        { authorities: DEFAULT_REFRESH_AUTHORITIES },
         { subject: uuidv4(), expiresIn: '-1d' },
       )
 
@@ -326,14 +327,14 @@ describe('AuthController (e2e)', () => {
     )
     expect(accessTokenDto.sub).toEqual(userId)
     expect(accessTokenDto.scope).toEqual(TokenScope.User)
-    expect(accessTokenDto.authorities).toEqual([])
+    expect(accessTokenDto.authorities).toEqual(DEFAULT_USER_AUTHORITIES)
 
     const refreshTokenDto = jwtService.verify<TokenDto>(
       response.body.refreshToken,
     )
     expect(refreshTokenDto.sub).toEqual(userId)
     expect(refreshTokenDto.scope).toEqual(TokenScope.User)
-    expect(refreshTokenDto.authorities).toEqual([Authority.RefreshAuth])
+    expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
   }
 
   function expectLegacyAuthResponseDto(
