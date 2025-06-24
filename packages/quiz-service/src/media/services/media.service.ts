@@ -8,7 +8,6 @@ import { PaginatedMediaPhotoSearchDto } from '@quiz/common'
 
 import { Cacheable } from '../../app/cache'
 import { EnvironmentVariables } from '../../app/config'
-import { Client } from '../../client/services/models/schemas'
 import { UploadedPhotoNotFoundException } from '../exceptions'
 
 import { PexelsMediaSearchService } from './pexels-media-search.service'
@@ -57,19 +56,19 @@ export class MediaService {
   }
 
   /**
-   * Deletes the uploaded photo file belonging to the given client.
+   * Deletes the uploaded photo file belonging to the given user.
    *
    * @param photoId - The ID of the photo to delete (without file extension).
-   * @param client - The client who owns the photo.
+   * @param userId - The ID of the user who owns the photo.
    *
    * @throws UploadedPhotoNotFoundException if the file does not exist.
    */
   public async deleteUploadPhoto(
     photoId: string,
-    client: Client,
+    userId: string,
   ): Promise<void> {
     const uploadDirectory = this.configService.get<string>('UPLOAD_DIRECTORY')
-    const filePath = join(uploadDirectory, `${client._id}/${photoId}.webp`)
+    const filePath = join(uploadDirectory, `${userId}/${photoId}.webp`)
 
     if (!(await MediaService.fileExists(filePath))) {
       throw new UploadedPhotoNotFoundException(photoId)
