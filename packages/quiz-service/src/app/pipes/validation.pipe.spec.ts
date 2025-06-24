@@ -1,6 +1,8 @@
 import { ArgumentMetadata } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
 import { validate } from 'class-validator'
 
+import { User } from '../../user/services/models/schemas'
 import { ValidationException } from '../exceptions'
 
 import { ValidationPipe } from './validation.pipe'
@@ -12,10 +14,12 @@ class TestDto {
 }
 
 describe('ValidationPipe', () => {
+  let reflector: Reflector
   let pipe: ValidationPipe
 
   beforeEach(() => {
-    pipe = new ValidationPipe()
+    reflector = new Reflector()
+    pipe = new ValidationPipe(reflector)
   })
 
   it('should return the value if no metatype is provided', async () => {
@@ -31,11 +35,26 @@ describe('ValidationPipe', () => {
     expect(result).toBe(value)
   })
 
-  it('should return the value if metatype is a native type', async () => {
+  it('should return the value if metatype is a primitive type', async () => {
     const value = { property: 'value' }
     const metadata: ArgumentMetadata = {
       type: 'body',
       metatype: String,
+      data: '',
+    }
+
+    const result = await pipe.transform(value, metadata)
+
+    expect(result).toBe(value)
+  })
+
+  it('should return the value if validation should be skipped', async () => {
+    jest.spyOn(reflector, 'get').mockReturnValue(true)
+
+    const value = { property: 'value' }
+    const metadata: ArgumentMetadata = {
+      type: 'body',
+      metatype: User,
       data: '',
     }
 

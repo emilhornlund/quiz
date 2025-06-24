@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
+import { SkipValidation } from '../../../../app/decorators'
 import { Player } from '../../../../player/services/models/schemas'
 
 /**
  * Mongoose schema for the Client collection.
  */
+@SkipValidation()
 @Schema({ _id: true, collection: 'clients' })
 export class Client {
   /**
