@@ -7,17 +7,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   closeTestApp,
+  createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
+} from '../../../test-utils/utils'
 
 describe('MediaController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
 
   beforeEach(async () => {
     app = await createTestApp()
-    authService = app.get(AuthService)
   })
 
   afterEach(async () => {
@@ -26,13 +24,11 @@ describe('MediaController (e2e)', () => {
 
   describe('/api/media/photos (GET)', () => {
     it('should succeed in retrieving photos', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.legacyAuthenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get('/api/media/photos?search=nature&limit=10&offset=0')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -70,13 +66,11 @@ describe('MediaController (e2e)', () => {
     test.each([['gif'], ['jpeg'], ['jpg'], ['png'], ['tiff'], ['webp']])(
       'should succeed in uploading a %s image',
       async (extension) => {
-        const { token } = await authService.legacyAuthenticate({
-          clientId: uuidv4(),
-        })
+        const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
         await supertest(app.getHttpServer())
           .post('/api/media/uploads/photos')
-          .set({ Authorization: `Bearer ${token}` })
+          .set({ Authorization: `Bearer ${accessToken}` })
           .attach(
             'file',
             join(__dirname, `../../../test-utils/assets/photo.${extension}`),
@@ -100,13 +94,11 @@ describe('MediaController (e2e)', () => {
     )
 
     it('should fail in uploading a non image file', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: uuidv4(),
-      })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .post('/api/media/uploads/photos')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .attach('file', join(__dirname, '../../../test-utils/assets/empty.txt'))
         .expect(422)
         .expect((res) => {
@@ -134,8 +126,8 @@ describe('MediaController (e2e)', () => {
 
   describe('/api/media/uploads/photos/:photoId (DELETE)', () => {
     it('should succeed in deleting an uploaded photo', async () => {
-      const clientId = uuidv4()
-      const { token } = await authService.legacyAuthenticate({ clientId })
+      const { accessToken, userId } =
+        await createDefaultUserAndAuthenticate(app)
 
       const photoId = uuidv4()
 
@@ -144,14 +136,14 @@ describe('MediaController (e2e)', () => {
         __dirname,
         '../../../',
         process.env.UPLOAD_DIRECTORY,
-        `/${clientId}/${photoId}.webp`,
+        `/${userId}/${photoId}.webp`,
       )
       await mkdir(dirname(dstFile))
       await copyFile(srcFile, dstFile)
 
       return supertest(app.getHttpServer())
         .delete(`/api/media/uploads/photos/${photoId}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
@@ -160,15 +152,13 @@ describe('MediaController (e2e)', () => {
     })
 
     it('should fail in deleting a non existing uploaded photo', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: uuidv4(),
-      })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       const photoId = uuidv4()
 
       return supertest(app.getHttpServer())
         .delete(`/api/media/uploads/photos/${photoId}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
