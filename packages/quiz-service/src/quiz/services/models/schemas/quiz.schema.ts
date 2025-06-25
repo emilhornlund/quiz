@@ -8,7 +8,7 @@ import {
 } from '@quiz/common'
 import { Model, Schema as MongooseSchema } from 'mongoose'
 
-import { Player } from '../../../../player/services/models/schemas'
+import { User } from '../../../../user/services/models/schemas'
 
 import {
   BaseQuestionDao,
@@ -90,12 +90,12 @@ export class Quiz {
     ))[]
 
   /**
-   * The player document associated with the quiz.
+   * The user document associated with the quiz.
    *
-   * Stores a reference to a Player document to link quizzes with their owners profiles.
+   * Stores a reference to a User document to link quizzes with their owners profiles.
    */
-  @Prop({ type: String, ref: 'Player' })
-  owner: Player
+  @Prop({ type: String, ref: 'User' })
+  owner: User
 
   /**
    * The date and time when the quiz was created.

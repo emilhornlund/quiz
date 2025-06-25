@@ -16,6 +16,8 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockPrimaryUser,
+  buildMockSecondaryUser,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
@@ -33,15 +35,13 @@ import {
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
   offsetSeconds,
 } from '../../../test-utils/data'
-import {
-  closeTestApp,
-  createTestApp,
-} from '../../../test-utils/utils/bootstrap'
+import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { AuthService } from '../../auth/services'
 import { ClientService } from '../../client/services'
 import { Client } from '../../client/services/models/schemas'
 import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { QuizService } from '../../quiz/services'
+import { User, UserModel } from '../../user/services/models/schemas'
 import { GameService } from '../services'
 import {
   BaseTask,
@@ -63,12 +63,15 @@ describe('GameController (e2e)', () => {
   let gameService: GameService
   let gameModel: GameModel
   let playerModel: PlayerModel
+  let userModel: UserModel
   let authService: AuthService
   let clientService: ClientService
   let quizService: QuizService
 
+  let hostUser: User
   let hostClient: Client
   let hostClientToken: string
+  let playerUser: User
   let playerClient: Client
   let playerClientToken: string
 
@@ -77,10 +80,12 @@ describe('GameController (e2e)', () => {
     gameService = app.get(GameService)
     gameModel = app.get<GameModel>(getModelToken(Game.name))
     playerModel = app.get<PlayerModel>(getModelToken(Player.name))
+    userModel = app.get<UserModel>(getModelToken(User.name))
     authService = app.get(AuthService)
     clientService = app.get(ClientService)
     quizService = app.get(QuizService)
 
+    hostUser = await userModel.create(buildMockPrimaryUser())
     const hostClientId = uuidv4()
     hostClient = await clientService.findOrCreateClient(hostClientId)
     const hostAuthResponse = await authService.legacyAuthenticate({
@@ -88,6 +93,7 @@ describe('GameController (e2e)', () => {
     })
     hostClientToken = hostAuthResponse.token
 
+    playerUser = await userModel.create(buildMockSecondaryUser())
     const playerClientId = uuidv4()
     playerClient = await clientService.findOrCreateClient(playerClientId)
     const playerAuthResponse = await authService.legacyAuthenticate({
@@ -104,7 +110,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in retrieving an existing active classic mode game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -123,7 +129,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         zeroToOneHundredQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -142,7 +148,7 @@ describe('GameController (e2e)', () => {
     it('should fail to retrieve a classic mode game if it has expired', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -170,7 +176,7 @@ describe('GameController (e2e)', () => {
     it('should fail to retrieve a zero to one hundred mode game if it expired', async () => {
       const { id: quizId } = await quizService.createQuiz(
         zeroToOneHundredQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -227,7 +233,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -245,7 +251,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in joining an existing active classic mode game when not on question task', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -272,7 +278,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in joining when nickname equals host player name', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       await playerModel
@@ -296,7 +302,7 @@ describe('GameController (e2e)', () => {
     it('should fail in joining when a player has already joined', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -334,7 +340,7 @@ describe('GameController (e2e)', () => {
     it('should fail in joining when nickname already taken', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -382,7 +388,7 @@ describe('GameController (e2e)', () => {
     it('should fail in joining an expired game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -445,7 +451,7 @@ describe('GameController (e2e)', () => {
     it('should allow a player to leave a game they are part of', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -484,7 +490,7 @@ describe('GameController (e2e)', () => {
     it('should allow the host to remove a player from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -523,7 +529,7 @@ describe('GameController (e2e)', () => {
     it('should fail when attempting to remove a player who does not exist', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -557,7 +563,7 @@ describe('GameController (e2e)', () => {
     it('should prevent a player from removing another player from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -618,7 +624,7 @@ describe('GameController (e2e)', () => {
     it('should prevent a host from removing themselves from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -654,7 +660,7 @@ describe('GameController (e2e)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -674,7 +680,7 @@ describe('GameController (e2e)', () => {
     it('should allow event subscription for a player who joined the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -700,7 +706,7 @@ describe('GameController (e2e)', () => {
     it('should deny event subscription without an authorization token', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -738,14 +744,14 @@ describe('GameController (e2e)', () => {
     it('should return Forbidden when subscribing to events with a token for a different game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       await gameService.createGame(quizIdSecond, playerClient)
@@ -766,7 +772,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in completing the current task', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -787,7 +793,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in completing the current podium task with players', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -830,7 +836,7 @@ describe('GameController (e2e)', () => {
     it('should succeed in completing the current podium task without players', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -860,7 +866,7 @@ describe('GameController (e2e)', () => {
     it('should fail in completing the current task if its current status is pending', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -886,7 +892,7 @@ describe('GameController (e2e)', () => {
     it('should fail in completing the current task if its current status is already completed', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -912,7 +918,7 @@ describe('GameController (e2e)', () => {
     it('should deny completing the current task without an authorization token', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -950,14 +956,14 @@ describe('GameController (e2e)', () => {
     it('should return 401 when completing the current task with a token for a different game', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
         classicQuizRequest,
-        playerClient.player,
+        playerUser,
       )
 
       await gameService.createGame(quizIdSecond, playerClient)
@@ -978,7 +984,7 @@ describe('GameController (e2e)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -1015,7 +1021,7 @@ describe('GameController (e2e)', () => {
     it('should return Forbidden when a host tries to submit an answer', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -1048,7 +1054,7 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest for invalid task status', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -1090,7 +1096,7 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest for non-question task type', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
@@ -1123,7 +1129,7 @@ describe('GameController (e2e)', () => {
     it('should return BadRequest when the player has already submitted an answer', async () => {
       const { id: quizId } = await quizService.createQuiz(
         classicQuizRequest,
-        hostClient.player,
+        hostUser,
       )
 
       const { id: gameID } = await gameService.createGame(quizId, hostClient)
