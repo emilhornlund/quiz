@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { getModelToken } from '@nestjs/mongoose'
 import { TokenDto, TokenScope } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
@@ -7,16 +8,14 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  MOCK_DEFAULT_USER_EMAIL,
-  MOCK_DEFAULT_USER_FAMILY_NAME,
-  MOCK_DEFAULT_USER_GIVEN_NAME,
-  MOCK_DEFAULT_USER_HASHED_PASSWORD,
-  MOCK_DEFAULT_USER_INVALID_PASSWORD,
-  MOCK_DEFAULT_USER_PASSWORD,
+  buildMockPrimaryUser,
+  MOCK_DEFAULT_INVALID_PASSWORD,
+  MOCK_DEFAULT_PASSWORD,
+  MOCK_PRIMARY_USER_EMAIL,
 } from '../../../test-utils/data'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { ClientService } from '../../client/services'
-import { UserRepository } from '../../user/services'
+import { User, UserModel } from '../../user/services/models/schemas'
 import { AuthService } from '../services'
 import {
   DEFAULT_REFRESH_AUTHORITIES,
@@ -27,15 +26,15 @@ describe('AuthController (e2e)', () => {
   let app: INestApplication
   let jwtService: JwtService
   let clientService: ClientService
-  let userRepository: UserRepository
   let authService: AuthService
+  let userModel: UserModel
 
   beforeEach(async () => {
     app = await createTestApp()
     jwtService = app.get(JwtService)
     clientService = app.get(ClientService)
-    userRepository = app.get<UserRepository>(UserRepository)
     authService = app.get<AuthService>(AuthService)
+    userModel = app.get<UserModel>(getModelToken(User.name))
   })
 
   afterEach(async () => {
@@ -44,18 +43,13 @@ describe('AuthController (e2e)', () => {
 
   describe('/api/login (POST)', () => {
     it('should succeed in authenticating a user', async () => {
-      const user = await userRepository.createLocalUser({
-        email: MOCK_DEFAULT_USER_EMAIL,
-        hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
-        givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-        familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-      })
+      const user = await userModel.create(buildMockPrimaryUser())
 
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
         .send({
-          email: MOCK_DEFAULT_USER_EMAIL,
-          password: MOCK_DEFAULT_USER_PASSWORD,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
         })
         .expect(200)
         .expect((res) => {
@@ -67,8 +61,8 @@ describe('AuthController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
         .send({
-          email: MOCK_DEFAULT_USER_EMAIL,
-          password: MOCK_DEFAULT_USER_PASSWORD,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
         })
         .expect(400)
         .expect((res) => {
@@ -84,8 +78,8 @@ describe('AuthController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
         .send({
-          email: MOCK_DEFAULT_USER_EMAIL,
-          password: MOCK_DEFAULT_USER_INVALID_PASSWORD,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_INVALID_PASSWORD,
         })
         .expect(400)
         .expect((res) => {
@@ -137,16 +131,11 @@ describe('AuthController (e2e)', () => {
 
   describe('/api/refresh (POST)', () => {
     it('should succeed in refresh an existing authentication', async () => {
-      const user = await userRepository.createLocalUser({
-        email: MOCK_DEFAULT_USER_EMAIL,
-        hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
-        givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-        familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-      })
+      const user = await userModel.create(buildMockPrimaryUser())
 
       const { refreshToken } = await authService.login({
-        email: MOCK_DEFAULT_USER_EMAIL,
-        password: MOCK_DEFAULT_USER_PASSWORD,
+        email: MOCK_PRIMARY_USER_EMAIL,
+        password: MOCK_DEFAULT_PASSWORD,
       })
 
       return supertest(app.getHttpServer())
