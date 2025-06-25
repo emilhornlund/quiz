@@ -1,8 +1,6 @@
 import { Logger, Module } from '@nestjs/common'
-import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { ClientPlayerController } from './controllers'
 import { PlayerService } from './services'
 import { Player, PlayerSchema } from './services/models/schemas'
 
@@ -14,7 +12,6 @@ import { Player, PlayerSchema } from './services/models/schemas'
  */
 @Module({
   imports: [
-    EventEmitterModule,
     MongooseModule.forFeature([
       {
         name: Player.name,
@@ -22,7 +19,7 @@ import { Player, PlayerSchema } from './services/models/schemas'
       },
     ]),
   ],
-  controllers: [ClientPlayerController],
+  controllers: [],
   providers: [Logger, PlayerService],
   exports: [PlayerService],
 })

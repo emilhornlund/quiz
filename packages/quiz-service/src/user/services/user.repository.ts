@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
 
-import { AuthProvider, User, UserModel } from './models/schemas'
+import { User, UserModel } from './models/schemas'
 
 /**
  * Repository for interacting with the User collection in the database.
@@ -43,6 +44,7 @@ export class UserRepository {
   public async findUserByIdOrThrow(id: string): Promise<User> {
     const user = await this.findUserById(id)
     if (!user) {
+      this.logger.warn(`User was not found by id '${id}.`)
       throw new UserNotFoundException(id)
     }
     return user
@@ -91,5 +93,26 @@ export class UserRepository {
       provider: AuthProvider.Local,
       ...details,
     }).save()
+  }
+
+  /**
+   * Updates a user document by its unique identifier, or throws if not found.
+   *
+   * @param id – The unique identifier of the user to update.
+   * @param details - The details that will be updated.
+   * @returns The updated user document.
+   */
+  public async findUserByIdAndUpdateOrThrow(
+    id: string,
+    details: Partial<User>,
+  ): Promise<User> {
+    const user = await this.userModel.findById(id).exec()
+
+    if (!user) {
+      this.logger.warn(`User was not found by id '${id}.`)
+      throw new UserNotFoundException(id)
+    }
+
+    return user.set(details).save()
   }
 }

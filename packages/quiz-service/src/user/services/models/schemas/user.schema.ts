@@ -1,16 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { AuthProvider } from '@quiz/common'
 import { Model, now } from 'mongoose'
 
 import { SkipValidation } from '../../../../app/decorators'
-
-/**
- * Which authentication provider created this account.
- * Values:
- * - `LOCAL`: email/password stored locally
- */
-export enum AuthProvider {
-  Local = 'LOCAL',
-}
 
 /**
  * Mongoose schema for the User collection.

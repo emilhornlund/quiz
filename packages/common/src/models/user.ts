@@ -1,3 +1,5 @@
+import { AuthProvider } from './auth'
+
 /**
  * DTO for creating a new user.
  */
@@ -66,4 +68,74 @@ export interface CreateUserResponseDto {
    * Timestamp when the user was last updated (ISO 8601 string).
    */
   readonly updated: Date
+}
+
+/**
+ * DTO for retrieving a user’s profile.
+ */
+export interface UserProfileResponseDto {
+  /**
+   * The user’s unique identifier (UUID).
+   */
+  readonly id: string
+
+  /**
+   * The user’s email address.
+   */
+  readonly email: string
+
+  /**
+   * The user’s given name, if provided.
+   */
+  readonly givenName?: string
+
+  /**
+   * The user’s family name, if provided.
+   */
+  readonly familyName?: string
+
+  /**
+   * The user’s default nickname, if provided.
+   */
+  readonly defaultNickname?: string
+
+  /**
+   * The user’s authentication provider.
+   */
+  readonly authProvider: AuthProvider
+
+  /**
+   * Timestamp when the user was created (ISO 8601 string).
+   */
+  readonly created: Date
+
+  /**
+   * Timestamp when the user was last updated (ISO 8601 string).
+   */
+  readonly updated: Date
+}
+
+/**
+ * DTO for updating an existing user.
+ */
+export interface UpdateUserProfileRequestDto {
+  /**
+   * Optional email address of the user.
+   */
+  readonly email?: string
+
+  /**
+   * Optional given name (first name) of the user.
+   */
+  readonly givenName?: string
+
+  /**
+   * Optional family name (last name) of the user.
+   */
+  readonly familyName?: string
+
+  /**
+   * Optional default nickname of the user used for when participating in games.
+   */
+  readonly defaultNickname?: string
 }
