@@ -24,4 +24,10 @@ export enum Authority {
    * Permission to allow using a valid refresh token to obtain a new access token.
    */
   RefreshAuth = 'REFRESH_AUTH',
+
+  /**
+   * Permission to perform user-related operations, including
+   * retrieving and updating their profiles.
+   */
+  User = 'USER',
 }

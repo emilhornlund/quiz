@@ -1,4 +1,13 @@
 /**
+ * Which provider used for authentication.
+ * Values:
+ * - `LOCAL`: email/password stored locally
+ */
+export enum AuthProvider {
+  Local = 'LOCAL',
+}
+
+/**
  * Data transfer object for authentication login requests.
  */
 export interface AuthLoginRequestDto {
