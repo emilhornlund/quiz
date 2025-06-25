@@ -11,9 +11,9 @@ export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
 export const MOCK_PRIMARY_USER_FAMILY_NAME = 'Appleseed'
 export const MOCK_PRIMARY_USER_DEFAULT_NICKNAME = 'FrostyBear'
 
-export const MOCK_SECONDARY_USER_EMAIL = 'user@example.com'
-export const MOCK_SECONDARY_USER_GIVEN_NAME = 'John'
-export const MOCK_SECONDARY_USER_FAMILY_NAME = 'Appleseed'
+export const MOCK_SECONDARY_USER_EMAIL = 'another.user@example.com'
+export const MOCK_SECONDARY_USER_GIVEN_NAME = 'Test'
+export const MOCK_SECONDARY_USER_FAMILY_NAME = 'Testsson'
 export const MOCK_SECONDARY_USER_DEFAULT_NICKNAME = 'WhiskerFox'
 
 export const MOCK_DEFAULT_PASSWORD = 'Super#SecretPa$$w0rd123'
