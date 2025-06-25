@@ -126,8 +126,10 @@ describe('MediaController (e2e)', () => {
 
   describe('/api/media/uploads/photos/:photoId (DELETE)', () => {
     it('should succeed in deleting an uploaded photo', async () => {
-      const { accessToken, userId } =
-        await createDefaultUserAndAuthenticate(app)
+      const {
+        accessToken,
+        user: { _id: userId },
+      } = await createDefaultUserAndAuthenticate(app)
 
       const photoId = uuidv4()
 
