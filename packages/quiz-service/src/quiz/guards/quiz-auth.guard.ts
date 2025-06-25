@@ -9,13 +9,14 @@ import {
 import { Reflector } from '@nestjs/core'
 import { QuizVisibility } from '@quiz/common'
 
+import { AuthGuardRequest } from '../../auth/guards'
 import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
 import { QuizService } from '../services'
 
 /**
  * Guard to authorize access to quizzes based on ownership.
  *
- * Ensures that the authenticated client owns the quiz they are trying to access
+ * Ensures that the authenticated user owns the quiz they are trying to access
  * or modify. Throws appropriate exceptions if authorization fails.
  */
 @Injectable()
@@ -24,28 +25,28 @@ export class QuizAuthGuard implements CanActivate {
    * Initializes the QuizAuthGuard.
    *
    * @param reflector - Used for retrieving metadata, such as if allow public.
-   * @param {QuizService} quizService - Service for managing quiz-related operations.
+   * @param quizService - Service for managing quiz-related operations.
    */
   constructor(
-    private reflector: Reflector,
+    private readonly reflector: Reflector,
     private readonly quizService: QuizService,
   ) {}
 
   /**
    * Determines whether the request can proceed based on authorization.
    *
-   * @param {ExecutionContext} context - The context of the incoming request.
+   * @param context - The context of the incoming request.
    *
-   * @returns {Promise<boolean>} A boolean indicating whether the request is authorized.
+   * @returns A boolean indicating whether the request is authorized.
    *
-   * @throws {UnauthorizedException} If the client is not authenticated.
-   * @throws {BadRequestException} If the `quizId` parameter is missing or invalid.
-   * @throws {ForbiddenException} If the client is not the owner of the quiz.
+   * @throws UnauthorizedException If the user is not authenticated.
+   * @throws BadRequestException If the `quizId` parameter is missing or invalid.
+   * @throws ForbiddenException If the user is not the owner of the quiz.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest()
+    const request = context.switchToHttp().getRequest<AuthGuardRequest>()
 
-    if (!request.client || !request.client.player?._id) {
+    if (!request.user?._id) {
       throw new UnauthorizedException()
     }
 
@@ -62,7 +63,7 @@ export class QuizAuthGuard implements CanActivate {
         context.getClass(),
       ]) ?? false
 
-    const isOwner = quiz.owner._id === request.client.player._id
+    const isOwner = quiz.owner._id === request.user._id
     const isPublicQuiz = quiz.visibility === QuizVisibility.Public
 
     if (

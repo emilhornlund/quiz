@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   LanguageCode,
@@ -8,43 +9,38 @@ import {
   QuizVisibility,
 } from '@quiz/common'
 import supertest from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
 
+import { buildMockSecondaryUser } from '../../../test-utils/data'
 import {
   closeTestApp,
+  createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
+} from '../../../test-utils/utils'
+import { User, UserModel } from '../../user/services/models/schemas'
 import { QuizService } from '../services'
 
-describe('ClientQuizController (e2e)', () => {
+describe('ProfileQuizController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
-  let clientService: ClientService
   let quizService: QuizService
+  let userModel: UserModel
 
   beforeEach(async () => {
     app = await createTestApp()
-
-    authService = app.get(AuthService)
-    clientService = app.get(ClientService)
     quizService = app.get(QuizService)
+    userModel = app.get<UserModel>(getModelToken(User.name))
   })
 
   afterEach(async () => {
     await closeTestApp(app)
   })
 
-  describe('/api/client/quizzes (GET)', () => {
-    it('should succeed in retrieving an empty page of associated quizzes from a new authenticated client', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.legacyAuthenticate({ clientId })
+  describe('/api/profile/quizzes (GET)', () => {
+    it('should succeed in retrieving an empty page of associated quizzes from a new authenticated user', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
-        .get('/api/client/quizzes')
-        .set({ Authorization: `Bearer ${token}` })
+        .get('/api/profile/quizzes')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('results', [])
@@ -54,8 +50,10 @@ describe('ClientQuizController (e2e)', () => {
         })
     })
 
-    it('should succeed in retrieving the associated quizzes from an existing authenticated client', async () => {
-      const client1 = await clientService.findOrCreateClient(uuidv4())
+    it('should succeed in retrieving the associated quizzes from an existing authenticated user', async () => {
+      const { accessToken, user: user1 } =
+        await createDefaultUserAndAuthenticate(app)
+
       const originalQuiz = await quizService.createQuiz(
         {
           title: 'Trivia Battle',
@@ -96,10 +94,10 @@ describe('ClientQuizController (e2e)', () => {
             },
           ],
         },
-        client1.player,
+        user1,
       )
 
-      const client2 = await clientService.findOrCreateClient(uuidv4())
+      const user2 = await userModel.create(buildMockSecondaryUser())
       await quizService.createQuiz(
         {
           title: 'Geography Explorer',
@@ -124,16 +122,12 @@ describe('ClientQuizController (e2e)', () => {
             },
           ],
         },
-        client2.player,
+        user2,
       )
 
-      const { token } = await authService.legacyAuthenticate({
-        clientId: client1._id,
-      })
-
       return supertest(app.getHttpServer())
-        .get('/api/client/quizzes')
-        .set({ Authorization: `Bearer ${token}` })
+        .get('/api/profile/quizzes')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('results')
@@ -173,7 +167,7 @@ describe('ClientQuizController (e2e)', () => {
 
     it('should fail in retrieving the associated quizzes without an authorization', async () => {
       return supertest(app.getHttpServer())
-        .get('/api/client/quizzes')
+        .get('/api/profile/quizzes')
         .expect(401)
         .expect((res) => {
           expect(res.body).toHaveProperty(
