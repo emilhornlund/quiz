@@ -24,7 +24,7 @@ import { PaginatedQuizResponse, QuizPageQueryFilter } from './models'
 @ApiBearerAuth()
 @ApiTags('profile', 'quiz')
 @RequiresScopes(TokenScope.User)
-@RequiredAuthorities(Authority.Quiz)
+@RequiredAuthorities(Authority.Quiz, Authority.User)
 @Controller('profile')
 export class ProfileQuizController {
   /**
@@ -38,7 +38,6 @@ export class ProfileQuizController {
    * Retrieves the quizzes associated with the authenticated user.
    *
    * @param user - The authenticated user making the request.
-   *
    * @param queryParams - The pagination and filtering query parameters for retrieving quizzes.
    *
    * @returns A paginated response containing the user's associated quizzes.
@@ -56,7 +55,7 @@ export class ProfileQuizController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized access to the endpoint.',
   })
-  public async getUserAssociatedQuizzes(
+  public async getUserQuizzes(
     @Principal() user: User,
     @Query(new ValidationPipe({ transform: true }))
     queryParams: QuizPageQueryFilter,
