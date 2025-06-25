@@ -2,17 +2,14 @@ import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 
 import {
-  MOCK_DEFAULT_PLAYER_NICKNAME,
-  MOCK_DEFAULT_USER_EMAIL,
-  MOCK_DEFAULT_USER_FAMILY_NAME,
-  MOCK_DEFAULT_USER_GIVEN_NAME,
-  MOCK_DEFAULT_USER_HASHED_PASSWORD,
-  MOCK_DEFAULT_USER_PASSWORD,
+  MOCK_DEFAULT_HASHED_PASSWORD,
+  MOCK_DEFAULT_PASSWORD,
+  MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+  MOCK_PRIMARY_USER_EMAIL,
+  MOCK_PRIMARY_USER_FAMILY_NAME,
+  MOCK_PRIMARY_USER_GIVEN_NAME,
 } from '../../../test-utils/data'
-import {
-  closeTestApp,
-  createTestApp,
-} from '../../../test-utils/utils/bootstrap'
+import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { UserRepository } from '../services'
 
 describe('UserController (e2e)', () => {
@@ -33,20 +30,20 @@ describe('UserController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post(`/api/users`)
         .send({
-          email: MOCK_DEFAULT_USER_EMAIL,
-          password: MOCK_DEFAULT_USER_PASSWORD,
-          givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-          familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-          defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(201)
         .expect((res) => {
           expect(res.body).toEqual({
             id: expect.any(String),
-            email: MOCK_DEFAULT_USER_EMAIL,
-            givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-            familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-            defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
             created: expect.any(String),
             updated: expect.any(String),
           })
@@ -119,26 +116,26 @@ describe('UserController (e2e)', () => {
 
     it('should return 409 conflict error when user already exists', async () => {
       await userRepository.createLocalUser({
-        email: MOCK_DEFAULT_USER_EMAIL,
-        hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
-        givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-        familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-        defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+        email: MOCK_PRIMARY_USER_EMAIL,
+        hashedPassword: MOCK_DEFAULT_HASHED_PASSWORD,
+        givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+        familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+        defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
       })
 
       return supertest(app.getHttpServer())
         .post(`/api/users`)
         .send({
-          email: MOCK_DEFAULT_USER_EMAIL,
-          password: MOCK_DEFAULT_USER_PASSWORD,
-          givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-          familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-          defaultNickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(409)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Email '${MOCK_DEFAULT_USER_EMAIL}' is not unique`,
+            message: `Email '${MOCK_PRIMARY_USER_EMAIL}' is not unique`,
             status: 409,
             timestamp: expect.any(String),
           })
