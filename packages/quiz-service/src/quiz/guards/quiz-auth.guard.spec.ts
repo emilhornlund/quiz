@@ -7,14 +7,14 @@ import {
 import { Test, TestingModule } from '@nestjs/testing'
 import { QuizVisibility } from '@quiz/common'
 
-import { Player } from '../../player/services/models/schemas'
+import { User } from '../../user/services/models/schemas'
 import { QuizService } from '../services'
 import { Quiz } from '../services/models/schemas'
 
 import { QuizAuthGuard } from './quiz-auth.guard'
 
 type MockRequest = {
-  client?: { player: Player }
+  user?: User
   params?: { quizId?: string }
 }
 
@@ -39,13 +39,11 @@ describe('QuizAuthGuard', () => {
     quizService = module.get(QuizService)
   })
 
-  it('should allow access if the client is authenticated and owns the quiz', async () => {
+  it('should allow access if the user is authenticated and owns the quiz', async () => {
     const mockRequest: MockRequest = {
-      client: {
-        player: {
-          _id: 'player1',
-        } as Player,
-      },
+      user: {
+        _id: 'player1',
+      } as User,
       params: {
         quizId: 'quiz1',
       },
@@ -53,7 +51,7 @@ describe('QuizAuthGuard', () => {
 
     const mockQuiz = {
       visibility: QuizVisibility.Private,
-      owner: { _id: 'player1' } as Player,
+      owner: { _id: 'player1' } as User,
     } as Quiz
     quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
@@ -77,9 +75,9 @@ describe('QuizAuthGuard', () => {
     )
   })
 
-  it('should throw UnauthorizedException if the client is not authenticated', async () => {
+  it('should throw UnauthorizedException if the user is not authenticated', async () => {
     const mockRequest: MockRequest = {
-      client: undefined,
+      user: undefined,
       params: {
         quizId: 'quiz1',
       },
@@ -104,11 +102,9 @@ describe('QuizAuthGuard', () => {
 
   it('should throw BadRequestException if quizId is missing', async () => {
     const mockRequest: MockRequest = {
-      client: {
-        player: {
-          _id: 'player1',
-        } as Player,
-      },
+      user: {
+        _id: 'player1',
+      } as User,
       params: {},
     }
 
@@ -129,13 +125,11 @@ describe('QuizAuthGuard', () => {
     )
   })
 
-  it('should throw ForbiddenException if the client is not the owner of the quiz', async () => {
+  it('should throw ForbiddenException if the user is not the owner of the quiz', async () => {
     const mockRequest: MockRequest = {
-      client: {
-        player: {
-          _id: 'player2',
-        } as Player,
-      },
+      user: {
+        _id: 'player2',
+      } as User,
       params: {
         quizId: 'quiz1',
       },
@@ -143,7 +137,7 @@ describe('QuizAuthGuard', () => {
 
     const mockQuiz = {
       visibility: QuizVisibility.Private,
-      owner: { _id: 'player1' } as Player,
+      owner: { _id: 'player1' } as User,
     } as Quiz
     quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
@@ -166,11 +160,9 @@ describe('QuizAuthGuard', () => {
 
   it('should call findQuizDocumentByIdOrThrow with the correct quizId', async () => {
     const mockRequest = {
-      client: {
-        player: {
-          _id: 'player1',
-        },
-      },
+      user: {
+        _id: 'player1',
+      } as User,
       params: {
         quizId: 'quiz1',
       },
@@ -178,7 +170,7 @@ describe('QuizAuthGuard', () => {
 
     const mockQuiz = {
       visibility: QuizVisibility.Private,
-      owner: { _id: 'player1' } as Player,
+      owner: { _id: 'player1' } as User,
     } as Quiz
     quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
@@ -203,11 +195,9 @@ describe('QuizAuthGuard', () => {
 
   it('should allow access to a public quiz when allowPublic is true', async () => {
     const mockRequest: MockRequest = {
-      client: {
-        player: {
-          _id: 'player2',
-        } as Player,
-      },
+      user: {
+        _id: 'player2',
+      } as User,
       params: {
         quizId: 'quiz1',
       },
@@ -215,7 +205,7 @@ describe('QuizAuthGuard', () => {
 
     const mockQuiz = {
       visibility: QuizVisibility.Public,
-      owner: { _id: 'player1' } as Player,
+      owner: { _id: 'player1' } as User,
     } as Quiz
     quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
 
