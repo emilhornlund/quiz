@@ -1,4 +1,6 @@
-import { AuthProvider, LocalUser, User } from '../models/schemas'
+import { AuthProvider } from '@quiz/common'
+
+import { LocalUser, User } from '../models/schemas'
 
 /**
  * Type guard to check whether a User document is a local‐auth user.

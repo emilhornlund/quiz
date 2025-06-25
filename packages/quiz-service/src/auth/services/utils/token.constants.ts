@@ -9,5 +9,6 @@ export const DEFAULT_USER_AUTHORITIES: Authority[] = [
   Authority.Game,
   Authority.Media,
   Authority.Quiz,
+  Authority.User,
 ]
 export const DEFAULT_REFRESH_AUTHORITIES: Authority[] = [Authority.RefreshAuth]

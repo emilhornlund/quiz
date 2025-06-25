@@ -1,10 +1,7 @@
+import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  AuthProvider,
-  LocalUser,
-  User,
-} from '../../src/user/services/models/schemas'
+import { LocalUser, User } from '../../src/user/services/models/schemas'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'
 export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
