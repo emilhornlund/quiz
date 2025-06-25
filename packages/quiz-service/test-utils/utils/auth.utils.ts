@@ -1,29 +1,20 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { getModelToken } from '@nestjs/mongoose'
 import { TokenScope } from '@quiz/common'
 
 import {
   DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME,
   DEFAULT_USER_AUTHORITIES,
 } from '../../src/auth/services/utils'
-import { UserRepository } from '../../src/user/services'
-import {
-  MOCK_DEFAULT_USER_EMAIL,
-  MOCK_DEFAULT_USER_FAMILY_NAME,
-  MOCK_DEFAULT_USER_GIVEN_NAME,
-  MOCK_DEFAULT_USER_HASHED_PASSWORD,
-} from '../data'
+import { User, UserModel } from '../../src/user/services/models/schemas'
+import { buildMockPrimaryUser } from '../data'
 
 export async function createDefaultUserAndAuthenticate(
   app: INestApplication,
-): Promise<{ accessToken: string; userId: string }> {
-  const userRepository = app.get<UserRepository>(UserRepository)
-  const user = await userRepository.createLocalUser({
-    email: MOCK_DEFAULT_USER_EMAIL,
-    hashedPassword: MOCK_DEFAULT_USER_HASHED_PASSWORD,
-    givenName: MOCK_DEFAULT_USER_GIVEN_NAME,
-    familyName: MOCK_DEFAULT_USER_FAMILY_NAME,
-  })
+): Promise<{ accessToken: string; user: User }> {
+  const userModel = app.get<UserModel>(getModelToken(User.name))
+  const user = await userModel.create(buildMockPrimaryUser())
 
   const jwtService = app.get<JwtService>(JwtService)
   const accessToken = await jwtService.signAsync(
@@ -37,5 +28,5 @@ export async function createDefaultUserAndAuthenticate(
     },
   )
 
-  return { accessToken, userId: user._id }
+  return { accessToken, user }
 }
