@@ -1,10 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { CreateUserRequestDto, CreateUserResponseDto } from '@quiz/common'
+import {
+  AuthProvider,
+  CreateUserRequestDto,
+  CreateUserResponseDto,
+  UpdateUserProfileRequestDto,
+  UserProfileResponseDto,
+} from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 
 import { BadCredentialsException } from '../exceptions'
 
-import { AuthProvider, LocalUser, User } from './models/schemas'
+import { LocalUser, User } from './models/schemas'
 import { UserRepository } from './user.repository'
 import { isLocalUser } from './utils'
 
@@ -99,6 +105,58 @@ export class UserService {
   }
 
   /**
+   * Finds a profile user by their ID or throws an exception if not found.
+   *
+   * @param userId - The unique identifier of the user.
+   *
+   * @returns The profile user response dto.
+   * @throws UserNotFoundException If the user is not found.
+   */
+  public async findUserProfileOrThrow(
+    userId: string,
+  ): Promise<UserProfileResponseDto> {
+    const user = await this.userRepository.findUserByIdOrThrow(userId)
+    return UserService.toProfileUserResponse(user)
+  }
+
+  /**
+   * Updates the profile of an existing user.
+   *
+   * @param userId - The unique identifier of the user to update.
+   * @param request -
+   *
+   * @returns A promise resolving to the updated user document.
+   * @throws UserNotFoundException If no user exists with the specified ID.
+   */
+  public async updateUser(
+    userId: string,
+    request: UpdateUserProfileRequestDto,
+  ): Promise<UserProfileResponseDto> {
+    this.logger.debug(`Updating user '${userId}' with '${request}'.`)
+
+    const updatedDetails: Partial<User> = {
+      ...(request.email && { email: request.email }),
+      ...(request.givenName && { givenName: request.givenName }),
+      ...(request.familyName && { familyName: request.familyName }),
+      ...(request.defaultNickname && {
+        defaultNickname: request.defaultNickname,
+      }),
+      updatedAt: new Date(),
+    }
+
+    const updatedUser = await this.userRepository.findUserByIdAndUpdateOrThrow(
+      userId,
+      updatedDetails,
+    )
+
+    this.logger.debug(
+      `Successfully updated user '${userId}' with '${request}'.`,
+    )
+
+    return UserService.toProfileUserResponse(updatedUser)
+  }
+
+  /**
    * Transforms a User document into a CreateUserResponseDto.
    *
    * @param createdUser - The User document returned from the database.
@@ -127,6 +185,38 @@ export class UserService {
       defaultNickname,
       created: createdAt,
       updated: updatedAt,
+    }
+  }
+
+  /**
+   * Transforms a User document into a ProfileUserResponseDto.
+   *
+   * @param user - The User document returned from the database.
+   * @returns DTO containing id, email, optional names, and timestamps.
+   *
+   * @private
+   */
+  private static toProfileUserResponse(user: User): UserProfileResponseDto {
+    const {
+      _id: id,
+      email,
+      givenName,
+      familyName,
+      defaultNickname,
+      provider: authProvider,
+      createdAt: created,
+      updatedAt: updated,
+    } = user
+
+    return {
+      id,
+      email,
+      givenName,
+      familyName,
+      defaultNickname,
+      authProvider,
+      created,
+      updated,
     }
   }
 }
