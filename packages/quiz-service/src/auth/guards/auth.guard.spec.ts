@@ -5,7 +5,13 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Test, TestingModule } from '@nestjs/testing'
-import { TokenDto, TokenScope } from '@quiz/common'
+import {
+  Authority,
+  GameParticipantType,
+  GameTokenDto,
+  TokenDto,
+  TokenScope,
+} from '@quiz/common'
 
 import { ClientService } from '../../client/services'
 import { UserRepository } from '../../user/services'
@@ -165,6 +171,51 @@ describe('AuthGuard', () => {
     ;(userRepository.findUserByIdOrThrow as jest.Mock).mockRejectedValue(
       new Error('404'),
     )
+
+    await expect(
+      guard.canActivate(
+        makeContext({
+          headers: { authorization: 'Bearer ok' },
+        }),
+      ),
+    ).rejects.toThrow(UnauthorizedException)
+  })
+
+  it('should authenticate a Game scope and attach gameId and participantType', async () => {
+    const token: GameTokenDto = {
+      sub: 'participant-id',
+      scope: TokenScope.Game,
+      authorities: [Authority.Game],
+      exp: Date.now() / 1000 + 60,
+      gameId: 'game-id',
+      participantType: GameParticipantType.HOST,
+    }
+
+    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+
+    jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const req: any = { headers: { authorization: 'Bearer ok' } }
+    const ok = await guard.canActivate(makeContext(req))
+    expect(ok).toBe(true)
+    expect(req.scope).toEqual(TokenScope.Game)
+    expect(req.authorities).toEqual([Authority.Game])
+    expect(req.gameId).toEqual('game-id')
+    expect(req.participantType).toEqual(GameParticipantType.HOST)
+  })
+
+  it('should throw if missing gameId or participantType in Game scope', async () => {
+    const token: TokenDto = {
+      sub: 'participant-id',
+      scope: TokenScope.Game,
+      authorities: [Authority.Game],
+      exp: Date.now() / 1000 + 60,
+    }
+
+    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+
+    jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 
     await expect(
       guard.canActivate(

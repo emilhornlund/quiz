@@ -5,13 +5,17 @@ import {
   AuthLoginResponseDto,
   Authority,
   AuthRefreshRequestDto,
+  GameParticipantType,
+  GameTokenDto,
   LegacyAuthRequestDto,
   LegacyAuthResponseDto,
   TokenDto,
   TokenScope,
 } from '@quiz/common'
+import { v4 as uuidv4 } from 'uuid'
 
 import { ClientService } from '../../client/services'
+import { GameRepository } from '../../game/services'
 import { UserService } from '../../user/services'
 
 import { getTokenAuthorities, getTokenExpiresIn } from './utils'
@@ -29,11 +33,13 @@ export class AuthService {
    * Initializes the AuthService.
    *
    * @param userService - Service for user credential verification.
+   * @param gameRepository - Repository for accessing game data.
    * @param clientService - Service to manage client data.
    * @param jwtService - Service for generating and verifying JWT tokens.
    */
   constructor(
     private readonly userService: UserService,
+    private readonly gameRepository: GameRepository,
     private clientService: ClientService,
     private jwtService: JwtService,
   ) {}
@@ -52,7 +58,47 @@ export class AuthService {
       authLoginRequestDto.email,
       authLoginRequestDto.password,
     )
-    return this.signTokenPair(user._id)
+    return this.signTokenPair(user._id, TokenScope.User)
+  }
+
+  /**
+   * Authenticate into a game using its PIN.
+   *
+   * @param gamePIN - The game’s unique 6-digit PIN.
+   * @param userId - Optional user ID to reuse (from a valid Game‐scoped user token).
+   *                 If omitted, an anonymous participant ID is generated.
+   * @returns Access + refresh tokens scoped to that game.
+   */
+  public async authenticateGame(
+    gamePIN: string,
+    userId?: string,
+  ): Promise<AuthLoginResponseDto> {
+    const game = await this.gameRepository.findGameByPINOrThrow(gamePIN)
+    const gameId = game._id
+
+    const participantId = userId || uuidv4()
+
+    const existingParticipant = game.participants.find(
+      (participant) => participant.player._id === participantId,
+    )
+
+    let participantType: GameParticipantType
+    if (existingParticipant) {
+      participantType = existingParticipant.type
+    } else if (game.participants.length === 0) {
+      participantType = GameParticipantType.HOST
+    } else {
+      participantType = GameParticipantType.PLAYER
+    }
+
+    this.logger.debug(
+      `Authenticating game '${gameId}' and participant '${participantId}:${participantType}'.`,
+    )
+
+    return this.signTokenPair(participantId, TokenScope.Game, {
+      gameId,
+      participantType,
+    })
   }
 
   /**
@@ -65,10 +111,10 @@ export class AuthService {
   public async refresh(
     authRefreshRequestDto: AuthRefreshRequestDto,
   ): Promise<AuthLoginResponseDto> {
-    let result: Pick<TokenDto, 'sub' | 'authorities'>
+    let payload: TokenDto
 
     try {
-      result = await this.jwtService.verifyAsync<TokenDto>(
+      payload = await this.jwtService.verifyAsync<TokenDto>(
         authRefreshRequestDto.refreshToken,
       )
     } catch (error) {
@@ -77,27 +123,50 @@ export class AuthService {
       throw new UnauthorizedException()
     }
 
-    if (!result.authorities.includes(Authority.RefreshAuth)) {
+    if (!payload.authorities.includes(Authority.RefreshAuth)) {
       this.logger.debug(
         `Failed to refresh token since missing '${Authority.RefreshAuth}' authority.`,
       )
       throw new UnauthorizedException()
     }
 
-    this.logger.debug(`Refreshing token with userId '${result.sub}'.`)
-    return this.signTokenPair(result.sub)
+    let additionalClaims = {}
+
+    if (payload.scope === TokenScope.Game) {
+      const { gameId, participantType } = payload as GameTokenDto
+      additionalClaims = { gameId, participantType }
+    }
+
+    this.logger.debug(`Refreshing token with userId '${payload.sub}'.`)
+    return this.signTokenPair(payload.sub, payload.scope, additionalClaims)
   }
 
   /**
    * Generates a new access token (15m) and refresh token (30d) for the given user.
    *
-   * @param userId - The subject (user ID) for whom to sign the tokens.
+   * @param subject - The subject (user ID) for whom to sign the tokens.
+   * @param scope - The broad area of the API this token grants access to (e.g. Client, Game, User).
+   * @param additionalClaims - Extra payload (e.g. gameId, participantType).
    * @returns Promise resolving to AuthLoginResponseDto with both tokens.
    * @private
    */
-  private async signTokenPair(userId: string): Promise<AuthLoginResponseDto> {
-    const accessToken = await this.signToken(TokenScope.User, false, userId)
-    const refreshToken = await this.signToken(TokenScope.User, true, userId)
+  private async signTokenPair(
+    subject: string,
+    scope: TokenScope,
+    additionalClaims?: Record<string, unknown>,
+  ): Promise<AuthLoginResponseDto> {
+    const accessToken = await this.signToken(
+      subject,
+      scope,
+      false,
+      additionalClaims,
+    )
+    const refreshToken = await this.signToken(
+      subject,
+      scope,
+      true,
+      additionalClaims,
+    )
     return { accessToken, refreshToken }
   }
 
@@ -118,7 +187,7 @@ export class AuthService {
       player: { _id: playerId, nickname },
     } = await this.clientService.findOrCreateClient(authRequest.clientId)
 
-    const token = await this.signToken(TokenScope.Client, false, clientIdHash)
+    const token = await this.signToken(clientIdHash, TokenScope.Client, false)
 
     return {
       token,
@@ -147,16 +216,18 @@ export class AuthService {
   /**
    * Signs a JWT for the specified scope and token type.
    *
+   * @param subject - The JWT “sub” claim, typically a user ID or client ID.
    * @param scope - The broad area of the API this token grants access to (e.g. Client, Game, User).
    * @param isRefreshToken - If true, issues a refresh token (long-lived); otherwise an access token (short-lived).
-   * @param subject - The JWT “sub” claim, typically a user ID or client ID.
+   * @param additionalClaims - Extra JWT payload.
    * @returns A promise resolving to the signed JWT string.
    * @private
    */
   private async signToken(
+    subject: string,
     scope: TokenScope,
     isRefreshToken: boolean,
-    subject: string,
+    additionalClaims?: Record<string, unknown>,
   ): Promise<string> {
     const authorities = getTokenAuthorities(scope, isRefreshToken)
     const expiresIn = getTokenExpiresIn(scope, isRefreshToken)
@@ -165,6 +236,7 @@ export class AuthService {
       {
         scope,
         authorities,
+        ...(additionalClaims || {}),
       },
       {
         subject,
