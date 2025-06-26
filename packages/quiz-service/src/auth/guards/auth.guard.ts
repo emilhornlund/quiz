@@ -6,7 +6,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { Authority, TokenDto, TokenScope } from '@quiz/common'
+import {
+  Authority,
+  GameParticipantType,
+  GameTokenDto,
+  TokenDto,
+  TokenScope,
+} from '@quiz/common'
 import { Request } from 'express'
 
 import { ClientService } from '../../client/services'
@@ -54,6 +60,16 @@ export interface AuthGuardRequest extends Request {
    * is `Client`. Loaded by clientService.findByClientIdHashOrThrow().
    */
   client?: Client
+
+  /**
+   * The game ID extracted from a Game-scoped token.
+   */
+  gameId?: string
+
+  /**
+   * The participant type (host or player) from a Game-scoped token.
+   */
+  participantType?: GameParticipantType
 }
 
 /**
@@ -120,7 +136,8 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<AuthGuardRequest>()
-    const { sub, scope, authorities } = await this.verifyTokenOrThrow(request)
+    const payload = await this.verifyTokenOrThrow(request)
+    const { sub, scope, authorities } = payload
 
     this.verifyAuthorizedScopesOrThrows(scope, context)
     this.verifyAuthorizedAuthoritiesOrThrows(authorities, context)
@@ -129,12 +146,23 @@ export class AuthGuard implements CanActivate {
     request.authorities = authorities
     request.principalId = sub
 
-    if (scope === TokenScope.User || scope === TokenScope.Game) {
+    if (scope === TokenScope.User) {
       try {
         request.user = await this.userRepository.findUserByIdOrThrow(sub)
       } catch {
         throw new UnauthorizedException()
       }
+    }
+
+    if (scope === TokenScope.Game) {
+      const { gameId, participantType } = payload as GameTokenDto
+
+      if (!gameId || !participantType) {
+        throw new UnauthorizedException('No gameId or participantType in token')
+      }
+
+      request.gameId = gameId
+      request.participantType = participantType
     }
 
     if (scope === TokenScope.Client) {
