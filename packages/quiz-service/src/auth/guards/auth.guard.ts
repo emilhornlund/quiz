@@ -38,6 +38,12 @@ export interface AuthGuardRequest extends Request {
   authorities: Authority[]
 
   /**
+   * Unique identifier of the authenticated subject (from the JWT `sub` claim).
+   * Always set when authentication succeeds.
+   */
+  principalId: string
+
+  /**
    * The authenticated user record, populated when `scope` is `User` or `Game`.
    * Fetched via `UserRepository.findUserByIdOrThrow(sub)`.
    */
@@ -121,6 +127,7 @@ export class AuthGuard implements CanActivate {
 
     request.scope = scope
     request.authorities = authorities
+    request.principalId = sub
 
     if (scope === TokenScope.User || scope === TokenScope.Game) {
       try {
