@@ -1,7 +1,12 @@
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { getModelToken } from '@nestjs/mongoose'
-import { TokenDto, TokenScope } from '@quiz/common'
+import {
+  GameParticipantType,
+  GameTokenDto,
+  TokenDto,
+  TokenScope,
+} from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
 import supertest from 'supertest'
@@ -9,15 +14,25 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   buildMockPrimaryUser,
+  createMockGameDocument,
+  createMockGameHostParticipantDocument,
+  createMockPlayerDocument,
   MOCK_DEFAULT_INVALID_PASSWORD,
   MOCK_DEFAULT_PASSWORD,
   MOCK_PRIMARY_USER_EMAIL,
 } from '../../../test-utils/data'
-import { closeTestApp, createTestApp } from '../../../test-utils/utils'
+import {
+  closeTestApp,
+  createDefaultUserAndAuthenticate,
+  createTestApp,
+} from '../../../test-utils/utils'
 import { ClientService } from '../../client/services'
+import { Game, GameModel } from '../../game/services/models/schemas'
+import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { User, UserModel } from '../../user/services/models/schemas'
 import { AuthService } from '../services'
 import {
+  DEFAULT_GAME_AUTHORITIES,
   DEFAULT_REFRESH_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
 } from '../services/utils'
@@ -28,6 +43,8 @@ describe('AuthController (e2e)', () => {
   let clientService: ClientService
   let authService: AuthService
   let userModel: UserModel
+  let gameModel: GameModel
+  let playerModel: PlayerModel
 
   beforeEach(async () => {
     app = await createTestApp()
@@ -35,6 +52,8 @@ describe('AuthController (e2e)', () => {
     clientService = app.get(ClientService)
     authService = app.get<AuthService>(AuthService)
     userModel = app.get<UserModel>(getModelToken(User.name))
+    gameModel = app.get<GameModel>(getModelToken(Game.name))
+    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
   })
 
   afterEach(async () => {
@@ -129,6 +148,69 @@ describe('AuthController (e2e)', () => {
     })
   })
 
+  describe('/api/auth/games/:gamePIN (POST)', () => {
+    it('should succeed in authenticating a user for a game', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
+
+      const game = await gameModel.create(createMockGameDocument())
+
+      return supertest(app.getHttpServer())
+        .post(`/api/auth/games/${game.pin}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send()
+        .expect(200)
+        .expect((res) => {
+          expectGameTokenPair(game._id, GameParticipantType.HOST, res, user._id)
+        })
+    })
+
+    it('should succeed in authenticating an anonymous participant for a game', async () => {
+      const player = await playerModel.create(createMockPlayerDocument())
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [createMockGameHostParticipantDocument({ player })],
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/auth/games/${game.pin}`)
+        .send()
+        .expect(200)
+        .expect((res) => {
+          expectGameTokenPair(game._id, GameParticipantType.PLAYER, res)
+        })
+    })
+
+    it('should 400 404 error when game PIN validation fails', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/games/XXXXXX')
+        .send()
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 404 error when an active game was not found', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/games/123456')
+        .send()
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Active game not found by PIN 123456',
+            status: 404,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+  })
+
   describe('/api/refresh (POST)', () => {
     it('should succeed in refresh an existing authentication', async () => {
       const user = await userModel.create(buildMockPrimaryUser())
@@ -146,6 +228,27 @@ describe('AuthController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expectAuthLoginRequestDto(user._id, res)
+        })
+    })
+
+    it('should succeed in refresh an existing authentication for a game', async () => {
+      const game = await gameModel.create(createMockGameDocument())
+
+      const userId = uuidv4()
+
+      const { refreshToken } = await authService.authenticateGame(
+        game.pin,
+        userId,
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/refresh')
+        .send({
+          refreshToken,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectGameTokenPair(game._id, GameParticipantType.HOST, res, userId)
         })
     })
 
@@ -324,6 +427,36 @@ describe('AuthController (e2e)', () => {
     expect(refreshTokenDto.sub).toEqual(userId)
     expect(refreshTokenDto.scope).toEqual(TokenScope.User)
     expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
+  }
+
+  function expectGameTokenPair(
+    gameId: string,
+    participantType: GameParticipantType,
+    response: Response,
+    participantId?: string,
+  ) {
+    expect(response.body).toEqual({
+      accessToken: expect.any(String),
+      refreshToken: expect.any(String),
+    })
+
+    const accessTokenDto = jwtService.verify<GameTokenDto>(
+      response.body.accessToken,
+    )
+    expect(accessTokenDto.sub).toEqual(participantId || expect.any(String))
+    expect(accessTokenDto.scope).toEqual(TokenScope.Game)
+    expect(accessTokenDto.authorities).toEqual(DEFAULT_GAME_AUTHORITIES)
+    expect(accessTokenDto.gameId).toEqual(gameId)
+    expect(accessTokenDto.participantType).toEqual(participantType)
+
+    const refreshTokenDto = jwtService.verify<GameTokenDto>(
+      response.body.refreshToken,
+    )
+    expect(refreshTokenDto.sub).toEqual(participantId || expect.any(String))
+    expect(refreshTokenDto.scope).toEqual(TokenScope.Game)
+    expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
+    expect(refreshTokenDto.gameId).toEqual(gameId)
+    expect(refreshTokenDto.participantType).toEqual(participantType)
   }
 
   function expectLegacyAuthResponseDto(
