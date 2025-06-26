@@ -1,3 +1,4 @@
+export * from './principal-id.decorator'
 export * from './principal.decorator'
 export * from './public.decorator'
 export * from './required-authorities.decorator'
