@@ -3,7 +3,6 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { AuthModule } from '../auth'
 import { ClientModule } from '../client'
 import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
@@ -48,7 +47,6 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
         schema: GameResultSchema,
       },
     ]),
-    AuthModule,
     PlayerModule,
     ClientModule,
     QuizModule,
@@ -72,5 +70,6 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
+  exports: [GameRepository],
 })
 export class GameModule {}
