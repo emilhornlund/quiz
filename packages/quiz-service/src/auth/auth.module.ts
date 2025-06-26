@@ -8,6 +8,7 @@ import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
 import { ClientModule } from '../client'
+import { GameModule } from '../game'
 import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
@@ -47,6 +48,7 @@ import { AuthService } from './services'
       },
     }),
     ClientModule,
+    GameModule,
     UserModule,
   ],
   controllers: [AuthController],
