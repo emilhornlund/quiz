@@ -3,14 +3,16 @@ import {
   faClockRotateLeft,
   faLightbulb,
   faLink,
+  faRightFromBracket,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
 import Bars from '../../assets/images/bars.svg'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
+import { useAuthContext } from '../../context/auth'
 import { classNames } from '../../utils/helpers'
 import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
 import { Menu, MenuItem, MenuSeparator } from '../Menu'
@@ -40,6 +42,8 @@ const Page: React.FC<PageProps> = ({
   footer,
   children,
 }) => {
+  const auth = useAuthContext()
+
   const navigate = useNavigate()
 
   const deviceType = useDeviceSizeType()
@@ -55,8 +59,13 @@ const Page: React.FC<PageProps> = ({
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev)
 
+  const handleLogout = useCallback(() => {
+    auth.setAuth(undefined)
+    navigate('/')
+  }, [auth, navigate])
+
   const profileMenuItems = useMemo(() => {
-    if (!profile) {
+    if (!auth.isLoggedIn() || !profile) {
       return null
     }
     return (
@@ -73,9 +82,12 @@ const Page: React.FC<PageProps> = ({
         <MenuItem icon={faLink} link="/player/link">
           Link
         </MenuItem>
+        <MenuItem icon={faRightFromBracket} onClick={handleLogout}>
+          Logout
+        </MenuItem>
       </>
     )
-  }, [profile])
+  }, [auth, profile, handleLogout])
 
   return (
     <div className={styles.main}>
@@ -85,12 +97,15 @@ const Page: React.FC<PageProps> = ({
           <span className={styles.text}>Klurigo</span>
         </button>
         <div className={styles.side}>
-          {discover && !isMobile && <Link to="/discover">Discover</Link>}
-          {discover && header && !isMobile && (
+          {auth.isLoggedIn() && discover && !isMobile && (
+            <Link to="/discover">Discover</Link>
+          )}
+          {!auth.isLoggedIn() && <Link to="/auth/login">Login</Link>}
+          {auth.isLoggedIn() && discover && header && !isMobile && (
             <div className={styles.verticalLine} />
           )}
           {header}
-          {profile && !isMobile && (
+          {auth.isLoggedIn() && profile && !isMobile && (
             <div
               className={styles.menuButtonWrapper}
               ref={profileMenuButtonRef}>
@@ -105,7 +120,7 @@ const Page: React.FC<PageProps> = ({
               </Menu>
             </div>
           )}
-          {isMobile && (discover || profile) && (
+          {auth.isLoggedIn() && isMobile && (discover || profile) && (
             <div className={styles.menuButtonWrapper} ref={mobileMenuButtonRef}>
               <button onClick={toggleMobileMenu} type="button">
                 <img src={Bars} alt="Menu" />

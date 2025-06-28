@@ -25,7 +25,7 @@ import styles from './TextField.module.scss'
 export interface TextFieldProps {
   id: string
   name?: string
-  type: 'text' | 'number'
+  type: 'text' | 'number' | 'password'
   kind?: 'primary' | 'secondary'
   size?: 'normal' | 'small'
   placeholder?: string
@@ -84,7 +84,7 @@ const TextField: React.FC<TextFieldProps> = ({
     let tmpValid = true
     let tmpErrorMessage: string | undefined
 
-    if (type === 'text') {
+    if (type === 'text' || type === 'password') {
       ;[tmpValid, tmpErrorMessage] = isValidString({
         value: internalValue as string,
         disabled,
