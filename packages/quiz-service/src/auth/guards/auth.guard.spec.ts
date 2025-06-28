@@ -13,7 +13,6 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { ClientService } from '../../client/services'
 import { UserRepository } from '../../user/services'
 import {
   REQUIRED_AUTHORITIES_KEY,
@@ -29,7 +28,7 @@ describe('AuthGuard', () => {
   let reflector: Reflector
   let authService: Partial<AuthService>
   let userRepository: Partial<UserRepository>
-  let clientService: Partial<ClientService>
+
   const fakeHandler = () => {}
   const fakeClass = class {}
 
@@ -46,7 +45,6 @@ describe('AuthGuard', () => {
     reflector = new Reflector()
     authService = { verifyToken: jest.fn() }
     userRepository = { findUserByIdOrThrow: jest.fn() }
-    clientService = { findByClientIdHashOrThrow: jest.fn() }
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -54,7 +52,6 @@ describe('AuthGuard', () => {
         { provide: Reflector, useValue: reflector },
         { provide: AuthService, useValue: authService },
         { provide: UserRepository, useValue: userRepository },
-        { provide: ClientService, useValue: clientService },
       ],
     }).compile()
 
@@ -224,33 +221,5 @@ describe('AuthGuard', () => {
         }),
       ),
     ).rejects.toThrow(UnauthorizedException)
-  })
-
-  it('should authenticate a Client scope and attach client', async () => {
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
-    const token: TokenDto = {
-      sub: 'client-id',
-      scope: TokenScope.Client,
-      authorities: [],
-      exp: Date.now() / 1000 + 60,
-    }
-
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
-
-    jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fakeClient = { id: 'client-id', name: 'C' } as any
-
-    ;(clientService.findByClientIdHashOrThrow as jest.Mock).mockResolvedValue(
-      fakeClient,
-    )
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const req: any = { headers: { authorization: 'Bearer ok' } }
-    const ok = await guard.canActivate(makeContext(req))
-    expect(ok).toBe(true)
-    expect(req.scope).toEqual(TokenScope.Client)
-    expect(req.client).toBe(fakeClient)
   })
 })
