@@ -67,8 +67,8 @@ export function createMockGameHostParticipantDocument(
   participant?: Partial<ParticipantBase & ParticipantHost>,
 ): ParticipantBase & ParticipantHost {
   return {
+    participantId: MOCK_DEFAULT_PLAYER_ID,
     type: GameParticipantType.HOST,
-    player: createMockPlayerDocument(),
     updated: offsetSeconds(0),
     created: offsetSeconds(0),
     ...(participant ?? {}),
@@ -79,8 +79,8 @@ export function createMockGamePlayerParticipantDocument(
   participant?: Partial<ParticipantBase & ParticipantPlayer>,
 ): ParticipantBase & ParticipantPlayer {
   return {
+    participantId: MOCK_DEFAULT_PLAYER_ID,
     type: GameParticipantType.PLAYER,
-    player: createMockPlayerDocument(),
     nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     rank: 0,
     totalScore: 0,

@@ -15,9 +15,13 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { Authority, TokenScope } from '@quiz/common'
 
-import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
-import { Client } from '../../client/services/models/schemas'
+import {
+  PrincipalId,
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
 import { GameService } from '../services'
 
 import { GameHistoryPageFilter } from './models'
@@ -28,32 +32,34 @@ import {
 } from './models/response'
 
 /**
- * Controller for retrieving games associated with a client.
+ * Controller for retrieving games associated with a user.
  */
 @ApiBearerAuth()
-@ApiTags('client', 'game')
+@ApiTags('profile', 'game')
 @ApiExtraModels(GameHistoryHostResponse, GameHistoryPlayerResponse)
-@Controller('/client/games')
-export class ClientGameController {
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Game)
+@Controller('/profile/games')
+export class ProfileGameController {
   /**
-   * Initializes the ClientGameController.
+   * Initializes the ProfileGameController.
    *
    * @param gameService - Service for managing game operations.
    */
   constructor(private readonly gameService: GameService) {}
 
   /**
-   * Retrieves the games associated with the authenticated client.
+   * Retrieves the games associated with the authenticated user.
    *
-   * @param client - The authenticated client making the request.
+   * @param userId - The unique identifier of the authenticated user making the request.
    * @param filter - The pagination parameters.
-   * @returns A paginated list of games where the client is a participant.
+   * @returns A paginated list of games where the user is a participant.
    */
   @Get()
   @ApiOperation({
-    summary: 'Get client-associated games',
+    summary: 'Get user-associated games',
     description:
-      'Retrieves a paginated list of games where the authenticated client has participated.',
+      'Retrieves a paginated list of games where the authenticated user has participated.',
   })
   @ApiQuery({
     name: 'offset',
@@ -77,13 +83,13 @@ export class ClientGameController {
     description: 'Unauthorized access to the endpoint.',
   })
   @HttpCode(HttpStatus.OK)
-  public async getClientAssociatedGames(
-    @AuthorizedClientParam() client: Client,
+  public async getUserGames(
+    @PrincipalId() userId: string,
     @Query(new ValidationPipe({ transform: true }))
     filter: GameHistoryPageFilter,
   ): Promise<PaginatedGameHistoryResponse> {
-    return this.gameService.findGamesByPlayerId(
-      client.player._id,
+    return this.gameService.findGamesByParticipantId(
+      userId,
       filter.offset ?? 0,
       filter.limit ?? 5,
     )

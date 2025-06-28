@@ -10,7 +10,12 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { Authority, TokenScope } from '@quiz/common'
 
+import {
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
 import { GameResultService } from '../services'
 
 import { ApiGameIdParam } from './decorators/api'
@@ -32,11 +37,13 @@ import {
  */
 @ApiBearerAuth()
 @ApiTags('game')
-@Controller('/games/:gameID/results')
 @ApiExtraModels(
   GameResultClassicModeResponse,
   GameResultZeroToOneHundredModeResponse,
 )
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Game)
+@Controller('/games/:gameID/results')
 export class GameResultController {
   /**
    * Creates a new instance of the GameResultController.

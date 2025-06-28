@@ -5,36 +5,27 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  createMockClientDocument,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
-  createMockPlayerDocument,
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
   offsetSeconds,
 } from '../../../test-utils/data'
 import {
   closeTestApp,
+  createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { Client, ClientModel } from '../../client/services/models/schemas'
-import { Player, PlayerModel } from '../../player/services/models/schemas'
+} from '../../../test-utils/utils'
+import { User } from '../../user/services/models/schemas'
 import { Game, GameModel } from '../services/models/schemas'
 
-describe('ClientGameController (e2e)', () => {
+describe('ProfileGameController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
-  let playerModel: PlayerModel
-  let clientModel: ClientModel
   let gameModel: GameModel
 
   beforeEach(async () => {
     app = await createTestApp()
-    authService = app.get(AuthService)
-    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
-    clientModel = app.get<ClientModel>(getModelToken(Client.name))
     gameModel = app.get<GameModel>(getModelToken(Game.name))
   })
 
@@ -42,23 +33,15 @@ describe('ClientGameController (e2e)', () => {
     await closeTestApp(app)
   })
 
-  describe('/api/client/games (GET)', () => {
+  describe('/api/profile/games (GET)', () => {
     it("should succeed in retrieving a player's past active and completed games", async () => {
-      const player = await playerModel.create(createMockPlayerDocument())
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const { _id: clientId } = await clientModel.create(
-        createMockClientDocument({ player }),
-      )
-
-      const { token } = await authService.legacyAuthenticate({
-        clientId,
-      })
-
-      await gameModel.insertMany(buildFirstPageGameDocuments(player))
+      await gameModel.insertMany(buildFirstPageGameDocuments(user))
 
       return supertest(app.getHttpServer())
-        .get('/api/client/games')
-        .set({ Authorization: `Bearer ${token}` })
+        .get('/api/profile/games')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -116,23 +99,15 @@ describe('ClientGameController (e2e)', () => {
     })
 
     it("should succeed in retrieving a the second page of the player's past active and completed games", async () => {
-      const player = await playerModel.create(createMockPlayerDocument())
-
-      const { _id: clientId } = await clientModel.create(
-        createMockClientDocument({ player }),
-      )
-
-      const { token } = await authService.legacyAuthenticate({
-        clientId,
-      })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       await gameModel.insertMany([
-        ...buildFirstPageGameDocuments(player),
+        ...buildFirstPageGameDocuments(user),
         createMockGameDocument({
           status: GameStatus.Completed,
           participants: [
             createMockGamePlayerParticipantDocument({
-              player,
+              participantId: user._id,
               rank: 9,
               totalScore: 499,
             }),
@@ -143,8 +118,8 @@ describe('ClientGameController (e2e)', () => {
       ])
 
       return supertest(app.getHttpServer())
-        .get('/api/client/games?offset=5&limit=5')
-        .set({ Authorization: `Bearer ${token}` })
+        .get('/api/profile/games?offset=5&limit=5')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -168,17 +143,11 @@ describe('ClientGameController (e2e)', () => {
     })
 
     it('should succeed in retrieving empty results when a player has no past games', async () => {
-      const player = await playerModel.create(createMockPlayerDocument())
-
-      const { _id: clientId } = await clientModel.create(
-        createMockClientDocument({ player }),
-      )
-
-      const { token } = await authService.legacyAuthenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
-        .get('/api/client/games')
-        .set({ Authorization: `Bearer ${token}` })
+        .get('/api/profile/games')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -207,22 +176,23 @@ describe('ClientGameController (e2e)', () => {
   })
 })
 
-function buildFirstPageGameDocuments(player: Player): Game[] {
+function buildFirstPageGameDocuments(user: User): Game[] {
+  const { _id: participantId } = user
   return [
     createMockGameDocument({
       status: GameStatus.Expired,
-      participants: [createMockGameHostParticipantDocument({ player })],
+      participants: [createMockGameHostParticipantDocument({ participantId })],
       created: offsetSeconds(0),
     }),
     createMockGameDocument({
       status: GameStatus.Completed,
-      participants: [createMockGameHostParticipantDocument({ player })],
+      participants: [createMockGameHostParticipantDocument({ participantId })],
       currentTask: createMockQuitTaskDocument(),
       created: offsetSeconds(1),
     }),
     createMockGameDocument({
       status: GameStatus.Completed,
-      participants: [createMockGameHostParticipantDocument({ player })],
+      participants: [createMockGameHostParticipantDocument({ participantId })],
       currentTask: createMockQuitTaskDocument(),
       created: offsetSeconds(2),
     }),
@@ -230,7 +200,7 @@ function buildFirstPageGameDocuments(player: Player): Game[] {
       status: GameStatus.Completed,
       participants: [
         createMockGamePlayerParticipantDocument({
-          player,
+          participantId,
           rank: 1,
           totalScore: 1337,
         }),
@@ -240,7 +210,7 @@ function buildFirstPageGameDocuments(player: Player): Game[] {
     }),
     createMockGameDocument({
       status: GameStatus.Active,
-      participants: [createMockGameHostParticipantDocument({ player })],
+      participants: [createMockGameHostParticipantDocument({ participantId })],
       currentTask: createMockQuestionTaskDocument(),
       created: offsetSeconds(4),
     }),
@@ -248,7 +218,7 @@ function buildFirstPageGameDocuments(player: Player): Game[] {
       status: GameStatus.Active,
       participants: [
         createMockGamePlayerParticipantDocument({
-          player,
+          participantId,
           rank: 5,
           totalScore: 4567,
         }),
