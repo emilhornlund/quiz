@@ -15,8 +15,6 @@ import {
 } from '@quiz/common'
 import { Request } from 'express'
 
-import { ClientService } from '../../client/services'
-import { Client } from '../../client/services/models/schemas'
 import { UserRepository } from '../../user/services'
 import { User } from '../../user/services/models/schemas'
 import { IS_PUBLIC_KEY } from '../controllers/decorators'
@@ -56,12 +54,6 @@ export interface AuthGuardRequest extends Request {
   user?: User
 
   /**
-   * The authenticated client record, populated when `scope`
-   * is `Client`. Loaded by clientService.findByClientIdHashOrThrow().
-   */
-  client?: Client
-
-  /**
    * The game ID extracted from a Game-scoped token.
    */
   gameId?: string
@@ -83,11 +75,10 @@ export interface AuthGuardRequest extends Request {
  *    - `scope: TokenScope`
  *    - `authorities: Authority[]`
  *    - `userId` (if scope is User or Game)
- *    - `client` (if scope is Client)
  *
  * The incoming `Request` is assumed to be an `AuthGuardRequest`.
  *
- * @throws {UnauthorizedException} if missing/invalid token or client lookup fails.
+ * @throws {UnauthorizedException} if missing/invalid token.
  * @throws {ForbiddenException} if the token’s scope or authorities don’t match
  *         the route’s requirements.
  */
@@ -100,13 +91,11 @@ export class AuthGuard implements CanActivate {
    *                    to determine if the route is public.
    * @param authService - Service for validating and decoding game tokens.
    * @param userRepository - Repository for accessing user data.
-   * @param clientService - Service for retrieving client information.
    */
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
     private readonly userRepository: UserRepository,
-    private readonly clientService: ClientService,
   ) {}
 
   /**
@@ -119,7 +108,6 @@ export class AuthGuard implements CanActivate {
    * 4. Check that `authorities` from token include any required authorities.
    * 5. Attach `scope` and `authorities` to `request`.
    * 6. If `scope` is `User` or `Game`, attach `request.userId = sub`.
-   * 7. If `scope` is `Client`, look up and attach `request.client`.
    *
    * @param context  The current request execution context.
    * @returns `true` if all checks pass.
@@ -163,10 +151,6 @@ export class AuthGuard implements CanActivate {
 
       request.gameId = gameId
       request.participantType = participantType
-    }
-
-    if (scope === TokenScope.Client) {
-      request.client = await this.clientService.findByClientIdHashOrThrow(sub)
     }
 
     return true

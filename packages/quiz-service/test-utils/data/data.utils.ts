@@ -6,10 +6,8 @@ import {
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
-import * as bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Client } from '../../src/client/services/models/schemas'
 import {
   BaseTask,
   Game,
@@ -31,7 +29,6 @@ import {
   TaskType,
 } from '../../src/game/services/models/schemas'
 import { buildLobbyTask } from '../../src/game/services/utils'
-import { Player } from '../../src/player/services/models/schemas'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -91,36 +88,8 @@ export function createMockGamePlayerParticipantDocument(
   }
 }
 
-export function createMockClientDocument(client?: Partial<Client>): Client {
-  const clientId = uuidv4()
-
-  const salt = bcrypt.genSaltSync()
-  const clientIdHash = bcrypt.hashSync(clientId, salt)
-
-  return {
-    _id: clientId,
-    clientIdHash,
-    player: createMockPlayerDocument(client?.player),
-    created: offsetSeconds(0),
-    modified: offsetSeconds(0),
-    ...(client ?? {}),
-  }
-}
-
 export const MOCK_DEFAULT_PLAYER_ID = uuidv4()
 export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
-
-export const MOCK_SECONDARY_PLAYER_NICKNAME = 'WhiskerFox'
-
-export function createMockPlayerDocument(player?: Partial<Player>): Player {
-  return {
-    _id: MOCK_DEFAULT_PLAYER_ID,
-    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
-    created: offsetSeconds(0),
-    modified: offsetSeconds(0),
-    ...(player ?? {}),
-  }
-}
 
 export function createMockMultiChoiceQuestionDocument(
   question?: Partial<BaseQuestionDao & QuestionMultiChoiceDao>,

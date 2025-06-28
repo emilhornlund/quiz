@@ -15,7 +15,6 @@ import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { AuthModule } from '../auth'
-import { ClientModule } from '../client'
 import { GameModule } from '../game'
 import { HealthModule } from '../health'
 import { MediaModule } from '../media'
@@ -33,8 +32,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
  * Root application module.
  *
  * This module initializes all core modules and shared configurations, including
- * database connections, exception filters, and core modules such as GameModule, AuthModule,
- * ClientModule, and PlayerModule.
+ * database connections, exception filters, and core modules such as GameModule and AuthModule.
  */
 @Module({
   imports: [
@@ -174,7 +172,6 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           }),
         ]),
     AuthModule,
-    ClientModule,
     GameModule,
     HealthModule,
     MediaModule,
