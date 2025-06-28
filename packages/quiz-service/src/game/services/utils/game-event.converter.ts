@@ -253,7 +253,7 @@ function buildGameLobbyHostEvent(
     game: { id: document._id, pin: document.pin },
     players: document.participants
       .filter((participant) => participant.type === GameParticipantType.PLAYER)
-      .map(({ player: { _id: id }, nickname }) => ({
+      .map(({ participantId: id, nickname }) => ({
         id,
         nickname,
       })),
@@ -778,10 +778,10 @@ function buildGameResultPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameResultPlayerEvent {
-  const { nickname, player } = participantPlayer
+  const { participantId, nickname } = participantPlayer
 
   const resultsEntryIndex = document.currentTask.results.findIndex(
-    ({ playerId }) => playerId === player._id,
+    ({ playerId }) => playerId === participantId,
   )
 
   const resultsEntry = document.currentTask.results?.[resultsEntryIndex]
@@ -875,15 +875,15 @@ function buildGameLeaderboardPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameLeaderboardPlayerEvent {
-  const { player, nickname } = participantPlayer
+  const { participantId, nickname } = participantPlayer
 
   const leaderboardIndex = document.currentTask.leaderboard.findIndex(
-    ({ playerId }) => playerId === player._id,
+    ({ playerId }) => playerId === participantId,
   )
 
   const leaderboardEntry = document.currentTask.leaderboard?.[leaderboardIndex]
   if (!leaderboardEntry) {
-    throw new Error(`Player not found in leaderboard: ${player._id}`)
+    throw new Error(`Player not found in leaderboard: ${participantId}`)
   }
 
   const { position, score, streaks } = leaderboardEntry
@@ -943,13 +943,13 @@ function buildGamePodiumPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Podium } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GamePodiumPlayerEvent {
-  const { player, nickname } = participantPlayer
+  const { participantId, nickname } = participantPlayer
 
   const leaderboardEntry = document.currentTask.leaderboard.find(
-    ({ playerId }) => playerId === player._id,
+    ({ playerId }) => playerId === participantId,
   )
   if (!leaderboardEntry) {
-    throw new Error(`Player not found in leaderboard: ${player._id}`)
+    throw new Error(`Player not found in leaderboard: ${participantId}`)
   }
   const { score: total, position } = leaderboardEntry
 

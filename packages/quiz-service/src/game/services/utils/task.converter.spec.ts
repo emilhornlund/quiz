@@ -1518,24 +1518,24 @@ function buildGameDocument(
     nextQuestion: 0,
     participants: [
       {
+        participantId: uuidv4(),
         type: GameParticipantType.HOST,
-        player: { _id: uuidv4() },
       },
       {
+        participantId: PARTICIPANT_PLAYER_ID_01,
         type: GameParticipantType.PLAYER,
-        player: { _id: PARTICIPANT_PLAYER_ID_01 },
         totalScore: 0,
         currentStreak: 0,
       },
       {
+        participantId: PARTICIPANT_PLAYER_ID_02,
         type: GameParticipantType.PLAYER,
-        player: { _id: PARTICIPANT_PLAYER_ID_02 },
         totalScore: 0,
         currentStreak: 0,
       },
       {
+        participantId: PARTICIPANT_PLAYER_ID_03,
         type: GameParticipantType.PLAYER,
-        player: { _id: PARTICIPANT_PLAYER_ID_03 },
         totalScore: 0,
         currentStreak: 0,
       },

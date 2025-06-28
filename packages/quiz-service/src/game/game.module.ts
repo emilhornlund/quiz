@@ -3,13 +3,11 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { ClientModule } from '../client'
-import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
 import {
-  ClientGameController,
   GameController,
+  ProfileGameController,
   QuizGameController,
 } from './controllers'
 import { GameResultController } from './controllers/game-result.controller'
@@ -47,15 +45,13 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
         schema: GameResultSchema,
       },
     ]),
-    PlayerModule,
-    ClientModule,
     QuizModule,
   ],
   controllers: [
     GameController,
     GameResultController,
     QuizGameController,
-    ClientGameController,
+    ProfileGameController,
   ],
   providers: [
     Logger,

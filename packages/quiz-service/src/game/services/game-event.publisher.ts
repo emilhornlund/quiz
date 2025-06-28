@@ -78,7 +78,7 @@ export class GameEventPublisher {
     event: GameEvent,
   ): Promise<void> {
     return this.publishDistributedEvent({
-      playerId: participant.player._id,
+      playerId: participant.participantId,
       event,
     })
   }

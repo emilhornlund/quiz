@@ -1,5 +1,4 @@
 export * from './create-game.response'
-export * from './find-game.response'
 export * from './game-history-host.response'
 export * from './game-history-player.response'
 export * from './game-result-classic-mode-player-metric.response'

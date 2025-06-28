@@ -4,8 +4,8 @@ import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
-import { Client } from '../../client/services/models/schemas'
 import { Quiz } from '../../quiz/services/models/schemas'
+import { User } from '../../user/services/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
@@ -53,13 +53,6 @@ export class GameRepository {
         {
           path: 'quiz',
           model: 'Quiz',
-        },
-        {
-          path: 'participants',
-          populate: {
-            path: 'player',
-            model: 'Player',
-          },
         },
       ])
   }
@@ -111,13 +104,6 @@ export class GameRepository {
         {
           path: 'quiz',
           model: 'Quiz',
-        },
-        {
-          path: 'participants',
-          populate: {
-            path: 'player',
-            model: 'Player',
-          },
         },
       ])
   }
@@ -172,15 +158,15 @@ export class GameRepository {
   }
 
   /**
-   * Finds games associated with a specific player ID.
+   * Finds games associated with a specific participant ID.
    *
-   * @param playerId - The ID of the player.
+   * @param participantId - The ID of the participant.
    * @param offset - The number of games to skip for pagination.
    * @param limit - The maximum number of games to return.
    * @returns An object containing the list of games and the total number of matching games.
    */
-  public async findGamesByPlayerId(
-    playerId: string,
+  public async findGamesByParticipantId(
+    participantId: string,
     offset: number = 0,
     limit: number = 5,
   ): Promise<{
@@ -189,7 +175,7 @@ export class GameRepository {
   }> {
     const filter: RootFilterQuery<Game> = {
       status: { $in: [GameStatus.Completed, GameStatus.Active] },
-      'participants.player': playerId,
+      'participants.participantId': participantId,
     }
 
     const total = await this.gameModel.countDocuments(filter)
@@ -203,13 +189,6 @@ export class GameRepository {
         {
           path: 'quiz',
           model: 'Quiz',
-        },
-        {
-          path: 'participants',
-          populate: {
-            path: 'player',
-            model: 'Player',
-          },
         },
       ])
 
@@ -248,15 +227,15 @@ export class GameRepository {
   /**
    * Creates and saves a new game.
    *
-   * @param {Quiz} quiz - The quiz document.
-   * @param {Client} client - The client object representing the host creating the game.
+   * @param quiz - The quiz document.
+   * @param user - The user object representing the host creating the game.
    *
-   * @returns {Promise<GameDocument>} A promise that resolves to the saved GameDocument.
+   * @returns A promise that resolves to the saved GameDocument.
    */
-  public async createGame(quiz: Quiz, client: Client): Promise<GameDocument> {
+  public async createGame(quiz: Quiz, user: User): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    const game = buildGameModel(quiz, gamePIN, client)
+    const game = buildGameModel(quiz, gamePIN, user)
 
     return new this.gameModel(game).save()
   }

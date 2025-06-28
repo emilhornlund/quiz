@@ -36,9 +36,9 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
   const { mode, name, participants, currentTask, previousTasks, questions } =
     gameDocument
 
-  const host = participants.find(
+  const hostParticipantId = participants.find(
     (p) => p.type === GameParticipantType.HOST,
-  )?.player
+  )?.participantId
 
   const playerParticipants: (ParticipantBase & ParticipantPlayer)[] =
     participants
@@ -65,7 +65,7 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     _id: uuidv4(),
     name,
     game: gameDocument,
-    host,
+    hostParticipantId,
     players: buildPlayerMetrics(
       mode,
       questions,
@@ -109,12 +109,12 @@ function buildPlayerMetrics(
     .map((participantPlayer) => {
       const { position: rank = 0, score = 0 } =
         leaderboard.find(
-          ({ playerId }) => playerId === participantPlayer.player._id,
+          ({ playerId }) => playerId === participantPlayer.participantId,
         ) || {}
       return questionResultTasks.reduce(
         (accumulator, { results }) => {
           const { correct, answer, streak, lastScore } = results.find(
-            ({ playerId }) => playerId === participantPlayer.player._id,
+            ({ playerId }) => playerId === participantPlayer.participantId,
           )
           return {
             ...accumulator,
@@ -144,7 +144,8 @@ function buildPlayerMetrics(
           }
         },
         {
-          player: participantPlayer.player,
+          participantId: participantPlayer.participantId,
+          nickname: participantPlayer.nickname,
           rank,
           correct: mode === GameMode.Classic ? 0 : undefined,
           incorrect: mode === GameMode.Classic ? 0 : undefined,
@@ -254,7 +255,7 @@ function calculateAverageResponseTimeByPlayer(
       presentedTime: presented.getTime(),
       answerTime:
         answers
-          .find(({ playerId }) => playerId === playerParticipant.player._id)
+          .find(({ playerId }) => playerId === playerParticipant.participantId)
           ?.created?.getTime() ||
         presented.getTime() + questions[questionIndex].duration * 1000,
     }))
