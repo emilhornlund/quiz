@@ -4,7 +4,6 @@ import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
 import Button from '../../components/Button'
-import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import {
   HostGameBeginState,
@@ -48,9 +47,7 @@ const GamePage = () => {
 
   const { gameID } = useGameContext()
 
-  const { token } = useAuthContext()
-
-  const [event, connectionStatus] = useEventSource(gameID, token)
+  const [event, connectionStatus] = useEventSource(gameID, 'N/A') //TODO: fix this later
   const [hasReconnected, setHasReconnected] = useState(false)
 
   useEffect(() => {

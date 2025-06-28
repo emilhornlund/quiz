@@ -1,8 +1,6 @@
 import { GameLobbyPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import HourglassIcon from '../../assets/images/hourglass-icon.svg'
 import {
   ConfirmDialog,
@@ -11,8 +9,6 @@ import {
   PageProminentIcon,
   Typography,
 } from '../../components'
-import { useAuthContext } from '../../context/auth'
-import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
 const MESSAGES = [
@@ -30,25 +26,25 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
     player: { nickname },
   },
 }) => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const [showConfirmLeaveGameDialog, setShowConfirmLeaveGameDialog] =
     useState<boolean>(false)
   const [isLeavingGame, setIsLeavingGame] = useState<boolean>(false)
 
-  const { gameID } = useGameContext()
-  const { leaveGame } = useQuizServiceClient()
-  const { player } = useAuthContext()
+  // const { gameID } = useGameContext()
+  // const { leaveGame } = useQuizServiceClient()
 
   const handleLeaveGame = () => {
     setShowConfirmLeaveGameDialog(false)
     setIsLeavingGame(true)
-    if (gameID && player?.id) {
-      leaveGame(gameID, player.id).finally(() => {
-        setIsLeavingGame(false)
-        navigate('/')
-      })
-    }
+    // TODO: fix this later
+    // if (gameID && player?.id) {
+    //   leaveGame(gameID, player.id).finally(() => {
+    //     setIsLeavingGame(false)
+    //     navigate('/')
+    //   })
+    // }
   }
 
   const message = useMemo(
