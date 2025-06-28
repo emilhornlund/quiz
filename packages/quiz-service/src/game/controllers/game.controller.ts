@@ -142,13 +142,13 @@ export class GameController {
   @ApiOperation({
     summary: 'Remove a player from a game',
     description:
-      'Allows an authorized client to remove a player from a specified game.',
+      'Allows an authorized participant to remove a player from a specified game.',
   })
   @ApiNoContentResponse({
     description: 'The player has successfully left the game.',
   })
   @ApiForbiddenResponse({
-    description: 'The client is not allowed to remove the player.',
+    description: 'The participant is not allowed to remove the player.',
   })
   @ApiNotFoundResponse({
     description:
@@ -236,7 +236,7 @@ export class GameController {
     description: 'Invalid game ID format or task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()
@@ -280,7 +280,7 @@ export class GameController {
       'Invalid game ID format or question result task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()
@@ -331,7 +331,7 @@ export class GameController {
       'Invalid game ID format or question result task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()

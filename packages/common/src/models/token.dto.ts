@@ -6,12 +6,6 @@ import { GameParticipantType } from './game-participant-type.enum'
  */
 export enum TokenScope {
   /**
-   * Device scope—grants the same access as `User` tokens.
-   * This will eventually be removed in favor of the `User` scope.
-   */
-  Client = 'CLIENT',
-
-  /**
    * Game scope—grants access to endpoints for hosting, joining, and
    * managing ongoing quiz games.
    */

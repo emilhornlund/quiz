@@ -225,7 +225,7 @@ export class GameService {
    * @returns A Promise that resolves when the player is successfully removed from the game.
    *
    * @throws {PlayerNotFoundException} If the specified player does not exist in the game.
-   * @throws {ForbiddenException} If the client is not authorized to remove the specified player.
+   * @throws {ForbiddenException} If the participant is not authorized to remove the specified player.
    */
   public async leaveGame(
     authorizedParticipantId: string,

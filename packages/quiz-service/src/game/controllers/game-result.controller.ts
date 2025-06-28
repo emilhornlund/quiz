@@ -32,7 +32,7 @@ import {
  * Handles the retrieval of final game data after a quiz has been completed.
  * Supports multiple game modes, each with their corresponding result structures.
  *
- * All endpoints in this controllers require authentication and client-level authorization
+ * All endpoints in this controllers require authentication and user-scope authorization
  * to access the results of a specific game session.
  */
 @ApiBearerAuth()
@@ -61,7 +61,7 @@ export class GameResultController {
    *
    * Authorization:
    * - Requires a valid access token (`@ApiBearerAuth`)
-   * - The client must have permission to access the requested game results.
+   * - The user must have permission to access the requested game results.
    *
    * @param gameID The unique identifier of the game.
    * @returns An array containing the game result, depending on the game mode.
@@ -89,7 +89,7 @@ export class GameResultController {
       'Unauthorized access to the endpoint. Token is missing or invalid.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to the game results.',
+    description: 'The user does not have access to the game results.',
   })
   @ApiNotFoundResponse({
     description: 'No game found with the specified unique identifier.',
