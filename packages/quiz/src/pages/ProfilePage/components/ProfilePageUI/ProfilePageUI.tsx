@@ -4,31 +4,20 @@ import {
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useState } from 'react'
+import React, { FC, FormEvent, useState } from 'react'
 
 import { Button, Page, TextField, Typography } from '../../../../components'
-import { Player } from '../../../../models'
 import { classNames } from '../../../../utils/helpers.ts'
 
 import styles from './ProfilePageUI.module.scss'
 
 export interface ProfilePageUIProps {
-  player?: Player
   onNicknameChange: (nickname: string) => void
 }
 
-const ProfilePageUI: FC<ProfilePageUIProps> = ({
-  player,
-  onNicknameChange,
-}) => {
-  const [tmpNickname, setTmpNickname] = useState<string | undefined>(
-    player?.nickname,
-  )
+const ProfilePageUI: FC<ProfilePageUIProps> = ({ onNicknameChange }) => {
+  const [tmpNickname, setTmpNickname] = useState<string | undefined>()
   const [tmpNicknameValid, setTmpNicknameValid] = useState<boolean>(false)
-
-  useEffect(() => {
-    setTmpNickname(player?.nickname)
-  }, [player])
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()

@@ -10,14 +10,9 @@ import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 
-import { Player } from '../../../../models'
-
 import QuizzesPageUI from './QuizzesPageUI'
 
-const player: Player = {
-  id: uuidv4(),
-  nickname: 'FrostyBear',
-}
+const authorId = uuidv4()
 
 describe('QuizzesPageUI', () => {
   it('should render QuizzesPageUI', async () => {
@@ -36,7 +31,7 @@ describe('QuizzesPageUI', () => {
               imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
               languageCode: LanguageCode.English,
               numberOfQuestions: 14,
-              author: { id: player.id, name: 'FrostyBear' },
+              author: { id: authorId, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -50,7 +45,7 @@ describe('QuizzesPageUI', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 20,
-              author: { id: player.id, name: 'FrostyBear' },
+              author: { id: authorId, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -64,7 +59,7 @@ describe('QuizzesPageUI', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 16,
-              author: { id: player.id, name: 'FrostyBear' },
+              author: { id: authorId, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -78,7 +73,7 @@ describe('QuizzesPageUI', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 28,
-              author: { id: player.id, name: 'FrostyBear' },
+              author: { id: authorId, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
@@ -92,7 +87,7 @@ describe('QuizzesPageUI', () => {
               category: QuizCategory.GeneralKnowledge,
               languageCode: LanguageCode.English,
               numberOfQuestions: 24,
-              author: { id: player.id, name: 'FrostyBear' },
+              author: { id: authorId, name: 'FrostyBear' },
               created: new Date(),
               updated: new Date(),
             },
