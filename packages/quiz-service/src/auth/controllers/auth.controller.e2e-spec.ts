@@ -16,7 +16,6 @@ import {
   buildMockPrimaryUser,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
-  createMockPlayerDocument,
   MOCK_DEFAULT_INVALID_PASSWORD,
   MOCK_DEFAULT_PASSWORD,
   MOCK_PRIMARY_USER_EMAIL,
@@ -28,7 +27,6 @@ import {
 } from '../../../test-utils/utils'
 import { ClientService } from '../../client/services'
 import { Game, GameModel } from '../../game/services/models/schemas'
-import { Player, PlayerModel } from '../../player/services/models/schemas'
 import { User, UserModel } from '../../user/services/models/schemas'
 import { AuthService } from '../services'
 import {
@@ -44,7 +42,6 @@ describe('AuthController (e2e)', () => {
   let authService: AuthService
   let userModel: UserModel
   let gameModel: GameModel
-  let playerModel: PlayerModel
 
   beforeEach(async () => {
     app = await createTestApp()
@@ -53,7 +50,6 @@ describe('AuthController (e2e)', () => {
     authService = app.get<AuthService>(AuthService)
     userModel = app.get<UserModel>(getModelToken(User.name))
     gameModel = app.get<GameModel>(getModelToken(Game.name))
-    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
   })
 
   afterEach(async () => {
@@ -165,11 +161,9 @@ describe('AuthController (e2e)', () => {
     })
 
     it('should succeed in authenticating an anonymous participant for a game', async () => {
-      const player = await playerModel.create(createMockPlayerDocument())
-
       const game = await gameModel.create(
         createMockGameDocument({
-          participants: [createMockGameHostParticipantDocument({ player })],
+          participants: [createMockGameHostParticipantDocument()],
         }),
       )
 

@@ -520,7 +520,7 @@ function buildQuestionResultTaskResults({
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .map((participant) => {
       const answer = answers.find(
-        ({ playerId }) => playerId === participant.player._id,
+        ({ playerId }) => playerId === participant.participantId,
       )
       return buildQuestionResultTaskItem(
         mode,
@@ -561,7 +561,7 @@ function buildQuestionResultTaskItem(
   answer: QuestionTaskAnswer,
 ): QuestionResultTaskItem {
   const {
-    player: { _id: playerId },
+    participantId,
     nickname,
     totalScore: previousScore,
     currentStreak,
@@ -584,7 +584,7 @@ function buildQuestionResultTaskItem(
 
   return {
     type,
-    playerId,
+    playerId: participantId,
     nickname,
     answer,
     correct,
@@ -698,15 +698,10 @@ function buildLeaderboardItems(
     )
     .map(
       (
-        {
-          player: { _id: playerId },
-          nickname,
-          totalScore: score,
-          currentStreak: streaks,
-        },
+        { participantId, nickname, totalScore: score, currentStreak: streaks },
         index,
       ) => ({
-        playerId,
+        playerId: participantId,
         nickname,
         position: index + 1,
         score,
@@ -731,7 +726,7 @@ function applyLastScore(
     .filter((participant) => participant.type === GameParticipantType.PLAYER)
     .forEach((participant) => {
       const resultEntry = gameDocument.currentTask.results.find(
-        ({ playerId }) => playerId === participant.player._id,
+        ({ playerId }) => playerId === participant.participantId,
       )
       if (resultEntry) {
         participant.rank = resultEntry.position

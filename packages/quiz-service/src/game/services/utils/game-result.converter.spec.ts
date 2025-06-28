@@ -6,7 +6,6 @@ import {
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
-import { v4 as uuidv4 } from 'uuid'
 
 import { GameDocument, TaskType } from '../models/schemas'
 
@@ -53,14 +52,14 @@ describe('Game Result Converter', () => {
         nextQuestion: 4,
         participants: [
           {
+            participantId: 'ecd312eb-b732-4232-9621-d9d075d7cef1',
             type: GameParticipantType.HOST,
-            player: { _id: uuidv4() },
             created: new Date('2025-04-09T14:43:03.687Z'),
             updated: new Date('2025-04-09T14:43:03.687Z'),
           },
           {
+            participantId: 'c36386fd-34c9-4a93-b282-805c026fb62e',
             type: GameParticipantType.PLAYER,
-            player: { _id: 'c36386fd-34c9-4a93-b282-805c026fb62e' },
             nickname: 'CosmicScorpion',
             created: new Date('2025-04-09T14:43:15.956Z'),
             updated: new Date('2025-04-09T14:43:15.956Z'),
@@ -68,8 +67,8 @@ describe('Game Result Converter', () => {
             currentStreak: 4,
           },
           {
+            participantId: 'dc74af58-f7d3-4116-9194-019674a607dc',
             type: GameParticipantType.PLAYER,
-            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
             nickname: 'FieryBear',
             created: new Date('2025-04-09T14:43:25.876Z'),
             updated: new Date('2025-04-09T14:43:25.876Z'),
@@ -77,8 +76,8 @@ describe('Game Result Converter', () => {
             currentStreak: 2,
           },
           {
+            participantId: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1',
             type: GameParticipantType.PLAYER,
-            player: { _id: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1' },
             nickname: 'BraveStallion',
             created: new Date('2025-04-09T14:43:38.314Z'),
             updated: new Date('2025-04-09T14:43:38.314Z'),
@@ -580,10 +579,11 @@ describe('Game Result Converter', () => {
         _id: expect.anything(),
         name: gameDocument.name,
         game: gameDocument,
-        host: { _id: expect.anything() },
+        hostParticipantId: 'ecd312eb-b732-4232-9621-d9d075d7cef1',
         players: [
           {
-            player: { _id: 'c36386fd-34c9-4a93-b282-805c026fb62e' },
+            participantId: 'c36386fd-34c9-4a93-b282-805c026fb62e',
+            nickname: 'CosmicScorpion',
             rank: 1,
             correct: 4,
             incorrect: 0,
@@ -593,7 +593,8 @@ describe('Game Result Converter', () => {
             score: 3891,
           },
           {
-            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
+            participantId: 'dc74af58-f7d3-4116-9194-019674a607dc',
+            nickname: 'FieryBear',
             rank: 2,
             correct: 3,
             incorrect: 1,
@@ -603,7 +604,8 @@ describe('Game Result Converter', () => {
             score: 2742,
           },
           {
-            player: { _id: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1' },
+            participantId: '3bf8caf6-ca1b-44d2-bc8c-aaea03afb8b1',
+            nickname: 'BraveStallion',
             rank: 3,
             correct: 1,
             incorrect: 1,
@@ -691,14 +693,14 @@ describe('Game Result Converter', () => {
         nextQuestion: 4,
         participants: [
           {
+            participantId: '4c5edb8a-ae4f-4294-ac59-dc5befbe5644',
             type: GameParticipantType.HOST,
-            player: { _id: uuidv4() },
             created: new Date('2025-04-11T15:21:00.069Z'),
             updated: new Date('2025-04-11T15:21:00.069Z'),
           },
           {
+            participantId: 'a145a38f-cb05-4ee5-b41a-6c4c16327321',
             type: GameParticipantType.PLAYER,
-            player: { _id: 'a145a38f-cb05-4ee5-b41a-6c4c16327321' },
             nickname: 'BraveBison',
             created: new Date('2025-04-11T15:21:13.166Z'),
             updated: new Date('2025-04-11T15:21:13.166Z'),
@@ -706,8 +708,8 @@ describe('Game Result Converter', () => {
             currentStreak: 0,
           },
           {
+            participantId: 'dc74af58-f7d3-4116-9194-019674a607dc',
             type: GameParticipantType.PLAYER,
-            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
             nickname: 'FieryBear',
             created: new Date('2025-04-11T15:21:22.480Z'),
             updated: new Date('2025-04-11T15:21:22.480Z'),
@@ -715,8 +717,8 @@ describe('Game Result Converter', () => {
             currentStreak: 0,
           },
           {
+            participantId: '84aabd9d-e067-4930-b6d2-9048f295d190',
             type: GameParticipantType.PLAYER,
-            player: { _id: '84aabd9d-e067-4930-b6d2-9048f295d190' },
             nickname: 'AtomicBasilisk',
             created: new Date('2025-04-11T15:21:36.885Z'),
             updated: new Date('2025-04-11T15:21:36.885Z'),
@@ -1188,10 +1190,11 @@ describe('Game Result Converter', () => {
         _id: expect.anything(),
         name: gameDocument.name,
         game: gameDocument,
-        host: { _id: expect.anything() },
+        hostParticipantId: '4c5edb8a-ae4f-4294-ac59-dc5befbe5644',
         players: [
           {
-            player: { _id: 'a145a38f-cb05-4ee5-b41a-6c4c16327321' },
+            nickname: 'BraveBison',
+            participantId: 'a145a38f-cb05-4ee5-b41a-6c4c16327321',
             rank: 1,
             averagePrecision: 0.75,
             unanswered: 1,
@@ -1200,7 +1203,8 @@ describe('Game Result Converter', () => {
             score: 70,
           },
           {
-            player: { _id: 'dc74af58-f7d3-4116-9194-019674a607dc' },
+            nickname: 'FieryBear',
+            participantId: 'dc74af58-f7d3-4116-9194-019674a607dc',
             rank: 2,
             averagePrecision: 0.7,
             unanswered: 1,
@@ -1209,7 +1213,8 @@ describe('Game Result Converter', () => {
             score: 118,
           },
           {
-            player: { _id: '84aabd9d-e067-4930-b6d2-9048f295d190' },
+            nickname: 'AtomicBasilisk',
+            participantId: '84aabd9d-e067-4930-b6d2-9048f295d190',
             rank: 3,
             averagePrecision: 0.41,
             unanswered: 2,
