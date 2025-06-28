@@ -31,17 +31,15 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
-import { ApiPlayerIDParam } from '../../player/controllers/decorators/api'
-import { RoutePlayerIdParam } from '../../player/controllers/decorators/params'
 import {
   ParseCorrectAnswerRequestPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
-import { ApiGameIdParam } from './decorators/api'
+import { ApiGameIdParam, ApiPlayerIDParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
-import { RouteGameIdParam } from './decorators/params'
+import { RouteGameIdParam, RoutePlayerIdParam } from './decorators/params'
 import {
   JoinGameRequest,
   MultiChoiceQuestionCorrectAnswerRequest,
