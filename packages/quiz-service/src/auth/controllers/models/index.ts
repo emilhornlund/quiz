@@ -1,7 +1,3 @@
 export * from './auth-login.request'
 export * from './auth-login.response'
 export * from './auth-refresh.request'
-export * from './legacy-auth.request'
-export * from './legacy-auth.response'
-export * from './legacy-auth-client.response'
-export * from './legacy-auth-player.response'

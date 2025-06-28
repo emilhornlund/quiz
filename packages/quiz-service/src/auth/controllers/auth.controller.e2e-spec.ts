@@ -7,7 +7,6 @@ import {
   TokenDto,
   TokenScope,
 } from '@quiz/common'
-import * as bcrypt from 'bcryptjs'
 import { Response } from 'superagent'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
@@ -25,7 +24,6 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { ClientService } from '../../client/services'
 import { Game, GameModel } from '../../game/services/models/schemas'
 import { User, UserModel } from '../../user/services/models/schemas'
 import { AuthService } from '../services'
@@ -38,7 +36,6 @@ import {
 describe('AuthController (e2e)', () => {
   let app: INestApplication
   let jwtService: JwtService
-  let clientService: ClientService
   let authService: AuthService
   let userModel: UserModel
   let gameModel: GameModel
@@ -46,7 +43,6 @@ describe('AuthController (e2e)', () => {
   beforeEach(async () => {
     app = await createTestApp()
     jwtService = app.get(JwtService)
-    clientService = app.get(ClientService)
     authService = app.get<AuthService>(AuthService)
     userModel = app.get<UserModel>(getModelToken(User.name))
     gameModel = app.get<GameModel>(getModelToken(Game.name))
@@ -313,95 +309,6 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  describe('/api/auth (POST)', () => {
-    it('should succeed in authenticating a new client', () => {
-      const clientId = uuidv4()
-
-      return supertest(app.getHttpServer())
-        .post('/api/auth')
-        .send({ clientId })
-        .expect(200)
-        .expect((res) => {
-          expectLegacyAuthResponseDto(res, clientId)
-        })
-    })
-
-    it('should succeed in authenticating an existing client', async () => {
-      const clientId = uuidv4()
-
-      const {
-        _id,
-        player: { _id: playerId, nickname },
-      } = await clientService.findOrCreateClient(clientId)
-
-      expect(clientId).toEqual(_id)
-
-      return supertest(app.getHttpServer())
-        .post('/api/auth')
-        .send({ clientId })
-        .expect(200)
-        .expect((res) => {
-          expectLegacyAuthResponseDto(res, clientId, playerId, nickname)
-        })
-    })
-
-    it('should fail in authenticating without a client id', async () => {
-      return supertest(app.getHttpServer())
-        .post('/api/auth')
-        .send({})
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Validation failed',
-            status: 400,
-            timestamp: expect.anything(),
-            validationErrors: [
-              {
-                property: 'clientId',
-                constraints: {
-                  isNotEmpty: 'clientId should not be empty',
-                  isUuid: 'clientId must be a UUID',
-                },
-              },
-            ],
-          })
-        })
-    })
-
-    it('should fail in authenticating without a request body', async () => {
-      return supertest(app.getHttpServer())
-        .post('/api/auth')
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'Missing request payload',
-            status: 400,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-
-    it('should fail in authenticating with an invalid client id', async () => {
-      return supertest(app.getHttpServer())
-        .post('/api/auth')
-        .send({ clientId: 'not-valid' })
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Validation failed')
-          expect(res.body).toHaveProperty('status', 400)
-          expect(res.body).toHaveProperty('timestamp')
-          expect(res.body).toHaveProperty('validationErrors', [
-            {
-              property: 'clientId',
-              constraints: {
-                isUuid: 'clientId must be a UUID',
-              },
-            },
-          ])
-        })
-    })
-  })
-
   function expectAuthLoginRequestDto(userId: string, response: Response) {
     expect(response.body).toEqual({
       accessToken: expect.any(String),
@@ -451,28 +358,5 @@ describe('AuthController (e2e)', () => {
     expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
     expect(refreshTokenDto.gameId).toEqual(gameId)
     expect(refreshTokenDto.participantType).toEqual(participantType)
-  }
-
-  function expectLegacyAuthResponseDto(
-    res: Response,
-    clientId: string,
-    playerId?: string,
-    nickname?: string,
-  ) {
-    expect(res.body).toEqual({
-      token: expect.any(String),
-      client: { id: clientId, name: '' },
-      player: {
-        id: playerId || expect.any(String),
-        nickname: nickname || expect.any(String),
-      },
-    })
-    const { sub, scope, authorities } = jwtService.verify<TokenDto>(
-      res.body.token,
-    )
-    const isMatch = bcrypt.compareSync(clientId, sub)
-    expect(isMatch).toBe(true)
-    expect(scope).toEqual(TokenScope.Client)
-    expect(authorities).toEqual([])
   }
 })
