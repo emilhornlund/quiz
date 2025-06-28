@@ -25,6 +25,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -289,6 +295,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -571,6 +583,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -817,6 +835,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -1057,6 +1081,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -1293,6 +1323,12 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >

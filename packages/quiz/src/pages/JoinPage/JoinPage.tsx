@@ -3,7 +3,7 @@ import {
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
+import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
@@ -16,7 +16,6 @@ import {
   TextField,
   Typography,
 } from '../../components'
-import { useAuthContext } from '../../context/auth'
 
 import { getMessage, getTitle } from './helpers.ts'
 import styles from './JoinPage.module.scss'
@@ -33,13 +32,6 @@ const JoinPage: FC = () => {
   const [nickname, setNickname] = useState<string>()
   const [nicknameValid, setNicknameValid] = useState<boolean>(false)
 
-  const { player, setPlayer } = useAuthContext()
-  useEffect(() => {
-    if (player?.nickname) {
-      setNickname(player.nickname)
-    }
-  }, [player])
-
   const title = useMemo<string>(() => getTitle(), [])
   const message = useMemo<string>(() => getMessage(), [])
 
@@ -47,10 +39,6 @@ const JoinPage: FC = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-
-    if (player && nickname) {
-      setPlayer({ ...player, nickname })
-    }
 
     if (gameID && nickname) {
       setIsJoiningGame(true)

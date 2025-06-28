@@ -2,7 +2,6 @@ import {
   CreateGameResponseDto,
   FindGameResponseDto,
   GameResultDto,
-  LegacyAuthResponseDto,
   MediaUploadPhotoResponseDto,
   PaginatedGameHistoryDto,
   PaginatedMediaPhotoSearchDto,
@@ -16,19 +15,17 @@ import {
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
-import { v4 as uuidv4 } from 'uuid'
+import { AuthLoginRequestDto, AuthLoginResponseDto } from '@quiz/common/src'
+import {
+  CreateUserRequestDto,
+  CreateUserResponseDto,
+} from '@quiz/common/src/models/user.ts'
 
 import { useAuthContext } from '../context/auth'
-import { Client } from '../models'
-import {
-  CLIENT_LOCAL_STORAGE_KEY,
-  TOKEN_LOCAL_STORAGE_KEY,
-} from '../utils/constants'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
 
 import {
   ApiPostBody,
-  isTokenExpired,
   parseQueryParams,
   parseResponseAndHandleError,
   resolveUrl,
@@ -37,74 +34,15 @@ import {
 /**
  * Provides a set of utility functions to interact with the quiz service API.
  *
- * This hook includes methods for client authentication, token management,
- * and making API requests (GET, POST, PUT, DELETE). It also provides specific
- * methods for retrieving player information and associated quizzes.
+ * This hook includes methods for making API requests (GET, POST, PUT, DELETE).
+ * It also provides specific methods for retrieving player information and associated quizzes.
  *
  * @returns An object containing the following methods:
  * - `getCurrentPlayer`: Retrieves information about the current player.
  * - `getCurrentPlayerQuizzes`: Retrieves quizzes associated with the current player.
  */
 export const useQuizServiceClient = () => {
-  const { setToken, setClient, setPlayer } = useAuthContext()
-
-  /**
-   * Retrieves the current client ID from local storage or generates a new one if none exists.
-   *
-   * @returns The client ID as a string.
-   */
-  const getClientId = (): string => {
-    const client = localStorage.getItem(CLIENT_LOCAL_STORAGE_KEY)
-    if (client) {
-      return (JSON.parse(client) as Client).id
-    }
-    const id = uuidv4()
-    setClient({ id })
-    return id
-  }
-
-  /**
-   * Authenticates the client with the quiz service and retrieves an authentication token.
-   *
-   * @returns A promise resolving to the authentication response containing the client and player details.
-   */
-  const authenticate = async (): Promise<LegacyAuthResponseDto> => {
-    const clientId = getClientId()
-
-    const options = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ clientId }),
-    }
-
-    const response = await fetch(resolveUrl('/auth'), options)
-
-    const parsedResponse =
-      await parseResponseAndHandleError<LegacyAuthResponseDto>(response)
-
-    setClient(parsedResponse.client)
-    setPlayer(parsedResponse.player)
-
-    return parsedResponse
-  }
-
-  /**
-   * Retrieves a valid JWT token, refreshing it if the existing token is expired or missing.
-   *
-   * @returns A promise resolving to the token as a string, or `undefined` if authentication fails.
-   */
-  const getToken = async (): Promise<string | undefined> => {
-    let token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
-    if (!token || isTokenExpired(token)) {
-      token = (await authenticate())?.token
-      setToken(token)
-      return token
-    }
-    return token
-  }
+  const { accessToken, refreshToken, setAuth } = useAuthContext()
 
   /**
    * Makes a generic API request using the specified HTTP method and parameters.
@@ -122,7 +60,7 @@ export const useQuizServiceClient = () => {
     requestBody?: ApiPostBody,
     token?: string,
   ): Promise<T> => {
-    token = token || (await getToken())
+    token = token || accessToken
 
     const options = {
       method,
@@ -135,6 +73,23 @@ export const useQuizServiceClient = () => {
     }
 
     const response = await fetch(resolveUrl(path), options)
+
+    if (response.status === 401 && refreshToken) {
+      return apiPost<AuthLoginResponseDto>('/auth/refresh', {
+        refreshToken,
+      }).then((refreshAuthResponse) => {
+        setAuth({
+          accessToken: refreshAuthResponse.accessToken,
+          refreshToken: refreshAuthResponse.refreshToken,
+        })
+        return apiFetch<T>(
+          method,
+          path,
+          requestBody,
+          refreshAuthResponse.accessToken,
+        )
+      })
+    }
 
     return parseResponseAndHandleError<T>(response)
   }
@@ -187,6 +142,43 @@ export const useQuizServiceClient = () => {
     path: string,
     requestBody?: ApiPostBody,
   ) => apiFetch<T>('DELETE', path, requestBody)
+
+  /**
+   * Sends a login request to the API and stores the returned authentication tokens.
+   *
+   * @param request - The login credentials containing email and password.
+   *
+   * @returns A promise that resolves to the login response with access and refresh tokens.
+   */
+  const login = (request: AuthLoginRequestDto): Promise<AuthLoginResponseDto> =>
+    apiPost<AuthLoginResponseDto>('/auth/login', {
+      email: request.email,
+      password: request.password,
+    }).then((loginAuthResponse) => {
+      setAuth({
+        accessToken: loginAuthResponse.accessToken,
+        refreshToken: loginAuthResponse.refreshToken,
+      })
+      return loginAuthResponse
+    })
+
+  /**
+   * Sends a registration request to the API to create a new user account.
+   *
+   * @param request - The user registration data including email, password, and optional names.
+   *
+   * @returns A promise that resolves to the newly created user's information.
+   */
+  const register = (
+    request: CreateUserRequestDto,
+  ): Promise<CreateUserResponseDto> =>
+    apiPost<CreateUserResponseDto>('/users', {
+      email: request.email,
+      password: request.password,
+      givenName: request.givenName,
+      familyName: request.familyName,
+      defaultNickname: request.defaultNickname,
+    })
 
   /**
    * Retrieves information about the current player.
@@ -321,12 +313,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the player is successfully linked.
    */
   const linkPlayer = (code: string): Promise<void> =>
-    apiPost<PlayerResponseDto>(`/client/player/link`, { code }).then(
-      ({ id, nickname }) => {
-        setPlayer({ id, nickname })
-        notifySuccess('Success! Your client has been linked to a new player.')
-      },
-    )
+    apiPost<PlayerResponseDto>(`/client/player/link`, { code }).then(() => {})
 
   /**
    * Finds a game using the provided game PIN.
@@ -492,8 +479,6 @@ export const useQuizServiceClient = () => {
     file: File,
     onProgress: (progress: number) => void,
   ): Promise<MediaUploadPhotoResponseDto> => {
-    const token = await getToken()
-
     return new Promise((resolve, reject) => {
       const formData = new FormData()
       formData.append('file', file)
@@ -524,7 +509,7 @@ export const useQuizServiceClient = () => {
       }
 
       xhr.open('POST', resolveUrl('/media/uploads/photos'))
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+      xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       xhr.send(formData)
     })
   }
@@ -540,6 +525,8 @@ export const useQuizServiceClient = () => {
     apiDelete<void>(`/media/uploads/photos/${photoId}`)
 
   return {
+    login,
+    register,
     getCurrentPlayer,
     updateCurrentPlayer,
     getCurrentPlayerQuizzes,

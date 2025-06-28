@@ -8,8 +8,6 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Player } from '../../../../models'
-
 import QuizzesPageUI from './QuizzesPageUI'
 
 const meta = {
@@ -24,10 +22,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const player: Player = {
-  id: uuidv4(),
-  nickname: 'FrostyBear',
-}
+const authorId = uuidv4()
 
 export const Default = {
   args: {
@@ -43,7 +38,7 @@ export const Default = {
         imageCoverURL: 'https://wallpaperaccess.com/full/157316.jpg',
         languageCode: LanguageCode.English,
         numberOfQuestions: 14,
-        author: { id: player.id, name: 'FrostyBear' },
+        author: { id: authorId, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -57,7 +52,7 @@ export const Default = {
         category: QuizCategory.GeneralKnowledge,
         languageCode: LanguageCode.English,
         numberOfQuestions: 20,
-        author: { id: player.id, name: 'FrostyBear' },
+        author: { id: authorId, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -71,7 +66,7 @@ export const Default = {
         category: QuizCategory.GeneralKnowledge,
         languageCode: LanguageCode.English,
         numberOfQuestions: 16,
-        author: { id: player.id, name: 'FrostyBear' },
+        author: { id: authorId, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -85,7 +80,7 @@ export const Default = {
         category: QuizCategory.GeneralKnowledge,
         languageCode: LanguageCode.English,
         numberOfQuestions: 28,
-        author: { id: player.id, name: 'FrostyBear' },
+        author: { id: authorId, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
@@ -99,7 +94,7 @@ export const Default = {
         category: QuizCategory.GeneralKnowledge,
         languageCode: LanguageCode.English,
         numberOfQuestions: 24,
-        author: { id: player.id, name: 'FrostyBear' },
+        author: { id: authorId, name: 'FrostyBear' },
         created: new Date(),
         updated: new Date(),
       },
