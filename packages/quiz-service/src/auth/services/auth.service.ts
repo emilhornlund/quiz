@@ -7,22 +7,19 @@ import {
   AuthRefreshRequestDto,
   GameParticipantType,
   GameTokenDto,
-  LegacyAuthRequestDto,
-  LegacyAuthResponseDto,
   TokenDto,
   TokenScope,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ClientService } from '../../client/services'
 import { GameRepository } from '../../game/services'
 import { UserService } from '../../user/services'
 
 import { getTokenAuthorities, getTokenExpiresIn } from './utils'
 
 /**
- * Service responsible for authenticating users and clients
- * and managing JWT token issuance (login, legacy auth, and refresh).
+ * Service responsible for authenticating users and managing JWT token
+ * issuance (login, legacy auth, and refresh).
  */
 @Injectable()
 export class AuthService {
@@ -34,13 +31,11 @@ export class AuthService {
    *
    * @param userService - Service for user credential verification.
    * @param gameRepository - Repository for accessing game data.
-   * @param clientService - Service to manage client data.
    * @param jwtService - Service for generating and verifying JWT tokens.
    */
   constructor(
     private readonly userService: UserService,
     private readonly gameRepository: GameRepository,
-    private clientService: ClientService,
     private jwtService: JwtService,
   ) {}
 
@@ -145,7 +140,7 @@ export class AuthService {
    * Generates a new access token (15m) and refresh token (30d) for the given user.
    *
    * @param subject - The subject (user ID) for whom to sign the tokens.
-   * @param scope - The broad area of the API this token grants access to (e.g. Client, Game, User).
+   * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
    * @param additionalClaims - Extra payload (e.g. gameId, participantType).
    * @returns Promise resolving to AuthLoginResponseDto with both tokens.
    * @private
@@ -171,32 +166,6 @@ export class AuthService {
   }
 
   /**
-   * Authenticates a client by generating a JWT token.
-   *
-   * @param {LegacyAuthRequestDto} authRequest - The request containing the client's unique identifier.
-   *
-   * @returns {Promise<LegacyAuthResponseDto>} A promise resolving to an `LegacyAuthResponseDto`, which includes
-   *          the generated JWT token, client information, and player information.
-   */
-  public async legacyAuthenticate(
-    authRequest: LegacyAuthRequestDto,
-  ): Promise<LegacyAuthResponseDto> {
-    const {
-      _id: clientId,
-      clientIdHash,
-      player: { _id: playerId, nickname },
-    } = await this.clientService.findOrCreateClient(authRequest.clientId)
-
-    const token = await this.signToken(clientIdHash, TokenScope.Client, false)
-
-    return {
-      token,
-      client: { id: clientId, name: '' },
-      player: { id: playerId, nickname },
-    }
-  }
-
-  /**
    * Verifies a JWT token and returns the decoded payload.
    *
    * @param {string} token - The JWT token to be verified.
@@ -216,8 +185,8 @@ export class AuthService {
   /**
    * Signs a JWT for the specified scope and token type.
    *
-   * @param subject - The JWT “sub” claim, typically a user ID or client ID.
-   * @param scope - The broad area of the API this token grants access to (e.g. Client, Game, User).
+   * @param subject - The JWT “sub” claim, typically a user ID or game participant ID.
+   * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
    * @param isRefreshToken - If true, issues a refresh token (long-lived); otherwise an access token (short-lived).
    * @param additionalClaims - Extra JWT payload.
    * @returns A promise resolving to the signed JWT string.
@@ -230,7 +199,7 @@ export class AuthService {
     additionalClaims?: Record<string, unknown>,
   ): Promise<string> {
     const authorities = getTokenAuthorities(scope, isRefreshToken)
-    const expiresIn = getTokenExpiresIn(scope, isRefreshToken)
+    const expiresIn = getTokenExpiresIn(isRefreshToken)
 
     return this.jwtService.signAsync(
       {
