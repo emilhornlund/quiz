@@ -13,6 +13,16 @@ export const MOCK_SECONDARY_USER_GIVEN_NAME = 'Test'
 export const MOCK_SECONDARY_USER_FAMILY_NAME = 'Testsson'
 export const MOCK_SECONDARY_USER_DEFAULT_NICKNAME = 'WhiskerFox'
 
+export const MOCK_TERTIARY_USER_EMAIL = 'tertiary.user@example.com'
+export const MOCK_TERTIARY_USER_GIVEN_NAME = 'Tertiary'
+export const MOCK_TERTIARY_USER_FAMILY_NAME = 'User'
+export const MOCK_TERTIARY_USER_DEFAULT_NICKNAME = 'ShadowWhirlwind'
+
+export const MOCK_QUATERNARY_USER_EMAIL = 'quaternary.user@example.com'
+export const MOCK_QUATERNARY_USER_GIVEN_NAME = 'Quaternary'
+export const MOCK_QUATERNARY_USER_FAMILY_NAME = 'User'
+export const MOCK_QUATERNARY_USER_DEFAULT_NICKNAME = 'PuddingPop'
+
 export const MOCK_DEFAULT_PASSWORD = 'Super#SecretPa$$w0rd123'
 export const MOCK_DEFAULT_INVALID_PASSWORD = 'Super#$ecretPassw0rd123'
 export const MOCK_DEFAULT_HASHED_PASSWORD =
@@ -48,6 +58,42 @@ export function buildMockSecondaryUser(
     givenName: MOCK_SECONDARY_USER_GIVEN_NAME,
     familyName: MOCK_SECONDARY_USER_FAMILY_NAME,
     defaultNickname: MOCK_SECONDARY_USER_DEFAULT_NICKNAME,
+    createdAt: now,
+    updatedAt: now,
+    ...(user ?? {}),
+  }
+}
+
+export function buildMockTertiaryUser(
+  user?: Partial<User & LocalUser>,
+): User & LocalUser {
+  const now = new Date()
+  return {
+    _id: uuidv4(),
+    provider: AuthProvider.Local,
+    email: MOCK_TERTIARY_USER_EMAIL,
+    hashedPassword: MOCK_DEFAULT_HASHED_PASSWORD,
+    givenName: MOCK_TERTIARY_USER_GIVEN_NAME,
+    familyName: MOCK_TERTIARY_USER_FAMILY_NAME,
+    defaultNickname: MOCK_TERTIARY_USER_DEFAULT_NICKNAME,
+    createdAt: now,
+    updatedAt: now,
+    ...(user ?? {}),
+  }
+}
+
+export function buildMockQuaternaryUser(
+  user?: Partial<User & LocalUser>,
+): User & LocalUser {
+  const now = new Date()
+  return {
+    _id: uuidv4(),
+    provider: AuthProvider.Local,
+    email: MOCK_QUATERNARY_USER_EMAIL,
+    hashedPassword: MOCK_DEFAULT_HASHED_PASSWORD,
+    givenName: MOCK_QUATERNARY_USER_GIVEN_NAME,
+    familyName: MOCK_QUATERNARY_USER_FAMILY_NAME,
+    defaultNickname: MOCK_QUATERNARY_USER_DEFAULT_NICKNAME,
     createdAt: now,
     updatedAt: now,
     ...(user ?? {}),

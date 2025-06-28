@@ -17,13 +17,14 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   buildMockPrimaryUser,
+  buildMockQuaternaryUser,
   buildMockSecondaryUser,
+  buildMockTertiaryUser,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
   createMockLeaderboardTaskItem,
   createMockMultiChoiceQuestionDocument,
-  createMockPlayerDocument,
   createMockPodiumTaskDocument,
   createMockQuestionResultTaskDocument,
   createMockQuestionTaskDocument,
@@ -31,15 +32,16 @@ import {
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
   MOCK_DEFAULT_PLAYER_NICKNAME,
+  MOCK_TERTIARY_USER_DEFAULT_NICKNAME,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
   offsetSeconds,
 } from '../../../test-utils/data'
-import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
-import { Client } from '../../client/services/models/schemas'
-import { Player, PlayerModel } from '../../player/services/models/schemas'
+import {
+  authenticateGame,
+  closeTestApp,
+  createTestApp,
+} from '../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
 import { User, UserModel } from '../../user/services/models/schemas'
 import { GameService } from '../services'
@@ -62,171 +64,25 @@ describe('GameController (e2e)', () => {
   let app: INestApplication
   let gameService: GameService
   let gameModel: GameModel
-  let playerModel: PlayerModel
   let userModel: UserModel
-  let authService: AuthService
-  let clientService: ClientService
   let quizService: QuizService
 
   let hostUser: User
-  let hostClient: Client
-  let hostClientToken: string
   let playerUser: User
-  let playerClient: Client
-  let playerClientToken: string
 
   beforeEach(async () => {
     app = await createTestApp()
     gameService = app.get(GameService)
     gameModel = app.get<GameModel>(getModelToken(Game.name))
-    playerModel = app.get<PlayerModel>(getModelToken(Player.name))
     userModel = app.get<UserModel>(getModelToken(User.name))
-    authService = app.get(AuthService)
-    clientService = app.get(ClientService)
     quizService = app.get(QuizService)
 
     hostUser = await userModel.create(buildMockPrimaryUser())
-    const hostClientId = uuidv4()
-    hostClient = await clientService.findOrCreateClient(hostClientId)
-    const hostAuthResponse = await authService.legacyAuthenticate({
-      clientId: hostClientId,
-    })
-    hostClientToken = hostAuthResponse.token
-
     playerUser = await userModel.create(buildMockSecondaryUser())
-    const playerClientId = uuidv4()
-    playerClient = await clientService.findOrCreateClient(playerClientId)
-    const playerAuthResponse = await authService.legacyAuthenticate({
-      clientId: playerClientId,
-    })
-    playerClientToken = playerAuthResponse.token
   })
 
   afterEach(async () => {
     await closeTestApp(app)
-  })
-
-  describe('/api/games (GET)', () => {
-    it('should succeed in retrieving an existing active classic mode game', async () => {
-      const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
-        hostUser,
-      )
-
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      const game = await gameModel.findById(gameID).exec()
-
-      return supertest(app.getHttpServer())
-        .get(`/api/games?gamePIN=${game.pin}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('id')
-        })
-    })
-
-    it('should succeed in retrieving an existing active zero to one hundred mode game', async () => {
-      const { id: quizId } = await quizService.createQuiz(
-        zeroToOneHundredQuizRequest,
-        hostUser,
-      )
-
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      const game = await gameModel.findById(gameID).exec()
-
-      return supertest(app.getHttpServer())
-        .get(`/api/games?gamePIN=${game.pin}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('id')
-        })
-    })
-
-    it('should fail to retrieve a classic mode game if it has expired', async () => {
-      const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
-        hostUser,
-      )
-
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      await gameModel
-        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
-        .exec()
-
-      const game = await gameModel.findById(gameID).exec()
-
-      return supertest(app.getHttpServer())
-        .get(`/api/games?gamePIN=${game.pin}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toHaveProperty(
-            'message',
-            `Active game not found by PIN ${game.pin}`,
-          )
-          expect(res.body).toHaveProperty('status', 404)
-          expect(res.body).toHaveProperty('timestamp')
-        })
-    })
-
-    it('should fail to retrieve a zero to one hundred mode game if it expired', async () => {
-      const { id: quizId } = await quizService.createQuiz(
-        zeroToOneHundredQuizRequest,
-        hostUser,
-      )
-
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      await gameModel
-        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
-        .exec()
-
-      const game = await gameModel.findById(gameID).exec()
-
-      return supertest(app.getHttpServer())
-        .get(`/api/games?gamePIN=${game.pin}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toHaveProperty(
-            'message',
-            `Active game not found by PIN ${game.pin}`,
-          )
-          expect(res.body).toHaveProperty('status', 404)
-          expect(res.body).toHaveProperty('timestamp')
-        })
-    })
-
-    it('should fail in retrieving a non existing active game', async () => {
-      return supertest(app.getHttpServer())
-        .get('/api/games?gamePIN=123456')
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toHaveProperty(
-            'message',
-            'Active game not found by PIN 123456',
-          )
-          expect(res.body).toHaveProperty('status', 404)
-          expect(res.body).toHaveProperty('timestamp')
-        })
-    })
-
-    it('should fail in retrieving an active game without a game PIN', async () => {
-      return supertest(app.getHttpServer())
-        .get('/api/games')
-        .set({ Authorization: `Bearer ${hostClientToken}` })
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('message', 'Validation failed')
-          expect(res.body).toHaveProperty('status', 400)
-          expect(res.body).toHaveProperty('timestamp')
-        })
-    })
   })
 
   describe('/api/games/:gameID/players (POST)', () => {
@@ -236,11 +92,18 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(204)
         .expect((res) => {
@@ -254,49 +117,32 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: createMockQuestionTaskDocument(),
         })
         .exec()
 
-      await supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
-        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
-        .expect(204)
-        .expect((res) => {
-          expect(res.body).toEqual({})
-        })
-
-      const updatedDocument = await gameModel.findById(gameID)
-      expect(updatedDocument.participants).toHaveLength(2)
-    })
-
-    it('should succeed in joining when nickname equals host player name', async () => {
-      const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
-        hostUser,
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
       )
 
-      await playerModel
-        .findByIdAndUpdate(hostClient.player._id, {
-          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
-        })
-        .exec()
-
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+      await supertest(app.getHttpServer())
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
         })
+
+      const updatedDocument = await gameModel.findById(gameId)
+      expect(updatedDocument.participants).toHaveLength(2)
     })
 
     it('should fail in joining when a player has already joined', async () => {
@@ -305,15 +151,15 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.PLAYER,
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -323,9 +169,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(409)
         .expect((res) => {
@@ -343,23 +196,14 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      const secondPlayerClient =
-        await clientService.findOrCreateClient(uuidv4())
-
-      await playerModel
-        .findByIdAndUpdate(secondPlayerClient.player._id, {
-          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
-        })
-        .exec()
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.PLAYER,
-              player: secondPlayerClient.player,
+              participantId: uuidv4(),
               nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
               totalScore: 0,
               currentStreak: 0,
@@ -370,9 +214,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(409)
         .expect((res) => {
@@ -391,21 +242,28 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, { status: GameStatus.Expired })
+        .findByIdAndUpdate(gameId, { status: GameStatus.Expired })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${gameID}`,
+            `Active game not found by id ${gameId}`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -413,17 +271,24 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining with a non existing game ID', async () => {
-      const gameID = uuidv4()
+      const gameId = uuidv4()
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/players`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${gameID}`,
+            `Active game not found by id ${gameId}`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -431,9 +296,18 @@ describe('GameController (e2e)', () => {
     })
 
     it('should fail in joining with an invalid game ID', async () => {
+      const gameId = 'invalid-uuid'
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post('/api/games/non-uuid/players')
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
         .expect(400)
         .expect((res) => {
@@ -454,21 +328,21 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.HOST,
-              player: hostClient.player,
+              participantId: hostUser._id,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -478,9 +352,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .delete(`/api/games/${gameId}/players/${playerUser._id}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
@@ -493,21 +374,21 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.HOST,
-              player: hostClient.player,
+              participantId: hostUser._id,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -517,9 +398,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .delete(`/api/games/${gameId}/players/${playerUser._id}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
@@ -532,14 +420,14 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.HOST,
-              player: hostClient.player,
+              participantId: hostUser._id,
               created: new Date(),
               updated: new Date(),
             },
@@ -547,13 +435,20 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/players/${playerClient.player._id}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .delete(`/api/games/${gameId}/players/${playerUser._id}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Player not found by id ${playerClient.player._id}`,
+            message: `Player not found by id ${playerUser._id}`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -566,30 +461,23 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
-      const secondPlayerClient =
-        await clientService.findOrCreateClient(uuidv4())
-
-      await playerModel
-        .findByIdAndUpdate(secondPlayerClient.player._id, {
-          nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
-        })
-        .exec()
+      const secondPlayerId = uuidv4()
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.HOST,
-              player: hostClient.player,
+              participantId: hostUser._id,
               created: new Date(),
               updated: new Date(),
             },
             {
               type: GameParticipantType.PLAYER,
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -597,8 +485,8 @@ describe('GameController (e2e)', () => {
             },
             {
               type: GameParticipantType.PLAYER,
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerId,
+              nickname: MOCK_TERTIARY_USER_DEFAULT_NICKNAME,
               totalScore: 0,
               currentStreak: 0,
               created: new Date(),
@@ -608,9 +496,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/players/${secondPlayerClient.player._id}`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .delete(`/api/games/${gameId}/players/${secondPlayerId}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -627,14 +522,14 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           participants: [
             {
               type: GameParticipantType.HOST,
-              player: hostClient.player,
+              participantId: hostUser._id,
               created: new Date(),
               updated: new Date(),
             },
@@ -642,9 +537,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/players/${hostClient.player._id}`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .delete(`/api/games/${gameId}/players/${hostUser._id}`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -663,11 +565,18 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
 
       const response = supertest(app.getHttpServer())
-        .get(`/api/games/${gameID}/events`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .get(`/api/games/${gameId}/events`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
 
@@ -683,17 +592,24 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameService.joinGame(
-        gameID,
-        playerClient,
+        gameId,
+        playerUser._id,
         MOCK_DEFAULT_PLAYER_NICKNAME,
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       const response = supertest(app.getHttpServer())
-        .get(`/api/games/${gameID}/events`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .get(`/api/games/${gameId}/events`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect('Content-Type', /text\/event-stream/)
 
@@ -709,10 +625,10 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       return supertest(app.getHttpServer())
-        .get(`/api/games/${gameID}/events`)
+        .get(`/api/games/${gameId}/events`)
         .expect(401)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -727,14 +643,21 @@ describe('GameController (e2e)', () => {
     it('should return 404 when subscribing to events for a non-existent game ID', async () => {
       const unknownGameID = uuidv4()
 
+      const accessToken = await authenticateGame(
+        app,
+        unknownGameID,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .get(`/api/games/${unknownGameID}/events`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Game not found by id '${unknownGameID}'`,
+            `Active game not found by id ${unknownGameID}`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -747,18 +670,28 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
         classicQuizRequest,
         hostUser,
       )
 
-      await gameService.createGame(quizIdSecond, playerClient)
+      const { id: anotherGameId } = await gameService.createGame(
+        quizIdSecond,
+        playerUser,
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        anotherGameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
 
       return supertest(app.getHttpServer())
-        .get(`/api/games/${gameID}/events`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .get(`/api/games/${gameId}/events`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')
@@ -775,15 +708,22 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, { 'currentTask.status': 'active' })
+        .findByIdAndUpdate(gameId, { 'currentTask.status': 'active' })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toStrictEqual({})
@@ -796,30 +736,38 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
-
-      const player = await playerModel.create(createMockPlayerDocument())
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: createMockPodiumTaskDocument({
             status: 'active',
             leaderboard: [
-              createMockLeaderboardTaskItem({ playerId: player._id }),
+              createMockLeaderboardTaskItem({ playerId: playerUser._id }),
             ],
           }),
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
-            createMockGamePlayerParticipantDocument({ player }),
+            createMockGamePlayerParticipantDocument({
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
+            }),
           ],
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toStrictEqual({})
@@ -828,7 +776,7 @@ describe('GameController (e2e)', () => {
       const {
         status,
         currentTask: { type },
-      } = await gameModel.findById(gameID)
+      } = await gameModel.findById(gameId)
       expect(type).toEqual(TaskType.Quit)
       expect(status).toEqual(GameStatus.Completed)
     })
@@ -839,17 +787,24 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: createMockPodiumTaskDocument({ status: 'active' }),
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toStrictEqual({})
@@ -858,7 +813,7 @@ describe('GameController (e2e)', () => {
       const {
         status,
         currentTask: { type },
-      } = await gameModel.findById(gameID)
+      } = await gameModel.findById(gameId)
       expect(type).toEqual(TaskType.Quit)
       expect(status).toEqual(GameStatus.Expired)
     })
@@ -869,15 +824,22 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, { 'currentTask.status': 'pending' })
+        .findByIdAndUpdate(gameId, { 'currentTask.status': 'pending' })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -895,15 +857,22 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, { 'currentTask.status': 'completed' })
+        .findByIdAndUpdate(gameId, { 'currentTask.status': 'completed' })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -921,10 +890,10 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
+        .post(`/api/games/${gameId}/tasks/current/complete`)
         .expect(401)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -939,14 +908,21 @@ describe('GameController (e2e)', () => {
     it('should return 404 when completing the current task for a non-existent game ID', async () => {
       const unknownGameID = uuidv4()
 
+      const accessToken = await authenticateGame(
+        app,
+        unknownGameID,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .post(`/api/games/${unknownGameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Game not found by id '${unknownGameID}'`,
+            `Active game not found by id ${unknownGameID}`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -959,18 +935,28 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
         classicQuizRequest,
         playerUser,
       )
 
-      await gameService.createGame(quizIdSecond, playerClient)
+      const { id: anotherGameId } = await gameService.createGame(
+        quizIdSecond,
+        playerUser,
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        anotherGameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/complete`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/tasks/current/complete`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')
@@ -987,16 +973,16 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameService.joinGame(
-        gameID,
-        playerClient,
+        gameId,
+        playerUser._id,
         MOCK_DEFAULT_PLAYER_NICKNAME,
       )
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: {
             _id: uuidv4(),
             type: TaskType.Question,
@@ -1008,9 +994,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/answers`)
-        .set({ Authorization: `Bearer ${playerClientToken}` })
+        .post(`/api/games/${gameId}/answers`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(204)
         .expect((res) => {
@@ -1024,10 +1017,10 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: {
             _id: uuidv4(),
             type: TaskType.Question,
@@ -1039,9 +1032,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/answers`)
-        .set({ Authorization: `Bearer ${hostClientToken}` })
+        .post(`/api/games/${gameId}/answers`)
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(403)
         .expect((res) => {
@@ -1057,16 +1057,16 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameService.joinGame(
-        gameID,
-        playerClient,
+        gameId,
+        playerUser._id,
         MOCK_DEFAULT_PLAYER_NICKNAME,
       )
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: {
             _id: uuidv4(),
             type: TaskType.Question,
@@ -1078,9 +1078,16 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${playerClientToken}`)
+        .post(`/api/games/${gameId}/answers`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
@@ -1099,21 +1106,28 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameService.joinGame(
-        gameID,
-        playerClient,
+        gameId,
+        playerUser._id,
         MOCK_DEFAULT_PLAYER_NICKNAME,
       )
 
       await gameModel
-        .findByIdAndUpdate(gameID, { currentTask: buildLobbyTask() })
+        .findByIdAndUpdate(gameId, { currentTask: buildLobbyTask() })
         .exec()
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${playerClientToken}`)
+        .post(`/api/games/${gameId}/answers`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
@@ -1132,16 +1146,16 @@ describe('GameController (e2e)', () => {
         hostUser,
       )
 
-      const { id: gameID } = await gameService.createGame(quizId, hostClient)
+      const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       await gameService.joinGame(
-        gameID,
-        playerClient,
+        gameId,
+        playerUser._id,
         MOCK_DEFAULT_PLAYER_NICKNAME,
       )
 
       await gameModel
-        .findByIdAndUpdate(gameID, {
+        .findByIdAndUpdate(gameId, {
           currentTask: {
             _id: uuidv4(),
             type: TaskType.Question,
@@ -1153,14 +1167,21 @@ describe('GameController (e2e)', () => {
         })
         .exec()
 
-      await gameService.submitQuestionAnswer(gameID, playerClient.player._id, {
+      await gameService.submitQuestionAnswer(gameId, playerUser._id, {
         type: QuestionType.MultiChoice,
         optionIndex: 0,
       })
 
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/answers`)
-        .set('Authorization', `Bearer ${playerClientToken}`)
+        .post(`/api/games/${gameId}/answers`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, optionIndex: 0 })
         .expect(400)
         .expect((res) => {
@@ -1172,26 +1193,33 @@ describe('GameController (e2e)', () => {
   })
 
   describe('/api/games/:gameID/tasks/current/correct_answers (POST)', () => {
-    let secondPlayerClient: Client
+    let secondPlayerUser: User
 
     beforeEach(async () => {
-      secondPlayerClient = await clientService.findOrCreateClient(uuidv4())
+      secondPlayerUser = await userModel.create(buildMockTertiaryUser())
     })
 
     it('should add a correct multi-choice answer successfully', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(204)
         .expect((res) => {
@@ -1210,7 +1238,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.MultiChoice,
               answer: 0,
@@ -1223,7 +1251,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.MultiChoice,
               answer: 1,
@@ -1243,15 +1271,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockRangeQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1259,7 +1287,7 @@ describe('GameController (e2e)', () => {
             correctAnswers: [{ type: QuestionType.Range, value: 50 }],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.Range,
                   answer: 50,
@@ -1270,7 +1298,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: secondPlayerClient,
+                user: secondPlayerUser,
                 answer: {
                   type: QuestionType.Range,
                   answer: 40,
@@ -1286,13 +1314,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.Range,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: 50,
                 },
                 {
                   type: QuestionType.Range,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: 40,
                 },
@@ -1304,9 +1332,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.Range, value: 40 })
         .expect(204)
         .expect((res) => {
@@ -1325,7 +1360,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.Range,
               answer: 50,
@@ -1338,7 +1373,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.Range,
               answer: 40,
@@ -1358,15 +1393,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockTrueFalseQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1374,7 +1409,7 @@ describe('GameController (e2e)', () => {
             correctAnswers: [{ type: QuestionType.TrueFalse, value: false }],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.TrueFalse,
                   answer: false,
@@ -1385,7 +1420,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: secondPlayerClient,
+                user: secondPlayerUser,
                 answer: {
                   type: QuestionType.TrueFalse,
                   answer: true,
@@ -1401,13 +1436,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.TrueFalse,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: false,
                 },
                 {
                   type: QuestionType.TrueFalse,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: true,
                 },
@@ -1419,9 +1454,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.TrueFalse, value: true })
         .expect(204)
         .expect((res) => {
@@ -1440,7 +1482,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.TrueFalse,
               answer: false,
@@ -1453,7 +1495,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.TrueFalse,
               answer: true,
@@ -1473,15 +1515,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockTypeAnswerQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1494,7 +1536,7 @@ describe('GameController (e2e)', () => {
             ],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.TypeAnswer,
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
@@ -1505,7 +1547,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: secondPlayerClient,
+                user: secondPlayerUser,
                 answer: {
                   type: QuestionType.TypeAnswer,
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
@@ -1521,13 +1563,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.TypeAnswer,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
                 },
                 {
                   type: QuestionType.TypeAnswer,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
                 },
@@ -1539,9 +1581,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({
           type: QuestionType.TypeAnswer,
           value: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
@@ -1569,7 +1618,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.TypeAnswer,
               answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
@@ -1582,7 +1631,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildCorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.TypeAnswer,
               answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
@@ -1596,17 +1645,24 @@ describe('GameController (e2e)', () => {
       ])
     })
 
-    it('should return 404 when adding a correct answer to a non-existing game', () => {
-      const gameID = uuidv4()
+    it('should return 404 when adding a correct answer to a non-existing game', async () => {
+      const gameId = uuidv4()
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
 
       return supertest(app.getHttpServer())
-        .post(`/api/games/${gameID}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .post(`/api/games/${gameId}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 0 })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Game not found by id '${gameID}'`,
+            message: `Active game not found by id ${gameId}`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -1616,17 +1672,24 @@ describe('GameController (e2e)', () => {
     it('should return 403 when adding a correct answer as a player', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${playerClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(403)
         .expect((res) => {
@@ -1641,21 +1704,26 @@ describe('GameController (e2e)', () => {
     it('should return 403 when adding a correct answer for a non-authorized game', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
-      const { token } = await authService.legacyAuthenticate({
-        clientId: uuidv4(),
-      })
+      const anotherUser = await userModel.create(buildMockQuaternaryUser())
+
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        anotherUser._id,
+        GameParticipantType.PLAYER,
+      )
 
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(403)
         .expect((res) => {
@@ -1670,10 +1738,10 @@ describe('GameController (e2e)', () => {
     it('should return 401 when adding a correct answer when missing authorization', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
@@ -1700,7 +1768,7 @@ describe('GameController (e2e)', () => {
               correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
               results: [
                 buildCorrectQuestionResultTaskItem({
-                  client: playerClient,
+                  user: playerUser,
                   answer: {
                     type: QuestionType.MultiChoice,
                     answer: 0,
@@ -1711,7 +1779,7 @@ describe('GameController (e2e)', () => {
                   position: 1,
                 }),
                 buildIncorrectQuestionResultTaskItem({
-                  client: secondPlayerClient,
+                  user: secondPlayerUser,
                   answer: {
                     type: QuestionType.MultiChoice,
                     answer: 1,
@@ -1722,17 +1790,24 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             }),
           },
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(400)
         .expect((res) => {
@@ -1751,17 +1826,24 @@ describe('GameController (e2e)', () => {
           game: {
             currentTask: createMockQuestionTaskDocument(),
           },
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .post(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(400)
         .expect((res) => {
@@ -1776,26 +1858,33 @@ describe('GameController (e2e)', () => {
   })
 
   describe('/api/games/:gameID/tasks/current/correct_answers (DELETE)', () => {
-    let secondPlayerClient: Client
+    let secondPlayerUser: User
 
     beforeEach(async () => {
-      secondPlayerClient = await clientService.findOrCreateClient(uuidv4())
+      secondPlayerUser = await userModel.create(buildMockTertiaryUser())
     })
 
     it('should delete a correct multi-choice answer successfully', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 0 })
         .expect(204)
         .expect((res) => {
@@ -1811,7 +1900,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.MultiChoice,
               answer: 0,
@@ -1822,7 +1911,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.MultiChoice,
               answer: 1,
@@ -1840,15 +1929,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockRangeQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1856,7 +1945,7 @@ describe('GameController (e2e)', () => {
             correctAnswers: [{ type: QuestionType.Range, value: 50 }],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.Range,
                   answer: 50,
@@ -1867,7 +1956,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: secondPlayerClient,
+                user: secondPlayerUser,
                 answer: {
                   type: QuestionType.Range,
                   answer: 40,
@@ -1883,13 +1972,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.Range,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: 50,
                 },
                 {
                   type: QuestionType.Range,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: 40,
                 },
@@ -1901,9 +1990,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.Range, value: 50 })
         .expect(204)
         .expect((res) => {
@@ -1919,7 +2015,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.Range,
               answer: 50,
@@ -1930,7 +2026,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.Range,
               answer: 40,
@@ -1948,15 +2044,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockTrueFalseQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -1964,7 +2060,7 @@ describe('GameController (e2e)', () => {
             correctAnswers: [{ type: QuestionType.TrueFalse, value: false }],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.TrueFalse,
                   answer: false,
@@ -1975,7 +2071,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: secondPlayerClient,
+                user: secondPlayerUser,
                 answer: {
                   type: QuestionType.TrueFalse,
                   answer: true,
@@ -1992,13 +2088,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.TrueFalse,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: false,
                 },
                 {
                   type: QuestionType.TrueFalse,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: true,
                 },
@@ -2010,9 +2106,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.TrueFalse, value: false })
         .expect(204)
         .expect((res) => {
@@ -2028,7 +2131,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.TrueFalse,
               answer: false,
@@ -2039,7 +2142,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.TrueFalse,
               answer: true,
@@ -2057,15 +2160,15 @@ describe('GameController (e2e)', () => {
           questions: [createMockTypeAnswerQuestionDocument()],
           participants: [
             createMockGameHostParticipantDocument({
-              player: hostClient.player,
+              participantId: hostUser._id,
             }),
             createMockGamePlayerParticipantDocument({
-              player: playerClient.player,
-              nickname: playerClient.player.nickname,
+              participantId: playerUser._id,
+              nickname: playerUser.defaultNickname,
             }),
             createMockGamePlayerParticipantDocument({
-              player: secondPlayerClient.player,
-              nickname: secondPlayerClient.player.nickname,
+              participantId: secondPlayerUser._id,
+              nickname: secondPlayerUser.defaultNickname,
             }),
           ],
           currentTask: createMockQuestionResultTaskDocument({
@@ -2078,7 +2181,7 @@ describe('GameController (e2e)', () => {
             ],
             results: [
               buildCorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.TypeAnswer,
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
@@ -2089,7 +2192,7 @@ describe('GameController (e2e)', () => {
                 position: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
-                client: playerClient,
+                user: playerUser,
                 answer: {
                   type: QuestionType.TypeAnswer,
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
@@ -2105,13 +2208,13 @@ describe('GameController (e2e)', () => {
               answers: [
                 {
                   type: QuestionType.TypeAnswer,
-                  playerId: playerClient.player._id,
+                  playerId: playerUser._id,
                   created: offsetSeconds(3),
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
                 },
                 {
                   type: QuestionType.TypeAnswer,
-                  playerId: secondPlayerClient.player._id,
+                  playerId: secondPlayerUser._id,
                   created: offsetSeconds(4),
                   answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
                 },
@@ -2123,9 +2226,16 @@ describe('GameController (e2e)', () => {
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       await supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({
           type: QuestionType.TypeAnswer,
           value: MOCK_TYPE_ANSWER_OPTION_VALUE,
@@ -2144,7 +2254,7 @@ describe('GameController (e2e)', () => {
       expect(toPlain(results)).toEqual([
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: playerClient,
+            user: playerUser,
             answer: {
               type: QuestionType.TypeAnswer,
               answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
@@ -2155,7 +2265,7 @@ describe('GameController (e2e)', () => {
         ),
         toPlain(
           buildIncorrectQuestionResultTaskItem({
-            client: secondPlayerClient,
+            user: secondPlayerUser,
             answer: {
               type: QuestionType.TypeAnswer,
               answer: MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
@@ -2167,17 +2277,24 @@ describe('GameController (e2e)', () => {
       ])
     })
 
-    it('should return 404 when deleting a correct answer to a non-existing game', () => {
-      const gameID = uuidv4()
+    it('should return 404 when deleting a correct answer to a non-existing game', async () => {
+      const gameId = uuidv4()
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
 
       return supertest(app.getHttpServer())
-        .delete(`/api/games/${gameID}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .delete(`/api/games/${gameId}/tasks/current/correct_answers`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 0 })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Game not found by id '${gameID}'`,
+            message: `Active game not found by id ${gameId}`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -2187,17 +2304,24 @@ describe('GameController (e2e)', () => {
     it('should return 403 when deleting a correct answer as a player', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
       return supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${playerClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(403)
         .expect((res) => {
@@ -2212,21 +2336,26 @@ describe('GameController (e2e)', () => {
     it('should return 403 when deleting a correct answer for a non-authorized game', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
-      const { token } = await authService.legacyAuthenticate({
-        clientId: uuidv4(),
-      })
+      const anotherUser = await userModel.create(buildMockQuaternaryUser())
+
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        anotherUser._id,
+        GameParticipantType.PLAYER,
+      )
 
       return supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(403)
         .expect((res) => {
@@ -2241,10 +2370,10 @@ describe('GameController (e2e)', () => {
     it('should return 401 when deleting a correct answer when missing authorization', async () => {
       const gameDocument = await gameModel.create(
         buildMultiChoiceQuestionGameDocument({
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
@@ -2271,7 +2400,7 @@ describe('GameController (e2e)', () => {
               correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
               results: [
                 buildCorrectQuestionResultTaskItem({
-                  client: playerClient,
+                  user: playerUser,
                   answer: {
                     type: QuestionType.MultiChoice,
                     answer: 0,
@@ -2282,7 +2411,7 @@ describe('GameController (e2e)', () => {
                   position: 1,
                 }),
                 buildIncorrectQuestionResultTaskItem({
-                  client: secondPlayerClient,
+                  user: secondPlayerUser,
                   answer: {
                     type: QuestionType.MultiChoice,
                     answer: 1,
@@ -2293,17 +2422,24 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             }),
           },
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(400)
         .expect((res) => {
@@ -2322,17 +2458,24 @@ describe('GameController (e2e)', () => {
           game: {
             currentTask: createMockQuestionTaskDocument(),
           },
-          clients: {
-            hostClient,
-            playerClient,
-            secondPlayerClient,
+          users: {
+            hostUser,
+            playerUser,
+            secondPlayerUser,
           },
         }),
       )
 
+      const accessToken = await authenticateGame(
+        app,
+        gameDocument._id,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
       return supertest(app.getHttpServer())
         .delete(`/api/games/${gameDocument._id}/tasks/current/correct_answers`)
-        .set('Authorization', `Bearer ${hostClientToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ type: QuestionType.MultiChoice, index: 1 })
         .expect(400)
         .expect((res) => {
@@ -2423,28 +2566,6 @@ const classicQuizRequest: QuizRequestDto = {
   ],
 }
 
-const zeroToOneHundredQuizRequest: QuizRequestDto = {
-  title: 'Updated Trivia Battle',
-  description: 'A fun and engaging updated trivia quiz for all ages.',
-  mode: GameMode.ZeroToOneHundred,
-  visibility: QuizVisibility.Private,
-  category: QuizCategory.GeneralKnowledge,
-  imageCoverURL: 'https://example.com/updated-question-cover-image.png',
-  languageCode: LanguageCode.Swedish,
-  questions: [
-    {
-      type: QuestionType.Range,
-      question: 'Guess the temperature of the hottest day ever recorded.',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      correct: 50,
-      duration: 30,
-    },
-  ],
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toPlain(instance: any): any {
   return JSON.parse(JSON.stringify(instance))
@@ -2452,25 +2573,25 @@ function toPlain(instance: any): any {
 
 function buildMultiChoiceQuestionGameDocument(options: {
   game?: Partial<Game>
-  clients: {
-    hostClient: Client
-    playerClient: Client
-    secondPlayerClient: Client
+  users: {
+    hostUser: User
+    playerUser: User
+    secondPlayerUser: User
   }
 }): Game {
   return createMockGameDocument({
     questions: [createMockMultiChoiceQuestionDocument()],
     participants: [
       createMockGameHostParticipantDocument({
-        player: options.clients.hostClient.player,
+        participantId: options.users.hostUser._id,
       }),
       createMockGamePlayerParticipantDocument({
-        player: options.clients.playerClient.player,
-        nickname: options.clients.playerClient.player.nickname,
+        participantId: options.users.playerUser._id,
+        nickname: options.users.playerUser.defaultNickname,
       }),
       createMockGamePlayerParticipantDocument({
-        player: options.clients.secondPlayerClient.player,
-        nickname: options.clients.secondPlayerClient.player.nickname,
+        participantId: options.users.secondPlayerUser._id,
+        nickname: options.users.secondPlayerUser.defaultNickname,
       }),
     ],
     currentTask: createMockQuestionResultTaskDocument({
@@ -2478,7 +2599,7 @@ function buildMultiChoiceQuestionGameDocument(options: {
       correctAnswers: [{ type: QuestionType.MultiChoice, index: 0 }],
       results: [
         buildCorrectQuestionResultTaskItem({
-          client: options.clients.playerClient,
+          user: options.users.playerUser,
           answer: {
             type: QuestionType.MultiChoice,
             answer: 0,
@@ -2489,7 +2610,7 @@ function buildMultiChoiceQuestionGameDocument(options: {
           position: 1,
         }),
         buildIncorrectQuestionResultTaskItem({
-          client: options.clients.secondPlayerClient,
+          user: options.users.secondPlayerUser,
           answer: {
             type: QuestionType.MultiChoice,
             answer: 1,
@@ -2505,13 +2626,13 @@ function buildMultiChoiceQuestionGameDocument(options: {
         answers: [
           {
             type: QuestionType.MultiChoice,
-            playerId: options.clients.playerClient.player._id,
+            playerId: options.users.playerUser._id,
             created: offsetSeconds(3),
             answer: 0,
           },
           {
             type: QuestionType.MultiChoice,
-            playerId: options.clients.secondPlayerClient.player._id,
+            playerId: options.users.secondPlayerUser._id,
             created: offsetSeconds(4),
             answer: 1,
           },
@@ -2526,7 +2647,7 @@ function buildMultiChoiceQuestionGameDocument(options: {
 
 function buildCorrectQuestionResultTaskItem(
   options: {
-    client: Client
+    user: User
     answer:
       | Omit<QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
@@ -2536,11 +2657,11 @@ function buildCorrectQuestionResultTaskItem(
 ): QuestionResultTaskItem {
   return {
     type: options.answer.type,
-    playerId: options.client.player._id,
-    nickname: options.client.player.nickname,
+    playerId: options.user._id,
+    nickname: options.user.defaultNickname,
     answer: {
       type: options.answer.type,
-      playerId: options.client.player._id,
+      playerId: options.user._id,
       answer: options.answer.answer,
       created: options.answer.created,
     },
@@ -2554,7 +2675,7 @@ function buildCorrectQuestionResultTaskItem(
 
 function buildIncorrectQuestionResultTaskItem(
   options: {
-    client: Client
+    user: User
     answer:
       | Omit<QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
@@ -2564,11 +2685,11 @@ function buildIncorrectQuestionResultTaskItem(
 ): QuestionResultTaskItem {
   return {
     type: options.answer.type,
-    playerId: options.client.player._id,
-    nickname: options.client.player.nickname,
+    playerId: options.user._id,
+    nickname: options.user.defaultNickname,
     answer: {
       type: options.answer.type,
-      playerId: options.client.player._id,
+      playerId: options.user._id,
       answer: options.answer.answer,
       created: options.answer.created,
     },

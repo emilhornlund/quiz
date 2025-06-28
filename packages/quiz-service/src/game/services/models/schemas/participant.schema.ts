@@ -1,13 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { GameParticipantType } from '@quiz/common'
 
-import { Player } from '../../../../player/services/models/schemas'
-
 /**
  * Represents a participant in a game, including host and player details.
  */
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class ParticipantBase {
+  /**
+   * The unique identifier of the participant.
+   */
+  @Prop({ type: String, required: true })
+  participantId: string
+
   /**
    * The type of participant, either host or player.
    */
@@ -16,14 +20,6 @@ export class ParticipantBase {
     required: true,
   })
   type!: GameParticipantType
-
-  /**
-   * The player document associated with the participant.
-   *
-   * Stores a reference to a Player document to link games with their player profiles.
-   */
-  @Prop({ type: String, ref: 'Player' })
-  player: Player
 
   /**
    * The date and time when the participant was created.

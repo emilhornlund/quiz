@@ -79,7 +79,7 @@ export class AuthService {
     const participantId = userId || uuidv4()
 
     const existingParticipant = game.participants.find(
-      (participant) => participant.player._id === participantId,
+      (participant) => participant.participantId === participantId,
     )
 
     let participantType: GameParticipantType
