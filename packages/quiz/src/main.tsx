@@ -4,9 +4,11 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
+import { ProtectedRoute } from './components'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
+  CreateUserPage,
   DiscoverPage,
   ErrorPage,
   GameHistoryPage,
@@ -14,6 +16,7 @@ import {
   GameResultsPage,
   HomePage,
   JoinPage,
+  LoginPage,
   PlayerLinkPage,
   ProfilePage,
   QuizCreatorPage,
@@ -37,52 +40,102 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
+        path: '/auth/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/auth/register',
+        element: <CreateUserPage />,
+      },
+      {
         path: '/discover',
-        element: <DiscoverPage />,
+        element: (
+          <ProtectedRoute>
+            <DiscoverPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/join',
-        element: <JoinPage />,
-      },
-      {
-        path: '/game',
         element: (
           <GameContextProvider>
-            <GamePage />
+            <JoinPage />
           </GameContextProvider>
         ),
       },
       {
+        path: '/game',
+        element: (
+          <ProtectedRoute>
+            <GameContextProvider>
+              <GamePage />
+            </GameContextProvider>
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: '/game/history',
-        element: <GameHistoryPage />,
+        element: (
+          <ProtectedRoute>
+            <GameHistoryPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/game/results/:gameID',
-        element: <GameResultsPage />,
+        element: (
+          <ProtectedRoute>
+            <GameResultsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/player/profile',
-        element: <ProfilePage />,
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/player/quizzes',
-        element: <QuizzesPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizzesPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/player/link',
-        element: <PlayerLinkPage />,
+        element: (
+          <ProtectedRoute>
+            <PlayerLinkPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/create',
-        element: <QuizCreatorPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizCreatorPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/details/:quizId',
-        element: <QuizDetailsPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizDetailsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/details/:quizId/edit',
-        element: <QuizCreatorPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizCreatorPage />
+          </ProtectedRoute>
+        ),
       },
     ],
     errorElement: <ErrorPage />,
