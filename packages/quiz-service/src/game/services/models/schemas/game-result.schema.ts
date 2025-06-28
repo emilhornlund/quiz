@@ -2,8 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { QuestionType } from '@quiz/common'
 import { HydratedDocument, Model } from 'mongoose'
 
-import { Player } from '../../../../player/services/models/schemas'
-
 import { Game } from './game.schema'
 
 /**
@@ -12,10 +10,16 @@ import { Game } from './game.schema'
 @Schema({ _id: false })
 export class PlayerMetric {
   /**
-   * The player who participated in the game.
+   * The player participant's unique identifier.
    */
-  @Prop({ type: String, ref: 'Player', required: true })
-  player: Player
+  @Prop({ type: String, required: true })
+  participantId: string
+
+  /**
+   * The player participant's nickname.
+   */
+  @Prop({ type: String, required: true })
+  nickname: string
 
   /**
    * The player's final rank in the game (1 = first place, etc.).
@@ -151,10 +155,10 @@ export class GameResult {
   game: Game
 
   /**
-   * The player who hosted the game.
+   * The participant's unique identifier who hosted the game.
    */
-  @Prop({ type: String, ref: 'Player', required: true })
-  host: Player
+  @Prop({ type: String, required: true })
+  hostParticipantId: string
 
   /**
    * A list of players and their final performance metrics.

@@ -13,35 +13,31 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockSecondaryUser,
+  buildMockTertiaryUser,
+} from '../../../test-utils/data'
+import {
   closeTestApp,
+  createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
-import { Client } from '../../client/services/models/schemas'
-import { Player } from '../../player/services/models/schemas'
+} from '../../../test-utils/utils'
 import { Quiz } from '../../quiz/services/models/schemas'
+import { User, UserModel } from '../../user/services/models/schemas'
 import { Game, GameResult, TaskType } from '../services/models/schemas'
 
 describe('GameResultController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
-  let clientService: ClientService
   let gameModel: Model<Game>
   let gameResultModel: Model<GameResult>
-
-  let hostClient: Client
-  let playerClient: Client
+  let userModel: UserModel
+  let playerUser: User
 
   beforeEach(async () => {
     app = await createTestApp()
-    clientService = app.get(ClientService)
-    authService = app.get(AuthService)
     gameModel = app.get<Model<Game>>(getModelToken(Game.name))
     gameResultModel = app.get<Model<GameResult>>(getModelToken(GameResult.name))
-
-    hostClient = await clientService.findOrCreateClient(uuidv4())
-    playerClient = await clientService.findOrCreateClient(uuidv4())
+    userModel = app.get<UserModel>(getModelToken(User.name))
+    playerUser = await userModel.create(buildMockSecondaryUser())
   })
 
   afterEach(async () => {
@@ -50,25 +46,29 @@ describe('GameResultController (e2e)', () => {
 
   describe('/api/games/:gameID/results (GET)', () => {
     it('should succeed in retrieving game results for a classic mode game', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: hostClient._id,
+      const gameId = uuidv4()
+
+      // const { accessToken, user: hostUser } =
+      //   await createDefaultUserAndAuthenticate(app, TokenScope.Game, {
+      //     gameId,
+      //     participantType: GameParticipantType.HOST,
+      //   })
+
+      const { accessToken, user: hostUser } =
+        await createDefaultUserAndAuthenticate(app)
+
+      const game = await gameModel.create({
+        ...buildMockClassicModeGame(hostUser, playerUser),
+        _id: gameId,
       })
 
-      const game = await gameModel.create(
-        buildMockClassicModeGame(hostClient, playerClient),
-      )
-
       const gameResult = await gameResultModel.create(
-        buildMockClassicModeGameResult(
-          game,
-          hostClient.player,
-          playerClient.player,
-        ),
+        buildMockClassicModeGameResult(game, hostUser, playerUser),
       )
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${game._id}/results`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -76,14 +76,14 @@ describe('GameResultController (e2e)', () => {
             name: 'Classic Quiz Debug',
             mode: GameMode.Classic,
             host: {
-              id: hostClient.player._id,
-              nickname: hostClient.player.nickname,
+              id: hostUser._id,
+              nickname: 'N/A',
             },
             playerMetrics: [
               {
                 player: {
-                  id: playerClient.player._id,
-                  nickname: playerClient.player.nickname,
+                  id: playerUser._id,
+                  nickname: playerUser.defaultNickname,
                 },
                 rank: 1,
                 correct: 4,
@@ -135,25 +135,20 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should succeed in retrieving game results for a zero to one hundred mode game', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: hostClient._id,
-      })
+      const { accessToken, user: hostUser } =
+        await createDefaultUserAndAuthenticate(app)
 
       const game = await gameModel.create(
-        buildMockZeroToOneHundredModeGame(hostClient, playerClient),
+        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
       )
 
       const gameResult = await gameResultModel.create(
-        buildMockZeroToOneHundredModeGameResult(
-          game,
-          hostClient.player,
-          playerClient.player,
-        ),
+        buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),
       )
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${game._id}/results`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -161,14 +156,14 @@ describe('GameResultController (e2e)', () => {
             name: '0-100 Quiz Debug',
             mode: GameMode.ZeroToOneHundred,
             host: {
-              id: hostClient.player._id,
-              nickname: hostClient.player.nickname,
+              id: hostUser._id,
+              nickname: 'N/A',
             },
             playerMetrics: [
               {
                 player: {
-                  id: playerClient.player._id,
-                  nickname: playerClient.player.nickname,
+                  id: playerUser._id,
+                  nickname: playerUser.defaultNickname,
                 },
                 rank: 1,
                 averagePrecision: 0.89,
@@ -215,17 +210,16 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 404 error when a game result was not found', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: hostClient._id,
-      })
+      const { accessToken, user: hostUser } =
+        await createDefaultUserAndAuthenticate(app)
 
       const game = await gameModel.create(
-        buildMockClassicModeGame(hostClient, playerClient),
+        buildMockClassicModeGame(hostUser, playerUser),
       )
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${game._id}/results`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -237,15 +231,13 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 404 error when a game was not found', async () => {
-      const { token } = await authService.legacyAuthenticate({
-        clientId: hostClient._id,
-      })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       const gameID = uuidv4()
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${gameID}/results`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -257,18 +249,17 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 403 forbidden error when player is not a participant of an existing game', async () => {
-      const anotherClientId = uuidv4()
-      const { token } = await authService.legacyAuthenticate({
-        clientId: anotherClientId,
-      })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
+
+      const anotherHostUser = await userModel.create(buildMockTertiaryUser())
 
       const game = await gameModel.create(
-        buildMockClassicModeGame(hostClient, playerClient),
+        buildMockClassicModeGame(anotherHostUser, playerUser),
       )
 
       return supertest(app.getHttpServer())
         .get(`/api/games/${game._id}/results`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -296,10 +287,7 @@ describe('GameResultController (e2e)', () => {
   })
 })
 
-function buildMockClassicModeGame(
-  hostClient: Client,
-  playerClient: Client,
-): Game {
+function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
   const date = new Date(Date.now() - 60 * 60 * 24 * 1000) // 1 day ago
   const offset = (seconds: number) => new Date(date.getTime() + seconds * 1000)
 
@@ -314,14 +302,14 @@ function buildMockClassicModeGame(
     participants: [
       {
         type: GameParticipantType.HOST,
-        player: hostClient.player,
+        participantId: hostUser._id,
         created: offset(0),
         updated: offset(0),
       },
       {
         type: GameParticipantType.PLAYER,
-        player: playerClient.player,
-        nickname: playerClient.player.nickname,
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
         created: offset(10.921),
         updated: offset(10.921),
         rank: 1,
@@ -354,7 +342,7 @@ function buildMockClassicModeGame(
         answers: [
           {
             type: QuestionType.MultiChoice,
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             created: offset(21.753),
             answer: 0,
           },
@@ -372,11 +360,11 @@ function buildMockClassicModeGame(
         results: [
           {
             type: QuestionType.MultiChoice,
-            playerId: playerClient.player._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.MultiChoice,
-              playerId: playerClient.player._id,
+              playerId: playerUser._id,
               created: offset(21.753),
               answer: 0,
             },
@@ -397,7 +385,7 @@ function buildMockClassicModeGame(
         questionIndex: 0,
         leaderboard: [
           {
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'EchoRaptor',
             score: 979,
@@ -415,7 +403,7 @@ function buildMockClassicModeGame(
         answers: [
           {
             type: QuestionType.Range,
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             created: offset(33.19),
             answer: 50,
           },
@@ -433,11 +421,11 @@ function buildMockClassicModeGame(
         results: [
           {
             type: QuestionType.Range,
-            playerId: playerClient.player._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.Range,
-              playerId: playerClient.player._id,
+              playerId: playerUser._id,
               created: offset(33.19),
               answer: 50,
             },
@@ -458,7 +446,7 @@ function buildMockClassicModeGame(
         questionIndex: 1,
         leaderboard: [
           {
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'EchoRaptor',
             score: 1969,
@@ -476,7 +464,7 @@ function buildMockClassicModeGame(
         answers: [
           {
             type: QuestionType.TrueFalse,
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             created: offset(39.408),
             answer: false,
           },
@@ -494,11 +482,11 @@ function buildMockClassicModeGame(
         results: [
           {
             type: QuestionType.TrueFalse,
-            playerId: playerClient.player._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.TrueFalse,
-              playerId: playerClient.player._id,
+              playerId: playerUser._id,
               created: offset(39.408),
               answer: false,
             },
@@ -519,7 +507,7 @@ function buildMockClassicModeGame(
         questionIndex: 2,
         leaderboard: [
           {
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'EchoRaptor',
             score: 2955,
@@ -537,7 +525,7 @@ function buildMockClassicModeGame(
         answers: [
           {
             type: QuestionType.TypeAnswer,
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             created: offset(52.074),
             answer: 'copenhagen',
           },
@@ -558,11 +546,11 @@ function buildMockClassicModeGame(
         results: [
           {
             type: QuestionType.TypeAnswer,
-            playerId: playerClient.player._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.TypeAnswer,
-              playerId: playerClient.player._id,
+              playerId: playerUser._id,
               created: offset(52.074),
               answer: 'copenhagen',
             },
@@ -582,7 +570,7 @@ function buildMockClassicModeGame(
         created: offset(53.346),
         leaderboard: [
           {
-            playerId: playerClient.player._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'EchoRaptor',
             score: 3846,
@@ -664,8 +652,8 @@ function buildMockClassicModeGame(
 }
 
 function buildMockZeroToOneHundredModeGame(
-  hostClient: Client,
-  playerClient: Client,
+  hostUser: User,
+  playerUser: User,
 ): Game {
   const date = new Date(Date.now() - 60 * 60 * 24 * 1000) // 1 day ago
   const offset = (seconds: number) => new Date(date.getTime() + seconds * 1000)
@@ -681,14 +669,14 @@ function buildMockZeroToOneHundredModeGame(
     participants: [
       {
         type: GameParticipantType.HOST,
-        player: hostClient.player,
+        participantId: hostUser._id,
         created: offset(0),
         updated: offset(0),
       },
       {
         type: GameParticipantType.PLAYER,
-        player: playerClient.player,
-        nickname: playerClient.player.nickname,
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
         created: offset(10.463),
         updated: offset(10.463),
         rank: 1,
@@ -721,7 +709,7 @@ function buildMockZeroToOneHundredModeGame(
         answers: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             created: offset(27.267),
             answer: 8,
           },
@@ -739,11 +727,11 @@ function buildMockZeroToOneHundredModeGame(
         results: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.Range,
-              playerId: playerClient._id,
+              playerId: playerUser._id,
               created: offset(27.267),
               answer: 8,
             },
@@ -764,7 +752,7 @@ function buildMockZeroToOneHundredModeGame(
         questionIndex: 0,
         leaderboard: [
           {
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'ElectricJackal',
             score: 2,
@@ -782,7 +770,7 @@ function buildMockZeroToOneHundredModeGame(
         answers: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             created: offset(40.256),
             answer: 90,
           },
@@ -800,11 +788,11 @@ function buildMockZeroToOneHundredModeGame(
         results: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.Range,
-              playerId: playerClient._id,
+              playerId: playerUser._id,
               created: offset(40.256),
               answer: 90,
             },
@@ -825,7 +813,7 @@ function buildMockZeroToOneHundredModeGame(
         questionIndex: 1,
         leaderboard: [
           {
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'ElectricJackal',
             score: -8,
@@ -843,7 +831,7 @@ function buildMockZeroToOneHundredModeGame(
         answers: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             created: offset(51.223),
             answer: 14,
           },
@@ -861,11 +849,11 @@ function buildMockZeroToOneHundredModeGame(
         results: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.Range,
-              playerId: playerClient._id,
+              playerId: playerUser._id,
               created: offset(51.223),
               answer: 14,
             },
@@ -886,7 +874,7 @@ function buildMockZeroToOneHundredModeGame(
         questionIndex: 2,
         leaderboard: [
           {
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'ElectricJackal',
             score: -18,
@@ -904,7 +892,7 @@ function buildMockZeroToOneHundredModeGame(
         answers: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             created: offset(63.043),
             answer: 56,
           },
@@ -922,11 +910,11 @@ function buildMockZeroToOneHundredModeGame(
         results: [
           {
             type: QuestionType.Range,
-            playerId: playerClient._id,
-            nickname: playerClient.player.nickname,
+            playerId: playerUser._id,
+            nickname: playerUser.defaultNickname,
             answer: {
               type: QuestionType.Range,
-              playerId: playerClient._id,
+              playerId: playerUser._id,
               created: offset(63.043),
               answer: 56,
             },
@@ -946,7 +934,7 @@ function buildMockZeroToOneHundredModeGame(
         created: offset(72.289),
         leaderboard: [
           {
-            playerId: playerClient._id,
+            playerId: playerUser._id,
             position: 1,
             nickname: 'ElectricJackal',
             score: 26,
@@ -1024,17 +1012,18 @@ function buildMockZeroToOneHundredModeGame(
 
 function buildMockClassicModeGameResult(
   game: Game,
-  hostPlayer: Player,
-  player: Player,
+  hostUser: User,
+  playerUser: User,
 ): GameResult {
   return {
     _id: uuidv4(),
     game,
     name: game.name,
-    host: hostPlayer,
+    hostParticipantId: hostUser._id,
     players: [
       {
-        player: player,
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
         rank: 1,
         correct: 4,
         incorrect: 0,
@@ -1085,17 +1074,18 @@ function buildMockClassicModeGameResult(
 
 function buildMockZeroToOneHundredModeGameResult(
   game: Game,
-  host: Player,
-  player: Player,
+  hostUser: User,
+  playerUser: User,
 ): GameResult {
   return {
     _id: uuidv4(),
     game,
-    host,
+    hostParticipantId: hostUser._id,
     name: game.name,
     players: [
       {
-        player,
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
         rank: 1,
         averagePrecision: 0.89,
         unanswered: 0,

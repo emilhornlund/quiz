@@ -2,6 +2,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
 import {
   GameMode,
+  GameResultClassicModePlayerMetricDto,
   GameResultClassicModeQuestionMetricDto,
   GameResultDto,
   GameResultPlayerMetricDto,
@@ -9,7 +10,6 @@ import {
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
-import { GameResultClassicModePlayerMetricDto } from '@quiz/common/dist/cjs/models/game-result'
 
 import { Cacheable } from '../../app/cache'
 import { GameResultsNotFoundException } from '../exceptions'
@@ -53,7 +53,7 @@ export class GameResultService {
 
     const {
       game: { _id: id, name, mode },
-      host,
+      hostParticipantId,
       players,
       questions,
       hosted: created,
@@ -63,7 +63,7 @@ export class GameResultService {
     return {
       id,
       name,
-      host: { id: host._id, nickname: host.nickname },
+      host: { id: hostParticipantId, nickname: 'N/A' },
       ...(mode === GameMode.Classic
         ? {
             mode: GameMode.Classic,
@@ -99,7 +99,8 @@ export class GameResultService {
     playerMetric: PlayerMetric,
   ): GameResultPlayerMetricDto {
     const {
-      player,
+      participantId: id,
+      nickname,
       rank,
       unanswered,
       averageResponseTime,
@@ -107,7 +108,7 @@ export class GameResultService {
       score,
     } = playerMetric
     return {
-      player: { id: player._id, nickname: player.nickname },
+      player: { id, nickname },
       rank,
       unanswered,
       averageResponseTime,
