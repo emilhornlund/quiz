@@ -1,2 +1,5 @@
-export type { ProfilePageUIProps } from './ProfilePageUI'
+export type {
+  UpdateUserProfileFormFields,
+  ProfilePageUIProps,
+} from './ProfilePageUI'
 export { default } from './ProfilePageUI'

@@ -1,5 +1,9 @@
 import {
+  AuthLoginRequestDto,
+  AuthLoginResponseDto,
   CreateGameResponseDto,
+  CreateUserRequestDto,
+  CreateUserResponseDto,
   FindGameResponseDto,
   GameResultDto,
   MediaUploadPhotoResponseDto,
@@ -14,12 +18,9 @@ import {
   QuizRequestDto,
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
+  UpdateUserProfileRequestDto,
+  UserProfileResponseDto,
 } from '@quiz/common'
-import { AuthLoginRequestDto, AuthLoginResponseDto } from '@quiz/common/src'
-import {
-  CreateUserRequestDto,
-  CreateUserResponseDto,
-} from '@quiz/common/src/models/user.ts'
 
 import { useAuthContext } from '../context/auth'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
@@ -38,7 +39,7 @@ import {
  * It also provides specific methods for retrieving player information and associated quizzes.
  *
  * @returns An object containing the following methods:
- * - `getCurrentPlayer`: Retrieves information about the current player.
+ * - `getUserProfile`: Retrieves information about the current player.
  * - `getCurrentPlayerQuizzes`: Retrieves quizzes associated with the current player.
  */
 export const useQuizServiceClient = () => {
@@ -181,29 +182,34 @@ export const useQuizServiceClient = () => {
     })
 
   /**
-   * Retrieves information about the current player.
+   * Retrieves information about the current user.
    *
-   * @returns A promise resolving to the player information as a `PlayerResponseDto`.
+   * @returns A promise resolving to the user information.
    */
-  const getCurrentPlayer = (): Promise<PlayerResponseDto> =>
-    apiGet<PlayerResponseDto>('/client/player')
+  const getUserProfile = (): Promise<UserProfileResponseDto> =>
+    apiGet<UserProfileResponseDto>('/profile/user')
 
   /**
    * Updates the currently authenticated player's profile.
    *
-   * @param nickname - The new nickname to update for the player.
+   * @param request - The user update data including email and optional names.
    *
-   * @returns A promise resolving to the updated player information as a `PlayerResponseDto`.
+   * @returns A promise resolving to the updated user information.
    */
-  const updateCurrentPlayer = (nickname: string): Promise<PlayerResponseDto> =>
-    apiPut<PlayerResponseDto>('/client/player', { nickname }).then(
-      (response) => {
-        notifySuccess(
-          'Nice! Your new nickname is locked in. Get ready to quiz in style!',
-        )
-        return response
-      },
-    )
+  const updateUserProfile = (
+    request: UpdateUserProfileRequestDto,
+  ): Promise<UserProfileResponseDto> =>
+    apiPut<UserProfileResponseDto>('/profile/user', {
+      email: request.email,
+      givenName: request.givenName,
+      familyName: request.familyName,
+      defaultNickname: request.defaultNickname,
+    }).then((response) => {
+      notifySuccess(
+        'Nice! Your new profile is locked in. Get ready to quiz in style!',
+      )
+      return response
+    })
 
   /**
    * Retrieves the quizzes associated with the current player.
@@ -527,8 +533,8 @@ export const useQuizServiceClient = () => {
   return {
     login,
     register,
-    getCurrentPlayer,
-    updateCurrentPlayer,
+    getUserProfile,
+    updateUserProfile,
     getCurrentPlayerQuizzes,
     createQuiz,
     getQuiz,
