@@ -70,7 +70,7 @@ const Page: React.FC<PageProps> = ({
     }
     return (
       <>
-        <MenuItem icon={faUser} link="/player/profile">
+        <MenuItem icon={faUser} link="/profile/user">
           Profile
         </MenuItem>
         <MenuItem icon={faLightbulb} link="/player/quizzes">
