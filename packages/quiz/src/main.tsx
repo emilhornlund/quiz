@@ -97,7 +97,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/player/quizzes',
+        path: '/profile/quizzes',
         element: (
           <ProtectedRoute>
             <QuizzesPage />
