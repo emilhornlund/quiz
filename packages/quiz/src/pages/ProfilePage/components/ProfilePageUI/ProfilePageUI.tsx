@@ -56,10 +56,6 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
     defaultNickname: false,
   })
 
-  useEffect(() => {
-    console.log(validFormFields)
-  }, [validFormFields])
-
   const isFormValid = useMemo(
     () => Object.values(validFormFields).every((valid) => !!valid),
     [validFormFields],
