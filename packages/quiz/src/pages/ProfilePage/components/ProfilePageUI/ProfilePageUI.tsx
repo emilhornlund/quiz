@@ -12,8 +12,8 @@ import {
   PLAYER_NICKNAME_MAX_LENGTH,
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
+  UpdateUserProfileRequestDto,
 } from '@quiz/common'
-import { UpdateUserProfileRequestDto } from '@quiz/common/src'
 import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
 
 import { Button, Page, TextField, Typography } from '../../../../components'

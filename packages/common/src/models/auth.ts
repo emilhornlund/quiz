@@ -46,3 +46,13 @@ export interface AuthRefreshRequestDto {
    */
   refreshToken: string
 }
+
+/**
+ * Data transfer object for authentication revoke requests.
+ */
+export interface AuthRevokeRequestDto {
+  /**
+   * The token previously issued during login (access or refresh).
+   */
+  readonly token: string
+}

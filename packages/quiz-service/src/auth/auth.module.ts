@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { JwtModule } from '@nestjs/jwt'
+import { MongooseModule } from '@nestjs/mongoose'
 import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
@@ -13,7 +14,8 @@ import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
-import { AuthService } from './services'
+import { AuthService, TokenRepository } from './services'
+import { Token, TokenSchema } from './services/models/schemas'
 
 @Module({
   imports: [
@@ -47,6 +49,12 @@ import { AuthService } from './services'
         }
       },
     }),
+    MongooseModule.forFeature([
+      {
+        name: Token.name,
+        schema: TokenSchema,
+      },
+    ]),
     EventEmitterModule,
     GameModule,
     UserModule,
@@ -54,6 +62,7 @@ import { AuthService } from './services'
   controllers: [AuthController],
   providers: [
     AuthService,
+    TokenRepository,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

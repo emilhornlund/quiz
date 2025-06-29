@@ -2,6 +2,21 @@ import { Authority } from './authority.enum'
 import { GameParticipantType } from './game-participant-type.enum'
 
 /**
+ * description here
+ */
+export enum TokenType {
+  /**
+   * description here
+   */
+  Access = 'ACCESS',
+
+  /**
+   * description here
+   */
+  Refresh = 'REFRESH',
+}
+
+/**
  * The functional area of the application that this token is intended for.
  */
 export enum TokenScope {
@@ -21,6 +36,11 @@ export enum TokenScope {
  * Represents a JSON Web Token (JWT) payload.
  */
 export interface TokenDto {
+  /**
+   * description here
+   */
+  jti: string
+
   /**
    * The subject of the token, typically a user or client identifier.
    */

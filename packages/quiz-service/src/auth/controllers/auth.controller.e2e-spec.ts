@@ -58,6 +58,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
+        .set('User-Agent', 'mock-user-agent')
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_PASSWORD,
@@ -71,6 +72,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when email not found', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
+        .set('User-Agent', 'mock-user-agent')
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_PASSWORD,
@@ -88,6 +90,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when password is invalid', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
+        .set('User-Agent', 'mock-user-agent')
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_INVALID_PASSWORD,
@@ -105,6 +108,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
+        .set('User-Agent', 'mock-user-agent')
         .send({})
         .expect(400)
         .expect((res) => {
@@ -138,6 +142,28 @@ describe('AuthController (e2e)', () => {
           })
         })
     })
+
+    it('should return 400 bad request when missing user agent', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/login')
+        .send({})
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  notEmpty: 'User agent is required.',
+                },
+                property: 'user-agent',
+              },
+            ],
+          })
+        })
+    })
   })
 
   describe('/api/auth/games/:gamePIN (POST)', () => {
@@ -148,7 +174,10 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/auth/games/${game.pin}`)
-        .set({ Authorization: `Bearer ${accessToken}` })
+        .set({
+          'User-Agent': 'mock-user-agent',
+          Authorization: `Bearer ${accessToken}`,
+        })
         .send()
         .expect(200)
         .expect((res) => {
@@ -165,6 +194,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post(`/api/auth/games/${game.pin}`)
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send()
         .expect(200)
         .expect((res) => {
@@ -172,9 +202,10 @@ describe('AuthController (e2e)', () => {
         })
     })
 
-    it('should 400 404 error when game PIN validation fails', async () => {
+    it('should 400 error when game PIN validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/games/XXXXXX')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send()
         .expect(400)
         .expect((res) => {
@@ -189,6 +220,7 @@ describe('AuthController (e2e)', () => {
     it('should return 404 error when an active game was not found', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/games/123456')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send()
         .expect(404)
         .expect((res) => {
@@ -199,19 +231,46 @@ describe('AuthController (e2e)', () => {
           })
         })
     })
+
+    it('should return 400 bad request when missing user agent', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/games/123456')
+        .send({})
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  notEmpty: 'User agent is required.',
+                },
+                property: 'user-agent',
+              },
+            ],
+          })
+        })
+    })
   })
 
   describe('/api/refresh (POST)', () => {
     it('should succeed in refresh an existing authentication', async () => {
       const user = await userModel.create(buildMockPrimaryUser())
 
-      const { refreshToken } = await authService.login({
-        email: MOCK_PRIMARY_USER_EMAIL,
-        password: MOCK_DEFAULT_PASSWORD,
-      })
+      const { refreshToken } = await authService.login(
+        {
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
+        },
+        '0.0.0.0',
+        'mock-user-agent',
+      )
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send({
           refreshToken,
         })
@@ -228,11 +287,14 @@ describe('AuthController (e2e)', () => {
 
       const { refreshToken } = await authService.authenticateGame(
         game.pin,
+        '0.0.0.0',
+        'mock-user-agent',
         userId,
       )
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send({
           refreshToken,
         })
@@ -250,6 +312,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send({
           refreshToken,
         })
@@ -271,6 +334,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send({
           refreshToken,
         })
@@ -287,6 +351,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
         .send({
           refreshToken: 'invalid_jwt',
         })
@@ -302,6 +367,155 @@ describe('AuthController (e2e)', () => {
                   isJwt: 'refreshToken must be a jwt string',
                 },
                 property: 'refreshToken',
+              },
+            ],
+          })
+        })
+    })
+
+    it('should return 400 bad request when missing user agent', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/refresh')
+        .send({})
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  notEmpty: 'User agent is required.',
+                },
+                property: 'user-agent',
+              },
+            ],
+          })
+        })
+    })
+  })
+
+  describe('/api/revoke (POST)', () => {
+    it('should succeed in revoking an existing user scope access token', async () => {
+      await userModel.create(buildMockPrimaryUser())
+
+      const { accessToken } = await authService.login(
+        {
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
+        },
+        '0.0.0.0',
+        'mock-user-agent',
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/revoke')
+        .set({
+          'User-Agent': 'mock-user-agent',
+        })
+        .send({
+          token: accessToken,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should succeed in revoking an existing user scope refresh token', async () => {
+      await userModel.create(buildMockPrimaryUser())
+
+      const { refreshToken } = await authService.login(
+        {
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_DEFAULT_PASSWORD,
+        },
+        '0.0.0.0',
+        'mock-user-agent',
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/revoke')
+        .set({
+          'User-Agent': 'mock-user-agent',
+        })
+        .send({
+          token: refreshToken,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should succeed in revoking an existing game scope acceess token', async () => {
+      const game = await gameModel.create(createMockGameDocument())
+
+      const userId = uuidv4()
+
+      const { accessToken } = await authService.authenticateGame(
+        game.pin,
+        '0.0.0.0',
+        'mock-user-agent',
+        userId,
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/revoke')
+        .set({ 'User-Agent': 'mock-user-agent' })
+        .send({
+          token: accessToken,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should succeed in revoking an existing game scope refresh token', async () => {
+      const game = await gameModel.create(createMockGameDocument())
+
+      const userId = uuidv4()
+
+      const { refreshToken } = await authService.authenticateGame(
+        game.pin,
+        '0.0.0.0',
+        'mock-user-agent',
+        userId,
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/revoke')
+        .set({ 'User-Agent': 'mock-user-agent' })
+        .send({
+          token: refreshToken,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should return 400 bad request when validation fails', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/revoke')
+        .set({ 'User-Agent': 'mock-user-agent' })
+        .send({
+          token: 'invalid_jwt',
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  isJwt: 'token must be a jwt string',
+                },
+                property: 'token',
               },
             ],
           })
