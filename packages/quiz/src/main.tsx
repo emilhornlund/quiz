@@ -90,7 +90,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/player/profile',
+        path: '/profile/user',
         element: (
           <ProtectedRoute>
             <ProfilePage />
