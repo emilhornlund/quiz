@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GameHistoryPageUI > should render GameHistoryPageUI with no results 1`] = `
+exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with no results 1`] = `
 <div>
   <div
     class="main"
@@ -114,7 +114,7 @@ exports[`GameHistoryPageUI > should render GameHistoryPageUI with no results 1`]
 </div>
 `;
 
-exports[`GameHistoryPageUI > should render GameHistoryPageUI with results 1`] = `
+exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] = `
 <div>
   <div
     class="main"
