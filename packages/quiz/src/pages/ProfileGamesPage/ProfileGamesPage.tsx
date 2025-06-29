@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
 
-import GameHistoryPageUI from './GameHistoryPageUI'
+import ProfileGamesPageUI from './ProfileGamesPageUI'
 
-const GameHistoryPage: FC = () => {
+const ProfileGamesPage: FC = () => {
   const navigate = useNavigate()
 
   const [searchParams, setSearchParams] = useState<{
@@ -15,11 +15,11 @@ const GameHistoryPage: FC = () => {
     offset: number
   }>({ limit: 5, offset: 0 })
 
-  const { getPaginatedGameHistory } = useQuizServiceClient()
+  const { getProfileGames } = useQuizServiceClient()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['game_history', searchParams],
-    queryFn: () => getPaginatedGameHistory(searchParams),
+    queryKey: ['myProfileGames', searchParams],
+    queryFn: () => getProfileGames(searchParams),
   })
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const GameHistoryPage: FC = () => {
   }
 
   return (
-    <GameHistoryPageUI
+    <ProfileGamesPageUI
       items={data.results}
       total={data.total}
       limit={data.limit}
@@ -47,4 +47,4 @@ const GameHistoryPage: FC = () => {
   )
 }
 
-export default GameHistoryPage
+export default ProfileGamesPage

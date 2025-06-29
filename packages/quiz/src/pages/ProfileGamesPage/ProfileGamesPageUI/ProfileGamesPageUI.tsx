@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Page, Pagination, Typography } from '../../../components'
 
 import GameTable from './components/GameTable'
-import styles from './GameHistoryPageUI.module.scss'
+import styles from './ProfileGamesPageUI.module.scss'
 
-export interface GameHistoryPageUIProps {
+export interface ProfileGamesPageUIProps {
   items: GameHistoryDto[]
   total: number
   limit: number
@@ -16,7 +16,7 @@ export interface GameHistoryPageUIProps {
   onChangePagination: (limit: number, offset: number) => void
 }
 
-const GameHistoryPageUI: FC<GameHistoryPageUIProps> = ({
+const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
   items,
   total,
   limit,
@@ -75,4 +75,4 @@ const GameHistoryPageUI: FC<GameHistoryPageUIProps> = ({
   )
 }
 
-export default GameHistoryPageUI
+export default ProfileGamesPageUI
