@@ -11,8 +11,6 @@ import {
   PaginatedGameHistoryDto,
   PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
-  PlayerLinkCodeResponseDto,
-  PlayerResponseDto,
   QuestionCorrectAnswerDto,
   QuestionDto,
   QuestionType,
@@ -330,24 +328,6 @@ export const useQuizServiceClient = () => {
     apiGet(`/quizzes/${quizId}/questions`)
 
   /**
-   * Fetches the current link code for the player.
-   *
-   * @returns A promise that resolves to the player's link code and its expiration details.
-   */
-  const getLinkCode = (): Promise<PlayerLinkCodeResponseDto> =>
-    apiGet(`/client/player/link`)
-
-  /**
-   * Links a player to another client using a provided link code.
-   *
-   * @param code - The unique link code to associate this client with the player on another device.
-   *
-   * @returns A promise that resolves when the player is successfully linked.
-   */
-  const linkPlayer = (code: string): Promise<void> =>
-    apiPost<PlayerResponseDto>(`/client/player/link`, { code }).then(() => {})
-
-  /**
    * Finds a game using the provided game PIN.
    *
    * @param gamePIN - The PIN of the game to find.
@@ -568,8 +548,6 @@ export const useQuizServiceClient = () => {
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
-    getLinkCode,
-    linkPlayer,
     findGame,
     createGame,
     joinGame,
