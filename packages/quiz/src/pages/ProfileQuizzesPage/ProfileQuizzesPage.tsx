@@ -11,9 +11,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
-import { QuizzesPageUI } from './components'
+import { ProfileQuizzesPageUI } from './components'
 
-const QuizzesPage: FC = () => {
+const ProfileQuizzesPage: FC = () => {
   const navigate = useNavigate()
 
   const { getProfileQuizzes } = useQuizServiceClient()
@@ -36,7 +36,7 @@ const QuizzesPage: FC = () => {
   })
 
   return (
-    <QuizzesPageUI
+    <ProfileQuizzesPageUI
       quizzes={data?.results ?? []}
       pagination={{
         total: data?.total ?? 0,
@@ -53,4 +53,4 @@ const QuizzesPage: FC = () => {
   )
 }
 
-export default QuizzesPage
+export default ProfileQuizzesPage

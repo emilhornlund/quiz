@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`QuizzesPageUI > should render QuizzesPageUI 1`] = `
+exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
 <div>
   <div
     class="main"
