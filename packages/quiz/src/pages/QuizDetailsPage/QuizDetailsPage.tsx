@@ -25,7 +25,7 @@ const QuizDetailsPage: FC = () => {
 
   useEffect(() => {
     if (hasQuizLoadingError) {
-      navigate('/player/profile')
+      navigate('/profile/user')
     }
   }, [hasQuizLoadingError, navigate])
 
@@ -54,7 +54,7 @@ const QuizDetailsPage: FC = () => {
     if (quizId) {
       setIsDeleteQuizLoading(true)
       deleteQuiz(quizId)
-        .then(() => navigate('/player/profile'))
+        .then(() => navigate('/profile/user'))
         .finally(() => setIsDeleteQuizLoading(false))
     }
   }
