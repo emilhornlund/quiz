@@ -10,15 +10,15 @@ import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 
-import QuizzesPageUI from './QuizzesPageUI'
+import ProfileQuizzesPageUI from './ProfileQuizzesPageUI'
 
 const authorId = uuidv4()
 
-describe('QuizzesPageUI', () => {
-  it('should render QuizzesPageUI', async () => {
+describe('ProfileQuizzesPageUI', () => {
+  it('should render ProfileQuizzesPageUI', async () => {
     const { container } = render(
       <MemoryRouter>
-        <QuizzesPageUI
+        <ProfileQuizzesPageUI
           quizzes={[
             {
               id: 'c2c3d5cc-63c0-4f70-8665-6dacbd1796f9',
