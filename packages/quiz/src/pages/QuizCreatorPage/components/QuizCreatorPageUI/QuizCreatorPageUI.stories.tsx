@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { FC, useState } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
+import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
 import { useQuestionDataSource } from '../../utils/QuestionDataSource'
 import { useQuizSettingsDataSource } from '../../utils/QuizSettingsDataSource'
 
@@ -78,7 +79,7 @@ const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
 const meta = {
   title: 'Pages/QuizCreatorPage',
   component: QuizCreatorPageUI,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockAuth],
   parameters: {
     layout: 'fullscreen',
   },
