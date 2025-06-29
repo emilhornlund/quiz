@@ -9,7 +9,16 @@ describe('ProfilePageUI', () => {
   it('should render ProfilePageUI', async () => {
     const { container } = render(
       <MemoryRouter>
-        <ProfilePageUI onNicknameChange={() => undefined} />
+        <ProfilePageUI
+          values={{
+            email: '',
+            givenName: '',
+            familyName: '',
+            defaultNickname: '',
+          }}
+          loading={false}
+          onChange={() => undefined}
+        />
       </MemoryRouter>,
     )
 

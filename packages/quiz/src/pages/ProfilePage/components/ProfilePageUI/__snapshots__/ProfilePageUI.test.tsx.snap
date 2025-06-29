@@ -39,69 +39,121 @@ exports[`ProfilePageUI > should render ProfilePageUI 1`] = `
       <div
         class="typography subtitle full"
       >
-        Update Your Profile
+        Shape your quiz identity
       </div>
       <div
         class="typography text medium"
       >
-        Customize your player profile by updating your nickname. Your nickname is how other players will see you in quizzes.
+        Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
       </div>
       <form
         class="profileDetailsForm"
       >
         <div
-          class="column full"
+          class="inputContainer"
         >
           <div
-            class="inputContainer"
+            class="textFieldInputContainer textFieldInputKindPrimary"
           >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-nickname-textfield"
-                id="nickname"
-                maxlength="20"
-                minlength="2"
-                name="nickname"
-                placeholder="Nickname"
-                type="text"
-                value=""
-              />
-            </div>
+            <input
+              class="textfield"
+              data-testid="test-email-textfield"
+              id="email"
+              maxlength="128"
+              minlength="6"
+              name="email"
+              placeholder="Email"
+              type="text"
+              value=""
+            />
           </div>
         </div>
         <div
-          class="column"
+          class="inputContainer"
         >
           <div
-            class="buttonInputContainer buttonInputKindCallToAction"
+            class="textFieldInputContainer textFieldInputKindPrimary"
           >
-            <button
-              data-testid="test-update-player-button-button"
-              disabled=""
-              id="update-player-button"
-              name="update-player-button"
-              type="submit"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
-                data-icon="floppy-disk"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                viewBox="0 0 448 512"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            <input
+              class="textfield"
+              data-testid="test-givenName-textfield"
+              id="givenName"
+              maxlength="64"
+              minlength="1"
+              name="givenName"
+              placeholder="Given Name"
+              type="text"
+              value=""
+            />
           </div>
+        </div>
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-familyName-textfield"
+              id="familyName"
+              maxlength="64"
+              minlength="1"
+              name="familyName"
+              placeholder="Family Name"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-defaultNickname-textfield"
+              id="defaultNickname"
+              maxlength="20"
+              minlength="2"
+              name="defaultNickname"
+              placeholder="Default Nickname"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction"
+        >
+          <button
+            data-testid="test-update-user-button-button"
+            disabled=""
+            id="update-user-button"
+            name="update-user-button"
+            type="submit"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-floppy-disk "
+              data-icon="floppy-disk"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Save
+            </span>
+          </button>
         </div>
       </form>
     </div>
