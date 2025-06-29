@@ -8,6 +8,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
+import { Throttle } from '@nestjs/throttler'
 
 import { Public } from '../../auth/controllers/decorators'
 import { UserService } from '../services'
@@ -36,6 +37,11 @@ export class UserController {
    */
   @Public()
   @Post()
+  @Throttle({
+    short: { limit: 1, ttl: 1000 }, // 1 request per 1 000 ms (burst control)
+    medium: { limit: 5, ttl: 1000 * 60 }, // 5 requests per 60 000 ms (human retries)
+    long: { limit: 10, ttl: 1000 * 60 * 60 * 24 }, // 10 requests per 86 400 000 ms (per IP per day)
+  })
   @ApiOperation({
     summary: 'Create new user',
     description:
