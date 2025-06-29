@@ -1,6 +1,6 @@
 import {
   faBinoculars,
-  faClockRotateLeft,
+  faGamepad,
   faLightbulb,
   faRightFromBracket,
   faUser,
@@ -75,8 +75,8 @@ const Page: React.FC<PageProps> = ({
         <MenuItem icon={faLightbulb} link="/profile/quizzes">
           Quizzes
         </MenuItem>
-        <MenuItem icon={faClockRotateLeft} link="/game/history">
-          History
+        <MenuItem icon={faGamepad} link="/profile/games">
+          Games
         </MenuItem>
         <MenuSeparator />
         <MenuItem icon={faRightFromBracket} onClick={handleLogout}>

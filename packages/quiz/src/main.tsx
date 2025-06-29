@@ -11,12 +11,12 @@ import {
   CreateUserPage,
   DiscoverPage,
   ErrorPage,
-  GameHistoryPage,
   GamePage,
   GameResultsPage,
   HomePage,
   JoinPage,
   LoginPage,
+  ProfileGamesPage,
   ProfilePage,
   QuizCreatorPage,
   QuizDetailsPage,
@@ -73,14 +73,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/game/history',
-        element: (
-          <ProtectedRoute>
-            <GameHistoryPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
         path: '/game/results/:gameID',
         element: (
           <ProtectedRoute>
@@ -101,6 +93,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <QuizzesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/profile/games',
+        element: (
+          <ProtectedRoute>
+            <ProfileGamesPage />
           </ProtectedRoute>
         ),
       },

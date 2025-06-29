@@ -4,11 +4,11 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
-import GameHistoryPageUI from './GameHistoryPageUI'
+import ProfileGamesPageUI from './ProfileGamesPageUI'
 
 const now = new Date('2025-04-27T09:54:14.000Z')
 
-describe('GameHistoryPageUI', () => {
+describe('ProfileGamesPageUI', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     vi.setSystemTime(now)
@@ -18,10 +18,10 @@ describe('GameHistoryPageUI', () => {
     vi.useRealTimers()
   })
 
-  it('should render GameHistoryPageUI with results', async () => {
+  it('should render ProfileGamesPageUI with results', async () => {
     const { container } = render(
       <MemoryRouter>
-        <GameHistoryPageUI
+        <ProfileGamesPageUI
           items={[
             {
               id: '1de06ead-16f0-47af-b8ba-63279267ffd3',
@@ -88,10 +88,10 @@ describe('GameHistoryPageUI', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render GameHistoryPageUI with no results', async () => {
+  it('should render ProfileGamesPageUI with no results', async () => {
     const { container } = render(
       <MemoryRouter>
-        <GameHistoryPageUI
+        <ProfileGamesPageUI
           items={[]}
           total={0}
           limit={0}
