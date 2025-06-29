@@ -8,12 +8,14 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
+import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
+
 import QuizDetailsPageUI from './QuizDetailsPageUI'
 
 const meta = {
   title: 'Pages/QuizDetailsPage',
   component: QuizDetailsPageUI,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockAuth],
   parameters: {
     layout: 'fullscreen',
   },
