@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { JwtModule } from '@nestjs/jwt'
 import * as jwt from 'jsonwebtoken'
 
@@ -46,6 +47,7 @@ import { AuthService } from './services'
         }
       },
     }),
+    EventEmitterModule,
     GameModule,
     UserModule,
   ],

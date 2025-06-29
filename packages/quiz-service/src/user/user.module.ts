@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 
 import { UserController, UserProfileController } from './controllers'
-import { UserRepository, UserService } from './services'
+import { UserEventHandler, UserRepository, UserService } from './services'
 import { LocalUserSchema, User, UserSchema } from './services/models/schemas'
 
 /**
@@ -18,9 +19,10 @@ import { LocalUserSchema, User, UserSchema } from './services/models/schemas'
         discriminators: [{ name: AuthProvider.Local, schema: LocalUserSchema }],
       },
     ]),
+    EventEmitterModule,
   ],
   controllers: [UserController, UserProfileController],
-  providers: [UserService, UserRepository],
+  providers: [UserService, UserRepository, UserEventHandler],
   exports: [UserService, UserRepository],
 })
 export class UserModule {}

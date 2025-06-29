@@ -58,6 +58,13 @@ export class User {
   defaultNickname?: string
 
   /**
+   * Date and time of the user's last successful login.
+   * This field is updated by listening to UserLoginEvent.
+   */
+  @Prop({ type: Date, required: false })
+  lastLoggedInAt?: Date
+
+  /**
    * Timestamp when the user was created (ISO-8601 string).
    */
   @Prop({ type: Date, default: now() })
