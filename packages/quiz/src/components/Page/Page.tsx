@@ -72,7 +72,7 @@ const Page: React.FC<PageProps> = ({
         <MenuItem icon={faUser} link="/profile/user">
           Profile
         </MenuItem>
-        <MenuItem icon={faLightbulb} link="/player/quizzes">
+        <MenuItem icon={faLightbulb} link="/profile/quizzes">
           Quizzes
         </MenuItem>
         <MenuItem icon={faClockRotateLeft} link="/game/history">
