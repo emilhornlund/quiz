@@ -17,7 +17,6 @@ import {
   HomePage,
   JoinPage,
   LoginPage,
-  PlayerLinkPage,
   ProfilePage,
   QuizCreatorPage,
   QuizDetailsPage,
@@ -102,14 +101,6 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <QuizzesPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/player/link',
-        element: (
-          <ProtectedRoute>
-            <PlayerLinkPage />
           </ProtectedRoute>
         ),
       },
