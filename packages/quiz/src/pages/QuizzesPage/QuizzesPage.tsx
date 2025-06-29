@@ -16,7 +16,7 @@ import { QuizzesPageUI } from './components'
 const QuizzesPage: FC = () => {
   const navigate = useNavigate()
 
-  const { getCurrentPlayerQuizzes } = useQuizServiceClient()
+  const { getProfileQuizzes } = useQuizServiceClient()
 
   const [searchParams, setSearchParams] = useState<{
     search?: string
@@ -31,8 +31,8 @@ const QuizzesPage: FC = () => {
   }>({ limit: DEFAULT_QUIZ_PAGINATION_LIMIT, offset: 0 })
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['currentPlayerQuizzes', searchParams],
-    queryFn: () => getCurrentPlayerQuizzes(searchParams),
+    queryKey: ['myProfileQuizzes', searchParams],
+    queryFn: () => getProfileQuizzes(searchParams),
   })
 
   return (
