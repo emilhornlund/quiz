@@ -1,4 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { JwtService } from '@nestjs/jwt'
 import {
   AuthLoginRequestDto,
@@ -15,7 +16,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { GameRepository } from '../../game/services'
 import { UserService } from '../../user/services'
 
-import { getTokenAuthorities, getTokenExpiresIn } from './utils'
+import { UserLoginEvent } from './models'
+import {
+  getTokenAuthorities,
+  getTokenExpiresIn,
+  USER_LOGIN_EVENT_KEY,
+} from './utils'
 
 /**
  * Service responsible for authenticating users and managing JWT token
@@ -32,11 +38,13 @@ export class AuthService {
    * @param userService - Service for user credential verification.
    * @param gameRepository - Repository for accessing game data.
    * @param jwtService - Service for generating and verifying JWT tokens.
+   * @param eventEmitter    - EventEmitter2 instance for emitting authentication-related events.
    */
   constructor(
     private readonly userService: UserService,
     private readonly gameRepository: GameRepository,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   /**
@@ -49,11 +57,16 @@ export class AuthService {
   public async login(
     authLoginRequestDto: AuthLoginRequestDto,
   ): Promise<AuthLoginResponseDto> {
-    const user = await this.userService.verifyUserCredentialsOrThrow(
+    const { _id: userId } = await this.userService.verifyUserCredentialsOrThrow(
       authLoginRequestDto.email,
       authLoginRequestDto.password,
     )
-    return this.signTokenPair(user._id, TokenScope.User)
+
+    const tokenPair = await this.signTokenPair(userId, TokenScope.User)
+
+    await this.emitUserLoginEvent(userId)
+
+    return tokenPair
   }
 
   /**
@@ -133,7 +146,17 @@ export class AuthService {
     }
 
     this.logger.debug(`Refreshing token with userId '${payload.sub}'.`)
-    return this.signTokenPair(payload.sub, payload.scope, additionalClaims)
+    const tokenPair = await this.signTokenPair(
+      payload.sub,
+      payload.scope,
+      additionalClaims,
+    )
+
+    if (payload.scope === TokenScope.User) {
+      await this.emitUserLoginEvent(payload.sub)
+    }
+
+    return tokenPair
   }
 
   /**
@@ -212,5 +235,25 @@ export class AuthService {
         expiresIn,
       },
     )
+  }
+
+  /**
+   * Emits a UserLoginEvent to notify subscribers that a user has logged in.
+   *
+   * @param userId - The unique identifier of the user whose login event is emitted.
+   * @returns A Promise that resolves once the event has been emitted (errors are caught and logged).
+   * @private
+   */
+  private async emitUserLoginEvent(userId: string): Promise<void> {
+    const event: UserLoginEvent = { userId, date: new Date() }
+    try {
+      this.eventEmitter.emit(USER_LOGIN_EVENT_KEY, event)
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.error(
+        `Failed to emit user login event for userId '${userId}': '${message}.'`,
+        stack,
+      )
+    }
   }
 }
