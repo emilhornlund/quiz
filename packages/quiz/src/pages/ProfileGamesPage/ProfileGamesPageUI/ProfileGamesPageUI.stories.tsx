@@ -5,16 +5,16 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { withMockAuth } from '../../../../.storybook/mockAuthContext.tsx'
 
-import GameHistoryPageUI from './GameHistoryPageUI'
+import ProfileGamesPageUI from './ProfileGamesPageUI'
 
 const meta = {
-  title: 'Pages/GameHistoryPage',
-  component: GameHistoryPageUI,
+  title: 'Pages/ProfileGamesPage',
+  component: ProfileGamesPageUI,
   decorators: [withRouter, withMockAuth],
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof GameHistoryPageUI>
+} satisfies Meta<typeof ProfileGamesPageUI>
 
 export default meta
 type Story = StoryObj<typeof meta>
