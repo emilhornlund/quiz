@@ -17,7 +17,7 @@ import {
 } from '../../../../components'
 import QuizTableFilter from '../../../../components/QuizTableFilter'
 
-export interface QuizzesPageUISearchParams {
+export interface ProfileQuizzesPageUISearchParams {
   search?: string
   visibility?: QuizVisibility
   category?: QuizCategory
@@ -29,16 +29,16 @@ export interface QuizzesPageUISearchParams {
   offset?: number
 }
 
-export interface QuizzesPageUIProps {
+export interface ProfileQuizzesPageUIProps {
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
   isError: boolean
-  onChangeSearchParams: (params: QuizzesPageUISearchParams) => void
+  onChangeSearchParams: (params: ProfileQuizzesPageUISearchParams) => void
   onCreateQuiz: () => void
 }
 
-const QuizzesPageUI: FC<QuizzesPageUIProps> = ({
+const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
   quizzes,
   pagination,
   isLoading,
@@ -48,7 +48,9 @@ const QuizzesPageUI: FC<QuizzesPageUIProps> = ({
 }) => {
   const [hasSearchFilter, setHasSearchFilter] = useState<boolean>(false)
 
-  const handleSearchFilterChange = (params: QuizzesPageUISearchParams) => {
+  const handleSearchFilterChange = (
+    params: ProfileQuizzesPageUISearchParams,
+  ) => {
     onChangeSearchParams({ ...params, offset: 0 })
     setHasSearchFilter(
       !!params.search?.length ||
@@ -106,4 +108,4 @@ const QuizzesPageUI: FC<QuizzesPageUIProps> = ({
   )
 }
 
-export default QuizzesPageUI
+export default ProfileQuizzesPageUI
