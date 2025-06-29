@@ -236,19 +236,19 @@ export const useQuizServiceClient = () => {
     })
 
   /**
-   * Retrieves the quizzes associated with the current player.
+   * Retrieves the quizzes associated with the current user.
    *
    * @param options.limit - The maximum number of quizzes to retrieve per page.
    * @param options.offset - The number of quizzes to skip before starting retrieval.
    *
    * @returns A promise resolving to the quizzes in a paginated format as a `PaginatedQuizResponseDto`.
    */
-  const getCurrentPlayerQuizzes = (options: {
+  const getProfileQuizzes = (options: {
     limit: number
     offset: number
   }): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>(
-      `/client/quizzes${parseQueryParams(options)}`,
+      `/profile/quizzes${parseQueryParams(options)}`,
     )
 
   /**
@@ -541,7 +541,7 @@ export const useQuizServiceClient = () => {
     register,
     getUserProfile,
     updateUserProfile,
-    getCurrentPlayerQuizzes,
+    getProfileQuizzes,
     createQuiz,
     getQuiz,
     getPublicQuizzes,
