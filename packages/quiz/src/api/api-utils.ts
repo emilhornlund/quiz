@@ -6,7 +6,7 @@ import { notifyError } from '../utils/notification.ts'
 /**
  * Represents the structure of a POST body for API requests.
  */
-export type ApiPostBody = { [key: string]: unknown }
+export type ApiPostBody = object
 
 /**
  * Represents an error that occurs during an API call.
