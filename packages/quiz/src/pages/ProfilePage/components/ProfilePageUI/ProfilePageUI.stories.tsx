@@ -17,6 +17,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default = {
   args: {
-    onNicknameChange: () => undefined,
+    values: { email: '', givenName: '', familyName: '', defaultNickname: '' },
+    loading: false,
+    onChange: () => undefined,
   },
 } satisfies Story
