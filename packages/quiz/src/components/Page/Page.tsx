@@ -2,7 +2,6 @@ import {
   faBinoculars,
   faClockRotateLeft,
   faLightbulb,
-  faLink,
   faRightFromBracket,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -79,9 +78,7 @@ const Page: React.FC<PageProps> = ({
         <MenuItem icon={faClockRotateLeft} link="/game/history">
           History
         </MenuItem>
-        <MenuItem icon={faLink} link="/player/link">
-          Link
-        </MenuItem>
+        <MenuSeparator />
         <MenuItem icon={faRightFromBracket} onClick={handleLogout}>
           Logout
         </MenuItem>
