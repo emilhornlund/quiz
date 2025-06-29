@@ -1,6 +1,7 @@
 import {
   AuthLoginRequestDto,
   AuthLoginResponseDto,
+  AuthRefreshRequestDto,
   CreateGameResponseDto,
   CreateUserRequestDto,
   CreateUserResponseDto,
@@ -27,69 +28,74 @@ import { notifyError, notifySuccess } from '../utils/notification.ts'
 
 import {
   ApiPostBody,
+  isTokenExpired,
   parseQueryParams,
   parseResponseAndHandleError,
   resolveUrl,
 } from './api-utils.ts'
 
 /**
- * Provides a set of utility functions to interact with the quiz service API.
+ * Hook for interacting with the Quiz service API.
  *
- * This hook includes methods for making API requests (GET, POST, PUT, DELETE).
- * It also provides specific methods for retrieving player information and associated quizzes.
+ * Automatically handles:
+ * - CRUD for quizzes
+ * - Game session actions
+ * - Media uploads
+ * - Authentication (including token refresh on expiry or 401)
  *
- * @returns An object containing the following methods:
- * - `getUserProfile`: Retrieves information about the current player.
- * - `getCurrentPlayerQuizzes`: Retrieves quizzes associated with the current player.
+ * @returns An object containing the various API methods.
  */
 export const useQuizServiceClient = () => {
   const { accessToken, refreshToken, setAuth } = useAuthContext()
 
   /**
-   * Makes a generic API request using the specified HTTP method and parameters.
+   * Makes an HTTP request to the Quiz API, handling token expiry & retry.
    *
-   * @template T - The expected type of the API response.
-   * @param method - The HTTP method (e.g., 'GET', 'POST').
-   * @param path - The relative path to the API endpoint.
-   * @param requestBody - The optional request body for POST or PUT requests.
-   * @param token - The optional authentication token. If not provided, it will be retrieved automatically.
-   * @returns A promise resolving to the API response as type `T`.
+   * @template T - Expected response type
+   * @param {'GET'|'POST'|'PUT'|'DELETE'} method - HTTP verb
+   * @param {string} path - API endpoint (relative)
+   * @param {ApiPostBody} [body] - Payload for POST/PUT/DELETE
+   * @param {string} [overrideToken] - If provided, use this token instead of context
+   * @returns {Promise<T>} - Parsed JSON response
    */
   const apiFetch = async <T extends object | void>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
-    requestBody?: ApiPostBody,
-    token?: string,
+    body?: ApiPostBody,
+    overrideToken?: string,
   ): Promise<T> => {
-    token = token || accessToken
+    let token = overrideToken || accessToken
 
-    const options = {
-      method,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      ...(requestBody ? { body: JSON.stringify(requestBody) } : {}),
+    // 1) Preemptively refresh expired accessToken (skip if we're already refreshing)
+    if (
+      !overrideToken &&
+      isTokenExpired(accessToken) &&
+      refreshToken &&
+      path !== '/auth/refresh'
+    ) {
+      const refreshed = await refresh({ refreshToken })
+      token = refreshed.accessToken
     }
 
-    const response = await fetch(resolveUrl(path), options)
+    // Build headers; omit auth header on the refresh endpoint
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+    if (token && path !== '/auth/refresh') {
+      headers.Authorization = `Bearer ${token}`
+    }
 
-    if (response.status === 401 && refreshToken) {
-      return apiPost<AuthLoginResponseDto>('/auth/refresh', {
-        refreshToken,
-      }).then((refreshAuthResponse) => {
-        setAuth({
-          accessToken: refreshAuthResponse.accessToken,
-          refreshToken: refreshAuthResponse.refreshToken,
-        })
-        return apiFetch<T>(
-          method,
-          path,
-          requestBody,
-          refreshAuthResponse.accessToken,
-        )
-      })
+    const response = await fetch(resolveUrl(path), {
+      method,
+      headers,
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    })
+
+    // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
+    if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
+      const refreshed = await refresh({ refreshToken })
+      return apiFetch<T>(method, path, body, refreshed.accessToken)
     }
 
     return parseResponseAndHandleError<T>(response)
@@ -162,6 +168,26 @@ export const useQuizServiceClient = () => {
       })
       return loginAuthResponse
     })
+
+  /**
+   * Sends a refresh request to the API and stores the returned authentication tokens.
+   *
+   * @param request - The request containing the refresh token.
+   *
+   * @returns A promise that resolves to the login response with access and refresh tokens.
+   */
+  const refresh = (
+    request: AuthRefreshRequestDto,
+  ): Promise<AuthLoginResponseDto> =>
+    apiPost<AuthLoginResponseDto>('/auth/refresh', request).then(
+      (refreshed) => {
+        setAuth({
+          accessToken: refreshed.accessToken,
+          refreshToken: refreshed.refreshToken,
+        })
+        return refreshed
+      },
+    )
 
   /**
    * Sends a registration request to the API to create a new user account.
