@@ -449,11 +449,13 @@ export const useQuizServiceClient = () => {
    *
    * @returns A promise that resolves to a paginated list of past games.
    */
-  const getPaginatedGameHistory = (options: {
+  const getProfileGames = (options: {
     limit: number
     offset: number
   }): Promise<PaginatedGameHistoryDto> =>
-    apiGet<PaginatedGameHistoryDto>(`/client/games${parseQueryParams(options)}`)
+    apiGet<PaginatedGameHistoryDto>(
+      `/profile/games${parseQueryParams(options)}`,
+    )
 
   /**
    * Fetches the results for a completed game by its ID.
@@ -556,7 +558,7 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     addCorrectAnswer,
     deleteCorrectAnswer,
-    getPaginatedGameHistory,
+    getProfileGames,
     getGameResults,
     searchPhotos,
     uploadImage,
