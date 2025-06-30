@@ -11,6 +11,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -23,11 +24,12 @@ import { Authority, TokenScope } from '@quiz/common'
 import { ParseGamePINPipe } from '../../game/pipes'
 import { AuthService } from '../services'
 
-import { Public } from './decorators'
+import { IpAddress, Public, UserAgent } from './decorators'
 import {
   AuthLoginRequest,
   AuthLoginResponse,
   AuthRefreshRequest,
+  AuthRevokeRequest,
 } from './models'
 
 /**
@@ -48,6 +50,8 @@ export class AuthController {
    * then issues a new access token and refresh token.
    *
    * @param authLoginRequest - Request containing the user's email and password.
+   * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
+   * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
    * @returns Promise resolving to an AuthLoginResponse with both tokens.
    */
   @Public()
@@ -71,8 +75,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async login(
     @Body() authLoginRequest: AuthLoginRequest,
+    @IpAddress() ipAddress: string,
+    @UserAgent() userAgent: string,
   ): Promise<AuthLoginResponse> {
-    return this.authService.login(authLoginRequest)
+    return this.authService.login(authLoginRequest, ipAddress, userAgent)
   }
 
   /**
@@ -82,6 +88,8 @@ export class AuthController {
    *
    * @param gamePIN - A 6-digit PIN that identifies the game.
    * @param authorization - Optional Bearer token of an authenticated user.
+   * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
+   * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
    * @returns A pair of access + refresh tokens scoped to the specified game.
    */
   @Public()
@@ -106,11 +114,18 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async authenticateGame(
     @Param('gamePIN', new ParseGamePINPipe()) gamePIN: string,
+    @IpAddress() ipAddress: string,
+    @UserAgent() userAgent: string,
     @Headers('Authorization') authorization?: string,
   ): Promise<AuthLoginResponse> {
     const optionalUserId =
       await this.extractUserIdFromAuthorizationHeader(authorization)
-    return this.authService.authenticateGame(gamePIN, optionalUserId)
+    return this.authService.authenticateGame(
+      gamePIN,
+      ipAddress,
+      userAgent,
+      optionalUserId,
+    )
   }
 
   /**
@@ -118,6 +133,8 @@ export class AuthController {
    * (and rotates the refresh token if applicable).
    *
    * @param authRefreshRequest - Request containing the existing refresh token.
+   * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
+   * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
    * @returns Promise resolving to an AuthLoginResponse with new tokens.
    */
   @Public()
@@ -145,8 +162,33 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async refresh(
     @Body() authRefreshRequest: AuthRefreshRequest,
+    @IpAddress() ipAddress: string,
+    @UserAgent() userAgent: string,
   ): Promise<AuthLoginResponse> {
-    return this.authService.refresh(authRefreshRequest)
+    return this.authService.refresh(authRefreshRequest, ipAddress, userAgent)
+  }
+
+  /**
+   * Revokes the specified JWT token, invalidating it for future use.
+   *
+   * @param authRevokeRequest - Request containing the JWT token to revoke.
+   * @returns A promise that resolves when the token has been successfully revoked.
+   */
+  @Public()
+  @Post('/revoke')
+  @ApiOperation({
+    summary: 'Revoke a JWT token',
+    description:
+      'Invalidates the provided JWT so it can no longer be used for authentication.',
+  })
+  @ApiNoContentResponse({
+    description: 'Token successfully revoked.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async revoke(
+    @Body() authRevokeRequest: AuthRevokeRequest,
+  ): Promise<void> {
+    return this.authService.revoke(authRevokeRequest.token)
   }
 
   /**

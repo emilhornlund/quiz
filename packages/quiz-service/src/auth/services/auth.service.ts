@@ -10,13 +10,16 @@ import {
   GameTokenDto,
   TokenDto,
   TokenScope,
+  TokenType,
 } from '@quiz/common'
+import ms, { StringValue } from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
 import { GameRepository } from '../../game/services'
 import { UserService } from '../../user/services'
 
 import { UserLoginEvent } from './models'
+import { TokenRepository } from './token.repository'
 import {
   getTokenAuthorities,
   getTokenExpiresIn,
@@ -37,12 +40,14 @@ export class AuthService {
    *
    * @param userService - Service for user credential verification.
    * @param gameRepository - Repository for accessing game data.
+   * @param tokenRepository - Repository for persisting and retrieving token metadata.
    * @param jwtService - Service for generating and verifying JWT tokens.
-   * @param eventEmitter    - EventEmitter2 instance for emitting authentication-related events.
+   * @param eventEmitter - EventEmitter2 instance for emitting authentication-related events.
    */
   constructor(
     private readonly userService: UserService,
     private readonly gameRepository: GameRepository,
+    private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -51,18 +56,27 @@ export class AuthService {
    * Authenticates a user by email and password, then issues a new pair of JWTs.
    *
    * @param authLoginRequestDto - DTO containing the user's email and password.
+   * @param ipAddress - The client's IP address, used for logging and token metadata.
+   * @param userAgent - The client's User-Agent string, used for logging and token metadata.
    * @returns Promise resolving to an AuthLoginResponseDto with access & refresh tokens.
    * @throws BadCredentialsException if credentials are invalid.
    */
   public async login(
     authLoginRequestDto: AuthLoginRequestDto,
+    ipAddress: string,
+    userAgent: string,
   ): Promise<AuthLoginResponseDto> {
     const { _id: userId } = await this.userService.verifyUserCredentialsOrThrow(
       authLoginRequestDto.email,
       authLoginRequestDto.password,
     )
 
-    const tokenPair = await this.signTokenPair(userId, TokenScope.User)
+    const tokenPair = await this.signTokenPair(
+      userId,
+      TokenScope.User,
+      ipAddress,
+      userAgent,
+    )
 
     await this.emitUserLoginEvent(userId)
 
@@ -73,12 +87,16 @@ export class AuthService {
    * Authenticate into a game using its PIN.
    *
    * @param gamePIN - The game’s unique 6-digit PIN.
+   * @param ipAddress - The client's IP address, used for logging and token metadata.
+   * @param userAgent - The client's User-Agent string, used for logging and token metadata.
    * @param userId - Optional user ID to reuse (from a valid Game‐scoped user token).
    *                 If omitted, an anonymous participant ID is generated.
    * @returns Access + refresh tokens scoped to that game.
    */
   public async authenticateGame(
     gamePIN: string,
+    ipAddress: string,
+    userAgent: string,
     userId?: string,
   ): Promise<AuthLoginResponseDto> {
     const game = await this.gameRepository.findGameByPINOrThrow(gamePIN)
@@ -103,21 +121,31 @@ export class AuthService {
       `Authenticating game '${gameId}' and participant '${participantId}:${participantType}'.`,
     )
 
-    return this.signTokenPair(participantId, TokenScope.Game, {
-      gameId,
-      participantType,
-    })
+    return this.signTokenPair(
+      participantId,
+      TokenScope.Game,
+      ipAddress,
+      userAgent,
+      {
+        gameId,
+        participantType,
+      },
+    )
   }
 
   /**
    * Validates the provided refresh token and issues a new pair of JWTs.
    *
    * @param authRefreshRequestDto - DTO containing the refresh token.
+   * @param ipAddress - The client's IP address, used for logging and token metadata.
+   * @param userAgent - The client's User-Agent string, used for logging and token metadata.
    * @returns Promise resolving to an AuthLoginResponseDto with fresh tokens.
    * @throws UnauthorizedException if token is invalid or missing REFRESH_AUTH authority.
    */
   public async refresh(
     authRefreshRequestDto: AuthRefreshRequestDto,
+    ipAddress: string,
+    userAgent: string,
   ): Promise<AuthLoginResponseDto> {
     let payload: TokenDto
 
@@ -149,6 +177,8 @@ export class AuthService {
     const tokenPair = await this.signTokenPair(
       payload.sub,
       payload.scope,
+      ipAddress,
+      userAgent,
       additionalClaims,
     )
 
@@ -160,10 +190,32 @@ export class AuthService {
   }
 
   /**
+   * Revokes the specified JWT token.
+   *
+   * @param token - The JWT string that should be invalidated.
+   * @returns A promise that resolves when the token has been revoked.
+   */
+  public async revoke(token: string): Promise<void> {
+    try {
+      const { jti } = this.jwtService.decode<TokenDto>(token)
+
+      const document = await this.tokenRepository.findByIdOrThrow(jti)
+      if (document) {
+        return this.tokenRepository.deleteByPairId(document.pairId)
+      }
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.debug(`Failed to revoke token: '${message}'.`, stack)
+    }
+  }
+
+  /**
    * Generates a new access token (15m) and refresh token (30d) for the given user.
    *
    * @param subject - The subject (user ID) for whom to sign the tokens.
    * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
+   * @param ipAddress - The client's IP address to record in the token metadata.
+   * @param userAgent - The client's User-Agent string to record in the token metadata.
    * @param additionalClaims - Extra payload (e.g. gameId, participantType).
    * @returns Promise resolving to AuthLoginResponseDto with both tokens.
    * @private
@@ -171,18 +223,29 @@ export class AuthService {
   private async signTokenPair(
     subject: string,
     scope: TokenScope,
+    ipAddress: string,
+    userAgent: string,
     additionalClaims?: Record<string, unknown>,
   ): Promise<AuthLoginResponseDto> {
+    const pairId = uuidv4()
+
     const accessToken = await this.signToken(
+      pairId,
       subject,
       scope,
       false,
+      ipAddress,
+      userAgent,
       additionalClaims,
     )
+
     const refreshToken = await this.signToken(
+      pairId,
       subject,
       scope,
       true,
+      ipAddress,
+      userAgent,
       additionalClaims,
     )
     return { accessToken, refreshToken }
@@ -208,33 +271,56 @@ export class AuthService {
   /**
    * Signs a JWT for the specified scope and token type.
    *
+   * @param pairId - Unique identifier linking an access token and its refresh token.
    * @param subject - The JWT “sub” claim, typically a user ID or game participant ID.
    * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
    * @param isRefreshToken - If true, issues a refresh token (long-lived); otherwise an access token (short-lived).
+   * @param ipAddress  - The client's IP address to record in the token metadata.
+   * @param userAgent  - The client's User-Agent string to record in the token metadata.
    * @param additionalClaims - Extra JWT payload.
    * @returns A promise resolving to the signed JWT string.
    * @private
    */
   private async signToken(
+    pairId: string,
     subject: string,
     scope: TokenScope,
     isRefreshToken: boolean,
+    ipAddress: string,
+    userAgent: string,
     additionalClaims?: Record<string, unknown>,
   ): Promise<string> {
     const authorities = getTokenAuthorities(scope, isRefreshToken)
     const expiresIn = getTokenExpiresIn(isRefreshToken)
 
-    return this.jwtService.signAsync(
+    const jwtId = uuidv4()
+
+    const token = await this.jwtService.signAsync(
       {
         scope,
         authorities,
         ...(additionalClaims || {}),
       },
       {
+        jwtid: jwtId,
         subject,
         expiresIn,
       },
     )
+
+    await this.tokenRepository.create({
+      _id: jwtId,
+      pairId,
+      type: isRefreshToken ? TokenType.Refresh : TokenType.Access,
+      scope,
+      principalId: subject,
+      ipAddress,
+      userAgent,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + ms(expiresIn as StringValue)),
+    })
+
+    return token
   }
 
   /**

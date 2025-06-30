@@ -19,6 +19,8 @@ describe('AuthService', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* gameRepository */ {} as any,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /* tokenRepository */ {} as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* jwtService     */ {} as any,
       /* eventEmitter   */ eventEmitter,
     )

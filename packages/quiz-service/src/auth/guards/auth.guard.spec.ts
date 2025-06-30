@@ -127,6 +127,7 @@ describe('AuthGuard', () => {
   it('should authenticate a User scope and attach user', async () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
     const token: TokenDto = {
+      jti: 'jwt-id',
       sub: 'user-id',
       scope: TokenScope.User,
       authorities: [],
@@ -156,6 +157,7 @@ describe('AuthGuard', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
 
     const token: TokenDto = {
+      jti: 'jwt-id',
       sub: 'no-such',
       scope: TokenScope.User,
       authorities: [],
@@ -180,6 +182,7 @@ describe('AuthGuard', () => {
 
   it('should authenticate a Game scope and attach gameId and participantType', async () => {
     const token: GameTokenDto = {
+      jti: 'jwt-id',
       sub: 'participant-id',
       scope: TokenScope.Game,
       authorities: [Authority.Game],
@@ -204,6 +207,7 @@ describe('AuthGuard', () => {
 
   it('should throw if missing gameId or participantType in Game scope', async () => {
     const token: TokenDto = {
+      jti: 'jwt-id',
       sub: 'participant-id',
       scope: TokenScope.Game,
       authorities: [Authority.Game],
