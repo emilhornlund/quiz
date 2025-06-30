@@ -2,6 +2,24 @@ import { Authority } from './authority.enum'
 import { GameParticipantType } from './game-participant-type.enum'
 
 /**
+ * Enumeration of possible token types.
+ *
+ * - `Access`: Short-lived JWT for accessing protected resources.
+ * - `Refresh`: Long-lived JWT used to obtain new access tokens.
+ */
+export enum TokenType {
+  /**
+   * Short-lived JSON Web Token used for accessing protected resources.
+   */
+  Access = 'ACCESS',
+
+  /**
+   * Long-lived JSON Web Token used to refresh an access token.
+   */
+  Refresh = 'REFRESH',
+}
+
+/**
  * The functional area of the application that this token is intended for.
  */
 export enum TokenScope {
@@ -21,6 +39,11 @@ export enum TokenScope {
  * Represents a JSON Web Token (JWT) payload.
  */
 export interface TokenDto {
+  /**
+   * Unique identifier for the token (the JWT “jti” claim).
+   */
+  jti: string
+
   /**
    * The subject of the token, typically a user or client identifier.
    */
