@@ -1,5 +1,5 @@
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons'
 import {
+  CreateUserRequestDto,
   EMAIL_MAX_LENGTH,
   EMAIL_MIN_LENGTH,
   EMAIL_REGEX,
@@ -9,52 +9,64 @@ import {
   GIVEN_NAME_MAX_LENGTH,
   GIVEN_NAME_MIN_LENGTH,
   GIVEN_NAME_REGEX,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_REGEX,
   PLAYER_NICKNAME_MAX_LENGTH,
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
-  UpdateUserProfileRequestDto,
 } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
+import React, { FC, FormEvent, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Button, Page, TextField, Typography } from '../../../../components'
+import {
+  IconButtonArrowRight,
+  Page,
+  TextField,
+  Typography,
+} from '../../../../components'
 
-import styles from './ProfilePageUI.module.scss'
+import styles from './CreateUserPageUI.module.scss'
+import { getMessage, getTitle } from './helpers.ts'
 
-export type UpdateUserProfileFormFields = UpdateUserProfileRequestDto
+export type CreateUserFormFields = CreateUserRequestDto
 
-export interface ProfilePageUIProps {
-  values: UpdateUserProfileFormFields
-  loading: boolean
-  onChange: (request: UpdateUserProfileFormFields) => void
+type CreateUserValidFormFields = {
+  [key in keyof CreateUserFormFields]: boolean
 }
 
-const ProfilePageUI: FC<ProfilePageUIProps> = ({
-  values,
-  loading,
-  onChange,
-}) => {
-  const [formFields, setFormFields] =
-    useState<UpdateUserProfileFormFields>(values)
+export interface CreateUserPageUIProps {
+  loading: boolean
+  onSubmit: (values: CreateUserFormFields) => void
+}
 
-  useEffect(() => {
-    setFormFields(values)
-  }, [values])
+const CreateUserPageUI: FC<CreateUserPageUIProps> = ({ loading, onSubmit }) => {
+  const title = useMemo(getTitle, [])
+  const message = useMemo(getMessage, [])
 
-  const handleChangeFormField = <K extends keyof UpdateUserProfileFormFields>(
+  const [formFields, setFormFields] = useState<CreateUserFormFields>({
+    email: '',
+    password: '',
+    givenName: '',
+    familyName: '',
+    defaultNickname: '',
+  })
+
+  const handleChangeFormField = <K extends keyof CreateUserRequestDto>(
     key: K,
-    value: UpdateUserProfileFormFields[K],
+    value: CreateUserFormFields[K],
   ) => {
     setFormFields({ ...formFields, [key]: value })
   }
 
-  const [validFormFields, setValidFormFields] = useState<{
-    [key in keyof UpdateUserProfileFormFields]: boolean
-  }>({
-    email: false,
-    givenName: false,
-    familyName: false,
-    defaultNickname: false,
-  })
+  const [validFormFields, setValidFormFields] =
+    useState<CreateUserValidFormFields>({
+      email: false,
+      password: false,
+      givenName: false,
+      familyName: false,
+      defaultNickname: false,
+    })
 
   const isFormValid = useMemo(
     () => Object.values(validFormFields).every((valid) => !!valid),
@@ -62,7 +74,7 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
   )
 
   const handleChangeValidFormField = <
-    K extends keyof UpdateUserProfileFormFields,
+    K extends keyof CreateUserValidFormFields,
   >(
     key: K,
     valid: boolean,
@@ -76,18 +88,23 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    onChange(formFields)
+    onSubmit({
+      ...formFields,
+      givenName: formFields.givenName || undefined,
+      familyName: formFields.familyName || undefined,
+      defaultNickname: formFields.defaultNickname || undefined,
+    })
   }
 
   return (
-    <Page align="start" discover profile>
-      <Typography variant="subtitle">Shape your quiz identity</Typography>
-      <Typography variant="text" size="medium">
-        Update your personal details to keep your profile up to date. Your
-        information helps personalize your quiz experience and lets others
-        recognize you during games.
+    <Page>
+      <Typography variant="title" size="medium">
+        {title}
       </Typography>
-      <form className={styles.profileDetailsForm} onSubmit={handleSubmit}>
+      <Typography variant="text" size="small">
+        {message}
+      </Typography>
+      <form className={styles.createUserForm} onSubmit={handleSubmit}>
         <TextField
           id="email"
           type="text"
@@ -99,6 +116,25 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
           disabled={loading}
           onChange={(value) => handleChangeFormField('email', value as string)}
           onValid={(valid) => handleChangeValidFormField('email', valid)}
+          required
+        />
+        <TextField
+          id="password"
+          type="password"
+          placeholder="Password"
+          value={formFields.password}
+          minLength={PASSWORD_MIN_LENGTH}
+          maxLength={PASSWORD_MAX_LENGTH}
+          regex={{
+            value: PASSWORD_REGEX,
+            message:
+              'Must include at least ≥2 uppercase, ≥2 lowercase, ≥2 digits, ≥2 symbols.',
+          }}
+          disabled={loading}
+          onChange={(value) =>
+            handleChangeFormField('password', value as string)
+          }
+          onValid={(valid) => handleChangeValidFormField('password', valid)}
           required
         />
         <TextField
@@ -145,19 +181,22 @@ const ProfilePageUI: FC<ProfilePageUIProps> = ({
             handleChangeValidFormField('defaultNickname', valid)
           }
         />
-        <Button
-          id="update-user-button"
+        <IconButtonArrowRight
+          id="join"
           type="submit"
           kind="call-to-action"
-          size="normal"
-          value="Save"
-          icon={faFloppyDisk}
+          value="Let's go!"
           loading={loading}
           disabled={!isFormValid || loading}
         />
       </form>
+      <Link to={'/auth/login'}>
+        <Typography variant="link" size="small">
+          Got an account? Flash your credentials and come on in!
+        </Typography>
+      </Link>
     </Page>
   )
 }
 
-export default ProfilePageUI
+export default CreateUserPageUI
