@@ -17,8 +17,8 @@ import {
   JoinPage,
   LoginPage,
   ProfileGamesPage,
-  ProfilePage,
   ProfileQuizzesPage,
+  ProfileUserPage,
   QuizCreatorPage,
   QuizDetailsPage,
 } from './pages'
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         path: '/profile/user',
         element: (
           <ProtectedRoute>
-            <ProfilePage />
+            <ProfileUserPage />
           </ProtectedRoute>
         ),
       },

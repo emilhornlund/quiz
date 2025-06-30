@@ -1,7 +1,7 @@
-@use '../../styles/helpers';
-@use '../../styles/variables';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
 
-.createUserForm {
+.loginForm {
   display: flex;
   flex-direction: column;
 

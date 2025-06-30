@@ -3,13 +3,13 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it } from 'vitest'
 
-import LoginPage from './LoginPage'
+import CreateUserPageUI from './CreateUserPageUI'
 
-describe('LoginPage', () => {
-  it('should render LoginPage', async () => {
+describe('CreateUserPageUI', () => {
+  it('should render CreateUserPageUI', async () => {
     render(
       <MemoryRouter>
-        <LoginPage />
+        <CreateUserPageUI loading={false} onSubmit={() => undefined} />
       </MemoryRouter>,
     )
   })

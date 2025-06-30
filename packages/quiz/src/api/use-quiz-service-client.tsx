@@ -203,6 +203,9 @@ export const useQuizServiceClient = () => {
       givenName: request.givenName,
       familyName: request.familyName,
       defaultNickname: request.defaultNickname,
+    }).then((response) => {
+      notifySuccess('Welcome aboard! Your account is ready to roll')
+      return response
     })
 
   /**
