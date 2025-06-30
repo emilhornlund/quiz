@@ -85,7 +85,7 @@ const HomePage: FC = () => {
           disabled={!gamePINValid}
         />
       </form>
-      {isLoggedIn() ? (
+      {isLoggedIn ? (
         <Link to={'/quiz/create'}>
           <Typography variant="link" size="small">
             Create your own quiz and challenge others!

@@ -10,7 +10,7 @@ export interface ProtectedRouteProps {
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   const auth = useAuthContext()
 
-  if (!auth.isLoggedIn()) {
+  if (!auth.isLoggedIn) {
     return <Navigate to="/" replace />
   }
 
