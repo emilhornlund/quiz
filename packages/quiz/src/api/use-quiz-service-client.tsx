@@ -2,6 +2,7 @@ import {
   AuthLoginRequestDto,
   AuthLoginResponseDto,
   AuthRefreshRequestDto,
+  AuthRevokeRequestDto,
   CreateGameResponseDto,
   CreateUserRequestDto,
   CreateUserResponseDto,
@@ -186,6 +187,18 @@ export const useQuizServiceClient = () => {
         return refreshed
       },
     )
+
+  /**
+   * Revokes the specified authentication token.
+   *
+   * Sends a request to invalidate the given access or refresh token on the server,
+   * effectively logging out the user and preventing further use of that token.
+   *
+   * @param request - An object containing the token to be revoked.
+   * @returns A promise that resolves when the token has been successfully revoked.
+   */
+  const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
+    apiPost<void>('/auth/revoke', request).then()
 
   /**
    * Sends a registration request to the API to create a new user account.
@@ -543,6 +556,7 @@ export const useQuizServiceClient = () => {
 
   return {
     login,
+    revoke,
     register,
     getUserProfile,
     updateUserProfile,

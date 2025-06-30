@@ -1,5 +1,14 @@
-import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { AuthState } from '../../models'
 import { AUTH_LOCAL_STORAGE_KEY } from '../../utils/constants.ts'
 
@@ -40,7 +49,20 @@ export interface AuthContextProviderProps {
  * @returns A React component wrapping its children with the `AuthContext` provider.
  */
 const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
+  const { revoke } = useQuizServiceClient()
+
+  const navigate = useNavigate()
+
   const [auth, setAuth] = useState<AuthState>()
+
+  /**
+   * Determines whether the user is currently logged in by verifying
+   * the presence of both access and refresh tokens in state.
+   */
+  const isLoggedIn = useMemo(
+    () => !!(auth?.accessToken && auth?.refreshToken),
+    [auth],
+  )
 
   useEffect(() => {
     setAuth(
@@ -63,6 +85,22 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   }
 
   /**
+   * Logs out the current user by revoking their authentication token,
+   * clearing the stored authentication state, and navigating to the home page.
+   *
+   * If an access or refresh token exists, it will be sent to the server for revocation.
+   */
+  const handleLogout = useCallback(() => {
+    const token = auth?.accessToken || auth?.refreshToken
+    if (token) {
+      revoke({ token }).then(() => {
+        handleSetAuth(undefined)
+        navigate('/')
+      })
+    }
+  }, [auth, revoke, navigate])
+
+  /**
    * Memoized value for the `AuthContext`, containing the current authentication state
    * and update functions.
    */
@@ -70,10 +108,11 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
     () => ({
       accessToken: auth?.accessToken,
       refreshToken: auth?.refreshToken,
+      isLoggedIn,
       setAuth: handleSetAuth,
-      isLoggedIn: () => !!auth?.accessToken && !!auth?.refreshToken,
+      logout: handleLogout,
     }),
-    [auth],
+    [auth, isLoggedIn, handleLogout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
