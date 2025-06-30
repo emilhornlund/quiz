@@ -3,13 +3,13 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 
-import ProfilePageUI from './ProfilePageUI'
+import ProfileUserPageUI from './ProfileUserPageUI.tsx'
 
-describe('ProfilePageUI', () => {
-  it('should render ProfilePageUI', async () => {
+describe('ProfileUserPageUI', () => {
+  it('should render ProfileUserPageUI', async () => {
     const { container } = render(
       <MemoryRouter>
-        <ProfilePageUI
+        <ProfileUserPageUI
           values={{
             email: '',
             givenName: '',
