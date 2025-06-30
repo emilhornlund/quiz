@@ -31,7 +31,11 @@ import 'react-toastify/dist/ReactToastify.css'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Outlet />,
+    element: (
+      <AuthContextProvider>
+        <Outlet />
+      </AuthContextProvider>
+    ),
     children: [
       {
         path: '/',
@@ -138,9 +142,7 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
     <ToastContainer
       position="top-right"
