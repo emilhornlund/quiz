@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from '../../components'
+import { useAuthContext } from '../../context/auth'
 
 import styles from './HomePage.module.scss'
 
@@ -24,6 +25,8 @@ const MESSAGES = [
 ]
 
 const HomePage: FC = () => {
+  const { isLoggedIn } = useAuthContext()
+
   const navigate = useNavigate()
 
   const { findGame } = useQuizServiceClient()
@@ -82,9 +85,19 @@ const HomePage: FC = () => {
           disabled={!gamePINValid}
         />
       </form>
-      <Link to={'/quiz/create'}>
-        <Typography variant="link">Create your own quiz</Typography>
-      </Link>
+      {isLoggedIn() ? (
+        <Link to={'/quiz/create'}>
+          <Typography variant="link" size="small">
+            Create your own quiz and challenge others!
+          </Typography>
+        </Link>
+      ) : (
+        <Link to={'/auth/login'}>
+          <Typography variant="link" size="small">
+            Want to create your own quiz? Log in to get started!
+          </Typography>
+        </Link>
+      )}
     </Page>
   )
 }
