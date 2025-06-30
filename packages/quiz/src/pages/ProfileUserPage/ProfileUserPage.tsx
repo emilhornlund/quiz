@@ -4,9 +4,9 @@ import React, { FC, useState } from 'react'
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
 
-import { ProfilePageUI, UpdateUserProfileFormFields } from './components'
+import { ProfileUserPageUI, UpdateUserProfileFormFields } from './components'
 
-const ProfilePage: FC = () => {
+const ProfileUserPage: FC = () => {
   const { getUserProfile, updateUserProfile } = useQuizServiceClient()
 
   const [isSavingUserProfile, setIsSavingUserProfile] = useState(false)
@@ -34,7 +34,7 @@ const ProfilePage: FC = () => {
   }
 
   return (
-    <ProfilePageUI
+    <ProfileUserPageUI
       values={{
         email: data.email,
         givenName: data.givenName,
@@ -47,4 +47,4 @@ const ProfilePage: FC = () => {
   )
 }
 
-export default ProfilePage
+export default ProfileUserPage

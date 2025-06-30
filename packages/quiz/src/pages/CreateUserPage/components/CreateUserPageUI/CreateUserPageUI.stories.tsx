@@ -1,19 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
-import CreateUserPage from './CreateUserPage'
+import CreateUserPageUI from './CreateUserPageUI'
 
 const meta = {
-  component: CreateUserPage,
+  title: 'Pages/CreateUserPage',
+  component: CreateUserPageUI,
   decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof CreateUserPage>
+} satisfies Meta<typeof CreateUserPageUI>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default = {
-  args: {},
+  args: {
+    loading: false,
+    onSubmit: () => undefined,
+  },
 } satisfies Story
