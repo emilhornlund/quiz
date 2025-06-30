@@ -7,8 +7,9 @@ import { AuthContext, AuthContextType } from '../src/context/auth'
 const mockAuth: AuthContextType = {
   accessToken: 'MOCK',
   refreshToken: 'MOCK',
+  isLoggedIn: true,
   setAuth: () => undefined,
-  isLoggedIn: () => true,
+  logout: () => undefined,
 }
 
 export const withMockAuth: Decorator = (
