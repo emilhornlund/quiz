@@ -1,3 +1,5 @@
+import { GameTokenDto, TokenDto, TokenScope, TokenType } from '@quiz/common'
+import { jwtDecode } from 'jwt-decode'
 import React, {
   FC,
   ReactNode,
@@ -9,26 +11,10 @@ import React, {
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
-import { AuthState } from '../../models'
+import { AuthState, ScopePayload } from '../../models'
 import { AUTH_LOCAL_STORAGE_KEY } from '../../utils/constants.ts'
 
 import { AuthContext, AuthContextType } from './auth-context.tsx'
-
-/**
- * Parses a JSON string into an object of type `T`, or returns `undefined` if the string is falsy.
- *
- * @template T - The expected type of the parsed object.
- * @param jsonString - The JSON string to parse.
- * @returns The parsed object of type `T` or `undefined` if the input is invalid.
- */
-const parseJSONString = <T extends AuthState>(
-  jsonString?: string | null,
-): T | undefined => {
-  if (!jsonString) {
-    return undefined
-  }
-  return JSON.parse(jsonString) as T
-}
 
 /**
  * Props for the `AuthContextProvider` component.
@@ -49,56 +35,167 @@ export interface AuthContextProviderProps {
  * @returns A React component wrapping its children with the `AuthContext` provider.
  */
 const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
+  /**
+   * revoke() — function from useQuizServiceClient for invalidating
+   * an access or refresh token on the server.
+   */
   const { revoke } = useQuizServiceClient()
 
+  /**
+   * Navigation function from react-router for programmatic route changes.
+   */
   const navigate = useNavigate()
 
-  const [auth, setAuth] = useState<AuthState>()
+  /**
+   * In-memory store of decoded token payloads per TokenScope and TokenType.
+   */
+  const [authState, setAuthState] = useState<AuthState>({
+    USER: undefined,
+    GAME: undefined,
+  })
 
   /**
-   * Determines whether the user is currently logged in by verifying
-   * the presence of both access and refresh tokens in state.
+   * `true` if there is a valid token pair in the User scope.
    */
-  const isLoggedIn = useMemo(
-    () => !!(auth?.accessToken && auth?.refreshToken),
-    [auth],
-  )
+  const isUserAuthenticated = useMemo(() => !!authState.USER, [authState])
 
+  /**
+   * `true` if there is a valid token pair in the Game scope.
+   */
+  const isGameAuthenticated = useMemo(() => !!authState.GAME, [authState])
+
+  /**
+   * On mount, hydrates authState from localStorage if data exists.
+   */
   useEffect(() => {
-    setAuth(
-      parseJSONString<AuthState>(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)),
-    )
+    const jsonString = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
+    if (jsonString) {
+      const newAuthState = JSON.parse(jsonString) as AuthState
+      setAuthState(newAuthState)
+    }
   }, [])
 
   /**
-   * Updates the auth information in the state and persists it to local storage.
-   *
-   * @param newAuth - The new auth object to set.
+   * Persists authState to localStorage whenever it changes.
    */
-  const handleSetAuth = (newAuth?: AuthState) => {
-    setAuth(newAuth)
-    if (newAuth) {
-      localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, JSON.stringify(newAuth))
+  useEffect(() => {
+    if (authState.USER || authState.GAME) {
+      localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, JSON.stringify(authState))
     } else {
       localStorage.removeItem(AUTH_LOCAL_STORAGE_KEY)
+    }
+  }, [authState])
+
+  /**
+   * Decodes a User-scope JWT into its typed payload.
+   *
+   * @param token - The raw JWT string to decode.
+   * @returns The `ScopePayload<TokenScope.User>` containing sub, exp, authorities, and token.
+   */
+  const decodeUserScopeTokenPayload = (
+    token: string,
+  ): ScopePayload<TokenScope.User> => {
+    const { sub, exp, authorities } = jwtDecode<TokenDto>(token)
+    return {
+      sub,
+      exp,
+      authorities,
+      token,
     }
   }
 
   /**
-   * Logs out the current user by revoking their authentication token,
-   * clearing the stored authentication state, and navigating to the home page.
+   * Decodes a Game-scope JWT into its typed payload (including gameId and participantType).
    *
-   * If an access or refresh token exists, it will be sent to the server for revocation.
+   * @param token - The raw JWT string to decode.
+   * @returns The `ScopePayload<TokenScope.Game>` containing sub, exp, authorities, gameId, participantType, and token.
    */
-  const handleLogout = useCallback(() => {
-    const token = auth?.accessToken || auth?.refreshToken
-    if (token) {
-      revoke({ token }).then(() => {
-        handleSetAuth(undefined)
-        navigate('/')
-      })
+  const decodeGameScopeTokenPayload = (
+    token: string,
+  ): ScopePayload<TokenScope.Game> => {
+    const { sub, exp, authorities, gameId, participantType } =
+      jwtDecode<GameTokenDto>(token)
+    return {
+      sub,
+      exp,
+      authorities,
+      token,
+      gameId,
+      participantType,
     }
-  }, [auth, revoke, navigate])
+  }
+
+  /**
+   * Stores a new access/refresh token pair for the given scope.
+   *
+   * Decodes each token and updates authState.
+   *
+   * @param scope - The TokenScope to update (User or Game).
+   * @param accessToken - The new access token string.
+   * @param refreshToken - The new refresh token string.
+   */
+  const handleSetTokenPair = useCallback(
+    (scope: TokenScope, accessToken: string, refreshToken: string) => {
+      setAuthState((prevState) => {
+        const modifiedAuthState = { ...prevState }
+        if (scope === TokenScope.User) {
+          modifiedAuthState.USER = {
+            [TokenType.Access]: decodeUserScopeTokenPayload(accessToken),
+            [TokenType.Refresh]: decodeUserScopeTokenPayload(refreshToken),
+          }
+        }
+        if (scope === TokenScope.Game) {
+          modifiedAuthState.GAME = {
+            [TokenType.Access]: decodeGameScopeTokenPayload(accessToken),
+            [TokenType.Refresh]: decodeGameScopeTokenPayload(refreshToken),
+          }
+        }
+        return modifiedAuthState
+      })
+    },
+    [setAuthState],
+  )
+
+  /**
+   * Clears all tokens for the specified TokenScope from authState.
+   *
+   * @param scope - The TokenScope to clear (User or Game).
+   */
+  const clearAuthState = useCallback(
+    (scope: TokenScope) => {
+      setAuthState((prevState) => {
+        const modifiedAuthState = { ...prevState }
+        if (scope === TokenScope.User) {
+          modifiedAuthState.USER = undefined
+        }
+        if (scope === TokenScope.Game) {
+          modifiedAuthState.GAME = undefined
+        }
+        return modifiedAuthState
+      })
+    },
+    [setAuthState],
+  )
+
+  /**
+   * Revokes the authentication token for the given scope via the API,
+   * then clears it from state and navigates home.
+   *
+   * @param scope - The TokenScope whose tokens should be revoked.
+   */
+  const revokeAuthToken = useCallback(
+    (scope: TokenScope) => {
+      const token =
+        authState[scope]?.ACCESS.token || authState[scope]?.REFRESH.token
+      if (token) {
+        revoke({ token }).then(() => {
+          clearAuthState(scope)
+          navigate('/')
+        })
+      }
+    },
+    [authState, clearAuthState, revoke, navigate],
+  )
 
   /**
    * Memoized value for the `AuthContext`, containing the current authentication state
@@ -106,13 +203,21 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    */
   const value = useMemo<AuthContextType>(
     () => ({
-      accessToken: auth?.accessToken,
-      refreshToken: auth?.refreshToken,
-      isLoggedIn,
-      setAuth: handleSetAuth,
-      logout: handleLogout,
+      user: authState.USER,
+      game: authState.GAME,
+      isUserAuthenticated,
+      isGameAuthenticated,
+      setTokenPair: handleSetTokenPair,
+      revokeUser: () => revokeAuthToken(TokenScope.User),
+      revokeGame: () => revokeAuthToken(TokenScope.Game),
     }),
-    [auth, isLoggedIn, handleLogout],
+    [
+      authState,
+      isUserAuthenticated,
+      isGameAuthenticated,
+      handleSetTokenPair,
+      revokeAuthToken,
+    ],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
