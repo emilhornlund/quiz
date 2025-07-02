@@ -18,9 +18,12 @@ import {
   QuizRequestDto,
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
+  TokenScope,
+  TokenType,
   UpdateUserProfileRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
+import { useCallback } from 'react'
 
 import { useAuthContext } from '../context/auth'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
@@ -45,25 +48,48 @@ import {
  * @returns An object containing the various API methods.
  */
 export const useQuizServiceClient = () => {
-  const { accessToken, refreshToken, setAuth } = useAuthContext()
+  const { user, game, setTokenPair } = useAuthContext()
+
+  /**
+   * Retrieves the token string for the specified scope and token type
+   * from the authentication context.
+   *
+   * @param scope - The TokenScope (User or Game) whose token to fetch.
+   * @param type - The TokenType (Access or Refresh) to retrieve.
+   * @returns The JWT/opaque token string, or `undefined` if not present.
+   */
+  const getToken = useCallback(
+    (scope: TokenScope, type: TokenType): string | undefined => {
+      switch (scope) {
+        case TokenScope.User:
+          return user?.[type].token
+        case TokenScope.Game:
+          return game?.[type].token
+      }
+    },
+    [user, game],
+  )
 
   /**
    * Makes an HTTP request to the Quiz API, handling token expiry & retry.
    *
    * @template T - Expected response type
-   * @param {'GET'|'POST'|'PUT'|'DELETE'} method - HTTP verb
-   * @param {string} path - API endpoint (relative)
-   * @param {ApiPostBody} [body] - Payload for POST/PUT/DELETE
-   * @param {string} [overrideToken] - If provided, use this token instead of context
+   * @param method - HTTP verb
+   * @param path - API endpoint (relative)
+   * @param body - Payload for POST/PUT/DELETE
+   * @param scope - The TokenScope to use when authorizing this request (User or Game).
+   * @param overrideToken - If provided, use this token instead of context
    * @returns {Promise<T>} - Parsed JSON response
    */
   const apiFetch = async <T extends object | void>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
-    body?: ApiPostBody,
+    body: ApiPostBody | undefined,
+    scope: TokenScope,
     overrideToken?: string,
   ): Promise<T> => {
-    let token = overrideToken || accessToken
+    let accessToken = overrideToken || getToken(scope, TokenType.Access)
+    let refreshToken = getToken(scope, TokenType.Refresh)
 
     // 1) Preemptively refresh expired accessToken (skip if we're already refreshing)
     if (
@@ -73,7 +99,9 @@ export const useQuizServiceClient = () => {
       path !== '/auth/refresh'
     ) {
       const refreshed = await refresh({ refreshToken })
-      token = refreshed.accessToken
+      setTokenPair(scope, refreshed.accessToken, refreshed.refreshToken)
+      accessToken = refreshed.accessToken
+      refreshToken = refreshed.refreshToken
     }
 
     // Build headers; omit auth header on the refresh endpoint
@@ -81,8 +109,8 @@ export const useQuizServiceClient = () => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     }
-    if (token && path !== '/auth/refresh') {
-      headers.Authorization = `Bearer ${token}`
+    if (accessToken && path !== '/auth/refresh') {
+      headers.Authorization = `Bearer ${accessToken}`
     }
 
     const response = await fetch(resolveUrl(path), {
@@ -94,7 +122,8 @@ export const useQuizServiceClient = () => {
     // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
     if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
       const refreshed = await refresh({ refreshToken })
-      return apiFetch<T>(method, path, body, refreshed.accessToken)
+      setTokenPair(scope, refreshed.accessToken, refreshed.refreshToken)
+      return apiFetch<T>(method, path, body, scope, refreshed.accessToken)
     }
 
     return parseResponseAndHandleError<T>(response)
@@ -105,10 +134,13 @@ export const useQuizServiceClient = () => {
    *
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
-  const apiGet = <T extends object | void>(path: string) =>
-    apiFetch<T>('GET', path, undefined)
+  const apiGet = <T extends object | void>(
+    path: string,
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('GET', path, undefined, scope)
 
   /**
    * Makes a POST request to the specified API endpoint.
@@ -116,12 +148,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the POST request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPost = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-  ) => apiFetch<T>('POST', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('POST', path, requestBody, scope)
 
   /**
    * Makes a PUT request to the specified API endpoint.
@@ -129,12 +163,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the PUT request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPut = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-  ) => apiFetch<T>('PUT', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('PUT', path, requestBody, scope)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -142,12 +178,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the DELETE request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiDelete = <T extends object | void>(
     path: string,
     requestBody?: ApiPostBody,
-  ) => apiFetch<T>('DELETE', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('DELETE', path, requestBody, scope)
 
   /**
    * Sends a login request to the API and stores the returned authentication tokens.
@@ -161,10 +199,11 @@ export const useQuizServiceClient = () => {
       email: request.email,
       password: request.password,
     }).then((loginAuthResponse) => {
-      setAuth({
-        accessToken: loginAuthResponse.accessToken,
-        refreshToken: loginAuthResponse.refreshToken,
-      })
+      setTokenPair(
+        TokenScope.User,
+        loginAuthResponse.accessToken,
+        loginAuthResponse.refreshToken,
+      )
       return loginAuthResponse
     })
 
@@ -178,15 +217,7 @@ export const useQuizServiceClient = () => {
   const refresh = (
     request: AuthRefreshRequestDto,
   ): Promise<AuthLoginResponseDto> =>
-    apiPost<AuthLoginResponseDto>('/auth/refresh', request).then(
-      (refreshed) => {
-        setAuth({
-          accessToken: refreshed.accessToken,
-          refreshToken: refreshed.refreshToken,
-        })
-        return refreshed
-      },
-    )
+    apiPost<AuthLoginResponseDto>('/auth/refresh', request)
 
   /**
    * Revokes the specified authentication token.
@@ -198,7 +229,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the token has been successfully revoked.
    */
   const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
-    apiPost<void>('/auth/revoke', request).then()
+    apiPost<void>('/auth/revoke', request).then(() => {})
 
   /**
    * Sends a registration request to the API to create a new user account.
@@ -351,7 +382,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the details of the found game as a `FindGameResponseDto`.
    */
   const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
-    apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
+    apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`, TokenScope.Game)
 
   /**
    * Creates a new game using the provided quizId.
@@ -372,7 +403,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the player has successfully joined the game.
    */
   const joinGame = (gameID: string, nickname: string): Promise<void> =>
-    apiPost<void>(`/games/${gameID}/players`, { nickname })
+    apiPost<void>(`/games/${gameID}/players`, { nickname }, TokenScope.Game)
 
   /**
    * Leaves an existing game using the provided game ID and player ID.
@@ -383,7 +414,11 @@ export const useQuizServiceClient = () => {
    * @returns A Promise that resolves when the player is successfully removed from the game.
    */
   const leaveGame = (gameID: string, playerID: string): Promise<void> =>
-    apiDelete<void>(`/games/${gameID}/players/${playerID}`)
+    apiDelete<void>(
+      `/games/${gameID}/players/${playerID}`,
+      undefined,
+      TokenScope.Game,
+    )
 
   /**
    * Marks the current task in the game as completed.
@@ -393,7 +428,11 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the task has been successfully completed.
    */
   const completeTask = (gameID: string) =>
-    apiPost(`/games/${gameID}/tasks/current/complete`, {}).then(() => {})
+    apiPost(
+      `/games/${gameID}/tasks/current/complete`,
+      {},
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Submits an answer to a question in the specified game.
@@ -424,7 +463,7 @@ export const useQuizServiceClient = () => {
       const { type, value } = submitQuestionAnswerRequest
       requestBody = { type, value }
     }
-    await apiPost(`/games/${gameID}/answers`, requestBody)
+    await apiPost(`/games/${gameID}/answers`, requestBody, TokenScope.Game)
   }
 
   /**
@@ -438,9 +477,11 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiPost(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
-      () => {},
-    )
+    apiPost(
+      `/games/${gameID}/tasks/current/correct_answers`,
+      answer,
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Deletes a correct answer from the current task in the specified game.
@@ -453,9 +494,11 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiDelete(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
-      () => {},
-    )
+    apiDelete(
+      `/games/${gameID}/tasks/current/correct_answers`,
+      answer,
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Retrieves the game history associated with the current player.
@@ -539,7 +582,7 @@ export const useQuizServiceClient = () => {
       }
 
       xhr.open('POST', resolveUrl('/media/uploads/photos'))
-      xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      xhr.setRequestHeader('Authorization', `Bearer ${user?.ACCESS.token}`)
       xhr.send(formData)
     })
   }

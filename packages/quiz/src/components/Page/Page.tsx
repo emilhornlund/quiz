@@ -41,7 +41,7 @@ const Page: React.FC<PageProps> = ({
   footer,
   children,
 }) => {
-  const { isLoggedIn, logout } = useAuthContext()
+  const { isUserAuthenticated, revokeUser } = useAuthContext()
 
   const navigate = useNavigate()
 
@@ -59,7 +59,7 @@ const Page: React.FC<PageProps> = ({
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev)
 
   const profileMenuItems = useMemo(() => {
-    if (!isLoggedIn || !profile) {
+    if (!isUserAuthenticated || !profile) {
       return null
     }
     return (
@@ -74,12 +74,12 @@ const Page: React.FC<PageProps> = ({
           Games
         </MenuItem>
         <MenuSeparator />
-        <MenuItem icon={faRightFromBracket} onClick={logout}>
+        <MenuItem icon={faRightFromBracket} onClick={revokeUser}>
           Logout
         </MenuItem>
       </>
     )
-  }, [profile, isLoggedIn, logout])
+  }, [profile, isUserAuthenticated, revokeUser])
 
   return (
     <div className={styles.main}>
@@ -89,15 +89,15 @@ const Page: React.FC<PageProps> = ({
           <span className={styles.text}>Klurigo</span>
         </button>
         <div className={styles.side}>
-          {isLoggedIn && discover && !isMobile && (
+          {isUserAuthenticated && discover && !isMobile && (
             <Link to="/discover">Discover</Link>
           )}
-          {!isLoggedIn && <Link to="/auth/login">Login</Link>}
-          {isLoggedIn && discover && header && !isMobile && (
+          {!isUserAuthenticated && <Link to="/auth/login">Login</Link>}
+          {isUserAuthenticated && discover && header && !isMobile && (
             <div className={styles.verticalLine} />
           )}
           {header}
-          {isLoggedIn && profile && !isMobile && (
+          {isUserAuthenticated && profile && !isMobile && (
             <div
               className={styles.menuButtonWrapper}
               ref={profileMenuButtonRef}>
@@ -112,7 +112,7 @@ const Page: React.FC<PageProps> = ({
               </Menu>
             </div>
           )}
-          {isLoggedIn && isMobile && (discover || profile) && (
+          {isUserAuthenticated && isMobile && (discover || profile) && (
             <div className={styles.menuButtonWrapper} ref={mobileMenuButtonRef}>
               <button onClick={toggleMobileMenu} type="button">
                 <img src={Bars} alt="Menu" />
