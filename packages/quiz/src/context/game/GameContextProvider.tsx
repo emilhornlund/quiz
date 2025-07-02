@@ -4,6 +4,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
+import { useAuthContext } from '../auth'
 
 import { GameContext, GameContextType } from './game-context.tsx'
 
@@ -27,6 +28,7 @@ export interface GameContextProviderProps {
  * @returns A React component wrapping its children with the `GameContext` provider.
  */
 const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
+  const { revokeGame } = useAuthContext()
   const [gameID] = useGameIDQueryParam()
 
   const {
@@ -51,7 +53,9 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       submitQuestionAnswer: (request) =>
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
       leaveGame: (playerID: string) =>
-        gameID ? leaveGame(gameID, playerID) : Promise.reject(),
+        gameID
+          ? leaveGame(gameID, playerID).then(revokeGame)
+          : Promise.reject(),
       addCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
@@ -68,6 +72,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       leaveGame,
       addCorrectAnswer,
       deleteCorrectAnswer,
+      revokeGame,
     ],
   )
 

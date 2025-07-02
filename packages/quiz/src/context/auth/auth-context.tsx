@@ -1,3 +1,4 @@
+import { TokenScope } from '@quiz/common'
 import { createContext } from 'react'
 
 import { AuthState } from '../../models'
@@ -6,30 +7,38 @@ import { AuthState } from '../../models'
  * AuthContextType defines the shape of authentication-related data
  * and actions available throughout the app.
  *
- * @property accessToken - The current access authentication token, if any.
- * @property refreshToken - The current refresh authentication token, if any.
- * @property isLoggedIn - Indicates whether a user is currently authenticated.
- * @property setAuth - Function to update the authentication state.
- * @property logout - Function to log out the user by revoking tokens and clearing state.
+ * @property user               Decoded token payloads for the User scope.
+ * @property game               Decoded token payloads for the Game scope.
+ * @property isUserAuthenticated Indicates if the User scope has valid tokens.
+ * @property isGameAuthenticated Indicates if the Game scope has valid tokens.
+ * @property setTokenPair       Function to store new tokens for a given scope.
+ * @property revokeUser         Function to revoke User-scope tokens.
+ * @property revokeGame         Function to revoke Game-scope tokens.
  */
 export type AuthContextType = {
-  accessToken?: string
-  refreshToken?: string
-  isLoggedIn: boolean
-  setAuth: (auth?: AuthState) => void
-  logout: () => void
+  user?: AuthState[TokenScope.User]
+  game?: AuthState[TokenScope.Game]
+  isUserAuthenticated: boolean
+  isGameAuthenticated: boolean
+  setTokenPair: (
+    scope: TokenScope,
+    accessToken: string,
+    refreshToken: string,
+  ) => void
+  revokeUser: () => void
+  revokeGame: () => void
 }
 
 /**
- * A React context providing authentication-related state and functions.
- *
- * This context holds the user's tokens, login status, and methods to
- * update authentication or log out.
+ * React context providing authentication state (tokens + flags)
+ * and actions (setTokenPair, revokeUser/Game).
  */
 export const AuthContext = createContext<AuthContextType>({
-  accessToken: undefined,
-  refreshToken: undefined,
-  isLoggedIn: false,
-  setAuth: () => undefined,
-  logout: () => undefined,
+  user: undefined,
+  game: undefined,
+  isUserAuthenticated: false,
+  isGameAuthenticated: false,
+  setTokenPair: () => undefined,
+  revokeUser: () => undefined,
+  revokeGame: () => undefined,
 })
