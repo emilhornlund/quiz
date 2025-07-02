@@ -1,3 +1,4 @@
+import { TokenScope } from '@quiz/common'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -44,11 +45,19 @@ const router = createBrowserRouter([
       },
       {
         path: '/auth/login',
-        element: <LoginPage />,
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <LoginPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/auth/register',
-        element: <CreateUserPage />,
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <CreateUserPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/discover',
@@ -61,15 +70,17 @@ const router = createBrowserRouter([
       {
         path: '/join',
         element: (
-          <GameContextProvider>
-            <JoinPage />
-          </GameContextProvider>
+          <ProtectedRoute scope={TokenScope.Game}>
+            <GameContextProvider>
+              <JoinPage />
+            </GameContextProvider>
+          </ProtectedRoute>
         ),
       },
       {
         path: '/game',
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute scope={TokenScope.Game}>
             <GameContextProvider>
               <GamePage />
             </GameContextProvider>
