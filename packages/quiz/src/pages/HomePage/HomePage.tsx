@@ -25,7 +25,7 @@ const MESSAGES = [
 ]
 
 const HomePage: FC = () => {
-  const { isLoggedIn } = useAuthContext()
+  const { isUserAuthenticated } = useAuthContext()
 
   const navigate = useNavigate()
 
@@ -85,7 +85,7 @@ const HomePage: FC = () => {
           disabled={!gamePINValid}
         />
       </form>
-      {isLoggedIn ? (
+      {isUserAuthenticated ? (
         <Link to={'/quiz/create'}>
           <Typography variant="link" size="small">
             Create your own quiz and challenge others!
