@@ -159,6 +159,17 @@ export class AuthService {
       throw new UnauthorizedException()
     }
 
+    try {
+      await this.tokenRepository.findByIdOrThrow(payload.jti)
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.debug(
+        `Unable to retrieve existing refresh token: '${message}'.`,
+        stack,
+      )
+      throw new UnauthorizedException()
+    }
+
     if (!payload.authorities.includes(Authority.RefreshAuth)) {
       this.logger.debug(
         `Failed to refresh token since missing '${Authority.RefreshAuth}' authority.`,
@@ -199,7 +210,7 @@ export class AuthService {
     try {
       const { jti } = this.jwtService.decode<TokenDto>(token)
 
-      const document = await this.tokenRepository.findByIdOrThrow(jti)
+      const document = await this.tokenRepository.findById(jti)
       if (document) {
         return this.tokenRepository.deleteByPairId(document.pairId)
       }

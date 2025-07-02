@@ -307,11 +307,41 @@ describe('AuthController (e2e)', () => {
         })
     })
 
-    it('should return 400 bad request when token has expired', async () => {
+    it('should return 401 unauthorized when token has expired', async () => {
       const refreshToken = await jwtService.signAsync(
         { authorities: DEFAULT_REFRESH_AUTHORITIES },
         { subject: uuidv4(), expiresIn: '-1d' },
       )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/refresh')
+        .set({ 'User-Agent': 'mock-user-agent' })
+        .send({
+          refreshToken,
+        })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 401 unauthorized when token already revoked', async () => {
+      const game = await gameModel.create(createMockGameDocument())
+
+      const userId = uuidv4()
+
+      const { refreshToken } = await authService.authenticateGame(
+        game.pin,
+        MOCK_IP_ADDRESS,
+        MOCK_USER_AGENT,
+        userId,
+      )
+
+      await authService.revoke(refreshToken)
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')

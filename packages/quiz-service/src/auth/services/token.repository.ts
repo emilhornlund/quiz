@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
+import { TokenNotFoundException } from '../exceptions'
+
 import { Token, TokenModel } from './models/schemas'
 
 /**
@@ -37,8 +39,24 @@ export class TokenRepository {
    * @param id – The JWT ID (`jti`) of the token.
    * @returns The matching Token document or `null` if not found.
    */
-  public async findByIdOrThrow(id: string): Promise<Token | null> {
+  public async findById(id: string): Promise<Token | null> {
     return this.tokenModel.findById(id)
+  }
+
+  /**
+   * Retrieves a token document by its unique identifier, or throws if not found.
+   *
+   * @param id – The JWT ID (`jti`) of the token.
+   * @returns The matching Token document.
+   * @throws TokenNotFoundException if no token exists with the given `id`.
+   */
+  public async findByIdOrThrow(id: string): Promise<Token | null> {
+    const document = await this.findById(id)
+    if (!document) {
+      this.logger.warn(`Token was not found by id '${id}.`)
+      throw new TokenNotFoundException(id)
+    }
+    return document
   }
 
   /**
