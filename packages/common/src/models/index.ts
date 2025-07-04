@@ -1,6 +1,5 @@
 export * from './auth'
 export * from './authority.enum'
-export * from './find-game-response.dto'
 export * from './game.dto'
 export * from './game-event'
 export * from './game-event-type.enum'
