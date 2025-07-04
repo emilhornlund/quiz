@@ -61,7 +61,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .set('User-Agent', 'mock-user-agent')
+        .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_PASSWORD,
@@ -75,7 +75,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when email not found', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .set('User-Agent', 'mock-user-agent')
+        .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_PASSWORD,
@@ -93,7 +93,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when password is invalid', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .set('User-Agent', 'mock-user-agent')
+        .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_DEFAULT_INVALID_PASSWORD,
@@ -111,7 +111,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .set('User-Agent', 'mock-user-agent')
+        .set('User-Agent', MOCK_USER_AGENT)
         .send({})
         .expect(400)
         .expect((res) => {
@@ -169,26 +169,44 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  describe('/api/auth/games/:gamePIN (POST)', () => {
-    it('should succeed in authenticating a user for a game', async () => {
+  describe('/api/auth/game (POST)', () => {
+    it('should succeed in authenticating a user participant using a game id', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const game = await gameModel.create(createMockGameDocument())
 
       return supertest(app.getHttpServer())
-        .post(`/api/auth/games/${game.pin}`)
+        .post('/api/auth/game')
         .set({
           'User-Agent': MOCK_USER_AGENT,
           Authorization: `Bearer ${accessToken}`,
         })
-        .send()
+        .send({ gameId: game._id })
         .expect(200)
         .expect((res) => {
           expectGameTokenPair(game._id, GameParticipantType.HOST, res, user._id)
         })
     })
 
-    it('should succeed in authenticating an anonymous participant for a game', async () => {
+    it('should succeed in authenticating a user participant using a game PIN', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
+
+      const game = await gameModel.create(createMockGameDocument())
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({
+          'User-Agent': MOCK_USER_AGENT,
+          Authorization: `Bearer ${accessToken}`,
+        })
+        .send({ gamePIN: game.pin })
+        .expect(200)
+        .expect((res) => {
+          expectGameTokenPair(game._id, GameParticipantType.HOST, res, user._id)
+        })
+    })
+
+    it('should succeed in authenticating an anonymous participant using a game id', async () => {
       const game = await gameModel.create(
         createMockGameDocument({
           participants: [createMockGameHostParticipantDocument()],
@@ -196,49 +214,126 @@ describe('AuthController (e2e)', () => {
       )
 
       return supertest(app.getHttpServer())
-        .post(`/api/auth/games/${game.pin}`)
-        .set({ 'User-Agent': 'mock-user-agent' })
-        .send()
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gameId: game._id })
         .expect(200)
         .expect((res) => {
           expectGameTokenPair(game._id, GameParticipantType.PLAYER, res)
         })
     })
 
-    it('should 400 error when game PIN validation fails', async () => {
+    it('should succeed in authenticating an anonymous participant using a game PIN', async () => {
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [createMockGameHostParticipantDocument()],
+        }),
+      )
+
       return supertest(app.getHttpServer())
-        .post('/api/auth/games/XXXXXX')
-        .set({ 'User-Agent': 'mock-user-agent' })
-        .send()
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gamePIN: game.pin })
+        .expect(200)
+        .expect((res) => {
+          expectGameTokenPair(game._id, GameParticipantType.PLAYER, res)
+        })
+    })
+
+    it('should return 400 error when game id validation fails', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gameId: 'non-uuid' })
         .expect(400)
         .expect((res) => {
           expect(res.body).toEqual({
             message: 'Validation failed',
             status: 400,
             timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  isUuid: 'gameId must be a UUID',
+                },
+                property: 'gameId',
+              },
+            ],
           })
         })
     })
 
-    it('should return 404 error when an active game was not found', async () => {
+    it('should return 400 error when game PIN validation fails', async () => {
       return supertest(app.getHttpServer())
-        .post('/api/auth/games/123456')
-        .set({ 'User-Agent': 'mock-user-agent' })
-        .send()
-        .expect(404)
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gamePIN: 'XXXXXX' })
+        .expect(400)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Active game not found by PIN 123456',
-            status: 404,
+            message: 'Validation failed',
+            status: 400,
             timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  matches: 'gamePIN must be a valid game PIN.',
+                },
+                property: 'gamePIN',
+              },
+            ],
+          })
+        })
+    })
+
+    it('should return 400 error when no request payload is provided', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send()
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Missing request payload',
+            status: 400,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 400 error when no game id or game PIN are provided', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gameId: undefined, gamePIN: undefined })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  isUuid: 'gameId must be a UUID',
+                },
+                property: 'gameId',
+              },
+              {
+                constraints: {
+                  matches: 'gamePIN must be a valid game PIN.',
+                },
+                property: 'gamePIN',
+              },
+            ],
           })
         })
     })
 
     it('should return 400 bad request when missing user agent', async () => {
       return supertest(app.getHttpServer())
-        .post('/api/auth/games/123456')
-        .send({})
+        .post('/api/auth/game')
+        .send({ gamePIN: '123456' })
         .expect(400)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -253,6 +348,36 @@ describe('AuthController (e2e)', () => {
                 property: 'user-agent',
               },
             ],
+          })
+        })
+    })
+
+    it('should return 401 error when an active game was not found by game id', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gameId: uuidv4() })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 401 error when an active game was not found by game PIN', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/game')
+        .set({ 'User-Agent': MOCK_USER_AGENT })
+        .send({ gamePIN: '123456' })
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            status: 401,
+            timestamp: expect.any(String),
           })
         })
     })
@@ -273,7 +398,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken,
         })
@@ -289,7 +414,7 @@ describe('AuthController (e2e)', () => {
       const userId = uuidv4()
 
       const { refreshToken } = await authService.authenticateGame(
-        game.pin,
+        { gamePIN: game.pin },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
         userId,
@@ -297,7 +422,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken,
         })
@@ -315,7 +440,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken,
         })
@@ -335,7 +460,7 @@ describe('AuthController (e2e)', () => {
       const userId = uuidv4()
 
       const { refreshToken } = await authService.authenticateGame(
-        game.pin,
+        { gamePIN: game.pin },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
         userId,
@@ -345,7 +470,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken,
         })
@@ -367,7 +492,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken,
         })
@@ -384,7 +509,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           refreshToken: 'invalid_jwt',
         })
@@ -488,7 +613,7 @@ describe('AuthController (e2e)', () => {
       const userId = uuidv4()
 
       const { accessToken } = await authService.authenticateGame(
-        game.pin,
+        { gamePIN: game.pin },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
         userId,
@@ -496,7 +621,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/revoke')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           token: accessToken,
         })
@@ -512,7 +637,7 @@ describe('AuthController (e2e)', () => {
       const userId = uuidv4()
 
       const { refreshToken } = await authService.authenticateGame(
-        game.pin,
+        { gamePIN: game.pin },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
         userId,
@@ -520,7 +645,7 @@ describe('AuthController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .post('/api/auth/revoke')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           token: refreshToken,
         })
@@ -533,7 +658,7 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when validation fails', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/revoke')
-        .set({ 'User-Agent': 'mock-user-agent' })
+        .set({ 'User-Agent': MOCK_USER_AGENT })
         .send({
           token: 'invalid_jwt',
         })
