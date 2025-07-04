@@ -1,7 +1,7 @@
 import {
   AuthLoginRequestDto,
-  AuthLoginResponseDto,
   AuthRefreshRequestDto,
+  AuthResponseDto,
   AuthRevokeRequestDto,
   CreateGameResponseDto,
   CreateUserRequestDto,
@@ -194,8 +194,8 @@ export const useQuizServiceClient = () => {
    *
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
-  const login = (request: AuthLoginRequestDto): Promise<AuthLoginResponseDto> =>
-    apiPost<AuthLoginResponseDto>('/auth/login', {
+  const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>('/auth/login', {
       email: request.email,
       password: request.password,
     }).then((loginAuthResponse) => {
@@ -214,10 +214,8 @@ export const useQuizServiceClient = () => {
    *
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
-  const refresh = (
-    request: AuthRefreshRequestDto,
-  ): Promise<AuthLoginResponseDto> =>
-    apiPost<AuthLoginResponseDto>('/auth/refresh', request)
+  const refresh = (request: AuthRefreshRequestDto): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>('/auth/refresh', request)
 
   /**
    * Revokes the specified authentication token.

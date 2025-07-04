@@ -23,9 +23,9 @@ export interface AuthLoginRequestDto {
 }
 
 /**
- * Data transfer object for authentication login responses.
+ * Data transfer object for authentication responses.
  */
-export interface AuthLoginResponseDto {
+export interface AuthResponseDto {
   /**
    * JWT access token—short-lived credential for resource access.
    */
