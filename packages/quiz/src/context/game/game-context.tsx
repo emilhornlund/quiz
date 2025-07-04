@@ -14,6 +14,9 @@ import { createContext } from 'react'
  */
 export type GameContextType = {
   gameID?: string
+  gameToken?: string
+  participantId?: string
+  participantType?: string
   isFullscreenActive: boolean
   toggleFullscreen: () => Promise<void>
   completeTask?: () => Promise<void>

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useAuthContext } from '../../context/auth'
 
 import { QuizDetailsPageUI } from './components'
 
@@ -11,7 +12,10 @@ const QuizDetailsPage: FC = () => {
 
   const { quizId } = useParams<{ quizId: string }>()
 
-  const { getQuiz, deleteQuiz, createGame } = useQuizServiceClient()
+  const { user } = useAuthContext()
+
+  const { getQuiz, deleteQuiz, createGame, authenticateGame } =
+    useQuizServiceClient()
 
   const {
     data: originalQuiz,
@@ -29,7 +33,10 @@ const QuizDetailsPage: FC = () => {
     }
   }, [hasQuizLoadingError, navigate])
 
-  const isOwner = false //TODO: fix this later
+  const isOwner = useMemo(
+    () => originalQuiz?.author.id === user?.ACCESS.sub,
+    [originalQuiz, user],
+  )
 
   const [isHostGameLoading, setIsHostGameLoading] = useState(false)
 
@@ -37,7 +44,9 @@ const QuizDetailsPage: FC = () => {
     if (quizId) {
       setIsHostGameLoading(true)
       createGame(quizId)
-        .then((response) => navigate(`/game?gameID=${response.id}`))
+        .then(({ id: gameId }) =>
+          authenticateGame({ gameId }).then(() => navigate('/game')),
+        )
         .finally(() => setIsHostGameLoading(false))
     }
   }

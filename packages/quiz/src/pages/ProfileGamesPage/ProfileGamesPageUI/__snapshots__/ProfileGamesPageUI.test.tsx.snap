@@ -170,10 +170,8 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
         <div
           class="rows"
         >
-          <a
+          <button
             class="row"
-            data-discover="true"
-            href="/game?gameID=1de06ead-16f0-47af-b8ba-63279267ffd3"
           >
              
             <img
@@ -255,11 +253,9 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
               </svg>
               Ongoing...
             </div>
-          </a>
-          <a
+          </button>
+          <button
             class="row"
-            data-discover="true"
-            href="/game/results/70f14923-6ae9-4daa-950d-56e2e0084c32"
           >
              
             <img
@@ -341,11 +337,9 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
               </svg>
               Host
             </div>
-          </a>
-          <a
+          </button>
+          <button
             class="row"
-            data-discover="true"
-            href="/game/results/4c14c469-dad1-4f32-8138-d251e8bf60cb"
           >
              
             <img
@@ -435,11 +429,9 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                 1
               </div>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             class="row"
-            data-discover="true"
-            href="/game/results/233f79b2-1b26-42eb-86bf-3097d3df789b"
           >
              
             <img
@@ -529,11 +521,9 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                 2
               </div>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             class="row"
-            data-discover="true"
-            href="/game/results/c5598fc1-3c15-45a7-83c8-55c1a1b7b8e9"
           >
              
             <img
@@ -623,7 +613,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                 5
               </div>
             </div>
-          </a>
+          </button>
         </div>
       </div>
       <div
