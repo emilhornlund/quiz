@@ -11,6 +11,22 @@ A full‑stack quiz game platform built with a modern monorepo setup. It feature
 
 ---
 
+## Prerequisites
+
+Before you get started, make sure you have the following installed on your machine:
+
+- **Node.js** v22.12.0 or higher  
+  We recommend using [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) to manage your Node versions.
+
+- **Yarn** v1.22.22 or higher  
+  Install via `npm install --global yarn` if you don’t already have it.
+
+- **Git**  
+  To clone and manage the repository.
+
+- **Docker & Docker Compose** (optional)  
+  If you prefer to run your database and cache in containers.
+
 ## Monorepo Structure
 
 This project uses [Yarn Workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) to manage multiple packages:

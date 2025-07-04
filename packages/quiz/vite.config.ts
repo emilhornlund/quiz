@@ -23,13 +23,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     base: '/',
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern',
-        },
-      },
-    },
     test: {
       environment: 'jsdom',
       globals: true,
