@@ -16,14 +16,13 @@ const ResponsivePlayer: FC<ResponsivePlayerProps> = ({
 }) => (
   <div className={styles.playerWrapper}>
     <ReactPlayer
-      url={url}
+      src={url}
       muted={false}
       width={grow ? '100%' : undefined}
       height={grow ? '100%' : undefined}
       playing={playing}
       loop
       controls
-      stopOnUnmount
     />
   </div>
 )
