@@ -1,4 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common'
 import {
   AuthProvider,
   CreateUserRequestDto,
@@ -154,6 +159,53 @@ export class UserService {
     )
 
     return UserService.toProfileUserResponse(updatedUser)
+  }
+
+  /**
+   * Change a local user’s password after verifying their current credentials.
+   *
+   * Verifies that `oldPassword` matches the existing hash, then hashes
+   * `newPassword` and updates the user record.
+   *
+   * @param userId - The unique identifier of the user whose password will be changed.
+   * @param oldPassword - The user’s current password for verification.
+   * @param newPassword - The new password to set; must meet complexity rules.
+   * @returns A promise that resolves when the password has been successfully updated.
+   * @throws BadRequestException if the provided old password does not match the stored password.
+   * @throws ForbiddenException if the user is not a local account.
+   */
+  public async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    this.logger.debug(`Changing password for user '${userId}'.`)
+
+    const user = await this.userRepository.findUserByIdOrThrow(userId)
+
+    if (isLocalUser(user)) {
+      const isPasswordCorrect = await bcrypt.compare(
+        oldPassword,
+        user.hashedPassword,
+      )
+
+      if (isPasswordCorrect) {
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+        await this.userRepository.findUserByIdAndUpdateOrThrow(userId, {
+          hashedPassword,
+        } as User & LocalUser)
+
+        this.logger.log(`Updated password for user '${userId}'.`)
+      } else {
+        this.logger.debug(`Old password is incorrect for user '${userId}'.`)
+        throw new BadRequestException('Old password is incorrect')
+      }
+    } else {
+      this.logger.debug(`User '${userId}' is not a local account.`)
+      throw new ForbiddenException('Incorrect user type')
+    }
   }
 
   /**

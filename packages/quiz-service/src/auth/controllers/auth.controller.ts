@@ -4,12 +4,14 @@ import {
   Headers,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -18,16 +20,18 @@ import {
 } from '@nestjs/swagger'
 import { Authority, TokenScope } from '@quiz/common'
 
+import { UserService } from '../../user/services'
 import { AuthService } from '../services'
 
-import { IpAddress, Public, UserAgent } from './decorators'
+import { IpAddress, PrincipalId, Public, UserAgent } from './decorators'
 import {
+  AuthGameRequest,
   AuthLoginRequest,
+  AuthPasswordChangeRequest,
   AuthRefreshRequest,
   AuthResponse,
   AuthRevokeRequest,
 } from './models'
-import { AuthGameRequest } from './models/auth-game.request'
 
 /**
  * Controller for managing authentication.
@@ -38,9 +42,13 @@ export class AuthController {
   /**
    * Initializes the AuthController.
    *
-   * @param {AuthService} authService - The service handling authentication logic.
+   * @param authService - The service handling authentication logic.
+   * @param userService - description here
    */
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * Authenticates a user by verifying their email and password,
@@ -188,6 +196,50 @@ export class AuthController {
     @Body() authRevokeRequest: AuthRevokeRequest,
   ): Promise<void> {
     return this.authService.revoke(authRevokeRequest.token)
+  }
+
+  /**
+   * Change the authenticated user’s password.
+   *
+   * Allows a user to update their password by providing their current password
+   * for verification and a new password to apply. Returns no content on success.
+   *
+   * @param authPasswordChangeRequest - DTO containing `oldPassword` and `newPassword`.
+   * @param principalId - The UUID of the user whose password will be changed.
+   * @returns A promise that resolves when the password has been successfully updated.
+   * @throws BadRequestException if the provided old password does not match the stored password.
+   * @throws UnauthorizedException if the request lacks valid authentication.
+   * @throws ForbiddenException if the user is not a local account.
+   */
+  @Patch('/password')
+  @ApiOperation({
+    summary: 'Change authenticated user’s password',
+    description:
+      'Endpoint for authenticated users to change their password by supplying their current password for verification and a new desired password.',
+  })
+  @ApiNoContentResponse({
+    description: 'Password changed successfully.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Old password incorrect or user account not eligible for password change.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Missing or invalid authentication credentials.',
+  })
+  @ApiForbiddenResponse({
+    description: 'Non-local accounts cannot change password.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async changePassword(
+    @Body() authPasswordChangeRequest: AuthPasswordChangeRequest,
+    @PrincipalId() principalId: string,
+  ): Promise<void> {
+    return this.userService.changePassword(
+      principalId,
+      authPasswordChangeRequest.oldPassword,
+      authPasswordChangeRequest.newPassword,
+    )
   }
 
   /**

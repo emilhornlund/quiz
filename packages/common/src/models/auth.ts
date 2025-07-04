@@ -71,3 +71,20 @@ export interface AuthRevokeRequestDto {
    */
   readonly token: string
 }
+
+/**
+ * Data Transfer Object for a password change request.
+ *
+ * Contains the user’s current password for verification and the desired new password.
+ */
+export interface AuthPasswordChangeRequestDto {
+  /**
+   * The user’s current password.
+   */
+  readonly oldPassword: string
+
+  /**
+   * The new password the user wants to set.
+   */
+  readonly newPassword: string
+}
