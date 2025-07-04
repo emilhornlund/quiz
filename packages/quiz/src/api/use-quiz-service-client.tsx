@@ -1,4 +1,5 @@
 import {
+  AuthGameRequestDto,
   AuthLoginRequestDto,
   AuthRefreshRequestDto,
   AuthResponseDto,
@@ -6,7 +7,6 @@ import {
   CreateGameResponseDto,
   CreateUserRequestDto,
   CreateUserResponseDto,
-  FindGameResponseDto,
   GameResultDto,
   MediaUploadPhotoResponseDto,
   PaginatedGameHistoryDto,
@@ -99,7 +99,6 @@ export const useQuizServiceClient = () => {
       path !== '/auth/refresh'
     ) {
       const refreshed = await refresh({ refreshToken })
-      setTokenPair(scope, refreshed.accessToken, refreshed.refreshToken)
       accessToken = refreshed.accessToken
       refreshToken = refreshed.refreshToken
     }
@@ -122,7 +121,6 @@ export const useQuizServiceClient = () => {
     // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
     if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
       const refreshed = await refresh({ refreshToken })
-      setTokenPair(scope, refreshed.accessToken, refreshed.refreshToken)
       return apiFetch<T>(method, path, body, scope, refreshed.accessToken)
     }
 
@@ -191,31 +189,42 @@ export const useQuizServiceClient = () => {
    * Sends a login request to the API and stores the returned authentication tokens.
    *
    * @param request - The login credentials containing email and password.
-   *
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
   const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>('/auth/login', {
       email: request.email,
       password: request.password,
-    }).then((loginAuthResponse) => {
-      setTokenPair(
-        TokenScope.User,
-        loginAuthResponse.accessToken,
-        loginAuthResponse.refreshToken,
-      )
-      return loginAuthResponse
+    }).then((res) => {
+      setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      return res
+    })
+
+  /**
+   * Sends a game authentication request to the API and stores the returned authentication tokens.
+   *
+   * @param request - The game authentication credentials containing the necessary game identifier.
+   * @returns A promise that resolves to the authentication response with access and refresh tokens.
+   */
+  const authenticateGame = (
+    request: AuthGameRequestDto,
+  ): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>(`/auth/game`, request).then((res) => {
+      setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
+      return res
     })
 
   /**
    * Sends a refresh request to the API and stores the returned authentication tokens.
    *
    * @param request - The request containing the refresh token.
-   *
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
   const refresh = (request: AuthRefreshRequestDto): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>('/auth/refresh', request)
+    apiPost<AuthResponseDto>('/auth/refresh', request).then((res) => {
+      setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
+      return res
+    })
 
   /**
    * Revokes the specified authentication token.
@@ -371,16 +380,6 @@ export const useQuizServiceClient = () => {
    */
   const getQuizQuestions = (quizId: string): Promise<QuestionDto[]> =>
     apiGet(`/quizzes/${quizId}/questions`)
-
-  /**
-   * Finds a game using the provided game PIN.
-   *
-   * @param gamePIN - The PIN of the game to find.
-   *
-   * @returns A promise resolving to the details of the found game as a `FindGameResponseDto`.
-   */
-  const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
-    apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`, TokenScope.Game)
 
   /**
    * Creates a new game using the provided quizId.
@@ -597,6 +596,7 @@ export const useQuizServiceClient = () => {
 
   return {
     login,
+    authenticateGame,
     revoke,
     register,
     getUserProfile,
@@ -608,7 +608,6 @@ export const useQuizServiceClient = () => {
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
-    findGame,
     createGame,
     joinGame,
     leaveGame,

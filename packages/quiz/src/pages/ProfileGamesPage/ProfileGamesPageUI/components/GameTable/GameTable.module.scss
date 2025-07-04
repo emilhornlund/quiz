@@ -45,6 +45,10 @@
       background-color: white;
       text-decoration: none;
       color: colors.$gray-4;
+      font-family: inherit;
+      appearance: none;
+      border: none;
+      outline: none;
 
       &:hover {
         background-color: colors.$gray-1;

@@ -9,8 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameHistoryDto, GameParticipantType, GameStatus } from '@quiz/common'
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import React, { FC, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import React, { FC, MouseEvent } from 'react'
 
 import Picture from '../../../../../assets/images/picture.svg'
 import {
@@ -23,21 +22,21 @@ import { formatTimeAgo } from '../../../../../utils/date.utils.ts'
 
 import styles from './GameTable.module.scss'
 
-export type GameTableItemProps = GameHistoryDto
+export type GameTableItemProps = {
+  values: GameHistoryDto
+  onClick: (id: string, status: GameStatus) => void
+}
 
-const GameTableItem: FC<GameTableItemProps> = (props) => {
-  const { id, name, mode, status, imageCoverURL, created } = props
+const GameTableItem: FC<GameTableItemProps> = ({ values, onClick }) => {
+  const { id, name, mode, status, imageCoverURL, created } = values
 
-  const link = useMemo(
-    () =>
-      status === GameStatus.Completed
-        ? `/game/results/${id}`
-        : `/game?gameID=${id}`,
-    [id, status],
-  )
+  const handleClick = (event: MouseEvent) => {
+    event.preventDefault()
+    onClick(id, status)
+  }
 
   return (
-    <Link to={link} className={styles.row}>
+    <button onClick={handleClick} className={styles.row}>
       {' '}
       <img
         src={imageCoverURL ?? Picture}
@@ -63,41 +62,46 @@ const GameTableItem: FC<GameTableItemProps> = (props) => {
           Ongoing...
         </div>
       )}
-      {props.participantType === GameParticipantType.HOST &&
+      {values.participantType === GameParticipantType.HOST &&
         status == GameStatus.Completed && (
           <div className={styles.host}>
             <FontAwesomeIcon icon={faUserTie} color={colors.white} />
             Host
           </div>
         )}
-      {props.participantType === GameParticipantType.PLAYER &&
+      {values.participantType === GameParticipantType.PLAYER &&
         status === GameStatus.Completed && (
           <div className={styles.stats}>
             <div className={styles.score}>
               <FontAwesomeIcon icon={faStar} className={styles.icon} />
-              {props.score}
+              {values.score}
             </div>
             <Badge
-              backgroundColor={getBadgePositionBackgroundColor(props.rank)}
+              backgroundColor={getBadgePositionBackgroundColor(values.rank)}
               size="small">
-              {props.rank}
+              {values.rank}
             </Badge>
           </div>
         )}
-    </Link>
+    </button>
   )
 }
 
 export interface GameTableProps {
   items: GameHistoryDto[]
+  onClick: (id: string, status: GameStatus) => void
 }
 
-const GameTable: FC<GameTableProps> = ({ items }) => {
+const GameTable: FC<GameTableProps> = ({ items, onClick }) => {
   return (
     <div className={styles.gameTable}>
       <div className={styles.rows}>
         {items.map((item) => (
-          <GameTableItem key={`game-table-item-${item.id}`} {...item} />
+          <GameTableItem
+            key={`game-table-item-${item.id}`}
+            values={item}
+            onClick={onClick}
+          />
         ))}
       </div>
     </div>
