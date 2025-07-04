@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AuthLoginResponseDto } from '@quiz/common'
+import { AuthResponseDto } from '@quiz/common'
 
 /**
  * Response object for successful login.
  */
-export class AuthLoginResponse implements AuthLoginResponseDto {
+export class AuthResponse implements AuthResponseDto {
   /**
    * JWT access token for use in protected requests.
    */
