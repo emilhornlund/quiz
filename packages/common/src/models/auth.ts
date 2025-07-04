@@ -23,6 +23,21 @@ export interface AuthLoginRequestDto {
 }
 
 /**
+ * Data transfer object for authentication game requests.
+ */
+export interface AuthGameRequestDto {
+  /**
+   * The unique identifier of the game to authenticate.
+   */
+  readonly gameId?: string
+
+  /**
+   * The unique 6-digit game PIN of the game to authenticate.
+   */
+  readonly gamePIN?: string
+}
+
+/**
  * Data transfer object for authentication responses.
  */
 export interface AuthResponseDto {
