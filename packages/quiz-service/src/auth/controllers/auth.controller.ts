@@ -27,8 +27,8 @@ import { AuthService } from '../services'
 import { IpAddress, Public, UserAgent } from './decorators'
 import {
   AuthLoginRequest,
-  AuthLoginResponse,
   AuthRefreshRequest,
+  AuthResponse,
   AuthRevokeRequest,
 } from './models'
 
@@ -52,7 +52,7 @@ export class AuthController {
    * @param authLoginRequest - Request containing the user's email and password.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @returns Promise resolving to an AuthLoginResponse with both tokens.
+   * @returns Promise resolving to an AuthResponse with both tokens.
    */
   @Public()
   @Post('/login')
@@ -67,7 +67,7 @@ export class AuthController {
   })
   @ApiOkResponse({
     description: 'Returns the issued access and refresh tokens.',
-    type: AuthLoginResponse,
+    type: AuthResponse,
   })
   @ApiBadRequestResponse({
     description: 'Validation failed or credentials are incorrect.',
@@ -77,7 +77,7 @@ export class AuthController {
     @Body() authLoginRequest: AuthLoginRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-  ): Promise<AuthLoginResponse> {
+  ): Promise<AuthResponse> {
     return this.authService.login(authLoginRequest, ipAddress, userAgent)
   }
 
@@ -106,7 +106,7 @@ export class AuthController {
     example: '123456',
   })
   @ApiOkResponse({
-    type: AuthLoginResponse,
+    type: AuthResponse,
     description: 'Game access and refresh tokens.',
   })
   @ApiBadRequestResponse({ description: 'Invalid game PIN format.' })
@@ -117,7 +117,7 @@ export class AuthController {
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
     @Headers('Authorization') authorization?: string,
-  ): Promise<AuthLoginResponse> {
+  ): Promise<AuthResponse> {
     const optionalUserId =
       await this.extractUserIdFromAuthorizationHeader(authorization)
     return this.authService.authenticateGame(
@@ -135,7 +135,7 @@ export class AuthController {
    * @param authRefreshRequest - Request containing the existing refresh token.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @returns Promise resolving to an AuthLoginResponse with new tokens.
+   * @returns Promise resolving to an AuthResponse with new tokens.
    */
   @Public()
   @Post('/refresh')
@@ -151,7 +151,7 @@ export class AuthController {
   @ApiOkResponse({
     description:
       'Returns a new access token and, if rotated, a new refresh token.',
-    type: AuthLoginResponse,
+    type: AuthResponse,
   })
   @ApiBadRequestResponse({
     description: 'Validation failed.',
@@ -164,7 +164,7 @@ export class AuthController {
     @Body() authRefreshRequest: AuthRefreshRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-  ): Promise<AuthLoginResponse> {
+  ): Promise<AuthResponse> {
     return this.authService.refresh(authRefreshRequest, ipAddress, userAgent)
   }
 
