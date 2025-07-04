@@ -15,9 +15,11 @@ import {
   buildMockPrimaryUser,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
-  MOCK_DEFAULT_INVALID_PASSWORD,
-  MOCK_DEFAULT_PASSWORD,
+  MOCK_PRIMARY_INVALID_PASSWORD,
+  MOCK_PRIMARY_PASSWORD,
   MOCK_PRIMARY_USER_EMAIL,
+  MOCK_SECONDARY_PASSWORD,
+  MOCK_WEAK_PASSWORD,
 } from '../../../test-utils/data'
 import {
   closeTestApp,
@@ -55,7 +57,7 @@ describe('AuthController (e2e)', () => {
     await closeTestApp(app)
   })
 
-  describe('/api/login (POST)', () => {
+  describe('/api/auth/login (POST)', () => {
     it('should succeed in authenticating a user', async () => {
       const user = await userModel.create(buildMockPrimaryUser())
 
@@ -64,7 +66,7 @@ describe('AuthController (e2e)', () => {
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
         })
         .expect(200)
         .expect((res) => {
@@ -78,7 +80,7 @@ describe('AuthController (e2e)', () => {
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
         })
         .expect(400)
         .expect((res) => {
@@ -96,7 +98,7 @@ describe('AuthController (e2e)', () => {
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_INVALID_PASSWORD,
+          password: MOCK_PRIMARY_INVALID_PASSWORD,
         })
         .expect(400)
         .expect((res) => {
@@ -383,14 +385,14 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  describe('/api/refresh (POST)', () => {
+  describe('/api/auth/refresh (POST)', () => {
     it('should succeed in refresh an existing authentication', async () => {
       const user = await userModel.create(buildMockPrimaryUser())
 
       const { refreshToken } = await authService.login(
         {
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
         },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
@@ -554,14 +556,14 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  describe('/api/revoke (POST)', () => {
+  describe('/api/auth/revoke (POST)', () => {
     it('should succeed in revoking an existing user scope access token', async () => {
       await userModel.create(buildMockPrimaryUser())
 
       const { accessToken } = await authService.login(
         {
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
         },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
@@ -587,7 +589,7 @@ describe('AuthController (e2e)', () => {
       const { refreshToken } = await authService.login(
         {
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
         },
         MOCK_IP_ADDRESS,
         MOCK_USER_AGENT,
@@ -678,6 +680,130 @@ describe('AuthController (e2e)', () => {
             ],
           })
         })
+    })
+
+    describe('/api/auth/password (PATCH)', () => {
+      it('should succeed in changing password of an existing user', async () => {
+        await userModel.create(buildMockPrimaryUser())
+
+        const { accessToken } = await authService.login(
+          {
+            email: MOCK_PRIMARY_USER_EMAIL,
+            password: MOCK_PRIMARY_PASSWORD,
+          },
+          MOCK_IP_ADDRESS,
+          MOCK_USER_AGENT,
+        )
+
+        return supertest(app.getHttpServer())
+          .patch('/api/auth/password')
+          .set({
+            Authorization: `Bearer ${accessToken}`,
+          })
+          .send({
+            oldPassword: MOCK_PRIMARY_PASSWORD,
+            newPassword: MOCK_SECONDARY_PASSWORD,
+          })
+          .expect(204)
+          .expect((res) => {
+            expect(res.body).toEqual({})
+          })
+      })
+
+      it('should return 400 bad request when old password is incorrect', async () => {
+        await userModel.create(buildMockPrimaryUser())
+
+        const { accessToken } = await authService.login(
+          {
+            email: MOCK_PRIMARY_USER_EMAIL,
+            password: MOCK_PRIMARY_PASSWORD,
+          },
+          MOCK_IP_ADDRESS,
+          MOCK_USER_AGENT,
+        )
+
+        return supertest(app.getHttpServer())
+          .patch('/api/auth/password')
+          .set({
+            Authorization: `Bearer ${accessToken}`,
+          })
+          .send({
+            oldPassword: MOCK_SECONDARY_PASSWORD,
+            newPassword: MOCK_PRIMARY_PASSWORD,
+          })
+          .expect(400)
+          .expect((res) => {
+            expect(res.body).toEqual({
+              message: 'Old password is incorrect',
+              status: 400,
+              timestamp: expect.any(String),
+            })
+          })
+      })
+
+      it('should return 400 bad request when passwords are invalid', async () => {
+        await userModel.create(buildMockPrimaryUser())
+
+        const { accessToken } = await authService.login(
+          {
+            email: MOCK_PRIMARY_USER_EMAIL,
+            password: MOCK_PRIMARY_PASSWORD,
+          },
+          MOCK_IP_ADDRESS,
+          MOCK_USER_AGENT,
+        )
+
+        return supertest(app.getHttpServer())
+          .patch('/api/auth/password')
+          .set({
+            Authorization: `Bearer ${accessToken}`,
+          })
+          .send({
+            oldPassword: MOCK_WEAK_PASSWORD,
+            newPassword: MOCK_WEAK_PASSWORD,
+          })
+          .expect(400)
+          .expect((res) => {
+            expect(res.body).toEqual({
+              message: 'Validation failed',
+              status: 400,
+              timestamp: expect.any(String),
+              validationErrors: [
+                {
+                  constraints: {
+                    matches:
+                      'Old password must include at least 2 uppercase letters, 2 lowercase letters, 2 digits, and 2 symbols.',
+                  },
+                  property: 'oldPassword',
+                },
+                {
+                  constraints: {
+                    matches:
+                      'New password must include at least 2 uppercase letters, 2 lowercase letters, 2 digits, and 2 symbols.',
+                  },
+                  property: 'newPassword',
+                },
+              ],
+            })
+          })
+      })
+
+      it('should return 401 unauthorized when missing authorization', async () => {
+        return supertest(app.getHttpServer())
+          .patch('/api/auth/password')
+          .send({
+            oldPassword: MOCK_PRIMARY_PASSWORD,
+            newPassword: MOCK_SECONDARY_PASSWORD,
+          })
+          .expect(401)
+          .expect((res) => {
+            expect(res.body).toEqual({
+              message: 'Missing Authorization header',
+              status: 401,
+              timestamp: expect.any(String),
+            })
+          })
+      })
     })
   })
 

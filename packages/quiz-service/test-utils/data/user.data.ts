@@ -23,10 +23,12 @@ export const MOCK_QUATERNARY_USER_GIVEN_NAME = 'Quaternary'
 export const MOCK_QUATERNARY_USER_FAMILY_NAME = 'User'
 export const MOCK_QUATERNARY_USER_DEFAULT_NICKNAME = 'PuddingPop'
 
-export const MOCK_DEFAULT_PASSWORD = 'Super#SecretPa$$w0rd123'
-export const MOCK_DEFAULT_INVALID_PASSWORD = 'Super#$ecretPassw0rd123'
+export const MOCK_PRIMARY_PASSWORD = 'Super#SecretPa$$w0rd123'
+export const MOCK_PRIMARY_INVALID_PASSWORD = 'Super#$ecretPassw0rd123'
 export const MOCK_DEFAULT_HASHED_PASSWORD =
   '$2b$10$.xzhAfwhLmb2Nbe5i2jRB.j4IUuWqnDvgUuQ/AZ/unHhOPJcJyVJ6'
+export const MOCK_SECONDARY_PASSWORD = 'Tr0ub4dor&3NewP@ssw0rd!'
+export const MOCK_WEAK_PASSWORD = 'not-a-strong-password'
 
 export function buildMockPrimaryUser(
   user?: Partial<User & LocalUser>,

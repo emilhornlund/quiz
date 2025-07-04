@@ -3,7 +3,7 @@ import supertest from 'supertest'
 
 import {
   MOCK_DEFAULT_HASHED_PASSWORD,
-  MOCK_DEFAULT_PASSWORD,
+  MOCK_PRIMARY_PASSWORD,
   MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
   MOCK_PRIMARY_USER_EMAIL,
   MOCK_PRIMARY_USER_FAMILY_NAME,
@@ -31,7 +31,7 @@ describe('UserController (e2e)', () => {
         .post(`/api/users`)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
           givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
           familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
@@ -127,7 +127,7 @@ describe('UserController (e2e)', () => {
         .post(`/api/users`)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_DEFAULT_PASSWORD,
+          password: MOCK_PRIMARY_PASSWORD,
           givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
           familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
