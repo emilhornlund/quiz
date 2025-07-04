@@ -9,6 +9,7 @@ import { ProtectedRoute } from './components'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
+  AuthGamePage,
   CreateUserPage,
   DiscoverPage,
   ErrorPage,
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
             <CreateUserPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: '/auth/game',
+        element: <AuthGamePage />,
       },
       {
         path: '/discover',

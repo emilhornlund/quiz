@@ -1,3 +1,4 @@
+export { default as AuthGamePage } from './AuthGamePage'
 export { default as CreateUserPage } from './CreateUserPage'
 export { default as DiscoverPage } from './DiscoverPage'
 export { default as ErrorPage } from './ErrorPage'

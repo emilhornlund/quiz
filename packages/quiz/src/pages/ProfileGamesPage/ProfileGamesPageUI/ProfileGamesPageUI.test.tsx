@@ -80,6 +80,7 @@ describe('ProfileGamesPageUI', () => {
           total={10}
           limit={5}
           offset={0}
+          onClick={() => undefined}
           onChangePagination={() => undefined}
         />
       </MemoryRouter>,
@@ -96,6 +97,7 @@ describe('ProfileGamesPageUI', () => {
           total={0}
           limit={0}
           offset={0}
+          onClick={() => undefined}
           onChangePagination={() => undefined}
         />
       </MemoryRouter>,

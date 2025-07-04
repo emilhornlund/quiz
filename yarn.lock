@@ -2462,6 +2462,11 @@
   resolved "https://registry.yarnpkg.com/@storybook/theming/-/theming-8.6.14.tgz#78c6dc878f705de70c67f2b2d08b8313b985d81a"
   integrity sha512-r4y+LsiB37V5hzpQo+BM10PaCsp7YlZ0YcZzQP1OCkPlYXmUAFy2VvDKaFRpD8IeNPKug2u4iFm/laDEbs03dg==
 
+"@supercharge/request-ip@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@supercharge/request-ip/-/request-ip-1.2.0.tgz#b8a8164322e09de3fa9b6f556885795c4841a7d4"
+  integrity sha512-wlt6JW69MHqLY2M6Sm/jVyCojNRKq2CBvwH0Hbx24SFhDQQGkgEjeKxVutDxHSyrWixFaOSLXC27euzxijhyMQ==
+
 "@svta/common-media-library@^0.12.4":
   version "0.12.4"
   resolved "https://registry.yarnpkg.com/@svta/common-media-library/-/common-media-library-0.12.4.tgz#1533e7518e6e36952eab8325f11c4e986cea4d4b"
@@ -2809,6 +2814,11 @@
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.5.tgz#ec10755e871497bcd83efe927e43ec46e8c0747e"
   integrity sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==
+
+"@types/ms@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-2.1.0.tgz#052aa67a48eccc4309d7f0191b7e41434b90bb78"
+  integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
 "@types/multer@^2.0.0":
   version "2.0.0"
