@@ -81,7 +81,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
           </div>
           <div className={classNames(styles.box, styles.qr)}>
             <QRCode
-              value={`${extractUrl(window.location.href)}/join?gameID=${id}`}
+              value={`${extractUrl(window.location.href)}/auth/game?id=${id}`}
             />
           </div>
         </div>

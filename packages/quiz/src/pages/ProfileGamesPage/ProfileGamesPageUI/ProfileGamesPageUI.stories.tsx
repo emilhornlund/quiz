@@ -79,6 +79,7 @@ export const Default = {
     total: 10,
     limit: 5,
     offset: 0,
+    onClick: () => undefined,
     onChangePagination: () => undefined,
   },
 } satisfies Story
@@ -89,6 +90,7 @@ export const Empty = {
     total: 0,
     limit: 0,
     offset: 0,
+    onClick: () => undefined,
     onChangePagination: () => undefined,
   },
 } satisfies Story

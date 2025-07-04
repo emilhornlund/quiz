@@ -4,7 +4,7 @@ import {
   PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import UsersIcon from '../../assets/images/users-icon.svg'
@@ -16,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '../../components'
+import { useGameContext } from '../../context/game'
 
 import { getMessage, getTitle } from './helpers.ts'
 import styles from './JoinPage.module.scss'
@@ -23,11 +24,8 @@ import styles from './JoinPage.module.scss'
 const JoinPage: FC = () => {
   const navigate = useNavigate()
 
-  const [searchParams] = useSearchParams()
-
+  const { gameID } = useGameContext()
   const { joinGame } = useQuizServiceClient()
-
-  const gameID = useMemo(() => searchParams.get('gameID'), [searchParams])
 
   const [nickname, setNickname] = useState<string>()
   const [nicknameValid, setNicknameValid] = useState<boolean>(false)
@@ -43,7 +41,7 @@ const JoinPage: FC = () => {
     if (gameID && nickname) {
       setIsJoiningGame(true)
       joinGame(gameID, nickname)
-        .then(() => navigate(`/game?gameID=${gameID}`))
+        .then(() => navigate(`/game`))
         .finally(() => setIsJoiningGame(false))
     }
   }

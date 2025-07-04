@@ -1,5 +1,5 @@
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { GameHistoryDto } from '@quiz/common'
+import { GameHistoryDto, GameStatus } from '@quiz/common'
 import React, { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,6 +13,7 @@ export interface ProfileGamesPageUIProps {
   total: number
   limit: number
   offset: number
+  onClick: (id: string, status: GameStatus) => void
   onChangePagination: (limit: number, offset: number) => void
 }
 
@@ -21,6 +22,7 @@ const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
   total,
   limit,
   offset,
+  onClick,
   onChangePagination,
 }) => {
   const navigate = useNavigate()
@@ -37,7 +39,7 @@ const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
       </Typography>
       {!!items.length && (
         <>
-          <GameTable items={items} />
+          <GameTable items={items} onClick={onClick} />
           <Pagination
             total={total}
             limit={limit}
