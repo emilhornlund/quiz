@@ -4,7 +4,6 @@ import {
   Headers,
   HttpCode,
   HttpStatus,
-  Param,
   Post,
   UnauthorizedException,
 } from '@nestjs/common'
@@ -12,16 +11,13 @@ import {
   ApiBadRequestResponse,
   ApiBody,
   ApiNoContentResponse,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { Authority, TokenScope } from '@quiz/common'
 
-import { ParseGamePINPipe } from '../../game/pipes'
 import { AuthService } from '../services'
 
 import { IpAddress, Public, UserAgent } from './decorators'
@@ -31,6 +27,7 @@ import {
   AuthResponse,
   AuthRevokeRequest,
 } from './models'
+import { AuthGameRequest } from './models/auth-game.request'
 
 /**
  * Controller for managing authentication.
@@ -82,38 +79,40 @@ export class AuthController {
   }
 
   /**
-   * Issue game‐scoped tokens by providing a game PIN.
-   * If an Authorization header with a valid User token (and `Game` authority) is present,
-   * that user ID is reused; otherwise a new anonymous participant is created.
+   * Authenticate a client for participation in a specific game by supplying
+   * either the game’s UUID or its 6-digit PIN.
    *
-   * @param gamePIN - A 6-digit PIN that identifies the game.
+   * @param authGameRequest – The request DTO containing **either**
+   *   - `gameId` (UUID) to look up the game by its internal ID, **or**
+   *   - `gamePIN` (6-digit string) to look up the game by its PIN.
    * @param authorization - Optional Bearer token of an authenticated user.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
    * @returns A pair of access + refresh tokens scoped to the specified game.
    */
   @Public()
-  @Post('/games/:gamePIN')
+  @Post('/game')
   @ApiOperation({
     summary: 'Game authentication',
-    description: 'Issue JWTs for game participation using the game’s PIN.',
+    description:
+      'Issue access and refresh tokens for participating in a game by providing either its UUID or 6-digit PIN.',
   })
-  @ApiParam({
-    name: 'gamePIN',
-    type: String,
-    description: 'The unique 6-digit PIN for the game to be retrieved.',
-    required: true,
-    example: '123456',
+  @ApiBody({
+    description:
+      'Payload containing either `gameId` (UUID) or `gamePIN` (6-digit string) to identify the game.',
+    type: AuthGameRequest,
   })
   @ApiOkResponse({
     type: AuthResponse,
     description: 'Game access and refresh tokens.',
   })
   @ApiBadRequestResponse({ description: 'Invalid game PIN format.' })
-  @ApiNotFoundResponse({ description: 'No active game found with that PIN.' })
+  @ApiUnauthorizedResponse({
+    description: 'No active game found with that ID or PIN.',
+  })
   @HttpCode(HttpStatus.OK)
   public async authenticateGame(
-    @Param('gamePIN', new ParseGamePINPipe()) gamePIN: string,
+    @Body() authGameRequest: AuthGameRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
     @Headers('Authorization') authorization?: string,
@@ -121,7 +120,7 @@ export class AuthController {
     const optionalUserId =
       await this.extractUserIdFromAuthorizationHeader(authorization)
     return this.authService.authenticateGame(
-      gamePIN,
+      authGameRequest,
       ipAddress,
       userAgent,
       optionalUserId,
