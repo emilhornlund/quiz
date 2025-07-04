@@ -3,9 +3,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { JwtService } from '@nestjs/jwt'
 import {
   AuthLoginRequestDto,
-  AuthLoginResponseDto,
   Authority,
   AuthRefreshRequestDto,
+  AuthResponseDto,
   GameParticipantType,
   GameTokenDto,
   TokenDto,
@@ -58,14 +58,14 @@ export class AuthService {
    * @param authLoginRequestDto - DTO containing the user's email and password.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
-   * @returns Promise resolving to an AuthLoginResponseDto with access & refresh tokens.
+   * @returns Promise resolving to an AuthResponseDto with access & refresh tokens.
    * @throws BadCredentialsException if credentials are invalid.
    */
   public async login(
     authLoginRequestDto: AuthLoginRequestDto,
     ipAddress: string,
     userAgent: string,
-  ): Promise<AuthLoginResponseDto> {
+  ): Promise<AuthResponseDto> {
     const { _id: userId } = await this.userService.verifyUserCredentialsOrThrow(
       authLoginRequestDto.email,
       authLoginRequestDto.password,
@@ -98,7 +98,7 @@ export class AuthService {
     ipAddress: string,
     userAgent: string,
     userId?: string,
-  ): Promise<AuthLoginResponseDto> {
+  ): Promise<AuthResponseDto> {
     const game = await this.gameRepository.findGameByPINOrThrow(gamePIN)
     const gameId = game._id
 
@@ -139,14 +139,14 @@ export class AuthService {
    * @param authRefreshRequestDto - DTO containing the refresh token.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
-   * @returns Promise resolving to an AuthLoginResponseDto with fresh tokens.
+   * @returns Promise resolving to an AuthResponseDto with fresh tokens.
    * @throws UnauthorizedException if token is invalid or missing REFRESH_AUTH authority.
    */
   public async refresh(
     authRefreshRequestDto: AuthRefreshRequestDto,
     ipAddress: string,
     userAgent: string,
-  ): Promise<AuthLoginResponseDto> {
+  ): Promise<AuthResponseDto> {
     let payload: TokenDto
 
     try {
@@ -228,7 +228,7 @@ export class AuthService {
    * @param ipAddress - The client's IP address to record in the token metadata.
    * @param userAgent - The client's User-Agent string to record in the token metadata.
    * @param additionalClaims - Extra payload (e.g. gameId, participantType).
-   * @returns Promise resolving to AuthLoginResponseDto with both tokens.
+   * @returns Promise resolving to AuthResponseDto with both tokens.
    * @private
    */
   private async signTokenPair(
@@ -237,7 +237,7 @@ export class AuthService {
     ipAddress: string,
     userAgent: string,
     additionalClaims?: Record<string, unknown>,
-  ): Promise<AuthLoginResponseDto> {
+  ): Promise<AuthResponseDto> {
     const pairId = uuidv4()
 
     const accessToken = await this.signToken(
