@@ -2,6 +2,7 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { JwtService } from '@nestjs/jwt'
 import {
+  AuthGameRequestDto,
   AuthLoginRequestDto,
   Authority,
   AuthRefreshRequestDto,
@@ -16,6 +17,7 @@ import ms, { StringValue } from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
 import { GameRepository } from '../../game/services'
+import { GameDocument } from '../../game/services/models/schemas'
 import { UserService } from '../../user/services'
 
 import { UserLoginEvent } from './models'
@@ -84,9 +86,11 @@ export class AuthService {
   }
 
   /**
-   * Authenticate into a game using its PIN.
+   * Authenticate into a game by its UUID or 6-digit PIN.
    *
-   * @param gamePIN - The game’s unique 6-digit PIN.
+   * @param authGameRequest – DTO containing **either**
+   *   - `gameId` (UUID) to identify the game by its unique ID, **or**
+   *   - `gamePIN` (6-digit string) to identify the game by its PIN.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
    * @param userId - Optional user ID to reuse (from a valid Game‐scoped user token).
@@ -94,12 +98,25 @@ export class AuthService {
    * @returns Access + refresh tokens scoped to that game.
    */
   public async authenticateGame(
-    gamePIN: string,
+    authGameRequest: AuthGameRequestDto,
     ipAddress: string,
     userAgent: string,
     userId?: string,
   ): Promise<AuthResponseDto> {
-    const game = await this.gameRepository.findGameByPINOrThrow(gamePIN)
+    let game: GameDocument
+    try {
+      game = await (authGameRequest.gameId
+        ? this.gameRepository.findGameByIDOrThrow(authGameRequest.gameId)
+        : this.gameRepository.findGameByPINOrThrow(authGameRequest.gamePIN))
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Failed to authenticate since an active game was not found: '${message}'.`,
+        stack,
+      )
+      throw new UnauthorizedException()
+    }
+
     const gameId = game._id
 
     const participantId = userId || uuidv4()
