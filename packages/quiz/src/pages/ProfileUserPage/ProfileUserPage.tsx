@@ -4,12 +4,15 @@ import React, { FC, useState } from 'react'
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
 
-import { ProfileUserPageUI, UpdateUserProfileFormFields } from './components'
+import { ProfileUserPageUI, UpdateUserDetailsFormFields } from './components'
+import { UpdateUserPasswordFormFields } from './components/ProfileUserPageUI/components'
 
 const ProfileUserPage: FC = () => {
-  const { getUserProfile, updateUserProfile } = useQuizServiceClient()
+  const { getUserProfile, updateUserProfile, updateUserPassword } =
+    useQuizServiceClient()
 
   const [isSavingUserProfile, setIsSavingUserProfile] = useState(false)
+  const [isSavingUserPassword, setIsSavingUserPassword] = useState(false)
 
   const {
     data,
@@ -20,9 +23,16 @@ const ProfileUserPage: FC = () => {
     queryFn: getUserProfile,
   })
 
-  const handleChange = (request: UpdateUserProfileFormFields): void => {
+  const handleChange = (request: UpdateUserDetailsFormFields): void => {
     setIsSavingUserProfile(true)
     updateUserProfile(request).finally(() => setIsSavingUserProfile(false))
+  }
+
+  const handlePasswordChange = (
+    request: UpdateUserPasswordFormFields,
+  ): void => {
+    setIsSavingUserPassword(true)
+    updateUserPassword(request).finally(() => setIsSavingUserPassword(false))
   }
 
   if (!data || isLoadingUserProfile || isError) {
@@ -42,7 +52,9 @@ const ProfileUserPage: FC = () => {
         defaultNickname: data.defaultNickname,
       }}
       loading={isLoadingUserProfile || isSavingUserProfile}
+      loadingPassword={isSavingUserPassword}
       onChange={handleChange}
+      onChangePassword={handlePasswordChange}
     />
   )
 }

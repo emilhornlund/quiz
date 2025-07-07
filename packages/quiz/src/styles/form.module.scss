@@ -1,0 +1,22 @@
+@use './helpers';
+@use './variables';
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter;
+    width: 100%;
+  }
+
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter;
+    width: variables.$mobile-width;
+  }
+
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter;
+    width: variables.$mobile-width;
+  }
+}
