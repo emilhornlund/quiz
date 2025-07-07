@@ -10,19 +10,19 @@ import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
   AuthGamePage,
-  CreateUserPage,
-  DiscoverPage,
+  AuthLoginPage,
+  AuthRegisterPage,
   ErrorPage,
+  GameJoinPage,
   GamePage,
   GameResultsPage,
   HomePage,
-  JoinPage,
-  LoginPage,
   ProfileGamesPage,
   ProfileQuizzesPage,
   ProfileUserPage,
   QuizCreatorPage,
   QuizDetailsPage,
+  QuizDiscoverPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
         path: '/auth/login',
         element: (
           <ProtectedRoute authenticated={false}>
-            <LoginPage />
+            <AuthLoginPage />
           </ProtectedRoute>
         ),
       },
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         path: '/auth/register',
         element: (
           <ProtectedRoute authenticated={false}>
-            <CreateUserPage />
+            <AuthRegisterPage />
           </ProtectedRoute>
         ),
       },
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
         path: '/discover',
         element: (
           <ProtectedRoute>
-            <DiscoverPage />
+            <QuizDiscoverPage />
           </ProtectedRoute>
         ),
       },
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute scope={TokenScope.Game}>
             <GameContextProvider>
-              <JoinPage />
+              <GameJoinPage />
             </GameContextProvider>
           </ProtectedRoute>
         ),
