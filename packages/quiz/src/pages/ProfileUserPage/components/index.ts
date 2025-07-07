@@ -1,5 +1,5 @@
 export type {
-  UpdateUserProfileFormFields,
+  UpdateUserDetailsFormFields,
   ProfileUserPageUIProps,
 } from './ProfileUserPageUI'
 export { default as ProfileUserPageUI } from './ProfileUserPageUI'

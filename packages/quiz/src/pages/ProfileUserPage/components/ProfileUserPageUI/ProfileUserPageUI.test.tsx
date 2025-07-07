@@ -17,7 +17,9 @@ describe('ProfileUserPageUI', () => {
             defaultNickname: '',
           }}
           loading={false}
+          loadingPassword={false}
           onChange={() => undefined}
+          onChangePassword={() => undefined}
         />
       </MemoryRouter>,
     )
