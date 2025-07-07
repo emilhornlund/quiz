@@ -98,7 +98,7 @@ export const useQuizServiceClient = () => {
       refreshToken &&
       path !== '/auth/refresh'
     ) {
-      const refreshed = await refresh({ refreshToken })
+      const refreshed = await refresh(scope, { refreshToken })
       accessToken = refreshed.accessToken
       refreshToken = refreshed.refreshToken
     }
@@ -120,7 +120,7 @@ export const useQuizServiceClient = () => {
 
     // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
     if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
-      const refreshed = await refresh({ refreshToken })
+      const refreshed = await refresh(scope, { refreshToken })
       return apiFetch<T>(method, path, body, scope, refreshed.accessToken)
     }
 
@@ -217,12 +217,16 @@ export const useQuizServiceClient = () => {
   /**
    * Sends a refresh request to the API and stores the returned authentication tokens.
    *
+   * @param scope - The TokenScope to use when authorizing this request (User or Game).
    * @param request - The request containing the refresh token.
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
-  const refresh = (request: AuthRefreshRequestDto): Promise<AuthResponseDto> =>
+  const refresh = (
+    scope: TokenScope,
+    request: AuthRefreshRequestDto,
+  ): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>('/auth/refresh', request).then((res) => {
-      setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
+      setTokenPair(scope, res.accessToken, res.refreshToken)
       return res
     })
 
