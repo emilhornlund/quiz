@@ -26,6 +26,8 @@ export const Default = {
       defaultNickname: '',
     },
     loading: false,
+    loadingPassword: false,
     onChange: () => undefined,
+    onChangePassword: () => undefined,
   },
 } satisfies Story

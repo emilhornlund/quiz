@@ -1,5 +1,3 @@
-export type {
-  UpdateUserProfileFormFields,
-  ProfileUserPageUIProps,
-} from './ProfileUserPageUI.tsx'
-export { default } from './ProfileUserPageUI.tsx'
+export type { UpdateUserDetailsFormFields } from './components'
+export type { ProfileUserPageUIProps } from './ProfileUserPageUI'
+export { default } from './ProfileUserPageUI'

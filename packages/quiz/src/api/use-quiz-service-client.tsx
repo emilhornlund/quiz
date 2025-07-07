@@ -1,6 +1,7 @@
 import {
   AuthGameRequestDto,
   AuthLoginRequestDto,
+  AuthPasswordChangeRequestDto,
   AuthRefreshRequestDto,
   AuthResponseDto,
   AuthRevokeRequestDto,
@@ -76,13 +77,13 @@ export const useQuizServiceClient = () => {
    * @template T - Expected response type
    * @param method - HTTP verb
    * @param path - API endpoint (relative)
-   * @param body - Payload for POST/PUT/DELETE
+   * @param body - Payload for GET/POST/PUT/PATCH/DELETE
    * @param scope - The TokenScope to use when authorizing this request (User or Game).
    * @param overrideToken - If provided, use this token instead of context
    * @returns {Promise<T>} - Parsed JSON response
    */
   const apiFetch = async <T extends object | void>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     body: ApiPostBody | undefined,
     scope: TokenScope,
@@ -169,6 +170,21 @@ export const useQuizServiceClient = () => {
     requestBody: ApiPostBody,
     scope: TokenScope = TokenScope.User,
   ) => apiFetch<T>('PUT', path, requestBody, scope)
+
+  /**
+   * Makes a PATCH request to the specified API endpoint.
+   *
+   * @template T - The expected type of the API response.
+   * @param path - The relative path to the API endpoint.
+   * @param requestBody - The request body to be sent in the PATCH request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @returns A promise resolving to the API response as type `T`.
+   */
+  const apiPatch = <T extends object | void>(
+    path: string,
+    requestBody: ApiPostBody,
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('PATCH', path, requestBody, scope)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -272,7 +288,7 @@ export const useQuizServiceClient = () => {
     apiGet<UserProfileResponseDto>('/profile/user')
 
   /**
-   * Updates the currently authenticated player's profile.
+   * Updates the currently authenticated user's profile.
    *
    * @param request - The user update data including email and optional names.
    *
@@ -292,6 +308,23 @@ export const useQuizServiceClient = () => {
       )
       return response
     })
+
+  /**
+   * Updates the currently authenticated user's password.
+   *
+   * @param request - The password data including the old and new passwords.
+   *
+   * @returns A promise that resolves when the password has been successfully updated.
+   */
+  const updateUserPassword = (
+    request: AuthPasswordChangeRequestDto,
+  ): Promise<void> =>
+    apiPatch('/auth/password', request)
+      .then(() => {})
+      .then((response) => {
+        notifySuccess('Done and dusted! Your password’s been refreshed.')
+        return response
+      })
 
   /**
    * Retrieves the quizzes associated with the current user.
@@ -605,6 +638,7 @@ export const useQuizServiceClient = () => {
     register,
     getUserProfile,
     updateUserProfile,
+    updateUserPassword,
     getProfileQuizzes,
     createQuiz,
     getQuiz,
