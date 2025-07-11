@@ -34,7 +34,7 @@ export class EmailService {
    *   - `html`: HTML body of the email.
    * @returns A promise that resolves when the email has been sent.
    */
-  public async sendEmail(
+  private async sendEmail(
     options: Pick<ISendMailOptions, 'to' | 'subject' | 'text' | 'html'>,
   ) {
     if (this.configService.get('EMAIL_ENABLED') === false) {
@@ -50,5 +50,46 @@ export class EmailService {
       const { message, stack } = error as Error
       this.logger.error(`Failed to send email: '${message}'.`, stack)
     }
+  }
+
+  /**
+   * Sends a welcome email containing a verification link to a new user.
+   *
+   * @param to               – Recipient’s email address.
+   * @param verificationLink – URL the user clicks to verify their email.
+   * @returns A promise that resolves when the welcome email has been sent.
+   */
+  public async sendWelcomeEmail(to: string, verificationLink: string) {
+    this.logger.log(`Sending welcome email to ${to}.`)
+
+    const text = `Hi,
+
+Thank you for signing up for Klurigo. We’re thrilled to have you on board!
+
+Please verify your email address by clicking or copying the link below into your browser:
+${verificationLink}
+
+If you didn’t create this account, simply ignore this email.
+
+Cheers,  
+The Klurigo Team`
+
+    const html = `<p>Hi,</p>
+
+<p>Thank you for signing up for Klurigo. We’re thrilled to have you on board!</p>
+
+<p>Please verify your email address by clicking or copying the link below into your browser:</p>
+<a href="${verificationLink}">${verificationLink}</a>
+
+<p>If you didn’t create this account, simply ignore this email.</p>
+
+<p>Cheers,<br />The Klurigo Team</p>`
+
+    await this.sendEmail({
+      to,
+      subject: 'Welcome to Klurigo!',
+      text,
+      html,
+    })
   }
 }
