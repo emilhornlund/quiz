@@ -19,7 +19,7 @@ import {
 import { Redis } from 'ioredis'
 
 import { QuizService } from '../../quiz/services'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import {
   NicknameNotUniqueException,
   PlayerNotFoundException,

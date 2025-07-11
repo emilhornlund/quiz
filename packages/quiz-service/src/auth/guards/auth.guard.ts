@@ -15,8 +15,7 @@ import {
 } from '@quiz/common'
 import { Request } from 'express'
 
-import { UserRepository } from '../../user/services'
-import { User } from '../../user/services/models/schemas'
+import { User, UserRepository } from '../../user/repositories'
 import { IS_PUBLIC_KEY } from '../controllers/decorators'
 import {
   REQUIRED_AUTHORITIES_KEY,

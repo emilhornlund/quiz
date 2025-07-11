@@ -13,7 +13,7 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { UserRepository } from '../../user/services'
+import { UserRepository } from '../../user/repositories'
 import {
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,

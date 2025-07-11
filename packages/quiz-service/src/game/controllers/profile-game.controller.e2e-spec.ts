@@ -17,7 +17,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { Game, GameModel } from '../services/models/schemas'
 
 describe('ProfileGameController (e2e)', () => {
