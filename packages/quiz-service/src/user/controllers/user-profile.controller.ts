@@ -22,8 +22,8 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
+import { User } from '../repositories'
 import { UserService } from '../services'
-import { User } from '../services/models/schemas'
 
 import { UpdateUserProfileRequest, UserProfileResponse } from './models'
 

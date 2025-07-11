@@ -2,7 +2,7 @@ import { GameParticipantType, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Quiz } from '../../../quiz/services/models/schemas'
-import { User } from '../../../user/services/models/schemas'
+import { User } from '../../../user/repositories'
 import { Game } from '../models/schemas'
 
 import { buildLobbyTask } from './task.converter'

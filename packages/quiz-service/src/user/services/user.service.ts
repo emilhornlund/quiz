@@ -14,9 +14,8 @@ import {
 import * as bcrypt from 'bcryptjs'
 
 import { BadCredentialsException } from '../exceptions'
+import { LocalUser, User, UserRepository } from '../repositories'
 
-import { LocalUser, User } from './models/schemas'
-import { UserRepository } from './user.repository'
 import { isLocalUser } from './utils'
 
 /**
@@ -39,13 +38,13 @@ export class UserService {
    *
    * @param email - The email address of the user.
    * @param password - The plaintext password to verify.
-   * @returns Promise resolving to the User & LocalUser data when valid.
+   * @returns Promise resolving to the LocalUser data when valid.
    * @throws BadCredentialsException if email not found, provider mismatch, or password incorrect.
    */
   public async verifyUserCredentialsOrThrow(
     email: string,
     password: string,
-  ): Promise<User & LocalUser> {
+  ): Promise<LocalUser> {
     const user = await this.userRepository.findUserByEmail(email)
     if (!user) {
       this.logger.debug(
@@ -195,7 +194,7 @@ export class UserService {
 
         await this.userRepository.findUserByIdAndUpdateOrThrow(userId, {
           hashedPassword,
-        } as User & LocalUser)
+        } as LocalUser)
 
         this.logger.log(`Updated password for user '${userId}'.`)
       } else {
@@ -255,7 +254,7 @@ export class UserService {
       givenName,
       familyName,
       defaultNickname,
-      provider: authProvider,
+      authProvider,
       createdAt: created,
       updatedAt: updated,
     } = user

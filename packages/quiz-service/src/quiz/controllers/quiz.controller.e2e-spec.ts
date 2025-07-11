@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { buildMockSecondaryUser } from '../../../test-utils/data'
 import { createDefaultUserAndAuthenticate } from '../../../test-utils/utils'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { User, UserModel } from '../../user/services/models/schemas'
+import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
 const multiChoiceQuestion: QuestionMultiChoiceDto = {

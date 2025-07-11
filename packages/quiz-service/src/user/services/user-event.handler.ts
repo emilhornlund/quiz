@@ -3,8 +3,7 @@ import { OnEvent } from '@nestjs/event-emitter'
 
 import { UserLoginEvent } from '../../auth/services/models'
 import { USER_LOGIN_EVENT_KEY } from '../../auth/services/utils'
-
-import { UserRepository } from './user.repository'
+import { UserRepository } from '../repositories'
 
 /**
  * Handles domain events related to users.

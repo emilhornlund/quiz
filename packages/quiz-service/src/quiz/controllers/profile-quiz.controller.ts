@@ -13,7 +13,7 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { QuizService } from '../services'
 
 import { PaginatedQuizResponse, QuizPageQueryFilter } from './models'

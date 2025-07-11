@@ -30,7 +30,7 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 

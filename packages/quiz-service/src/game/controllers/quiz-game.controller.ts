@@ -18,7 +18,7 @@ import {
 import { ApiQuizIdParam } from '../../quiz/controllers/decorators/api'
 import { AuthorizedQuiz } from '../../quiz/controllers/decorators/auth'
 import { RouteQuizIdParam } from '../../quiz/controllers/decorators/params'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { GameService } from '../services'
 
 import { CreateGameResponse } from './models/response'

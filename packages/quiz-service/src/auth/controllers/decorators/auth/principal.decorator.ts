@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 
-import { User } from '../../../../user/services/models/schemas'
+import { User } from '../../../../user/repositories'
 import { AuthGuardRequest } from '../../../guards'
 
 /**
