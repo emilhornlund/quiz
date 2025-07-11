@@ -2,7 +2,7 @@ import { ArgumentMetadata } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { validate } from 'class-validator'
 
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { ValidationException } from '../exceptions'
 
 import { ValidationPipe } from './validation.pipe'

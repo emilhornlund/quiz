@@ -10,7 +10,7 @@ import {
   MOCK_PRIMARY_USER_GIVEN_NAME,
 } from '../../../test-utils/data'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { UserRepository } from '../services'
+import { UserRepository } from '../repositories'
 
 describe('UserController (e2e)', () => {
   let app: INestApplication

@@ -27,7 +27,7 @@ import {
   createTestApp,
 } from '../../../test-utils/utils'
 import { Game, GameModel } from '../../game/services/models/schemas'
-import { User, UserModel } from '../../user/services/models/schemas'
+import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'
 import {
   DEFAULT_GAME_AUTHORITIES,

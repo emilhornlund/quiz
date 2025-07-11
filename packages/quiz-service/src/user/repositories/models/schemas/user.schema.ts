@@ -4,6 +4,54 @@ import { Model, now } from 'mongoose'
 
 import { SkipValidation } from '../../../../app/decorators'
 
+interface IUser {
+  /**
+   * The user’s unique identifier.
+   */
+
+  _id: string
+
+  /**
+   * The user’s authentication provider.
+   */
+  authProvider: AuthProvider
+
+  /**
+   * The user’s unique email address.
+   */
+  email: string
+
+  /**
+   * The user’s given name (optional).
+   */
+  givenName?: string
+
+  /**
+   * The user’s family name (optional).
+   */
+  familyName?: string
+
+  /**
+   * The user’s default nickname used for when participating in games (optional).
+   */
+  defaultNickname?: string
+
+  /**
+   * Date and time of the user's last successful login.
+   */
+  lastLoggedInAt?: Date
+
+  /**
+   * Timestamp when the user was created (ISO-8601 string).
+   */
+  createdAt: Date
+
+  /**
+   * Timestamp when the user was last updated (ISO-8601 string).
+   */
+  updatedAt: Date
+}
+
 /**
  * Mongoose schema for the User collection.
  */
@@ -11,10 +59,10 @@ import { SkipValidation } from '../../../../app/decorators'
 @Schema({
   _id: true,
   collection: 'users',
-  discriminatorKey: 'provider',
+  discriminatorKey: 'authProvider',
   timestamps: true,
 })
-export class User {
+export class User implements IUser {
   /**
    * The unique identifier of the user.
    * Acts as the primary key in the database.
@@ -28,10 +76,10 @@ export class User {
    */
   @Prop({
     type: String,
-    enum: Object.values(AuthProvider),
+    enum: [AuthProvider.Local],
     required: true,
   })
-  provider!: AuthProvider.Local
+  authProvider: AuthProvider
 
   /**
    * The user’s unique email address.
@@ -59,7 +107,6 @@ export class User {
 
   /**
    * Date and time of the user's last successful login.
-   * This field is updated by listening to UserLoginEvent.
    */
   @Prop({ type: Date, required: false })
   lastLoggedInAt?: Date
@@ -92,17 +139,57 @@ export const UserSchema = SchemaFactory.createForClass(User)
  * Only applies when `provider === AuthProvider.LOCAL`.
  */
 @Schema({ _id: false })
-export class LocalUser {
+export class LocalUser implements IUser {
   /**
-   * Must be "LOCAL" for this subdocument.
+   * The user’s unique identifier.
    */
-  provider!: AuthProvider.Local
+  _id: string
+
+  /**
+   * The user’s authentication provider, Local in for this discriminator.
+   */
+  authProvider!: AuthProvider.Local
+
+  /**
+   * The user’s unique email address.
+   */
+  email: string
 
   /**
    * The user’s hashed password for a local account.
    */
   @Prop({ type: String, required: true })
   hashedPassword: string
+
+  /**
+   * The user’s given name (optional).
+   */
+  givenName?: string
+
+  /**
+   * The user’s family name (optional).
+   */
+  familyName?: string
+
+  /**
+   * The user’s default nickname used for when participating in games (optional).
+   */
+  defaultNickname?: string
+
+  /**
+   * Date and time of the user's last successful login.
+   */
+  lastLoggedInAt?: Date
+
+  /**
+   * Timestamp when the user was created (ISO-8601 string).
+   */
+  createdAt: Date
+
+  /**
+   * Timestamp when the user was last updated (ISO-8601 string).
+   */
+  updatedAt: Date
 }
 
 /**

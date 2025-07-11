@@ -21,7 +21,7 @@ import {
 import { RootFilterQuery } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import { QuizNotFoundException } from '../exceptions'
 
 import {

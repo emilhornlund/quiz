@@ -90,7 +90,7 @@ export class UserRepository {
   }): Promise<User> {
     return new this.userModel({
       _id: uuidv4(),
-      provider: AuthProvider.Local,
+      authProvider: AuthProvider.Local,
       ...details,
     }).save()
   }

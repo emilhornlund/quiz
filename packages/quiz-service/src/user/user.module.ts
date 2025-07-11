@@ -4,8 +4,13 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 
 import { UserController, UserProfileController } from './controllers'
-import { UserEventHandler, UserRepository, UserService } from './services'
-import { LocalUserSchema, User, UserSchema } from './services/models/schemas'
+import {
+  LocalUserSchema,
+  User,
+  UserRepository,
+  UserSchema,
+} from './repositories'
+import { UserEventHandler, UserService } from './services'
 
 /**
  * Module for managing user-related operations.

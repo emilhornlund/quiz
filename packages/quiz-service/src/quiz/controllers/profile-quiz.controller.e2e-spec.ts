@@ -16,7 +16,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { User, UserModel } from '../../user/services/models/schemas'
+import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
 describe('ProfileQuizController (e2e)', () => {
