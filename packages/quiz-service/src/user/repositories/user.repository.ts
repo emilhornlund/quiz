@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
 
-import { User, UserModel } from './models/schemas'
+import { LocalUser, User, UserModel } from './models'
 
 /**
  * Repository for interacting with the User collection in the database.
@@ -81,17 +81,16 @@ export class UserRepository {
    * @param details - Object containing email, hashedPassword, givenName and familyName.
    * @returns The newly created User document.
    */
-  public async createLocalUser(details: {
-    email: string
-    hashedPassword: string
-    givenName?: string
-    familyName?: string
-    defaultNickname?: string
-  }): Promise<User> {
+  public async createLocalUser(
+    details: Omit<
+      LocalUser,
+      '_id' | 'authProvider' | 'createdAt' | 'updatedAt'
+    >,
+  ): Promise<User> {
     return new this.userModel({
+      ...details,
       _id: uuidv4(),
       authProvider: AuthProvider.Local,
-      ...details,
     }).save()
   }
 
