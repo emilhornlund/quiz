@@ -22,7 +22,7 @@ import {
   createTestApp,
 } from '../../../test-utils/utils'
 import { Quiz } from '../../quiz/services/models/schemas'
-import { User, UserModel } from '../../user/services/models/schemas'
+import { User, UserModel } from '../../user/repositories'
 import { Game, GameResult, TaskType } from '../services/models/schemas'
 
 describe('GameResultController (e2e)', () => {

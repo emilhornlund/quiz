@@ -8,7 +8,7 @@ import {
 } from '@quiz/common'
 import { Model, Schema as MongooseSchema } from 'mongoose'
 
-import { User } from '../../../../user/services/models/schemas'
+import { User } from '../../../../user/repositories'
 
 import {
   BaseQuestionDao,

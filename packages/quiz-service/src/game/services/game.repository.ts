@@ -5,7 +5,7 @@ import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { Quiz } from '../../quiz/services/models/schemas'
-import { User } from '../../user/services/models/schemas'
+import { User } from '../../user/repositories'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,
