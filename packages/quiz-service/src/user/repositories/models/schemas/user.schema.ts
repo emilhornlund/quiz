@@ -156,6 +156,12 @@ export class LocalUser implements IUser {
   email: string
 
   /**
+   * The user’s unverified email address (optional).
+   */
+  @Prop({ type: String, required: false })
+  unverifiedEmail?: string
+
+  /**
    * The user’s hashed password for a local account.
    */
   @Prop({ type: String, required: true })

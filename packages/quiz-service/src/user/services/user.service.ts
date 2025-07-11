@@ -93,8 +93,9 @@ export class UserService {
       CreateUserRequestDto,
       'email' | 'givenName' | 'familyName' | 'defaultNickname'
     > &
-      Pick<LocalUser, 'hashedPassword'> = {
+      Pick<LocalUser, 'unverifiedEmail' | 'hashedPassword'> = {
       email,
+      unverifiedEmail: email,
       hashedPassword,
       givenName,
       familyName,
