@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
@@ -57,7 +57,7 @@ import { Token, TokenSchema } from './services/models/schemas'
     ]),
     EventEmitterModule,
     GameModule,
-    UserModule,
+    forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
   providers: [
