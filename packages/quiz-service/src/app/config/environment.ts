@@ -19,4 +19,5 @@ export interface EnvironmentVariables {
   EMAIL_ENABLED: boolean
   EMAIL_USERNAME: string
   EMAIL_PASSWORD: string
+  KLURIGO_URL: string
 }

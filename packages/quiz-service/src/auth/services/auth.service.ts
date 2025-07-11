@@ -1,4 +1,10 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { JwtService } from '@nestjs/jwt'
 import {
@@ -47,6 +53,7 @@ export class AuthService {
    * @param eventEmitter - EventEmitter2 instance for emitting authentication-related events.
    */
   constructor(
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly gameRepository: GameRepository,
     private readonly tokenRepository: TokenRepository,
@@ -349,6 +356,33 @@ export class AuthService {
     })
 
     return token
+  }
+
+  /**
+   * Signs a JWT token for email verification.
+   *
+   * Generates a token with the `VERIFY_EMAIL` authority that expires in 72 hours.
+   *
+   * @param subject – The user ID (JWT `sub` claim) for whom the token is issued.
+   * @param email   – The email address to include in the token payload.
+   * @returns A promise that resolves to the signed verification token string.
+   */
+  public async signVerifyEmailToken(
+    subject: string,
+    email: string,
+  ): Promise<string> {
+    return this.jwtService.signAsync(
+      {
+        scope: TokenScope.User,
+        authorities: [Authority.VerifyEmail],
+        email,
+      },
+      {
+        jwtid: uuidv4(),
+        subject,
+        expiresIn: '72h',
+      },
+    )
   }
 
   /**

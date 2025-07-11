@@ -1,9 +1,12 @@
 import {
   BadRequestException,
   ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   Logger,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import {
   AuthProvider,
   CreateUserRequestDto,
@@ -13,6 +16,9 @@ import {
 } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
 
+import { EnvironmentVariables } from '../../app/config'
+import { AuthService } from '../../auth/services'
+import { EmailService } from '../../email/services'
 import { BadCredentialsException } from '../exceptions'
 import { LocalUser, User, UserRepository } from '../repositories'
 
@@ -29,9 +35,18 @@ export class UserService {
   /**
    * Initializes the UserService.
    *
-   * @param userRepository - Repository for user data access.
+   * @param userRepository – Repository for user data access.
+   * @param authService    – Service for authentication operations (e.g., token generation, verification).
+   * @param emailService   – Service for sending emails (welcome, verification, etc.).
+   * @param configService  – Service for reading application configuration and environment variables.
    */
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService<EnvironmentVariables>,
+  ) {}
 
   /**
    * Verifies a local‐auth user's credentials.
@@ -105,6 +120,18 @@ export class UserService {
     const createdUser = await this.userRepository.createLocalUser(details)
 
     this.logger.log(`Created a new user with email: '${email}'.`)
+
+    try {
+      const verificationToken = await this.authService.signVerifyEmailToken(
+        createdUser._id,
+        email,
+      )
+      const verificationLink = `${this.configService.get('KLURIGO_URL')}/auth/verify?token=${verificationToken}`
+      await this.emailService.sendWelcomeEmail(email, verificationLink)
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.error(`Failed to send welcome email: '${message}'.`, stack)
+    }
 
     return UserService.toCreateUserResponse(createdUser)
   }

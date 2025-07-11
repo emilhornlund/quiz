@@ -30,4 +30,9 @@ export enum Authority {
    * retrieving and updating their profiles.
    */
   User = 'USER',
+
+  /**
+   * Permission to allow generation and validation of email-verification tokens.
+   */
+  VerifyEmail = 'VERIFY_EMAIL',
 }

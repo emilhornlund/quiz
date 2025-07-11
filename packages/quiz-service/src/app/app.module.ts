@@ -63,6 +63,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         EMAIL_ENABLED: Joi.boolean().default(true),
         EMAIL_USERNAME: Joi.string().optional(),
         EMAIL_PASSWORD: Joi.string().optional(),
+        KLURIGO_URL: Joi.string().required(),
       }),
       isGlobal: true,
     }),
