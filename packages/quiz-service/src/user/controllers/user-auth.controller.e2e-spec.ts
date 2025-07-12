@@ -205,4 +205,56 @@ describe('UserAuthController (e2e)', () => {
         })
     })
   })
+
+  describe('/api/auth/password/reset (POST)', () => {
+    it('should send a password reset email successfully', async () => {
+      const { email } = await userRepository.createLocalUser({
+        email: MOCK_PRIMARY_USER_EMAIL,
+        hashedPassword: MOCK_DEFAULT_HASHED_PASSWORD,
+        givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+        familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+        defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+      })
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/password/reset')
+        .send({ email })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should return successfully when a user was not found by email', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/password/reset')
+        .send({ email: 'non-existent-email@example.com' })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should return 400 bad request when email validation fails', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/password/reset')
+        .send({ email: 'invalid-email' })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  matches: 'Email must be a valid address.',
+                },
+                property: 'email',
+              },
+            ],
+          })
+        })
+    })
+  })
 })
