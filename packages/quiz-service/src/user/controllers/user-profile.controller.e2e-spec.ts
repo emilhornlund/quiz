@@ -17,6 +17,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
+import { LocalUser } from '../repositories'
 
 describe('UserProfileController (e2e)', () => {
   let app: INestApplication
@@ -31,7 +32,10 @@ describe('UserProfileController (e2e)', () => {
 
   describe('/api/profile/user (GET)', () => {
     it('should succeed in retrieving the associated profile from a user', async () => {
-      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        { unverifiedEmail: MOCK_SECONDARY_USER_EMAIL } as Partial<LocalUser>,
+      )
 
       return supertest(app.getHttpServer())
         .get('/api/profile/user')
@@ -41,6 +45,7 @@ describe('UserProfileController (e2e)', () => {
           expect(res.body).toEqual({
             id: user._id,
             email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
             givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
             familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
             defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
@@ -82,7 +87,8 @@ describe('UserProfileController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toEqual({
             id: user._id,
-            email: MOCK_SECONDARY_USER_EMAIL,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
             givenName: MOCK_SECONDARY_USER_GIVEN_NAME,
             familyName: MOCK_SECONDARY_USER_FAMILY_NAME,
             defaultNickname: MOCK_SECONDARY_USER_DEFAULT_NICKNAME,
@@ -93,7 +99,63 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should update the user’s nickname containing emojis successfully', async () => {
+    it('should not set the user’s unverified email when the new email it equals the old email', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: undefined,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            authProvider: AuthProvider.Local,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should unset the user’s unverified email when the new email equals the old already verified email', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        {
+          email: MOCK_PRIMARY_USER_EMAIL,
+          unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
+        } as Partial<LocalUser>,
+      )
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: undefined,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            authProvider: AuthProvider.Local,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should update the user’s default nickname containing emojis successfully', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const defaultNickname = '🥶🐻'
