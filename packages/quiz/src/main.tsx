@@ -12,6 +12,7 @@ import {
   AuthGamePage,
   AuthLoginPage,
   AuthRegisterPage,
+  AuthVerifyPage,
   ErrorPage,
   GameJoinPage,
   GamePage,
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
             <AuthRegisterPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: '/auth/verify',
+        element: <AuthVerifyPage />,
       },
       {
         path: '/auth/game',
