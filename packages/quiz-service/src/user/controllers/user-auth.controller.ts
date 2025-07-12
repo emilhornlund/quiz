@@ -18,6 +18,7 @@ import { Authority, TokenDto, TokenScope } from '@quiz/common'
 
 import {
   JwtPayload,
+  PrincipalId,
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
@@ -73,5 +74,41 @@ export class UserAuthController {
       throw new UnauthorizedException('Unauthorized')
     }
     return this.userService.verifyEmail(payload.sub, payload.email)
+  }
+
+  /**
+   * Resends the verification email to the authenticated user’s unverified email address.
+   *
+   * Applies:
+   * - `@RequiresScopes(TokenScope.User)` to enforce the user scope.
+   * - `@RequiredAuthorities(Authority.User)` to ensure the user has the proper authority.
+   *
+   * @param userId - The unique identifier of the authenticated user requesting the resend.
+   * @returns void upon successful dispatch of the verification email.
+   */
+  @Post('/email/resend_verification')
+  @RequiresScopes(TokenScope.User)
+  @RequiredAuthorities(Authority.User)
+  @ApiOperation({
+    summary: 'Resend email verification',
+    description:
+      'Sends a new email verification link to the user’s unverified email address.',
+  })
+  @ApiNoContentResponse({
+    description:
+      'No content returned when the verification email is sent successfully.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Authorization header is missing or invalid.',
+  })
+  @ApiForbiddenResponse({
+    description:
+      'User does not have sufficient authority to perform this operation.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async resendEmailVerification(
+    @PrincipalId() userId: string,
+  ): Promise<void> {
+    return this.userService.resendVerificationEmail(userId)
   }
 }
