@@ -14,23 +14,34 @@ import {
   PLAYER_NICKNAME_REGEX,
   UpdateUserProfileRequestDto,
 } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { Button, TextField, Typography } from '../../../../../../components'
 import styles from '../../../../../../styles/form.module.scss'
 
-export type UpdateUserDetailsFormFields = UpdateUserProfileRequestDto
+export type UpdateUserDetailsFormFields = UpdateUserProfileRequestDto & {
+  unverifiedEmail?: string
+}
 
 export interface UserDetailsFormProps {
   values: UpdateUserDetailsFormFields
   loading: boolean
   onChange: (request: UpdateUserDetailsFormFields) => void
+  onClickResendVerificationEmail: () => void
 }
 
 const UserDetailsForm: FC<UserDetailsFormProps> = ({
   values,
   loading,
   onChange,
+  onClickResendVerificationEmail,
 }) => {
   const [formFields, setFormFields] =
     useState<UpdateUserDetailsFormFields>(values)
@@ -73,6 +84,11 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
     }
   }
 
+  const handleClickResendVerificationEmail = (event: MouseEvent) => {
+    event.preventDefault()
+    onClickResendVerificationEmail()
+  }
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     onChange(formFields)
@@ -87,19 +103,38 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
         recognize you during games.
       </Typography>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <TextField
-          id="email"
-          type="text"
-          placeholder="Email"
-          value={formFields.email}
-          minLength={EMAIL_MIN_LENGTH}
-          maxLength={EMAIL_MAX_LENGTH}
-          regex={EMAIL_REGEX}
-          disabled={loading}
-          onChange={(value) => handleChangeFormField('email', value as string)}
-          onValid={(valid) => handleChangeValidFormField('email', valid)}
-          required
-        />
+        <div className={styles.formField}>
+          <TextField
+            id="email"
+            type="text"
+            placeholder="Email"
+            value={formFields.email}
+            minLength={EMAIL_MIN_LENGTH}
+            maxLength={EMAIL_MAX_LENGTH}
+            regex={EMAIL_REGEX}
+            disabled={loading}
+            onChange={(value) =>
+              handleChangeFormField('email', value as string)
+            }
+            onValid={(valid) => handleChangeValidFormField('email', valid)}
+            required
+          />
+          {formFields.unverifiedEmail && (
+            <span className={styles.hint}>
+              Whoops, your email{' '}
+              <i>
+                <b>{formFields.unverifiedEmail}</b>
+              </i>{' '}
+              hasn’t RSVP’d to verification yet!{' '}
+              <button
+                type="button"
+                className={styles.buttonLink}
+                onClick={handleClickResendVerificationEmail}>
+                Zap me a fresh verification link!
+              </button>
+            </span>
+          )}
+        </div>
         <TextField
           id="givenName"
           type="text"

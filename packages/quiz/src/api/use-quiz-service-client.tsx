@@ -276,6 +276,26 @@ export const useQuizServiceClient = () => {
     )
 
   /**
+   * Resend a verification email to the current user.
+   *
+   * @returns {Promise<void>} Resolves once the email has been sent (or rejects on failure).
+   */
+  const resendVerificationEmail = (): Promise<void> =>
+    apiPost<void>('/auth/email/resend_verification', {})
+      .then((response) => {
+        notifySuccess(
+          'Hooray! A fresh verification email is on its way—check your inbox!',
+        )
+        return response
+      })
+      .catch((error) => {
+        notifyError(
+          'Whoops! We couldn’t resend your verification email. Please try again.',
+        )
+        throw error
+      })
+
+  /**
    * Sends a registration request to the API to create a new user account.
    *
    * @param request - The user registration data including email, password, and optional names.
@@ -653,6 +673,7 @@ export const useQuizServiceClient = () => {
     authenticateGame,
     revoke,
     verifyEmail,
+    resendVerificationEmail,
     register,
     getUserProfile,
     updateUserProfile,

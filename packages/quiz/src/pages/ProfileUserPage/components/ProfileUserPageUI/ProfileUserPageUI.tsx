@@ -15,6 +15,7 @@ export interface ProfileUserPageUIProps {
   loadingPassword: boolean
   onChange: (request: UpdateUserDetailsFormFields) => void
   onChangePassword: (request: UpdateUserPasswordFormFields) => void
+  onClickResendVerificationEmail: () => void
 }
 
 const ProfileUserPageUI: FC<ProfileUserPageUIProps> = ({
@@ -23,9 +24,15 @@ const ProfileUserPageUI: FC<ProfileUserPageUIProps> = ({
   loadingPassword,
   onChange,
   onChangePassword,
+  onClickResendVerificationEmail,
 }) => (
   <Page align="start" discover profile>
-    <UserDetailsForm values={values} loading={loading} onChange={onChange} />
+    <UserDetailsForm
+      values={values}
+      loading={loading}
+      onChange={onChange}
+      onClickResendVerificationEmail={onClickResendVerificationEmail}
+    />
     <PageDivider />
     <UserPasswordForm loading={loadingPassword} onChange={onChangePassword} />
   </Page>

@@ -21,6 +21,7 @@ export const Default = {
   args: {
     values: {
       email: '',
+      unverifiedEmail: undefined,
       givenName: '',
       familyName: '',
       defaultNickname: '',
@@ -29,5 +30,6 @@ export const Default = {
     loadingPassword: false,
     onChange: () => undefined,
     onChangePassword: () => undefined,
+    onClickResendVerificationEmail: () => undefined,
   },
 } satisfies Story
