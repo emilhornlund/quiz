@@ -7,7 +7,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { GameParticipantType, TokenScope } from '@quiz/common'
+import {
+  GameParticipantType,
+  GameTokenDto,
+  TokenDto,
+  TokenScope,
+} from '@quiz/common'
 
 import { AuthGuardRequest } from '../../auth/guards'
 import { GAME_PARTICIPANT_TYPE } from '../controllers/decorators/auth'
@@ -42,7 +47,9 @@ export class GameAuthGuard implements CanActivate {
    * @throws {UnauthorizedException} if the token scope is unrecognized.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<AuthGuardRequest>()
+    const request = context
+      .switchToHttp()
+      .getRequest<AuthGuardRequest<GameTokenDto>>()
 
     const requiredParticipantType =
       this.reflector.getAllAndOverride<GameParticipantType>(
@@ -55,13 +62,13 @@ export class GameAuthGuard implements CanActivate {
       throw new BadRequestException()
     }
 
-    if (request.scope === TokenScope.Game) {
+    if (request.payload.scope === TokenScope.Game) {
       await this.verifyGameScopeOrThrow(
         gameID,
         request,
         requiredParticipantType,
       )
-    } else if (request.scope === TokenScope.User) {
+    } else if (request.payload.scope === TokenScope.User) {
       await this.verifyUserScopeOrThrow(
         gameID,
         request,
@@ -87,16 +94,16 @@ export class GameAuthGuard implements CanActivate {
    */
   private async verifyGameScopeOrThrow(
     gameID: string,
-    request: AuthGuardRequest,
+    request: AuthGuardRequest<GameTokenDto>,
     requiredParticipantType?: GameParticipantType,
   ): Promise<void> {
-    if (gameID !== request.gameId) {
+    if (gameID !== request.payload.gameId) {
       throw new ForbiddenException()
     }
 
     if (
       requiredParticipantType &&
-      requiredParticipantType !== request.participantType
+      requiredParticipantType !== request.payload.participantType
     ) {
       throw new ForbiddenException()
     }
@@ -115,13 +122,13 @@ export class GameAuthGuard implements CanActivate {
    */
   private async verifyUserScopeOrThrow(
     gameID: string,
-    request: AuthGuardRequest,
+    request: AuthGuardRequest<TokenDto>,
     requiredParticipantType?: GameParticipantType,
   ): Promise<void> {
     const game = await this.gameRepository.findGameByIDOrThrow(gameID, false)
 
     const participant = game.participants.find(
-      (participant) => participant.participantId === request.principalId,
+      (participant) => participant.participantId === request.payload.sub,
     )
 
     if (

@@ -6,13 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import {
-  Authority,
-  GameParticipantType,
-  GameTokenDto,
-  TokenDto,
-  TokenScope,
-} from '@quiz/common'
+import { Authority, GameTokenDto, TokenDto, TokenScope } from '@quiz/common'
 import { Request } from 'express'
 
 import { User, UserRepository } from '../../user/repositories'
@@ -27,25 +21,7 @@ import { AuthService } from '../services'
  * Extended Express Request that includes authentication state
  * set by the AuthGuard.
  */
-export interface AuthGuardRequest extends Request {
-  /**
-   * The broad API area this request is operating under,
-   * taken from the JWT’s `scope` claim.
-   */
-  scope: TokenScope
-
-  /**
-   * The list of authorities (permissions) granted by the JWT,
-   * taken from the JWT’s `authorities` claim.
-   */
-  authorities: Authority[]
-
-  /**
-   * Unique identifier of the authenticated subject (from the JWT `sub` claim).
-   * Always set when authentication succeeds.
-   */
-  principalId: string
-
+export interface AuthGuardRequest<T extends TokenDto> extends Request {
   /**
    * The authenticated user record, populated when `scope` is `User` or `Game`.
    * Fetched via `UserRepository.findUserByIdOrThrow(sub)`.
@@ -53,14 +29,10 @@ export interface AuthGuardRequest extends Request {
   user?: User
 
   /**
-   * The game ID extracted from a Game-scoped token.
+   * The full JWT payload, including standard claims (`sub`, `scope`, `authorities`)
+   * and any custom claims.
    */
-  gameId?: string
-
-  /**
-   * The participant type (host or player) from a Game-scoped token.
-   */
-  participantType?: GameParticipantType
+  payload: T
 }
 
 /**
@@ -122,16 +94,15 @@ export class AuthGuard implements CanActivate {
       return true
     }
 
-    const request = context.switchToHttp().getRequest<AuthGuardRequest>()
+    const request = context
+      .switchToHttp()
+      .getRequest<AuthGuardRequest<TokenDto>>()
     const payload = await this.verifyTokenOrThrow(request)
+    request.payload = payload
     const { sub, scope, authorities } = payload
 
     this.verifyAuthorizedScopesOrThrows(scope, context)
     this.verifyAuthorizedAuthoritiesOrThrows(authorities, context)
-
-    request.scope = scope
-    request.authorities = authorities
-    request.principalId = sub
 
     if (scope === TokenScope.User) {
       try {
@@ -147,9 +118,6 @@ export class AuthGuard implements CanActivate {
       if (!gameId || !participantType) {
         throw new UnauthorizedException('No gameId or participantType in token')
       }
-
-      request.gameId = gameId
-      request.participantType = participantType
     }
 
     return true
