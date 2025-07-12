@@ -13,9 +13,13 @@ import { buildMockPrimaryUser } from '../data'
 
 export async function createDefaultUserAndAuthenticate(
   app: INestApplication,
+  mockUser?: Partial<User>,
 ): Promise<{ accessToken: string; user: User }> {
   const userModel = app.get<UserModel>(getModelToken(User.name))
-  const user = await userModel.create(buildMockPrimaryUser())
+  const user = await userModel.create({
+    ...buildMockPrimaryUser(),
+    ...mockUser,
+  })
 
   const jwtService = app.get<JwtService>(JwtService)
   const accessToken = await jwtService.signAsync(

@@ -14,6 +14,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { REQUEST } from '@nestjs/core'
 import {
+  TokenDto,
   UPLOAD_IMAGE_MAX_FILE_SIZE,
   UPLOAD_IMAGE_MIMETYPE_REGEX,
   UPLOAD_IMAGE_MIN_FILE_SIZE,
@@ -42,7 +43,7 @@ export class ParseImageFilePipe
    * @param logger - Optional logger for error tracking.
    */
   constructor(
-    @Inject(REQUEST) private readonly request: AuthGuardRequest,
+    @Inject(REQUEST) private readonly request: AuthGuardRequest<TokenDto>,
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly logger: Logger = new Logger(ParseImageFilePipe.name),
   ) {}

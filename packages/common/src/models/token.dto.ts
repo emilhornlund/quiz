@@ -64,6 +64,14 @@ export interface TokenDto {
    * Determines which actions or endpoints the bearer is allowed to access.
    */
   authorities: Authority[]
+
+  /**
+   * Capture any extra JWT claims not explicitly defined in this interface.
+   *
+   * This index signature allows the payload to include arbitrary properties,
+   * ensuring that custom or non-standard claims can be safely represented.
+   */
+  [claim: string]: unknown
 }
 
 /**
