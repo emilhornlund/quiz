@@ -8,8 +8,12 @@ import { ProfileUserPageUI, UpdateUserDetailsFormFields } from './components'
 import { UpdateUserPasswordFormFields } from './components/ProfileUserPageUI/components'
 
 const ProfileUserPage: FC = () => {
-  const { getUserProfile, updateUserProfile, updateUserPassword } =
-    useQuizServiceClient()
+  const {
+    getUserProfile,
+    updateUserProfile,
+    updateUserPassword,
+    resendVerificationEmail,
+  } = useQuizServiceClient()
 
   const [isSavingUserProfile, setIsSavingUserProfile] = useState(false)
   const [isSavingUserPassword, setIsSavingUserPassword] = useState(false)
@@ -35,6 +39,10 @@ const ProfileUserPage: FC = () => {
     updateUserPassword(request).finally(() => setIsSavingUserPassword(false))
   }
 
+  const handleResendVerificationEmail = () => {
+    resendVerificationEmail().then(() => {})
+  }
+
   if (!data || isLoadingUserProfile || isError) {
     return (
       <Page profile>
@@ -46,7 +54,8 @@ const ProfileUserPage: FC = () => {
   return (
     <ProfileUserPageUI
       values={{
-        email: data.email,
+        email: data.unverifiedEmail ?? data.email,
+        unverifiedEmail: data.unverifiedEmail,
         givenName: data.givenName,
         familyName: data.familyName,
         defaultNickname: data.defaultNickname,
@@ -55,6 +64,7 @@ const ProfileUserPage: FC = () => {
       loadingPassword={isSavingUserPassword}
       onChange={handleChange}
       onChangePassword={handlePasswordChange}
+      onClickResendVerificationEmail={handleResendVerificationEmail}
     />
   )
 }
