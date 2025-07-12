@@ -174,4 +174,35 @@ describe('UserAuthController (e2e)', () => {
         })
     })
   })
+
+  describe('/api/auth/email/resend_verification (POST)', () => {
+    it('should resend the verification email successfully', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(app, {
+        unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+      } as Partial<LocalUser>)
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/email/resend_verification')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send()
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should return 401 when missing authorization header', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/email/resend_verification')
+        .send()
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Missing Authorization header',
+            status: 401,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
 })
