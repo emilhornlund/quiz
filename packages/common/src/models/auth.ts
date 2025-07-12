@@ -90,11 +90,21 @@ export interface AuthPasswordChangeRequestDto {
 }
 
 /**
- * Data Transfer Object for a password reset request.
+ * Data Transfer Object for initiating a password-forgot flow.
+ */
+export interface AuthPasswordForgotRequestDto {
+  /**
+   * The user’s email address.
+   */
+  readonly email: string
+}
+
+/**
+ * Data Transfer Object for completing a password-reset flow.
  */
 export interface AuthPasswordResetRequestDto {
   /**
-   * The user’s email.
+   * The new password the user wants to set.
    */
-  readonly email: string
+  readonly password: string
 }

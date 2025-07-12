@@ -367,6 +367,34 @@ export class UserService {
   }
 
   /**
+   * Updates a local user’s password.
+   *
+   * @param userId – The user’s unique identifier.
+   * @param password – The new plain-text password to set.
+   * @returns A promise that resolves when the password has been successfully updated.
+   * @throws ForbiddenException if the user is not a local account.
+   */
+  public async setPassword(userId: string, password: string): Promise<void> {
+    this.logger.log(`Setting password for user '${userId}'.`)
+
+    const user = await this.userRepository.findUserByIdOrThrow(userId)
+
+    if (isLocalUser(user)) {
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(password, salt)
+
+      await this.userRepository.findUserByIdAndUpdateOrThrow(userId, {
+        hashedPassword,
+      } as LocalUser)
+
+      this.logger.log(`Updated password for user '${userId}'.`)
+    } else {
+      this.logger.debug(`User '${userId}' is not a local account.`)
+      throw new ForbiddenException('Incorrect user type')
+    }
+  }
+
+  /**
    * Computes how to patch a User’s email fields based on a requested change.
    *
    * - If `newEmail` is falsy, returns an empty object (no change).
