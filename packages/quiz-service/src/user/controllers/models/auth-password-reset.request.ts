@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import {
   AuthPasswordResetRequestDto,
-  EMAIL_MAX_LENGTH,
-  EMAIL_MIN_LENGTH,
-  EMAIL_REGEX,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_REGEX,
 } from '@quiz/common'
 import { Matches, MaxLength, MinLength } from 'class-validator'
 
@@ -12,19 +12,20 @@ import { Matches, MaxLength, MinLength } from 'class-validator'
  */
 export class AuthPasswordResetRequest implements AuthPasswordResetRequestDto {
   /**
-   * The user’s email address.
+   * The new password the user wants to set.
    */
   @ApiProperty({
-    title: 'Email',
-    description: 'Unique email address for the user.',
+    title: 'Password',
+    description: 'Strong password meeting complexity requirements.',
     type: String,
-    pattern: EMAIL_REGEX.source,
-    example: 'user@example.com',
+    pattern: PASSWORD_REGEX.source,
+    example: 'Super#SecretPa$$w0rd123',
   })
-  @MinLength(EMAIL_MIN_LENGTH)
-  @MaxLength(EMAIL_MAX_LENGTH)
-  @Matches(EMAIL_REGEX, {
-    message: 'Email must be a valid address.',
+  @MinLength(PASSWORD_MIN_LENGTH)
+  @MaxLength(PASSWORD_MAX_LENGTH)
+  @Matches(PASSWORD_REGEX, {
+    message:
+      'Password must include ≥2 uppercase, ≥2 lowercase, ≥2 digits, ≥2 symbols.',
   })
-  readonly email: string
+  readonly password: string
 }
