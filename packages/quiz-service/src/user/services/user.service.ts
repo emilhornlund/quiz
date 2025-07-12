@@ -186,29 +186,7 @@ export class UserService {
       `Successfully updated user '${userId}' with '${request}'.`,
     )
 
-    if (
-      isLocalUser(updatedUser) &&
-      updatedUser.email &&
-      updatedUser.unverifiedEmail &&
-      updatedUser.email !== updatedUser.unverifiedEmail
-    ) {
-      try {
-        const verificationLink = await this.generateVerifyEmailLink(
-          updatedUser._id,
-          updatedUser.unverifiedEmail,
-        )
-        await this.emailService.sendVerificationEmail(
-          updatedUser.unverifiedEmail,
-          verificationLink,
-        )
-      } catch (error) {
-        const { message, stack } = error as Error
-        this.logger.error(
-          `Failed to send verification email: '${message}'.`,
-          stack,
-        )
-      }
-    }
+    await this.sendVerificationEmail(updatedUser)
 
     return UserService.toProfileUserResponse(updatedUser)
   }
@@ -244,6 +222,65 @@ export class UserService {
     } else {
       this.logger.debug(`User '${userId}' is not a local account.`)
       throw new ForbiddenException('Incorrect user type')
+    }
+  }
+
+  /**
+   * Initiates resending of the verification email for a given user.
+   *
+   * Logs the action and then looks up the user by ID before sending.
+   *
+   * @param userId - The unique identifier of the user to resend verification for.
+   * @returns void after the send operation has been attempted.
+   */
+  public async resendVerificationEmail(userId: string): Promise<void> {
+    this.logger.log(`Resending verification email for user '${userId}'.`)
+
+    const user = await this.userRepository.findUserByIdOrThrow(userId)
+    return this.sendVerificationEmail(user)
+  }
+
+  /**
+   * Sends a verification email if the user’s unverified email differs from their primary email.
+   *
+   * - Verifies the user is a local account with both `email` and `unverifiedEmail` set.
+   * - Generates a time-limited verification link.
+   * - Dispatches the email via the EmailService.
+   * - Logs successes and failures appropriately.
+   *
+   * @param user - The User entity containing email details and identifier.
+   * @returns void once the email has been sent or deemed unnecessary.
+   */
+  private async sendVerificationEmail(user: User): Promise<void> {
+    if (
+      isLocalUser(user) &&
+      user.email &&
+      user.unverifiedEmail &&
+      user.email !== user.unverifiedEmail
+    ) {
+      try {
+        const verificationLink = await this.generateVerifyEmailLink(
+          user._id,
+          user.unverifiedEmail,
+        )
+
+        this.logger.log(`Sending verification email for user '${user._id}'.`)
+
+        await this.emailService.sendVerificationEmail(
+          user.unverifiedEmail,
+          verificationLink,
+        )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.error(
+          `Failed to send verification email: '${message}'.`,
+          stack,
+        )
+      }
+    } else {
+      this.logger.debug(
+        `User '${user._id}' not qualified for email verification.`,
+      )
     }
   }
 
@@ -345,6 +382,9 @@ export class UserService {
     userId: string,
     unverifiedEmail: string,
   ): Promise<string> {
+    this.logger.debug(
+      `Generating verification link for user '${userId}' and unverified email '${unverifiedEmail}'.`,
+    )
     const verificationToken = await this.authService.signVerifyEmailToken(
       userId,
       unverifiedEmail,
