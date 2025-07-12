@@ -88,3 +88,13 @@ export interface AuthPasswordChangeRequestDto {
    */
   readonly newPassword: string
 }
+
+/**
+ * Data Transfer Object for a password reset request.
+ */
+export interface AuthPasswordResetRequestDto {
+  /**
+   * The user’s email.
+   */
+  readonly email: string
+}

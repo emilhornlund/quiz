@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   HttpCode,
   HttpStatus,
@@ -8,6 +9,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
   ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiOperation,
@@ -19,10 +21,13 @@ import { Authority, TokenDto, TokenScope } from '@quiz/common'
 import {
   JwtPayload,
   PrincipalId,
+  Public,
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
 import { UserService } from '../services'
+
+import { AuthPasswordResetRequest } from './models'
 
 /**
  * Controller for email verification and other user-auth endpoints.
@@ -110,5 +115,34 @@ export class UserAuthController {
     @PrincipalId() userId: string,
   ): Promise<void> {
     return this.userService.resendVerificationEmail(userId)
+  }
+
+  /**
+   * Sends a password reset link to the user's email address.
+   *
+   * @param authPasswordResetRequest – DTO containing the user’s email.
+   * @returns A promise that resolves when the password reset email has been sent.
+   */
+  @Public()
+  @Post('/password/reset')
+  @ApiOperation({
+    summary: 'Reset password',
+    description: 'Sends a password reset link to the user’s email address.',
+  })
+  @ApiBody({
+    description: 'Password reset request payload',
+    type: AuthPasswordResetRequest,
+  })
+  @ApiNoContentResponse({
+    description:
+      'No content returned when the password reset email is sent successfully.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async resetPassword(
+    @Body() authPasswordResetRequest: AuthPasswordResetRequest,
+  ): Promise<void> {
+    return this.userService.sendPasswordResetEmail(
+      authPasswordResetRequest.email,
+    )
   }
 }

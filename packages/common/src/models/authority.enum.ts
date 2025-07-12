@@ -26,6 +26,11 @@ export enum Authority {
   RefreshAuth = 'REFRESH_AUTH',
 
   /**
+   * Permission to allow generation and validation of password-reset tokens.
+   */
+  ResetPassword = 'RESET_PASSWORD',
+
+  /**
    * Permission to perform user-related operations, including
    * retrieving and updating their profiles.
    */

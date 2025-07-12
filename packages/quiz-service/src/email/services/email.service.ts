@@ -72,7 +72,7 @@ Thank you for signing up for Klurigo. We’re thrilled to have you on board!
 Please verify your email address by clicking or copying the link below into your browser:
 ${verificationLink}
 
-If you didn’t create this account, simply ignore this email.
+This link will expire in 3 days. If you didn’t create this account, simply ignore this email.
 
 Cheers,  
 The Klurigo Team`
@@ -84,7 +84,7 @@ The Klurigo Team`
 <p>Please verify your email address by clicking or copying the link below into your browser:</p>
 <a href="${verificationLink}">${verificationLink}</a>
 
-<p>If you didn’t create this account, simply ignore this email.</p>
+<p>This link will expire in 3 days. If you didn’t create this account, simply ignore this email.</p>
 
 <p>Cheers,<br />The Klurigo Team</p>`
 
@@ -114,7 +114,7 @@ The Klurigo Team`
 We received a request to change the email address on your Klurigo account. To complete this update, please verify your new email by clicking or copying the link below into your browser:
 ${verificationLink}
 
-If you did not request an email change, you can safely ignore this message and no changes will be made.
+This link will expire in 3 days. If you did not request an email change, you can safely ignore this message and no changes will be made.
 
 Thanks for helping us keep your account secure!
 
@@ -126,7 +126,7 @@ The Klurigo Team`
 <p>We received a request to change the email address on your Klurigo account. To complete this update, please verify your new email by clicking or copying the link below into your browser:</p>
 <a href="${verificationLink}">${verificationLink}</a>
 
-<p>If you did not request an email change, you can safely ignore this message and no changes will be made.</p>
+<p>This link will expire in 3 days. If you did not request an email change, you can safely ignore this message and no changes will be made.</p>
 
 <p>Thanks for helping us keep your account secure!</p>
 
@@ -135,6 +135,46 @@ The Klurigo Team`
     await this.sendEmail({
       to,
       subject: 'Confirm Your New Email Address for Klurigo',
+      text,
+      html,
+    })
+  }
+
+  /**
+   * Sends a password reset email to the specified recipient.
+   *
+   * @param to – The recipient’s email address.
+   * @param passwordResetLink – The URL containing the password reset token.
+   * @returns A promise that resolves when the email has been sent.
+   */
+  public async sendPasswordResetEmail(
+    to: string,
+    passwordResetLink: string,
+  ): Promise<void> {
+    this.logger.log(`Sending password reset email to ${to}.`)
+
+    const text = `Hi,
+
+We received a request to reset the password for your Klurigo account. To choose a new password, please click or copy the link below into your browser:
+${passwordResetLink}
+
+This link will expire in 60 minutes. If you did not request a password reset, no changes will be made to your account.
+
+Stay safe,
+The Klurigo Team`
+
+    const html = `<p>Hi,</p>
+
+<p>We received a request to reset the password for your Klurigo account. To choose a new password, please click or copy the link below into your browser:<p/>
+<a href="${passwordResetLink}">${passwordResetLink}</a>
+
+<p>This link will expire in 60 minutes. If you did not request a password reset, no changes will be made to your account.</p>
+
+<p>Stay safe,<br />The Klurigo Team</p>`
+
+    await this.sendEmail({
+      to,
+      subject: 'Reset Your Klurigo Password',
       text,
       html,
     })
