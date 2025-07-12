@@ -12,6 +12,7 @@ describe('ProfileUserPageUI', () => {
         <ProfileUserPageUI
           values={{
             email: '',
+            unverifiedEmail: undefined,
             givenName: '',
             familyName: '',
             defaultNickname: '',
@@ -20,6 +21,30 @@ describe('ProfileUserPageUI', () => {
           loadingPassword={false}
           onChange={() => undefined}
           onChangePassword={() => undefined}
+          onClickResendVerificationEmail={() => undefined}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(container).toMatchSnapshot()
+  })
+
+  it('should render ProfileUserPageUI with prepopulated values', async () => {
+    const { container } = render(
+      <MemoryRouter>
+        <ProfileUserPageUI
+          values={{
+            email: 'user@example.com',
+            unverifiedEmail: undefined,
+            givenName: 'John',
+            familyName: 'Appleseed',
+            defaultNickname: 'FrostyBear',
+          }}
+          loading={false}
+          loadingPassword={false}
+          onChange={() => undefined}
+          onChangePassword={() => undefined}
+          onClickResendVerificationEmail={() => undefined}
         />
       </MemoryRouter>,
     )
