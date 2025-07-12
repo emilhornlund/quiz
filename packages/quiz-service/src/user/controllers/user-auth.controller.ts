@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   UnauthorizedException,
 } from '@nestjs/common'
@@ -16,6 +17,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { Throttle } from '@nestjs/throttler'
 import { Authority, TokenDto, TokenScope } from '@quiz/common'
 
 import {
@@ -27,12 +29,11 @@ import {
 } from '../../auth/controllers/decorators'
 import { UserService } from '../services'
 
-import { AuthPasswordResetRequest } from './models'
+import { AuthPasswordForgotRequest, AuthPasswordResetRequest } from './models'
 
 /**
  * Controller for email verification and other user-auth endpoints.
  */
-@ApiBearerAuth()
 @ApiTags('auth')
 @Controller('auth')
 export class UserAuthController {
@@ -55,6 +56,7 @@ export class UserAuthController {
   @Post('/email/verify')
   @RequiresScopes(TokenScope.User)
   @RequiredAuthorities(Authority.VerifyEmail)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Verify user email',
     description:
@@ -92,6 +94,7 @@ export class UserAuthController {
    * @returns void upon successful dispatch of the verification email.
    */
   @Post('/email/resend_verification')
+  @ApiBearerAuth()
   @RequiresScopes(TokenScope.User)
   @RequiredAuthorities(Authority.User)
   @ApiOperation({
@@ -118,20 +121,26 @@ export class UserAuthController {
   }
 
   /**
-   * Sends a password reset link to the user's email address.
+   * Initiates a forgot-password flow by sending a reset link to the user's email.
    *
-   * @param authPasswordResetRequest – DTO containing the user’s email.
+   * @param authPasswordForgotRequest – DTO containing the user’s email.
    * @returns A promise that resolves when the password reset email has been sent.
    */
   @Public()
-  @Post('/password/reset')
+  @Post('/password/forgot')
+  @Throttle({
+    short: { limit: 1, ttl: 1000 }, // 1 request per 1 000 ms (burst control)
+    medium: { limit: 5, ttl: 1000 * 60 }, // 5 requests per 60 000 ms (human retries)
+    long: { limit: 10, ttl: 1000 * 60 * 60 * 24 }, // 10 requests per 86 400 000 ms (per IP per day)
+  })
   @ApiOperation({
-    summary: 'Reset password',
-    description: 'Sends a password reset link to the user’s email address.',
+    summary: 'Forgot password',
+    description:
+      '`Authorization: None`\n\nSends a password reset link to the user’s email address.',
   })
   @ApiBody({
-    description: 'Password reset request payload',
-    type: AuthPasswordResetRequest,
+    description: 'Password forgot request payload',
+    type: AuthPasswordForgotRequest,
   })
   @ApiNoContentResponse({
     description:
@@ -139,10 +148,50 @@ export class UserAuthController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   public async resetPassword(
-    @Body() authPasswordResetRequest: AuthPasswordResetRequest,
+    @Body() authPasswordForgotRequest: AuthPasswordForgotRequest,
   ): Promise<void> {
     return this.userService.sendPasswordResetEmail(
-      authPasswordResetRequest.email,
+      authPasswordForgotRequest.email,
+    )
+  }
+
+  /**
+   * Completes the password-reset flow for an authenticated user.
+   *
+   * @param userId - The unique identifier of the user to reset the password for.
+   * @param authPasswordResetRequest – DTO containing the user’s new password.
+   * @returns A promise that resolves when the password has been reset.
+   */
+  @Patch('/password/reset')
+  @ApiBearerAuth()
+  @RequiresScopes(TokenScope.User)
+  @RequiredAuthorities(Authority.ResetPassword)
+  @ApiOperation({
+    summary: 'Reset authenticated user’s password',
+    description: `\`Authorization: Scope(${TokenScope.User}), Authorities(${Authority.ResetPassword})\`\n\nResets the password for the authenticated user.`,
+  })
+  @ApiBody({
+    description: 'Password reset request payload',
+    type: AuthPasswordResetRequest,
+  })
+  @ApiNoContentResponse({
+    description: 'No content returned when the password is reset.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Authorization header is missing or invalid.',
+  })
+  @ApiForbiddenResponse({
+    description:
+      'User does not have sufficient authority to perform this operation.',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async setPassword(
+    @PrincipalId() userId: string,
+    @Body() authPasswordResetRequest: AuthPasswordResetRequest,
+  ): Promise<void> {
+    return this.userService.setPassword(
+      userId,
+      authPasswordResetRequest.password,
     )
   }
 }
