@@ -148,13 +148,15 @@ export const useQuizServiceClient = () => {
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the POST request.
    * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param overrideToken - If provided, use this token instead of context.
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPost = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
     scope: TokenScope = TokenScope.User,
-  ) => apiFetch<T>('POST', path, requestBody, scope)
+    overrideToken?: string,
+  ) => apiFetch<T>('POST', path, requestBody, scope, overrideToken)
 
   /**
    * Makes a PUT request to the specified API endpoint.
@@ -257,6 +259,21 @@ export const useQuizServiceClient = () => {
    */
   const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
     apiPost<void>('/auth/revoke', request).then(() => {})
+
+  /**
+   * Verifies a user’s email address by sending the provided token to the backend.
+   *
+   * Sends a POST request to `/auth/email/verify` with the given token in a user scope.
+   *
+   * @param token – The one-time email verification token that was emailed to the user.
+   * @returns A promise which:
+   *   - **resolves** to `void` if the server confirms the email successfully,
+   *   - **rejects** with an error if the verification fails or the token is invalid.
+   */
+  const verifyEmail = (token: string): Promise<void> =>
+    apiPost<void>('/auth/email/verify', {}, TokenScope.User, token).then(
+      () => {},
+    )
 
   /**
    * Sends a registration request to the API to create a new user account.
@@ -635,6 +652,7 @@ export const useQuizServiceClient = () => {
     login,
     authenticateGame,
     revoke,
+    verifyEmail,
     register,
     getUserProfile,
     updateUserProfile,

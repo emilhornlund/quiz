@@ -1,6 +1,7 @@
 export { default as AuthGamePage } from './AuthGamePage'
 export { default as AuthLoginPage } from './AuthLoginPage'
 export { default as AuthRegisterPage } from './AuthRegisterPage'
+export { default as AuthVerifyPage } from './AuthVerifyPage'
 export { default as ErrorPage } from './ErrorPage'
 export { default as GameJoinPage } from './GameJoinPage'
 export { default as GamePage } from './GamePage'
