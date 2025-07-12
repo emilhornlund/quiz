@@ -41,6 +41,7 @@ describe('UserController (e2e)', () => {
           expect(res.body).toEqual({
             id: expect.any(String),
             email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
             givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
             familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
             defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
