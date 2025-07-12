@@ -1,3 +1,4 @@
+export * from './jwt-payload.decorator'
 export * from './principal-id.decorator'
 export * from './principal.decorator'
 export * from './public.decorator'
