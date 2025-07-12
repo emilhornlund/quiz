@@ -6,7 +6,11 @@ import { AuthProvider } from '@quiz/common'
 import { AuthModule } from '../auth'
 import { EmailModule } from '../email'
 
-import { UserController, UserProfileController } from './controllers'
+import {
+  UserAuthController,
+  UserController,
+  UserProfileController,
+} from './controllers'
 import {
   LocalUserSchema,
   User,
@@ -31,7 +35,7 @@ import { UserEventHandler, UserService } from './services'
     forwardRef(() => AuthModule),
     EmailModule,
   ],
-  controllers: [UserController, UserProfileController],
+  controllers: [UserController, UserProfileController, UserAuthController],
   providers: [UserService, UserRepository, UserEventHandler],
   exports: [UserService, UserRepository],
 })
