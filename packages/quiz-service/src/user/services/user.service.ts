@@ -285,6 +285,41 @@ export class UserService {
   }
 
   /**
+   * Sends a password reset email for a given user email.
+   *
+   * Looks up the user by email, generates a password reset link, and emails it if eligible.
+   *
+   * @param email – The email address of the user requesting a password reset.
+   * @returns A promise that resolves when the password reset process has completed.
+   */
+  public async sendPasswordResetEmail(email: string): Promise<void> {
+    const user = await this.userRepository.findUserByEmail(email)
+
+    if (user && isLocalUser(user)) {
+      try {
+        const passwordResetLink = await this.generatePasswordResetLink(user._id)
+
+        this.logger.log(
+          `Sending password reset email on behalf of user '${user._id}'.`,
+        )
+
+        await this.emailService.sendPasswordResetEmail(
+          user.email,
+          passwordResetLink,
+        )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.error(
+          `Failed to send verification email: '${message}'.`,
+          stack,
+        )
+      }
+    } else {
+      this.logger.log(`User not qualified for password reset.`)
+    }
+  }
+
+  /**
    * Change a local user’s password after verifying their current credentials.
    *
    * Verifies that `oldPassword` matches the existing hash, then hashes
@@ -390,6 +425,24 @@ export class UserService {
       unverifiedEmail,
     )
     return `${this.configService.get('KLURIGO_URL')}/auth/verify?token=${verificationToken}`
+  }
+
+  /**
+   * Generates a complete password reset URL for a given user ID.
+   *
+   * Creates a signed JWT token with RESET_PASSWORD authority and embeds it in the reset URL.
+   *
+   * @param userId – The unique identifier of the user for whom to generate the reset link.
+   * @returns A promise that resolves to the complete URL for resetting the password containing a signed toke.
+   * @private
+   */
+  private async generatePasswordResetLink(userId: string): Promise<string> {
+    this.logger.debug(`Generating password reset link for user '${userId}'.`)
+
+    const passwordResetToken =
+      await this.authService.signPasswordResetToken(userId)
+
+    return `${this.configService.get('KLURIGO_URL')}/auth/password_reset?token=${passwordResetToken}`
   }
 
   /**

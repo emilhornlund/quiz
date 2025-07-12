@@ -1,3 +1,4 @@
+export * from './auth-password-reset.request'
 export * from './create-user.request'
 export * from './create-user.response'
 export * from './update-user-profile.request'
