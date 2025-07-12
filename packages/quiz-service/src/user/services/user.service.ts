@@ -122,11 +122,10 @@ export class UserService {
     this.logger.log(`Created a new user with email: '${email}'.`)
 
     try {
-      const verificationToken = await this.authService.signVerifyEmailToken(
+      const verificationLink = await this.generateVerifyEmailLink(
         createdUser._id,
         email,
       )
-      const verificationLink = `${this.configService.get('KLURIGO_URL')}/auth/verify?token=${verificationToken}`
       await this.emailService.sendWelcomeEmail(email, verificationLink)
     } catch (error) {
       const { message, stack } = error as Error
@@ -166,8 +165,10 @@ export class UserService {
   ): Promise<UserProfileResponseDto> {
     this.logger.debug(`Updating user '${userId}' with '${request}'.`)
 
+    const originalUser = await this.userRepository.findUserByIdOrThrow(userId)
+
     const updatedDetails: Partial<User> = {
-      ...(request.email && { email: request.email }),
+      ...this.computeEmailUpdate(request.email, originalUser),
       ...(request.givenName && { givenName: request.givenName }),
       ...(request.familyName && { familyName: request.familyName }),
       ...(request.defaultNickname && {
@@ -184,6 +185,30 @@ export class UserService {
     this.logger.debug(
       `Successfully updated user '${userId}' with '${request}'.`,
     )
+
+    if (
+      isLocalUser(updatedUser) &&
+      updatedUser.email &&
+      updatedUser.unverifiedEmail &&
+      updatedUser.email !== updatedUser.unverifiedEmail
+    ) {
+      try {
+        const verificationLink = await this.generateVerifyEmailLink(
+          updatedUser._id,
+          updatedUser.unverifiedEmail,
+        )
+        await this.emailService.sendVerificationEmail(
+          updatedUser.unverifiedEmail,
+          verificationLink,
+        )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.error(
+          `Failed to send verification email: '${message}'.`,
+          stack,
+        )
+      }
+    }
 
     return UserService.toProfileUserResponse(updatedUser)
   }
@@ -270,6 +295,64 @@ export class UserService {
   }
 
   /**
+   * Computes how to patch a User’s email fields based on a requested change.
+   *
+   * - If `newEmail` is falsy, returns an empty object (no change).
+   * - If the new email differs from the current one _and_ the user is a local user,
+   *   sets only `unverifiedEmail` so we can send a verification.
+   * - Otherwise, updates the verified `email` and clears any pending `unverifiedEmail`.
+   *
+   * @param newEmail      – The email provided in the update request (may be undefined).
+   * @param originalUser  – The existing User record from the database.
+   * @returns A partial User object containing exactly the email‐related fields to be updated.
+   */
+  private computeEmailUpdate(
+    newEmail: string | undefined,
+    originalUser: User,
+  ): Partial<User | LocalUser> {
+    if (!newEmail) {
+      return {}
+    }
+
+    if (isLocalUser(originalUser)) {
+      if (newEmail !== originalUser.email) {
+        return { unverifiedEmail: newEmail }
+      }
+      return {
+        email: newEmail,
+        unverifiedEmail: undefined,
+      }
+    }
+
+    return {
+      email: newEmail,
+    }
+  }
+
+  /**
+   * Generates a verification link for a user’s new email address.
+   *
+   * This method creates a signed token for the given user and email,
+   * then constructs the full URL that the user will visit to confirm
+   * their new address.
+   *
+   * @param userId          - The unique identifier of the user requesting verification.
+   * @param unverifiedEmail - The new email address that requires confirmation.
+   * @returns A promise that resolves to the complete verification URL containing a signed token.
+   * @private
+   */
+  private async generateVerifyEmailLink(
+    userId: string,
+    unverifiedEmail: string,
+  ): Promise<string> {
+    const verificationToken = await this.authService.signVerifyEmailToken(
+      userId,
+      unverifiedEmail,
+    )
+    return `${this.configService.get('KLURIGO_URL')}/auth/verify?token=${verificationToken}`
+  }
+
+  /**
    * Transforms a User document into a CreateUserResponseDto.
    *
    * @param createdUser - The User document returned from the database.
@@ -290,9 +373,14 @@ export class UserService {
       updatedAt,
     } = createdUser
 
+    const unverifiedEmail = isLocalUser(createdUser)
+      ? createdUser.unverifiedEmail
+      : undefined
+
     return {
       id: _id,
       email,
+      unverifiedEmail,
       givenName,
       familyName,
       defaultNickname,
@@ -321,9 +409,12 @@ export class UserService {
       updatedAt: updated,
     } = user
 
+    const unverifiedEmail = isLocalUser(user) ? user.unverifiedEmail : undefined
+
     return {
       id,
       email,
+      unverifiedEmail,
       givenName,
       familyName,
       defaultNickname,

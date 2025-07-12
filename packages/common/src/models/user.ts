@@ -45,6 +45,11 @@ export interface CreateUserResponseDto {
   readonly email: string
 
   /**
+   * The user’s unverified email address, if provided.
+   */
+  readonly unverifiedEmail?: string
+
+  /**
    * The new user’s given name, if provided.
    */
   readonly givenName?: string
@@ -83,6 +88,11 @@ export interface UserProfileResponseDto {
    * The user’s email address.
    */
   readonly email: string
+
+  /**
+   * The user’s unverified email address, if provided.
+   */
+  readonly unverifiedEmail?: string
 
   /**
    * The user’s given name, if provided.

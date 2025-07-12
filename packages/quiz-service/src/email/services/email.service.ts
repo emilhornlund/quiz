@@ -59,7 +59,10 @@ export class EmailService {
    * @param verificationLink – URL the user clicks to verify their email.
    * @returns A promise that resolves when the welcome email has been sent.
    */
-  public async sendWelcomeEmail(to: string, verificationLink: string) {
+  public async sendWelcomeEmail(
+    to: string,
+    verificationLink: string,
+  ): Promise<void> {
     this.logger.log(`Sending welcome email to ${to}.`)
 
     const text = `Hi,
@@ -88,6 +91,50 @@ The Klurigo Team`
     await this.sendEmail({
       to,
       subject: 'Welcome to Klurigo!',
+      text,
+      html,
+    })
+  }
+
+  /**
+   * Sends a verification email containing a verification link to an existing user.
+   *
+   * @param to               – Recipient’s email address.
+   * @param verificationLink – URL the user clicks to verify their email.
+   * @returns A promise that resolves when the verification email has been sent.
+   */
+  public async sendVerificationEmail(
+    to: string,
+    verificationLink: string,
+  ): Promise<void> {
+    this.logger.log(`Sending verification email to ${to}.`)
+
+    const text = `Hi,
+
+We received a request to change the email address on your Klurigo account. To complete this update, please verify your new email by clicking or copying the link below into your browser:
+${verificationLink}
+
+If you did not request an email change, you can safely ignore this message and no changes will be made.
+
+Thanks for helping us keep your account secure!
+
+Cheers,  
+The Klurigo Team`
+
+    const html = `<p>Hi,</p>
+
+<p>We received a request to change the email address on your Klurigo account. To complete this update, please verify your new email by clicking or copying the link below into your browser:</p>
+<a href="${verificationLink}">${verificationLink}</a>
+
+<p>If you did not request an email change, you can safely ignore this message and no changes will be made.</p>
+
+<p>Thanks for helping us keep your account secure!</p>
+
+<p>Cheers,<br />The Klurigo Team</p>`
+
+    await this.sendEmail({
+      to,
+      subject: 'Confirm Your New Email Address for Klurigo',
       text,
       html,
     })

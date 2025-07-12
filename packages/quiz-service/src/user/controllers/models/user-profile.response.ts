@@ -32,10 +32,24 @@ export class UserProfileResponse implements UserProfileResponseDto {
     title: 'Email',
     description: 'Email address of the user.',
     type: String,
+    format: 'email',
     pattern: EMAIL_REGEX.source,
     example: 'user@example.com',
   })
   readonly email: string
+
+  /**
+   * The user’s unverified email address, if provided.
+   */
+  @ApiPropertyOptional({
+    title: 'Unverified Email',
+    description: 'The user’s unverified email address.',
+    type: String,
+    format: 'email',
+    pattern: EMAIL_REGEX.source,
+    example: 'user@example.com',
+  })
+  readonly unverifiedEmail?: string
 
   /**
    * The user’s given name, if provided.
