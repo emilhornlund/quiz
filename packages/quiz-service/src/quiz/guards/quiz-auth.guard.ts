@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { QuizVisibility } from '@quiz/common'
+import { QuizVisibility, TokenDto } from '@quiz/common'
 
 import { AuthGuardRequest } from '../../auth/guards'
 import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
@@ -44,7 +44,9 @@ export class QuizAuthGuard implements CanActivate {
    * @throws ForbiddenException If the user is not the owner of the quiz.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<AuthGuardRequest>()
+    const request = context
+      .switchToHttp()
+      .getRequest<AuthGuardRequest<TokenDto>>()
 
     if (!request.user?._id) {
       throw new UnauthorizedException()

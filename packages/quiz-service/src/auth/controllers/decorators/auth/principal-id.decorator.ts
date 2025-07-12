@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common'
+import { TokenDto } from '@quiz/common'
 
 import { AuthGuardRequest } from '../../../guards'
 
@@ -26,10 +27,10 @@ import { AuthGuardRequest } from '../../../guards'
  */
 export const PrincipalId = createParamDecorator(
   (_unused: unknown, ctx: ExecutionContext): string => {
-    const req = ctx.switchToHttp().getRequest<AuthGuardRequest>()
-    if (!req.principalId) {
+    const req = ctx.switchToHttp().getRequest<AuthGuardRequest<TokenDto>>()
+    if (!req.payload.sub) {
       throw new UnauthorizedException('Missing principalId on request')
     }
-    return req.principalId
+    return req.payload.sub
   },
 )

@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common'
+import { TokenDto } from '@quiz/common'
 
 import { User } from '../../../../user/repositories'
 import { AuthGuardRequest } from '../../../guards'
@@ -30,7 +31,7 @@ import { AuthGuardRequest } from '../../../guards'
  */
 export const Principal = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): User => {
-    const request = ctx.switchToHttp().getRequest<AuthGuardRequest>()
+    const request = ctx.switchToHttp().getRequest<AuthGuardRequest<TokenDto>>()
     if (!request.user) {
       throw new UnauthorizedException('Unauthorized')
     }

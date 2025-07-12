@@ -32,7 +32,9 @@ describe('AuthGuard', () => {
   const fakeHandler = () => {}
   const fakeClass = class {}
 
-  function makeContext(req: Partial<AuthGuardRequest>): ExecutionContext {
+  function makeContext(
+    req: Partial<AuthGuardRequest<TokenDto>>,
+  ): ExecutionContext {
     return {
       getHandler: () => fakeHandler,
       getClass: () => fakeClass,
@@ -148,8 +150,8 @@ describe('AuthGuard', () => {
     const req: any = { headers: { authorization: 'Bearer ok' } }
     const ok = await guard.canActivate(makeContext(req))
     expect(ok).toBe(true)
-    expect(req.scope).toEqual(TokenScope.User)
-    expect(req.authorities).toEqual([])
+    expect(req.payload.scope).toEqual(TokenScope.User)
+    expect(req.payload.authorities).toEqual([])
     expect(req.user).toBe(fakeUser)
   })
 
@@ -199,10 +201,10 @@ describe('AuthGuard', () => {
     const req: any = { headers: { authorization: 'Bearer ok' } }
     const ok = await guard.canActivate(makeContext(req))
     expect(ok).toBe(true)
-    expect(req.scope).toEqual(TokenScope.Game)
-    expect(req.authorities).toEqual([Authority.Game])
-    expect(req.gameId).toEqual('game-id')
-    expect(req.participantType).toEqual(GameParticipantType.HOST)
+    expect(req.payload.scope).toEqual(TokenScope.Game)
+    expect(req.payload.authorities).toEqual([Authority.Game])
+    expect(req.payload.gameId).toEqual('game-id')
+    expect(req.payload.participantType).toEqual(GameParticipantType.HOST)
   })
 
   it('should throw if missing gameId or participantType in Game scope', async () => {
