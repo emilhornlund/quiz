@@ -189,6 +189,40 @@ export class UserService {
   }
 
   /**
+   * Confirm that the provided email matches the user’s unverifiedEmail,
+   * then clear the unverifiedEmail field to mark verification.
+   *
+   * Logs each step and throws if the email doesn’t match
+   * or if the account isn’t a local user.
+   *
+   * @param userId - The unique identifier of the user being verified.
+   * @param email - The email address extracted from the verification token.
+   * @returns A promise that resolves when the email has been successfully verified.
+   * @throws BadRequestException if the email does not match unverifiedEmail.
+   * @throws ForbiddenException if the user account isn’t a local user.
+   */
+  public async verifyEmail(userId: string, email: string): Promise<void> {
+    this.logger.log(`Verifying email '${email}' for user '${userId}'.`)
+
+    const user = await this.userRepository.findUserByIdOrThrow(userId)
+    if (isLocalUser(user)) {
+      if (user.unverifiedEmail === email) {
+        await this.userRepository.findUserByIdAndUpdateOrThrow(userId, {
+          unverifiedEmail: undefined,
+        } as LocalUser)
+      } else {
+        this.logger.debug(
+          `Email '${email}' does not match unverified email '${user.unverifiedEmail}' for user '${userId}'.`,
+        )
+        throw new BadRequestException('Email does not match')
+      }
+    } else {
+      this.logger.debug(`User '${userId}' is not a local account.`)
+      throw new ForbiddenException('Incorrect user type')
+    }
+  }
+
+  /**
    * Change a local user’s password after verifying their current credentials.
    *
    * Verifies that `oldPassword` matches the existing hash, then hashes
