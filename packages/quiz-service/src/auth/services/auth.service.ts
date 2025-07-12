@@ -363,12 +363,12 @@ export class AuthService {
    *
    * Generates a token with the `VERIFY_EMAIL` authority that expires in 72 hours.
    *
-   * @param subject – The user ID (JWT `sub` claim) for whom the token is issued.
-   * @param email   – The email address to include in the token payload.
+   * @param userId – The user ID (JWT `sub` claim) for whom the token is issued.
+   * @param email  – The email address to include in the token payload.
    * @returns A promise that resolves to the signed verification token string.
    */
   public async signVerifyEmailToken(
-    subject: string,
+    userId: string,
     email: string,
   ): Promise<string> {
     return this.jwtService.signAsync(
@@ -379,8 +379,30 @@ export class AuthService {
       },
       {
         jwtid: uuidv4(),
-        subject,
+        subject: userId,
         expiresIn: '72h',
+      },
+    )
+  }
+
+  /**
+   * Signs a JWT token for password reset.
+   *
+   * Generates a token with the `RESET_PASSWORD` authority that expires in 1 hour.
+   *
+   * @param userId – The user ID (JWT `sub` claim) for whom the token is issued.
+   * @returns A promise that resolves to the signed password reset token string.
+   */
+  public async signPasswordResetToken(userId: string): Promise<string> {
+    return this.jwtService.signAsync(
+      {
+        scope: TokenScope.User,
+        authorities: [Authority.ResetPassword],
+      },
+      {
+        jwtid: uuidv4(),
+        subject: userId,
+        expiresIn: '1h',
       },
     )
   }
