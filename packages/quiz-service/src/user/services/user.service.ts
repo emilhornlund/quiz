@@ -470,7 +470,7 @@ export class UserService {
     const passwordResetToken =
       await this.authService.signPasswordResetToken(userId)
 
-    return `${this.configService.get('KLURIGO_URL')}/auth/password_reset?token=${passwordResetToken}`
+    return `${this.configService.get('KLURIGO_URL')}/auth/password/reset?token=${passwordResetToken}`
   }
 
   /**
