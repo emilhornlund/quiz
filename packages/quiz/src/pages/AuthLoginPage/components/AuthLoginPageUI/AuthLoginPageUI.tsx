@@ -114,6 +114,11 @@ const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({ loading, onSubmit }) => {
           onValid={(valid) => handleChangeValidFormField('password', valid)}
           required
         />
+        <Link to={'/auth/password/forgot'}>
+          <Typography variant="link" size="small">
+            Forgot your password?
+          </Typography>
+        </Link>
         <IconButtonArrowRight
           id="join"
           type="submit"
