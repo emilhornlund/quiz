@@ -1,5 +1,7 @@
 export { default as AuthGamePage } from './AuthGamePage'
 export { default as AuthLoginPage } from './AuthLoginPage'
+export { default as AuthPasswordForgotPage } from './AuthPasswordForgotPage'
+export { default as AuthPasswordResetPage } from './AuthPasswordResetPage'
 export { default as AuthRegisterPage } from './AuthRegisterPage'
 export { default as AuthVerifyPage } from './AuthVerifyPage'
 export { default as ErrorPage } from './ErrorPage'
