@@ -2,6 +2,8 @@ import {
   AuthGameRequestDto,
   AuthLoginRequestDto,
   AuthPasswordChangeRequestDto,
+  AuthPasswordForgotRequestDto,
+  AuthPasswordResetRequestDto,
   AuthRefreshRequestDto,
   AuthResponseDto,
   AuthRevokeRequestDto,
@@ -180,13 +182,15 @@ export const useQuizServiceClient = () => {
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the PATCH request.
    * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param overrideToken - If provided, use this token instead of context.
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPatch = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
     scope: TokenScope = TokenScope.User,
-  ) => apiFetch<T>('PATCH', path, requestBody, scope)
+    overrideToken?: string,
+  ) => apiFetch<T>('PATCH', path, requestBody, scope, overrideToken)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -294,6 +298,45 @@ export const useQuizServiceClient = () => {
         )
         throw error
       })
+
+  /**
+   * Sends a password reset email to the user.
+   *
+   * @param request - An object containing the user’s email.
+   * @returns A promise that resolves when the reset email has been successfully sent.
+   */
+  const sendPasswordResetEmail = (
+    request: AuthPasswordForgotRequestDto,
+  ): Promise<void> =>
+    apiPost<void>('/auth/password/forgot', request).then((response) => {
+      notifySuccess(
+        'We’ve flung a reset link to your inbox. Didn’t see it? Sneak a peek in your spam folder.',
+      )
+      return response
+    })
+
+  /**
+   * Resets the user’s password using the provided token.
+   *
+   * @param request - An object containing the new password details.
+   * @param token   - The password reset token extracted from the reset link.
+   * @returns A promise that resolves when the password has been successfully updated.
+   */
+  const resetPassword = (
+    request: AuthPasswordResetRequestDto,
+    token: string,
+  ): Promise<void> =>
+    apiPatch<void>(
+      '/auth/password/reset',
+      request,
+      TokenScope.User,
+      token,
+    ).then((response) => {
+      notifySuccess(
+        'All Set! Your new password is locked and loaded. Welcome back!',
+      )
+      return response
+    })
 
   /**
    * Sends a registration request to the API to create a new user account.
@@ -674,6 +717,8 @@ export const useQuizServiceClient = () => {
     revoke,
     verifyEmail,
     resendVerificationEmail,
+    sendPasswordResetEmail,
+    resetPassword,
     register,
     getUserProfile,
     updateUserProfile,

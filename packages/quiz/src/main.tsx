@@ -11,6 +11,8 @@ import GameContextProvider from './context/game'
 import {
   AuthGamePage,
   AuthLoginPage,
+  AuthPasswordForgotPage,
+  AuthPasswordResetPage,
   AuthRegisterPage,
   AuthVerifyPage,
   ErrorPage,
@@ -64,6 +66,22 @@ const router = createBrowserRouter([
       {
         path: '/auth/verify',
         element: <AuthVerifyPage />,
+      },
+      {
+        path: '/auth/password/forgot',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthPasswordForgotPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/password/reset',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthPasswordResetPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/auth/game',
