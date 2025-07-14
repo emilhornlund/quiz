@@ -25,7 +25,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@quiz/common": "1.0.0",
-    "@tanstack/react-query": "5.81.5",
+    "@tanstack/react-query": "5.83.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "event-source-polyfill": "^1.0.31",
@@ -34,7 +34,7 @@
     "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
     "react-full-screen": "^1.1.1",
-    "react-player": "^3.1.0",
+    "react-player": "^3.2.0",
     "react-qr-code": "^2.0.18",
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
@@ -64,12 +64,12 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "jsdom": "^26.1.0",
-    "msw": "^2.10.3",
+    "msw": "^2.10.4",
     "prop-types": "^15.8.1",
     "sass": "^1.89.2",
     "storybook": "^8.6.14",
     "storybook-addon-remix-react-router": "^4.0.1",
-    "vite": "^7.0.2",
+    "vite": "^7.0.4",
     "vitest": "^3.2.4"
   }
 }
