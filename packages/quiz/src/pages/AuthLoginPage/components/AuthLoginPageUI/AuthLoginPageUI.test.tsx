@@ -9,7 +9,11 @@ describe('AuthLoginPageUI', () => {
   it('should render AuthLoginPage', async () => {
     render(
       <MemoryRouter>
-        <AuthLoginPageUI loading={false} onSubmit={() => undefined} />
+        <AuthLoginPageUI
+          loading={false}
+          onSubmit={() => undefined}
+          onGoogleClick={() => undefined}
+        />
       </MemoryRouter>,
     )
   })
