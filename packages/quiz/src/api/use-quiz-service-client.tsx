@@ -1,5 +1,6 @@
 import {
   AuthGameRequestDto,
+  AuthGoogleExchangeRequestDto,
   AuthLoginRequestDto,
   AuthPasswordChangeRequestDto,
   AuthPasswordForgotRequestDto,
@@ -218,6 +219,21 @@ export const useQuizServiceClient = () => {
       email: request.email,
       password: request.password,
     }).then((res) => {
+      setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      return res
+    })
+
+  /**
+   * Exchanges a Google OAuth authorization code and PKCE verifier
+   * for an authentication response containing access and refresh tokens.
+   *
+   * @param request - An object with `code` (the Google OAuth code) and `codeVerifier` (the matching PKCE verifier).
+   * @returns A promise that resolves to the login response with access and refresh tokens.
+   */
+  const googleExchangeCode = (
+    request: AuthGoogleExchangeRequestDto,
+  ): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>('/auth/google/exchange', request).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
       return res
     })
@@ -713,6 +729,7 @@ export const useQuizServiceClient = () => {
 
   return {
     login,
+    googleExchangeCode,
     authenticateGame,
     revoke,
     verifyEmail,

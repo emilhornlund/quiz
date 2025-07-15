@@ -1,24 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
-import AuthLoginPageUI from './AuthLoginPageUI'
+import AuthGoogleCallbackPageUI from './AuthGoogleCallbackPageUI'
 
 const meta = {
-  title: 'Pages/AuthLoginPage',
-  component: AuthLoginPageUI,
+  title: 'Pages/AuthGoogleCallbackPage',
+  component: AuthGoogleCallbackPageUI,
   decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof AuthLoginPageUI>
+} satisfies Meta<typeof AuthGoogleCallbackPageUI>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default = {
-  args: {
-    loading: false,
-    onSubmit: () => undefined,
-    onGoogleClick: () => undefined,
-  },
+  args: {},
 } satisfies Story

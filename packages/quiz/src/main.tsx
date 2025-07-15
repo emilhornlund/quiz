@@ -10,6 +10,7 @@ import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import {
   AuthGamePage,
+  AuthGoogleCallbackPage,
   AuthLoginPage,
   AuthPasswordForgotPage,
   AuthPasswordResetPage,
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute authenticated={false}>
             <AuthLoginPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/google/callback',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthGoogleCallbackPage />
           </ProtectedRoute>
         ),
       },
