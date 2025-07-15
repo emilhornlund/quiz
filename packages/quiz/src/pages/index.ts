@@ -1,4 +1,5 @@
 export { default as AuthGamePage } from './AuthGamePage'
+export { default as AuthGoogleCallbackPage } from './AuthGoogleCallbackPage'
 export { default as AuthLoginPage } from './AuthLoginPage'
 export { default as AuthPasswordForgotPage } from './AuthPasswordForgotPage'
 export { default as AuthPasswordResetPage } from './AuthPasswordResetPage'

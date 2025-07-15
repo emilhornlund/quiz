@@ -108,3 +108,19 @@ export interface AuthPasswordResetRequestDto {
    */
   readonly password: string
 }
+
+/**
+ * Data Transfer Object for exchanging a Google OAuth authorization code
+ * and PKCE verifier for access/refresh tokens.
+ */
+export interface AuthGoogleExchangeRequestDto {
+  /**
+   * The authorization code returned by Google after user consent.
+   */
+  code: string
+
+  /**
+   * The PKCE code verifier originally sent in the OAuth request.
+   */
+  codeVerifier: string
+}
