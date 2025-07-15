@@ -1,7 +1,7 @@
 @use '../../../../styles/helpers';
 @use '../../../../styles/variables';
 
-.loginForm {
+.loginForm, .authProviderButton {
   display: flex;
   flex-direction: column;
 

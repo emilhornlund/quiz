@@ -1,3 +1,4 @@
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import {
   AuthLoginRequestDto,
   EMAIL_MAX_LENGTH,
@@ -11,8 +12,10 @@ import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
+  Button,
   IconButtonArrowRight,
   Page,
+  PageDivider,
   TextField,
   Typography,
 } from '../../../../components'
@@ -29,9 +32,14 @@ type ValidLoginFormFields = {
 export interface AuthLoginPageUIProps {
   loading: boolean
   onSubmit: (values: LoginFormFields) => void
+  onGoogleClick: () => void
 }
 
-const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({ loading, onSubmit }) => {
+const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({
+  loading,
+  onSubmit,
+  onGoogleClick,
+}) => {
   const title = useMemo(getTitle, [])
   const message = useMemo(getMessage, [])
 
@@ -133,6 +141,21 @@ const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({ loading, onSubmit }) => {
           New here? Join the fun and create your account!
         </Typography>
       </Link>
+
+      <PageDivider />
+
+      <div className={styles.authProviderButton}>
+        <Button
+          id="google-login-button"
+          type="button"
+          kind="primary"
+          value="Google"
+          icon={faGoogle}
+          iconPosition="leading"
+          loading={false}
+          onClick={onGoogleClick}
+        />
+      </div>
     </Page>
   )
 }
