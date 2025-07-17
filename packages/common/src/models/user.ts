@@ -126,9 +126,14 @@ export interface UserProfileResponseDto {
 }
 
 /**
- * DTO for updating an existing user.
+ * DTO for updating an existing local user.
  */
-export interface UpdateUserProfileRequestDto {
+export interface UpdateLocalUserProfileRequestDto {
+  /**
+   * The user’s authentication provider, Local for this request dto.
+   */
+  readonly authProvider: AuthProvider.Local
+
   /**
    * Optional email address of the user.
    */
@@ -143,6 +148,21 @@ export interface UpdateUserProfileRequestDto {
    * Optional family name (last name) of the user.
    */
   readonly familyName?: string
+
+  /**
+   * Optional default nickname of the user used for when participating in games.
+   */
+  readonly defaultNickname?: string
+}
+
+/**
+ * DTO for updating an existing Google user.
+ */
+export interface UpdateGoogleUserProfileRequestDto {
+  /**
+   * The user’s authentication provider, Google for this request dto.
+   */
+  readonly authProvider: AuthProvider.Google
 
   /**
    * Optional default nickname of the user used for when participating in games.

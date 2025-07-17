@@ -1,5 +1,6 @@
-import { ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import {
+  AuthProvider,
   EMAIL_MAX_LENGTH,
   EMAIL_MIN_LENGTH,
   EMAIL_REGEX,
@@ -12,14 +13,34 @@ import {
   PLAYER_NICKNAME_MAX_LENGTH,
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
-  UpdateUserProfileRequestDto,
+  UpdateLocalUserProfileRequestDto,
 } from '@quiz/common'
-import { IsOptional, Matches, MaxLength, MinLength } from 'class-validator'
+import {
+  IsEnum,
+  IsOptional,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator'
 
 /**
- * Represents the request object for updating a user’s profile.
+ * Represents the request object for updating a local user’s profile.
  */
-export class UpdateUserProfileRequest implements UpdateUserProfileRequestDto {
+export class UpdateLocalUserProfileRequest
+  implements UpdateLocalUserProfileRequestDto
+{
+  /**
+   * The user’s authentication provider, Local for this request dto.
+   */
+  @ApiProperty({
+    title: 'Authentication Provider',
+    description: 'The provider used by the user to authenticate.',
+    example: AuthProvider.Local,
+    enum: [AuthProvider.Local],
+  })
+  @IsEnum(AuthProvider)
+  authProvider: AuthProvider.Local
+
   /**
    * The user’s email address.
    */

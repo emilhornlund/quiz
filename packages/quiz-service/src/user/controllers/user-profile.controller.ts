@@ -9,29 +9,41 @@ import {
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiExtraModels,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
+  getSchemaPath,
 } from '@nestjs/swagger'
-import { Authority, TokenScope } from '@quiz/common'
+import {
+  Authority,
+  TokenScope,
+  UpdateGoogleUserProfileRequestDto,
+} from '@quiz/common'
 
 import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
+import { ParseUpdateUserProfileRequestPipe } from '../pipes'
 import { User } from '../repositories'
 import { UserService } from '../services'
 
-import { UpdateUserProfileRequest, UserProfileResponse } from './models'
+import {
+  UpdateGoogleUserProfileRequest,
+  UpdateLocalUserProfileRequest,
+  UserProfileResponse,
+} from './models'
 
 /**
  * Controller for managing user-profile-related operations.
  */
 @ApiBearerAuth()
 @ApiTags('user', 'profile')
+@ApiExtraModels(UpdateLocalUserProfileRequest, UpdateGoogleUserProfileRequest)
 @RequiresScopes(TokenScope.User)
 @RequiredAuthorities(Authority.User)
 @Controller('/profile/user')
@@ -90,7 +102,12 @@ export class UserProfileController {
   })
   @ApiBody({
     description: 'Payload containing the new new update details for the user.',
-    type: UpdateUserProfileRequest,
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(UpdateLocalUserProfileRequest) },
+        { $ref: getSchemaPath(UpdateGoogleUserProfileRequest) },
+      ],
+    },
   })
   @ApiOkResponse({
     description: 'Successfully updated the user’s profile.',
@@ -105,7 +122,8 @@ export class UserProfileController {
   @HttpCode(HttpStatus.OK)
   public async updateUserProfile(
     @Principal() principal: User,
-    @Body() request: UpdateUserProfileRequest,
+    @Body(new ParseUpdateUserProfileRequestPipe())
+    request: UpdateLocalUserProfileRequest | UpdateGoogleUserProfileRequestDto,
   ): Promise<UserProfileResponse> {
     return await this.userService.updateUser(principal._id, request)
   }

@@ -1,3 +1,4 @@
+import { AuthProvider } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -19,9 +20,28 @@ type Story = StoryObj<typeof meta>
 
 export const Default = {
   args: {
+    authProvider: AuthProvider.Local,
     values: {
       email: '',
       unverifiedEmail: undefined,
+      givenName: '',
+      familyName: '',
+      defaultNickname: '',
+    },
+    loading: false,
+    loadingPassword: false,
+    onChange: () => undefined,
+    onChangePassword: () => undefined,
+    onClickResendVerificationEmail: () => undefined,
+  },
+} satisfies Story
+
+export const UnverifiedEmail = {
+  args: {
+    authProvider: AuthProvider.Local,
+    values: {
+      email: 'user@example.com',
+      unverifiedEmail: 'user@example.com',
       givenName: '',
       familyName: '',
       defaultNickname: '',

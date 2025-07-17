@@ -24,7 +24,8 @@ import {
   SubmitQuestionAnswerRequestDto,
   TokenScope,
   TokenType,
-  UpdateUserProfileRequestDto,
+  UpdateGoogleUserProfileRequestDto,
+  UpdateLocalUserProfileRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
 import { useCallback } from 'react'
@@ -391,19 +392,18 @@ export const useQuizServiceClient = () => {
    * @returns A promise resolving to the updated user information.
    */
   const updateUserProfile = (
-    request: UpdateUserProfileRequestDto,
+    request:
+      | UpdateLocalUserProfileRequestDto
+      | UpdateGoogleUserProfileRequestDto,
   ): Promise<UserProfileResponseDto> =>
-    apiPut<UserProfileResponseDto>('/profile/user', {
-      email: request.email,
-      givenName: request.givenName,
-      familyName: request.familyName,
-      defaultNickname: request.defaultNickname,
-    }).then((response) => {
-      notifySuccess(
-        'Nice! Your new profile is locked in. Get ready to quiz in style!',
-      )
-      return response
-    })
+    apiPut<UserProfileResponseDto>('/profile/user', request).then(
+      (response) => {
+        notifySuccess(
+          'Nice! Your new profile is locked in. Get ready to quiz in style!',
+        )
+        return response
+      },
+    )
 
   /**
    * Updates the currently authenticated user's password.
