@@ -171,7 +171,7 @@ export class UserService {
       return existingUser
     }
 
-    return await this.userRepository.createGoogleUser({
+    const createdUser = await this.userRepository.createGoogleUser({
       googleUserId: profile.id,
       email: profile.email,
       unverifiedEmail: profile.verified_email ? undefined : profile.email,
@@ -179,6 +179,10 @@ export class UserService {
       familyName: profile.family_name,
       defaultNickname: undefined,
     })
+
+    await this.emailService.sendWelcomeEmail(createdUser.email)
+
+    return createdUser
   }
 
   /**
