@@ -72,11 +72,11 @@ export class User implements IUser {
 
   /**
    * Authentication provider.
-   * Stored as one of the AuthProvider values (e.g. `"LOCAL"`).
+   * Stored as one of the AuthProvider values (e.g. `"LOCAL"` or `"GOOGLE"`).
    */
   @Prop({
     type: String,
-    enum: [AuthProvider.Local],
+    enum: [AuthProvider.Local, AuthProvider.Google],
     required: true,
   })
   authProvider: AuthProvider
@@ -202,3 +202,68 @@ export class LocalUser implements IUser {
  * Schema factory for the LocalUser class.
  */
 export const LocalUserSchema = SchemaFactory.createForClass(LocalUser)
+
+@Schema({ _id: false })
+export class GoogleUser implements IUser {
+  /**
+   * The user’s unique identifier.
+   */
+  _id: string
+
+  /**
+   * The unique user ID assigned by Google’s OAuth2 service.
+   */
+  @Prop({ type: String, required: true })
+  googleUserId: string
+
+  /**
+   * The user’s authentication provider, Google in for this discriminator.
+   */
+  authProvider!: AuthProvider.Google
+
+  /**
+   * The user’s unique email address.
+   */
+  email: string
+
+  /**
+   * The user’s unverified email address (optional).
+   */
+  @Prop({ type: String, required: false })
+  unverifiedEmail?: string
+
+  /**
+   * The user’s given name (optional).
+   */
+  givenName?: string
+
+  /**
+   * The user’s family name (optional).
+   */
+  familyName?: string
+
+  /**
+   * The user’s default nickname used for when participating in games (optional).
+   */
+  defaultNickname?: string
+
+  /**
+   * Date and time of the user's last successful login.
+   */
+  lastLoggedInAt?: Date
+
+  /**
+   * Timestamp when the user was created (ISO-8601 string).
+   */
+  createdAt: Date
+
+  /**
+   * Timestamp when the user was last updated (ISO-8601 string).
+   */
+  updatedAt: Date
+}
+
+/**
+ * Schema factory for the GoogleUser class.
+ */
+export const GoogleUserSchema = SchemaFactory.createForClass(GoogleUser)

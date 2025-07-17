@@ -93,3 +93,7 @@ export const FAMILY_NAME_MIN_LENGTH = 1
 export const FAMILY_NAME_MAX_LENGTH = 64
 export const FAMILY_NAME_REGEX =
   /^(?=.{1,64}$)[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u
+
+// Google OAuth
+export const GOOGLE_OAUTH_CODE_REGEX = /^[0-9A-Za-z\-_/+=]{10,512}$/
+export const GOOGLE_OAUTH_CODE_VERIFIER_REGEX = /^[A-Za-z0-9\-._~]{43,128}$/

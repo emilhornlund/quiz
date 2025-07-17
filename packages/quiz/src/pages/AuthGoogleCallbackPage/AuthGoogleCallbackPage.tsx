@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
@@ -16,8 +16,15 @@ const AuthGoogleCallbackPage: FC = () => {
 
   const { googleExchangeCode } = useQuizServiceClient()
 
+  const hasExchangedRef = useRef(false)
+
   const [searchParams] = useSearchParams()
   useEffect(() => {
+    if (hasExchangedRef.current) {
+      return
+    }
+    hasExchangedRef.current = true
+
     const code = searchParams.get('code') || undefined
     const state = searchParams.get('state') || undefined
 

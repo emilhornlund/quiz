@@ -1,12 +1,14 @@
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { LocalUser } from '../../src/user/repositories'
+import { GoogleUser, LocalUser } from '../../src/user/repositories'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'
 export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
 export const MOCK_PRIMARY_USER_FAMILY_NAME = 'Appleseed'
 export const MOCK_PRIMARY_USER_DEFAULT_NICKNAME = 'FrostyBear'
+
+export const MOCK_PRIMARY_GOOGLE_USER_ID = '123'
 
 export const MOCK_SECONDARY_USER_EMAIL = 'another.user@example.com'
 export const MOCK_SECONDARY_USER_GIVEN_NAME = 'Test'
@@ -37,6 +39,24 @@ export function buildMockPrimaryUser(user?: Partial<LocalUser>): LocalUser {
     authProvider: AuthProvider.Local,
     email: MOCK_PRIMARY_USER_EMAIL,
     hashedPassword: MOCK_DEFAULT_HASHED_PASSWORD,
+    givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+    familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+    defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+    createdAt: now,
+    updatedAt: now,
+    ...(user ?? {}),
+  }
+}
+
+export function buildMockPrimaryGoogleUser(
+  user?: Partial<GoogleUser>,
+): GoogleUser {
+  const now = new Date()
+  return {
+    _id: uuidv4(),
+    googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
+    authProvider: AuthProvider.Google,
+    email: MOCK_PRIMARY_USER_EMAIL,
     givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
     familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
     defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
