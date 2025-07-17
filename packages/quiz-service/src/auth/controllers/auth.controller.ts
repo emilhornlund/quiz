@@ -26,6 +26,7 @@ import { AuthService } from '../services'
 import { IpAddress, PrincipalId, Public, UserAgent } from './decorators'
 import {
   AuthGameRequest,
+  AuthGoogleExchangeRequest,
   AuthLoginRequest,
   AuthPasswordChangeRequest,
   AuthRefreshRequest,
@@ -84,6 +85,44 @@ export class AuthController {
     @UserAgent() userAgent: string,
   ): Promise<AuthResponse> {
     return this.authService.login(authLoginRequest, ipAddress, userAgent)
+  }
+
+  /**
+   * Exchanges a Google OAuth authorization code and PKCE verifier
+   * for an authentication response containing access and refresh tokens.
+   *
+   * @param request   - Request containing the Google OAuth `code` and `codeVerifier`.
+   * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
+   * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
+   * @returns Promise resolving to an AuthResponse with both tokens.
+   */
+  @Public()
+  @Post('/google/exchange')
+  @ApiBody({
+    description:
+      'Request payload with Google OAuth authorization code and PKCE code verifier.',
+    type: AuthGoogleExchangeRequest,
+  })
+  @ApiOkResponse({
+    description:
+      'Successfully exchanged code; returns access and refresh tokens.',
+    type: AuthResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid code, code verifier, or PKCE validation failed.',
+  })
+  @HttpCode(HttpStatus.OK)
+  public async googleCodeExchange(
+    @Body() request: AuthGoogleExchangeRequest,
+    @IpAddress() ipAddress: string,
+    @UserAgent() userAgent: string,
+  ): Promise<AuthResponse> {
+    return this.authService.loginGoogle(
+      request.code,
+      request.codeVerifier,
+      ipAddress,
+      userAgent,
+    )
   }
 
   /**
