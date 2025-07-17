@@ -26,6 +26,7 @@ import { GameRepository } from '../../game/services'
 import { GameDocument } from '../../game/services/models/schemas'
 import { UserService } from '../../user/services'
 
+import { GoogleAuthService } from './google-auth.service'
 import { UserLoginEvent } from './models'
 import { TokenRepository } from './token.repository'
 import {
@@ -51,6 +52,7 @@ export class AuthService {
    * @param tokenRepository - Repository for persisting and retrieving token metadata.
    * @param jwtService - Service for generating and verifying JWT tokens.
    * @param eventEmitter - EventEmitter2 instance for emitting authentication-related events.
+   * @param googleAuthService - Service responsible for handling Google OAuth flows
    */
   constructor(
     @Inject(forwardRef(() => UserService))
@@ -59,6 +61,7 @@ export class AuthService {
     private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly googleAuthService: GoogleAuthService,
   ) {}
 
   /**
@@ -79,6 +82,43 @@ export class AuthService {
       authLoginRequestDto.email,
       authLoginRequestDto.password,
     )
+
+    const tokenPair = await this.signTokenPair(
+      userId,
+      TokenScope.User,
+      ipAddress,
+      userAgent,
+    )
+
+    await this.emitUserLoginEvent(userId)
+
+    return tokenPair
+  }
+
+  /**
+   * Performs authentication via Google OAuth.
+   *
+   * @param code - The OAuth2 authorization code returned by Google after user consent.
+   * @param codeVerifier - The PKCE code verifier originally used to generate the code challenge.
+   * @param ipAddress - The client's IP address, used for logging and token metadata.
+   * @param userAgent - The client's User-Agent string, used for logging and token metadata.
+   * @returns A promise resolving to an AuthResponseDto containing the issued tokens.
+   */
+  public async loginGoogle(
+    code: string,
+    codeVerifier: string,
+    ipAddress: string,
+    userAgent: string,
+  ): Promise<AuthResponseDto> {
+    const accessToken = await this.googleAuthService.exchangeCodeForAccessToken(
+      code,
+      codeVerifier,
+    )
+
+    const profile = await this.googleAuthService.fetchGoogleProfile(accessToken)
+
+    const { _id: userId } =
+      await this.userService.verifyOrCreateGoogleUser(profile)
 
     const tokenPair = await this.signTokenPair(
       userId,

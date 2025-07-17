@@ -23,6 +23,8 @@ describe('AuthService', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* jwtService     */ {} as any,
       /* eventEmitter   */ eventEmitter,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /* configService  */ {} as any,
     )
 
     // Override the internal logger so we can spy on .error()

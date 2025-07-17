@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
 
+import { HttpModule } from '@nestjs/axios'
 import { forwardRef, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
@@ -14,7 +15,7 @@ import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
-import { AuthService, TokenRepository } from './services'
+import { AuthService, GoogleAuthService, TokenRepository } from './services'
 import { Token, TokenSchema } from './services/models/schemas'
 
 @Module({
@@ -56,12 +57,14 @@ import { Token, TokenSchema } from './services/models/schemas'
       },
     ]),
     EventEmitterModule,
+    HttpModule,
     GameModule,
     forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
+    GoogleAuthService,
     TokenRepository,
     {
       provide: APP_GUARD,

@@ -12,15 +12,21 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockPrimaryGoogleUser,
   buildMockPrimaryUser,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
+  MOCK_PRIMARY_GOOGLE_USER_ID,
   MOCK_PRIMARY_INVALID_PASSWORD,
   MOCK_PRIMARY_PASSWORD,
   MOCK_PRIMARY_USER_EMAIL,
   MOCK_SECONDARY_PASSWORD,
   MOCK_WEAK_PASSWORD,
 } from '../../../test-utils/data'
+import {
+  MOCK_GOOGLE_VALID_CODE,
+  MOCK_GOOGLE_VALID_CODE_VERIFIER,
+} from '../../../test-utils/data/google-auth.data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
@@ -151,6 +157,132 @@ describe('AuthController (e2e)', () => {
     it('should return 400 bad request when missing user agent', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
+        .send({})
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  notEmpty: 'User agent is required.',
+                },
+                property: 'user-agent',
+              },
+            ],
+          })
+        })
+    })
+  })
+
+  describe('/api/auth/google/exchange (POST)', () => {
+    it('should successfully authenticate a new google user', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            accessToken: expect.any(String),
+            refreshToken: expect.any(String),
+          })
+        })
+    })
+
+    it('should successfully authenticate an existing google user', async () => {
+      await userModel.create(
+        buildMockPrimaryGoogleUser({
+          googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
+          email: MOCK_PRIMARY_USER_EMAIL,
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            accessToken: expect.any(String),
+            refreshToken: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 409 conflict when the email is already registered', async () => {
+      await userModel.create(
+        buildMockPrimaryUser({
+          email: MOCK_PRIMARY_USER_EMAIL,
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(409)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Email already exists',
+            status: 409,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 400 bad request when validation fails', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({})
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.any(String),
+            validationErrors: [
+              {
+                constraints: {
+                  matches:
+                    'Invalid code format. Only URL-safe characters (“A–Z”, “a–z”, “0–9”, “-”, “_”, “/”) are allowed.',
+                  maxLength: 'Code must be at most 512 characters long.',
+                  minLength: 'Code must be at least 10 characters long.',
+                },
+                property: 'code',
+              },
+              {
+                constraints: {
+                  matches:
+                    'Invalid code verifier format. Only unreserved URI characters (“A–Z”, “a–z”, “0–9”, “-”, “.”, “_”, “~”) are allowed.',
+                  maxLength:
+                    'Code verifier must be at most 128 characters long.',
+                  minLength:
+                    'Code verifier must be at least 43 characters long.',
+                },
+                property: 'codeVerifier',
+              },
+            ],
+          })
+        })
+    })
+
+    it('should return 400 bad request when missing user agent', async () => {
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
         .send({})
         .expect(400)
         .expect((res) => {

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   forwardRef,
   Inject,
@@ -18,9 +19,10 @@ import * as bcrypt from 'bcryptjs'
 
 import { EnvironmentVariables } from '../../app/config'
 import { AuthService } from '../../auth/services'
+import { GoogleProfileDto } from '../../auth/services/models'
 import { EmailService } from '../../email/services'
 import { BadCredentialsException } from '../exceptions'
-import { LocalUser, User, UserRepository } from '../repositories'
+import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'
 
 import { isLocalUser } from './utils'
 
@@ -133,6 +135,49 @@ export class UserService {
     }
 
     return UserService.toCreateUserResponse(createdUser)
+  }
+
+  /**
+   * Ensures a google user record exists for the given Google profile.
+   * If one already exists (by Google ID), updates their details; otherwise creates a new user.
+   *
+   * @param profile - The GoogleProfileResponse containing user info from Google.
+   * @returns A promise resolving to the existing or newly created GoogleUser entity.
+   */
+  public async verifyOrCreateGoogleUser(
+    profile: GoogleProfileDto,
+  ): Promise<GoogleUser> {
+    const existingUser =
+      await this.userRepository.findAndUpdateGoogleUserByGoogleId(profile.id, {
+        email: profile.email,
+        unverifiedEmail: profile.verified_email ? undefined : profile.email,
+        givenName: profile.given_name,
+        familyName: profile.family_name,
+      })
+
+    const conflictingUser = await this.userRepository.findUserByEmail(
+      profile.email,
+    )
+
+    if (
+      conflictingUser &&
+      (!existingUser || conflictingUser._id !== existingUser._id)
+    ) {
+      throw new ConflictException('Email already exists')
+    }
+
+    if (existingUser) {
+      return existingUser
+    }
+
+    return await this.userRepository.createGoogleUser({
+      googleUserId: profile.id,
+      email: profile.email,
+      unverifiedEmail: profile.verified_email ? undefined : profile.email,
+      givenName: profile.given_name,
+      familyName: profile.family_name,
+      defaultNickname: undefined,
+    })
   }
 
   /**

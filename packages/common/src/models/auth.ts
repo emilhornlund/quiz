@@ -5,6 +5,7 @@
  */
 export enum AuthProvider {
   Local = 'LOCAL',
+  Google = 'GOOGLE',
 }
 
 /**
@@ -117,10 +118,10 @@ export interface AuthGoogleExchangeRequestDto {
   /**
    * The authorization code returned by Google after user consent.
    */
-  code: string
+  readonly code: string
 
   /**
    * The PKCE code verifier originally sent in the OAuth request.
    */
-  codeVerifier: string
+  readonly codeVerifier: string
 }

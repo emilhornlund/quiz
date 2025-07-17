@@ -4,8 +4,9 @@ import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
+import { isGoogleUser } from '../services/utils'
 
-import { LocalUser, User, UserModel } from './models'
+import { GoogleUser, LocalUser, User, UserModel } from './models'
 
 /**
  * Repository for interacting with the User collection in the database.
@@ -95,6 +96,29 @@ export class UserRepository {
   }
 
   /**
+   * Creates and persists a new google‐auth user record.
+   *
+   * @param details - Object containing google user information.
+   * @returns The newly created User document.
+   */
+  public async createGoogleUser(
+    details: Omit<
+      GoogleUser,
+      '_id' | 'authProvider' | 'createdAt' | 'updatedAt'
+    >,
+  ): Promise<GoogleUser | null> {
+    const createdUser: User = await new this.userModel({
+      ...details,
+      _id: uuidv4(),
+      authProvider: AuthProvider.Google,
+    }).save()
+
+    if (isGoogleUser(createdUser)) {
+      return createdUser
+    }
+  }
+
+  /**
    * Updates a user document by its unique identifier, or throws if not found.
    *
    * @param id – The unique identifier of the user to update.
@@ -113,5 +137,32 @@ export class UserRepository {
     }
 
     return user.set(details).save()
+  }
+
+  /**
+   * Finds a Google‐authenticated user by their Google user ID and updates their profile.
+   *
+   * @param googleUserId - The unique identifier assigned by Google to the user.
+   * @param details - Partial profile fields to update (email, names, etc.).
+   * @returns A promise resolving to the updated GoogleUser document, or `null` if not found.
+   */
+  public async findAndUpdateGoogleUserByGoogleId(
+    googleUserId: string,
+    details: Partial<
+      Omit<GoogleUser, '_id' | 'authProvider' | 'createdAt' | 'updatedAt'>
+    >,
+  ): Promise<GoogleUser | null> {
+    const user = await this.userModel.findOne({ googleUserId }).exec()
+
+    if (!user || !isGoogleUser(user)) {
+      return null
+    }
+
+    const updatedUser = await user.set(details).save()
+    if (isGoogleUser(updatedUser)) {
+      return updatedUser
+    }
+
+    return null
   }
 }

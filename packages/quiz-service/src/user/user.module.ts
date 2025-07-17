@@ -12,6 +12,7 @@ import {
   UserProfileController,
 } from './controllers'
 import {
+  GoogleUserSchema,
   LocalUserSchema,
   User,
   UserRepository,
@@ -28,7 +29,10 @@ import { UserEventHandler, UserService } from './services'
       {
         name: User.name,
         schema: UserSchema,
-        discriminators: [{ name: AuthProvider.Local, schema: LocalUserSchema }],
+        discriminators: [
+          { name: AuthProvider.Local, schema: LocalUserSchema },
+          { name: AuthProvider.Google, schema: GoogleUserSchema },
+        ],
       },
     ]),
     EventEmitterModule,
