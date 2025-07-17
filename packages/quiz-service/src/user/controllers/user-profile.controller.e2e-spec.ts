@@ -3,6 +3,7 @@ import { AuthProvider } from '@quiz/common'
 import supertest from 'supertest'
 
 import {
+  buildMockPrimaryGoogleUser,
   MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
   MOCK_PRIMARY_USER_EMAIL,
   MOCK_PRIMARY_USER_FAMILY_NAME,
@@ -31,7 +32,7 @@ describe('UserProfileController (e2e)', () => {
   })
 
   describe('/api/profile/user (GET)', () => {
-    it('should succeed in retrieving the associated profile from a user', async () => {
+    it('should succeed in retrieving the associated profile from a local user', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(
         app,
         { unverifiedEmail: MOCK_SECONDARY_USER_EMAIL } as Partial<LocalUser>,
@@ -56,6 +57,33 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
+    it('should succeed in retrieving the associated profile from a Google user', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        buildMockPrimaryGoogleUser({
+          unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
+        }),
+      )
+
+      return supertest(app.getHttpServer())
+        .get('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            authProvider: AuthProvider.Google,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
     it('should fail in retrieving the associated profile without authorization', async () => {
       return supertest(app.getHttpServer())
         .get('/api/profile/user')
@@ -71,13 +99,14 @@ describe('UserProfileController (e2e)', () => {
   })
 
   describe('/api/profile/user (PUT)', () => {
-    it('should update all fields of the user successfully', async () => {
+    it('should update all fields of the local user successfully', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
+          authProvider: AuthProvider.Local,
           email: MOCK_SECONDARY_USER_EMAIL,
           givenName: MOCK_SECONDARY_USER_GIVEN_NAME,
           familyName: MOCK_SECONDARY_USER_FAMILY_NAME,
@@ -99,13 +128,42 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should not set the user’s unverified email when the new email it equals the old email', async () => {
+    it('should update all fields of the Google user successfully', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        buildMockPrimaryGoogleUser(),
+      )
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          authProvider: AuthProvider.Google,
+          defaultNickname: MOCK_SECONDARY_USER_DEFAULT_NICKNAME,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_SECONDARY_USER_DEFAULT_NICKNAME,
+            authProvider: AuthProvider.Google,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should not set the local user’s unverified email when the new email it equals the old email', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
+          authProvider: AuthProvider.Local,
           email: MOCK_PRIMARY_USER_EMAIL,
         })
         .expect(200)
@@ -124,7 +182,7 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should unset the user’s unverified email when the new email equals the old already verified email', async () => {
+    it('should unset the local user’s unverified email when the new email equals the old already verified email', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(
         app,
         {
@@ -137,6 +195,7 @@ describe('UserProfileController (e2e)', () => {
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
+          authProvider: AuthProvider.Local,
           email: MOCK_PRIMARY_USER_EMAIL,
         })
         .expect(200)
@@ -155,7 +214,7 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should update the user’s default nickname containing emojis successfully', async () => {
+    it('should update the local user’s default nickname containing emojis successfully', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const defaultNickname = '🥶🐻'
@@ -163,7 +222,10 @@ describe('UserProfileController (e2e)', () => {
       return supertest(app.getHttpServer())
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
-        .send({ defaultNickname })
+        .send({
+          authProvider: AuthProvider.Local,
+          defaultNickname,
+        })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -179,13 +241,45 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should update the user with empty request body successfully', async () => {
+    it('should update the Google user’s default nickname containing emojis successfully', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        buildMockPrimaryGoogleUser(),
+      )
+
+      const defaultNickname = '🥶🐻'
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          authProvider: AuthProvider.Google,
+          defaultNickname,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname,
+            authProvider: AuthProvider.Google,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should update the local user with empty request body successfully', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
-        .send({})
+        .send({
+          authProvider: AuthProvider.Local,
+        })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -201,13 +295,14 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
-    it('should return 400 bad request if validation fails', async () => {
+    it('should return 400 bad request if validation fails for a local user request', async () => {
       const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put('/api/profile/user')
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
+          authProvider: AuthProvider.Local,
           email: '',
           givenName: '',
           familyName: '',
@@ -246,6 +341,40 @@ describe('UserProfileController (e2e)', () => {
                 },
                 property: 'familyName',
               },
+              {
+                constraints: {
+                  matches:
+                    'Nickname can only contain letters, numbers, and underscores.',
+                  minLength:
+                    'defaultNickname must be longer than or equal to 2 characters',
+                },
+                property: 'defaultNickname',
+              },
+            ],
+          })
+        })
+    })
+
+    it('should return 400 bad request if validation fails for a Google user request', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(
+        app,
+        buildMockPrimaryGoogleUser(),
+      )
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          authProvider: AuthProvider.Google,
+          defaultNickname: '',
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Validation failed',
+            status: 400,
+            timestamp: expect.anything(),
+            validationErrors: [
               {
                 constraints: {
                   matches:

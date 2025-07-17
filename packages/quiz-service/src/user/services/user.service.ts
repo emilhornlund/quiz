@@ -12,7 +12,7 @@ import {
   AuthProvider,
   CreateUserRequestDto,
   CreateUserResponseDto,
-  UpdateUserProfileRequestDto,
+  UpdateGoogleUserProfileRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
 import * as bcrypt from 'bcryptjs'
@@ -21,6 +21,7 @@ import { EnvironmentVariables } from '../../app/config'
 import { AuthService } from '../../auth/services'
 import { GoogleProfileDto } from '../../auth/services/models'
 import { EmailService } from '../../email/services'
+import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
 import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'
 
@@ -206,20 +207,32 @@ export class UserService {
    */
   public async updateUser(
     userId: string,
-    request: UpdateUserProfileRequestDto,
+    request: UpdateLocalUserProfileRequest | UpdateGoogleUserProfileRequestDto,
   ): Promise<UserProfileResponseDto> {
     this.logger.debug(`Updating user '${userId}' with '${request}'.`)
 
     const originalUser = await this.userRepository.findUserByIdOrThrow(userId)
 
-    const updatedDetails: Partial<User> = {
-      ...this.computeEmailUpdate(request.email, originalUser),
-      ...(request.givenName && { givenName: request.givenName }),
-      ...(request.familyName && { familyName: request.familyName }),
+    let updatedDetails: Partial<User> = {
       ...(request.defaultNickname && {
         defaultNickname: request.defaultNickname,
       }),
       updatedAt: new Date(),
+    }
+
+    if (request.authProvider === AuthProvider.Local) {
+      updatedDetails = {
+        ...updatedDetails,
+        ...this.computeEmailUpdate(request.email, originalUser),
+        ...(request.givenName && { givenName: request.givenName }),
+        ...(request.familyName && { familyName: request.familyName }),
+        ...(request.defaultNickname && {
+          defaultNickname: request.defaultNickname,
+        }),
+      } as Partial<LocalUser>
+    }
+    if (request.authProvider === AuthProvider.Google) {
+      updatedDetails = updatedDetails as Partial<GoogleUser>
     }
 
     const updatedUser = await this.userRepository.findUserByIdAndUpdateOrThrow(
@@ -532,16 +545,13 @@ export class UserService {
     const {
       _id,
       email,
+      unverifiedEmail,
       givenName,
       familyName,
       defaultNickname,
       createdAt,
       updatedAt,
     } = createdUser
-
-    const unverifiedEmail = isLocalUser(createdUser)
-      ? createdUser.unverifiedEmail
-      : undefined
 
     return {
       id: _id,
@@ -567,6 +577,7 @@ export class UserService {
     const {
       _id: id,
       email,
+      unverifiedEmail,
       givenName,
       familyName,
       defaultNickname,
@@ -574,8 +585,6 @@ export class UserService {
       createdAt: created,
       updatedAt: updated,
     } = user
-
-    const unverifiedEmail = isLocalUser(user) ? user.unverifiedEmail : undefined
 
     return {
       id,
