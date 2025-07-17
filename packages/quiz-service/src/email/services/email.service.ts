@@ -56,16 +56,17 @@ export class EmailService {
    * Sends a welcome email containing a verification link to a new user.
    *
    * @param to               – Recipient’s email address.
-   * @param verificationLink – URL the user clicks to verify their email.
+   * @param verificationLink – Optional URL the user clicks to verify their email.
    * @returns A promise that resolves when the welcome email has been sent.
    */
   public async sendWelcomeEmail(
     to: string,
-    verificationLink: string,
+    verificationLink?: string,
   ): Promise<void> {
     this.logger.log(`Sending welcome email to ${to}.`)
 
-    const text = `Hi,
+    const text = verificationLink
+      ? `Hi,
 
 Thank you for signing up for Klurigo. We’re thrilled to have you on board!
 
@@ -76,8 +77,15 @@ This link will expire in 3 days. If you didn’t create this account, simply ign
 
 Cheers,  
 The Klurigo Team`
+      : `Hi,
 
-    const html = `<p>Hi,</p>
+Thank you for signing up for Klurigo. We’re thrilled to have you on board!
+
+Cheers,  
+The Klurigo Team`
+
+    const html = verificationLink
+      ? `<p>Hi,</p>
 
 <p>Thank you for signing up for Klurigo. We’re thrilled to have you on board!</p>
 
@@ -85,6 +93,11 @@ The Klurigo Team`
 <a href="${verificationLink}">${verificationLink}</a>
 
 <p>This link will expire in 3 days. If you didn’t create this account, simply ignore this email.</p>
+
+<p>Cheers,<br />The Klurigo Team</p>`
+      : `<p>Hi,</p>
+
+<p>Thank you for signing up for Klurigo. We’re thrilled to have you on board!</p>
 
 <p>Cheers,<br />The Klurigo Team</p>`
 
