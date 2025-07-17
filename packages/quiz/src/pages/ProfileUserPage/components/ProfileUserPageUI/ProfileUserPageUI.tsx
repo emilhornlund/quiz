@@ -1,3 +1,4 @@
+import { AuthProvider } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { Page, PageDivider } from '../../../../components'
@@ -10,6 +11,7 @@ import {
 } from './components'
 
 export interface ProfileUserPageUIProps {
+  authProvider: AuthProvider
   values: UpdateUserDetailsFormFields
   loading: boolean
   loadingPassword: boolean
@@ -19,6 +21,7 @@ export interface ProfileUserPageUIProps {
 }
 
 const ProfileUserPageUI: FC<ProfileUserPageUIProps> = ({
+  authProvider,
   values,
   loading,
   loadingPassword,
@@ -28,13 +31,21 @@ const ProfileUserPageUI: FC<ProfileUserPageUIProps> = ({
 }) => (
   <Page align="start" discover profile>
     <UserDetailsForm
+      authProvider={authProvider}
       values={values}
       loading={loading}
       onChange={onChange}
       onClickResendVerificationEmail={onClickResendVerificationEmail}
     />
-    <PageDivider />
-    <UserPasswordForm loading={loadingPassword} onChange={onChangePassword} />
+    {authProvider === AuthProvider.Local && (
+      <>
+        <PageDivider />
+        <UserPasswordForm
+          loading={loadingPassword}
+          onChange={onChangePassword}
+        />
+      </>
+    )}
   </Page>
 )
 

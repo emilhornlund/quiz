@@ -1,5 +1,6 @@
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons'
 import {
+  AuthProvider,
   EMAIL_MAX_LENGTH,
   EMAIL_MIN_LENGTH,
   EMAIL_REGEX,
@@ -12,8 +13,8 @@ import {
   PLAYER_NICKNAME_MAX_LENGTH,
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
-  UpdateUserProfileRequestDto,
 } from '@quiz/common'
+import { UserProfileResponseDto } from '@quiz/common/src'
 import React, {
   FC,
   FormEvent,
@@ -26,11 +27,13 @@ import React, {
 import { Button, TextField, Typography } from '../../../../../../components'
 import styles from '../../../../../../styles/form.module.scss'
 
-export type UpdateUserDetailsFormFields = UpdateUserProfileRequestDto & {
-  unverifiedEmail?: string
-}
+export type UpdateUserDetailsFormFields = Pick<
+  UserProfileResponseDto,
+  'email' | 'unverifiedEmail' | 'givenName' | 'familyName' | 'defaultNickname'
+>
 
 export interface UserDetailsFormProps {
+  authProvider: AuthProvider
   values: UpdateUserDetailsFormFields
   loading: boolean
   onChange: (request: UpdateUserDetailsFormFields) => void
@@ -38,6 +41,7 @@ export interface UserDetailsFormProps {
 }
 
 const UserDetailsForm: FC<UserDetailsFormProps> = ({
+  authProvider,
   values,
   loading,
   onChange,
@@ -112,7 +116,7 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             minLength={EMAIL_MIN_LENGTH}
             maxLength={EMAIL_MAX_LENGTH}
             regex={EMAIL_REGEX}
-            disabled={loading}
+            disabled={loading || authProvider === AuthProvider.Google}
             onChange={(value) =>
               handleChangeFormField('email', value as string)
             }
@@ -143,7 +147,7 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
           minLength={GIVEN_NAME_MIN_LENGTH}
           maxLength={GIVEN_NAME_MAX_LENGTH}
           regex={GIVEN_NAME_REGEX}
-          disabled={loading}
+          disabled={loading || authProvider === AuthProvider.Google}
           onChange={(value) =>
             handleChangeFormField('givenName', value as string)
           }
@@ -157,7 +161,7 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
           minLength={FAMILY_NAME_MIN_LENGTH}
           maxLength={FAMILY_NAME_MAX_LENGTH}
           regex={FAMILY_NAME_REGEX}
-          disabled={loading}
+          disabled={loading || authProvider === AuthProvider.Google}
           onChange={(value) =>
             handleChangeFormField('familyName', value as string)
           }
