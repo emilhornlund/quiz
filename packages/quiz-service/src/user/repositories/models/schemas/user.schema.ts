@@ -22,6 +22,11 @@ interface IUser {
   email: string
 
   /**
+   * The user’s unverified email address (optional).
+   */
+  unverifiedEmail?: string
+
+  /**
    * The user’s given name (optional).
    */
   givenName?: string
@@ -86,6 +91,12 @@ export class User implements IUser {
    */
   @Prop({ type: String, unique: true, required: true })
   email: string
+
+  /**
+   * The user’s unverified email address (optional).
+   */
+  @Prop({ type: String, required: false })
+  unverifiedEmail?: string
 
   /**
    * Optional given name (first name) of the user.
@@ -158,7 +169,6 @@ export class LocalUser implements IUser {
   /**
    * The user’s unverified email address (optional).
    */
-  @Prop({ type: String, required: false })
   unverifiedEmail?: string
 
   /**
@@ -229,7 +239,6 @@ export class GoogleUser implements IUser {
   /**
    * The user’s unverified email address (optional).
    */
-  @Prop({ type: String, required: false })
   unverifiedEmail?: string
 
   /**

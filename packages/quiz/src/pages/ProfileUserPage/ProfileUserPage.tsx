@@ -1,3 +1,4 @@
+import { AuthProvider } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import React, { FC, useState } from 'react'
 
@@ -28,8 +29,23 @@ const ProfileUserPage: FC = () => {
   })
 
   const handleChange = (request: UpdateUserDetailsFormFields): void => {
-    setIsSavingUserProfile(true)
-    updateUserProfile(request).finally(() => setIsSavingUserProfile(false))
+    if (data?.authProvider) {
+      setIsSavingUserProfile(true)
+      updateUserProfile({
+        ...(data.authProvider === AuthProvider.Local
+          ? {
+              authProvider: AuthProvider.Local,
+              email: request.email,
+              givenName: request.givenName,
+              familyName: request.familyName,
+              defaultNickname: request.defaultNickname,
+            }
+          : {
+              authProvider: AuthProvider.Google,
+              defaultNickname: request.defaultNickname,
+            }),
+      }).finally(() => setIsSavingUserProfile(false))
+    }
   }
 
   const handlePasswordChange = (
@@ -53,6 +69,7 @@ const ProfileUserPage: FC = () => {
 
   return (
     <ProfileUserPageUI
+      authProvider={data.authProvider}
       values={{
         email: data.unverifiedEmail ?? data.email,
         unverifiedEmail: data.unverifiedEmail,

@@ -57,6 +57,7 @@ export function buildMockPrimaryGoogleUser(
     googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
     authProvider: AuthProvider.Google,
     email: MOCK_PRIMARY_USER_EMAIL,
+    unverifiedEmail: undefined,
     givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
     familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
     defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
