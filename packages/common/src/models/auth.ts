@@ -4,6 +4,7 @@
  * - `LOCAL`: email/password stored locally
  */
 export enum AuthProvider {
+  None = 'NONE',
   Local = 'LOCAL',
   Google = 'GOOGLE',
 }

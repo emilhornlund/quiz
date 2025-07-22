@@ -1,0 +1,23 @@
+{
+  "name": "mongodb-migrator",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "mongodb-migrator": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint --fix"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10"
+  },
+  "dependencies": {
+    "bson": "^6.10.4",
+    "commander": "^14.0.0",
+    "uuid": "^11.1.0"
+  }
+}

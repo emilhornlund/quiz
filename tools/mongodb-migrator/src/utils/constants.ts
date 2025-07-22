@@ -1,0 +1,6 @@
+export const COLLECTION_NAME_PLAYERS = 'players'
+export const COLLECTION_NAME_USERS = 'users'
+export const COLLECTION_NAME_GAMES = 'games'
+export const COLLECTION_NAME_GAME_RESULTS = 'game_results'
+export const COLLECTION_NAME_QUIZZES = 'quizzes'
+export const COLLECTION_NAME_TOKENS = 'tokens'
