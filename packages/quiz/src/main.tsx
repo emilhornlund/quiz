@@ -8,6 +8,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import { ProtectedRoute } from './components'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
+import MigrationContextProvider from './context/migration'
 import {
   AuthGamePage,
   AuthGoogleCallbackPage,
@@ -39,7 +40,9 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <AuthContextProvider>
-        <Outlet />
+        <MigrationContextProvider>
+          <Outlet />
+        </MigrationContextProvider>
       </AuthContextProvider>
     ),
     children: [
