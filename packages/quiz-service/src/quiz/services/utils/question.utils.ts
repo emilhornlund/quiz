@@ -7,7 +7,7 @@ import {
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 /**
  * Checks if the given question is of type `MultiChoice`.

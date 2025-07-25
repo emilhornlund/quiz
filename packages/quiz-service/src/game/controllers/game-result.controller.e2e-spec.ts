@@ -21,7 +21,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { Quiz } from '../../quiz/services/models/schemas'
+import { Quiz } from '../../quiz/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { Game, GameResult, TaskType } from '../services/models/schemas'
 

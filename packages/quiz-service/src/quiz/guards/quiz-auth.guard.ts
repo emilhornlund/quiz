@@ -11,7 +11,7 @@ import { QuizVisibility, TokenDto } from '@quiz/common'
 
 import { AuthGuardRequest } from '../../auth/guards'
 import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
-import { QuizService } from '../services'
+import { QuizRepository } from '../repositories'
 
 /**
  * Guard to authorize access to quizzes based on ownership.
@@ -25,11 +25,11 @@ export class QuizAuthGuard implements CanActivate {
    * Initializes the QuizAuthGuard.
    *
    * @param reflector - Used for retrieving metadata, such as if allow public.
-   * @param quizService - Service for managing quiz-related operations.
+   * @param quizRepository - Repository for accessing and modifying quiz documents.
    */
   constructor(
     private readonly reflector: Reflector,
-    private readonly quizService: QuizService,
+    private readonly quizRepository: QuizRepository,
   ) {}
 
   /**
@@ -57,7 +57,7 @@ export class QuizAuthGuard implements CanActivate {
       throw new BadRequestException()
     }
 
-    const quiz = await this.quizService.findQuizDocumentByIdOrThrow(quizId)
+    const quiz = await this.quizRepository.findQuizByIdOrThrow(quizId)
 
     const allowPublic =
       this.reflector.getAllAndOverride<boolean>(AUTHORIZED_QUIZ_ALLOW_PUBLIC, [
