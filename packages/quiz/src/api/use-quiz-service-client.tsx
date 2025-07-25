@@ -31,6 +31,7 @@ import {
 import { useCallback } from 'react'
 
 import { useAuthContext } from '../context/auth'
+import { useMigrationContext } from '../context/migration'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
 
 import {
@@ -54,6 +55,7 @@ import {
  */
 export const useQuizServiceClient = () => {
   const { user, game, setTokenPair } = useAuthContext()
+  const { migrated, playerId, completeMigration } = useMigrationContext()
 
   /**
    * Retrieves the token string for the specified scope and token type
@@ -216,11 +218,17 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
   const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>('/auth/login', {
-      email: request.email,
-      password: request.password,
-    }).then((res) => {
+    apiPost<AuthResponseDto>(
+      `/auth/login${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      {
+        email: request.email,
+        password: request.password,
+      },
+    ).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      if (!migrated) {
+        completeMigration()
+      }
       return res
     })
 
@@ -234,8 +242,14 @@ export const useQuizServiceClient = () => {
   const googleExchangeCode = (
     request: AuthGoogleExchangeRequestDto,
   ): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>('/auth/google/exchange', request).then((res) => {
+    apiPost<AuthResponseDto>(
+      `/auth/google/exchange${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      request,
+    ).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      if (!migrated) {
+        completeMigration()
+      }
       return res
     })
 
@@ -365,13 +379,19 @@ export const useQuizServiceClient = () => {
   const register = (
     request: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> =>
-    apiPost<CreateUserResponseDto>('/users', {
-      email: request.email,
-      password: request.password,
-      givenName: request.givenName,
-      familyName: request.familyName,
-      defaultNickname: request.defaultNickname,
-    }).then((response) => {
+    apiPost<CreateUserResponseDto>(
+      `/users${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      {
+        email: request.email,
+        password: request.password,
+        givenName: request.givenName,
+        familyName: request.familyName,
+        defaultNickname: request.defaultNickname,
+      },
+    ).then((response) => {
+      if (!migrated) {
+        completeMigration()
+      }
       notifySuccess('Welcome aboard! Your account is ready to roll')
       return response
     })
