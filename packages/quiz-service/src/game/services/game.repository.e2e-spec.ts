@@ -7,7 +7,7 @@ import {
   closeTestApp,
   createTestApp,
 } from '../../../test-utils/utils/bootstrap'
-import { Quiz } from '../../quiz/services/models/schemas'
+import { Quiz } from '../../quiz/repositories/models/schemas'
 
 import { GameRepository } from './game.repository'
 import {

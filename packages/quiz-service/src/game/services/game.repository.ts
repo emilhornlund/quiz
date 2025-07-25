@@ -4,7 +4,7 @@ import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
-import { Quiz } from '../../quiz/services/models/schemas'
+import { Quiz } from '../../quiz/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import {
   ActiveGameNotFoundByGamePINException,

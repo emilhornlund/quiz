@@ -15,7 +15,7 @@ import {
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
-} from '../../../quiz/services/models/schemas'
+} from '../../../quiz/repositories/models/schemas'
 import {
   GameDocument,
   QuestionTaskAnswer,

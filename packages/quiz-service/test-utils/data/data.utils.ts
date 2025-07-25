@@ -37,7 +37,7 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-} from '../../src/quiz/services/models/schemas'
+} from '../../src/quiz/repositories/models/schemas'
 
 import { offsetSeconds } from './helpers.utils'
 

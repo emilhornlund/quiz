@@ -18,7 +18,7 @@ import {
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 
-import { QuizService } from '../../quiz/services'
+import { QuizRepository } from '../../quiz/repositories'
 import { User } from '../../user/repositories'
 import {
   NicknameNotUniqueException,
@@ -57,18 +57,18 @@ export class GameService {
   /**
    * Creates an instance of GameService.
    *
-   * @param {Redis} redis - The Redis instance used for managing data synchronization and storing answers.
-   * @param {GameRepository} gameRepository - Repository for accessing and modifying game data.
-   * @param {GameTaskTransitionScheduler} gameTaskTransitionScheduler - Scheduler for handling game task transitions.
-   * @param {GameEventPublisher} gameEventPublisher - Service responsible for publishing game events to clients.
-   * @param {QuizService} quizService - Service for managing quiz-related operations.
+   * @param redis - The Redis instance used for managing data synchronization and storing answers.
+   * @param gameRepository - Repository for accessing and modifying game data.
+   * @param gameTaskTransitionScheduler - Scheduler for handling game task transitions.
+   * @param gameEventPublisher - Service responsible for publishing game events to clients.
+   * @param quizRepository - Repository for accessing and modifying quiz documents.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
     private gameRepository: GameRepository,
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private gameEventPublisher: GameEventPublisher,
-    private quizService: QuizService,
+    private quizRepository: QuizRepository,
   ) {}
 
   /**
@@ -84,7 +84,7 @@ export class GameService {
     quizId: string,
     user: User,
   ): Promise<CreateGameResponseDto> {
-    const quiz = await this.quizService.findQuizDocumentByIdOrThrow(quizId)
+    const quiz = await this.quizRepository.findQuizByIdOrThrow(quizId)
 
     const gameDocument = await this.gameRepository.createGame(quiz, user)
 

@@ -1,7 +1,7 @@
 import { GameMode, GameParticipantType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionDao } from '../../../quiz/services/models/schemas'
+import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import { IllegalTaskTypeException } from '../../exceptions'
 import {
   BaseTask,
