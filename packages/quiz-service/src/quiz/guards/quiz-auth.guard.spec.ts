@@ -8,8 +8,8 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { QuizVisibility } from '@quiz/common'
 
 import { User } from '../../user/repositories'
-import { QuizService } from '../services'
-import { Quiz } from '../services/models/schemas'
+import { QuizRepository } from '../repositories'
+import { Quiz } from '../repositories/models/schemas'
 
 import { QuizAuthGuard } from './quiz-auth.guard'
 
@@ -20,23 +20,23 @@ type MockRequest = {
 
 describe('QuizAuthGuard', () => {
   let quizAuthGuard: QuizAuthGuard
-  let quizService: jest.Mocked<QuizService>
+  let quizRepository: jest.Mocked<QuizRepository>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         QuizAuthGuard,
         {
-          provide: QuizService,
+          provide: QuizRepository,
           useValue: {
-            findQuizDocumentByIdOrThrow: jest.fn(),
+            findQuizByIdOrThrow: jest.fn(),
           },
         },
       ],
     }).compile()
 
     quizAuthGuard = module.get<QuizAuthGuard>(QuizAuthGuard)
-    quizService = module.get(QuizService)
+    quizRepository = module.get(QuizRepository)
   })
 
   it('should allow access if the user is authenticated and owns the quiz', async () => {
@@ -53,7 +53,7 @@ describe('QuizAuthGuard', () => {
       visibility: QuizVisibility.Private,
       owner: { _id: 'player1' } as User,
     } as Quiz
-    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
+    quizRepository.findQuizByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
@@ -70,9 +70,7 @@ describe('QuizAuthGuard', () => {
     const result = await quizAuthGuard.canActivate(mockContext)
 
     expect(result).toBe(true)
-    expect(quizService.findQuizDocumentByIdOrThrow).toHaveBeenCalledWith(
-      'quiz1',
-    )
+    expect(quizRepository.findQuizByIdOrThrow).toHaveBeenCalledWith('quiz1')
   })
 
   it('should throw UnauthorizedException if the user is not authenticated', async () => {
@@ -139,7 +137,7 @@ describe('QuizAuthGuard', () => {
       visibility: QuizVisibility.Private,
       owner: { _id: 'player1' } as User,
     } as Quiz
-    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
+    quizRepository.findQuizByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
@@ -158,7 +156,7 @@ describe('QuizAuthGuard', () => {
     )
   })
 
-  it('should call findQuizDocumentByIdOrThrow with the correct quizId', async () => {
+  it('should call findQuizByIdOrThrow with the correct quizId', async () => {
     const mockRequest = {
       user: {
         _id: 'player1',
@@ -172,7 +170,7 @@ describe('QuizAuthGuard', () => {
       visibility: QuizVisibility.Private,
       owner: { _id: 'player1' } as User,
     } as Quiz
-    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
+    quizRepository.findQuizByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({
@@ -188,9 +186,7 @@ describe('QuizAuthGuard', () => {
 
     await quizAuthGuard.canActivate(mockContext)
 
-    expect(quizService.findQuizDocumentByIdOrThrow).toHaveBeenCalledWith(
-      'quiz1',
-    )
+    expect(quizRepository.findQuizByIdOrThrow).toHaveBeenCalledWith('quiz1')
   })
 
   it('should allow access to a public quiz when allowPublic is true', async () => {
@@ -207,7 +203,7 @@ describe('QuizAuthGuard', () => {
       visibility: QuizVisibility.Public,
       owner: { _id: 'player1' } as User,
     } as Quiz
-    quizService.findQuizDocumentByIdOrThrow.mockResolvedValue(mockQuiz)
+    quizRepository.findQuizByIdOrThrow.mockResolvedValue(mockQuiz)
 
     const mockContext = {
       switchToHttp: () => ({

@@ -11,7 +11,7 @@ import {
   BaseQuestionDao,
   QuestionDao,
   QuestionRangeDao,
-} from '../../../quiz/services/models/schemas'
+} from '../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isRangeQuestion,
