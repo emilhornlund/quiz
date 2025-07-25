@@ -70,6 +70,7 @@ export class AuthService {
    * @param authLoginRequestDto - DTO containing the user's email and password.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
+   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
    * @returns Promise resolving to an AuthResponseDto with access & refresh tokens.
    * @throws BadCredentialsException if credentials are invalid.
    */
@@ -77,6 +78,8 @@ export class AuthService {
     authLoginRequestDto: AuthLoginRequestDto,
     ipAddress: string,
     userAgent: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    legacyPlayerId?: string,
   ): Promise<AuthResponseDto> {
     const { _id: userId } = await this.userService.verifyUserCredentialsOrThrow(
       authLoginRequestDto.email,
@@ -102,6 +105,7 @@ export class AuthService {
    * @param codeVerifier - The PKCE code verifier originally used to generate the code challenge.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
+   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
    * @returns A promise resolving to an AuthResponseDto containing the issued tokens.
    */
   public async loginGoogle(
@@ -109,6 +113,8 @@ export class AuthService {
     codeVerifier: string,
     ipAddress: string,
     userAgent: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    legacyPlayerId?: string,
   ): Promise<AuthResponseDto> {
     const accessToken = await this.googleAuthService.exchangeCodeForAccessToken(
       code,

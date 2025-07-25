@@ -91,11 +91,14 @@ export class UserService {
   /**
    * Creates and persists a new user record.
    *
-   * @param requestDto Data for the new user (email, password, optional names).
+   * @param requestDto - Data for the new user (email, password, optional names).
+   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
    * @returns Created user data including timestamps.
    */
   public async createUser(
     requestDto: CreateUserRequestDto,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    legacyPlayerId?: string,
   ): Promise<CreateUserResponseDto> {
     const { email, password, givenName, familyName, defaultNickname } =
       requestDto
