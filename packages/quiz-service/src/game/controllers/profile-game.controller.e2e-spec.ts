@@ -18,7 +18,7 @@ import {
   createTestApp,
 } from '../../../test-utils/utils'
 import { User } from '../../user/repositories'
-import { Game, GameModel } from '../services/models/schemas'
+import { Game, GameModel } from '../repositories/models/schemas'
 
 describe('ProfileGameController (e2e)', () => {
   let app: INestApplication

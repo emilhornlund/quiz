@@ -27,7 +27,7 @@ import {
   QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
-} from '../../src/game/services/models/schemas'
+} from '../../src/game/repositories/models/schemas'
 import { buildLobbyTask } from '../../src/game/services/utils'
 import {
   BaseQuestionDao,

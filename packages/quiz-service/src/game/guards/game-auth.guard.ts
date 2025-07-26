@@ -16,7 +16,7 @@ import {
 
 import { AuthGuardRequest } from '../../auth/guards'
 import { GAME_PARTICIPANT_TYPE } from '../controllers/decorators/auth'
-import { GameRepository } from '../services'
+import { GameRepository } from '../repositories'
 
 /**
  * Guard to authorize access to game-related operations based on the participant type.

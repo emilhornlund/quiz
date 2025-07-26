@@ -4,7 +4,7 @@ import {
   Participant,
   ParticipantBase,
   ParticipantPlayer,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 /**
  * Checks if the given participant is of type `PLAYER`.

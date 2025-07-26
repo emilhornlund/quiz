@@ -4,9 +4,13 @@ import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../exceptions'
+import { GameResultRepository } from '../repositories'
+import {
+  GameDocument,
+  QuestionTaskAnswer,
+  TaskType,
+} from '../repositories/models/schemas'
 
-import { GameResultRepository } from './game-result.repository'
-import { GameDocument, QuestionTaskAnswer, TaskType } from './models/schemas'
 import {
   buildLeaderboardTask,
   buildPodiumTask,

@@ -2,9 +2,10 @@ import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
 import { Job, Queue } from 'bullmq'
 
+import { GameRepository } from '../repositories'
+import { GameDocument, TaskType } from '../repositories/models/schemas'
+
 import { GameTaskTransitionService } from './game-task-transition.service'
-import { GameRepository } from './game.repository'
-import { GameDocument, TaskType } from './models/schemas'
 
 export const TASK_QUEUE_NAME = 'task'
 const TASK_TRANSITION_JOB_NAME = TASK_QUEUE_NAME + 'transition'

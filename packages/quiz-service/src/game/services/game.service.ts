@@ -25,11 +25,11 @@ import {
   PlayerNotFoundException,
   PlayerNotUniqueException,
 } from '../exceptions'
+import { GameRepository } from '../repositories'
+import { TaskType } from '../repositories/models/schemas'
 
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
-import { GameRepository } from './game.repository'
-import { TaskType } from './models/schemas'
 import {
   buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
