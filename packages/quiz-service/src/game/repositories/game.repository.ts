@@ -11,10 +11,10 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
+import { GameEventPublisher } from '../services'
+import { buildGameModel, buildQuitTask } from '../services/utils'
 
-import { GameEventPublisher } from './game-event.publisher'
 import { Game, GameDocument, TaskType } from './models/schemas'
-import { buildGameModel, buildQuitTask } from './utils'
 
 /**
  * Repository for interacting with the Game collection in the database.

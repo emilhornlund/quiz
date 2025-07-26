@@ -41,7 +41,7 @@ import {
   QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 import {
   isMultiChoiceAnswer,

@@ -13,9 +13,8 @@ import {
 
 import { Cacheable } from '../../app/cache'
 import { GameResultsNotFoundException } from '../exceptions'
-
-import { GameResultRepository } from './game-result.repository'
-import { PlayerMetric, QuestionMetric } from './models/schemas'
+import { GameResultRepository } from '../repositories'
+import { PlayerMetric, QuestionMetric } from '../repositories/models/schemas'
 
 const CACHE_GAME_RESULTS_TTL = 60 * 60 // 1h in seconds
 
