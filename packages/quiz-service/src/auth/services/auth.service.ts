@@ -22,8 +22,8 @@ import {
 import ms, { StringValue } from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameRepository } from '../../game/services'
-import { GameDocument } from '../../game/services/models/schemas'
+import { GameRepository } from '../../game/repositories'
+import { GameDocument } from '../../game/repositories/models/schemas'
 import { UserService } from '../../user/services'
 
 import { GoogleAuthService } from './google-auth.service'

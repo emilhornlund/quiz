@@ -20,7 +20,7 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event.converter'
 

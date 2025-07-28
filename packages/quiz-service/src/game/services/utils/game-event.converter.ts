@@ -39,7 +39,7 @@ import {
   ParticipantPlayer,
   QuestionResultTaskItem,
   TaskType,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 import {
   isMultiChoiceAnswer,

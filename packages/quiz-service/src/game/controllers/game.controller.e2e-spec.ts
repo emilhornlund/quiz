@@ -44,7 +44,6 @@ import {
 } from '../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
 import { User, UserModel } from '../../user/repositories'
-import { GameService } from '../services'
 import {
   BaseTask,
   Game,
@@ -57,7 +56,8 @@ import {
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
   TaskType,
-} from '../services/models/schemas'
+} from '../repositories/models/schemas'
+import { GameService } from '../services'
 import { buildLobbyTask } from '../services/utils'
 
 describe('GameController (e2e)', () => {

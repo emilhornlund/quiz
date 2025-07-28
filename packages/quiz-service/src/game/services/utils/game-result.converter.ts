@@ -15,7 +15,7 @@ import {
   QuestionResultTask,
   QuestionTask,
   TaskType,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 /**
  * Builds the final GameResult model based on the provided game document.

@@ -7,7 +7,7 @@ import {
   QuestionType,
 } from '@quiz/common'
 
-import { GameDocument, TaskType } from '../models/schemas'
+import { GameDocument, TaskType } from '../../repositories/models/schemas'
 
 import { buildGameResultModel } from './game-result.converter'
 

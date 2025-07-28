@@ -32,7 +32,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { Game, GameModel } from '../../game/services/models/schemas'
+import { Game, GameModel } from '../../game/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'
 import {
