@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
+import { buildGameResultModel } from '../services/utils'
+
 import {
   GameDocument,
   GameResult,
   GameResultDocument,
   GameResultModel,
 } from './models/schemas'
-import { buildGameResultModel } from './utils'
 
 /**
  * Repository service for creating and storing game result documents.

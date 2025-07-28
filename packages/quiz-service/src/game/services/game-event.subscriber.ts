@@ -13,10 +13,10 @@ import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
 import { PlayerNotFoundException } from '../exceptions'
+import { GameRepository } from '../repositories'
+import { TaskType } from '../repositories/models/schemas'
 
-import { GameRepository } from './game.repository'
 import { DistributedEvent } from './models/event'
-import { TaskType } from './models/schemas'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,

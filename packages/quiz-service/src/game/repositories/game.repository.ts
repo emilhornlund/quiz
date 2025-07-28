@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
@@ -11,10 +11,10 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
+import { GameEventPublisher } from '../services'
+import { buildGameModel, buildQuitTask } from '../services/utils'
 
-import { GameEventPublisher } from './game-event.publisher'
 import { Game, GameDocument, TaskType } from './models/schemas'
-import { buildGameModel, buildQuitTask } from './utils'
 
 /**
  * Repository for interacting with the Game collection in the database.
@@ -29,6 +29,7 @@ export class GameRepository {
    */
   constructor(
     @InjectModel(Game.name) private gameModel: Model<Game>,
+    @Inject(forwardRef(() => GameEventPublisher))
     private gameEventPublisher: GameEventPublisher,
   ) {}
 
