@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { MurLock } from 'murlock'
 
-import { GameRepository } from './game.repository'
+import { GameRepository } from '../repositories'
 
 /**
  * Periodically checks for completed or expired games and updates or removes them accordingly.

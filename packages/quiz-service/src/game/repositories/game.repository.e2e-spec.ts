@@ -3,10 +3,7 @@ import { getModelToken } from '@nestjs/mongoose'
 import { GameMode, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  closeTestApp,
-  createTestApp,
-} from '../../../test-utils/utils/bootstrap'
+import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { Quiz } from '../../quiz/repositories/models/schemas'
 
 import { GameRepository } from './game.repository'

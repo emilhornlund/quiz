@@ -12,20 +12,19 @@ import {
 } from './controllers'
 import { GameResultController } from './controllers/game-result.controller'
 import { GameListener } from './handlers'
+import { GameRepository, GameResultRepository } from './repositories'
+import { Game, GameSchema } from './repositories/models/schemas'
+import { GameResult, GameResultSchema } from './repositories/models/schemas'
 import {
   GameEventPublisher,
   GameEventSubscriber,
   GameExpirySchedulerService,
-  GameRepository,
-  GameResultRepository,
   GameResultService,
   GameService,
   GameTaskTransitionScheduler,
   GameTaskTransitionService,
   TASK_QUEUE_NAME,
 } from './services'
-import { Game, GameSchema } from './services/models/schemas'
-import { GameResult, GameResultSchema } from './services/models/schemas'
 
 /**
  * GameModule sets up the necessary controllers, providers, and Mongoose schemas
