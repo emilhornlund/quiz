@@ -1,7 +1,11 @@
 import { INestApplication } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
 import supertest from 'supertest'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockLegacyPlayerUser,
+  buildMockSecondaryUser,
   MOCK_DEFAULT_HASHED_PASSWORD,
   MOCK_PRIMARY_PASSWORD,
   MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
@@ -10,14 +14,16 @@ import {
   MOCK_PRIMARY_USER_GIVEN_NAME,
 } from '../../../test-utils/data'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { UserRepository } from '../repositories'
+import { User, UserModel, UserRepository } from '../repositories'
 
 describe('UserController (e2e)', () => {
   let app: INestApplication
+  let userModel: UserModel
   let userRepository: UserRepository
 
   beforeEach(async () => {
     app = await createTestApp()
+    userModel = app.get<UserModel>(getModelToken(User.name))
     userRepository = app.get<UserRepository>(UserRepository)
   })
 
@@ -137,6 +143,90 @@ describe('UserController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toEqual({
             message: `Email '${MOCK_PRIMARY_USER_EMAIL}' is not unique`,
+            status: 409,
+            timestamp: expect.any(String),
+          })
+        })
+    })
+
+    it('should succeed in creating a new user from a legacy player user', async () => {
+      const { _id: legacyPlayerId, createdAt } = await userModel.create(
+        buildMockLegacyPlayerUser(),
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/users`)
+        .query({ legacyPlayerId })
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: legacyPlayerId,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            created: createdAt.toISOString(),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should succeed in creating a new user from a legacy player user that does not exist', async () => {
+      const legacyPlayerId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post(`/api/users`)
+        .query({ legacyPlayerId })
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: legacyPlayerId,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
+    it('should return 400 bad request when creating a new user from a legacy player user that was already migrated', async () => {
+      const legacyPlayerUser: User = await userModel.create(
+        buildMockSecondaryUser(),
+      )
+      const legacyPlayerId = legacyPlayerUser._id
+
+      return supertest(app.getHttpServer())
+        .post(`/api/users`)
+        .query({ legacyPlayerId })
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+        })
+        .expect(409)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Unable to migrate legacy player '${legacyPlayerId}', already migrated`,
             status: 409,
             timestamp: expect.any(String),
           })

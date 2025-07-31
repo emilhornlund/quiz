@@ -1,7 +1,7 @@
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GoogleUser, LocalUser } from '../../src/user/repositories'
+import { GoogleUser, LocalUser, NoneUser } from '../../src/user/repositories'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'
 export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
@@ -112,5 +112,16 @@ export function buildMockQuaternaryUser(user?: Partial<LocalUser>): LocalUser {
     createdAt: now,
     updatedAt: now,
     ...(user ?? {}),
+  }
+}
+
+export function buildMockLegacyPlayerUser(): NoneUser {
+  const now = new Date()
+  return {
+    _id: uuidv4(),
+    authProvider: AuthProvider.None,
+    email: 'n/a@na.na',
+    createdAt: now,
+    updatedAt: now,
   }
 }

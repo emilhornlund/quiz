@@ -170,13 +170,7 @@ export class QuestionTask {
   questionIndex: number
 
   @Prop({ type: [QuestionTaskBaseAnswerSchema], required: true })
-  answers: (QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-    ))[]
+  answers: QuestionTaskAnswer[]
 
   @Prop({ type: Date, default: () => new Date() })
   presented?: Date
@@ -231,13 +225,7 @@ export class QuestionResultTaskItem {
   nickname: string
 
   @Prop({ type: QuestionTaskBaseAnswerSchema, required: false })
-  answer?: QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-    )
+  answer?: QuestionTaskAnswer
 
   @Prop({ type: Boolean, required: true })
   correct: boolean

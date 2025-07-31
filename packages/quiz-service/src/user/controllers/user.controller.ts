@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -6,6 +14,7 @@ import {
   ApiConflictResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
@@ -33,6 +42,7 @@ export class UserController {
    * Creates a new user account.
    *
    * @param createUserRequest DTO containing email, password, and optional names.
+   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
    * @returns The newly created user’s details.
    */
   @Public()
@@ -46,6 +56,13 @@ export class UserController {
     summary: 'Create new user',
     description:
       'Registers a new user with email, password, and optional names.',
+  })
+  @ApiQuery({
+    name: 'legacyPlayerId',
+    description: 'Optional player ID from the legacy system for migration',
+    type: String,
+    format: 'uuid',
+    required: false,
   })
   @ApiBody({
     description: 'Payload for creating a new user.',
@@ -64,7 +81,9 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   public async createUser(
     @Body() createUserRequest: CreateUserRequest,
+    @Query('legacyPlayerId', new ParseUUIDPipe({ optional: true }))
+    legacyPlayerId?: string,
   ): Promise<CreateUserResponse> {
-    return this.userService.createUser(createUserRequest)
+    return this.userService.createUser(createUserRequest, legacyPlayerId)
   }
 }

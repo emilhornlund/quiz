@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
@@ -21,6 +21,9 @@ import { Game, GameDocument, TaskType } from './models/schemas'
  */
 @Injectable()
 export class GameRepository {
+  // Logger for logging repository operations
+  private logger: Logger = new Logger(GameRepository.name)
+
   /**
    * Constructs the GameRepository.
    *
@@ -317,5 +320,246 @@ export class GameRepository {
     })
 
     return result.deletedCount ?? 0
+  }
+
+  /**
+   * Replace every occurrence of one participantId with another across all game documents.
+   *
+   * @param fromParticipantId - the participantId to search for
+   * @param toParticipantId - the participantId to replace it with
+   * @returns a promise that resolves once all updates have been committed (or rejects/aborts on error)
+   */
+  public async updateGameParticipant(
+    fromParticipantId: string,
+    toParticipantId: string,
+  ): Promise<void> {
+    this.logger.log(
+      `Updating game participant from '${fromParticipantId}' to '${toParticipantId}'.`,
+    )
+
+    try {
+      const updates = [
+        // 1) participants[].participantId
+        this.gameModel.updateMany(
+          { 'participants.participantId': fromParticipantId },
+          {
+            $set: {
+              'participants.$[p].participantId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'p.participantId': fromParticipantId }],
+          },
+        ),
+
+        // 2a) QuestionResult currentTask → currentTask.results[].playerId
+        this.gameModel.updateMany(
+          {
+            'currentTask.type': TaskType.QuestionResult,
+            'currentTask.results.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'currentTask.results.$[res].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'res.playerId': fromParticipantId }],
+            strict: false,
+          },
+        ),
+
+        // 2b) QuestionResult tasks → previousTasks[].results[].playerId
+        this.gameModel.updateMany(
+          {
+            'previousTasks.type': TaskType.QuestionResult,
+            'previousTasks.results.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'previousTasks.$[task].results.$[res].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'task.type': TaskType.QuestionResult,
+                'task.results.playerId': fromParticipantId,
+              },
+              { 'res.playerId': fromParticipantId },
+            ],
+          },
+        ),
+
+        // 3a) QuestionResult currentTask → currentTask.results[].answer.playerId
+        this.gameModel.updateMany(
+          {
+            'currentTask.type': TaskType.QuestionResult,
+            'currentTask.results.answer.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'currentTask.results.$[res].answer.playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'res.answer.playerId': fromParticipantId }],
+            strict: false,
+          },
+        ),
+
+        // 3b) QuestionResult tasks → previousTasks[].results[].answer.playerId
+        this.gameModel.updateMany(
+          {
+            'previousTasks.type': TaskType.QuestionResult,
+            'previousTasks.results.answer.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'previousTasks.$[task].results.$[res].answer.playerId':
+                toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'task.type': TaskType.QuestionResult,
+                'task.results.answer.playerId': fromParticipantId,
+              },
+              { 'res.answer.playerId': fromParticipantId },
+            ],
+          },
+        ),
+
+        // 4a) Question currentTask → currentTask.answers[].playerId
+        this.gameModel.updateMany(
+          {
+            'currentTask.type': TaskType.Question,
+            'currentTask.answers.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'currentTask.answers.$[res].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'res.playerId': fromParticipantId }],
+            strict: false,
+          },
+        ),
+
+        // 4b) Question tasks → previousTasks[].answers[].playerId
+        this.gameModel.updateMany(
+          {
+            'previousTasks.type': TaskType.Question,
+            'previousTasks.answers.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'previousTasks.$[task].answers.$[res].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'task.type': TaskType.Question,
+                'task.answers.playerId': fromParticipantId,
+              },
+              { 'res.playerId': fromParticipantId },
+            ],
+          },
+        ),
+
+        // 5a) Leaderboard currentTask → currentTask.leaderboard[].playerId
+        this.gameModel.updateMany(
+          {
+            'currentTask.type': TaskType.Leaderboard,
+            'currentTask.leaderboard.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'currentTask.leaderboard.$[entry].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'entry.playerId': fromParticipantId }],
+            strict: false,
+          },
+        ),
+
+        // 5b) Leaderboard tasks → previousTasks[].leaderboard[].playerId
+        this.gameModel.updateMany(
+          {
+            'previousTasks.type': TaskType.Leaderboard,
+            'previousTasks.leaderboard.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'previousTasks.$[task].leaderboard.$[entry].playerId':
+                toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'task.type': TaskType.Leaderboard,
+                'task.leaderboard.playerId': fromParticipantId,
+              },
+              { 'entry.playerId': fromParticipantId },
+            ],
+          },
+        ),
+
+        // 6a) Podium currentTask → currentTask.leaderboard[].playerId
+        this.gameModel.updateMany(
+          {
+            'currentTask.type': TaskType.Podium,
+            'currentTask.leaderboard.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'currentTask.leaderboard.$[entry].playerId': toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [{ 'entry.playerId': fromParticipantId }],
+            strict: false,
+          },
+        ),
+
+        // 6b) Podium tasks → previousTasks[].leaderboard[].playerId
+        this.gameModel.updateMany(
+          {
+            'previousTasks.type': TaskType.Podium,
+            'previousTasks.leaderboard.playerId': fromParticipantId,
+          },
+          {
+            $set: {
+              'previousTasks.$[task].leaderboard.$[entry].playerId':
+                toParticipantId,
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'task.type': TaskType.Podium,
+                'task.leaderboard.playerId': fromParticipantId,
+              },
+              { 'entry.playerId': fromParticipantId },
+            ],
+          },
+        ),
+      ]
+
+      // fire all updates in parallel
+      await Promise.all(updates)
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Unable to update game participant from '${fromParticipantId}' to '${toParticipantId}': ${message}`,
+        stack,
+      )
+      throw error
+    }
   }
 }

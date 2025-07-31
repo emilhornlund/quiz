@@ -62,7 +62,7 @@ export class GoogleAuthService {
       return data.access_token
     } catch (error) {
       const { message, stack } = error as Error
-      this.logger.error(
+      this.logger.warn(
         `Failed to exchange code for access token: '${message}'.`,
         stack,
       )
@@ -93,7 +93,7 @@ export class GoogleAuthService {
       return response.data
     } catch (error) {
       const { message, stack } = error as Error
-      this.logger.error(
+      this.logger.warn(
         `Failed to fetch Google user profile: '${message}'.`,
         stack,
       )

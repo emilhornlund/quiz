@@ -65,6 +65,6 @@ import {
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
-  exports: [GameRepository],
+  exports: [GameRepository, GameResultRepository],
 })
 export class GameModule {}
