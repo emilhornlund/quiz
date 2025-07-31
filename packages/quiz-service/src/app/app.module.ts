@@ -18,6 +18,7 @@ import { AuthModule } from '../auth'
 import { GameModule } from '../game'
 import { HealthModule } from '../health'
 import { MediaModule } from '../media'
+import { MigrationModule } from '../migration'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 
@@ -181,6 +182,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     GameModule,
     HealthModule,
     MediaModule,
+    MigrationModule,
     QuizModule,
     UserModule,
   ],

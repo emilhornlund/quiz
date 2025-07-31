@@ -141,4 +141,33 @@ export class QuizRepository {
 
     this.logger.log(`Deleted quiz by id '${quizId}'.`)
   }
+
+  /**
+   * Updates the owner field on all quizzes from one user to another.
+   *
+   * @param fromUserId  The ID of the current quiz owner.
+   * @param toUserId    The ID of the new quiz owner.
+   * @returns A Promise that resolves once all matching quizzes have been updated.
+   */
+  public async updateQuizOwner(
+    fromUserId: string,
+    toUserId: string,
+  ): Promise<void> {
+    this.logger.log(
+      `Updating quiz owner from '${fromUserId}' to '${toUserId}'.`,
+    )
+
+    try {
+      await this.quizModel.updateMany(
+        { owner: fromUserId },
+        { $set: { owner: toUserId } },
+      )
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Unable update quiz owner from '${fromUserId} to '${toUserId}': ${message}`,
+        stack,
+      )
+    }
+  }
 }

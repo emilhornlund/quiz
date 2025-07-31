@@ -26,24 +26,28 @@ export class UserRepository {
   ) {}
 
   /**
-   * Retrieves a user document by its unique identifier.
+   * Finds a user by their unique identifier.
    *
-   * @param id – The unique identifier to search for.
-   * @returns The matching User document, or `null` if none exists.
+   * @param id - The unique identifier of the user.
+   * @returns A Promise resolving to the User document of type T, or null if none exists.
    */
-  public async findUserById(id: string): Promise<User> {
-    return this.userModel.findById(id).exec()
+  public async findUserById<T extends User>(id: string): Promise<T | null> {
+    const user = await this.userModel.findById(id).exec()
+    if (user) {
+      return user as T
+    }
+    return null
   }
 
   /**
-   * Retrieves a user document by its unique identifier, or throws if not found.
+   * Finds a user by their unique identifier, or throws if not found.
    *
-   * @param id – The unique identifier to search for.
-   * @returns The matching User document.
-   * @throws UserNotFoundException if no user exists with the given `id`.
+   * @param id - The unique identifier of the user.
+   * @returns A Promise resolving to the User document of type T.
+   * @throws UserNotFoundException if no user exists with the given id.
    */
-  public async findUserByIdOrThrow(id: string): Promise<User> {
-    const user = await this.findUserById(id)
+  public async findUserByIdOrThrow<T extends User>(id: string): Promise<T> {
+    const user = await this.findUserById<T>(id)
     if (!user) {
       this.logger.warn(`User was not found by id '${id}.`)
       throw new UserNotFoundException(id)
@@ -77,6 +81,17 @@ export class UserRepository {
   }
 
   /**
+   * Creates and persists a new user record.
+   *
+   * @param details - Object containing the user's details.
+   * @returns The newly created User document.
+   */
+  public async createUser<T extends User>(details: Partial<T>): Promise<T> {
+    const createdUser = await new this.userModel(details).save()
+    return createdUser as T
+  }
+
+  /**
    * Creates and persists a new local‐auth user record.
    *
    * @param details - Object containing email, hashedPassword, givenName and familyName.
@@ -87,12 +102,12 @@ export class UserRepository {
       LocalUser,
       '_id' | 'authProvider' | 'createdAt' | 'updatedAt'
     >,
-  ): Promise<User> {
-    return new this.userModel({
+  ): Promise<LocalUser> {
+    return this.createUser<LocalUser>({
       ...details,
       _id: uuidv4(),
       authProvider: AuthProvider.Local,
-    }).save()
+    })
   }
 
   /**
@@ -106,16 +121,12 @@ export class UserRepository {
       GoogleUser,
       '_id' | 'authProvider' | 'createdAt' | 'updatedAt'
     >,
-  ): Promise<GoogleUser | null> {
-    const createdUser: User = await new this.userModel({
+  ): Promise<GoogleUser> {
+    return this.createUser<GoogleUser>({
       ...details,
       _id: uuidv4(),
       authProvider: AuthProvider.Google,
-    }).save()
-
-    if (isGoogleUser(createdUser)) {
-      return createdUser
-    }
+    })
   }
 
   /**
@@ -125,10 +136,10 @@ export class UserRepository {
    * @param details - The details that will be updated.
    * @returns The updated user document.
    */
-  public async findUserByIdAndUpdateOrThrow(
+  public async findUserByIdAndUpdateOrThrow<T extends User>(
     id: string,
-    details: Partial<User>,
-  ): Promise<User> {
+    details: Partial<T>,
+  ): Promise<T> {
     const user = await this.userModel.findById(id).exec()
 
     if (!user) {
@@ -136,7 +147,20 @@ export class UserRepository {
       throw new UserNotFoundException(id)
     }
 
-    return user.set(details).save()
+    if (details.authProvider && details.authProvider !== user.authProvider) {
+      const updatedUser = await this.userModel
+        .findByIdAndUpdate(id, details, {
+          new: true,
+          overwriteDiscriminatorKey: true,
+          runValidators: true,
+          context: 'query',
+        })
+        .exec()
+      return updatedUser as T
+    }
+
+    const updatedUser = await user.set(details).save()
+    return updatedUser as T
   }
 
   /**
@@ -164,5 +188,15 @@ export class UserRepository {
     }
 
     return null
+  }
+
+  /**
+   * Deletes a user by their unique identifier.
+   *
+   * @param userId  The unique identifier of the user to delete.
+   * @returns A Promise that resolves once the user has been removed.
+   */
+  public async deleteUserById(userId: string): Promise<void> {
+    await this.userModel.deleteOne({ _id: userId })
   }
 }

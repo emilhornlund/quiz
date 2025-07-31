@@ -21,6 +21,7 @@ import { EnvironmentVariables } from '../../app/config'
 import { AuthService } from '../../auth/services'
 import { GoogleProfileDto } from '../../auth/services/models'
 import { EmailService } from '../../email/services'
+import { MigrationService } from '../../migration/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
 import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'
@@ -38,16 +39,18 @@ export class UserService {
   /**
    * Initializes the UserService.
    *
-   * @param userRepository – Repository for user data access.
-   * @param authService    – Service for authentication operations (e.g., token generation, verification).
-   * @param emailService   – Service for sending emails (welcome, verification, etc.).
-   * @param configService  – Service for reading application configuration and environment variables.
+   * @param userRepository     Repository for user data access.
+   * @param authService        Service for authentication operations.
+   * @param emailService       Service for sending emails (verification, welcome, etc.).
+   * @param migrationService   Service responsible for migrating legacy user data.
+   * @param configService      Service for reading application configuration.
    */
   constructor(
     private readonly userRepository: UserRepository,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     private readonly emailService: EmailService,
+    private readonly migrationService: MigrationService,
     private readonly configService: ConfigService<EnvironmentVariables>,
   ) {}
 
@@ -89,13 +92,15 @@ export class UserService {
   }
 
   /**
-   * Creates and persists a new user record.
+   * Creates and persists a new local-auth user.
    *
-   * @param requestDto Data for the new user (email, password, optional names).
-   * @returns Created user data including timestamps.
+   * @param requestDto       Data for the new user (email, password, optional names).
+   * @param legacyPlayerId   (Optional) UUID from the legacy system to migrate player data.
+   * @returns A Promise resolving to the created user’s details.
    */
   public async createUser(
     requestDto: CreateUserRequestDto,
+    legacyPlayerId?: string,
   ): Promise<CreateUserResponseDto> {
     const { email, password, givenName, familyName, defaultNickname } =
       requestDto
@@ -120,7 +125,17 @@ export class UserService {
       defaultNickname,
     }
 
-    const createdUser = await this.userRepository.createLocalUser(details)
+    let createdUser: LocalUser
+    if (legacyPlayerId) {
+      createdUser =
+        await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
+          legacyPlayerId,
+          null,
+          { ...details, authProvider: AuthProvider.Local },
+        )
+    } else {
+      createdUser = await this.userRepository.createLocalUser(details)
+    }
 
     this.logger.log(`Created a new user with email: '${email}'.`)
 
@@ -139,14 +154,15 @@ export class UserService {
   }
 
   /**
-   * Ensures a google user record exists for the given Google profile.
-   * If one already exists (by Google ID), updates their details; otherwise creates a new user.
+   * Finds an existing Google user or creates a new one from OAuth profile.
    *
-   * @param profile - The GoogleProfileResponse containing user info from Google.
-   * @returns A promise resolving to the existing or newly created GoogleUser entity.
+   * @param profile          The GoogleProfileDto containing info from Google.
+   * @param legacyPlayerId   (Optional) UUID from the legacy system to migrate player data.
+   * @returns A Promise resolving to the existing or newly created GoogleUser.
    */
   public async verifyOrCreateGoogleUser(
     profile: GoogleProfileDto,
+    legacyPlayerId?: string,
   ): Promise<GoogleUser> {
     const existingUser =
       await this.userRepository.findAndUpdateGoogleUserByGoogleId(profile.id, {
@@ -168,17 +184,41 @@ export class UserService {
     }
 
     if (existingUser) {
+      if (legacyPlayerId) {
+        return this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
+          legacyPlayerId,
+          existingUser._id,
+        )
+      }
       return existingUser
     }
 
-    const createdUser = await this.userRepository.createGoogleUser({
+    const details: Omit<
+      GoogleUser,
+      '_id' | 'authProvider' | 'createdAt' | 'updatedAt'
+    > = {
       googleUserId: profile.id,
       email: profile.email,
       unverifiedEmail: profile.verified_email ? undefined : profile.email,
       givenName: profile.given_name,
       familyName: profile.family_name,
       defaultNickname: undefined,
-    })
+    }
+
+    let createdUser: GoogleUser
+    if (legacyPlayerId) {
+      createdUser =
+        await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
+          legacyPlayerId,
+          null,
+          {
+            ...details,
+            authProvider: AuthProvider.Google,
+          },
+        )
+    } else {
+      createdUser = await this.userRepository.createGoogleUser(details)
+    }
 
     await this.emailService.sendWelcomeEmail(createdUser.email)
 

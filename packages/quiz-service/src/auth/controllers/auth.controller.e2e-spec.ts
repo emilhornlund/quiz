@@ -12,10 +12,23 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockLegacyPlayerUser,
   buildMockPrimaryGoogleUser,
   buildMockPrimaryUser,
+  buildMockSecondaryUser,
+  createMockClassicQuiz,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
+  createMockGamePlayerParticipantDocument,
+  createMockGameResultDocument,
+  createMockGameResultPlayerMetric,
+  createMockLeaderboardTaskDocument,
+  createMockLeaderboardTaskItem,
+  createMockPodiumTaskDocument,
+  createMockQuestionResultTaskDocument,
+  createMockQuestionResultTaskItemDocument,
+  createMockQuestionTaskDocument,
+  createMockQuestionTaskMultiChoiceAnswer,
   MOCK_PRIMARY_GOOGLE_USER_ID,
   MOCK_PRIMARY_INVALID_PASSWORD,
   MOCK_PRIMARY_PASSWORD,
@@ -32,7 +45,13 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { Game, GameModel } from '../../game/repositories/models/schemas'
+import {
+  Game,
+  GameModel,
+  GameResult,
+  GameResultModel,
+} from '../../game/repositories/models/schemas'
+import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'
 import {
@@ -50,6 +69,8 @@ describe('AuthController (e2e)', () => {
   let authService: AuthService
   let userModel: UserModel
   let gameModel: GameModel
+  let gameResultModel: GameResultModel
+  let quizModel: QuizModel
 
   beforeEach(async () => {
     app = await createTestApp()
@@ -57,6 +78,8 @@ describe('AuthController (e2e)', () => {
     authService = app.get<AuthService>(AuthService)
     userModel = app.get<UserModel>(getModelToken(User.name))
     gameModel = app.get<GameModel>(getModelToken(Game.name))
+    gameResultModel = app.get<GameResultModel>(getModelToken(GameResult.name))
+    quizModel = app.get<QuizModel>(getModelToken(Quiz.name))
   })
 
   afterEach(async () => {
@@ -174,6 +197,85 @@ describe('AuthController (e2e)', () => {
             ],
           })
         })
+    })
+
+    it('should succeed in authenticating a legacy player user', async () => {
+      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
+
+      const { _id: legacyPlayerId } = await userModel.create(
+        buildMockLegacyPlayerUser(),
+      )
+
+      const { gameId, gameResultId, quizId } =
+        await createMockLegacyPlayerDocuments(legacyPlayerId)
+
+      await supertest(app.getHttpServer())
+        .post('/api/auth/login')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(userId, res)
+        })
+
+      await verifyLegacyPlayerMigration(
+        userId,
+        legacyPlayerId,
+        gameId,
+        gameResultId,
+        quizId,
+      )
+    })
+
+    it('should succeed in authenticating a legacy player user that does not exist', async () => {
+      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
+
+      const legacyPlayerId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/login')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(userId, res)
+        })
+    })
+
+    it('should succeed in authenticating a legacy player user that was already migrated', async () => {
+      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
+
+      const legacyPlayerUser: User = await userModel.create(
+        buildMockSecondaryUser(),
+      )
+      const legacyPlayerId = legacyPlayerUser._id
+
+      await supertest(app.getHttpServer())
+        .post('/api/auth/login')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          email: MOCK_PRIMARY_USER_EMAIL,
+          password: MOCK_PRIMARY_PASSWORD,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(userId, res)
+        })
+
+      const expectedLegacyPlayerUser: User =
+        await userModel.findById(legacyPlayerId)
+      expect(JSON.stringify(expectedLegacyPlayerUser)).toEqual(
+        JSON.stringify(legacyPlayerUser),
+      )
     })
   })
 
@@ -298,6 +400,153 @@ describe('AuthController (e2e)', () => {
                 property: 'user-agent',
               },
             ],
+          })
+        })
+    })
+
+    it('should succeed in authenticating a legacy player user as a new google user', async () => {
+      const { _id: legacyPlayerId } = await userModel.create(
+        buildMockLegacyPlayerUser(),
+      )
+
+      await supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(legacyPlayerId, res)
+        })
+
+      const legacyPlayerUser = await userModel.findById(legacyPlayerId)
+      expect(legacyPlayerUser).toBeTruthy()
+    })
+
+    it('should successfully authenticate a legacy player user as an existing google user', async () => {
+      const { _id: userId } = await userModel.create(
+        buildMockPrimaryGoogleUser({
+          googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
+          email: MOCK_PRIMARY_USER_EMAIL,
+        }),
+      )
+
+      const { _id: legacyPlayerId } = await userModel.create(
+        buildMockLegacyPlayerUser(),
+      )
+
+      const { gameId, gameResultId, quizId } =
+        await createMockLegacyPlayerDocuments(legacyPlayerId)
+
+      await supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(userId, res)
+        })
+
+      await verifyLegacyPlayerMigration(
+        userId,
+        legacyPlayerId,
+        gameId,
+        gameResultId,
+        quizId,
+      )
+    })
+
+    it('should succeed in authenticating a legacy player user that does not exist as a new google user', async () => {
+      const legacyPlayerId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(legacyPlayerId, res)
+        })
+    })
+
+    it('should succeed in authenticating a legacy player user that does not exist as an existing google user', async () => {
+      const { _id: userId } = await userModel.create(
+        buildMockPrimaryGoogleUser({
+          googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
+          email: MOCK_PRIMARY_USER_EMAIL,
+        }),
+      )
+
+      const legacyPlayerId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(userId, res)
+        })
+    })
+
+    it('should succeed in authenticating a legacy player user that was already migrated as an existing google user', async () => {
+      const legacyPlayerUser: User = await userModel.create(
+        buildMockPrimaryGoogleUser({
+          googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
+          email: MOCK_PRIMARY_USER_EMAIL,
+        }),
+      )
+      const legacyPlayerId = legacyPlayerUser._id
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(200)
+        .expect((res) => {
+          expectAuthLoginRequestDto(legacyPlayerId, res)
+        })
+    })
+
+    it('should return 400 bad request when authenticating a legacy player user that was already migrated as an existing local user', async () => {
+      const legacyPlayerUser: User = await userModel.create(
+        buildMockSecondaryUser(),
+      )
+      const legacyPlayerId = legacyPlayerUser._id
+
+      return supertest(app.getHttpServer())
+        .post('/api/auth/google/exchange')
+        .query({ legacyPlayerId })
+        .set('User-Agent', MOCK_USER_AGENT)
+        .send({
+          code: MOCK_GOOGLE_VALID_CODE,
+          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
+        })
+        .expect(409)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Unable to migrate legacy player '${legacyPlayerId}', already migrated`,
+            status: 409,
+            timestamp: expect.any(String),
           })
         })
     })
@@ -992,5 +1241,94 @@ describe('AuthController (e2e)', () => {
     expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
     expect(refreshTokenDto.gameId).toEqual(gameId)
     expect(refreshTokenDto.participantType).toEqual(participantType)
+  }
+
+  async function createMockLegacyPlayerDocuments(
+    legacyPlayerId: string,
+  ): Promise<{ gameId: string; gameResultId: string; quizId: string }> {
+    const { _id: gameId } = await gameModel.create(
+      createMockGameDocument({
+        participants: [
+          createMockGameHostParticipantDocument({
+            participantId: legacyPlayerId,
+          }),
+          createMockGamePlayerParticipantDocument({
+            participantId: legacyPlayerId,
+          }),
+        ],
+        previousTasks: [
+          createMockQuestionTaskDocument({
+            answers: [
+              createMockQuestionTaskMultiChoiceAnswer({
+                playerId: legacyPlayerId,
+              }),
+            ],
+          }),
+          createMockQuestionResultTaskDocument({
+            results: [
+              createMockQuestionResultTaskItemDocument({
+                playerId: legacyPlayerId,
+                answer: createMockQuestionTaskMultiChoiceAnswer({
+                  playerId: legacyPlayerId,
+                }),
+              }),
+            ],
+          }),
+          createMockLeaderboardTaskDocument({
+            leaderboard: [
+              createMockLeaderboardTaskItem({ playerId: legacyPlayerId }),
+            ],
+          }),
+        ],
+        currentTask: createMockPodiumTaskDocument({
+          leaderboard: [
+            createMockLeaderboardTaskItem({ playerId: legacyPlayerId }),
+          ],
+        }),
+      }),
+    )
+
+    const { _id: gameResultId } = await gameResultModel.create(
+      createMockGameResultDocument({
+        hostParticipantId: legacyPlayerId,
+        players: [
+          createMockGameResultPlayerMetric({ participantId: legacyPlayerId }),
+        ],
+      }),
+    )
+
+    const { _id: quizId } = await quizModel.create(
+      createMockClassicQuiz({
+        owner: { _id: legacyPlayerId } as User,
+      }),
+    )
+
+    return { gameId, gameResultId, quizId }
+  }
+
+  async function verifyLegacyPlayerMigration(
+    userId: string,
+    legacyPlayerId: string,
+    gameId: string,
+    gameResultId: string,
+    quizId: string,
+  ) {
+    const legacyPlayerUser = await userModel.findById(legacyPlayerId)
+    expect(legacyPlayerUser).toBeFalsy()
+
+    const gameDocument = await gameModel.findById(gameId)
+    const gameDocumentString = JSON.stringify(gameDocument)
+    expect(gameDocumentString).toContain(userId)
+    expect(gameDocumentString).not.toContain(legacyPlayerId)
+
+    const gameResultDocument = await gameResultModel.findById(gameResultId)
+    const gameResultDocumentString = JSON.stringify(gameResultDocument)
+    expect(gameResultDocumentString).toContain(userId)
+    expect(gameResultDocumentString).not.toContain(legacyPlayerId)
+
+    const quizDocument = await quizModel.findById(quizId)
+    const quizDocumentString = JSON.stringify(quizDocument)
+    expect(quizDocumentString).toContain(userId)
+    expect(quizDocumentString).not.toContain(legacyPlayerId)
   }
 })

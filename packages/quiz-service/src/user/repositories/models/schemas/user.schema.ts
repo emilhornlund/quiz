@@ -81,7 +81,7 @@ export class User implements IUser {
    */
   @Prop({
     type: String,
-    enum: [AuthProvider.Local, AuthProvider.Google],
+    enum: [AuthProvider.None, AuthProvider.Local, AuthProvider.Google],
     required: true,
   })
   authProvider: AuthProvider
@@ -276,3 +276,64 @@ export class GoogleUser implements IUser {
  * Schema factory for the GoogleUser class.
  */
 export const GoogleUserSchema = SchemaFactory.createForClass(GoogleUser)
+
+/**
+ * Schema for a user with no external auth provider (anonymous/legacy player).
+ */
+@Schema({ _id: false })
+export class NoneUser implements IUser {
+  /**
+   * The user’s unique identifier.
+   */
+  _id: string
+
+  /**
+   * The user’s authentication provider, None in for this discriminator.
+   */
+  authProvider!: AuthProvider.None
+
+  /**
+   * The user’s unique email address.
+   */
+  email: string
+
+  /**
+   * The user’s unverified email address (optional).
+   */
+  unverifiedEmail?: string
+
+  /**
+   * The user’s given name (optional).
+   */
+  givenName?: string
+
+  /**
+   * The user’s family name (optional).
+   */
+  familyName?: string
+
+  /**
+   * The user’s default nickname used for when participating in games (optional).
+   */
+  defaultNickname?: string
+
+  /**
+   * Date and time of the user's last successful login.
+   */
+  lastLoggedInAt?: Date
+
+  /**
+   * Timestamp when the user was created (ISO-8601 string).
+   */
+  createdAt: Date
+
+  /**
+   * Timestamp when the user was last updated (ISO-8601 string).
+   */
+  updatedAt: Date
+}
+
+/**
+ * Schema factory for the NoneUser class.
+ */
+export const NoneUserSchema = SchemaFactory.createForClass(NoneUser)
