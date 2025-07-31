@@ -214,6 +214,38 @@ describe('UserProfileController (e2e)', () => {
         })
     })
 
+    it('should not unset the local user’s unverified email when the new email equals the old unverified email', async () => {
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(
+        app,
+        {
+          email: MOCK_PRIMARY_USER_EMAIL,
+          unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+        } as Partial<LocalUser>,
+      )
+
+      return supertest(app.getHttpServer())
+        .put('/api/profile/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({
+          authProvider: AuthProvider.Local,
+          email: MOCK_PRIMARY_USER_EMAIL,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: user._id,
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            authProvider: AuthProvider.Local,
+            created: expect.any(String),
+            updated: expect.any(String),
+          })
+        })
+    })
+
     it('should update the local user’s default nickname containing emojis successfully', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 

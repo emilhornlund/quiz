@@ -520,6 +520,9 @@ export class UserService {
       if (newEmail !== originalUser.email) {
         return { unverifiedEmail: newEmail }
       }
+      if (originalUser.email === originalUser.unverifiedEmail) {
+        return {}
+      }
       return {
         email: newEmail,
         unverifiedEmail: undefined,
