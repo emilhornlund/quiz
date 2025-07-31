@@ -99,7 +99,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(user._id, res)
+          expectUserTokenPair(user._id, res)
         })
     })
 
@@ -219,7 +219,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(userId, res)
+          expectUserTokenPair(userId, res)
         })
 
       await verifyLegacyPlayerMigration(
@@ -246,7 +246,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(userId, res)
+          expectUserTokenPair(userId, res)
         })
     })
 
@@ -268,7 +268,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(userId, res)
+          expectUserTokenPair(userId, res)
         })
 
       const expectedLegacyPlayerUser: User =
@@ -419,7 +419,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(legacyPlayerId, res)
+          expectUserTokenPair(legacyPlayerId, res)
         })
 
       const legacyPlayerUser = await userModel.findById(legacyPlayerId)
@@ -451,7 +451,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(userId, res)
+          expectUserTokenPair(userId, res)
         })
 
       await verifyLegacyPlayerMigration(
@@ -476,7 +476,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(legacyPlayerId, res)
+          expectUserTokenPair(legacyPlayerId, res)
         })
     })
 
@@ -500,7 +500,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(userId, res)
+          expectUserTokenPair(userId, res)
         })
     })
 
@@ -523,7 +523,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(legacyPlayerId, res)
+          expectUserTokenPair(legacyPlayerId, res)
         })
     })
 
@@ -787,7 +787,7 @@ describe('AuthController (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          expectAuthLoginRequestDto(user._id, res)
+          expectUserTokenPair(user._id, res)
         })
     })
 
@@ -1188,7 +1188,7 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  function expectAuthLoginRequestDto(userId: string, response: Response) {
+  function expectUserTokenPair(userId: string, response: Response) {
     expect(response.body).toEqual({
       accessToken: expect.any(String),
       refreshToken: expect.any(String),
