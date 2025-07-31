@@ -97,9 +97,9 @@ export class CreateUserRequest implements CreateUserRequestDto {
   readonly familyName?: string
 
   /**
-   * Optional default nickname of the user used for when participating in games.
+   * Default nickname of the user used for when participating in games.
    */
-  @ApiPropertyOptional({
+  @ApiProperty({
     title: 'Default Nickname',
     description:
       'A nickname chosen by the player, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
@@ -110,11 +110,10 @@ export class CreateUserRequest implements CreateUserRequestDto {
     pattern: PLAYER_NICKNAME_REGEX.source,
     example: 'FrostyBear',
   })
-  @IsOptional()
   @MinLength(PLAYER_NICKNAME_MIN_LENGTH)
   @MaxLength(PLAYER_NICKNAME_MAX_LENGTH)
   @Matches(PLAYER_NICKNAME_REGEX, {
     message: 'Nickname can only contain letters, numbers, and underscores.',
   })
-  readonly defaultNickname?: string
+  readonly defaultNickname: string
 }

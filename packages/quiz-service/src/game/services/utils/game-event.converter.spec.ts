@@ -8,6 +8,7 @@ import {
   GameLeaderboardHostEvent,
   GamePodiumHostEvent,
   GameResultHostEvent,
+  generateNickname,
   QuestionType,
 } from '@quiz/common'
 
@@ -26,7 +27,6 @@ import {
   createMockRangeQuestionDocument,
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
-  generateNickname,
   MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,

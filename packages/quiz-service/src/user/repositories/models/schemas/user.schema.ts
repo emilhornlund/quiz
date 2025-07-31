@@ -39,7 +39,7 @@ interface IUser {
   /**
    * The user’s default nickname used for when participating in games (optional).
    */
-  defaultNickname?: string
+  defaultNickname: string
 
   /**
    * Date and time of the user's last successful login.
@@ -114,7 +114,7 @@ export class User implements IUser {
    * Optional default nickname of the user used for when participating in games.
    */
   @Prop({ type: String, required: false })
-  defaultNickname?: string
+  defaultNickname: string
 
   /**
    * Date and time of the user's last successful login.
@@ -190,7 +190,7 @@ export class LocalUser implements IUser {
   /**
    * The user’s default nickname used for when participating in games (optional).
    */
-  defaultNickname?: string
+  defaultNickname: string
 
   /**
    * Date and time of the user's last successful login.
@@ -252,9 +252,9 @@ export class GoogleUser implements IUser {
   familyName?: string
 
   /**
-   * The user’s default nickname used for when participating in games (optional).
+   * The user’s default nickname used for when participating in games.
    */
-  defaultNickname?: string
+  defaultNickname: string
 
   /**
    * Date and time of the user's last successful login.
@@ -313,9 +313,9 @@ export class NoneUser implements IUser {
   familyName?: string
 
   /**
-   * The user’s default nickname used for when participating in games (optional).
+   * The user’s default nickname used for when participating in games.
    */
-  defaultNickname?: string
+  defaultNickname: string
 
   /**
    * Date and time of the user's last successful login.

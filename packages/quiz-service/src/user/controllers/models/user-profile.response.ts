@@ -76,9 +76,9 @@ export class UserProfileResponse implements UserProfileResponseDto {
   readonly familyName?: string
 
   /**
-   * The user’s default nickname, if provided.
+   * The user’s default nickname.
    */
-  @ApiPropertyOptional({
+  @ApiProperty({
     title: 'Default Nickname',
     description:
       'A nickname chosen by the user, must be 2 to 20 characters long and contain only letters, numbers, or underscores.',
@@ -89,7 +89,7 @@ export class UserProfileResponse implements UserProfileResponseDto {
     pattern: PLAYER_NICKNAME_REGEX.source,
     example: 'FrostyBear',
   })
-  readonly defaultNickname?: string
+  readonly defaultNickname: string
 
   /**
    * The user’s authentication provider.

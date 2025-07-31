@@ -12,9 +12,6 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
-  PLAYER_NICKNAME_MAX_LENGTH,
-  PLAYER_NICKNAME_MIN_LENGTH,
-  PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -25,6 +22,7 @@ import {
   TextField,
   Typography,
 } from '../../../../components'
+import NicknameTextField from '../../../../components/NicknameTextField'
 
 import styles from './AuthRegisterPageUI.module.scss'
 import { getMessage, getTitle } from './helpers.ts'
@@ -95,7 +93,7 @@ const AuthRegisterPageUI: FC<AuthRegisterPageUIProps> = ({
       ...formFields,
       givenName: formFields.givenName || undefined,
       familyName: formFields.familyName || undefined,
-      defaultNickname: formFields.defaultNickname || undefined,
+      defaultNickname: formFields.defaultNickname,
     })
   }
 
@@ -168,18 +166,10 @@ const AuthRegisterPageUI: FC<AuthRegisterPageUIProps> = ({
           }
           onValid={(valid) => handleChangeValidFormField('familyName', valid)}
         />
-        <TextField
-          id="defaultNickname"
-          type="text"
-          placeholder="Default Nickname"
+        <NicknameTextField
           value={formFields.defaultNickname}
-          minLength={PLAYER_NICKNAME_MIN_LENGTH}
-          maxLength={PLAYER_NICKNAME_MAX_LENGTH}
-          regex={PLAYER_NICKNAME_REGEX}
           disabled={loading}
-          onChange={(value) =>
-            handleChangeFormField('defaultNickname', value as string)
-          }
+          onChange={(value) => handleChangeFormField('defaultNickname', value)}
           onValid={(valid) =>
             handleChangeValidFormField('defaultNickname', valid)
           }
