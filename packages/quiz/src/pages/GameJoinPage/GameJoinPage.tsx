@@ -1,8 +1,3 @@
-import {
-  PLAYER_NICKNAME_MAX_LENGTH,
-  PLAYER_NICKNAME_MIN_LENGTH,
-  PLAYER_NICKNAME_REGEX,
-} from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,9 +8,9 @@ import {
   IconButtonArrowRight,
   Page,
   PageProminentIcon,
-  TextField,
   Typography,
 } from '../../components'
+import NicknameTextField from '../../components/NicknameTextField'
 import { useGameContext } from '../../context/game'
 
 import styles from './GameJoinPage.module.scss'
@@ -66,18 +61,12 @@ const GameJoinPage: FC = () => {
         {message}
       </Typography>
       <form className={styles.joinForm} onSubmit={handleSubmit}>
-        <TextField
-          id="nickname"
-          type="text"
+        <NicknameTextField
+          value={nickname}
           placeholder="Nickname"
-          value={nickname ?? ''}
-          minLength={PLAYER_NICKNAME_MIN_LENGTH}
-          maxLength={PLAYER_NICKNAME_MAX_LENGTH}
-          regex={PLAYER_NICKNAME_REGEX}
           disabled={isJoiningGame}
-          onChange={(value) => setNickname(value as string)}
+          onChange={setNickname}
           onValid={setNicknameValid}
-          required
         />
         <IconButtonArrowRight
           id="join"
