@@ -268,11 +268,9 @@ export class UserService {
       updatedDetails = {
         ...updatedDetails,
         ...this.computeEmailUpdate(request.email, originalUser),
-        ...(request.givenName && { givenName: request.givenName }),
-        ...(request.familyName && { familyName: request.familyName }),
-        ...(request.defaultNickname && {
-          defaultNickname: request.defaultNickname,
-        }),
+        givenName: request.givenName,
+        familyName: request.familyName,
+        defaultNickname: request.defaultNickname,
       } as Partial<LocalUser>
     }
     if (request.authProvider === AuthProvider.Google) {

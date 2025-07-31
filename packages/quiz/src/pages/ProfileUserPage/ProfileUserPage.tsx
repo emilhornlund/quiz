@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
+import { trimToUndefined } from '../../utils/helpers.ts'
 
 import { ProfileUserPageUI, UpdateUserDetailsFormFields } from './components'
 import { UpdateUserPasswordFormFields } from './components/ProfileUserPageUI/components'
@@ -23,6 +24,7 @@ const ProfileUserPage: FC = () => {
     data,
     isLoading: isLoadingUserProfile,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ['myUserProfile'],
     queryFn: getUserProfile,
@@ -36,15 +38,17 @@ const ProfileUserPage: FC = () => {
           ? {
               authProvider: AuthProvider.Local,
               email: request.email,
-              givenName: request.givenName,
-              familyName: request.familyName,
+              givenName: trimToUndefined(request.givenName),
+              familyName: trimToUndefined(request.familyName),
               defaultNickname: request.defaultNickname,
             }
           : {
               authProvider: AuthProvider.Google,
               defaultNickname: request.defaultNickname,
             }),
-      }).finally(() => setIsSavingUserProfile(false))
+      })
+        .then(() => refetch())
+        .finally(() => setIsSavingUserProfile(false))
     }
   }
 
