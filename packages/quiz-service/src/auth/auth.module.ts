@@ -11,6 +11,7 @@ import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
 import { GameModule } from '../game'
+import { MigrationModule } from '../migration'
 import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
@@ -59,6 +60,7 @@ import { Token, TokenSchema } from './services/models/schemas'
     EventEmitterModule,
     HttpModule,
     GameModule,
+    forwardRef(() => MigrationModule),
     forwardRef(() => UserModule),
   ],
   controllers: [AuthController],

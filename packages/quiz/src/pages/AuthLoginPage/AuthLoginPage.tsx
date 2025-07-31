@@ -53,7 +53,6 @@ const AuthLoginPage: FC = () => {
     params.append('code_challenge', codeChallenge)
     params.append('code_challenge_method', 'S256')
 
-    console.log('https://accounts.google.com/o/oauth2/auth?', params.toString())
     window.location.href = `https://accounts.google.com/o/oauth2/auth?${params}`
   }
 

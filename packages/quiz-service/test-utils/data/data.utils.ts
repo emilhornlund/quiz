@@ -2,20 +2,25 @@ import {
   GameMode,
   GameParticipantType,
   GameStatus,
+  LanguageCode,
   MediaType,
   QuestionRangeAnswerMargin,
   QuestionType,
+  QuizCategory,
+  QuizVisibility,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
   BaseTask,
   Game,
+  GameResult,
   LeaderboardTask,
   LeaderboardTaskItem,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
+  PlayerMetric,
   PodiumTask,
   QuestionResultTask,
   QuestionResultTaskItem,
@@ -38,6 +43,7 @@ import {
   QuestionTypeAnswerDao,
   Quiz,
 } from '../../src/quiz/repositories/models/schemas'
+import { User } from '../../src/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
 
@@ -328,5 +334,122 @@ export function createMockQuitTaskDocument(
     status: 'completed',
     created: offsetSeconds(0),
     ...(task ?? {}),
+  }
+}
+
+export function createMockGameResultDocument(
+  gameResult?: Partial<GameResult>,
+): GameResult {
+  return {
+    _id: uuidv4(),
+    game: { _id: uuidv4() } as Game,
+    name: 'Trivia Battle',
+    hostParticipantId: MOCK_DEFAULT_PLAYER_ID,
+    players: [],
+    questions: [],
+    hosted: new Date(),
+    completed: new Date(),
+    ...(gameResult ?? {}),
+  }
+}
+
+export function createMockGameResultPlayerMetric(
+  playerMetric?: Partial<PlayerMetric>,
+): PlayerMetric {
+  return {
+    participantId: MOCK_DEFAULT_PLAYER_ID,
+    nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
+    rank: 0,
+    correct: 0,
+    incorrect: 0,
+    unanswered: 0,
+    averageResponseTime: 0,
+    longestCorrectStreak: 0,
+    score: 0,
+    ...(playerMetric ?? {}),
+  }
+}
+
+export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
+  return {
+    _id: uuidv4(),
+    title: 'Trivia Battle',
+    description: 'A fun and engaging trivia quiz for all ages.',
+    mode: GameMode.Classic,
+    visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
+    imageCoverURL: 'https://example.com/question-cover-image.png',
+    languageCode: LanguageCode.English,
+    questions: [
+      {
+        type: QuestionType.MultiChoice,
+        text: 'What is the capital of Sweden?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        options: [
+          {
+            value: 'Stockholm',
+            correct: true,
+          },
+          {
+            value: 'Copenhagen',
+            correct: false,
+          },
+          {
+            value: 'London',
+            correct: false,
+          },
+          {
+            value: 'Berlin',
+            correct: false,
+          },
+        ],
+        points: 1000,
+        duration: 30,
+      },
+      {
+        type: QuestionType.Range,
+        text: 'Guess the temperature of the hottest day ever recorded.',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        min: 0,
+        max: 100,
+        step: 0,
+        correct: 50,
+        margin: QuestionRangeAnswerMargin.Medium,
+        points: 1000,
+        duration: 30,
+      },
+      {
+        type: QuestionType.TrueFalse,
+        text: 'The earth is flat.',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        correct: false,
+        points: 1000,
+        duration: 30,
+      },
+      {
+        type: QuestionType.TypeAnswer,
+        text: 'What is the capital of Denmark?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        options: ['Copenhagen'],
+        points: 1000,
+        duration: 30,
+      },
+    ],
+    owner: { _id: uuidv4() } as User,
+    created: new Date(),
+    updated: new Date(),
+    ...(quiz ?? {}),
   }
 }

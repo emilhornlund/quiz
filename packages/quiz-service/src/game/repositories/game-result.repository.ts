@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
 import { buildGameResultModel } from '../services/utils'
@@ -16,6 +16,9 @@ import {
  */
 @Injectable()
 export class GameResultRepository {
+  // Logger for logging repository operations
+  private logger: Logger = new Logger(GameResultRepository.name)
+
   /**
    * Creates a new instance of the GameResultRepository.
    *
@@ -54,5 +57,39 @@ export class GameResultRepository {
           path: 'game',
         },
       ])
+  }
+
+  /**
+   * Updates all GameResult documents by replacing one participant’s ID with another.
+   *
+   * @param fromParticipantId  The participantId to replace.
+   * @param toParticipantId    The new participantId to set.
+   * @returns A Promise that resolves once all matching documents have been updated.
+   */
+  public async updateGameResultParticipant(
+    fromParticipantId: string,
+    toParticipantId: string,
+  ): Promise<void> {
+    this.logger.log(
+      `Updating game result participant from '${fromParticipantId}' to '${toParticipantId}'.`,
+    )
+
+    try {
+      await this.gameResultModel.updateMany(
+        { hostParticipantId: fromParticipantId },
+        { $set: { hostParticipantId: toParticipantId } },
+      )
+
+      await this.gameResultModel.updateMany(
+        { 'players.participantId': fromParticipantId },
+        { $set: { 'players.$.participantId': toParticipantId } },
+      )
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Unable update game result participant from '${fromParticipantId} to '${toParticipantId}': ${message}`,
+        stack,
+      )
+    }
   }
 }

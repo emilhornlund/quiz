@@ -5,6 +5,7 @@ import { AuthProvider } from '@quiz/common'
 
 import { AuthModule } from '../auth'
 import { EmailModule } from '../email'
+import { MigrationModule } from '../migration'
 
 import {
   UserAuthController,
@@ -14,6 +15,7 @@ import {
 import {
   GoogleUserSchema,
   LocalUserSchema,
+  NoneUserSchema,
   User,
   UserRepository,
   UserSchema,
@@ -30,6 +32,7 @@ import { UserEventHandler, UserService } from './services'
         name: User.name,
         schema: UserSchema,
         discriminators: [
+          { name: AuthProvider.None, schema: NoneUserSchema },
           { name: AuthProvider.Local, schema: LocalUserSchema },
           { name: AuthProvider.Google, schema: GoogleUserSchema },
         ],
@@ -38,6 +41,7 @@ import { UserEventHandler, UserService } from './services'
     EventEmitterModule,
     forwardRef(() => AuthModule),
     EmailModule,
+    forwardRef(() => MigrationModule),
   ],
   controllers: [UserController, UserProfileController, UserAuthController],
   providers: [UserService, UserRepository, UserEventHandler],
