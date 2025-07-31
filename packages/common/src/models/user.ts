@@ -25,9 +25,9 @@ export interface CreateUserRequestDto {
   readonly familyName?: string
 
   /**
-   * Optional default nickname of the user used for when participating in games.
+   * Default nickname of the user used for when participating in games.
    */
-  readonly defaultNickname?: string
+  readonly defaultNickname: string
 }
 
 /**
@@ -60,9 +60,9 @@ export interface CreateUserResponseDto {
   readonly familyName?: string
 
   /**
-   * The new user’s default nickname, if provided.
+   * The new user’s default nickname.
    */
-  readonly defaultNickname?: string
+  readonly defaultNickname: string
 
   /**
    * Timestamp when the user was created (ISO 8601 string).
@@ -105,9 +105,9 @@ export interface UserProfileResponseDto {
   readonly familyName?: string
 
   /**
-   * The user’s default nickname, if provided.
+   * The user’s default nickname.
    */
-  readonly defaultNickname?: string
+  readonly defaultNickname: string
 
   /**
    * The user’s authentication provider.

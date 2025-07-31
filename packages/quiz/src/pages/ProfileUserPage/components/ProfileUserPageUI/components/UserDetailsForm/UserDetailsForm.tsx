@@ -10,9 +10,6 @@ import {
   GIVEN_NAME_MAX_LENGTH,
   GIVEN_NAME_MIN_LENGTH,
   GIVEN_NAME_REGEX,
-  PLAYER_NICKNAME_MAX_LENGTH,
-  PLAYER_NICKNAME_MIN_LENGTH,
-  PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
 import { UserProfileResponseDto } from '@quiz/common/src'
 import React, {
@@ -25,6 +22,7 @@ import React, {
 } from 'react'
 
 import { Button, TextField, Typography } from '../../../../../../components'
+import NicknameTextField from '../../../../../../components/NicknameTextField'
 import styles from '../../../../../../styles/form.module.scss'
 
 export type UpdateUserDetailsFormFields = Pick<
@@ -167,18 +165,10 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
           }
           onValid={(valid) => handleChangeValidFormField('familyName', valid)}
         />
-        <TextField
-          id="defaultNickname"
-          type="text"
-          placeholder="Default Nickname"
+        <NicknameTextField
           value={formFields.defaultNickname}
-          minLength={PLAYER_NICKNAME_MIN_LENGTH}
-          maxLength={PLAYER_NICKNAME_MAX_LENGTH}
-          regex={PLAYER_NICKNAME_REGEX}
           disabled={loading}
-          onChange={(value) =>
-            handleChangeFormField('defaultNickname', value as string)
-          }
+          onChange={(value) => handleChangeFormField('defaultNickname', value)}
           onValid={(valid) =>
             handleChangeValidFormField('defaultNickname', valid)
           }
