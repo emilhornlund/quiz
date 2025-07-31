@@ -139,6 +139,9 @@ describe('UserProfileController (e2e)', () => {
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
           authProvider: AuthProvider.Google,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: MOCK_SECONDARY_USER_DEFAULT_NICKNAME,
         })
         .expect(200)
@@ -165,6 +168,9 @@ describe('UserProfileController (e2e)', () => {
         .send({
           authProvider: AuthProvider.Local,
           email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(200)
         .expect((res) => {
@@ -197,6 +203,9 @@ describe('UserProfileController (e2e)', () => {
         .send({
           authProvider: AuthProvider.Local,
           email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(200)
         .expect((res) => {
@@ -229,6 +238,9 @@ describe('UserProfileController (e2e)', () => {
         .send({
           authProvider: AuthProvider.Local,
           email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(200)
         .expect((res) => {
@@ -256,6 +268,9 @@ describe('UserProfileController (e2e)', () => {
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
           authProvider: AuthProvider.Local,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname,
         })
         .expect(200)
@@ -286,6 +301,9 @@ describe('UserProfileController (e2e)', () => {
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
           authProvider: AuthProvider.Google,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname,
         })
         .expect(200)
@@ -311,6 +329,10 @@ describe('UserProfileController (e2e)', () => {
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
           authProvider: AuthProvider.Local,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
         .expect(200)
         .expect((res) => {
@@ -398,6 +420,9 @@ describe('UserProfileController (e2e)', () => {
         .set({ Authorization: `Bearer ${accessToken}` })
         .send({
           authProvider: AuthProvider.Google,
+          email: MOCK_PRIMARY_USER_EMAIL,
+          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: '',
         })
         .expect(400)
