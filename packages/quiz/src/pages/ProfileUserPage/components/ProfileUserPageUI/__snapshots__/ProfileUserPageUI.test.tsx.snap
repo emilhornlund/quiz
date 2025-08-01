@@ -37,6 +37,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
       class="content fullWidth startAlign"
     >
       <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
+      <div
         class="typography subtitle full"
       >
         Shape your quiz identity
@@ -234,6 +257,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
     <div
       class="content fullWidth startAlign"
     >
+      <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
       <div
         class="typography subtitle full"
       >
@@ -534,6 +580,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
       class="content fullWidth startAlign"
     >
       <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
+      <div
         class="typography subtitle full"
       >
         Shape your quiz identity
@@ -730,6 +799,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
     <div
       class="content fullWidth startAlign"
     >
+      <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
       <div
         class="typography subtitle full"
       >
@@ -1029,6 +1121,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
       class="content fullWidth startAlign"
     >
       <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
+      <div
         class="typography subtitle full"
       >
         Shape your quiz identity
@@ -1245,6 +1360,29 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
     <div
       class="content fullWidth startAlign"
     >
+      <div
+        class="legacyInfoBox"
+      >
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://quiz.emilhornlund.com"
+        >
+          quiz.emilhornlund.com
+        </a>
+         one last time, and we’ll magically teleport everything over to 
+        <span>
+          klurigo.com
+        </span>
+        . Ready to blast off your data?
+      </div>
       <div
         class="typography subtitle full"
       >

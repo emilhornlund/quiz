@@ -9,6 +9,8 @@ import React, {
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { notifySuccess } from '../../utils/notification.ts'
+
 import { MigrationContext, MigrationContextType } from './migration-context.tsx'
 
 const LEGACY_HOST = 'quiz.emilhornlund.com'
@@ -79,6 +81,9 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
       newPlayerId = tmpLegacyPlayerId
       localStorage.setItem('player', JSON.stringify({ id: newPlayerId }))
       setPlayerId(newPlayerId)
+      notifySuccess(
+        'Yay, Player ID is in hand! Are you set for more brain-busting quizzes?',
+      )
     } else {
       const rawPlayer = localStorage.getItem('player')
       if (rawPlayer && !tmpLegacyPlayerId) {

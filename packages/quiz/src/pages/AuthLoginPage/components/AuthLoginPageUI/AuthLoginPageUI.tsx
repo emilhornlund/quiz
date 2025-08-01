@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import {
   Button,
   IconButtonArrowRight,
+  LegacyInfoBox,
   Page,
   PageDivider,
   TextField,
@@ -82,7 +83,8 @@ const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({
   }
 
   return (
-    <Page>
+    <Page align="start">
+      <LegacyInfoBox />
       <Typography variant="title" size="medium">
         {title}
       </Typography>
