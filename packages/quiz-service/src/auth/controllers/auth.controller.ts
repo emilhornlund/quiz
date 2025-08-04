@@ -4,7 +4,6 @@ import {
   Headers,
   HttpCode,
   HttpStatus,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -61,7 +60,7 @@ export class AuthController {
    * @param authLoginRequest - Request containing the user's email and password.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
+   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
    * @returns Promise resolving to an AuthResponse with both tokens.
    */
   @Public()
@@ -72,10 +71,10 @@ export class AuthController {
       'Verifies user credentials and issues a new access token and refresh token.',
   })
   @ApiQuery({
-    name: 'legacyPlayerId',
-    description: 'Optional player ID from the legacy system for migration',
+    name: 'migrationToken',
+    description:
+      'Optional migration token identifying the legacy anonymous user.',
     type: String,
-    format: 'uuid',
     required: false,
   })
   @ApiBody({
@@ -94,14 +93,14 @@ export class AuthController {
     @Body() authLoginRequest: AuthLoginRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-    @Query('legacyPlayerId', new ParseUUIDPipe({ optional: true }))
-    legacyPlayerId?: string,
+    @Query('migrationToken')
+    migrationToken?: string,
   ): Promise<AuthResponse> {
     return this.authService.login(
       authLoginRequest,
       ipAddress,
       userAgent,
-      legacyPlayerId,
+      migrationToken,
     )
   }
 
@@ -112,16 +111,16 @@ export class AuthController {
    * @param request   - Request containing the Google OAuth `code` and `codeVerifier`.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
+   * @param migrationToken - Optional player ID from the old system to migrate player data.
    * @returns Promise resolving to an AuthResponse with both tokens.
    */
   @Public()
   @Post('/google/exchange')
   @ApiQuery({
-    name: 'legacyPlayerId',
-    description: 'Optional player ID from the legacy system for migration',
+    name: 'migrationToken',
+    description:
+      'Optional migration token identifying the legacy anonymous user.',
     type: String,
-    format: 'uuid',
     required: false,
   })
   @ApiBody({
@@ -142,15 +141,15 @@ export class AuthController {
     @Body() request: AuthGoogleExchangeRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-    @Query('legacyPlayerId', new ParseUUIDPipe({ optional: true }))
-    legacyPlayerId?: string,
+    @Query('migrationToken')
+    migrationToken?: string,
   ): Promise<AuthResponse> {
     return this.authService.loginGoogle(
       request.code,
       request.codeVerifier,
       ipAddress,
       userAgent,
-      legacyPlayerId,
+      migrationToken,
     )
   }
 

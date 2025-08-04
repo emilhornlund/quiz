@@ -327,7 +327,10 @@ function transformOriginalDocument(
         return transformQuizDocument(originalDocument)
       case COLLECTION_NAME_PLAYERS:
       case COLLECTION_NAME_USERS:
-        return transformPlayerOrUserDocument(originalDocument)
+        return transformPlayerOrUserDocument(
+          originalDocument,
+          clientPlayerMapper,
+        )
       case COLLECTION_NAME_TOKENS:
         return transformTokenDocument(originalDocument)
       default:
