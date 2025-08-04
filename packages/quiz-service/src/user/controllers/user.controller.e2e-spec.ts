@@ -1,11 +1,9 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
 import supertest from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
 
 import {
-  buildMockLegacyPlayerUser,
-  buildMockSecondaryUser,
+  buildMockNoneMigratedPlayerUser,
   MOCK_DEFAULT_HASHED_PASSWORD,
   MOCK_PRIMARY_PASSWORD,
   MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
@@ -150,13 +148,17 @@ describe('UserController (e2e)', () => {
     })
 
     it('should succeed in creating a new user from a legacy player user', async () => {
-      const { _id: legacyPlayerId, createdAt } = await userModel.create(
-        buildMockLegacyPlayerUser(),
-      )
+      const {
+        _id: legacyPlayerId,
+        createdAt,
+        migrationTokens,
+      } = await userModel.create(buildMockNoneMigratedPlayerUser())
+
+      const migrationToken = migrationTokens[0]
 
       return supertest(app.getHttpServer())
         .post(`/api/users`)
-        .query({ legacyPlayerId })
+        .query({ migrationToken })
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_PRIMARY_PASSWORD,
@@ -179,12 +181,10 @@ describe('UserController (e2e)', () => {
         })
     })
 
-    it('should succeed in creating a new user from a legacy player user that does not exist', async () => {
-      const legacyPlayerId = uuidv4()
-
+    it('should return 404 not found when creating a new user from a legacy player user that does not exist', async () => {
       return supertest(app.getHttpServer())
         .post(`/api/users`)
-        .query({ legacyPlayerId })
+        .query({ migrationToken: 'n/a' })
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_PRIMARY_PASSWORD,
@@ -192,42 +192,11 @@ describe('UserController (e2e)', () => {
           familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
-        .expect(201)
+        .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            id: legacyPlayerId,
-            email: MOCK_PRIMARY_USER_EMAIL,
-            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
-            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
-            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
-            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
-            created: expect.any(String),
-            updated: expect.any(String),
-          })
-        })
-    })
-
-    it('should return 400 bad request when creating a new user from a legacy player user that was already migrated', async () => {
-      const legacyPlayerUser: User = await userModel.create(
-        buildMockSecondaryUser(),
-      )
-      const legacyPlayerId = legacyPlayerUser._id
-
-      return supertest(app.getHttpServer())
-        .post(`/api/users`)
-        .query({ legacyPlayerId })
-        .send({
-          email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_PRIMARY_PASSWORD,
-          givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
-          familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
-          defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
-        })
-        .expect(409)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: `Unable to migrate legacy player '${legacyPlayerId}', already migrated`,
-            status: 409,
+            message: 'User was not found by migration token',
+            status: 404,
             timestamp: expect.any(String),
           })
         })

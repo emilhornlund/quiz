@@ -33,6 +33,7 @@ import { useCallback } from 'react'
 import { useAuthContext } from '../context/auth'
 import { useMigrationContext } from '../context/migration'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
+import useLocalStorage from '../utils/use-local-storage.tsx'
 
 import {
   ApiPostBody,
@@ -55,7 +56,15 @@ import {
  */
 export const useQuizServiceClient = () => {
   const { user, game, setTokenPair } = useAuthContext()
-  const { migrated, playerId, completeMigration } = useMigrationContext()
+
+  const { completeMigration } = useMigrationContext()
+
+  const [migrationToken] = useLocalStorage<string | undefined>(
+    'migrationToken',
+    undefined,
+  )
+
+  const [migrated] = useLocalStorage<boolean>('migrated', false)
 
   /**
    * Retrieves the token string for the specified scope and token type
@@ -219,7 +228,7 @@ export const useQuizServiceClient = () => {
    */
   const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>(
-      `/auth/login${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      `/auth/login${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
       {
         email: request.email,
         password: request.password,
@@ -243,7 +252,7 @@ export const useQuizServiceClient = () => {
     request: AuthGoogleExchangeRequestDto,
   ): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>(
-      `/auth/google/exchange${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      `/auth/google/exchange${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
       request,
     ).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
@@ -380,7 +389,7 @@ export const useQuizServiceClient = () => {
     request: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> =>
     apiPost<CreateUserResponseDto>(
-      `/users${parseQueryParams({ ...(!migrated && playerId ? { legacyPlayerId: playerId } : {}) })}`,
+      `/users${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
       {
         email: request.email,
         password: request.password,

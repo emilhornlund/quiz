@@ -2,6 +2,7 @@ import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { GoogleUser, LocalUser, NoneUser } from '../../src/user/repositories'
+import { computeMigrationToken } from '../utils'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'
 export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
@@ -115,13 +116,19 @@ export function buildMockQuaternaryUser(user?: Partial<LocalUser>): LocalUser {
   }
 }
 
-export function buildMockLegacyPlayerUser(): NoneUser {
+export function buildMockNoneMigratedPlayerUser(
+  user?: Partial<NoneUser>,
+): NoneUser {
+  const userId = user?._id ?? uuidv4()
   const now = new Date()
   return {
-    _id: uuidv4(),
+    _id: userId,
     authProvider: AuthProvider.None,
     email: 'n/a@na.na',
+    defaultNickname: '',
+    migrationTokens: [computeMigrationToken(uuidv4(), userId)],
     createdAt: now,
     updatedAt: now,
+    ...(user ?? {}),
   }
 }
