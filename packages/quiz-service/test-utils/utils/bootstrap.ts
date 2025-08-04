@@ -10,9 +10,9 @@ import { configureApp } from '../../src/app/utils'
 import { GoogleAuthService } from '../../src/auth/services'
 import { GoogleProfileDto } from '../../src/auth/services/models'
 import { PexelsMediaSearchService } from '../../src/media/services'
+import { MOCK_PRIMARY_GOOGLE_USER_ID, MOCK_PRIMARY_USER_EMAIL } from '../data'
 import {
   MOCK_GOOGLE_ACCESS_TOKEN_VALID,
-  MOCK_GOOGLE_PROFILE_DTO,
   MOCK_GOOGLE_VALID_CODE,
   MOCK_GOOGLE_VALID_CODE_VERIFIER,
 } from '../data/google-auth.data'
@@ -54,7 +54,15 @@ const mockGoogleAuthService = {
     accessToken: string,
   ): Promise<GoogleProfileDto> => {
     if (accessToken === MOCK_GOOGLE_ACCESS_TOKEN_VALID) {
-      return MOCK_GOOGLE_PROFILE_DTO
+      return {
+        id: MOCK_PRIMARY_GOOGLE_USER_ID,
+        email: MOCK_PRIMARY_USER_EMAIL,
+        verified_email: true,
+        name: 'Jane Doe',
+        given_name: 'Jane',
+        family_name: 'Doe',
+        picture: 'http://img',
+      }
     }
     throw new UnauthorizedException('Access token is invalid or has expired.')
   },

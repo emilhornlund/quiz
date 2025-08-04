@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  ParseUUIDPipe,
   Post,
   Query,
 } from '@nestjs/common'
@@ -42,7 +41,7 @@ export class UserController {
    * Creates a new user account.
    *
    * @param createUserRequest DTO containing email, password, and optional names.
-   * @param legacyPlayerId - Optional player ID from the old system to migrate player data.
+   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
    * @returns The newly created user’s details.
    */
   @Public()
@@ -58,10 +57,10 @@ export class UserController {
       'Registers a new user with email, password, and optional names.',
   })
   @ApiQuery({
-    name: 'legacyPlayerId',
-    description: 'Optional player ID from the legacy system for migration',
+    name: 'migrationToken',
+    description:
+      'Optional migration token identifying the legacy anonymous user.',
     type: String,
-    format: 'uuid',
     required: false,
   })
   @ApiBody({
@@ -81,9 +80,9 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   public async createUser(
     @Body() createUserRequest: CreateUserRequest,
-    @Query('legacyPlayerId', new ParseUUIDPipe({ optional: true }))
-    legacyPlayerId?: string,
+    @Query('migrationToken')
+    migrationToken?: string,
   ): Promise<CreateUserResponse> {
-    return this.userService.createUser(createUserRequest, legacyPlayerId)
+    return this.userService.createUser(createUserRequest, migrationToken)
   }
 }

@@ -95,12 +95,12 @@ export class UserService {
    * Creates and persists a new local-auth user.
    *
    * @param requestDto       Data for the new user (email, password, optional names).
-   * @param legacyPlayerId   (Optional) UUID from the legacy system to migrate player data.
+   * @param migrationToken   Optional migration token identifying the legacy anonymous user.
    * @returns A Promise resolving to the created user’s details.
    */
   public async createUser(
     requestDto: CreateUserRequestDto,
-    legacyPlayerId?: string,
+    migrationToken?: string,
   ): Promise<CreateUserResponseDto> {
     const { email, password, givenName, familyName, defaultNickname } =
       requestDto
@@ -126,10 +126,10 @@ export class UserService {
     }
 
     let createdUser: LocalUser
-    if (legacyPlayerId) {
+    if (migrationToken) {
       createdUser =
         await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
-          legacyPlayerId,
+          migrationToken,
           null,
           { ...details, authProvider: AuthProvider.Local },
         )
@@ -157,12 +157,12 @@ export class UserService {
    * Finds an existing Google user or creates a new one from OAuth profile.
    *
    * @param profile          The GoogleProfileDto containing info from Google.
-   * @param legacyPlayerId   (Optional) UUID from the legacy system to migrate player data.
+   * @param migrationToken   Optional migration token identifying the legacy anonymous user.
    * @returns A Promise resolving to the existing or newly created GoogleUser.
    */
   public async verifyOrCreateGoogleUser(
     profile: GoogleProfileDto,
-    legacyPlayerId?: string,
+    migrationToken?: string,
   ): Promise<GoogleUser> {
     const existingUser =
       await this.userRepository.findAndUpdateGoogleUserByGoogleId(profile.id, {
@@ -184,9 +184,9 @@ export class UserService {
     }
 
     if (existingUser) {
-      if (legacyPlayerId) {
+      if (migrationToken) {
         return this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-          legacyPlayerId,
+          migrationToken,
           existingUser._id,
         )
       }
@@ -206,10 +206,10 @@ export class UserService {
     }
 
     let createdUser: GoogleUser
-    if (legacyPlayerId) {
+    if (migrationToken) {
       createdUser =
         await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-          legacyPlayerId,
+          migrationToken,
           null,
           {
             ...details,

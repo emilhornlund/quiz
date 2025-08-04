@@ -47,6 +47,11 @@ interface IUser {
   lastLoggedInAt?: Date
 
   /**
+   * Array of migration tokens associated with the user, used during client‐player data migrations.
+   */
+  migrationTokens?: string[]
+
+  /**
    * Timestamp when the user was created (ISO-8601 string).
    */
   createdAt: Date
@@ -121,6 +126,12 @@ export class User implements IUser {
    */
   @Prop({ type: Date, required: false })
   lastLoggedInAt?: Date
+
+  /**
+   * Array of migration tokens associated with the user, used during client‐player data migrations.
+   */
+  @Prop({ type: [String], required: false })
+  migrationTokens?: string[]
 
   /**
    * Timestamp when the user was created (ISO-8601 string).
@@ -198,6 +209,11 @@ export class LocalUser implements IUser {
   lastLoggedInAt?: Date
 
   /**
+   * Array of migration tokens associated with the user, used during client‐player data migrations.
+   */
+  migrationTokens?: string[]
+
+  /**
    * Timestamp when the user was created (ISO-8601 string).
    */
   createdAt: Date
@@ -262,6 +278,11 @@ export class GoogleUser implements IUser {
   lastLoggedInAt?: Date
 
   /**
+   * Array of migration tokens associated with the user, used during client‐player data migrations.
+   */
+  migrationTokens?: string[]
+
+  /**
    * Timestamp when the user was created (ISO-8601 string).
    */
   createdAt: Date
@@ -321,6 +342,11 @@ export class NoneUser implements IUser {
    * Date and time of the user's last successful login.
    */
   lastLoggedInAt?: Date
+
+  /**
+   * Array of migration tokens associated with the user, used during client‐player data migrations.
+   */
+  migrationTokens?: string[]
 
   /**
    * Timestamp when the user was created (ISO-8601 string).

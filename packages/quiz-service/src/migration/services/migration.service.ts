@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  Logger,
-} from '@nestjs/common'
-import { AuthProvider } from '@quiz/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 
 import { GameRepository, GameResultRepository } from '../../game/repositories'
 import { QuizRepository } from '../../quiz/repositories'
@@ -38,99 +32,70 @@ export class MigrationService {
    * Migrate data from a legacy anonymous user into an existing account,
    * or update a legacy user’s details in place if no target account is given.
    *
-   * @param legacyPlayerId   ID of the anonymous/legacy user.
+   * @param migrationToken   The migration token identifying the legacy anonymous user.
    * @param existingUserId   (Optional) ID of the existing user to merge into.
    * @param updateDetails    (Optional) New details to set when updating in place.
    * @returns A Promise resolving to the User document after migration or update.
    */
   public async migrateLegacyPlayerUser<T extends User>(
-    legacyPlayerId: string,
+    migrationToken: string,
     existingUserId?: string,
     updateDetails?: Partial<T>,
   ): Promise<T> {
     const legacyPlayerUser =
-      await this.userRepository.findUserById(legacyPlayerId)
-
-    const isLegacyPlayerValid =
-      legacyPlayerUser && legacyPlayerUser.authProvider === AuthProvider.None
-
-    const isLegacyPlayerMigrated =
-      legacyPlayerUser && legacyPlayerUser.authProvider !== AuthProvider.None
+      await this.userRepository.removeMigrationTokenForUserOrThrow<T>(
+        migrationToken,
+      )
 
     // Simulate user creation, update details but skip data migration
-    if (!existingUserId && updateDetails && isLegacyPlayerValid) {
-      this.logger.log(`Migrating legacy player '${legacyPlayerId}'.`)
+    if (!existingUserId && updateDetails) {
+      this.logger.log('Migrating legacy player')
 
       return this.userRepository.findUserByIdAndUpdateOrThrow<T>(
-        legacyPlayerId,
+        legacyPlayerUser._id,
         updateDetails,
       )
     }
-    // Create an actual new user in case of the legacy player does not exist
-    else if (!existingUserId && updateDetails && !legacyPlayerUser) {
-      this.logger.log(`Create new user from legacy player '${legacyPlayerId}'.`)
-      return this.userRepository.createUser<T>({
-        _id: legacyPlayerId,
-        ...updateDetails,
-      })
-    }
+
     // An already migrated user exists
-    else if (existingUserId && !updateDetails) {
-      this.logger.log(
-        `Migrating legacy player '${legacyPlayerId}' to '${existingUserId}'.`,
-      )
+    if (existingUserId && !updateDetails) {
+      this.logger.log(`Migrating legacy player to '${existingUserId}'.`)
 
       const migratedUser =
         await this.userRepository.findUserByIdOrThrow<T>(existingUserId)
 
-      // Associate the legacy player with the already migrated user
-      if (isLegacyPlayerValid) {
-        try {
-          await this.gameRepository.updateGameParticipant(
-            legacyPlayerId,
-            existingUserId,
-          )
+      try {
+        await this.gameRepository.updateGameParticipant(
+          legacyPlayerUser._id,
+          existingUserId,
+        )
 
-          await this.gameResultRepository.updateGameResultParticipant(
-            legacyPlayerId,
-            existingUserId,
-          )
+        await this.gameResultRepository.updateGameResultParticipant(
+          legacyPlayerUser._id,
+          existingUserId,
+        )
 
-          await this.quizRepository.updateQuizOwner(
-            legacyPlayerId,
-            existingUserId,
-          )
+        await this.quizRepository.updateQuizOwner(
+          legacyPlayerUser._id,
+          existingUserId,
+        )
 
-          await this.userRepository.deleteUserById(legacyPlayerId)
-        } catch (error) {
-          const { message, stack } = error as Error
-          this.logger.warn(
-            `Failed to migrate legacy player '${legacyPlayerId}': '${message}'.`,
-            stack,
-          )
-          throw new BadRequestException(
-            `Failed to migrate legacy player '${legacyPlayerId}'`,
-          )
-        }
+        await this.userRepository.deleteUserById(legacyPlayerUser._id)
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.warn(
+          `Failed to migrate legacy player: '${message}'.`,
+          stack,
+        )
+        throw new BadRequestException('Failed to migrate legacy player')
       }
 
       return migratedUser
     }
-    // Legacy player already migrated
-    else if (isLegacyPlayerMigrated) {
-      this.logger.log(
-        `Unable to migrate legacy player '${legacyPlayerId}', already migrated.`,
-      )
-      throw new ConflictException(
-        `Unable to migrate legacy player '${legacyPlayerId}', already migrated`,
-      )
-    }
 
     this.logger.error(
-      `Fatal error: Unable to migrate legacy player '${legacyPlayerId}', should not reach here.`,
+      'Fatal error: Unable to migrate legacy player, should not reach here.',
     )
-    throw new BadRequestException(
-      `Unable to migrate legacy player '${legacyPlayerId}'`,
-    )
+    throw new BadRequestException('Unable to migrate legacy player')
   }
 }

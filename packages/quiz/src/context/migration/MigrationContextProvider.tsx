@@ -5,38 +5,17 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { notifySuccess } from '../../utils/notification.ts'
+import { sha256 } from '../../utils/oauth.ts'
+import useLocalStorage from '../../utils/use-local-storage.tsx'
 
 import { MigrationContext, MigrationContextType } from './migration-context.tsx'
 
 const LEGACY_HOST = 'quiz.emilhornlund.com'
 const TARGET_HOST = 'klurigo.com'
-
-/**
- * Safely parse a JSON‐stringified object containing an `id` field.
- *
- * @param value - A JSON string like `{"id":"…"}`
- * @returns The extracted `id` if parsing succeeds, otherwise `undefined`
- */
-const extractObjectIdFromString = (
-  value: string | undefined,
-): string | undefined => {
-  try {
-    const parsedIdObject: { id: string } | undefined = value
-      ? (JSON.parse(value) as { id: string })
-      : undefined
-    return parsedIdObject?.id
-  } catch (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    error
-  ) {
-    return undefined
-  }
-}
 
 /**
  * Props for the MigrationContextProvider component.
@@ -57,78 +36,90 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
 }) => {
   const [searchParams] = useSearchParams()
 
-  const [clientId, setClientId] = useState<string | undefined>(undefined)
-  const [playerId, setPlayerId] = useState<string | undefined>(undefined)
+  const [client, , clearClient] = useLocalStorage<{ id: string } | undefined>(
+    'client',
+    undefined,
+  )
 
-  const tmpLegacyPlayerId = searchParams.get('legacyPlayerId')
+  const [player, , clearPlayer] = useLocalStorage<{ id: string } | undefined>(
+    'player',
+    undefined,
+  )
+
+  const [, , clearToken] = useLocalStorage<string | undefined>(
+    'token',
+    undefined,
+  )
+
+  const [, setMigrationToken, clearMigrationToken] = useLocalStorage<
+    string | undefined
+  >('migrationToken', undefined)
+
+  const [migrated, setMigrated] = useLocalStorage<boolean>('migrated', false)
+
+  const migrationTokenSearchParam = searchParams.get('migrationToken')
 
   const hasRedirected = useRef<boolean>(false)
 
   useEffect(() => {
     if (hasRedirected.current) return
 
-    let newClientId: string | undefined
-    const rawClient = localStorage.getItem('client')
-    if (rawClient) {
-      newClientId = extractObjectIdFromString(rawClient)
-      if (newClientId) {
-        setClientId(newClientId)
-      }
-    }
-
-    let newPlayerId: string | undefined
-    if (tmpLegacyPlayerId) {
-      newPlayerId = tmpLegacyPlayerId
-      localStorage.setItem('player', JSON.stringify({ id: newPlayerId }))
-      setPlayerId(newPlayerId)
-      notifySuccess(
-        'Yay, Player ID is in hand! Are you set for more brain-busting quizzes?',
-      )
-    } else {
-      const rawPlayer = localStorage.getItem('player')
-      if (rawPlayer && !tmpLegacyPlayerId) {
-        newPlayerId = extractObjectIdFromString(rawPlayer)
-        if (newPlayerId) {
-          setPlayerId(newPlayerId)
+    async function migrationProcess(): Promise<void> {
+      let newMigrationToken: string | undefined = undefined
+      if (!migrated) {
+        if (migrationTokenSearchParam) {
+          newMigrationToken = migrationTokenSearchParam
+          notifySuccess(
+            'Yay, migration is in hand! Are you set for more brain-busting quizzes?',
+          )
+        } else if (client?.id && player?.id) {
+          newMigrationToken = await sha256(`${client.id}:${player.id}`)
+        }
+        if (newMigrationToken) {
+          setMigrationToken(newMigrationToken)
         }
       }
-    }
 
-    const url = new URL(window.location.href)
+      const url = new URL(window.location.href)
 
-    if (url.host === LEGACY_HOST) {
-      if (newPlayerId) {
-        url.searchParams.set('legacyPlayerId', newPlayerId)
+      if (url.host === LEGACY_HOST) {
+        if (newMigrationToken) {
+          url.searchParams.set('migrationToken', newMigrationToken)
+        }
+
+        const searchParamString =
+          url.searchParams.size > 0 ? `?${url.searchParams.toString()}` : ''
+
+        hasRedirected.current = true
+
+        window.location.replace(
+          `https://${TARGET_HOST}${url.pathname}${searchParamString}`,
+        )
       }
-
-      const searchParamString =
-        url.searchParams.size > 0 ? `?${url.searchParams.toString()}` : ''
-
-      hasRedirected.current = true
-
-      window.location.replace(
-        `https://${TARGET_HOST}${url.pathname}${searchParamString}`,
-      )
     }
-  }, [tmpLegacyPlayerId])
+
+    migrationProcess()
+  }, [
+    client?.id,
+    player?.id,
+    migrated,
+    migrationTokenSearchParam,
+    setMigrationToken,
+  ])
 
   const handleCompleteMigration: () => void = useCallback((): void => {
-    localStorage.removeItem('client')
-    localStorage.removeItem('player')
-    localStorage.removeItem('token')
-
-    setClientId(undefined)
-    setPlayerId(undefined)
-  }, [])
+    clearClient()
+    clearPlayer()
+    clearToken()
+    clearMigrationToken()
+    setMigrated(true)
+  }, [clearClient, clearPlayer, clearToken, clearMigrationToken, setMigrated])
 
   const value = useMemo<MigrationContextType>(
     () => ({
-      clientId,
-      playerId,
-      migrated: !clientId && !playerId,
       completeMigration: handleCompleteMigration,
     }),
-    [clientId, playerId, handleCompleteMigration],
+    [handleCompleteMigration],
   )
 
   return (

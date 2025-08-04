@@ -12,10 +12,9 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  buildMockLegacyPlayerUser,
+  buildMockNoneMigratedPlayerUser,
   buildMockPrimaryGoogleUser,
   buildMockPrimaryUser,
-  buildMockSecondaryUser,
   createMockClassicQuiz,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
@@ -202,16 +201,17 @@ describe('AuthController (e2e)', () => {
     it('should succeed in authenticating a legacy player user', async () => {
       const { _id: userId } = await userModel.create(buildMockPrimaryUser())
 
-      const { _id: legacyPlayerId } = await userModel.create(
-        buildMockLegacyPlayerUser(),
+      const { _id: legacyPlayerId, migrationTokens } = await userModel.create(
+        buildMockNoneMigratedPlayerUser(),
       )
+      const migrationToken = migrationTokens[0]
 
       const { gameId, gameResultId, quizId } =
         await createMockLegacyPlayerDocuments(legacyPlayerId)
 
       await supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .query({ legacyPlayerId })
+        .query({ migrationToken })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
@@ -231,51 +231,25 @@ describe('AuthController (e2e)', () => {
       )
     })
 
-    it('should succeed in authenticating a legacy player user that does not exist', async () => {
-      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
-
-      const legacyPlayerId = uuidv4()
+    it('should return 404 not found when authenticating a legacy player user that does not exist', async () => {
+      await userModel.create(buildMockPrimaryUser())
 
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
-        .query({ legacyPlayerId })
+        .query({ migrationToken: 'n/a' })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_PRIMARY_PASSWORD,
         })
-        .expect(200)
+        .expect(404)
         .expect((res) => {
-          expectUserTokenPair(userId, res)
+          expect(res.body).toEqual({
+            message: 'User was not found by migration token',
+            status: 404,
+            timestamp: expect.any(String),
+          })
         })
-    })
-
-    it('should succeed in authenticating a legacy player user that was already migrated', async () => {
-      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
-
-      const legacyPlayerUser: User = await userModel.create(
-        buildMockSecondaryUser(),
-      )
-      const legacyPlayerId = legacyPlayerUser._id
-
-      await supertest(app.getHttpServer())
-        .post('/api/auth/login')
-        .query({ legacyPlayerId })
-        .set('User-Agent', MOCK_USER_AGENT)
-        .send({
-          email: MOCK_PRIMARY_USER_EMAIL,
-          password: MOCK_PRIMARY_PASSWORD,
-        })
-        .expect(200)
-        .expect((res) => {
-          expectUserTokenPair(userId, res)
-        })
-
-      const expectedLegacyPlayerUser: User =
-        await userModel.findById(legacyPlayerId)
-      expect(JSON.stringify(expectedLegacyPlayerUser)).toEqual(
-        JSON.stringify(legacyPlayerUser),
-      )
     })
   })
 
@@ -405,13 +379,14 @@ describe('AuthController (e2e)', () => {
     })
 
     it('should succeed in authenticating a legacy player user as a new google user', async () => {
-      const { _id: legacyPlayerId } = await userModel.create(
-        buildMockLegacyPlayerUser(),
+      const { _id: legacyPlayerId, migrationTokens } = await userModel.create(
+        buildMockNoneMigratedPlayerUser(),
       )
+      const migrationToken = migrationTokens[0]
 
       await supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
+        .query({ migrationToken })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           code: MOCK_GOOGLE_VALID_CODE,
@@ -434,16 +409,17 @@ describe('AuthController (e2e)', () => {
         }),
       )
 
-      const { _id: legacyPlayerId } = await userModel.create(
-        buildMockLegacyPlayerUser(),
+      const { _id: legacyPlayerId, migrationTokens } = await userModel.create(
+        buildMockNoneMigratedPlayerUser(),
       )
+      const migrationToken = migrationTokens[0]
 
       const { gameId, gameResultId, quizId } =
         await createMockLegacyPlayerDocuments(legacyPlayerId)
 
       await supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
+        .query({ migrationToken })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           code: MOCK_GOOGLE_VALID_CODE,
@@ -463,79 +439,62 @@ describe('AuthController (e2e)', () => {
       )
     })
 
-    it('should succeed in authenticating a legacy player user that does not exist as a new google user', async () => {
-      const legacyPlayerId = uuidv4()
-
+    it('should return 404 not found when authenticating a legacy player user that does not exist as a new google user', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
+        .query({ migrationToken: 'n/a' })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           code: MOCK_GOOGLE_VALID_CODE,
           codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
         })
-        .expect(200)
+        .expect(404)
         .expect((res) => {
-          expectUserTokenPair(legacyPlayerId, res)
+          expect(res.body).toEqual({
+            message: 'User was not found by migration token',
+            status: 404,
+            timestamp: expect.any(String),
+          })
         })
     })
 
     it('should succeed in authenticating a legacy player user that does not exist as an existing google user', async () => {
-      const { _id: userId } = await userModel.create(
+      await userModel.create(
         buildMockPrimaryGoogleUser({
           googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
           email: MOCK_PRIMARY_USER_EMAIL,
         }),
       )
 
-      const legacyPlayerId = uuidv4()
-
       return supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
+        .query({ migrationToken: 'n/a' })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           code: MOCK_GOOGLE_VALID_CODE,
           codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
         })
-        .expect(200)
+        .expect(404)
         .expect((res) => {
-          expectUserTokenPair(userId, res)
+          expect(res.body).toEqual({
+            message: 'User was not found by migration token',
+            status: 404,
+            timestamp: expect.any(String),
+          })
         })
     })
 
-    it('should succeed in authenticating a legacy player user that was already migrated as an existing google user', async () => {
-      const legacyPlayerUser: User = await userModel.create(
-        buildMockPrimaryGoogleUser({
-          googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
-          email: MOCK_PRIMARY_USER_EMAIL,
-        }),
+    it('should return 409 conflict when authenticating a legacy player user that was already migrated as an existing local user', async () => {
+      await userModel.create(buildMockPrimaryUser())
+
+      const { migrationTokens } = await userModel.create(
+        buildMockNoneMigratedPlayerUser(),
       )
-      const legacyPlayerId = legacyPlayerUser._id
+      const migrationToken = migrationTokens[0]
 
       return supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
-        .set('User-Agent', MOCK_USER_AGENT)
-        .send({
-          code: MOCK_GOOGLE_VALID_CODE,
-          codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
-        })
-        .expect(200)
-        .expect((res) => {
-          expectUserTokenPair(legacyPlayerId, res)
-        })
-    })
-
-    it('should return 400 bad request when authenticating a legacy player user that was already migrated as an existing local user', async () => {
-      const legacyPlayerUser: User = await userModel.create(
-        buildMockSecondaryUser(),
-      )
-      const legacyPlayerId = legacyPlayerUser._id
-
-      return supertest(app.getHttpServer())
-        .post('/api/auth/google/exchange')
-        .query({ legacyPlayerId })
+        .query({ migrationToken })
         .set('User-Agent', MOCK_USER_AGENT)
         .send({
           code: MOCK_GOOGLE_VALID_CODE,
@@ -544,7 +503,7 @@ describe('AuthController (e2e)', () => {
         .expect(409)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Unable to migrate legacy player '${legacyPlayerId}', already migrated`,
+            message: 'Email already exists',
             status: 409,
             timestamp: expect.any(String),
           })
