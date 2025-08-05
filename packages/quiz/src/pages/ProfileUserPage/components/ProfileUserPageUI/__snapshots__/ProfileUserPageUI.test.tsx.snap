@@ -37,27 +37,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"
@@ -258,27 +286,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"
@@ -580,27 +636,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"
@@ -800,27 +884,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"
@@ -1121,27 +1233,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"
@@ -1361,27 +1501,55 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
       class="content fullWidth startAlign"
     >
       <div
-        class="legacyInfoBox"
+        class="card kindCallToAction sizeLarge center"
       >
-        Hey quiz champion! Did your brainy adventures happen on
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+        <button
+          type="button"
         >
-          quiz.emilhornlund.com
-        </a>
-        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-         
-        <a
-          href="https://quiz.emilhornlund.com"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-xmark "
+            data-icon="xmark"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 384 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div
+          class="content"
         >
-          quiz.emilhornlund.com
-        </a>
-         one last time, and we’ll magically teleport everything over to 
-        <span>
-          klurigo.com
-        </span>
-        . Ready to blast off your data?
+          <span>
+            Hey quiz champion! Did your brainy adventures happen on
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+             
+            <a
+              href="https://quiz.emilhornlund.com"
+            >
+              quiz.emilhornlund.com
+            </a>
+             one last time, and we’ll magically teleport everything over to
+             
+            <b>
+              <i>
+                klurigo.com
+              </i>
+            </b>
+            . Ready to blast off your data?
+          </span>
+        </div>
       </div>
       <div
         class="typography subtitle full"

@@ -6,6 +6,7 @@ import UsersIcon from '../../assets/images/users-icon.svg'
 import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
+  LegacyInfoCard,
   Page,
   PageProminentIcon,
   Typography,
@@ -43,6 +44,7 @@ const GameJoinPage: FC = () => {
 
   return (
     <Page
+      align="start"
       header={
         <IconButtonArrowLeft
           id="back-button"
@@ -53,6 +55,7 @@ const GameJoinPage: FC = () => {
           onClick={() => navigate(-1)}
         />
       }>
+      <LegacyInfoCard />
       <PageProminentIcon src={UsersIcon} alt="Users" />
       <Typography variant="title" size="medium">
         {title}

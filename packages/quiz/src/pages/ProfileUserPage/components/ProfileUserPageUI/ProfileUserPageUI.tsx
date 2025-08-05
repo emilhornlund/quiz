@@ -1,7 +1,7 @@
 import { AuthProvider } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { LegacyInfoBox, Page, PageDivider } from '../../../../components'
+import { LegacyInfoCard, Page, PageDivider } from '../../../../components'
 
 import {
   UpdateUserDetailsFormFields,
@@ -30,7 +30,7 @@ const ProfileUserPageUI: FC<ProfileUserPageUIProps> = ({
   onClickResendVerificationEmail,
 }) => (
   <Page align="start" discover profile>
-    <LegacyInfoBox />
+    <LegacyInfoCard />
     <UserDetailsForm
       authProvider={authProvider}
       values={values}
