@@ -235,7 +235,7 @@ export const useQuizServiceClient = () => {
       },
     ).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (!migrated) {
+      if (!migrated && !!migrationToken) {
         completeMigration()
       }
       return res
@@ -256,7 +256,7 @@ export const useQuizServiceClient = () => {
       request,
     ).then((res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (!migrated) {
+      if (!migrated && !!migrationToken) {
         completeMigration()
       }
       return res
@@ -398,7 +398,7 @@ export const useQuizServiceClient = () => {
         defaultNickname: request.defaultNickname,
       },
     ).then((response) => {
-      if (!migrated) {
+      if (!migrated && !!migrationToken) {
         completeMigration()
       }
       notifySuccess('Welcome aboard! Your account is ready to roll')

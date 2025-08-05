@@ -1,5 +1,6 @@
 export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
 export type { ButtonProps } from './Button'
+export type { CardProps } from './Card'
 export type { CircularProgressBarProps } from './CircularProgressBar'
 export type { ConfirmDialogProps } from './ConfirmDialog'
 export type { DropzoneProps } from './Dropzone'
@@ -33,12 +34,13 @@ export type { StreakBadgeProps } from './StreakBadge'
 export type { TextareaProps } from './Textarea'
 export type { TextFieldProps } from './TextField'
 export type { TypographyProps } from './Typography'
+export { default as Badge, getBadgePositionBackgroundColor } from './Badge'
 export {
   default as Button,
   IconButtonArrowLeft,
   IconButtonArrowRight,
 } from './Button'
-export { default as Badge, getBadgePositionBackgroundColor } from './Badge'
+export { default } from './Card'
 export {
   default as CircularProgressBar,
   CircularProgressBarSize,
@@ -49,7 +51,7 @@ export { default as Dropzone } from './Dropzone'
 export { default as HostGameFooter } from './HostGameFooter'
 export { default as IconTooltip } from './IconTooltip'
 export { default as Leaderboard } from './Leaderboard'
-export { default as LegacyInfoBox } from './LegacyInfoBox'
+export { default as LegacyInfoCard } from './LegacyInfoCard'
 export { default as LoadingSpinner } from './LoadingSpinner'
 export { default as MediaModal } from './MediaModal'
 export { Menu, MenuItem, MenuSeparator } from './Menu'
