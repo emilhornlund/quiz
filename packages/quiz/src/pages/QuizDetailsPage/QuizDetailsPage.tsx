@@ -12,9 +12,10 @@ const QuizDetailsPage: FC = () => {
 
   const { quizId } = useParams<{ quizId: string }>()
 
-  const { player } = useAuthContext()
+  const { user } = useAuthContext()
 
-  const { getQuiz, deleteQuiz, createGame } = useQuizServiceClient()
+  const { getQuiz, deleteQuiz, createGame, authenticateGame } =
+    useQuizServiceClient()
 
   const {
     data: originalQuiz,
@@ -28,13 +29,13 @@ const QuizDetailsPage: FC = () => {
 
   useEffect(() => {
     if (hasQuizLoadingError) {
-      navigate('/player/profile')
+      navigate('/profile/user')
     }
   }, [hasQuizLoadingError, navigate])
 
   const isOwner = useMemo(
-    () => player?.id === originalQuiz?.author?.id,
-    [player, originalQuiz],
+    () => originalQuiz?.author.id === user?.ACCESS.sub,
+    [originalQuiz, user],
   )
 
   const [isHostGameLoading, setIsHostGameLoading] = useState(false)
@@ -43,7 +44,9 @@ const QuizDetailsPage: FC = () => {
     if (quizId) {
       setIsHostGameLoading(true)
       createGame(quizId)
-        .then((response) => navigate(`/game?gameID=${response.id}`))
+        .then(({ id: gameId }) =>
+          authenticateGame({ gameId }).then(() => navigate('/game')),
+        )
         .finally(() => setIsHostGameLoading(false))
     }
   }
@@ -60,7 +63,7 @@ const QuizDetailsPage: FC = () => {
     if (quizId) {
       setIsDeleteQuizLoading(true)
       deleteQuiz(quizId)
-        .then(() => navigate('/player/profile'))
+        .then(() => navigate('/profile/user'))
         .finally(() => setIsDeleteQuizLoading(false))
     }
   }

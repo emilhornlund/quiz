@@ -14,13 +14,12 @@ async function bootstrap() {
     .setTitle('Quiz Service')
     .setVersion('1.0.0')
     .addTag('auth', 'Operations for user authentication and authorization.')
-    .addTag(
-      'client',
-      'Operations related to client registration and profile management.',
-    )
     .addTag('game', 'Operations for creating and managing quiz games.')
+    .addTag('health', 'Operations determining service health.')
     .addTag('media', 'Operations for uploading and retrieving media assets.')
+    .addTag('profile', 'Operations for managing current user profiles.')
     .addTag('quiz', 'Operations for creating and managing quiz content.')
+    .addTag('user', 'Operations for creating and managing users.')
     .addBearerAuth({ type: 'http', name: 'Authorization', in: 'header' })
     .build()
   const document = SwaggerModule.createDocument(app, config)

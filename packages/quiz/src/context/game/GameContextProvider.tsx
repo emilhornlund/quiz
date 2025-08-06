@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useMemo } from 'react'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
-import { useGameIDQueryParam } from '../../utils/use-game-id-query-param.tsx'
+import { useAuthContext } from '../auth'
 
 import { GameContext, GameContextType } from './game-context.tsx'
 
@@ -27,7 +27,13 @@ export interface GameContextProviderProps {
  * @returns A React component wrapping its children with the `GameContext` provider.
  */
 const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
-  const [gameID] = useGameIDQueryParam()
+  const { revokeGame } = useAuthContext()
+  const { game } = useAuthContext()
+
+  const gameID = useMemo(() => game?.ACCESS.gameId, [game])
+  const gameToken = useMemo(() => game?.ACCESS.token, [game])
+  const participantId = useMemo(() => game?.ACCESS.sub, [game])
+  const participantType = useMemo(() => game?.ACCESS.participantType, [game])
 
   const {
     completeTask,
@@ -46,12 +52,17 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
   const value = useMemo<GameContextType>(
     () => ({
       gameID,
+      gameToken,
+      participantId,
+      participantType,
       isFullscreenActive: fullScreenHandle.active,
       completeTask: () => (gameID ? completeTask(gameID) : Promise.reject()),
       submitQuestionAnswer: (request) =>
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
       leaveGame: (playerID: string) =>
-        gameID ? leaveGame(gameID, playerID) : Promise.reject(),
+        gameID
+          ? leaveGame(gameID, playerID).then(revokeGame)
+          : Promise.reject(),
       addCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
@@ -62,12 +73,16 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
     }),
     [
       gameID,
+      gameToken,
+      participantId,
+      participantType,
       fullScreenHandle,
       completeTask,
       submitQuestionAnswer,
       leaveGame,
       addCorrectAnswer,
       deleteCorrectAnswer,
+      revokeGame,
     ],
   )
 

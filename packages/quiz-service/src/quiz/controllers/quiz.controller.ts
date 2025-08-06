@@ -23,9 +23,14 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { Authority, TokenScope } from '@quiz/common'
 
-import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
-import { Client } from '../../client/services/models/schemas'
+import {
+  Principal,
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
+import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
@@ -51,7 +56,6 @@ import { QuestionResponseMultiChoiceExample } from './utils/question-examples.ut
  */
 @ApiBearerAuth()
 @ApiTags('quiz')
-@Controller('quizzes')
 @ApiExtraModels(
   QuestionMultiChoice,
   QuestionRange,
@@ -61,27 +65,30 @@ import { QuestionResponseMultiChoiceExample } from './utils/question-examples.ut
   QuizClassicRequest,
   QuizZeroToOneHundredRequest,
 )
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Quiz)
+@Controller('quizzes')
 export class QuizController {
   /**
    * Initializes the QuizController.
    *
-   * @param {QuizService} quizService - Service for managing quiz operations.
+   * @param quizService - Service for managing quiz operations.
    */
   constructor(private readonly quizService: QuizService) {}
 
   /**
-   * Creates a new quiz and associates it with the authenticated client.
+   * Creates a new quiz and associates it with the authenticated user.
    *
-   * @param {Client} client - The client initiating the request.
-   * @param {QuizClassicRequest | QuizZeroToOneHundredRequest} quizRequest - The details of the quiz to create.
+   * @param user - The user initiating the request.
+   * @param quizRequest - The details of the quiz to create.
    *
-   * @returns {Promise<QuizResponse>} The newly created quiz.
+   * @returns The newly created quiz.
    */
   @Post()
   @ApiOperation({
     summary: 'Create a new quiz',
     description:
-      'Creates a new quiz and associates it with the authenticated client.',
+      'Creates a new quiz and associates it with the authenticated user.',
   })
   @ApiBody({
     description: 'Request body for creating a new game.',
@@ -101,11 +108,11 @@ export class QuizController {
   })
   @HttpCode(HttpStatus.CREATED)
   public async createQuiz(
-    @AuthorizedClientParam() client: Client,
+    @Principal() user: User,
     @Body(new ParseQuizRequestPipe())
     quizRequest: QuizClassicRequest | QuizZeroToOneHundredRequest,
   ): Promise<QuizResponse> {
-    return this.quizService.createQuiz(quizRequest, client.player)
+    return this.quizService.createQuiz(quizRequest, user)
   }
 
   /**
@@ -172,7 +179,7 @@ export class QuizController {
     description: 'Unauthorized access to the endpoint.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to this quiz.',
+    description: 'The user does not have access to this quiz.',
   })
   @ApiNotFoundResponse({ description: 'Quiz not found.' })
   @HttpCode(HttpStatus.OK)
@@ -214,7 +221,7 @@ export class QuizController {
     description: 'Unauthorized access to the endpoint.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to this quiz.',
+    description: 'The user does not have access to this quiz.',
   })
   @ApiNotFoundResponse({ description: 'Quiz not found.' })
   @HttpCode(HttpStatus.OK)
@@ -248,7 +255,7 @@ export class QuizController {
     description: 'Unauthorized access to the endpoint.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to this quiz.',
+    description: 'The user does not have access to this quiz.',
   })
   @ApiNotFoundResponse({ description: 'Quiz not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -294,7 +301,7 @@ export class QuizController {
     description: 'Unauthorized access to the endpoint.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to the quiz.',
+    description: 'The ser does not have access to the quiz.',
   })
   @HttpCode(HttpStatus.OK)
   public async findAllQuestion(

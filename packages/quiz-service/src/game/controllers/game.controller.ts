@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpCode,
   HttpStatus,
   MessageEvent,
@@ -19,29 +18,28 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
 import { SkipThrottle } from '@nestjs/throttler'
-import { GameParticipantType } from '@quiz/common'
+import { Authority, GameParticipantType, TokenScope } from '@quiz/common'
 import { Observable } from 'rxjs'
 
-import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
-import { Client } from '../../client/services/models/schemas'
-import { ApiPlayerIDParam } from '../../player/controllers/decorators/api'
-import { AuthorizedPlayerIdParam } from '../../player/controllers/decorators/auth'
-import { RoutePlayerIdParam } from '../../player/controllers/decorators/params'
+import {
+  PrincipalId,
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
 import {
   ParseCorrectAnswerRequestPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
 import { GameEventSubscriber, GameService } from '../services'
 
-import { ApiGameIdParam } from './decorators/api'
+import { ApiGameIdParam, ApiPlayerIDParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'
-import { QueryGameIdParam, RouteGameIdParam } from './decorators/params'
+import { RouteGameIdParam, RoutePlayerIdParam } from './decorators/params'
 import {
   JoinGameRequest,
   MultiChoiceQuestionCorrectAnswerRequest,
@@ -53,7 +51,6 @@ import {
   TrueFalseQuestionCorrectAnswerRequest,
   TypeAnswerQuestionCorrectAnswerRequest,
 } from './models/requests'
-import { FindGameResponse } from './models/response'
 
 /**
  * GameController handles incoming HTTP requests related to game operations,
@@ -73,6 +70,8 @@ import { FindGameResponse } from './models/response'
   TypeAnswerQuestionCorrectAnswerRequest,
 )
 @ApiTags('game')
+@RequiresScopes(TokenScope.Game)
+@RequiredAuthorities(Authority.Game)
 @Controller('games')
 export class GameController {
   /**
@@ -87,54 +86,20 @@ export class GameController {
   ) {}
 
   /**
-   * Finds an active game by its game PIN.
+   * Allows a participant to join an existing game as a player.
    *
-   * @param {string} gamePIN - The unique 6-digit game PIN used to identify the game.
+   * @param participantId - The unique identifier of the authorized participant joining the game.
+   * @param gameId - The unique identifier of the game.
+   * @param request - The request body containing the player's nickname.
    *
-   * @returns {FindGameResponse} A response object containing details of the active game.
-   */
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Retrieve an active game by its PIN',
-    description:
-      'Fetches an active game using the provided unique 6-digit game PIN.',
-  })
-  @ApiQuery({
-    name: 'gamePIN',
-    type: String,
-    description: 'The unique 6-digit PIN for the game to be retrieved.',
-    required: true,
-    example: '123456',
-  })
-  @ApiOkResponse({
-    description: 'Successfully retrieved the active game.',
-    type: FindGameResponse,
-  })
-  @ApiNotFoundResponse({
-    description: 'No active game found with the specified game PIN.',
-  })
-  async findGame(
-    @QueryGameIdParam() gamePIN: string,
-  ): Promise<FindGameResponse> {
-    return this.gameService.findActiveGameByGamePIN(gamePIN)
-  }
-
-  /**
-   * Allows a player to join an existing game.
-   *
-   * @param {Client} client - The client object containing details of the authorized client joining the game.
-   * @param {string} gameID - The unique identifier of the game.
-   * @param {JoinGameRequest} request - The request body containing the player's nickname.
-   *
-   * @returns {Promise<void>} A Promise that resolves when the player has successfully joined the game.
+   * @returns A Promise that resolves when the player has successfully joined the game.
    */
   @Post('/:gameID/players')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Join a game',
     description:
-      'Allows a player to join an existing game by providing the game ID. Returns a unique player identifier and a token for the player.',
+      'Allows a participant to join an existing game as a player by providing the game ID. Returns a unique identifier and a token for the participant.',
   })
   @ApiBody({
     description: 'Request body for joining an existing game.',
@@ -152,36 +117,36 @@ export class GameController {
   })
   @ApiGameIdParam()
   async joinGame(
-    @AuthorizedClientParam() client: Client,
-    @RouteGameIdParam() gameID: string,
+    @PrincipalId() participantId: string,
+    @RouteGameIdParam() gameId: string,
     @Body() request: JoinGameRequest,
   ): Promise<void> {
-    return this.gameService.joinGame(gameID, client, request.nickname)
+    return this.gameService.joinGame(gameId, participantId, request.nickname)
   }
 
   /**
    * Removes a player from a game.
    *
-   * This endpoint allows an authorized client (player or host) to remove a player from a game.
+   * This endpoint allows an authorized participant (player or host) to remove a player from a game.
    * - Players can only remove themselves from a game.
    * - Hosts can remove any player except themselves.
    *
-   * @param client - The client object containing details of the authorized client performing the action.
-   * @param gameID - The unique identifier of the game.
-   * @param playerID - The unique identifier of the player to remove.
+   * @param participantId - The unique identifier of the authorized participant performing the action.
+   * @param gameId - The unique identifier of the game.
+   * @param playerId - The unique identifier of the player to remove.
    */
   @Delete('/:gameID/players/:playerID')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Remove a player from a game',
     description:
-      'Allows an authorized client to remove a player from a specified game.',
+      'Allows an authorized participant to remove a player from a specified game.',
   })
   @ApiNoContentResponse({
     description: 'The player has successfully left the game.',
   })
   @ApiForbiddenResponse({
-    description: 'The client is not allowed to remove the player.',
+    description: 'The participant is not allowed to remove the player.',
   })
   @ApiNotFoundResponse({
     description:
@@ -191,30 +156,30 @@ export class GameController {
   @ApiGameIdParam()
   @ApiPlayerIDParam()
   async leaveGame(
-    @AuthorizedClientParam() client: Client,
-    @RouteGameIdParam() gameID: string,
-    @RoutePlayerIdParam() playerID: string,
+    @PrincipalId() participantId: string,
+    @RouteGameIdParam() gameId: string,
+    @RoutePlayerIdParam() playerId: string,
   ): Promise<void> {
-    return this.gameService.leaveGame(client, gameID, playerID)
+    return this.gameService.leaveGame(participantId, gameId, playerId)
   }
 
   /**
    * Retrieves a stream of game-related events for a specific game.
    *
-   * Clients receive both general and client-specific game events, including
+   * Participants receive both general and participant-specific game events, including
    * heartbeat events for connection monitoring and game updates relevant to the subscribed game.
    *
-   * @param {string} playerId - The ID of the player requesting the stream.
-   * @param {string} gameID - The unique identifier of the game to subscribe to.
+   * @param participantId - The unique identifier of the participant requesting the stream.
+   * @param gameId - The unique identifier of the game to subscribe to.
    *
-   * @returns {Observable<MessageEvent>} A stream of events for SSE, each containing data in JSON format.
+   * @returns A stream of events for SSE, each containing data in JSON format.
    */
   @Sse('/:gameID/events')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Subscribe to game events',
     description:
-      'Provides a stream of real-time game events for the specified game ID. Requires an active game subscription and a valid client token for access. Events are sent in Server-Sent Events (SSE) format, allowing clients to receive continuous updates.',
+      'Provides a stream of real-time game events for the specified game ID. Requires an active game subscription and a valid token for access. Events are sent in Server-Sent Events (SSE) format, allowing participants to receive continuous updates.',
   })
   @ApiOkResponse({
     description:
@@ -240,10 +205,10 @@ export class GameController {
   @ApiGameIdParam()
   @SkipThrottle()
   public async getEventStream(
-    @AuthorizedPlayerIdParam() playerId: string,
-    @RouteGameIdParam() gameID: string,
+    @PrincipalId() participantId: string,
+    @RouteGameIdParam() gameId: string,
   ): Promise<Observable<MessageEvent>> {
-    return this.gameEventSubscriber.subscribe(gameID, playerId)
+    return this.gameEventSubscriber.subscribe(gameId, participantId)
   }
 
   /**
@@ -251,9 +216,9 @@ export class GameController {
    *
    * Requires the caller to be the host and the current task status to be 'active'.
    *
-   * @param {string} gameID - The ID of the game.
+   * @param gameId - The unique identifier of the game.
    *
-   * @returns {Promise<void>} A Promise that resolves when the task is successfully marked as completed.
+   * @returns A Promise that resolves when the task is successfully marked as completed.
    */
   @Post('/:gameID/tasks/current/complete')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -269,12 +234,12 @@ export class GameController {
     description: 'Invalid game ID format or task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()
-  public async completeTask(@RouteGameIdParam() gameID: string): Promise<void> {
-    await this.gameService.completeCurrentTask(gameID)
+  public async completeTask(@RouteGameIdParam() gameId: string): Promise<void> {
+    await this.gameService.completeCurrentTask(gameId)
   }
 
   /**
@@ -284,7 +249,7 @@ export class GameController {
    * to the list of accepted answers for the current question result.
    * Only allowed when the current task is of type `QuestionResult` and not in an active state.
    *
-   * @param gameID - The ID of the game.
+   * @param gameId - The unique identifier of the game.
    * @param correctAnswerRequest - The correct answer to add. Type must match the question type.
    */
   @Post('/:gameID/tasks/current/correct_answers')
@@ -313,12 +278,12 @@ export class GameController {
       'Invalid game ID format or question result task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()
   public async addCorrectAnswer(
-    @RouteGameIdParam() gameID: string,
+    @RouteGameIdParam() gameId: string,
     @Body(new ParseCorrectAnswerRequestPipe())
     correctAnswerRequest:
       | MultiChoiceQuestionCorrectAnswerRequest
@@ -326,7 +291,7 @@ export class GameController {
       | TrueFalseQuestionCorrectAnswerRequest
       | TypeAnswerQuestionCorrectAnswerRequest,
   ): Promise<void> {
-    return this.gameService.addCorrectAnswer(gameID, correctAnswerRequest)
+    return this.gameService.addCorrectAnswer(gameId, correctAnswerRequest)
   }
 
   /**
@@ -335,7 +300,7 @@ export class GameController {
    * This operation removes a matching correct answer entry from the result task's list of correct answers.
    * Only allowed when the current task is of type `QuestionResult` and not in an active state.
    *
-   * @param gameID - The ID of the game.
+   * @param gameId - The unique identifier of the game.
    * @param correctAnswerRequest - The correct answer to delete. Type must match the question type.
    */
   @Delete('/:gameID/tasks/current/correct_answers')
@@ -364,12 +329,12 @@ export class GameController {
       'Invalid game ID format or question result task not in active status.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized access or invalid client role.',
+    description: 'Unauthorized access or invalid participant role.',
   })
   @AuthorizedGame(GameParticipantType.HOST)
   @ApiGameIdParam()
   public async deleteCorrectAnswer(
-    @RouteGameIdParam() gameID: string,
+    @RouteGameIdParam() gameId: string,
     @Body(new ParseCorrectAnswerRequestPipe())
     correctAnswerRequest:
       | MultiChoiceQuestionCorrectAnswerRequest
@@ -377,14 +342,14 @@ export class GameController {
       | TrueFalseQuestionCorrectAnswerRequest
       | TypeAnswerQuestionCorrectAnswerRequest,
   ): Promise<void> {
-    return this.gameService.deleteCorrectAnswer(gameID, correctAnswerRequest)
+    return this.gameService.deleteCorrectAnswer(gameId, correctAnswerRequest)
   }
 
   /**
    * Submits an answer for the current question in a game.
    *
-   * @param {string} playerId - The ID of the player submitting the answer.
-   * @param {string} gameID - The ID of the game where the answer is being submitted.
+   * @param {string} playerId - The unique identifier of the player submitting the answer.
+   * @param {string} gameId - The unique identifier of the game where the answer is being submitted.
    * @param {object} submitQuestionAnswerRequest - The request containing the answer details.
    *
    * @returns {Promise<void>} A Promise that resolves when the answer submission is successful.
@@ -413,8 +378,8 @@ export class GameController {
   @AuthorizedGame(GameParticipantType.PLAYER)
   @ApiGameIdParam()
   public async submitQuestionAnswer(
-    @AuthorizedPlayerIdParam() playerId: string,
-    @RouteGameIdParam() gameID: string,
+    @PrincipalId() playerId: string,
+    @RouteGameIdParam() gameId: string,
     @Body(new ParseSubmitQuestionAnswerRequestPipe())
     submitQuestionAnswerRequest:
       | SubmitMultiChoiceQuestionAnswerRequest
@@ -423,7 +388,7 @@ export class GameController {
       | SubmitTypeAnswerQuestionAnswerRequest,
   ): Promise<void> {
     return this.gameService.submitQuestionAnswer(
-      gameID,
+      gameId,
       playerId,
       submitQuestionAnswerRequest,
     )

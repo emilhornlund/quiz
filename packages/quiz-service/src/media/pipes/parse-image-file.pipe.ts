@@ -14,6 +14,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { REQUEST } from '@nestjs/core'
 import {
+  TokenDto,
   UPLOAD_IMAGE_MAX_FILE_SIZE,
   UPLOAD_IMAGE_MIMETYPE_REGEX,
   UPLOAD_IMAGE_MIN_FILE_SIZE,
@@ -22,11 +23,7 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../app/config'
-import { Client } from '../../client/services/models/schemas'
-
-interface ClientRequest extends Request {
-  client?: Client
-}
+import { AuthGuardRequest } from '../../auth/guards'
 
 /**
  * Pipe that validates, processes, and converts uploaded image files.
@@ -46,7 +43,7 @@ export class ParseImageFilePipe
    * @param logger - Optional logger for error tracking.
    */
   constructor(
-    @Inject(REQUEST) private readonly request: Request,
+    @Inject(REQUEST) private readonly request: AuthGuardRequest<TokenDto>,
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly logger: Logger = new Logger(ParseImageFilePipe.name),
   ) {}
@@ -68,20 +65,20 @@ export class ParseImageFilePipe
       throw new UnprocessableEntityException('Unable to process image file')
     }
 
-    const client = (this.request as ClientRequest).client
-
-    if (!client) {
+    if (!this.request.user) {
       throw new UnauthorizedException('Unauthorized')
     }
 
+    const { _id: userId } = this.request.user
+
     let isNewDirectory = false
-    const newOutputDirectory = join(baseDir, client._id)
+    const newOutputDirectory = join(baseDir, userId)
     if (!fs.existsSync(newOutputDirectory)) {
       fs.mkdirSync(newOutputDirectory)
       isNewDirectory = true
     }
 
-    const newFileName = `${client._id}/${uuidv4()}.webp`
+    const newFileName = `${userId}/${uuidv4()}.webp`
     const newFilePath = join(baseDir, newFileName)
 
     try {

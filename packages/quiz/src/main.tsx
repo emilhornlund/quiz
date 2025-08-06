@@ -1,24 +1,33 @@
+import { TokenScope } from '@quiz/common'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { Bounce, ToastContainer } from 'react-toastify'
 
+import { ProtectedRoute } from './components'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
+import MigrationContextProvider from './context/migration'
 import {
-  DiscoverPage,
+  AuthGamePage,
+  AuthGoogleCallbackPage,
+  AuthLoginPage,
+  AuthPasswordForgotPage,
+  AuthPasswordResetPage,
+  AuthRegisterPage,
+  AuthVerifyPage,
   ErrorPage,
-  GameHistoryPage,
+  GameJoinPage,
   GamePage,
   GameResultsPage,
   HomePage,
-  JoinPage,
-  PlayerLinkPage,
-  ProfilePage,
+  ProfileGamesPage,
+  ProfileQuizzesPage,
+  ProfileUserPage,
   QuizCreatorPage,
   QuizDetailsPage,
-  QuizzesPage,
+  QuizDiscoverPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -29,7 +38,13 @@ import 'react-toastify/dist/ReactToastify.css'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Outlet />,
+    element: (
+      <AuthContextProvider>
+        <MigrationContextProvider>
+          <Outlet />
+        </MigrationContextProvider>
+      </AuthContextProvider>
+    ),
     children: [
       {
         path: '/',
@@ -37,52 +52,136 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
+        path: '/auth/login',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthLoginPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/google/callback',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthGoogleCallbackPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/register',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthRegisterPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/verify',
+        element: <AuthVerifyPage />,
+      },
+      {
+        path: '/auth/password/forgot',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthPasswordForgotPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/password/reset',
+        element: (
+          <ProtectedRoute authenticated={false}>
+            <AuthPasswordResetPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/auth/game',
+        element: <AuthGamePage />,
+      },
+      {
         path: '/discover',
-        element: <DiscoverPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizDiscoverPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/join',
-        element: <JoinPage />,
+        element: (
+          <ProtectedRoute scope={TokenScope.Game}>
+            <GameContextProvider>
+              <GameJoinPage />
+            </GameContextProvider>
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/game',
         element: (
-          <GameContextProvider>
-            <GamePage />
-          </GameContextProvider>
+          <ProtectedRoute scope={TokenScope.Game}>
+            <GameContextProvider>
+              <GamePage />
+            </GameContextProvider>
+          </ProtectedRoute>
         ),
       },
       {
-        path: '/game/history',
-        element: <GameHistoryPage />,
-      },
-      {
         path: '/game/results/:gameID',
-        element: <GameResultsPage />,
+        element: (
+          <ProtectedRoute>
+            <GameResultsPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: '/player/profile',
-        element: <ProfilePage />,
+        path: '/profile/user',
+        element: (
+          <ProtectedRoute>
+            <ProfileUserPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: '/player/quizzes',
-        element: <QuizzesPage />,
+        path: '/profile/quizzes',
+        element: (
+          <ProtectedRoute>
+            <ProfileQuizzesPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: '/player/link',
-        element: <PlayerLinkPage />,
+        path: '/profile/games',
+        element: (
+          <ProtectedRoute>
+            <ProfileGamesPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/create',
-        element: <QuizCreatorPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizCreatorPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/details/:quizId',
-        element: <QuizDetailsPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizDetailsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/quiz/details/:quizId/edit',
-        element: <QuizCreatorPage />,
+        element: (
+          <ProtectedRoute>
+            <QuizCreatorPage />
+          </ProtectedRoute>
+        ),
       },
     ],
     errorElement: <ErrorPage />,
@@ -94,9 +193,7 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
     <ToastContainer
       position="top-right"

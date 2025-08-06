@@ -16,4 +16,11 @@ export interface EnvironmentVariables {
   JWT_PUBLIC_KEY_PATH: string
   PEXELS_API_KEY: string
   UPLOAD_DIRECTORY: string
+  EMAIL_ENABLED: boolean
+  EMAIL_USERNAME: string
+  EMAIL_PASSWORD: string
+  KLURIGO_URL: string
+  GOOGLE_CLIENT_ID: string
+  GOOGLE_CLIENT_SECRET: string
+  GOOGLE_REDIRECT_URI: string
 }

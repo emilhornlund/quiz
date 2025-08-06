@@ -15,12 +15,12 @@ import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { AuthModule } from '../auth'
-import { ClientModule } from '../client'
 import { GameModule } from '../game'
 import { HealthModule } from '../health'
 import { MediaModule } from '../media'
-import { PlayerModule } from '../player'
+import { MigrationModule } from '../migration'
 import { QuizModule } from '../quiz'
+import { UserModule } from '../user'
 
 import { EnvironmentVariables } from './config'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
@@ -32,8 +32,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
  * Root application module.
  *
  * This module initializes all core modules and shared configurations, including
- * database connections, exception filters, and core modules such as GameModule, AuthModule,
- * ClientModule, and PlayerModule.
+ * database connections, exception filters, and core modules such as GameModule and AuthModule.
  */
 @Module({
   imports: [
@@ -62,6 +61,13 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         JWT_PUBLIC_KEY_PATH: Joi.string(),
         PEXELS_API_KEY: Joi.string().required(),
         UPLOAD_DIRECTORY: Joi.string().required(),
+        EMAIL_ENABLED: Joi.boolean().default(true),
+        EMAIL_USERNAME: Joi.string().optional(),
+        EMAIL_PASSWORD: Joi.string().optional(),
+        KLURIGO_URL: Joi.string().required(),
+        GOOGLE_CLIENT_ID: Joi.string().required(),
+        GOOGLE_CLIENT_SECRET: Joi.string().required(),
+        GOOGLE_REDIRECT_URI: Joi.string().required(),
       }),
       isGlobal: true,
     }),
@@ -173,12 +179,12 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           }),
         ]),
     AuthModule,
-    ClientModule,
     GameModule,
     HealthModule,
     MediaModule,
-    PlayerModule,
+    MigrationModule,
     QuizModule,
+    UserModule,
   ],
   controllers: [],
   providers: [

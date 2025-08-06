@@ -8,21 +8,28 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { Authority, TokenScope } from '@quiz/common'
 
-import { AuthorizedClientParam } from '../../client/controllers/decorators/auth'
-import { Client } from '../../client/services/models/schemas'
+import {
+  Principal,
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../auth/controllers/decorators'
 import { ApiQuizIdParam } from '../../quiz/controllers/decorators/api'
 import { AuthorizedQuiz } from '../../quiz/controllers/decorators/auth'
 import { RouteQuizIdParam } from '../../quiz/controllers/decorators/params'
+import { User } from '../../user/repositories'
 import { GameService } from '../services'
 
-import { CreateGameResponse } from './models/response/create-game.response'
+import { CreateGameResponse } from './models/response'
 
 /**
  * Controller for managing quiz-game-related operations.
  */
 @ApiBearerAuth()
 @ApiTags('quiz', 'game')
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Game)
 @Controller('/quizzes/:quizId/games')
 export class QuizGameController {
   /**
@@ -33,12 +40,12 @@ export class QuizGameController {
   constructor(private readonly gameService: GameService) {}
 
   /**
-   * Creates a new game and assigns it to the authorized player.
+   * Creates a new game and assigns it to the authorized user.
    *
-   * @param {string} quizId - The ID of the quiz to create a game from.
-   * @param {Client} client - The client object containing details of the authorized client creating the game.
+   * @param quizId - The ID of the quiz to create a game from.
+   * @param user - The user object containing details of the authorized user creating the game.
    *
-   * @returns {CreateGameResponse} A response containing the details of the created game.
+   * @returns A response containing the details of the created game.
    */
   @Post()
   @AuthorizedQuiz({ allowPublic: true })
@@ -56,13 +63,13 @@ export class QuizGameController {
     description: 'Unauthorized access to the endpoint.',
   })
   @ApiForbiddenResponse({
-    description: 'The client does not have access to this quiz.',
+    description: 'The user does not have access to this quiz.',
   })
   @ApiNotFoundResponse({ description: 'Quiz not found.' })
   async createGame(
     @RouteQuizIdParam() quizId: string,
-    @AuthorizedClientParam() client: Client,
+    @Principal() user: User,
   ): Promise<CreateGameResponse> {
-    return this.gameService.createGame(quizId, client)
+    return this.gameService.createGame(quizId, user)
   }
 }

@@ -2,7 +2,6 @@ import { GAME_PIN_LENGTH, GAME_PIN_REGEX } from '@quiz/common'
 import React, { FC, FormEvent, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
   IconButtonArrowRight,
@@ -11,6 +10,7 @@ import {
   TextField,
   Typography,
 } from '../../components'
+import { useAuthContext } from '../../context/auth'
 
 import styles from './HomePage.module.scss'
 
@@ -24,9 +24,9 @@ const MESSAGES = [
 ]
 
 const HomePage: FC = () => {
-  const navigate = useNavigate()
+  const { isUserAuthenticated } = useAuthContext()
 
-  const { findGame } = useQuizServiceClient()
+  const navigate = useNavigate()
 
   const [gamePIN, setGamePIN] = useState<string>()
   const [gamePINValid, setGamePINValid] = useState<boolean>(false)
@@ -37,16 +37,11 @@ const HomePage: FC = () => {
     [],
   )
 
-  const [isFindingGame, setIsFindingGame] = useState(false)
-
   const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (gamePIN) {
-      setIsFindingGame(true)
-      findGame(gamePIN)
-        .then(({ id }) => navigate(`/join?gameID=${id}`))
-        .finally(() => setIsFindingGame(false))
+      navigate(`/auth/game?pin=${gamePIN}`)
     }
   }
 
@@ -68,7 +63,6 @@ const HomePage: FC = () => {
           minLength={GAME_PIN_LENGTH}
           maxLength={GAME_PIN_LENGTH}
           regex={GAME_PIN_REGEX}
-          disabled={isFindingGame}
           onChange={(value) => setGamePIN(value as string)}
           onValid={setGamePINValid}
           required
@@ -78,13 +72,22 @@ const HomePage: FC = () => {
           type="submit"
           kind="call-to-action"
           value="Join the game"
-          loading={isFindingGame}
           disabled={!gamePINValid}
         />
       </form>
-      <Link to={'/quiz/create'}>
-        <Typography variant="link">Create your own quiz</Typography>
-      </Link>
+      {isUserAuthenticated ? (
+        <Link to={'/quiz/create'}>
+          <Typography variant="link" size="small">
+            Create your own quiz and challenge others!
+          </Typography>
+        </Link>
+      ) : (
+        <Link to={'/auth/login'}>
+          <Typography variant="link" size="small">
+            Want to create your own quiz? Log in to get started!
+          </Typography>
+        </Link>
+      )}
     </Page>
   )
 }

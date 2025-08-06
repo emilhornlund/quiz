@@ -1,0 +1,88 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LegacyInfoCardUI > should render a LegacyInfoCardUI as migrated 1`] = `
+<div>
+  <div
+    class="card kindSuccess sizeLarge center"
+  >
+    <button
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-xmark "
+        data-icon="xmark"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 384 512"
+      >
+        <path
+          d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <div
+      class="content"
+    >
+      <span>
+        Your migration’s all set! Pop in or make a fresh account, and we’ll take it from here.
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyInfoCardUI > should render a LegacyInfoCardUI as not migrated 1`] = `
+<div>
+  <div
+    class="card kindCallToAction sizeLarge center"
+  >
+    <button
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-xmark "
+        data-icon="xmark"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 384 512"
+      >
+        <path
+          d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <div
+      class="content"
+    >
+      <span>
+        Hey quiz champion! Did your brainy adventures happen on
+         
+        <a
+          href="https://https://legacy.com"
+        >
+          https://legacy.com
+        </a>
+        ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+         
+        <a
+          href="https://https://legacy.com"
+        >
+          https://legacy.com
+        </a>
+         one last time, and we’ll magically teleport everything over to
+         
+        <b>
+          <i>
+            https://target.com
+          </i>
+        </b>
+        . Ready to blast off your data?
+      </span>
+    </div>
+  </div>
+</div>
+`;

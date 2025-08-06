@@ -4,7 +4,6 @@ import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
 import Button from '../../components/Button'
-import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import {
   HostGameBeginState,
@@ -46,11 +45,9 @@ import styles from './GamePage.module.scss'
 const GamePage = () => {
   const navigate = useNavigate()
 
-  const { gameID } = useGameContext()
+  const { gameID, gameToken, participantId, leaveGame } = useGameContext()
 
-  const { token } = useAuthContext()
-
-  const [event, connectionStatus] = useEventSource(gameID, token)
+  const [event, connectionStatus] = useEventSource(gameID, gameToken)
   const [hasReconnected, setHasReconnected] = useState(false)
 
   useEffect(() => {
@@ -76,15 +73,19 @@ const GamePage = () => {
     }
   }, [connectionStatus, hasReconnected])
 
-  const shouldBlock = useCallback<BlockerFunction>(
-    () =>
-      !(
-        event?.type === GameEventType.GamePodiumHost ||
-        event?.type === GameEventType.GamePodiumPlayer ||
-        event?.type === GameEventType.GameQuitEvent
-      ),
-    [event],
-  )
+  const shouldBlock = useCallback<BlockerFunction>(() => {
+    const isAllowedEventType =
+      event?.type &&
+      [
+        GameEventType.GamePodiumHost,
+        GameEventType.GamePodiumPlayer,
+        GameEventType.GameQuitEvent,
+      ].includes(event.type)
+
+    const hasGameId = !!gameID
+
+    return !isAllowedEventType && hasGameId
+  }, [event, gameID])
   const blocker = useBlocker(shouldBlock)
 
   useEffect(() => {
@@ -138,6 +139,14 @@ const GamePage = () => {
     }
   }, [event])
 
+  const handleLeaveGame = () => {
+    if (blocker.state === 'blocked' && participantId && leaveGame) {
+      leaveGame(participantId).finally(() => {
+        blocker.proceed()
+      })
+    }
+  }
+
   return (
     <>
       {stateComponent}
@@ -158,7 +167,7 @@ const GamePage = () => {
               type="button"
               kind="call-to-action"
               value="Proceed"
-              onClick={() => blocker.proceed()}
+              onClick={handleLeaveGame}
             />
           </div>
         </Modal>

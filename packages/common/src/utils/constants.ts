@@ -69,3 +69,31 @@ export const MEDIA_SEARCH_TERM_REGEX = /^[a-zA-Z0-9_ ]{2,20}$/
 export const UPLOAD_IMAGE_MIN_FILE_SIZE = 1 // 1 byte
 export const UPLOAD_IMAGE_MAX_FILE_SIZE = 20 * 1024 * 1024 // 20mb
 export const UPLOAD_IMAGE_MIMETYPE_REGEX = /^image\/(gif|jpeg|png|tiff|webp)$/
+
+/* Password */
+export const PASSWORD_MIN_LENGTH = 8
+export const PASSWORD_MAX_LENGTH = 128
+export const PASSWORD_REGEX =
+  /^(?=(?:.*[a-z]){2,})(?=(?:.*[A-Z]){2,})(?=(?:.*\d){2,})(?=(?:.*[^A-Za-z0-9]){2,}).{8,128}$/
+
+/* Email */
+export const EMAIL_MIN_LENGTH = 6
+export const EMAIL_MAX_LENGTH = 128
+export const EMAIL_REGEX =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+// Given (first) name: 1–64 characters, no leading/trailing separators
+export const GIVEN_NAME_MIN_LENGTH = 1
+export const GIVEN_NAME_MAX_LENGTH = 64
+export const GIVEN_NAME_REGEX =
+  /^(?=.{1,64}$)[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u
+
+// Family (last) name: 1–64 characters, no leading/trailing separators
+export const FAMILY_NAME_MIN_LENGTH = 1
+export const FAMILY_NAME_MAX_LENGTH = 64
+export const FAMILY_NAME_REGEX =
+  /^(?=.{1,64}$)[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u
+
+// Google OAuth
+export const GOOGLE_OAUTH_CODE_REGEX = /^[0-9A-Za-z\-_/+=]{10,512}$/
+export const GOOGLE_OAUTH_CODE_VERIFIER_REGEX = /^[A-Za-z0-9\-._~]{43,128}$/

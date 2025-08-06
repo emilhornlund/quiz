@@ -3,8 +3,13 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEvent, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import {
+  GameDocument,
+  Participant,
+  TaskType,
+} from '../repositories/models/schemas'
+
 import { DistributedEvent } from './models/event'
-import { GameDocument, Participant, TaskType } from './models/schemas'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
@@ -78,7 +83,7 @@ export class GameEventPublisher {
     event: GameEvent,
   ): Promise<void> {
     return this.publishDistributedEvent({
-      playerId: participant.player._id,
+      playerId: participant.participantId,
       event,
     })
   }

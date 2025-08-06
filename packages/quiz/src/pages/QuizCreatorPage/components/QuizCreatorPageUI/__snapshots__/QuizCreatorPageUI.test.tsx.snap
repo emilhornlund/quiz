@@ -25,6 +25,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="quizCreatorPageHeader"
         >
@@ -1023,6 +1029,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="quizCreatorPageHeader"
         >
@@ -1178,6 +1190,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="quizCreatorPageHeader"
         >
@@ -1333,6 +1351,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="quizCreatorPageHeader"
         >
@@ -1490,6 +1514,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="quizCreatorPageHeader"
         >

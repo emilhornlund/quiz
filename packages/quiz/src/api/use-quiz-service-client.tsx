@@ -1,30 +1,39 @@
 import {
+  AuthGameRequestDto,
+  AuthGoogleExchangeRequestDto,
+  AuthLoginRequestDto,
+  AuthPasswordChangeRequestDto,
+  AuthPasswordForgotRequestDto,
+  AuthPasswordResetRequestDto,
+  AuthRefreshRequestDto,
   AuthResponseDto,
+  AuthRevokeRequestDto,
   CreateGameResponseDto,
-  FindGameResponseDto,
+  CreateUserRequestDto,
+  CreateUserResponseDto,
   GameResultDto,
   MediaUploadPhotoResponseDto,
   PaginatedGameHistoryDto,
   PaginatedMediaPhotoSearchDto,
   PaginatedQuizResponseDto,
-  PlayerLinkCodeResponseDto,
-  PlayerResponseDto,
   QuestionCorrectAnswerDto,
   QuestionDto,
   QuestionType,
   QuizRequestDto,
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
+  TokenScope,
+  TokenType,
+  UpdateGoogleUserProfileRequestDto,
+  UpdateLocalUserProfileRequestDto,
+  UserProfileResponseDto,
 } from '@quiz/common'
-import { v4 as uuidv4 } from 'uuid'
+import { useCallback } from 'react'
 
 import { useAuthContext } from '../context/auth'
-import { Client } from '../models'
-import {
-  CLIENT_LOCAL_STORAGE_KEY,
-  TOKEN_LOCAL_STORAGE_KEY,
-} from '../utils/constants'
+import { useMigrationContext } from '../context/migration'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
+import useLocalStorage from '../utils/use-local-storage.tsx'
 
 import {
   ApiPostBody,
@@ -35,106 +44,101 @@ import {
 } from './api-utils.ts'
 
 /**
- * Provides a set of utility functions to interact with the quiz service API.
+ * Hook for interacting with the Quiz service API.
  *
- * This hook includes methods for client authentication, token management,
- * and making API requests (GET, POST, PUT, DELETE). It also provides specific
- * methods for retrieving player information and associated quizzes.
+ * Automatically handles:
+ * - CRUD for quizzes
+ * - Game session actions
+ * - Media uploads
+ * - Authentication (including token refresh on expiry or 401)
  *
- * @returns An object containing the following methods:
- * - `getCurrentPlayer`: Retrieves information about the current player.
- * - `getCurrentPlayerQuizzes`: Retrieves quizzes associated with the current player.
+ * @returns An object containing the various API methods.
  */
 export const useQuizServiceClient = () => {
-  const { setToken, setClient, setPlayer } = useAuthContext()
+  const { user, game, setTokenPair } = useAuthContext()
+
+  const { completeMigration } = useMigrationContext()
+
+  const [migrationToken] = useLocalStorage<string | undefined>(
+    'migrationToken',
+    undefined,
+  )
+
+  const [migrated] = useLocalStorage<boolean>('migrated', false)
 
   /**
-   * Retrieves the current client ID from local storage or generates a new one if none exists.
+   * Retrieves the token string for the specified scope and token type
+   * from the authentication context.
    *
-   * @returns The client ID as a string.
+   * @param scope - The TokenScope (User or Game) whose token to fetch.
+   * @param type - The TokenType (Access or Refresh) to retrieve.
+   * @returns The JWT/opaque token string, or `undefined` if not present.
    */
-  const getClientId = (): string => {
-    const client = localStorage.getItem(CLIENT_LOCAL_STORAGE_KEY)
-    if (client) {
-      return (JSON.parse(client) as Client).id
-    }
-    const id = uuidv4()
-    setClient({ id })
-    return id
-  }
+  const getToken = useCallback(
+    (scope: TokenScope, type: TokenType): string | undefined => {
+      switch (scope) {
+        case TokenScope.User:
+          return user?.[type].token
+        case TokenScope.Game:
+          return game?.[type].token
+      }
+    },
+    [user, game],
+  )
 
   /**
-   * Authenticates the client with the quiz service and retrieves an authentication token.
+   * Makes an HTTP request to the Quiz API, handling token expiry & retry.
    *
-   * @returns A promise resolving to the authentication response containing the client and player details.
-   */
-  const authenticate = async (): Promise<AuthResponseDto> => {
-    const clientId = getClientId()
-
-    const options = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ clientId }),
-    }
-
-    const response = await fetch(resolveUrl('/auth'), options)
-
-    const parsedResponse =
-      await parseResponseAndHandleError<AuthResponseDto>(response)
-
-    setClient(parsedResponse.client)
-    setPlayer(parsedResponse.player)
-
-    return parsedResponse
-  }
-
-  /**
-   * Retrieves a valid JWT token, refreshing it if the existing token is expired or missing.
-   *
-   * @returns A promise resolving to the token as a string, or `undefined` if authentication fails.
-   */
-  const getToken = async (): Promise<string | undefined> => {
-    let token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
-    if (!token || isTokenExpired(token)) {
-      token = (await authenticate())?.token
-      setToken(token)
-      return token
-    }
-    return token
-  }
-
-  /**
-   * Makes a generic API request using the specified HTTP method and parameters.
-   *
-   * @template T - The expected type of the API response.
-   * @param method - The HTTP method (e.g., 'GET', 'POST').
-   * @param path - The relative path to the API endpoint.
-   * @param requestBody - The optional request body for POST or PUT requests.
-   * @param token - The optional authentication token. If not provided, it will be retrieved automatically.
-   * @returns A promise resolving to the API response as type `T`.
+   * @template T - Expected response type
+   * @param method - HTTP verb
+   * @param path - API endpoint (relative)
+   * @param body - Payload for GET/POST/PUT/PATCH/DELETE
+   * @param scope - The TokenScope to use when authorizing this request (User or Game).
+   * @param overrideToken - If provided, use this token instead of context
+   * @returns {Promise<T>} - Parsed JSON response
    */
   const apiFetch = async <T extends object | void>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
-    requestBody?: ApiPostBody,
-    token?: string,
+    body: ApiPostBody | undefined,
+    scope: TokenScope,
+    overrideToken?: string,
   ): Promise<T> => {
-    token = token || (await getToken())
+    let accessToken = overrideToken || getToken(scope, TokenType.Access)
+    let refreshToken = getToken(scope, TokenType.Refresh)
 
-    const options = {
-      method,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      ...(requestBody ? { body: JSON.stringify(requestBody) } : {}),
+    // 1) Preemptively refresh expired accessToken (skip if we're already refreshing)
+    if (
+      !overrideToken &&
+      isTokenExpired(accessToken) &&
+      refreshToken &&
+      path !== '/auth/refresh'
+    ) {
+      const refreshed = await refresh(scope, { refreshToken })
+      accessToken = refreshed.accessToken
+      refreshToken = refreshed.refreshToken
     }
 
-    const response = await fetch(resolveUrl(path), options)
+    // Build headers; omit auth header on the refresh endpoint
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+    if (accessToken && path !== '/auth/refresh') {
+      headers.Authorization = `Bearer ${accessToken}`
+    }
+
+    const response = await fetch(resolveUrl(path), {
+      method,
+      headers,
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    })
+
+    // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
+    if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
+      const refreshed = await refresh(scope, { refreshToken })
+      return apiFetch<T>(method, path, body, scope, refreshed.accessToken)
+    }
 
     return parseResponseAndHandleError<T>(response)
   }
@@ -144,10 +148,13 @@ export const useQuizServiceClient = () => {
    *
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
-  const apiGet = <T extends object | void>(path: string) =>
-    apiFetch<T>('GET', path, undefined)
+  const apiGet = <T extends object | void>(
+    path: string,
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('GET', path, undefined, scope)
 
   /**
    * Makes a POST request to the specified API endpoint.
@@ -155,12 +162,16 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the POST request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param overrideToken - If provided, use this token instead of context.
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPost = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-  ) => apiFetch<T>('POST', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+    overrideToken?: string,
+  ) => apiFetch<T>('POST', path, requestBody, scope, overrideToken)
 
   /**
    * Makes a PUT request to the specified API endpoint.
@@ -168,12 +179,31 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the PUT request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPut = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-  ) => apiFetch<T>('PUT', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('PUT', path, requestBody, scope)
+
+  /**
+   * Makes a PATCH request to the specified API endpoint.
+   *
+   * @template T - The expected type of the API response.
+   * @param path - The relative path to the API endpoint.
+   * @param requestBody - The request body to be sent in the PATCH request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param overrideToken - If provided, use this token instead of context.
+   * @returns A promise resolving to the API response as type `T`.
+   */
+  const apiPatch = <T extends object | void>(
+    path: string,
+    requestBody: ApiPostBody,
+    scope: TokenScope = TokenScope.User,
+    overrideToken?: string,
+  ) => apiFetch<T>('PATCH', path, requestBody, scope, overrideToken)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -181,52 +211,260 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the DELETE request.
+   * @param scope - The TokenScope to authenticate this call (defaults to User).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiDelete = <T extends object | void>(
     path: string,
     requestBody?: ApiPostBody,
-  ) => apiFetch<T>('DELETE', path, requestBody)
+    scope: TokenScope = TokenScope.User,
+  ) => apiFetch<T>('DELETE', path, requestBody, scope)
 
   /**
-   * Retrieves information about the current player.
+   * Sends a login request to the API and stores the returned authentication tokens.
    *
-   * @returns A promise resolving to the player information as a `PlayerResponseDto`.
+   * @param request - The login credentials containing email and password.
+   * @returns A promise that resolves to the login response with access and refresh tokens.
    */
-  const getCurrentPlayer = (): Promise<PlayerResponseDto> =>
-    apiGet<PlayerResponseDto>('/client/player')
+  const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>(
+      `/auth/login${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      {
+        email: request.email,
+        password: request.password,
+      },
+    ).then((res) => {
+      setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      if (!migrated && !!migrationToken) {
+        completeMigration()
+      }
+      return res
+    })
 
   /**
-   * Updates the currently authenticated player's profile.
+   * Exchanges a Google OAuth authorization code and PKCE verifier
+   * for an authentication response containing access and refresh tokens.
    *
-   * @param nickname - The new nickname to update for the player.
-   *
-   * @returns A promise resolving to the updated player information as a `PlayerResponseDto`.
+   * @param request - An object with `code` (the Google OAuth code) and `codeVerifier` (the matching PKCE verifier).
+   * @returns A promise that resolves to the login response with access and refresh tokens.
    */
-  const updateCurrentPlayer = (nickname: string): Promise<PlayerResponseDto> =>
-    apiPut<PlayerResponseDto>('/client/player', { nickname }).then(
+  const googleExchangeCode = (
+    request: AuthGoogleExchangeRequestDto,
+  ): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>(
+      `/auth/google/exchange${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      request,
+    ).then((res) => {
+      setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+      if (!migrated && !!migrationToken) {
+        completeMigration()
+      }
+      return res
+    })
+
+  /**
+   * Sends a game authentication request to the API and stores the returned authentication tokens.
+   *
+   * @param request - The game authentication credentials containing the necessary game identifier.
+   * @returns A promise that resolves to the authentication response with access and refresh tokens.
+   */
+  const authenticateGame = (
+    request: AuthGameRequestDto,
+  ): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>(`/auth/game`, request).then((res) => {
+      setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
+      return res
+    })
+
+  /**
+   * Sends a refresh request to the API and stores the returned authentication tokens.
+   *
+   * @param scope - The TokenScope to use when authorizing this request (User or Game).
+   * @param request - The request containing the refresh token.
+   * @returns A promise that resolves to the login response with access and refresh tokens.
+   */
+  const refresh = (
+    scope: TokenScope,
+    request: AuthRefreshRequestDto,
+  ): Promise<AuthResponseDto> =>
+    apiPost<AuthResponseDto>('/auth/refresh', request).then((res) => {
+      setTokenPair(scope, res.accessToken, res.refreshToken)
+      return res
+    })
+
+  /**
+   * Revokes the specified authentication token.
+   *
+   * Sends a request to invalidate the given access or refresh token on the server,
+   * effectively logging out the user and preventing further use of that token.
+   *
+   * @param request - An object containing the token to be revoked.
+   * @returns A promise that resolves when the token has been successfully revoked.
+   */
+  const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
+    apiPost<void>('/auth/revoke', request).then(() => {})
+
+  /**
+   * Verifies a user’s email address by sending the provided token to the backend.
+   *
+   * Sends a POST request to `/auth/email/verify` with the given token in a user scope.
+   *
+   * @param token – The one-time email verification token that was emailed to the user.
+   * @returns A promise which:
+   *   - **resolves** to `void` if the server confirms the email successfully,
+   *   - **rejects** with an error if the verification fails or the token is invalid.
+   */
+  const verifyEmail = (token: string): Promise<void> =>
+    apiPost<void>('/auth/email/verify', {}, TokenScope.User, token).then(
+      () => {},
+    )
+
+  /**
+   * Resend a verification email to the current user.
+   *
+   * @returns {Promise<void>} Resolves once the email has been sent (or rejects on failure).
+   */
+  const resendVerificationEmail = (): Promise<void> =>
+    apiPost<void>('/auth/email/resend_verification', {})
+      .then((response) => {
+        notifySuccess(
+          'Hooray! A fresh verification email is on its way—check your inbox!',
+        )
+        return response
+      })
+      .catch((error) => {
+        notifyError(
+          'Whoops! We couldn’t resend your verification email. Please try again.',
+        )
+        throw error
+      })
+
+  /**
+   * Sends a password reset email to the user.
+   *
+   * @param request - An object containing the user’s email.
+   * @returns A promise that resolves when the reset email has been successfully sent.
+   */
+  const sendPasswordResetEmail = (
+    request: AuthPasswordForgotRequestDto,
+  ): Promise<void> =>
+    apiPost<void>('/auth/password/forgot', request).then((response) => {
+      notifySuccess(
+        'We’ve flung a reset link to your inbox. Didn’t see it? Sneak a peek in your spam folder.',
+      )
+      return response
+    })
+
+  /**
+   * Resets the user’s password using the provided token.
+   *
+   * @param request - An object containing the new password details.
+   * @param token   - The password reset token extracted from the reset link.
+   * @returns A promise that resolves when the password has been successfully updated.
+   */
+  const resetPassword = (
+    request: AuthPasswordResetRequestDto,
+    token: string,
+  ): Promise<void> =>
+    apiPatch<void>(
+      '/auth/password/reset',
+      request,
+      TokenScope.User,
+      token,
+    ).then((response) => {
+      notifySuccess(
+        'All Set! Your new password is locked and loaded. Welcome back!',
+      )
+      return response
+    })
+
+  /**
+   * Sends a registration request to the API to create a new user account.
+   *
+   * @param request - The user registration data including email, password, and optional names.
+   *
+   * @returns A promise that resolves to the newly created user's information.
+   */
+  const register = (
+    request: CreateUserRequestDto,
+  ): Promise<CreateUserResponseDto> =>
+    apiPost<CreateUserResponseDto>(
+      `/users${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      {
+        email: request.email,
+        password: request.password,
+        givenName: request.givenName,
+        familyName: request.familyName,
+        defaultNickname: request.defaultNickname,
+      },
+    ).then((response) => {
+      if (!migrated && !!migrationToken) {
+        completeMigration()
+      }
+      notifySuccess('Welcome aboard! Your account is ready to roll')
+      return response
+    })
+
+  /**
+   * Retrieves information about the current user.
+   *
+   * @returns A promise resolving to the user information.
+   */
+  const getUserProfile = (): Promise<UserProfileResponseDto> =>
+    apiGet<UserProfileResponseDto>('/profile/user')
+
+  /**
+   * Updates the currently authenticated user's profile.
+   *
+   * @param request - The user update data including email and optional names.
+   *
+   * @returns A promise resolving to the updated user information.
+   */
+  const updateUserProfile = (
+    request:
+      | UpdateLocalUserProfileRequestDto
+      | UpdateGoogleUserProfileRequestDto,
+  ): Promise<UserProfileResponseDto> =>
+    apiPut<UserProfileResponseDto>('/profile/user', request).then(
       (response) => {
         notifySuccess(
-          'Nice! Your new nickname is locked in. Get ready to quiz in style!',
+          'Nice! Your new profile is locked in. Get ready to quiz in style!',
         )
         return response
       },
     )
 
   /**
-   * Retrieves the quizzes associated with the current player.
+   * Updates the currently authenticated user's password.
+   *
+   * @param request - The password data including the old and new passwords.
+   *
+   * @returns A promise that resolves when the password has been successfully updated.
+   */
+  const updateUserPassword = (
+    request: AuthPasswordChangeRequestDto,
+  ): Promise<void> =>
+    apiPatch('/auth/password', request)
+      .then(() => {})
+      .then((response) => {
+        notifySuccess('Done and dusted! Your password’s been refreshed.')
+        return response
+      })
+
+  /**
+   * Retrieves the quizzes associated with the current user.
    *
    * @param options.limit - The maximum number of quizzes to retrieve per page.
    * @param options.offset - The number of quizzes to skip before starting retrieval.
    *
    * @returns A promise resolving to the quizzes in a paginated format as a `PaginatedQuizResponseDto`.
    */
-  const getCurrentPlayerQuizzes = (options: {
+  const getProfileQuizzes = (options: {
     limit: number
     offset: number
   }): Promise<PaginatedQuizResponseDto> =>
     apiGet<PaginatedQuizResponseDto>(
-      `/client/quizzes${parseQueryParams(options)}`,
+      `/profile/quizzes${parseQueryParams(options)}`,
     )
 
   /**
@@ -306,39 +544,6 @@ export const useQuizServiceClient = () => {
     apiGet(`/quizzes/${quizId}/questions`)
 
   /**
-   * Fetches the current link code for the player.
-   *
-   * @returns A promise that resolves to the player's link code and its expiration details.
-   */
-  const getLinkCode = (): Promise<PlayerLinkCodeResponseDto> =>
-    apiGet(`/client/player/link`)
-
-  /**
-   * Links a player to another client using a provided link code.
-   *
-   * @param code - The unique link code to associate this client with the player on another device.
-   *
-   * @returns A promise that resolves when the player is successfully linked.
-   */
-  const linkPlayer = (code: string): Promise<void> =>
-    apiPost<PlayerResponseDto>(`/client/player/link`, { code }).then(
-      ({ id, nickname }) => {
-        setPlayer({ id, nickname })
-        notifySuccess('Success! Your client has been linked to a new player.')
-      },
-    )
-
-  /**
-   * Finds a game using the provided game PIN.
-   *
-   * @param gamePIN - The PIN of the game to find.
-   *
-   * @returns A promise resolving to the details of the found game as a `FindGameResponseDto`.
-   */
-  const findGame = (gamePIN: string): Promise<FindGameResponseDto> =>
-    apiGet<FindGameResponseDto>(`/games?gamePIN=${gamePIN}`)
-
-  /**
    * Creates a new game using the provided quizId.
    *
    * @param quizId - The ID of the quiz to create a game from.
@@ -357,7 +562,7 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the player has successfully joined the game.
    */
   const joinGame = (gameID: string, nickname: string): Promise<void> =>
-    apiPost<void>(`/games/${gameID}/players`, { nickname })
+    apiPost<void>(`/games/${gameID}/players`, { nickname }, TokenScope.Game)
 
   /**
    * Leaves an existing game using the provided game ID and player ID.
@@ -368,7 +573,11 @@ export const useQuizServiceClient = () => {
    * @returns A Promise that resolves when the player is successfully removed from the game.
    */
   const leaveGame = (gameID: string, playerID: string): Promise<void> =>
-    apiDelete<void>(`/games/${gameID}/players/${playerID}`)
+    apiDelete<void>(
+      `/games/${gameID}/players/${playerID}`,
+      undefined,
+      TokenScope.Game,
+    )
 
   /**
    * Marks the current task in the game as completed.
@@ -378,7 +587,11 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the task has been successfully completed.
    */
   const completeTask = (gameID: string) =>
-    apiPost(`/games/${gameID}/tasks/current/complete`, {}).then(() => {})
+    apiPost(
+      `/games/${gameID}/tasks/current/complete`,
+      {},
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Submits an answer to a question in the specified game.
@@ -409,7 +622,7 @@ export const useQuizServiceClient = () => {
       const { type, value } = submitQuestionAnswerRequest
       requestBody = { type, value }
     }
-    await apiPost(`/games/${gameID}/answers`, requestBody)
+    await apiPost(`/games/${gameID}/answers`, requestBody, TokenScope.Game)
   }
 
   /**
@@ -423,9 +636,11 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiPost(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
-      () => {},
-    )
+    apiPost(
+      `/games/${gameID}/tasks/current/correct_answers`,
+      answer,
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Deletes a correct answer from the current task in the specified game.
@@ -438,9 +653,11 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiDelete(`/games/${gameID}/tasks/current/correct_answers`, answer).then(
-      () => {},
-    )
+    apiDelete(
+      `/games/${gameID}/tasks/current/correct_answers`,
+      answer,
+      TokenScope.Game,
+    ).then(() => {})
 
   /**
    * Retrieves the game history associated with the current player.
@@ -450,11 +667,13 @@ export const useQuizServiceClient = () => {
    *
    * @returns A promise that resolves to a paginated list of past games.
    */
-  const getPaginatedGameHistory = (options: {
+  const getProfileGames = (options: {
     limit: number
     offset: number
   }): Promise<PaginatedGameHistoryDto> =>
-    apiGet<PaginatedGameHistoryDto>(`/client/games${parseQueryParams(options)}`)
+    apiGet<PaginatedGameHistoryDto>(
+      `/profile/games${parseQueryParams(options)}`,
+    )
 
   /**
    * Fetches the results for a completed game by its ID.
@@ -492,8 +711,6 @@ export const useQuizServiceClient = () => {
     file: File,
     onProgress: (progress: number) => void,
   ): Promise<MediaUploadPhotoResponseDto> => {
-    const token = await getToken()
-
     return new Promise((resolve, reject) => {
       const formData = new FormData()
       formData.append('file', file)
@@ -524,7 +741,7 @@ export const useQuizServiceClient = () => {
       }
 
       xhr.open('POST', resolveUrl('/media/uploads/photos'))
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+      xhr.setRequestHeader('Authorization', `Bearer ${user?.ACCESS.token}`)
       xhr.send(formData)
     })
   }
@@ -540,18 +757,25 @@ export const useQuizServiceClient = () => {
     apiDelete<void>(`/media/uploads/photos/${photoId}`)
 
   return {
-    getCurrentPlayer,
-    updateCurrentPlayer,
-    getCurrentPlayerQuizzes,
+    login,
+    googleExchangeCode,
+    authenticateGame,
+    revoke,
+    verifyEmail,
+    resendVerificationEmail,
+    sendPasswordResetEmail,
+    resetPassword,
+    register,
+    getUserProfile,
+    updateUserProfile,
+    updateUserPassword,
+    getProfileQuizzes,
     createQuiz,
     getQuiz,
     getPublicQuizzes,
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
-    getLinkCode,
-    linkPlayer,
-    findGame,
     createGame,
     joinGame,
     leaveGame,
@@ -559,7 +783,7 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     addCorrectAnswer,
     deleteCorrectAnswer,
-    getPaginatedGameHistory,
+    getProfileGames,
     getGameResults,
     searchPhotos,
     uploadImage,

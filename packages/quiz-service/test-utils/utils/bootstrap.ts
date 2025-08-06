@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, UnauthorizedException } from '@nestjs/common'
 import { getConnectionToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis'
@@ -7,7 +7,15 @@ import { Connection } from 'mongoose'
 
 import { AppModule } from '../../src/app'
 import { configureApp } from '../../src/app/utils'
+import { GoogleAuthService } from '../../src/auth/services'
+import { GoogleProfileDto } from '../../src/auth/services/models'
 import { PexelsMediaSearchService } from '../../src/media/services'
+import { MOCK_PRIMARY_GOOGLE_USER_ID, MOCK_PRIMARY_USER_EMAIL } from '../data'
+import {
+  MOCK_GOOGLE_ACCESS_TOKEN_VALID,
+  MOCK_GOOGLE_VALID_CODE,
+  MOCK_GOOGLE_VALID_CODE_VERIFIER,
+} from '../data/google-auth.data'
 
 const mockPexelsMediaSearchService = {
   searchPhotos: async () =>
@@ -27,12 +35,47 @@ const mockPexelsMediaSearchService = {
     }),
 }
 
+const mockGoogleAuthService = {
+  exchangeCodeForAccessToken: async (
+    code: string,
+    codeVerifier: string,
+  ): Promise<string> => {
+    if (
+      code === MOCK_GOOGLE_VALID_CODE &&
+      codeVerifier === MOCK_GOOGLE_VALID_CODE_VERIFIER
+    ) {
+      return MOCK_GOOGLE_ACCESS_TOKEN_VALID
+    }
+    throw new UnauthorizedException(
+      'Invalid authorization code or PKCE verifier.',
+    )
+  },
+  fetchGoogleProfile: async (
+    accessToken: string,
+  ): Promise<GoogleProfileDto> => {
+    if (accessToken === MOCK_GOOGLE_ACCESS_TOKEN_VALID) {
+      return {
+        id: MOCK_PRIMARY_GOOGLE_USER_ID,
+        email: MOCK_PRIMARY_USER_EMAIL,
+        verified_email: true,
+        name: 'Jane Doe',
+        given_name: 'Jane',
+        family_name: 'Doe',
+        picture: 'http://img',
+      }
+    }
+    throw new UnauthorizedException('Access token is invalid or has expired.')
+  },
+}
+
 export async function createTestApp(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })
     .overrideProvider(PexelsMediaSearchService)
     .useValue(mockPexelsMediaSearchService)
+    .overrideProvider(GoogleAuthService)
+    .useValue(mockGoogleAuthService)
     .compile()
 
   const app = moduleFixture.createNestApplication()

@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   LanguageCode,
@@ -18,12 +19,10 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  closeTestApp,
-  createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
+import { buildMockSecondaryUser } from '../../../test-utils/data'
+import { createDefaultUserAndAuthenticate } from '../../../test-utils/utils'
+import { closeTestApp, createTestApp } from '../../../test-utils/utils'
+import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
 const multiChoiceQuestion: QuestionMultiChoiceDto = {
@@ -134,15 +133,13 @@ const updatedData: QuizRequestDto = {
 
 describe('QuizController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
   let quizService: QuizService
-  let clientService: ClientService
+  let userModel: UserModel
 
   beforeEach(async () => {
     app = await createTestApp()
-    authService = app.get(AuthService)
     quizService = app.get(QuizService)
-    clientService = app.get(ClientService)
+    userModel = app.get<UserModel>(getModelToken(User.name))
   })
 
   afterEach(async () => {
@@ -151,13 +148,11 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes (POST)', () => {
     it('should succeed in creating a new quiz', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .post('/api/quizzes')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send(originalData)
         .expect(201)
         .expect((res) => {
@@ -185,24 +180,18 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes (GET)', () => {
     it('should return a paginated list of public quizzes', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
-        publicQuizzes.push(
-          await quizService.createQuiz(originalData, client.player),
-        )
+        publicQuizzes.push(await quizService.createQuiz(originalData, user))
       }
 
       await Promise.all(
         [...Array(5).keys()].map(() =>
           quizService.createQuiz(
             { ...originalData, visibility: QuizVisibility.Private },
-            client.player,
+            user,
           ),
         ),
       )
@@ -213,7 +202,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -226,21 +215,17 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return quizzes filtered by search term', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       await Promise.all([
         ...[...Array(10).keys()].map(() =>
-          quizService.createQuiz({ ...originalData }, client.player),
+          quizService.createQuiz({ ...originalData }, user),
         ),
       ])
 
       const uniqueQuiz = await quizService.createQuiz(
         { ...originalData, title: 'Unique Quiz Title' },
-        client.player,
+        user,
       )
 
       const uniqueQuizTitleResultsSortedByCreatedDate = [uniqueQuiz].map(
@@ -249,7 +234,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?search=Unique%20Quiz%20Title')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -262,15 +247,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return quizzes filtered by mode', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       await Promise.all(
         [...Array(10).keys()].map(() =>
-          quizService.createQuiz({ ...originalData }, client.player),
+          quizService.createQuiz({ ...originalData }, user),
         ),
       )
 
@@ -279,7 +260,7 @@ describe('QuizController (e2e)', () => {
         zeroToOneHundredQuizzes.push(
           await quizService.createQuiz(
             { ...updatedData, visibility: QuizVisibility.Public },
-            client.player,
+            user,
           ),
         )
       }
@@ -292,7 +273,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?mode=ZERO_TO_ONE_HUNDRED')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -305,17 +286,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return quizzes sort by updated in ascending order', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
-        publicQuizzes.push(
-          await quizService.createQuiz(originalData, client.player),
-        )
+        publicQuizzes.push(await quizService.createQuiz(originalData, user))
       }
 
       const allResultsSortedByUpdatedAscendingDate = publicQuizzes
@@ -324,7 +299,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?sort=updated&order=asc')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -337,17 +312,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return the correct number of quizzes based on the limit', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
-        publicQuizzes.push(
-          await quizService.createQuiz(originalData, client.player),
-        )
+        publicQuizzes.push(await quizService.createQuiz(originalData, user))
       }
 
       const firstFiveResultsSortedByCreatedDate = publicQuizzes
@@ -357,7 +326,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?limit=5')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -370,17 +339,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return quizzes with the correct offset', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const publicQuizzes: QuizResponseDto[] = []
       for (let i = 0; i < 10; i++) {
-        publicQuizzes.push(
-          await quizService.createQuiz(originalData, client.player),
-        )
+        publicQuizzes.push(await quizService.createQuiz(originalData, user))
       }
 
       const secondFiveResultsSortedByCreatedDate = publicQuizzes
@@ -390,7 +353,7 @@ describe('QuizController (e2e)', () => {
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?limit=5&offset=5')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -403,13 +366,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should return an empty list when no quizzes exists', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -427,7 +388,7 @@ describe('QuizController (e2e)', () => {
         .expect(401)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'Unauthorized',
+            message: 'Missing Authorization header',
             status: 401,
             timestamp: expect.anything(),
           })
@@ -435,13 +396,11 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should validate query parameters and return a 400 error for invalid input', async () => {
-      const clientId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get('/api/quizzes?limit=X&offset=X&mode=X&sort=X&order=X')
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(400)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -493,20 +452,13 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes/:quizId (GET)', () => {
     it('should succeed in retrieving an existing quiz', async () => {
-      const clientId = uuidv4()
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      const originalQuiz = await quizService.createQuiz(
-        originalData,
-        client.player,
-      )
+      const originalQuiz = await quizService.createQuiz(originalData, user)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${originalQuiz.id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id', originalQuiz.id)
@@ -538,14 +490,13 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in retrieving a non existing quiz', async () => {
-      const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quizId}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -558,7 +509,8 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should succeed in retrieving a public quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
+
       const {
         id,
         title,
@@ -570,13 +522,11 @@ describe('QuizController (e2e)', () => {
         imageCoverURL,
         created,
         updated,
-      } = await quizService.createQuiz(originalData, client.player)
-
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      } = await quizService.createQuiz(originalData, user)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -590,8 +540,8 @@ describe('QuizController (e2e)', () => {
             imageCoverURL,
             numberOfQuestions: originalData.questions.length,
             author: {
-              id: client.player._id,
-              name: client.player.nickname,
+              id: user._id,
+              name: user.defaultNickname,
             },
             created: created.toISOString(),
             updated: updated.toISOString(),
@@ -600,17 +550,18 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in retrieving a private quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
+      const user = await userModel.create(buildMockSecondaryUser())
+
       const { id } = await quizService.createQuiz(
         { ...originalData, visibility: QuizVisibility.Private },
-        client.player,
+        user,
       )
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')
@@ -622,20 +573,13 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes/:quizId (PUT)', () => {
     it('should succeed in updating an existing quiz', async () => {
-      const clientId = uuidv4()
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      const originalQuiz = await quizService.createQuiz(
-        originalData,
-        client.player,
-      )
+      const originalQuiz = await quizService.createQuiz(originalData, user)
 
       return supertest(app.getHttpServer())
         .put(`/api/quizzes/${originalQuiz.id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send(updatedData)
         .expect(200)
         .expect((res) => {
@@ -664,14 +608,12 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in updating a non existing quiz', async () => {
-      const clientId = uuidv4()
       const quizId = uuidv4()
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put(`/api/quizzes/${quizId}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send(updatedData)
         .expect(404)
         .expect((res) => {
@@ -685,14 +627,15 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in updating a non authorized quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
-      const { id } = await quizService.createQuiz(originalData, client.player)
+      const user = await userModel.create(buildMockSecondaryUser())
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { id } = await quizService.createQuiz(originalData, user)
+
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .put(`/api/quizzes/${id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .send(updatedData)
         .expect(403)
         .expect((res) => {
@@ -705,20 +648,13 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes/:quizId (DELETE)', () => {
     it('should succeed in deleting an existing quiz', async () => {
-      const clientId = uuidv4()
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      const originalQuiz = await quizService.createQuiz(
-        originalData,
-        client.player,
-      )
+      const originalQuiz = await quizService.createQuiz(originalData, user)
 
       return supertest(app.getHttpServer())
         .delete(`/api/quizzes/${originalQuiz.id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(204)
         .expect((res) => {
           expect(res.body).toEqual({})
@@ -726,14 +662,13 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in deleting a non existing quiz', async () => {
-      const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .delete(`/api/quizzes/${quizId}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -746,14 +681,15 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in deleting a non authorized quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
-      const { id } = await quizService.createQuiz(originalData, client.player)
+      const user = await userModel.create(buildMockSecondaryUser())
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { id } = await quizService.createQuiz(originalData, user)
+
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .delete(`/api/quizzes/${id}`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')
@@ -765,17 +701,13 @@ describe('QuizController (e2e)', () => {
 
   describe('/api/quizzes/:quizId/questions (GET)', () => {
     it('should succeed in retrieving all questions for a classic mode quiz', async () => {
-      const clientId = uuidv4()
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      const quiz = await quizService.createQuiz(originalData, client.player)
+      const quiz = await quizService.createQuiz(originalData, user)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quiz.id}/questions`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual(originalData.questions)
@@ -783,17 +715,13 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should succeed in retrieving all questions for a zero to one hundred mode quiz', async () => {
-      const clientId = uuidv4()
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
-
-      const quiz = await quizService.createQuiz(updatedData, client.player)
+      const quiz = await quizService.createQuiz(updatedData, user)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quiz.id}/questions`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual(updatedData.questions)
@@ -803,11 +731,11 @@ describe('QuizController (e2e)', () => {
     it('should fail in retrieving all questions for a non existing quiz', async () => {
       const unknownQuizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${unknownQuizId}/questions`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -820,17 +748,15 @@ describe('QuizController (e2e)', () => {
     })
 
     it('should fail in retrieving all questions for a non authorized quiz', async () => {
-      const clientId = uuidv4()
+      const user = await userModel.create(buildMockSecondaryUser())
 
-      const client = await clientService.findOrCreateClient(clientId)
+      const quiz = await quizService.createQuiz(originalData, user)
 
-      const quiz = await quizService.createQuiz(originalData, client.player)
-
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .get(`/api/quizzes/${quiz.id}/questions`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')

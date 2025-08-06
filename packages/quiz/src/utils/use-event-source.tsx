@@ -46,7 +46,6 @@ export const useEventSource = (
       eventSourceRef.current = eventSource
 
       eventSource.onopen = () => {
-        console.log('Connection opened')
         setConnectionStatus(ConnectionStatus.CONNECTED)
       }
 

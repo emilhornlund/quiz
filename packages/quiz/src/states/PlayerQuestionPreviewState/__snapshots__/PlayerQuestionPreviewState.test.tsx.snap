@@ -25,6 +25,12 @@ exports[`PlayerQuestionPreviewState > should render PlayerQuestionPreviewState 1
       <div
         class="side"
       >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >

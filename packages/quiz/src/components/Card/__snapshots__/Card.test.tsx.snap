@@ -1,0 +1,135 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Card > should render a Card with children 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull"
+  >
+    <div
+      class="content"
+    >
+      some text
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with default props 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop center false 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop center true 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull center"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop kind call-to-action 1`] = `
+<div>
+  <div
+    class="card kindCallToAction sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop kind primary 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop kind success 1`] = `
+<div>
+  <div
+    class="card kindSuccess sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop size full 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeFull"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop size large 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeLarge"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop size medium 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeMedium"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;
+
+exports[`Card > should render a Card with prop size small 1`] = `
+<div>
+  <div
+    class="card kindPrimary sizeSmall"
+  >
+    <div
+      class="content"
+    />
+  </div>
+</div>
+`;

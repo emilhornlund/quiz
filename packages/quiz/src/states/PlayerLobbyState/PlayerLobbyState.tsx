@@ -2,7 +2,6 @@ import { GameLobbyPlayerEvent } from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import HourglassIcon from '../../assets/images/hourglass-icon.svg'
 import {
   ConfirmDialog,
@@ -36,15 +35,15 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
     useState<boolean>(false)
   const [isLeavingGame, setIsLeavingGame] = useState<boolean>(false)
 
-  const { gameID } = useGameContext()
-  const { leaveGame } = useQuizServiceClient()
-  const { player } = useAuthContext()
+  const { game } = useAuthContext()
+  const { gameID, leaveGame } = useGameContext()
 
   const handleLeaveGame = () => {
     setShowConfirmLeaveGameDialog(false)
-    setIsLeavingGame(true)
-    if (gameID && player?.id) {
-      leaveGame(gameID, player.id).finally(() => {
+    const participantId = game?.ACCESS.sub
+    if (gameID && participantId) {
+      setIsLeavingGame(true)
+      leaveGame?.(participantId).finally(() => {
         setIsLeavingGame(false)
         navigate('/')
       })

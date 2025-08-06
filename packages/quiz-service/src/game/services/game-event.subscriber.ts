@@ -13,10 +13,10 @@ import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
 import { PlayerNotFoundException } from '../exceptions'
+import { GameRepository } from '../repositories'
+import { TaskType } from '../repositories/models/schemas'
 
-import { GameRepository } from './game.repository'
 import { DistributedEvent } from './models/event'
-import { TaskType } from './models/schemas'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
@@ -106,33 +106,33 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Subscribes to the observable stream of events for a game by its ID and player ID,
+   * Subscribes to the observable stream of events for a game by its ID and participant ID,
    * ensuring that only events relevant to the player are provided.
    *
-   * @param {string} gameID - The unique identifier of the game.
-   * @param {string} playerId - The ID of the player subscribing to the game events.
+   * @param gameId - The unique identifier of the game.
+   * @param participantId - The unique identifier of the participant subscribing to the game events.
    *
-   * @returns {Promise<Observable<MessageEvent>>} An observable of MessageEvent for the player.
+   * @returns An observable of MessageEvent for the participant.
    *
    * @throws {ActiveGameNotFoundByIDException} if no active game is found.
    * @throws {PlayerNotFoundException} if the player is not the host or a player in the game.
    */
   public async subscribe(
-    gameID: string,
-    playerId: string,
+    gameId: string,
+    participantId: string,
   ): Promise<Observable<MessageEvent>> {
-    const document = await this.gameRepository.findGameByIDOrThrow(gameID)
+    const document = await this.gameRepository.findGameByIDOrThrow(gameId)
 
     const participant = document.participants.find(
-      (participant) => participant.player._id === playerId,
+      (participant) => participant.participantId === participantId,
     )
 
     if (!participant) {
-      throw new PlayerNotFoundException(playerId)
+      throw new PlayerNotFoundException(participantId)
     }
 
-    if (!this.activePlayers.has(playerId)) {
-      this.activePlayers.add(playerId)
+    if (!this.activePlayers.has(participantId)) {
+      this.activePlayers.add(participantId)
     }
 
     const source = fromEvent(
@@ -151,7 +151,7 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
     )
 
     const initialEvent: DistributedEvent = {
-      playerId,
+      playerId: participantId,
       event:
         participant.type === GameParticipantType.PLAYER
           ? buildPlayerGameEvent(document, participant, {
@@ -165,10 +165,11 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     return concat(from([initialEvent]), source).pipe(
       filter(
-        (event) => event.playerId === undefined || event.playerId === playerId,
+        (event) =>
+          event.playerId === undefined || event.playerId === participantId,
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),
-      finalize(() => this.activePlayers.delete(playerId)),
+      finalize(() => this.activePlayers.delete(participantId)),
     )
   }
 }

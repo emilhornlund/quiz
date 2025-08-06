@@ -1,5 +1,0 @@
-export * from './api-player-created-property.decorator'
-export * from './api-player-id-param.decorator'
-export * from './api-player-id-property.decorator'
-export * from './api-player-modified-property.decorator'
-export * from './api-player-nickname-property.decorator'

@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { InjectModel } from '@nestjs/mongoose'
 import {
   GameMode,
   LanguageCode,
@@ -21,9 +20,8 @@ import {
 import { RootFilterQuery } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Player } from '../../player/services/models/schemas'
-import { QuizNotFoundException } from '../exceptions'
-
+import { User } from '../../user/repositories'
+import { QuizRepository } from '../repositories'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -32,8 +30,8 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-  QuizModel,
-} from './models/schemas'
+} from '../repositories/models/schemas'
+
 import { calculateRangeStep } from './utils'
 
 /**
@@ -44,63 +42,49 @@ export class QuizService {
   /**
    * Initializes the QuizService.
    *
-   * @param quizModel - The Mongoose model for quizzes.
+   * @param quizRepository - Repository for accessing and modifying quiz documents.
    * @param eventEmitter - Emits domain events (e.g., when a quiz is deleted).
    * @param logger - Logger instance for logging operations.
    */
   constructor(
-    @InjectModel(Quiz.name) private quizModel: QuizModel,
-    private eventEmitter: EventEmitter2,
+    private readonly quizRepository: QuizRepository,
+    private readonly eventEmitter: EventEmitter2,
     private readonly logger: Logger = new Logger(QuizService.name),
   ) {}
 
   /**
    * Creates a new quiz.
    *
-   * @param {QuizRequestDto} quizRequest - The data for the quiz to be created.
-   * @param {Player} player - The player creating the quiz.
+   * @param quizRequest - The data for the quiz to be created.
+   * @param user - The user creating the quiz.
    *
-   * @returns {Promise<QuizResponseDto>} - The created quiz's details.
+   * @returns The created quiz's details.
    */
   public async createQuiz(
     quizRequest: QuizRequestDto,
-    player: Player,
+    user: User,
   ): Promise<QuizResponseDto> {
-    const quiz = await this.quizModel.create(
-      QuizService.buildNewQuiz(quizRequest, player),
+    const document = await this.quizRepository.createQuiz(
+      QuizService.buildNewQuiz(quizRequest, user),
     )
 
-    this.logger.log(`Created quiz with id '${quiz._id}.'`)
+    this.logger.log(`Created quiz with id '${document._id}.'`)
 
-    return QuizService.buildQuizResponseDto(quiz)
+    return QuizService.buildQuizResponseDto(document)
   }
 
   /**
    * Finds a quiz by its ID.
    *
-   * @param {string} quizId - The unique identifier of the quiz.
+   * @param quizId - The unique identifier of the quiz.
    *
-   * @returns {Promise<QuizResponseDto>} - The details of the found quiz.
+   * @returns The details of the found quiz.
    *
-   * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
+   * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async findQuizById(quizId: string): Promise<QuizResponseDto> {
-    const quiz = await this.findQuizDocumentByIdOrThrow(quizId)
+    const quiz = await this.quizRepository.findQuizByIdOrThrow(quizId)
     return QuizService.buildQuizResponseDto(quiz)
-  }
-
-  /**
-   * Retrieves the owner of a quiz by its ID.
-   *
-   * @param {string} quizId - The unique identifier of the quiz.
-   *
-   * @returns {Promise<Player>} - The owner of the quiz.
-   *
-   * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
-   */
-  public async findOwnerByQuizId(quizId: string): Promise<Player> {
-    const quiz = await this.findQuizDocumentByIdOrThrow(quizId)
-    return quiz.owner
   }
 
   /**
@@ -117,7 +101,7 @@ export class QuizService {
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
    * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
    *
-   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the quizzes and metadata.
+   * @returns A paginated response containing the quizzes and metadata.
    */
   public async findQuizzesByOwnerId(
     ownerId: string,
@@ -161,7 +145,7 @@ export class QuizService {
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
    * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
    *
-   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the list of quizzes.
+   * @returns A paginated response containing the list of quizzes.
    */
   public async findPublicQuizzes(
     search?: string,
@@ -188,7 +172,7 @@ export class QuizService {
   }
 
   /**
-   * description here.
+   * Finds quizzes using filter, sorting, pagination.
    *
    * @param ownerId - The ID of the owner whose quizzes are to be retrieved.
    * @param search - Optional search term to filter quizzes by title.
@@ -201,7 +185,7 @@ export class QuizService {
    * @param limit - Maximum number of quizzes to retrieve. Defaults to 10.
    * @param offset - Number of quizzes to skip for pagination. Defaults to 0.
    *
-   * @returns {Promise<PaginatedQuizResponseDto>} A paginated response containing the list of quizzes.
+   * @returns A paginated response containing the list of quizzes.
    *
    * @private
    */
@@ -226,14 +210,15 @@ export class QuizService {
       ...(languageCode ? { languageCode } : {}),
     }
 
-    const total = await this.quizModel.countDocuments(filter)
+    const total = await this.quizRepository.countQuizzes(filter)
 
-    const quizzes = await this.quizModel
-      .find(filter)
-      .sort({ [sortField]: sortOrder })
-      .skip(offset)
-      .limit(limit)
-      .populate('owner')
+    const quizzes = await this.quizRepository.findQuizzes(
+      filter,
+      sortField,
+      sortOrder,
+      limit,
+      offset,
+    )
 
     return {
       results: quizzes.map(QuizService.buildQuizResponseDto),
@@ -246,29 +231,21 @@ export class QuizService {
   /**
    * Updates an existing quiz.
    *
-   * @param {string} quizId - The unique identifier of the quiz.
-   * @param {QuizRequestDto} quizRequest - The updated quiz data.
+   * @param quizId - The unique identifier of the quiz.
+   * @param quizRequest - The updated quiz data.
    *
-   * @returns {Promise<QuizResponseDto>} - The updated quiz's details.
+   * @returns The updated quiz's details.
    *
-   * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
+   * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async updateQuiz(
     quizId: string,
     quizRequest: QuizRequestDto,
   ): Promise<QuizResponseDto> {
-    const updatedQuiz = await this.quizModel.findByIdAndUpdate(
+    const updatedQuiz = await this.quizRepository.updateQuiz(
       quizId,
       QuizService.buildUpdatedQuiz(quizRequest),
-      { new: true },
     )
-
-    if (!updatedQuiz) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
-      throw new QuizNotFoundException(quizId)
-    }
-
-    this.logger.log(`Updated quiz with id '${quizId}.'`)
 
     return QuizService.buildQuizResponseDto(updatedQuiz)
   }
@@ -276,61 +253,28 @@ export class QuizService {
   /**
    * Deletes a quiz by its ID.
    *
-   * @param {string} quizId - The unique identifier of the quiz.
+   * @param quizId - The unique identifier of the quiz.
    *
-   * @returns {Promise<void>} - Confirms successful deletion of the quiz.
+   * @returns Confirms successful deletion of the quiz.
    *
-   * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
+   * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async deleteQuiz(quizId: string): Promise<void> {
-    const deletedQuiz = await this.quizModel.findByIdAndDelete(quizId)
-
-    if (!deletedQuiz) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
-      throw new QuizNotFoundException(quizId)
-    }
-
-    this.logger.log(`Deleted quiz by id '${quizId}'.`)
-
+    await this.quizRepository.deleteQuiz(quizId)
     this.eventEmitter.emit('quiz.deleted', { quizId })
-  }
-
-  /**
-   * Finds a quiz document by its ID or throws an exception if not found.
-   *
-   * @param {string} quizId - The unique identifier of the quiz.
-   *
-   * @returns {Promise<Quiz>} - The found quiz document.
-   *
-   * @throws {QuizNotFoundException} - If no quiz is found with the given ID.
-   */
-  public async findQuizDocumentByIdOrThrow(quizId: string): Promise<Quiz> {
-    const quiz = await this.quizModel.findById(quizId).populate('owner')
-
-    if (!quiz) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
-      throw new QuizNotFoundException(quizId)
-    }
-
-    return quiz
   }
 
   /**
    * Retrieves all questions associated with a given quiz.
    *
-   * @param {string} quizId - The unique identifier of the quiz.
+   * @param quizId - The unique identifier of the quiz.
    *
-   * @returns {Promise<QuestionDto[]>} - A list of all questions associated with the specified quiz.
+   * @returns A list of all questions associated with the specified quiz.
    *
-   * @throws {QuizNotFoundException} - If the quiz with the given ID does not exist.
+   * @throws If the quiz with the given ID does not exist.
    */
   public async findAllQuestion(quizId: string): Promise<QuestionDto[]> {
-    const quiz = await this.quizModel.findById(quizId).populate('owner')
-
-    if (!quiz) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
-      throw new QuizNotFoundException(quizId)
-    }
+    const quiz = await this.quizRepository.findQuizByIdOrThrow(quizId)
 
     return quiz.questions.map((question) =>
       QuizService.buildQuestionDto(quiz.mode, question),
@@ -338,18 +282,15 @@ export class QuizService {
   }
 
   /**
-   * Builds a new quiz document based on the request data and player.
+   * Builds a new quiz document based on the request data and user.
    *
-   * @param {QuizRequestDto} quizRequest - The data for the quiz to be created.
-   * @param {Player} player - The player creating the quiz.
+   * @param quizRequest - The data for the quiz to be created.
+   * @param user - The user creating the quiz.
    *
-   * @returns {Quiz} - The constructed quiz document.
+   * @returns The constructed quiz document.
    * @private
    */
-  private static buildNewQuiz(
-    quizRequest: QuizRequestDto,
-    player: Player,
-  ): Quiz {
+  private static buildNewQuiz(quizRequest: QuizRequestDto, user: User): Quiz {
     const created = new Date()
     return {
       _id: uuidv4(),
@@ -361,7 +302,7 @@ export class QuizService {
       imageCoverURL: quizRequest.imageCoverURL,
       languageCode: quizRequest.languageCode,
       questions: QuizService.buildQuizQuestions(quizRequest),
-      owner: player,
+      owner: user,
       created,
       updated: created,
     }
@@ -370,9 +311,9 @@ export class QuizService {
   /**
    * Builds the data for updating a quiz.
    *
-   * @param {QuizRequestDto} quizRequest - The updated quiz data.
+   * @param quizRequest - The updated quiz data.
    *
-   * @returns {Partial<Quiz>} - The updated quiz data to persist.
+   * @returns The updated quiz data to persist.
    * @private
    */
   private static buildUpdatedQuiz(quizRequest: QuizRequestDto): Partial<Quiz> {
@@ -392,9 +333,9 @@ export class QuizService {
   /**
    * Builds the Mongoose-compatible documents for the questions.
    *
-   * @param {QuizRequestDto} quizRequest - The data for the question.
+   * @param quizRequest - The data for the question.
    *
-   * @returns {QuestionDao} - The constructed question documents.
+   * @returns The constructed question documents.
    * @private
    */
   private static buildQuizQuestions(
@@ -472,10 +413,10 @@ export class QuizService {
   /**
    * Constructs a `QuestionDto` object from a Mongoose `Question` document.
    *
-   * @param {GameMode} mode - The game mode of the quiz.
-   * @param {BaseQuestionDao} question - The Mongoose question document to transform.
+   * @param mode - The game mode of the quiz.
+   * @param question - The Mongoose question document to transform.
    *
-   * @returns {QuestionDto} - The constructed DTO representing the question details.
+   * @returns The constructed DTO representing the question details.
    * @private
    */
   private static buildQuestionDto(
@@ -547,9 +488,9 @@ export class QuizService {
   /**
    * Builds a QuizResponseDto from a Quiz document.
    *
-   * @param {Quiz} quiz - The quiz document.
+   * @param quiz - The quiz document.
    *
-   * @returns {QuizResponseDto} - The constructed response DTO.
+   * @returns The constructed response DTO.
    * @private
    */
   private static buildQuizResponseDto(quiz: Quiz): QuizResponseDto {
@@ -579,7 +520,7 @@ export class QuizService {
       numberOfQuestions: questions.length,
       author: {
         id: owner._id,
-        name: owner.nickname,
+        name: owner.defaultNickname,
       },
       created,
       updated,

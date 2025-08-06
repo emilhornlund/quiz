@@ -1,0 +1,85 @@
+@use './helpers';
+@use './variables';
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter;
+    width: 100%;
+  }
+
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter;
+    width: variables.$mobile-width;
+  }
+
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter;
+    width: variables.$mobile-width;
+  }
+
+  .formField {
+    display: flex;
+    flex-direction: column;
+
+    @include helpers.mobile {
+      row-gap: variables.$mobile-narrow-layout-gutter * 0.5;
+    }
+
+    @include helpers.tablet {
+      row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+    }
+
+    @include helpers.desktop {
+      row-gap: variables.$desktop-narrow-layout-gutter * 0.5;
+    }
+
+    .hint {
+      display: inline;
+
+      @include helpers.mobile {
+        @include helpers.fontSize(variables.$mobile-control-small-font-size);
+      }
+
+      @include helpers.tablet {
+        @include helpers.fontSize(variables.$tablet-control-small-font-size);
+      }
+
+      @include helpers.desktop {
+        @include helpers.fontSize(variables.$desktop-control-small-font-size);
+      }
+
+      .buttonLink {
+        display: inline-flex;
+        -moz-appearance: none;
+        -o-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        font-family: inherit;
+        outline: none;
+        text-decoration: underline;
+        cursor: pointer;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(variables.$mobile-control-small-font-size);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(variables.$tablet-control-small-font-size);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(variables.$desktop-control-small-font-size);
+        }
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

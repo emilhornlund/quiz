@@ -1,26 +1,28 @@
 import { GameParticipantType } from '@quiz/common'
 
-import { GameDocument } from '../models/schemas'
+import { GameDocument } from '../../repositories/models/schemas'
 
 /**
- * Checks whether a player is unique in the list of game participants.
+ * Checks whether a participant is unique in the list of game participants.
  *
- * @param {(Participant & (ParticipantHost | ParticipantPlayer))[]} participants - The list of participants in the game.
- * @param {string} playerId - The unique identifier of the player to be checked.
+ * @param participants - The list of participants in the game.
+ * @param participantId - The unique identifier of the participant to be checked.
  *
- * @returns {boolean} Returns `true` if the player ID does not already exist in the participants list, otherwise `false`.
+ * @returns Returns `true` if the player ID does not already exist in the participants list, otherwise `false`.
  */
 export const isPlayerUnique = (
   participants: GameDocument['participants'],
-  playerId: string,
+  participantId: string,
 ): boolean =>
-  !participants.find((participant) => participant.player._id === playerId)
+  !participants.find(
+    (participant) => participant.participantId === participantId,
+  )
 
 /**
  * Checks whether a nickname is unique among players in the game participants list.
  *
- * @param {(Participant & (ParticipantHost | ParticipantPlayer))[]} participants - The list of participants in the game.
- * @param {string} nickname - The nickname to check for uniqueness.
+ * @param participants - The list of participants in the game.
+ * @param nickname - The nickname to check for uniqueness.
  *
  * @returns {boolean} Returns `true` if the nickname does not already exist among player participants, otherwise `false`.
  */
@@ -31,5 +33,5 @@ export const isNicknameUnique = (
   !participants.find(
     (participant) =>
       participant.type === GameParticipantType.PLAYER &&
-      participant.nickname === nickname,
+      participant.nickname.trim() === nickname.trim(),
   )

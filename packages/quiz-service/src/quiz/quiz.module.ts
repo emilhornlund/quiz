@@ -2,9 +2,10 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { ClientQuizController, QuizController } from './controllers'
+import { ProfileQuizController, QuizController } from './controllers'
+import { QuizRepository } from './repositories'
+import { Quiz, QuizSchema } from './repositories/models/schemas'
 import { QuizService } from './services'
-import { Quiz, QuizSchema } from './services/models/schemas'
 
 @Module({
   imports: [
@@ -16,8 +17,8 @@ import { Quiz, QuizSchema } from './services/models/schemas'
       },
     ]),
   ],
-  controllers: [QuizController, ClientQuizController],
-  providers: [Logger, QuizService],
-  exports: [QuizService],
+  controllers: [QuizController, ProfileQuizController],
+  providers: [Logger, QuizService, QuizRepository],
+  exports: [QuizService, QuizRepository],
 })
 export class QuizModule {}

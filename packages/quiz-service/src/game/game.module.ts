@@ -3,32 +3,28 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { AuthModule } from '../auth'
-import { ClientModule } from '../client'
-import { PlayerModule } from '../player'
 import { QuizModule } from '../quiz'
 
 import {
-  ClientGameController,
   GameController,
+  ProfileGameController,
   QuizGameController,
 } from './controllers'
 import { GameResultController } from './controllers/game-result.controller'
 import { GameListener } from './handlers'
+import { GameRepository, GameResultRepository } from './repositories'
+import { Game, GameSchema } from './repositories/models/schemas'
+import { GameResult, GameResultSchema } from './repositories/models/schemas'
 import {
   GameEventPublisher,
   GameEventSubscriber,
   GameExpirySchedulerService,
-  GameRepository,
-  GameResultRepository,
   GameResultService,
   GameService,
   GameTaskTransitionScheduler,
   GameTaskTransitionService,
   TASK_QUEUE_NAME,
 } from './services'
-import { Game, GameSchema } from './services/models/schemas'
-import { GameResult, GameResultSchema } from './services/models/schemas'
 
 /**
  * GameModule sets up the necessary controllers, providers, and Mongoose schemas
@@ -48,16 +44,13 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
         schema: GameResultSchema,
       },
     ]),
-    AuthModule,
-    PlayerModule,
-    ClientModule,
     QuizModule,
   ],
   controllers: [
     GameController,
     GameResultController,
     QuizGameController,
-    ClientGameController,
+    ProfileGameController,
   ],
   providers: [
     Logger,
@@ -72,5 +65,6 @@ import { GameResult, GameResultSchema } from './services/models/schemas'
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
   ],
+  exports: [GameRepository, GameResultRepository],
 })
 export class GameModule {}

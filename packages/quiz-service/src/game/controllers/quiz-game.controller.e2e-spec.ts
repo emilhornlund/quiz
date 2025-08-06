@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
 import {
   GameMode,
   LanguageCode,
@@ -17,13 +18,14 @@ import {
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
+import { buildMockSecondaryUser } from '../../../test-utils/data'
 import {
   closeTestApp,
+  createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils/bootstrap'
-import { AuthService } from '../../auth/services'
-import { ClientService } from '../../client/services'
+} from '../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
+import { User, UserModel } from '../../user/repositories'
 
 const multiChoiceQuestion: QuestionMultiChoiceDto = {
   type: QuestionType.MultiChoice,
@@ -133,15 +135,13 @@ const zeroToOneHundredQuizRequest: QuizRequestDto = {
 
 describe('QuizGameController (e2e)', () => {
   let app: INestApplication
-  let authService: AuthService
   let quizService: QuizService
-  let clientService: ClientService
+  let userModel: UserModel
 
   beforeEach(async () => {
     app = await createTestApp()
-    authService = app.get(AuthService)
     quizService = app.get(QuizService)
-    clientService = app.get(ClientService)
+    userModel = app.get<UserModel>(getModelToken(User.name))
   })
 
   afterEach(async () => {
@@ -150,20 +150,16 @@ describe('QuizGameController (e2e)', () => {
 
   describe('/api/quizzes/:quizId/games (POST)', () => {
     it('should succeed in creating a new game from an existing classic mode quiz', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const originalQuiz = await quizService.createQuiz(
         classicQuizRequest,
-        client.player,
+        user,
       )
 
       return supertest(app.getHttpServer())
         .post(`/api/quizzes/${originalQuiz.id}/games`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
@@ -171,20 +167,16 @@ describe('QuizGameController (e2e)', () => {
     })
 
     it('should succeed in creating a new game from an existing zero-to-one-hundred mode quiz', async () => {
-      const clientId = uuidv4()
-
-      const client = await clientService.findOrCreateClient(clientId)
-
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
       const originalQuiz = await quizService.createQuiz(
         zeroToOneHundredQuizRequest,
-        client.player,
+        user,
       )
 
       return supertest(app.getHttpServer())
         .post(`/api/quizzes/${originalQuiz.id}/games`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
@@ -192,14 +184,13 @@ describe('QuizGameController (e2e)', () => {
     })
 
     it('should fail in creating a new game from a non existing quiz', async () => {
-      const clientId = uuidv4()
       const quizId = uuidv4()
 
-      const { token } = await authService.authenticate({ clientId })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .post(`/api/quizzes/${quizId}/games`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(404)
         .expect((res) => {
           expect(res.body).toHaveProperty(
@@ -212,17 +203,18 @@ describe('QuizGameController (e2e)', () => {
     })
 
     it('should succeed in creating a new game from public quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
+      const anotherUser = await userModel.create(buildMockSecondaryUser())
+
       const { id } = await quizService.createQuiz(
         { ...classicQuizRequest, visibility: QuizVisibility.Public },
-        client.player,
+        anotherUser,
       )
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .post(`/api/quizzes/${id}/games`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id')
@@ -230,17 +222,18 @@ describe('QuizGameController (e2e)', () => {
     })
 
     it('should fail in creating a new game from a non authorized quiz', async () => {
-      const client = await clientService.findOrCreateClient(uuidv4())
+      const anotherUser = await userModel.create(buildMockSecondaryUser())
+
       const { id } = await quizService.createQuiz(
         { ...classicQuizRequest, visibility: QuizVisibility.Private },
-        client.player,
+        anotherUser,
       )
 
-      const { token } = await authService.authenticate({ clientId: uuidv4() })
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       return supertest(app.getHttpServer())
         .post(`/api/quizzes/${id}/games`)
-        .set({ Authorization: `Bearer ${token}` })
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(403)
         .expect((res) => {
           expect(res.body).toHaveProperty('message', 'Forbidden')

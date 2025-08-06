@@ -1,26 +1,22 @@
 import { GameParticipantType, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Client } from '../../../client/services/models/schemas'
-import { Quiz } from '../../../quiz/services/models/schemas'
-import { Game } from '../models/schemas'
+import { Quiz } from '../../../quiz/repositories/models/schemas'
+import { User } from '../../../user/repositories'
+import { Game } from '../../repositories/models/schemas'
 
 import { buildLobbyTask } from './task.converter'
 
 /**
  * Builds a complete game document from the provided partial game model and other details.
  *
- * @param {Quiz} quiz - The quiz document.
- * @param {string} gamePIN - The unique 6-digit game PIN of the game to create.
- * @param {Client} client - The client object representing the host creating the game.
+ * @param quiz - The quiz document.
+ * @param gamePIN - The unique 6-digit game PIN of the game to create.
+ * @param user - The user object representing the host creating the game.
  *
- * @returns {Game} A fully constructed Game document.
+ * @returns A fully constructed Game document.
  */
-export function buildGameModel(
-  quiz: Quiz,
-  gamePIN: string,
-  client: Client,
-): Game {
+export function buildGameModel(quiz: Quiz, gamePIN: string, user: User): Game {
   const now = Date.now()
 
   return {
@@ -34,8 +30,8 @@ export function buildGameModel(
     nextQuestion: 0,
     participants: [
       {
+        participantId: user._id,
         type: GameParticipantType.HOST,
-        player: client.player,
         created: new Date(now),
         updated: new Date(now),
       },

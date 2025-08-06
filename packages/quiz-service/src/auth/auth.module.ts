@@ -1,17 +1,23 @@
 import { readFileSync } from 'fs'
 
-import { Module } from '@nestjs/common'
+import { HttpModule } from '@nestjs/axios'
+import { forwardRef, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { JwtModule } from '@nestjs/jwt'
+import { MongooseModule } from '@nestjs/mongoose'
 import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../app/config'
-import { ClientModule } from '../client'
+import { GameModule } from '../game'
+import { MigrationModule } from '../migration'
+import { UserModule } from '../user'
 
 import { AuthController } from './controllers'
 import { AuthGuard } from './guards'
-import { AuthService } from './services'
+import { AuthService, GoogleAuthService, TokenRepository } from './services'
+import { Token, TokenSchema } from './services/models/schemas'
 
 @Module({
   imports: [
@@ -45,11 +51,23 @@ import { AuthService } from './services'
         }
       },
     }),
-    ClientModule,
+    MongooseModule.forFeature([
+      {
+        name: Token.name,
+        schema: TokenSchema,
+      },
+    ]),
+    EventEmitterModule,
+    HttpModule,
+    GameModule,
+    forwardRef(() => MigrationModule),
+    forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
+    GoogleAuthService,
+    TokenRepository,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

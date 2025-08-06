@@ -20,7 +20,7 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-} from '../models/schemas'
+} from '../../repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event.converter'
 
@@ -215,7 +215,7 @@ export function toPlayerQuestionPlayerEventMetaData(
 ): Partial<GameEventMetaData> {
   return {
     hasPlayerAnswerSubmission: !!answers?.find(
-      (answer) => answer.playerId === participant.player._id,
+      (answer) => answer.playerId === participant.participantId,
     ),
   }
 }

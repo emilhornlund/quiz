@@ -1,35 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { AuthResponseDto } from '@quiz/common'
 
-import { AuthClientResponse } from './auth-client.response'
-import { AuthPlayerResponse } from './auth-player.response'
-
 /**
- * Response object for client authentication.
+ * Response object for successful login.
  */
 export class AuthResponse implements AuthResponseDto {
   /**
-   * JWT token generated for the authenticated client.
-   * - Format: Bearer token
+   * JWT access token for use in protected requests.
    */
   @ApiProperty({
-    title: 'Token',
-    description: 'JWT token issued to the client for authenticated requests.',
+    title: 'Access Token',
+    description: 'Short-lived JWT for API authentication.',
     type: String,
     format: 'bearer',
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
   })
-  token: string
+  readonly accessToken: string
 
   /**
-   * Response object for client authentication.
+   * JWT refresh token to obtain new access tokens.
    */
-  @ApiProperty()
-  client: AuthClientResponse
-
-  /**
-   * Response object for player authentication.
-   */
-  @ApiProperty()
-  player: AuthPlayerResponse
+  @ApiProperty({
+    title: 'Refresh Token',
+    description: 'Long-lived JWT used to refresh the access token.',
+    type: String,
+    format: 'bearer',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
+  readonly refreshToken: string
 }
