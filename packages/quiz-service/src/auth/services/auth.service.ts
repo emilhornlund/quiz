@@ -90,10 +90,18 @@ export class AuthService {
     )
 
     if (migrationToken) {
-      await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
-        migrationToken,
-        userId,
-      )
+      try {
+        await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
+          migrationToken,
+          userId,
+        )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.debug(
+          `Failed to migrate legacy user '${userId}' while authenticate local user: '${message}'.`,
+          stack,
+        )
+      }
     }
 
     const tokenPair = await this.signTokenPair(

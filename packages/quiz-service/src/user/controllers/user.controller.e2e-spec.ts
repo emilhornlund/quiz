@@ -181,7 +181,7 @@ describe('UserController (e2e)', () => {
         })
     })
 
-    it('should return 404 not found when creating a new user from a legacy player user that does not exist', async () => {
+    it('should succeed in creating a new user from a legacy player user that does not exist', async () => {
       return supertest(app.getHttpServer())
         .post(`/api/users`)
         .query({ migrationToken: 'n/a' })
@@ -192,12 +192,17 @@ describe('UserController (e2e)', () => {
           familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
           defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
         })
-        .expect(404)
+        .expect(201)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: 'User was not found by migration token',
-            status: 404,
-            timestamp: expect.any(String),
+            id: expect.any(String),
+            email: MOCK_PRIMARY_USER_EMAIL,
+            unverifiedEmail: MOCK_PRIMARY_USER_EMAIL,
+            givenName: MOCK_PRIMARY_USER_GIVEN_NAME,
+            familyName: MOCK_PRIMARY_USER_FAMILY_NAME,
+            defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
+            created: expect.any(String),
+            updated: expect.any(String),
           })
         })
     })
