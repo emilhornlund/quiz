@@ -127,12 +127,21 @@ export class UserService {
 
     let createdUser: LocalUser
     if (migrationToken) {
-      createdUser =
-        await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
-          migrationToken,
-          null,
-          { ...details, authProvider: AuthProvider.Local },
+      try {
+        createdUser =
+          await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
+            migrationToken,
+            null,
+            { ...details, authProvider: AuthProvider.Local },
+          )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.debug(
+          `Failed to migrate legacy user while creating local user: '${message}'.`,
+          stack,
         )
+        createdUser = await this.userRepository.createLocalUser(details)
+      }
     } else {
       createdUser = await this.userRepository.createLocalUser(details)
     }
@@ -185,10 +194,19 @@ export class UserService {
 
     if (existingUser) {
       if (migrationToken) {
-        return this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-          migrationToken,
-          existingUser._id,
-        )
+        try {
+          return this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
+            migrationToken,
+            existingUser._id,
+          )
+        } catch (error) {
+          const { message, stack } = error as Error
+          this.logger.debug(
+            `Failed to migrate legacy user while authenticating google user: '${message}'.`,
+            stack,
+          )
+          return existingUser
+        }
       }
       return existingUser
     }
@@ -207,15 +225,24 @@ export class UserService {
 
     let createdUser: GoogleUser
     if (migrationToken) {
-      createdUser =
-        await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-          migrationToken,
-          null,
-          {
-            ...details,
-            authProvider: AuthProvider.Google,
-          },
+      try {
+        createdUser =
+          await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
+            migrationToken,
+            null,
+            {
+              ...details,
+              authProvider: AuthProvider.Google,
+            },
+          )
+      } catch (error) {
+        const { message, stack } = error as Error
+        this.logger.debug(
+          `Failed to migrate legacy user while creating google user: '${message}'.`,
+          stack,
         )
+        createdUser = await this.userRepository.createGoogleUser(details)
+      }
     } else {
       createdUser = await this.userRepository.createGoogleUser(details)
     }

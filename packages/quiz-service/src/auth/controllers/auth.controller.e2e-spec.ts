@@ -231,8 +231,8 @@ describe('AuthController (e2e)', () => {
       )
     })
 
-    it('should return 404 not found when authenticating a legacy player user that does not exist', async () => {
-      await userModel.create(buildMockPrimaryUser())
+    it('should succeed in authenticating a legacy player user that does not exist', async () => {
+      const { _id: userId } = await userModel.create(buildMockPrimaryUser())
 
       return supertest(app.getHttpServer())
         .post('/api/auth/login')
@@ -242,13 +242,9 @@ describe('AuthController (e2e)', () => {
           email: MOCK_PRIMARY_USER_EMAIL,
           password: MOCK_PRIMARY_PASSWORD,
         })
-        .expect(404)
+        .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'User was not found by migration token',
-            status: 404,
-            timestamp: expect.any(String),
-          })
+          expectUserTokenPair(userId, res)
         })
     })
   })
@@ -439,7 +435,7 @@ describe('AuthController (e2e)', () => {
       )
     })
 
-    it('should return 404 not found when authenticating a legacy player user that does not exist as a new google user', async () => {
+    it('should successfully authenticate a legacy player user that does not exist as a new google user', async () => {
       return supertest(app.getHttpServer())
         .post('/api/auth/google/exchange')
         .query({ migrationToken: 'n/a' })
@@ -448,13 +444,9 @@ describe('AuthController (e2e)', () => {
           code: MOCK_GOOGLE_VALID_CODE,
           codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
         })
-        .expect(404)
+        .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'User was not found by migration token',
-            status: 404,
-            timestamp: expect.any(String),
-          })
+          expectUserTokenPair(null, res)
         })
     })
 
@@ -1147,7 +1139,7 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  function expectUserTokenPair(userId: string, response: Response) {
+  function expectUserTokenPair(userId: string | null, response: Response) {
     expect(response.body).toEqual({
       accessToken: expect.any(String),
       refreshToken: expect.any(String),
@@ -1157,7 +1149,7 @@ describe('AuthController (e2e)', () => {
       response.body.accessToken,
     )
     expect(accessTokenDto.jti).toEqual(expect.any(String))
-    expect(accessTokenDto.sub).toEqual(userId)
+    expect(accessTokenDto.sub).toEqual(userId || expect.any(String))
     expect(accessTokenDto.scope).toEqual(TokenScope.User)
     expect(accessTokenDto.authorities).toEqual(DEFAULT_USER_AUTHORITIES)
 
@@ -1165,7 +1157,7 @@ describe('AuthController (e2e)', () => {
       response.body.refreshToken,
     )
     expect(refreshTokenDto.jti).toEqual(expect.any(String))
-    expect(refreshTokenDto.sub).toEqual(userId)
+    expect(refreshTokenDto.sub).toEqual(userId || expect.any(String))
     expect(refreshTokenDto.scope).toEqual(TokenScope.User)
     expect(refreshTokenDto.authorities).toEqual(DEFAULT_REFRESH_AUTHORITIES)
   }
