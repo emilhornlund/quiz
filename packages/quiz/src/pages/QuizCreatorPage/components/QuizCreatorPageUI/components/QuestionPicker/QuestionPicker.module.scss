@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../../../../styles/colors';
 @use '../../../../../../styles/helpers';
 @use '../../../../../../styles/variables';
@@ -58,6 +59,10 @@ $outline-offset: helpers.pxToRem(2px);
     flex-direction: column;
 
     .addQuestionButton {
+      -moz-appearance: none;
+      -o-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -80,6 +85,11 @@ $outline-offset: helpers.pxToRem(2px);
 
       @include helpers.desktop {
         @include helpers.fontSize(32px);
+      }
+
+      &:hover {
+        color: color.mix(colors.$white, colors.$yellow-2, 30%);
+        outline-color: color.mix(colors.$white, colors.$yellow-2, 30%);
       }
     }
   }

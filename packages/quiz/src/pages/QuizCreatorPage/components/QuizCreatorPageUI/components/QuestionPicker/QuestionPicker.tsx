@@ -101,7 +101,7 @@ const QuestionPicker: FC<QuestionPickerProps> = ({
         <button
           className={styles.addQuestionButton}
           onClick={handleAddItemButtonClick}>
-          <FontAwesomeIcon icon={faPlusCircle} />
+          <FontAwesomeIcon icon={faPlusCircle} widthAuto />
         </button>
       </div>
       <ConfirmDialog

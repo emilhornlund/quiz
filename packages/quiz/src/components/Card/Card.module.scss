@@ -138,6 +138,12 @@
   }
 
   button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -moz-appearance: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
     appearance: none;
     outline: none;
     border: none;
