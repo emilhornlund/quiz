@@ -311,7 +311,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-circle-plus "
+                class="svg-inline--fa fa-circle-plus fa-width-auto "
                 data-icon="circle-plus"
                 data-prefix="fas"
                 role="img"
