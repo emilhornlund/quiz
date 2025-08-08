@@ -101,6 +101,7 @@ export const Default = {
         updated: new Date(),
       },
     ],
+    filter: {},
     pagination: { total: 10, limit: 5, offset: 0 },
     isLoading: false,
     isError: false,

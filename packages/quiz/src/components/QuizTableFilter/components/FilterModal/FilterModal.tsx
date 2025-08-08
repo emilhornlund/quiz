@@ -4,20 +4,23 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
   GameModeLabels,
   LanguageLabels,
   QuizCategoryLabels,
   QuizVisibilityLabels,
-} from '../../../../models/labels.ts'
+} from '../../../../models'
 import { classNames } from '../../../../utils/helpers.ts'
 import Button from '../../../Button'
 import Modal from '../../../Modal'
 import Select from '../../../Select'
 
 import styles from './FilterModal.module.scss'
+
+const ALL_KEY = 'all'
+const ALL_VALUE = 'All'
 
 export interface FilterOptions {
   visibility?: QuizVisibility
@@ -28,7 +31,8 @@ export interface FilterOptions {
   order?: 'asc' | 'desc'
 }
 
-export interface FilterModalProps extends FilterOptions {
+export interface FilterModalProps {
+  filter: FilterOptions
   showVisibilityFilter: boolean
   open: boolean
   onClose: () => void
@@ -36,24 +40,18 @@ export interface FilterModalProps extends FilterOptions {
 }
 
 const FilterModal: FC<FilterModalProps> = ({
-  visibility,
-  languageCode,
-  mode,
-  sort,
-  order,
+  filter,
   showVisibilityFilter,
   open,
   onClose,
   onApply,
 }) => {
   const [internalFilterOptions, setInternalFilterOptions] =
-    useState<FilterOptions>({
-      visibility,
-      languageCode,
-      mode,
-      sort,
-      order,
-    })
+    useState<FilterOptions>(filter)
+
+  useEffect(() => {
+    setInternalFilterOptions(filter)
+  }, [filter])
 
   const handleFilterOptionChange = <K extends keyof FilterOptions>(
     key: K,
@@ -79,18 +77,18 @@ const FilterModal: FC<FilterModalProps> = ({
             id="category-select"
             kind="secondary"
             values={[
-              { key: 'none', value: 'none', valueLabel: 'None' },
+              { key: ALL_KEY, value: ALL_KEY, valueLabel: ALL_VALUE },
               ...Object.values(QuizCategory).map((category) => ({
                 key: category,
                 value: category,
                 valueLabel: QuizCategoryLabels[category],
               })),
             ]}
-            value={internalFilterOptions.category || 'none'}
+            value={internalFilterOptions.category || ALL_KEY}
             onChange={(value) =>
               handleFilterOptionChange(
                 'category',
-                value === 'none' ? undefined : (value as QuizCategory),
+                value === ALL_KEY ? undefined : (value as QuizCategory),
               )
             }
           />
@@ -102,18 +100,18 @@ const FilterModal: FC<FilterModalProps> = ({
               id="visibility-select"
               kind="secondary"
               values={[
-                { key: 'none', value: 'none', valueLabel: 'None' },
+                { key: ALL_KEY, value: ALL_KEY, valueLabel: ALL_VALUE },
                 ...Object.values(QuizVisibility).map((visibility) => ({
                   key: visibility,
                   value: visibility,
                   valueLabel: QuizVisibilityLabels[visibility],
                 })),
               ]}
-              value={internalFilterOptions.visibility || 'none'}
+              value={internalFilterOptions.visibility || ALL_KEY}
               onChange={(value) =>
                 handleFilterOptionChange(
                   'visibility',
-                  value === 'none' ? undefined : (value as QuizVisibility),
+                  value === ALL_KEY ? undefined : (value as QuizVisibility),
                 )
               }
             />
@@ -125,18 +123,18 @@ const FilterModal: FC<FilterModalProps> = ({
             id="language-select"
             kind="secondary"
             values={[
-              { key: 'none', value: 'none', valueLabel: 'None' },
+              { key: ALL_KEY, value: ALL_KEY, valueLabel: ALL_VALUE },
               ...Object.values(LanguageCode).map((languageCode) => ({
                 key: languageCode,
                 value: languageCode,
                 valueLabel: LanguageLabels[languageCode],
               })),
             ]}
-            value={internalFilterOptions.languageCode || 'none'}
+            value={internalFilterOptions.languageCode || ALL_KEY}
             onChange={(value) =>
               handleFilterOptionChange(
                 'languageCode',
-                value === 'none' ? undefined : (value as LanguageCode),
+                value === ALL_KEY ? undefined : (value as LanguageCode),
               )
             }
           />
@@ -147,18 +145,18 @@ const FilterModal: FC<FilterModalProps> = ({
             id="game-mode-select"
             kind="secondary"
             values={[
-              { key: 'none', value: 'none', valueLabel: 'None' },
+              { key: ALL_KEY, value: ALL_KEY, valueLabel: ALL_VALUE },
               ...Object.values(GameMode).map((gameMode) => ({
                 key: gameMode,
                 value: gameMode,
                 valueLabel: GameModeLabels[gameMode],
               })),
             ]}
-            value={internalFilterOptions.mode || 'none'}
+            value={internalFilterOptions.mode || ALL_KEY}
             onChange={(value) =>
               handleFilterOptionChange(
                 'mode',
-                value === 'none' ? undefined : (value as GameMode),
+                value === ALL_KEY ? undefined : (value as GameMode),
               )
             }
           />

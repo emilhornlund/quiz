@@ -7,7 +7,11 @@ import QuizTableFilter from './QuizTableFilter'
 describe('QuizTableFilter', () => {
   it('should render QuizTableFilter', async () => {
     const { container } = render(
-      <QuizTableFilter onChange={() => undefined} showVisibilityFilter />,
+      <QuizTableFilter
+        filter={{}}
+        onChange={() => undefined}
+        showVisibilityFilter
+      />,
     )
 
     expect(container).toMatchSnapshot()

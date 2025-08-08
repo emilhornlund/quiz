@@ -58,9 +58,9 @@ exports[`FilterModal > should render FilterModal 1`] = `
                   name="category-select"
                 >
                   <option
-                    value="none"
+                    value="all"
                   >
-                    None
+                    All
                   </option>
                   <option
                     value="GENERAL_KNOWLEDGE"
@@ -205,9 +205,9 @@ exports[`FilterModal > should render FilterModal 1`] = `
                   name="visibility-select"
                 >
                   <option
-                    value="none"
+                    value="all"
                   >
-                    None
+                    All
                   </option>
                   <option
                     value="PUBLIC"
@@ -257,9 +257,9 @@ exports[`FilterModal > should render FilterModal 1`] = `
                   name="language-select"
                 >
                   <option
-                    value="none"
+                    value="all"
                   >
-                    None
+                    All
                   </option>
                   <option
                     value="ab"
@@ -1214,9 +1214,9 @@ exports[`FilterModal > should render FilterModal 1`] = `
                   name="game-mode-select"
                 >
                   <option
-                    value="none"
+                    value="all"
                   >
-                    None
+                    All
                   </option>
                   <option
                     value="CLASSIC"

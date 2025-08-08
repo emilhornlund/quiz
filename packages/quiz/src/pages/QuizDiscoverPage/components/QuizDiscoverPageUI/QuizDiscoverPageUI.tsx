@@ -15,7 +15,20 @@ import {
 } from '../../../../components'
 import QuizTableFilter from '../../../../components/QuizTableFilter'
 
+export interface QuizDiscoverPageUISearchParams {
+  search?: string
+  visibility?: QuizVisibility
+  category?: QuizCategory
+  languageCode?: LanguageCode
+  mode?: GameMode
+  sort?: 'title' | 'created' | 'updated'
+  order?: 'asc' | 'desc'
+  limit?: number
+  offset?: number
+}
+
 export interface QuizDiscoverPageUIProps {
+  filter: QuizDiscoverPageUISearchParams
   results: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
   isLoading: boolean
@@ -34,6 +47,7 @@ export interface QuizDiscoverPageUIProps {
 }
 
 const QuizDiscoverPageUI: FC<QuizDiscoverPageUIProps> = ({
+  filter,
   results,
   pagination,
   isLoading,
@@ -47,6 +61,7 @@ const QuizDiscoverPageUI: FC<QuizDiscoverPageUIProps> = ({
       the perfect quiz to host and share the fun!
     </Typography>
     <QuizTableFilter
+      filter={filter}
       onChange={(options) => onChangeSearchParams({ ...options, offset: 0 })}
     />
     {!isLoading && !isError && results ? (

@@ -40,27 +40,29 @@ const ResultChip: FC<ResultChipProps> = ({
     <span>
       <FontAwesomeIcon icon={faUserGroup} /> {count}
     </span>
-    <button
-      className={classNames(
-        styles.buttonOverlay,
-        loading ? styles.loading : undefined,
-      )}
-      disabled={loading}
-      onClick={onClick}>
-      {!loading && !correct && (
-        <FontAwesomeIcon icon={faCircleCheck} className={styles.icon} />
-      )}
-      {!loading && correct && (
-        <FontAwesomeIcon icon={faCircleXmark} className={styles.icon} />
-      )}
-      {loading && (
-        <div className={styles.loadingSpinner}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      )}
-    </button>
+    {onClick && (
+      <button
+        className={classNames(
+          styles.buttonOverlay,
+          loading ? styles.loading : undefined,
+        )}
+        disabled={loading}
+        onClick={onClick}>
+        {!loading && !correct && (
+          <FontAwesomeIcon icon={faCircleCheck} className={styles.icon} />
+        )}
+        {!loading && correct && (
+          <FontAwesomeIcon icon={faCircleXmark} className={styles.icon} />
+        )}
+        {loading && (
+          <div className={styles.loadingSpinner}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
+      </button>
+    )}
   </div>
 )
 
@@ -111,12 +113,6 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
-              onClick={() =>
-                processCorrectAnswer({
-                  type: QuestionType.TrueFalse,
-                  value: value as boolean,
-                })
-              }
             />
           )
         case QuestionType.Range:
@@ -127,12 +123,6 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
-              onClick={() =>
-                processCorrectAnswer({
-                  type: QuestionType.Range,
-                  value: value as number,
-                })
-              }
             />
           )
         case QuestionType.TypeAnswer:

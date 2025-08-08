@@ -94,6 +94,7 @@ describe('QuizDiscoverPageUI', () => {
               updated,
             },
           ]}
+          filter={{}}
           pagination={{ total: 10, limit: 5, offset: 0 }}
           isLoading={false}
           isError={false}

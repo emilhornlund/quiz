@@ -7,6 +7,7 @@ import {
   IconButtonArrowRight,
   NicknameChip,
 } from '../../components'
+import config from '../../config'
 import { useGameContext } from '../../context/game'
 import { classNames, extractUrl } from '../../utils/helpers.ts'
 import GamePage from '../common/GamePage'
@@ -72,7 +73,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
           <div className={classNames(styles.box, styles.info)}>
             Join at{' '}
             <strong>
-              {extractUrl(window.location.href, { omitProtocol: true })}
+              {extractUrl(config.baseUrl, { omitProtocol: true })}
             </strong>
           </div>
           <div className={classNames(styles.box, styles.pin)}>
@@ -80,9 +81,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
             <div>{pin}</div>
           </div>
           <div className={classNames(styles.box, styles.qr)}>
-            <QRCode
-              value={`${extractUrl(window.location.href)}/auth/game?id=${id}`}
-            />
+            <QRCode value={`${config.baseUrl}/auth/game?id=${id}`} />
           </div>
         </div>
         <div className={styles.content}>
