@@ -5,7 +5,7 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, FormEvent, useState } from 'react'
+import React, { FC, FormEvent, useEffect, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'
@@ -25,18 +25,21 @@ export interface FilterOptions {
 }
 
 export interface QuizTableFilterProps {
+  filter: FilterOptions
   showVisibilityFilter?: boolean
   onChange?: (options: FilterOptions) => void
 }
 
 const QuizTableFilter: FC<QuizTableFilterProps> = ({
+  filter,
   showVisibilityFilter = false,
   onChange,
 }) => {
-  const [internalFilter, setInternalFilter] = useState<FilterOptions>({
-    sort: 'created',
-    order: 'desc',
-  })
+  const [internalFilter, setInternalFilter] = useState<FilterOptions>(filter)
+
+  useEffect(() => {
+    setInternalFilter(filter)
+  }, [filter])
 
   const [showFilterModal, setShowFilterModal] = useState(false)
 
@@ -95,7 +98,7 @@ const QuizTableFilter: FC<QuizTableFilterProps> = ({
         </form>
       </div>
       <FilterModal
-        {...internalFilter}
+        filter={internalFilter}
         showVisibilityFilter={showVisibilityFilter}
         open={showFilterModal}
         onClose={() => setShowFilterModal(false)}

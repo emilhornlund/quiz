@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { QuestionType } from '@quiz/common'
 import React, { DragEvent, FC, MouseEvent } from 'react'
 
-import { QuestionTypeLabels } from '../../../../../../../../models/labels.ts'
+import { QuestionTypeLabels } from '../../../../../../../../models'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
 
 import styles from './QuestionPickerItem.module.scss'
@@ -72,7 +72,9 @@ const QuestionPickerItem: FC<QuestionPickerItemProps> = ({
           styles.questionPickerItemButton,
           active ? styles.questionPickerItemActive : undefined,
         )}>
-        <div className={styles.questionPickerItemText}>{text}</div>
+        <div className={styles.questionPickerItemText}>
+          <span>{text}</span>
+        </div>
         <div className={styles.questionPickerItemType}>
           {QuestionTypeLabels[type]}
         </div>

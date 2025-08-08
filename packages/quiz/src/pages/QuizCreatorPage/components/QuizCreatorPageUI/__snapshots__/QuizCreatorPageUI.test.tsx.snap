@@ -134,7 +134,9 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                 <div
                   class="questionPickerItemText"
                 >
-                  Who painted The Starry Night?
+                  <span>
+                    Who painted The Starry Night?
+                  </span>
                 </div>
                 <div
                   class="questionPickerItemType"
@@ -205,7 +207,9 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                 <div
                   class="questionPickerItemText"
                 >
-                  What percentage of the earth's surface is covered by water?
+                  <span>
+                    What percentage of the earth's surface is covered by water?
+                  </span>
                 </div>
                 <div
                   class="questionPickerItemType"
@@ -241,7 +245,9 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                 <div
                   class="questionPickerItemText"
                 >
-                  Rabbits can't vomit?
+                  <span>
+                    Rabbits can't vomit?
+                  </span>
                 </div>
                 <div
                   class="questionPickerItemType"
@@ -277,7 +283,9 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                 <div
                   class="questionPickerItemText"
                 >
-                  Who painted the Mono Lisa?
+                  <span>
+                    Who painted the Mono Lisa?
+                  </span>
                 </div>
                 <div
                   class="questionPickerItemType"

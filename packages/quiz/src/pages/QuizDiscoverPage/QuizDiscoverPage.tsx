@@ -1,33 +1,20 @@
-import {
-  DEFAULT_QUIZ_PAGINATION_LIMIT,
-  GameMode,
-  LanguageCode,
-  QuizCategory,
-} from '@quiz/common'
+import { DEFAULT_QUIZ_PAGINATION_LIMIT } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions.tsx'
 
 import QuizDiscoverPageUI from './components/QuizDiscoverPageUI'
 
 const QuizDiscoverPage: FC = () => {
   const { getPublicQuizzes } = useQuizServiceClient()
 
-  const [searchParams, setSearchParams] = useState<{
-    search?: string
-    category?: QuizCategory
-    languageCode?: LanguageCode
-    mode?: GameMode
-    sort?: 'title' | 'created' | 'updated'
-    order?: 'asc' | 'desc'
-    limit: number
-    offset: number
-  }>({ limit: DEFAULT_QUIZ_PAGINATION_LIMIT, offset: 0 })
+  const { options, setOptions } = useQuizzesSearchOptions()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['publicQuizzes', searchParams],
-    queryFn: () => getPublicQuizzes(searchParams),
+    queryKey: ['publicQuizzes', options],
+    queryFn: () => getPublicQuizzes(options),
   })
 
   return (
@@ -38,11 +25,10 @@ const QuizDiscoverPage: FC = () => {
         limit: data?.limit ?? DEFAULT_QUIZ_PAGINATION_LIMIT,
         offset: data?.offset ?? 0,
       }}
+      filter={options}
       isLoading={isLoading}
       isError={isError}
-      onChangeSearchParams={(params) =>
-        setSearchParams({ ...searchParams, ...params })
-      }
+      onChangeSearchParams={setOptions}
     />
   )
 }

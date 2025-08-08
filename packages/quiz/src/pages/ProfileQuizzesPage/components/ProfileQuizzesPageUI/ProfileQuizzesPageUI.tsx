@@ -32,6 +32,7 @@ export interface ProfileQuizzesPageUISearchParams {
 export interface ProfileQuizzesPageUIProps {
   quizzes: QuizResponseDto[]
   pagination: { total: number; limit: number; offset: number }
+  filter: ProfileQuizzesPageUISearchParams
   isLoading: boolean
   isError: boolean
   onChangeSearchParams: (params: ProfileQuizzesPageUISearchParams) => void
@@ -41,6 +42,7 @@ export interface ProfileQuizzesPageUIProps {
 const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
   quizzes,
   pagination,
+  filter,
   isLoading,
   isError,
   onChangeSearchParams,
@@ -85,6 +87,7 @@ const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
       />
       {(!!quizzes.length || hasSearchFilter) && (
         <QuizTableFilter
+          filter={filter}
           onChange={handleSearchFilterChange}
           showVisibilityFilter
         />

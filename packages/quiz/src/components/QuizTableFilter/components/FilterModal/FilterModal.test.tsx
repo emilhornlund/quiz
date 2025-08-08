@@ -14,12 +14,14 @@ describe('FilterModal', () => {
   it('should render FilterModal', async () => {
     const { container } = render(
       <FilterModal
-        visibility={QuizVisibility.Public}
-        category={QuizCategory.GeneralKnowledge}
-        languageCode={LanguageCode.English}
-        mode={GameMode.Classic}
-        sort="created"
-        order="desc"
+        filter={{
+          visibility: QuizVisibility.Public,
+          category: QuizCategory.GeneralKnowledge,
+          languageCode: LanguageCode.English,
+          mode: GameMode.Classic,
+          sort: 'created',
+          order: 'desc',
+        }}
         onClose={() => undefined}
         onApply={() => undefined}
         showVisibilityFilter
