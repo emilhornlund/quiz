@@ -34,7 +34,7 @@ export interface MigrationContextProviderProps {
 const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
   children,
 }) => {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [client, , clearClient] = useLocalStorage<{ id: string } | undefined>(
     'client',
@@ -69,6 +69,8 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
       if (!migrated) {
         if (migrationTokenSearchParam) {
           newMigrationToken = migrationTokenSearchParam
+          searchParams.delete('migrationToken')
+          setSearchParams(searchParams)
           notifySuccess(
             'Yay, migration is in hand! Are you set for more brain-busting quizzes?',
           )
@@ -105,6 +107,8 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
     migrated,
     migrationTokenSearchParam,
     setMigrationToken,
+    searchParams,
+    setSearchParams,
   ])
 
   const handleCompleteMigration: () => void = useCallback((): void => {
