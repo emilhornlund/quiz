@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { useAuthContext } from '../../context/auth'
-import useLocalStorage from '../../utils/use-local-storage.tsx'
 
 import { LegacyInfoCardUI } from './components'
 
