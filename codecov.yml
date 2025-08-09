@@ -4,6 +4,12 @@ comment:
   require_changes: true
 
 component_management:
+  default_rules:
+    statuses:
+      - type: project
+        informational: true
+      - type: patch
+        informational: true
   individual_components:
     - component_id: quiz
       name: quiz
