@@ -7,10 +7,10 @@ import React, {
   useRef,
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { notifySuccess } from '../../utils/notification.ts'
 import { sha256 } from '../../utils/oauth.ts'
-import useLocalStorage from '../../utils/use-local-storage.tsx'
 
 import { MigrationContext, MigrationContextType } from './migration-context.tsx'
 

@@ -29,11 +29,11 @@ import {
   UserProfileResponseDto,
 } from '@quiz/common'
 import { useCallback } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { useAuthContext } from '../context/auth'
 import { useMigrationContext } from '../context/migration'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
-import useLocalStorage from '../utils/use-local-storage.tsx'
 
 import {
   ApiPostBody,
