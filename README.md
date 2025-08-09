@@ -1,3 +1,5 @@
+<img src="https://github.com/emilhornlund/quiz/blob/main/.github/screenshot.png" alt="klurigo banner" align="center" />
+
 # Klurigo – formerly “Quiz”
 
 [![Main](https://github.com/emilhornlund/quiz/actions/workflows/main.yml/badge.svg)](https://github.com/emilhornlund/quiz/actions/workflows/main.yml)
