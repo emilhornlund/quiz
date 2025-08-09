@@ -8,14 +8,15 @@ import { AuthRegisterPageUI, CreateUserFormFields } from './components'
 const AuthRegisterPage: FC = () => {
   const navigate = useNavigate()
 
-  const { register } = useQuizServiceClient()
+  const { login, register } = useQuizServiceClient()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleSubmit = (values: CreateUserFormFields) => {
     setIsLoading(true)
     register(values)
-      .then(() => navigate('/auth/login'))
+      .then(() => login({ email: values.email, password: values.password }))
+      .then(() => navigate('/'))
       .finally(() => setIsLoading(false))
   }
 
