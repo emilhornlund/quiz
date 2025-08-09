@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AuthContextProvider > clears per-scope auth with revokeUser/revokeGame (calls API, navigates, updates storage) 1`] = `<div />`;
+
+exports[`AuthContextProvider > initializes from localStorage on first render (no flicker) 1`] = `<div />`;
+
+exports[`AuthContextProvider > removes storage entry when both scopes are cleared 1`] = `<div />`;
+
+exports[`AuthContextProvider > removes storage when the last remaining scope is cleared 1`] = `<div />`;
+
+exports[`AuthContextProvider > setTokenPair(Game) decodes game fields and persists to localStorage 1`] = `<div />`;
+
+exports[`AuthContextProvider > setTokenPair(User) decodes tokens and persists to localStorage 1`] = `<div />`;
+
+exports[`AuthContextProvider > starts unauthenticated when localStorage is empty 1`] = `<div />`;

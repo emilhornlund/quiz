@@ -47,7 +47,8 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
    */
   const shouldRedirect = useMemo(() => {
     const isAllowed =
-      scope === TokenScope.Game ? isGameAuthenticated : isUserAuthenticated
+      (scope === TokenScope.Game && isGameAuthenticated) ||
+      (scope === TokenScope.User && isUserAuthenticated)
     return authenticated ? !isAllowed : isAllowed
   }, [scope, authenticated, isUserAuthenticated, isGameAuthenticated])
 

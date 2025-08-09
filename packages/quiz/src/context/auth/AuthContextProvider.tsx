@@ -17,6 +17,23 @@ import { AUTH_LOCAL_STORAGE_KEY } from '../../utils/constants.ts'
 import { AuthContext, AuthContextType } from './auth-context.tsx'
 
 /**
+ * Reads and parses the initial authentication state from localStorage.
+ *
+ * @returns The parsed `AuthState` if available, otherwise an empty state
+ *          with both `USER` and `GAME` set to `undefined`.
+ */
+function readInitialAuthState(): AuthState {
+  try {
+    const json = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
+    return json
+      ? (JSON.parse(json) as AuthState)
+      : { USER: undefined, GAME: undefined }
+  } catch {
+    return { USER: undefined, GAME: undefined }
+  }
+}
+
+/**
  * Props for the `AuthContextProvider` component.
  *
  * @property children - The child components to be wrapped by the provider.
@@ -49,10 +66,9 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   /**
    * In-memory store of decoded token payloads per TokenScope and TokenType.
    */
-  const [authState, setAuthState] = useState<AuthState>({
-    USER: undefined,
-    GAME: undefined,
-  })
+  const [authState, setAuthState] = useState<AuthState>(() =>
+    readInitialAuthState(),
+  )
 
   /**
    * `true` if there is a valid token pair in the User scope.
@@ -63,17 +79,6 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * `true` if there is a valid token pair in the Game scope.
    */
   const isGameAuthenticated = useMemo(() => !!authState.GAME, [authState])
-
-  /**
-   * On mount, hydrates authState from localStorage if data exists.
-   */
-  useEffect(() => {
-    const jsonString = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
-    if (jsonString) {
-      const newAuthState = JSON.parse(jsonString) as AuthState
-      setAuthState(newAuthState)
-    }
-  }, [])
 
   /**
    * Persists authState to localStorage whenever it changes.
