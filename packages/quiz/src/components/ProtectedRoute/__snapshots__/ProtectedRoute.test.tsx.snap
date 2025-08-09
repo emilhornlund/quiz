@@ -1,0 +1,49 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProtectedRoute > redirects for guest-only route when User IS authenticated (authenticated=false) 1`] = `
+<div>
+  <div>
+    Home
+  </div>
+</div>
+`;
+
+exports[`ProtectedRoute > redirects to "/" when User scope is not authenticated (default authenticated=true) 1`] = `
+<div>
+  <div>
+    Home
+  </div>
+</div>
+`;
+
+exports[`ProtectedRoute > redirects when Game scope is NOT authenticated 1`] = `
+<div>
+  <div>
+    Home
+  </div>
+</div>
+`;
+
+exports[`ProtectedRoute > renders children for guest-only route when User is NOT authenticated (authenticated=false) 1`] = `
+<div>
+  <div>
+    Guest Only
+  </div>
+</div>
+`;
+
+exports[`ProtectedRoute > renders children when Game scope is authenticated 1`] = `
+<div>
+  <div>
+    Protected Game
+  </div>
+</div>
+`;
+
+exports[`ProtectedRoute > renders children when User scope is authenticated (default props) 1`] = `
+<div>
+  <div>
+    Protected User
+  </div>
+</div>
+`;
