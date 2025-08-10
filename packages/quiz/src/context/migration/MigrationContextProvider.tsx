@@ -9,8 +9,10 @@ import React, {
 import { useSearchParams } from 'react-router-dom'
 import { useLocalStorage } from 'usehooks-ts'
 
+import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { notifySuccess } from '../../utils/notification.ts'
 import { sha256 } from '../../utils/oauth.ts'
+import { useAuthContext } from '../auth'
 
 import { MigrationContext, MigrationContextType } from './migration-context.tsx'
 
@@ -34,6 +36,10 @@ export interface MigrationContextProviderProps {
 const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
   children,
 }) => {
+  const { isUserAuthenticated } = useAuthContext()
+
+  const { migrateUser } = useQuizServiceClient()
+
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [client, , clearClient] = useLocalStorage<{ id: string } | undefined>(
@@ -59,10 +65,11 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
 
   const migrationTokenSearchParam = searchParams.get('migrationToken')
 
+  const hasMigrated = useRef<boolean>(false)
   const hasRedirected = useRef<boolean>(false)
 
   useEffect(() => {
-    if (hasRedirected.current) return
+    if (hasRedirected.current || hasMigrated.current) return
 
     async function migrationProcess(): Promise<void> {
       let newMigrationToken: string | undefined = undefined
@@ -71,14 +78,18 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
           newMigrationToken = migrationTokenSearchParam
           searchParams.delete('migrationToken')
           setSearchParams(searchParams)
-          notifySuccess(
-            'Yay, migration is in hand! Are you set for more brain-busting quizzes?',
-          )
+
+          if (isUserAuthenticated) {
+            hasMigrated.current = true
+            await migrateUser({ migrationToken: newMigrationToken })
+          } else {
+            setMigrationToken(newMigrationToken)
+            notifySuccess(
+              'Yay, migration is in hand! Are you set for more brain-busting quizzes?',
+            )
+          }
         } else if (client?.id && player?.id) {
           newMigrationToken = await sha256(`${client.id}:${player.id}`)
-        }
-        if (newMigrationToken) {
-          setMigrationToken(newMigrationToken)
         }
       }
 
@@ -102,6 +113,7 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
 
     migrationProcess()
   }, [
+    isUserAuthenticated,
     client?.id,
     player?.id,
     migrated,
@@ -109,6 +121,7 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
     setMigrationToken,
     searchParams,
     setSearchParams,
+    migrateUser,
   ])
 
   const handleCompleteMigration: () => void = useCallback((): void => {
