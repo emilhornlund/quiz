@@ -26,6 +26,7 @@ import {
   TokenType,
   UpdateGoogleUserProfileRequestDto,
   UpdateLocalUserProfileRequestDto,
+  UserMigrationRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
 import { useCallback } from 'react'
@@ -406,6 +407,20 @@ export const useQuizServiceClient = () => {
     })
 
   /**
+   * Migrates a legacy anonymous player profile to the current user account.
+   *
+   * Sends the migration token to the backend, linking the old profile data
+   * with the authenticated user.
+   *
+   * @param request - The migration request containing the 43-character token.
+   * @returns A promise that resolves when the migration is successful.
+   */
+  const migrateUser = (request: UserMigrationRequestDto): Promise<void> =>
+    apiPost<void>('/migration/user', request).then(() => {
+      notifySuccess('Your past self has officially joined the party!')
+    })
+
+  /**
    * Retrieves information about the current user.
    *
    * @returns A promise resolving to the user information.
@@ -766,6 +781,7 @@ export const useQuizServiceClient = () => {
     sendPasswordResetEmail,
     resetPassword,
     register,
+    migrateUser,
     getUserProfile,
     updateUserProfile,
     updateUserPassword,
