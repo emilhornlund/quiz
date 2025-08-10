@@ -4,6 +4,7 @@ import { GameModule } from '../game'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 
+import { UserMigrationController } from './controllers'
 import { MigrationService } from './services'
 
 /**
@@ -15,7 +16,7 @@ import { MigrationService } from './services'
     forwardRef(() => QuizModule),
     forwardRef(() => UserModule),
   ],
-  controllers: [],
+  controllers: [UserMigrationController],
   providers: [MigrationService],
   exports: [MigrationService],
 })

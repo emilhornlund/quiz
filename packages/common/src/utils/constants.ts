@@ -97,3 +97,9 @@ export const FAMILY_NAME_REGEX =
 // Google OAuth
 export const GOOGLE_OAUTH_CODE_REGEX = /^[0-9A-Za-z\-_/+=]{10,512}$/
 export const GOOGLE_OAUTH_CODE_VERIFIER_REGEX = /^[A-Za-z0-9\-._~]{43,128}$/
+
+// Migration token
+/** Fixed length of a SHA‑256 base64url-encoded token without padding. */
+export const MIGRATION_TOKEN_LENGTH = 43
+/** Regex for a 43‑character base64url (A‑Z, a‑z, 0‑9, _ , -) migration token. */
+export const MIGRATION_TOKEN_REGEX = /^[A-Za-z0-9_-]{43}$/
