@@ -7,6 +7,7 @@ import {
   extractValue,
   extractValueOrThrow,
   toDate,
+  UNKNOWN_NICKNAME_PLACEHOLDER,
 } from '../utils'
 
 /**
@@ -37,7 +38,9 @@ export function transformGameResultsDocument(
           'participantId',
           'player',
         ),
-        nickname: extractValue<string>(player, {}, 'nickname') || '$UNKNOWN',
+        nickname:
+          extractValue<string>(player, {}, 'nickname') ||
+          UNKNOWN_NICKNAME_PLACEHOLDER,
         rank: extractValueOrThrow<number>(player, {}, 'rank'),
         correct: extractValue<number>(player, {}, 'correct'),
         incorrect: extractValue<number>(player, {}, 'incorrect'),
