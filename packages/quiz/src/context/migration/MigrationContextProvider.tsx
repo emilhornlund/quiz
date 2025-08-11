@@ -62,7 +62,7 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
     string | undefined
   >('migrationToken', undefined)
 
-  const [migrated, setMigrated] = useLocalStorage<boolean>('migrated', false)
+  const [, setMigrated] = useLocalStorage<boolean>('migrated', false)
 
   const migrationTokenSearchParam = searchParams.get('migrationToken')
 
@@ -70,7 +70,7 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
   const hasRedirected = useRef<boolean>(false)
 
   useEffect(() => {
-    if (hasRedirected.current || hasMigrated.current) return
+    if (hasRedirected.current) return
 
     console.log('local storage')
     for (let i = 0; i < localStorage.length; i++) {
@@ -91,8 +91,14 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
           console.log(
             `Begin migrating authenticated used using migration token '${newMigrationToken}'.`,
           )
-          hasMigrated.current = true
-          await migrateUser({ migrationToken: newMigrationToken })
+          if (!hasMigrated.current) {
+            hasMigrated.current = true
+            await migrateUser({ migrationToken: newMigrationToken })
+          } else {
+            console.log(
+              `User has already migrated using migration token '${newMigrationToken}'.`,
+            )
+          }
         } else {
           console.log(`Received migration token: '${newMigrationToken}'.`)
           setMigrationToken(newMigrationToken)
@@ -131,7 +137,6 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
     isUserAuthenticated,
     client?.id,
     player?.id,
-    migrated,
     migrationTokenSearchParam,
     setMigrationToken,
     searchParams,

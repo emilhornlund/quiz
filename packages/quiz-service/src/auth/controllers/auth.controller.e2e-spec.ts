@@ -451,7 +451,7 @@ describe('AuthController (e2e)', () => {
     })
 
     it('should succeed in authenticating a legacy player user that does not exist as an existing google user', async () => {
-      await userModel.create(
+      const { _id: userId } = await userModel.create(
         buildMockPrimaryGoogleUser({
           googleUserId: MOCK_PRIMARY_GOOGLE_USER_ID,
           email: MOCK_PRIMARY_USER_EMAIL,
@@ -466,13 +466,9 @@ describe('AuthController (e2e)', () => {
           code: MOCK_GOOGLE_VALID_CODE,
           codeVerifier: MOCK_GOOGLE_VALID_CODE_VERIFIER,
         })
-        .expect(404)
+        .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'User was not found by migration token',
-            status: 404,
-            timestamp: expect.any(String),
-          })
+          expectUserTokenPair(userId, res)
         })
     })
 
