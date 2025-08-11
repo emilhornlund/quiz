@@ -239,12 +239,12 @@ export const useQuizServiceClient = () => {
         email: request.email,
         password: request.password,
       },
-    ).then((res) => {
+    ).then(async (res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
       if (!migrated && !!migrationToken) {
         completeMigration()
       }
-      fetchCurrentUser(res.accessToken)
+      await fetchCurrentUser(res.accessToken)
       return res
     })
 
@@ -261,12 +261,12 @@ export const useQuizServiceClient = () => {
     apiPost<AuthResponseDto>(
       `/auth/google/exchange${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
       request,
-    ).then((res) => {
+    ).then(async (res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
       if (!migrated && !!migrationToken) {
         completeMigration()
       }
-      fetchCurrentUser(res.accessToken)
+      await fetchCurrentUser(res.accessToken)
       return res
     })
 
@@ -307,11 +307,17 @@ export const useQuizServiceClient = () => {
    * effectively logging out the user and preventing further use of that token.
    *
    * @param request - An object containing the token to be revoked.
+   * @param scope - The TokenScope (User or Game) whose token to revoke.
    * @returns A promise that resolves when the token has been successfully revoked.
    */
-  const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
+  const revoke = (
+    request: AuthRevokeRequestDto,
+    scope: TokenScope,
+  ): Promise<void> =>
     apiPost<void>('/auth/revoke', request).then(() => {
-      clearCurrentUser()
+      if (scope === TokenScope.User) {
+        clearCurrentUser()
+      }
     })
 
   /**
