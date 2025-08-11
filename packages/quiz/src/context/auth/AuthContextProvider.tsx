@@ -1,37 +1,13 @@
 import { GameTokenDto, TokenDto, TokenScope, TokenType } from '@quiz/common'
 import { jwtDecode } from 'jwt-decode'
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { FC, ReactNode, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { AuthState, ScopePayload } from '../../models'
-import { AUTH_LOCAL_STORAGE_KEY } from '../../utils/constants.ts'
 
 import { AuthContext, AuthContextType } from './auth-context.tsx'
-
-/**
- * Reads and parses the initial authentication state from localStorage.
- *
- * @returns The parsed `AuthState` if available, otherwise an empty state
- *          with both `USER` and `GAME` set to `undefined`.
- */
-function readInitialAuthState(): AuthState {
-  try {
-    const json = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
-    return json
-      ? (JSON.parse(json) as AuthState)
-      : { USER: undefined, GAME: undefined }
-  } catch {
-    return { USER: undefined, GAME: undefined }
-  }
-}
 
 /**
  * Props for the `AuthContextProvider` component.
@@ -66,9 +42,10 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   /**
    * In-memory store of decoded token payloads per TokenScope and TokenType.
    */
-  const [authState, setAuthState] = useState<AuthState>(() =>
-    readInitialAuthState(),
-  )
+  const [authState, setAuthState] = useLocalStorage<AuthState>('auth', {
+    USER: undefined,
+    GAME: undefined,
+  })
 
   /**
    * `true` if there is a valid token pair in the User scope.
@@ -79,17 +56,6 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * `true` if there is a valid token pair in the Game scope.
    */
   const isGameAuthenticated = useMemo(() => !!authState.GAME, [authState])
-
-  /**
-   * Persists authState to localStorage whenever it changes.
-   */
-  useEffect(() => {
-    if (authState.USER || authState.GAME) {
-      localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, JSON.stringify(authState))
-    } else {
-      localStorage.removeItem(AUTH_LOCAL_STORAGE_KEY)
-    }
-  }, [authState])
 
   /**
    * Decodes a User-scope JWT into its typed payload.
