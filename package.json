@@ -21,9 +21,9 @@
     "test:coverage": "concurrently \"yarn workspace @quiz/quiz-service test:coverage\" \"yarn workspace @quiz/quiz test:coverage\""
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
+    "@eslint/js": "^9.33.0",
     "concurrently": "^9.2.0",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
