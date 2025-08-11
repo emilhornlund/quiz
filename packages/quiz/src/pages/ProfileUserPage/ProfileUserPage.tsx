@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
+import { useUserContext } from '../../context/user'
 import { trimToUndefined } from '../../utils/helpers.ts'
 
 import { ProfileUserPageUI, UpdateUserDetailsFormFields } from './components'
@@ -17,6 +18,8 @@ const ProfileUserPage: FC = () => {
     resendVerificationEmail,
   } = useQuizServiceClient()
 
+  const { setCurrentUser } = useUserContext()
+
   const [isSavingUserProfile, setIsSavingUserProfile] = useState(false)
   const [isSavingUserPassword, setIsSavingUserPassword] = useState(false)
 
@@ -27,7 +30,7 @@ const ProfileUserPage: FC = () => {
     refetch,
   } = useQuery({
     queryKey: ['myUserProfile'],
-    queryFn: getUserProfile,
+    queryFn: () => getUserProfile(undefined),
   })
 
   const handleChange = (request: UpdateUserDetailsFormFields): void => {
@@ -47,6 +50,9 @@ const ProfileUserPage: FC = () => {
               defaultNickname: request.defaultNickname,
             }),
       })
+        .then(({ id, email, unverifiedEmail, defaultNickname }) => {
+          setCurrentUser({ id, email, unverifiedEmail, defaultNickname })
+        })
         .then(() => refetch())
         .finally(() => setIsSavingUserProfile(false))
     }

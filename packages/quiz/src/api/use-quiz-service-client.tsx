@@ -34,6 +34,7 @@ import { useLocalStorage } from 'usehooks-ts'
 
 import { useAuthContext } from '../context/auth'
 import { useMigrationContext } from '../context/migration'
+import { useUserContext } from '../context/user'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
 
 import {
@@ -57,6 +58,8 @@ import {
  */
 export const useQuizServiceClient = () => {
   const { user, game, setTokenPair } = useAuthContext()
+
+  const { fetchCurrentUser, clearCurrentUser } = useUserContext()
 
   const { completeMigration } = useMigrationContext()
 
@@ -150,12 +153,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param overrideToken - If provided, use this token instead of context.
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiGet = <T extends object | void>(
     path: string,
     scope: TokenScope = TokenScope.User,
-  ) => apiFetch<T>('GET', path, undefined, scope)
+    overrideToken?: string,
+  ) => apiFetch<T>('GET', path, undefined, scope, overrideToken)
 
   /**
    * Makes a POST request to the specified API endpoint.
@@ -239,6 +244,7 @@ export const useQuizServiceClient = () => {
       if (!migrated && !!migrationToken) {
         completeMigration()
       }
+      fetchCurrentUser(res.accessToken)
       return res
     })
 
@@ -260,6 +266,7 @@ export const useQuizServiceClient = () => {
       if (!migrated && !!migrationToken) {
         completeMigration()
       }
+      fetchCurrentUser(res.accessToken)
       return res
     })
 
@@ -303,7 +310,9 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the token has been successfully revoked.
    */
   const revoke = (request: AuthRevokeRequestDto): Promise<void> =>
-    apiPost<void>('/auth/revoke', request).then(() => {})
+    apiPost<void>('/auth/revoke', request).then(() => {
+      clearCurrentUser()
+    })
 
   /**
    * Verifies a user’s email address by sending the provided token to the backend.
@@ -423,10 +432,18 @@ export const useQuizServiceClient = () => {
   /**
    * Retrieves information about the current user.
    *
+   * @param overrideToken - If provided, use this token instead of context.
+   *
    * @returns A promise resolving to the user information.
    */
-  const getUserProfile = (): Promise<UserProfileResponseDto> =>
-    apiGet<UserProfileResponseDto>('/profile/user')
+  const getUserProfile = (
+    overrideToken?: string,
+  ): Promise<UserProfileResponseDto> =>
+    apiGet<UserProfileResponseDto>(
+      '/profile/user',
+      TokenScope.User,
+      overrideToken,
+    )
 
   /**
    * Updates the currently authenticated user's profile.
