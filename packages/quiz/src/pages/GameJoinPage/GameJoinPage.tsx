@@ -7,12 +7,13 @@ import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
   LegacyInfoCard,
+  NicknameTextField,
   Page,
   PageProminentIcon,
   Typography,
 } from '../../components'
-import NicknameTextField from '../../components/NicknameTextField'
 import { useGameContext } from '../../context/game'
+import { useUserContext } from '../../context/user'
 
 import styles from './GameJoinPage.module.scss'
 import { getMessage, getTitle } from './helpers.ts'
@@ -20,10 +21,15 @@ import { getMessage, getTitle } from './helpers.ts'
 const GameJoinPage: FC = () => {
   const navigate = useNavigate()
 
+  const { currentUser } = useUserContext()
+
   const { gameID } = useGameContext()
+
   const { joinGame } = useQuizServiceClient()
 
-  const [nickname, setNickname] = useState<string>()
+  const [nickname, setNickname] = useState<string>(
+    currentUser?.defaultNickname || '',
+  )
   const [nicknameValid, setNicknameValid] = useState<boolean>(false)
 
   const title = useMemo<string>(() => getTitle(), [])
@@ -34,7 +40,7 @@ const GameJoinPage: FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
-    if (gameID && nickname) {
+    if (gameID && nickname && nicknameValid) {
       setIsJoiningGame(true)
       joinGame(gameID, nickname)
         .then(() => navigate(`/game`))
@@ -63,7 +69,11 @@ const GameJoinPage: FC = () => {
       <Typography variant="text" size="small">
         {message}
       </Typography>
-      <form className={styles.joinForm} onSubmit={handleSubmit}>
+      <form
+        data-testid="join-form"
+        name="join-game-form"
+        className={styles.joinForm}
+        onSubmit={handleSubmit}>
         <NicknameTextField
           value={nickname}
           placeholder="Nickname"
