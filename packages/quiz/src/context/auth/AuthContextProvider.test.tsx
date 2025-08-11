@@ -189,7 +189,7 @@ describe('AuthContextProvider', () => {
     })
 
     await waitFor(() => {
-      expect(mockRevoke).toHaveBeenCalledWith({ token: 'u.acc' }) // access is preferred
+      expect(mockRevoke).toHaveBeenCalledWith({ token: 'u.acc' }, 'USER') // access is preferred
       expect(mockNavigate).toHaveBeenCalledWith('/')
       expect(ctx.user).toBeUndefined()
       // game still present
@@ -202,7 +202,7 @@ describe('AuthContextProvider', () => {
     })
 
     await waitFor(() => {
-      expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' })
+      expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
       expect(ctx.game).toBeUndefined()
       // storage cleared entirely when both scopes are empty
       expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeNull()

@@ -193,7 +193,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
       const token =
         authState[scope]?.ACCESS.token || authState[scope]?.REFRESH.token
       if (token) {
-        revoke({ token }).then(() => {
+        revoke({ token }, scope).then(() => {
           clearAuthState(scope)
           navigate('/')
         })
