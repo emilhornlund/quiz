@@ -68,8 +68,6 @@ export const useQuizServiceClient = () => {
     undefined,
   )
 
-  const [migrated] = useLocalStorage<boolean>('migrated', false)
-
   /**
    * Retrieves the token string for the specified scope and token type
    * from the authentication context.
@@ -234,14 +232,14 @@ export const useQuizServiceClient = () => {
    */
   const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>(
-      `/auth/login${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      `/auth/login${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
       {
         email: request.email,
         password: request.password,
       },
     ).then(async (res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (!migrated && !!migrationToken) {
+      if (migrationToken) {
         completeMigration()
       }
       await fetchCurrentUser(res.accessToken)
@@ -259,11 +257,11 @@ export const useQuizServiceClient = () => {
     request: AuthGoogleExchangeRequestDto,
   ): Promise<AuthResponseDto> =>
     apiPost<AuthResponseDto>(
-      `/auth/google/exchange${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      `/auth/google/exchange${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
       request,
     ).then(async (res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (!migrated && !!migrationToken) {
+      if (migrationToken) {
         completeMigration()
       }
       await fetchCurrentUser(res.accessToken)
@@ -405,7 +403,7 @@ export const useQuizServiceClient = () => {
     request: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> =>
     apiPost<CreateUserResponseDto>(
-      `/users${parseQueryParams({ ...(!migrated && migrationToken ? { migrationToken } : {}) })}`,
+      `/users${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
       {
         email: request.email,
         password: request.password,
@@ -414,7 +412,7 @@ export const useQuizServiceClient = () => {
         defaultNickname: request.defaultNickname,
       },
     ).then((response) => {
-      if (!migrated && !!migrationToken) {
+      if (migrationToken) {
         completeMigration()
       }
       notifySuccess('Welcome aboard! Your account is ready to roll')

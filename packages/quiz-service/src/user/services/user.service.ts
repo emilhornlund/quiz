@@ -195,7 +195,7 @@ export class UserService {
     if (existingUser) {
       if (migrationToken) {
         try {
-          return this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
+          return await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
             migrationToken,
             existingUser._id,
           )
