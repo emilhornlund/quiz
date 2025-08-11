@@ -90,6 +90,7 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
           }
         } else if (client?.id && player?.id) {
           newMigrationToken = await sha256(`${client.id}:${player.id}`)
+          setMigrationToken(newMigrationToken)
         }
       }
 
