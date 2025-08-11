@@ -4,3 +4,5 @@ export const COLLECTION_NAME_GAMES = 'games'
 export const COLLECTION_NAME_GAME_RESULTS = 'game_results'
 export const COLLECTION_NAME_QUIZZES = 'quizzes'
 export const COLLECTION_NAME_TOKENS = 'tokens'
+
+export const UNKNOWN_NICKNAME_PLACEHOLDER = '__UNKNOWN_NICKNAME__'

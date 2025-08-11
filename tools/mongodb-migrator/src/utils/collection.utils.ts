@@ -27,6 +27,7 @@ import {
   COLLECTION_NAME_QUIZZES,
   COLLECTION_NAME_TOKENS,
   COLLECTION_NAME_USERS,
+  UNKNOWN_NICKNAME_PLACEHOLDER,
 } from './constants'
 import { extractValueOrThrow } from './extract-value.utils'
 import { JSONObject, writeJSONObject } from './json.utils'
@@ -165,7 +166,7 @@ export function filterUsers(collections: CollectionsRecord): CollectionsRecord {
 }
 
 /**
- * Replaces any placeholder `'$UNKNOWN'` nicknames in game‐results with the real
+ * Replaces any unknown nickname placeholder in game‐results with the real
  * participant nickname from the corresponding game.
  *
  * @param collections – Map containing `game_results` and `games`.
@@ -206,7 +207,7 @@ export function patchUnknownNicknameInGameResults(
       'players',
     ).map((player) => {
       const nickname = extractValueOrThrow<string>(player, {}, 'nickname')
-      if (nickname === '$UNKNOWN') {
+      if (nickname === UNKNOWN_NICKNAME_PLACEHOLDER) {
         const participantId = extractValueOrThrow<string>(
           player,
           {},
@@ -219,7 +220,7 @@ export function patchUnknownNicknameInGameResults(
         )?.nickname
         if (foundNickname) {
           console.log(
-            `Replacing '$UNKNOWNs' nickname with '${foundNickname}' in game result ${gameId} for player ${participantId}`,
+            `Replacing '${UNKNOWN_NICKNAME_PLACEHOLDER}' nickname with '${foundNickname}' in game result ${gameId} for player ${participantId}`,
           )
           return { ...player, nickname: foundNickname }
         }
