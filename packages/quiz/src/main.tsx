@@ -9,6 +9,7 @@ import { ProtectedRoute } from './components'
 import AuthContextProvider from './context/auth'
 import GameContextProvider from './context/game'
 import MigrationContextProvider from './context/migration'
+import UserContextProvider from './context/user'
 import {
   AuthGamePage,
   AuthGoogleCallbackPage,
@@ -39,11 +40,13 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <AuthContextProvider>
-        <MigrationContextProvider>
-          <Outlet />
-        </MigrationContextProvider>
-      </AuthContextProvider>
+      <UserContextProvider>
+        <AuthContextProvider>
+          <MigrationContextProvider>
+            <Outlet />
+          </MigrationContextProvider>
+        </AuthContextProvider>
+      </UserContextProvider>
     ),
     children: [
       {
