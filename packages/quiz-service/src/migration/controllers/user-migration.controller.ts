@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Post,
+} from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,6 +36,9 @@ import { UserMigrationRequest } from './models'
 @RequiredAuthorities(Authority.User)
 @Controller('/migration/user')
 export class UserMigrationController {
+  // Logger instance for recording user-migration controller operations.
+  private readonly logger: Logger = new Logger(UserMigrationController.name)
+
   /**
    * Initializes the UserMigrationController.
    *
@@ -74,8 +84,18 @@ export class UserMigrationController {
     @PrincipalId() userId: string,
     @Body() request: UserMigrationRequest,
   ): Promise<void> {
-    return this.migrationService
-      .migrateLegacyPlayerUser(request.migrationToken, userId, undefined)
-      .then(() => {})
+    try {
+      await this.migrationService.migrateLegacyPlayerUser(
+        request.migrationToken,
+        userId,
+        undefined,
+      )
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.debug(
+        `Failed to migrate legacy player user using token '${request.migrationToken}' for existing user '${userId}': '${message}'.`,
+        stack,
+      )
+    }
   }
 }

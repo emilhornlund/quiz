@@ -47,6 +47,21 @@ describe('UserMigrationController (e2e)', () => {
         })
     })
 
+    it('should return 204 when an migration token is not found', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(app, {
+        unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
+      } as Partial<LocalUser>)
+
+      return supertest(app.getHttpServer())
+        .post('/api/migration/user')
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({ migrationToken: 'jU4n2n9eC-8GEZhk8NcApcfNQF9xO0yQOeJUZQk4w-E' })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
     it('should return 400 bad request for invalid migration token', async () => {
       const { accessToken } = await createDefaultUserAndAuthenticate(app, {
         unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
@@ -85,25 +100,6 @@ describe('UserMigrationController (e2e)', () => {
           expect(res.body).toEqual({
             message: 'Missing Authorization header',
             status: 401,
-            timestamp: expect.anything(),
-          })
-        })
-    })
-
-    it('should return 404 when an migration token is not found', async () => {
-      const { accessToken } = await createDefaultUserAndAuthenticate(app, {
-        unverifiedEmail: MOCK_SECONDARY_USER_EMAIL,
-      } as Partial<LocalUser>)
-
-      return supertest(app.getHttpServer())
-        .post('/api/migration/user')
-        .set({ Authorization: `Bearer ${accessToken}` })
-        .send({ migrationToken: 'jU4n2n9eC-8GEZhk8NcApcfNQF9xO0yQOeJUZQk4w-E' })
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toEqual({
-            message: 'User was not found by migration token',
-            status: 404,
             timestamp: expect.anything(),
           })
         })
