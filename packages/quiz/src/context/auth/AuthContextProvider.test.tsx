@@ -4,8 +4,6 @@ import React, { useContext, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { AUTH_LOCAL_STORAGE_KEY } from '../../utils/constants'
-
 import { AuthContext } from './auth-context'
 import AuthContextProvider from './AuthContextProvider'
 
@@ -62,7 +60,7 @@ function renderWithProvider(capture: (ctx: any) => void, ui?: React.ReactNode) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setLocalStorageAuth(state: any) {
-  localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, JSON.stringify(state))
+  localStorage.setItem('auth', JSON.stringify(state))
 }
 
 // --- Lifecycle ---
@@ -134,7 +132,7 @@ describe('AuthContextProvider', () => {
       expect(ctx.user?.ACCESS.token).toBe('user.access.jwt')
       expect(ctx.user?.REFRESH.token).toBe('user.refresh.jwt')
       // persisted
-      const parsed = JSON.parse(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)!)
+      const parsed = JSON.parse(localStorage.getItem('auth')!)
       expect(parsed.USER.ACCESS.token).toBe('user.access.jwt')
       expect(parsed.USER.REFRESH.token).toBe('user.refresh.jwt')
     })
@@ -159,7 +157,7 @@ describe('AuthContextProvider', () => {
       expect(ctx.game?.ACCESS.gameId).toBe('game-123')
       expect(ctx.game?.ACCESS.participantType).toBe('Player')
       // persisted
-      const parsed = JSON.parse(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)!)
+      const parsed = JSON.parse(localStorage.getItem('auth')!)
       expect(parsed.GAME.ACCESS.token).toBe('game.access.jwt')
     })
 
@@ -205,7 +203,7 @@ describe('AuthContextProvider', () => {
       expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
       expect(ctx.game).toBeUndefined()
       // storage cleared entirely when both scopes are empty
-      expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeNull()
+      expect(localStorage.getItem('auth')).toBe('{}')
     })
 
     expect(container).toMatchSnapshot()
@@ -220,7 +218,7 @@ describe('AuthContextProvider', () => {
       ctx.setTokenPair(TokenScope.User, 'user.acc', 'user.ref')
       ctx.setTokenPair(TokenScope.Game, 'game.acc', 'game.ref')
     })
-    expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeTruthy()
+    expect(localStorage.getItem('auth')).toBeTruthy()
 
     await act(async () => {
       await ctx.revokeUser()
@@ -230,7 +228,7 @@ describe('AuthContextProvider', () => {
     })
 
     await waitFor(() => {
-      expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeNull()
+      expect(localStorage.getItem('auth')).toBe('{}')
     })
 
     expect(container).toMatchSnapshot()
@@ -244,14 +242,14 @@ describe('AuthContextProvider', () => {
     await act(async () => {
       ctx.setTokenPair(TokenScope.User, 'user.acc', 'user.ref')
     })
-    expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeTruthy()
+    expect(localStorage.getItem('auth')).toBeTruthy()
 
     await act(async () => {
       await ctx.revokeUser()
     })
 
     await waitFor(() => {
-      expect(localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)).toBeNull()
+      expect(localStorage.getItem('auth')).toBe('{}')
     })
 
     expect(container).toMatchSnapshot()
