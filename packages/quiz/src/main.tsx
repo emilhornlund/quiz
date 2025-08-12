@@ -23,6 +23,7 @@ import {
   GamePage,
   GameResultsPage,
   HomePage,
+  LegacyRedirectionPage,
   ProfileGamesPage,
   ProfileQuizzesPage,
   ProfileUserPage,
@@ -30,11 +31,14 @@ import {
   QuizDetailsPage,
   QuizDiscoverPage,
 } from './pages'
+import { LEGACY_HOST } from './utils/constants.ts'
 
 import './styles/fonts.scss'
 import './styles/index.css'
 
 import 'react-toastify/dist/ReactToastify.css'
+
+const isLegacyHost = window.location.hostname === LEGACY_HOST
 
 const router = createBrowserRouter([
   {
@@ -48,145 +52,153 @@ const router = createBrowserRouter([
         </AuthContextProvider>
       </UserContextProvider>
     ),
-    children: [
-      {
-        path: '/',
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: '/auth/login',
-        element: (
-          <ProtectedRoute authenticated={false}>
-            <AuthLoginPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/auth/google/callback',
-        element: (
-          <ProtectedRoute authenticated={false}>
-            <AuthGoogleCallbackPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/auth/register',
-        element: (
-          <ProtectedRoute authenticated={false}>
-            <AuthRegisterPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/auth/verify',
-        element: <AuthVerifyPage />,
-      },
-      {
-        path: '/auth/password/forgot',
-        element: (
-          <ProtectedRoute authenticated={false}>
-            <AuthPasswordForgotPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/auth/password/reset',
-        element: (
-          <ProtectedRoute authenticated={false}>
-            <AuthPasswordResetPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/auth/game',
-        element: <AuthGamePage />,
-      },
-      {
-        path: '/discover',
-        element: (
-          <ProtectedRoute>
-            <QuizDiscoverPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/join',
-        element: (
-          <ProtectedRoute scope={TokenScope.Game}>
-            <GameContextProvider>
-              <GameJoinPage />
-            </GameContextProvider>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/game',
-        element: (
-          <ProtectedRoute scope={TokenScope.Game}>
-            <GameContextProvider>
-              <GamePage />
-            </GameContextProvider>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/game/results/:gameID',
-        element: (
-          <ProtectedRoute>
-            <GameResultsPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/profile/user',
-        element: (
-          <ProtectedRoute>
-            <ProfileUserPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/profile/quizzes',
-        element: (
-          <ProtectedRoute>
-            <ProfileQuizzesPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/profile/games',
-        element: (
-          <ProtectedRoute>
-            <ProfileGamesPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/quiz/create',
-        element: (
-          <ProtectedRoute>
-            <QuizCreatorPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/quiz/details/:quizId',
-        element: (
-          <ProtectedRoute>
-            <QuizDetailsPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/quiz/details/:quizId/edit',
-        element: (
-          <ProtectedRoute>
-            <QuizCreatorPage />
-          </ProtectedRoute>
-        ),
-      },
-    ],
+    children: isLegacyHost
+      ? [
+          {
+            path: '/',
+            index: true,
+            element: <LegacyRedirectionPage />,
+          },
+        ]
+      : [
+          {
+            path: '/',
+            index: true,
+            element: <HomePage />,
+          },
+          {
+            path: '/auth/login',
+            element: (
+              <ProtectedRoute authenticated={false}>
+                <AuthLoginPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/auth/google/callback',
+            element: (
+              <ProtectedRoute authenticated={false}>
+                <AuthGoogleCallbackPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/auth/register',
+            element: (
+              <ProtectedRoute authenticated={false}>
+                <AuthRegisterPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/auth/verify',
+            element: <AuthVerifyPage />,
+          },
+          {
+            path: '/auth/password/forgot',
+            element: (
+              <ProtectedRoute authenticated={false}>
+                <AuthPasswordForgotPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/auth/password/reset',
+            element: (
+              <ProtectedRoute authenticated={false}>
+                <AuthPasswordResetPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/auth/game',
+            element: <AuthGamePage />,
+          },
+          {
+            path: '/discover',
+            element: (
+              <ProtectedRoute>
+                <QuizDiscoverPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/join',
+            element: (
+              <ProtectedRoute scope={TokenScope.Game}>
+                <GameContextProvider>
+                  <GameJoinPage />
+                </GameContextProvider>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/game',
+            element: (
+              <ProtectedRoute scope={TokenScope.Game}>
+                <GameContextProvider>
+                  <GamePage />
+                </GameContextProvider>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/game/results/:gameID',
+            element: (
+              <ProtectedRoute>
+                <GameResultsPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/profile/user',
+            element: (
+              <ProtectedRoute>
+                <ProfileUserPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/profile/quizzes',
+            element: (
+              <ProtectedRoute>
+                <ProfileQuizzesPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/profile/games',
+            element: (
+              <ProtectedRoute>
+                <ProfileGamesPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/quiz/create',
+            element: (
+              <ProtectedRoute>
+                <QuizCreatorPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/quiz/details/:quizId',
+            element: (
+              <ProtectedRoute>
+                <QuizDetailsPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/quiz/details/:quizId/edit',
+            element: (
+              <ProtectedRoute>
+                <QuizCreatorPage />
+              </ProtectedRoute>
+            ),
+          },
+        ],
     errorElement: <ErrorPage />,
   },
 ])

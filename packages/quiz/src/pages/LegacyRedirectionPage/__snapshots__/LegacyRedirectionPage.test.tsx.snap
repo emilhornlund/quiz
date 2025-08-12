@@ -1,0 +1,439 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LegacyRedirectionPage > announces the remaining seconds in the aria-live region 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Fresh start—no past activity found on this device.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          7
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyRedirectionPage > redirects with window.location.replace and logs when the count hits 0 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        We’ve saved your old profile and we’ll bring it along.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          0
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com?migrationToken=xyz"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyRedirectionPage > renders title and shows target host in subtitle 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Fresh start—no past activity found on this device.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          10
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyRedirectionPage > shows the “fresh start” message when no migration token exists and builds the link without query 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Fresh start—no past activity found on this device.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          10
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyRedirectionPage > shows the “saved profile” message when a migration token exists and builds the link with the token 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        We’ve saved your old profile and we’ll bring it along.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          10
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com?migrationToken=abc123"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LegacyRedirectionPage > starts the countdown on mount 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      />
+    </div>
+    <div
+      class="content fullWidth centerAlign"
+    >
+      <div
+        class="typography title full"
+      >
+        We’ve moved—come with us!
+      </div>
+      <div
+        class="typography subtitle full"
+      >
+        Your new home is 
+        <strong>
+          example.com
+        </strong>
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Fresh start—no past activity found on this device.
+      </div>
+      <div
+        class="typography text medium"
+      >
+        Warping you over in 
+        <strong>
+          10
+          s
+        </strong>
+        …
+      </div>
+      <div
+        class="typography link medium"
+      >
+        <a
+          href="https://example.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Take me there now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

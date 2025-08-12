@@ -1,3 +1,4 @@
+import { MIGRATION_TOKEN_REGEX } from '@quiz/common'
 import React, {
   FC,
   ReactNode,
@@ -15,9 +16,6 @@ import { sha256 } from '../../utils/oauth.ts'
 import { useAuthContext } from '../auth'
 
 import { MigrationContext, MigrationContextType } from './migration-context.tsx'
-
-const LEGACY_HOST = 'quiz.emilhornlund.com'
-const TARGET_HOST = 'klurigo.com'
 
 /**
  * Props for the MigrationContextProvider component.
@@ -58,90 +56,93 @@ const MigrationContextProvider: FC<MigrationContextProviderProps> = ({
     { deserializer: (value) => `${value}` },
   )
 
-  const [, setMigrationToken, clearMigrationToken] = useLocalStorage<
-    string | undefined
-  >('migrationToken', undefined)
+  const [migrationToken, setMigrationToken, clearMigrationToken] =
+    useLocalStorage<string | undefined>('migrationToken', undefined)
 
   const [, setMigrated] = useLocalStorage<boolean>('migrated', false)
 
   const migrationTokenSearchParam = searchParams.get('migrationToken')
 
-  const hasMigrated = useRef<boolean>(false)
-  const hasRedirected = useRef<boolean>(false)
+  // Track tokens we’ve already acted on to avoid duplicate migrations / notifications
+  const handledTokens = useRef<Set<string>>(new Set())
+  // Track latest client:player pair to avoid stale sha256 writes
+  const latestPairRef = useRef<string | null>(null)
+
+  // Remove a query param safely without mutating the original instance
+  const removeQueryParam = useCallback(
+    (key: string) => {
+      const next = new URLSearchParams(searchParams)
+      next.delete(key)
+      setSearchParams(next)
+    },
+    [searchParams, setSearchParams],
+  )
 
   useEffect(() => {
-    if (hasRedirected.current) return
+    // 1) If URL carries a migration token, handle that path first
+    if (
+      migrationTokenSearchParam &&
+      MIGRATION_TOKEN_REGEX.test(migrationTokenSearchParam)
+    ) {
+      const token = migrationTokenSearchParam
+      // Always clear the query param (prevents loops if the page re-renders)
+      removeQueryParam('migrationToken')
 
-    console.log('local storage')
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key) {
-        console.log(key + '=[' + localStorage.getItem(key) + ']')
+      if (handledTokens.current.has(token)) {
+        // Already handled this token (migration or notification) — noop
+        return
       }
-    }
 
-    async function migrationProcess(): Promise<void> {
-      let newMigrationToken: string | undefined = undefined
-      if (migrationTokenSearchParam) {
-        newMigrationToken = migrationTokenSearchParam
-        searchParams.delete('migrationToken')
-        setSearchParams(searchParams)
-
-        if (isUserAuthenticated) {
-          console.log(
-            `Begin migrating authenticated used using migration token '${newMigrationToken}'.`,
-          )
-          if (!hasMigrated.current) {
-            hasMigrated.current = true
-            await migrateUser({ migrationToken: newMigrationToken })
-          } else {
-            console.log(
-              `User has already migrated using migration token '${newMigrationToken}'.`,
-            )
-          }
-        } else {
-          console.log(`Received migration token: '${newMigrationToken}'.`)
-          setMigrationToken(newMigrationToken)
+      if (isUserAuthenticated) {
+        handledTokens.current.add(token)
+        console.log(
+          `Begin migrating authenticated user using migration token '${token}'.`,
+        )
+        // Fire and forget; if you want, you can await and set a local 'migrated' flag too
+        void migrateUser({ migrationToken: token })
+      } else {
+        // Only write to LS + notify if different
+        if (migrationToken !== token) {
+          console.log(`Received migration token: '${token}'.`)
+          setMigrationToken(token)
+          // Notify once per token
+          handledTokens.current.add(token)
           notifySuccess(
             'Yay, migration is in hand! Are you set for more brain-busting quizzes?',
           )
         }
-      } else if (client?.id && player?.id) {
-        newMigrationToken = await sha256(`${client.id}:${player.id}`)
-        console.log(
-          `Generated migration token '${newMigrationToken}' from client '${client.id}' and player '${player.id}'.`,
-        )
-        setMigrationToken(newMigrationToken)
       }
-
-      const url = new URL(window.location.href)
-
-      if (url.host === LEGACY_HOST) {
-        if (newMigrationToken) {
-          url.searchParams.set('migrationToken', newMigrationToken)
-        }
-
-        const searchParamString =
-          url.searchParams.size > 0 ? `?${url.searchParams.toString()}` : ''
-
-        hasRedirected.current = true
-
-        const redirectURL = `https://${TARGET_HOST}${url.pathname}${searchParamString}`
-        console.log(`Redirecting to '${redirectURL}'.`)
-        window.location.replace(redirectURL)
-      }
+      return
     }
 
-    migrationProcess()
+    // 2) Otherwise derive a deterministic token from client:player if both exist
+    if (client?.id && player?.id) {
+      const pair = `${client.id}:${player.id}`
+      latestPairRef.current = pair
+
+      sha256(pair).then((derived) => {
+        // Ignore stale resolutions
+        if (latestPairRef.current !== pair) return
+
+        if (derived && derived !== migrationToken) {
+          console.log(
+            `Generated migration token '${derived}' from client '${client.id}' and player '${player.id}'.`,
+          )
+          setMigrationToken(derived)
+        }
+      })
+    }
   }, [
     isUserAuthenticated,
     client?.id,
     player?.id,
     migrationTokenSearchParam,
+    migrationToken,
     setMigrationToken,
     searchParams,
     setSearchParams,
     migrateUser,
+    removeQueryParam,
   ])
 
   const handleCompleteMigration: () => void = useCallback((): void => {

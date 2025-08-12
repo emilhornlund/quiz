@@ -25,6 +25,7 @@ export interface PageProps {
   noPadding?: boolean
   discover?: boolean
   profile?: boolean
+  hideLogin?: boolean
   header?: React.ReactNode
   footer?: React.ReactNode
   children: React.ReactNode | React.ReactNode[]
@@ -37,6 +38,7 @@ const Page: React.FC<PageProps> = ({
   noPadding = false,
   discover = false,
   profile = false,
+  hideLogin = false,
   header,
   footer,
   children,
@@ -92,7 +94,9 @@ const Page: React.FC<PageProps> = ({
           {isUserAuthenticated && discover && !isMobile && (
             <Link to="/discover">Discover</Link>
           )}
-          {!isUserAuthenticated && <Link to="/auth/login">Login</Link>}
+          {!isUserAuthenticated && !hideLogin && (
+            <Link to="/auth/login">Login</Link>
+          )}
           {isUserAuthenticated && discover && header && !isMobile && (
             <div className={styles.verticalLine} />
           )}
