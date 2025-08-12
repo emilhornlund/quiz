@@ -213,17 +213,16 @@ export function patchUnknownNicknameInGameResults(
           {},
           'participantId',
         )
-        const foundNickname = gameParticipants.find(
-          (participant) =>
-            extractValueOrThrow<string>(participant, {}, 'participantId') ===
-            participantId,
-        )?.nickname
-        if (foundNickname) {
-          console.log(
-            `Replacing '${UNKNOWN_NICKNAME_PLACEHOLDER}' nickname with '${foundNickname}' in game result ${gameId} for player ${participantId}`,
-          )
-          return { ...player, nickname: foundNickname }
-        }
+        const foundNickname =
+          gameParticipants.find(
+            (participant) =>
+              extractValueOrThrow<string>(participant, {}, 'participantId') ===
+              participantId,
+          )?.nickname || 'Unknown'
+        console.log(
+          `Replacing '${UNKNOWN_NICKNAME_PLACEHOLDER}' nickname with '${foundNickname}' in game result ${gameId} for player ${participantId}`,
+        )
+        return { ...player, nickname: foundNickname }
       }
       return { ...player, nickname }
     })
