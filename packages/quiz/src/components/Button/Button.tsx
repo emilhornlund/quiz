@@ -44,6 +44,7 @@ const Button: React.FC<ButtonProps> = ({
   iconPosition = 'leading',
   iconColor,
   onClick,
+  children,
 }) => {
   const deviceType = useDeviceSizeType()
 
@@ -51,8 +52,8 @@ const Button: React.FC<ButtonProps> = ({
     if (hideValue === 'mobile' && deviceType === DeviceType.Mobile) {
       return false
     }
-    return !!value
-  }, [value, deviceType, hideValue])
+    return !!value || !!children
+  }, [value, children, deviceType, hideValue])
 
   const deviceSize = useMemo(
     () => (deviceType === DeviceType.Mobile ? 'small' : size),
@@ -91,7 +92,7 @@ const Button: React.FC<ButtonProps> = ({
             {icon && iconPosition === 'leading' && (
               <FontAwesomeIcon icon={icon} color={iconColor} />
             )}
-            {showValue && <span>{value}</span>}
+            {showValue && <span>{children || value}</span>}
             {icon && iconPosition === 'trailing' && (
               <FontAwesomeIcon icon={icon} color={iconColor} />
             )}
