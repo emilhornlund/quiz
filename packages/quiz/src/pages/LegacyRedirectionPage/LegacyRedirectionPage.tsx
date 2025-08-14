@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useMemo } from 'react'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import React, { FC, useCallback, useEffect, useMemo } from 'react'
 import { useCountdown, useLocalStorage } from 'usehooks-ts'
 
-import { Page, Typography } from '../../components'
+import { Button, Page, Typography } from '../../components'
 import { REDIRECT_TARGET_HOST } from '../../utils/constants.ts'
 
 type LegacyRedirectionPageProps = {
@@ -42,14 +43,18 @@ const LegacyRedirectionPage: FC<LegacyRedirectionPageProps> = ({
     startCountdown()
   }, [startCountdown])
 
+  const handleRedirection = useCallback(() => {
+    if (!disableRedirect) {
+      console.log(`Redirecting to '${redirectionLink}'.`)
+      window.location.replace(redirectionLink)
+    }
+  }, [disableRedirect, redirectionLink])
+
   useEffect(() => {
     if (count === 0) {
-      console.log(`Redirecting to '${redirectionLink}'.`)
-      if (!disableRedirect) {
-        window.location.replace(redirectionLink)
-      }
+      handleRedirection()
     }
-  }, [count, disableRedirect, redirectionLink])
+  }, [count, handleRedirection])
 
   return (
     <Page hideLogin>
@@ -71,11 +76,15 @@ const LegacyRedirectionPage: FC<LegacyRedirectionPageProps> = ({
         Warping you over in&nbsp;<strong>{count}s</strong>…
       </Typography>
 
-      <Typography variant="link" size="medium">
-        <a href={redirectionLink} target="_blank" rel="noreferrer">
-          Take me there now
-        </a>
-      </Typography>
+      <Button
+        id="redirect-button"
+        type="button"
+        kind="call-to-action"
+        icon={faPaperPlane}
+        iconPosition="leading"
+        onClick={handleRedirection}>
+        Take Me There Now!
+      </Button>
     </Page>
   )
 }

@@ -58,7 +58,7 @@ describe('LegacyRedirectionPage', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('shows the “saved profile” message when a migration token exists and builds the link with the token', () => {
+  it('shows the “saved profile” message when a migration token exists', () => {
     const token = 'abc123'
     window.localStorage.setItem('migrationToken', token)
 
@@ -68,26 +68,23 @@ describe('LegacyRedirectionPage', () => {
       screen.getByText(/We’ve saved your old profile/i),
     ).toBeInTheDocument()
 
-    const link = screen.getByRole('link', { name: /Take me there now/i })
-    expect(link).toHaveAttribute(
-      'href',
-      `https://example.com?migrationToken=${token}`,
-    )
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(link).toHaveAttribute('rel', 'noreferrer')
+    expect(
+      screen.getByRole('button', { name: /Take Me There Now!/i }),
+    ).toBeInTheDocument()
 
     expect(container).toMatchSnapshot()
   })
 
-  it('shows the “fresh start” message when no migration token exists and builds the link without query', () => {
+  it('shows the “fresh start” message when no migration token exists', () => {
     const { container } = renderWithRouter(<LegacyRedirectionPage />)
 
     expect(
       screen.getByText(/Fresh start—no past activity found on this device./i),
     ).toBeInTheDocument()
 
-    const link = screen.getByRole('link', { name: /Take me there now/i })
-    expect(link).toHaveAttribute('href', 'https://example.com')
+    expect(
+      screen.getByRole('button', { name: /Take Me There Now!/i }),
+    ).toBeInTheDocument()
 
     expect(container).toMatchSnapshot()
   })
