@@ -7,6 +7,12 @@ COPY ../../ ./
 
 RUN yarn install --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
 
+ARG SENTRY_DSN
+ENV VITE_SENTRY_DSN=$SENTRY_DSN
+
+ARG SENTRY_RELEASE
+ENV VITE_SENTRY_RELEASE=$SENTRY_RELEASE
+
 RUN yarn workspace @quiz/common build
 RUN yarn workspace @quiz/quiz build --mode production
 
@@ -14,6 +20,8 @@ RUN yarn workspace @quiz/quiz build --mode production
 FROM nginx:alpine
 
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 COPY --from=build /app/packages/quiz/dist /usr/share/nginx/html
 COPY --from=build /app/packages/quiz/nginx.conf.template /etc/nginx/nginx.conf.template

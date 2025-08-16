@@ -35,6 +35,14 @@ FROM node:22-alpine
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
+ARG SENTRY_DSN
+ENV SENTRY_DSN=$SENTRY_DSN
+
+ARG SENTRY_RELEASE
+ENV SENTRY_RELEASE=${SENTRY_RELEASE}
+
 COPY --from=optimize /app/packages/quiz-service/ ./
 COPY --from=optimize /app/node_modules ./node_modules
 

@@ -12,4 +12,14 @@ export default {
    * Redirect URI registered in Google Console for OAuth callbacks.
    */
   googleRedirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI as string,
+
+  /**
+   * The Sentry Data Source Name (DSN) for the application.
+   */
+  VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN as string,
+
+  /**
+   * The release identifier injected at build time and passed to Sentry.
+   */
+  VITE_SENTRY_RELEASE: import.meta.env.VITE_SENTRY_RELEASE as string,
 }
