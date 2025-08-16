@@ -9,6 +9,10 @@ on:
         required: true
       REGISTRY_PASS:
         required: true
+      SENTRY_KLURIGO_DSN:
+        required: true
+      SENTRY_KLURIGO_SERVICE_DSN:
+        required: true
     outputs:
       short_sha:
         description: "Short git SHA for this run"
@@ -30,9 +34,11 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        service:
-          - quiz
-          - quiz-service
+        include:
+          - service: quiz
+            sentry-project: klurigo
+          - service: quiz-service
+            sentry-project: klurigo-service
     env:
       REGISTRY_HOST: emils-nuc-server:5000
       SHORT_SHA: ${{ needs.prepare.outputs.short_sha }}
@@ -46,6 +52,14 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASS }}
 
+      - name: Set Sentry DSN
+        run: |
+          if [ "${{ matrix.sentry-project }}" = "klurigo" ]; then
+            echo "SENTRY_DSN=${{ secrets.SENTRY_KLURIGO_DSN }}" >> "$GITHUB_ENV"
+          else
+            echo "SENTRY_DSN=${{ secrets.SENTRY_KLURIGO_SERVICE_DSN }}" >> "$GITHUB_ENV"
+          fi
+
       - name: Build & Push ${{ matrix.service }}
         uses: docker/build-push-action@v6
         with:
@@ -54,3 +68,6 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY_HOST }}/${{ matrix.service }}:${{ env.SHORT_SHA }}
+          build-args: |
+            SENTRY_DSN=${{ env.SENTRY_DSN }}
+            SENTRY_RELEASE=${{ matrix.sentry-project }}@${{ github.sha }}

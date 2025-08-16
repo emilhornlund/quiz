@@ -18,9 +18,12 @@ jobs:
       MONGODB_DB: klurigo_test
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
-        with: { node-version: '22' }
+        with:
+          node-version: '22'
 
       - name: Install Yarn
         run: npm install -g yarn@1.22.22
@@ -45,6 +48,18 @@ jobs:
       - name: Test & Coverage
         run: |
           yarn test:coverage
+
+      - name: Upload Klurigo artifacts for Sentry
+        uses: actions/upload-artifact@v4
+        with:
+          name: klurigo-sentry-artifacts
+          path: packages/quiz/dist/assets/**/*.map
+
+      - name: Upload Klurigo Service artifacts for Sentry
+        uses: actions/upload-artifact@v4
+        with:
+          name: klurigo-service-sentry-artifacts
+          path: packages/quiz-service/dist/**/*.map
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

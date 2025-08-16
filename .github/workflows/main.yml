@@ -31,3 +31,14 @@ jobs:
       INFRA_REPO_PAT: ${{ secrets.INFRA_REPO_PAT }}
       QUIZ_PORTAINER_BETA_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_BETA_WEBHOOK }}
       QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK }}
+
+  sentry-release:
+    needs: deploy-beta
+    permissions:
+      contents: read
+    uses: ./.github/workflows/sentry-release.yml
+    with:
+      environment: beta
+      release: ${{ github.sha }}
+    secrets:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

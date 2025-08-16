@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { RedisModule } from '@nestjs-modules/ioredis'
+import { SentryModule } from '@sentry/nestjs/setup'
 import Joi from 'joi'
 import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
@@ -23,9 +24,11 @@ import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 
 import { EnvironmentVariables } from './config'
+import { AppController } from './controllers'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
 import { ValidationPipe } from './pipes'
 
+const isProdEnv = process.env.NODE_ENV === 'production'
 const isTestEnv = process.env.NODE_ENV === 'test'
 
 /**
@@ -36,6 +39,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
  */
 @Module({
   imports: [
+    ...(isProdEnv ? [SentryModule.forRoot()] : []),
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       validationSchema: Joi.object({
@@ -186,7 +190,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     QuizModule,
     UserModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     Logger,
     {

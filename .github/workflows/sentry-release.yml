@@ -1,0 +1,66 @@
+# .github/workflows/sentry-release.yml
+name: Sentry Release
+permissions:
+  contents: read
+on:
+  workflow_call:
+    inputs:
+      release:
+        description: "The Docker image tag (short SHA) to deploy"
+        required: true
+        type: string
+      environment:
+        description: "Either 'beta' or 'prod'"
+        required: true
+        type: string
+    secrets:
+      SENTRY_AUTH_TOKEN:
+        required: true
+
+jobs:
+  create-sentry-release:
+    name: Create Sentry Release
+    runs-on: self-hosted
+    environment: ${{ inputs.environment }}
+    strategy:
+      matrix:
+        project:
+          - klurigo
+          - klurigo-service
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set paths & artifact names
+        run: |
+          if [ "${{ matrix.project }}" = "klurigo" ]; then
+            echo "SENTRY_SOURCEMAPS_PATH=packages/quiz/dist/assets" >> "$GITHUB_ENV"
+            echo "SENTRY_ARTIFACT_NAME=klurigo-sentry-artifacts" >> "$GITHUB_ENV"
+          else
+            echo "SENTRY_SOURCEMAPS_PATH=packages/quiz-service/dist" >> "$GITHUB_ENV"
+            echo "SENTRY_ARTIFACT_NAME=klurigo-service-sentry-artifacts" >> "$GITHUB_ENV"
+          fi
+
+      - name: Download ${{ matrix.project }} artifacts for Sentry
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ env.SENTRY_ARTIFACT_NAME }}
+          path: ${{ env.SENTRY_SOURCEMAPS_PATH }}
+
+      - name: Create Sentry release via CLI
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ matrix.project }}
+          SENTRY_RELEASE: "${{ matrix.project }}@${{ inputs.release }}"
+        run: |
+          npx @sentry/cli releases new "$SENTRY_RELEASE"
+          npx @sentry/cli releases set-commits "$SENTRY_RELEASE" --auto --ignore-missing
+          npx @sentry/cli sourcemaps upload "${{ env.SENTRY_SOURCEMAPS_PATH }}"
+          npx @sentry/cli releases finalize "$SENTRY_RELEASE"

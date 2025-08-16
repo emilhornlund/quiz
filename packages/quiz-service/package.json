@@ -36,6 +36,7 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@quiz/common": "1.0.0",
+    "@sentry/nestjs": "^10.5.0",
     "@supercharge/request-ip": "^1.2.0",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",

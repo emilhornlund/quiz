@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
+import { SentryExceptionCaptured } from '@sentry/nestjs'
 
 import { ValidationException } from '../exceptions'
 import { reduceNestedValidationErrors } from '../utils'
@@ -18,6 +19,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     private logger: Logger,
   ) {}
 
+  @SentryExceptionCaptured()
   catch(exception: unknown, host: ArgumentsHost): void {
     const { httpAdapter } = this.httpAdapterHost
 
