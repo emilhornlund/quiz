@@ -46,6 +46,18 @@ import {
 } from './api-utils.ts'
 
 /**
+ * Options that control how authenticated requests are performed.
+ */
+type FetchOptions = {
+  /** Which token scope to use for auth (defaults to `TokenScope.User`). */
+  scope?: TokenScope
+  /** Access token to use for this call (overrides context token if provided). */
+  token?: string
+  /** Auto-refresh access token on expiry/401 (defaults to `true`). */
+  refresh?: boolean
+}
+
+/**
  * Hook for interacting with the Quiz service API.
  *
  * Automatically handles:
@@ -95,17 +107,19 @@ export const useQuizServiceClient = () => {
    * @param method - HTTP verb
    * @param path - API endpoint (relative)
    * @param body - Payload for GET/POST/PUT/PATCH/DELETE
-   * @param scope - The TokenScope to use when authorizing this request (User or Game).
-   * @param overrideToken - If provided, use this token instead of context
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns {Promise<T>} - Parsed JSON response
    */
   const apiFetch = async <T extends object | void>(
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     body: ApiPostBody | undefined,
-    scope: TokenScope,
-    overrideToken?: string,
+    options: FetchOptions = {},
   ): Promise<T> => {
+    const overrideToken = options.token
+    const scope = options.scope ?? TokenScope.User
+    const shouldRefresh = options.refresh ?? true
+
     let accessToken = overrideToken || getToken(scope, TokenType.Access)
     let refreshToken = getToken(scope, TokenType.Refresh)
 
@@ -114,7 +128,8 @@ export const useQuizServiceClient = () => {
       !overrideToken &&
       isTokenExpired(accessToken) &&
       refreshToken &&
-      path !== '/auth/refresh'
+      path !== '/auth/refresh' &&
+      shouldRefresh
     ) {
       const refreshed = await refresh(scope, { refreshToken })
       accessToken = refreshed.accessToken
@@ -137,9 +152,17 @@ export const useQuizServiceClient = () => {
     })
 
     // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
-    if (response.status === 401 && refreshToken && path !== '/auth/refresh') {
+    if (
+      response.status === 401 &&
+      refreshToken &&
+      path !== '/auth/refresh' &&
+      shouldRefresh
+    ) {
       const refreshed = await refresh(scope, { refreshToken })
-      return apiFetch<T>(method, path, body, scope, refreshed.accessToken)
+      return apiFetch<T>(method, path, body, {
+        scope,
+        token: refreshed.accessToken,
+      })
     }
 
     return parseResponseAndHandleError<T>(response)
@@ -150,15 +173,13 @@ export const useQuizServiceClient = () => {
    *
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
-   * @param scope - The TokenScope to authenticate this call (defaults to User).
-   * @param overrideToken - If provided, use this token instead of context.
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiGet = <T extends object | void>(
     path: string,
-    scope: TokenScope = TokenScope.User,
-    overrideToken?: string,
-  ) => apiFetch<T>('GET', path, undefined, scope, overrideToken)
+    options: FetchOptions = {},
+  ) => apiFetch<T>('GET', path, undefined, options)
 
   /**
    * Makes a POST request to the specified API endpoint.
@@ -166,16 +187,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the POST request.
-   * @param scope - The TokenScope to authenticate this call (defaults to User).
-   * @param overrideToken - If provided, use this token instead of context.
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPost = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-    scope: TokenScope = TokenScope.User,
-    overrideToken?: string,
-  ) => apiFetch<T>('POST', path, requestBody, scope, overrideToken)
+    options: FetchOptions = {},
+  ) => apiFetch<T>('POST', path, requestBody, options)
 
   /**
    * Makes a PUT request to the specified API endpoint.
@@ -183,14 +202,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the PUT request.
-   * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPut = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-    scope: TokenScope = TokenScope.User,
-  ) => apiFetch<T>('PUT', path, requestBody, scope)
+    options: FetchOptions = {},
+  ) => apiFetch<T>('PUT', path, requestBody, options)
 
   /**
    * Makes a PATCH request to the specified API endpoint.
@@ -198,16 +217,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the PATCH request.
-   * @param scope - The TokenScope to authenticate this call (defaults to User).
-   * @param overrideToken - If provided, use this token instead of context.
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiPatch = <T extends object | void>(
     path: string,
     requestBody: ApiPostBody,
-    scope: TokenScope = TokenScope.User,
-    overrideToken?: string,
-  ) => apiFetch<T>('PATCH', path, requestBody, scope, overrideToken)
+    options: FetchOptions = {},
+  ) => apiFetch<T>('PATCH', path, requestBody, options)
 
   /**
    * Makes a DELETE request to the specified API endpoint.
@@ -215,14 +232,14 @@ export const useQuizServiceClient = () => {
    * @template T - The expected type of the API response.
    * @param path - The relative path to the API endpoint.
    * @param requestBody - The request body to be sent in the DELETE request.
-   * @param scope - The TokenScope to authenticate this call (defaults to User).
+   * @param options - Per-call overrides (`scope`, `token`, `refresh`).
    * @returns A promise resolving to the API response as type `T`.
    */
   const apiDelete = <T extends object | void>(
     path: string,
     requestBody?: ApiPostBody,
-    scope: TokenScope = TokenScope.User,
-  ) => apiFetch<T>('DELETE', path, requestBody, scope)
+    options: FetchOptions = {},
+  ) => apiFetch<T>('DELETE', path, requestBody, options)
 
   /**
    * Sends a login request to the API and stores the returned authentication tokens.
@@ -277,10 +294,12 @@ export const useQuizServiceClient = () => {
   const authenticateGame = (
     request: AuthGameRequestDto,
   ): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>(`/auth/game`, request).then((res) => {
-      setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
-      return res
-    })
+    apiPost<AuthResponseDto>(`/auth/game`, request, { refresh: false }).then(
+      (res) => {
+        setTokenPair(TokenScope.Game, res.accessToken, res.refreshToken)
+        return res
+      },
+    )
 
   /**
    * Sends a refresh request to the API and stores the returned authentication tokens.
@@ -329,9 +348,11 @@ export const useQuizServiceClient = () => {
    *   - **rejects** with an error if the verification fails or the token is invalid.
    */
   const verifyEmail = (token: string): Promise<void> =>
-    apiPost<void>('/auth/email/verify', {}, TokenScope.User, token).then(
-      () => {},
-    )
+    apiPost<void>(
+      '/auth/email/verify',
+      {},
+      { scope: TokenScope.User, token },
+    ).then(() => {})
 
   /**
    * Resend a verification email to the current user.
@@ -380,12 +401,10 @@ export const useQuizServiceClient = () => {
     request: AuthPasswordResetRequestDto,
     token: string,
   ): Promise<void> =>
-    apiPatch<void>(
-      '/auth/password/reset',
-      request,
-      TokenScope.User,
+    apiPatch<void>('/auth/password/reset', request, {
+      scope: TokenScope.User,
       token,
-    ).then((response) => {
+    }).then((response) => {
       notifySuccess(
         'All Set! Your new password is locked and loaded. Welcome back!',
       )
@@ -436,18 +455,15 @@ export const useQuizServiceClient = () => {
   /**
    * Retrieves information about the current user.
    *
-   * @param overrideToken - If provided, use this token instead of context.
+   * @param token - If provided, use this token instead of context.
    *
    * @returns A promise resolving to the user information.
    */
-  const getUserProfile = (
-    overrideToken?: string,
-  ): Promise<UserProfileResponseDto> =>
-    apiGet<UserProfileResponseDto>(
-      '/profile/user',
-      TokenScope.User,
-      overrideToken,
-    )
+  const getUserProfile = (token?: string): Promise<UserProfileResponseDto> =>
+    apiGet<UserProfileResponseDto>('/profile/user', {
+      scope: TokenScope.User,
+      token,
+    })
 
   /**
    * Updates the currently authenticated user's profile.
@@ -598,7 +614,11 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves when the player has successfully joined the game.
    */
   const joinGame = (gameID: string, nickname: string): Promise<void> =>
-    apiPost<void>(`/games/${gameID}/players`, { nickname }, TokenScope.Game)
+    apiPost<void>(
+      `/games/${gameID}/players`,
+      { nickname },
+      { scope: TokenScope.Game },
+    )
 
   /**
    * Leaves an existing game using the provided game ID and player ID.
@@ -609,11 +629,9 @@ export const useQuizServiceClient = () => {
    * @returns A Promise that resolves when the player is successfully removed from the game.
    */
   const leaveGame = (gameID: string, playerID: string): Promise<void> =>
-    apiDelete<void>(
-      `/games/${gameID}/players/${playerID}`,
-      undefined,
-      TokenScope.Game,
-    )
+    apiDelete<void>(`/games/${gameID}/players/${playerID}`, undefined, {
+      scope: TokenScope.Game,
+    })
 
   /**
    * Marks the current task in the game as completed.
@@ -626,7 +644,7 @@ export const useQuizServiceClient = () => {
     apiPost(
       `/games/${gameID}/tasks/current/complete`,
       {},
-      TokenScope.Game,
+      { scope: TokenScope.Game },
     ).then(() => {})
 
   /**
@@ -658,7 +676,9 @@ export const useQuizServiceClient = () => {
       const { type, value } = submitQuestionAnswerRequest
       requestBody = { type, value }
     }
-    await apiPost(`/games/${gameID}/answers`, requestBody, TokenScope.Game)
+    await apiPost(`/games/${gameID}/answers`, requestBody, {
+      scope: TokenScope.Game,
+    })
   }
 
   /**
@@ -672,11 +692,9 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiPost(
-      `/games/${gameID}/tasks/current/correct_answers`,
-      answer,
-      TokenScope.Game,
-    ).then(() => {})
+    apiPost(`/games/${gameID}/tasks/current/correct_answers`, answer, {
+      scope: TokenScope.Game,
+    }).then(() => {})
 
   /**
    * Deletes a correct answer from the current task in the specified game.
@@ -689,11 +707,9 @@ export const useQuizServiceClient = () => {
     gameID: string,
     answer: QuestionCorrectAnswerDto,
   ): Promise<void> =>
-    apiDelete(
-      `/games/${gameID}/tasks/current/correct_answers`,
-      answer,
-      TokenScope.Game,
-    ).then(() => {})
+    apiDelete(`/games/${gameID}/tasks/current/correct_answers`, answer, {
+      scope: TokenScope.Game,
+    }).then(() => {})
 
   /**
    * Retrieves the game history associated with the current player.
