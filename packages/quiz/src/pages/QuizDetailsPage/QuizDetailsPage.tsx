@@ -17,25 +17,22 @@ const QuizDetailsPage: FC = () => {
   const { getQuiz, deleteQuiz, createGame, authenticateGame } =
     useQuizServiceClient()
 
-  const {
-    data: originalQuiz,
-    isLoading: isLoadingQuiz,
-    isError: hasQuizLoadingError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['quiz', quizId],
     queryFn: () => getQuiz(quizId as string),
     enabled: !!quizId,
+    retry: false,
   })
 
   useEffect(() => {
-    if (hasQuizLoadingError) {
-      navigate('/profile/user')
+    if (isError) {
+      navigate(-1)
     }
-  }, [hasQuizLoadingError, navigate])
+  }, [isError, navigate])
 
   const isOwner = useMemo(
-    () => originalQuiz?.author.id === user?.ACCESS.sub,
-    [originalQuiz, user],
+    () => data?.author.id === user?.ACCESS.sub,
+    [data, user],
   )
 
   const [isHostGameLoading, setIsHostGameLoading] = useState(false)
@@ -70,9 +67,9 @@ const QuizDetailsPage: FC = () => {
 
   return (
     <QuizDetailsPageUI
-      quiz={originalQuiz}
+      quiz={data}
       isOwner={isOwner}
-      isLoadingQuiz={isLoadingQuiz}
+      isLoadingQuiz={isLoading}
       isHostGameLoading={isHostGameLoading}
       isDeleteQuizLoading={isDeleteQuizLoading}
       onHostGame={handleCreateGame}
