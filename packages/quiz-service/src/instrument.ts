@@ -14,12 +14,14 @@ function getSentryEnvironment() {
 if (process.env.NODE_ENV === 'production') {
   console.log('Initializing Sentry')
   Sentry.init({
-    dsn: 'https://db8c9f306455a022069bdcc3f7f5cdc9@o4509486568374272.ingest.de.sentry.io/4509667099934800',
+    dsn: process.env.SENTRY_DSN,
     release: process.env.SENTRY_RELEASE,
     environment: getSentryEnvironment(),
     sendDefaultPii: true,
-    enableLogs: true,
-    integrations: [],
+    integrations: [
+      Sentry.consoleLoggingIntegration({ levels: ['warn', 'error'] }),
+      Sentry.httpIntegration(),
+    ],
     tracesSampleRate: 1.0,
   })
 }
