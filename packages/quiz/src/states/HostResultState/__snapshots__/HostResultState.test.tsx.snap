@@ -25,12 +25,6 @@ exports[`HostResultState > should render HostResultState with question type mult
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -85,178 +79,186 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            Vincent van Gogh
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              3
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-xmark icon"
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          class="chips"
-        >
-          <div
-            class="chip incorrect"
-          >
-            Claude Monet
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              5
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            Who painted The Starry Night?
           </div>
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            Pablo Picasso
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              2
-            </span>
-            <button
-              class="buttonOverlay"
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Leonardo da Vinci
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              0
-            </span>
-            <button
-              class="buttonOverlay"
+                Vincent van Gogh
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  3
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-xmark icon"
+                    data-icon="circle-xmark"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+                Claude Monet
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  5
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                Pablo Picasso
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  2
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                Leonardo da Vinci
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  0
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -343,12 +345,6 @@ exports[`HostResultState > should render HostResultState with question type mult
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -403,256 +399,264 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            Vincent van Gogh
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-xmark icon"
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          class="chips"
-        >
-          <div
-            class="chip incorrect"
-          >
-            Leonardo da Vinci
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              4
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            Who painted The Starry Night?
           </div>
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            Rembrandt
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              3
-            </span>
-            <button
-              class="buttonOverlay"
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Pablo Picasso
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              2
-            </span>
-            <button
-              class="buttonOverlay"
+                Vincent van Gogh
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-xmark icon"
+                    data-icon="circle-xmark"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Claude Monet
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                Leonardo da Vinci
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  4
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              0
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+                Rembrandt
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  3
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            Michelangelo
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                Pablo Picasso
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  2
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              0
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+                Claude Monet
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  0
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+                Michelangelo
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  0
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -739,12 +743,6 @@ exports[`HostResultState > should render HostResultState with question type mult
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -799,100 +797,108 @@ exports[`HostResultState > should render HostResultState with question type mult
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            Vincent van Gogh
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              3
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-xmark icon"
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            Who painted The Starry Night?
           </div>
-        </div>
-        <div
-          class="chips"
-        >
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            Pablo Picasso
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              7
-            </span>
-            <button
-              class="buttonOverlay"
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+                Vincent van Gogh
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  3
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-xmark icon"
+                    data-icon="circle-xmark"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="chips"
+            >
+              <div
+                class="chip incorrect"
+              >
+                Pablo Picasso
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  7
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -979,12 +985,6 @@ exports[`HostResultState > should render HostResultState with question type rang
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -1039,220 +1039,228 @@ exports[`HostResultState > should render HostResultState with question type rang
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        What percentage of the earth's surface is covered by water?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            71
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              2
-            </span>
-          </div>
-        </div>
-        <div
-          class="chips"
-        >
-          <div
-            class="chip incorrect"
-          >
-            59
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
+            What percentage of the earth's surface is covered by water?
           </div>
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            61
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+            <div
+              class="chips"
+            >
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            64
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                71
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  2
+                </span>
+              </div>
+            </div>
+            <div
+              class="chips"
+            >
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            65
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                59
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            72
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                61
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            73
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                64
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            79
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                65
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            83
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+                72
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
+                73
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                79
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                83
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1339,12 +1347,6 @@ exports[`HostResultState > should render HostResultState with question type true
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -1399,66 +1401,74 @@ exports[`HostResultState > should render HostResultState with question type true
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Rabbits can't vomit?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            True
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              4
-            </span>
+            Rabbits can't vomit?
           </div>
-        </div>
-        <div
-          class="chips"
-        >
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            False
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
+            <div
+              class="chips"
+            >
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              6
-            </span>
+                True
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  4
+                </span>
+              </div>
+            </div>
+            <div
+              class="chips"
+            >
+              <div
+                class="chip incorrect"
+              >
+                False
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  6
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1545,12 +1555,6 @@ exports[`HostResultState > should render HostResultState with question type type
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -1605,178 +1609,186 @@ exports[`HostResultState > should render HostResultState with question type type
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Who painted the Mono Lisa?
-      </div>
-      <div
-        class="questionResults"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="chips"
+          class="contentInner"
         >
           <div
-            class="chip correct"
+            class="typography subtitle full"
           >
-            leonardo da vinci
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              2
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-xmark icon"
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          class="chips"
-        >
-          <div
-            class="chip incorrect"
-          >
-            leonardo
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              4
-            </span>
-            <button
-              class="buttonOverlay"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            Who painted the Mono Lisa?
           </div>
           <div
-            class="chip incorrect"
+            class="questionResults"
           >
-            picasso
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              3
-            </span>
-            <button
-              class="buttonOverlay"
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip correct"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="chip incorrect"
-          >
-            rembrandt
-            <span>
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-user-group "
-                data-icon="user-group"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 576 512"
-              >
-                <path
-                  d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
-                  fill="currentColor"
-                />
-              </svg>
-               
-              1
-            </span>
-            <button
-              class="buttonOverlay"
+                leonardo da vinci
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  2
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-xmark icon"
+                    data-icon="circle-xmark"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="chips"
             >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check icon"
-                data-icon="circle-check"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
+              <div
+                class="chip incorrect"
               >
-                <path
-                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+                leonardo
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  4
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                picasso
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  3
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="chip incorrect"
+              >
+                rembrandt
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-user-group "
+                    data-icon="user-group"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 576 512"
+                  >
+                    <path
+                      d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  1
+                </span>
+                <button
+                  class="buttonOverlay"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check icon"
+                    data-icon="circle-check"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm84.4-299.3l-80 128c-4.2 6.7-11.4 10.9-19.3 11.3s-15.5-3.2-20.2-9.6l-48-64c-8-10.6-5.8-25.6 4.8-33.6s25.6-5.8 33.6 4.8l27 36 61.4-98.3c7-11.2 21.8-14.7 33.1-7.6s14.7 21.8 7.6 33.1z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -61,154 +61,162 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="Runner"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="Runner"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -275,155 +283,163 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="   "
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            disabled=""
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="   "
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -490,154 +506,162 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="Someone"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="Someone"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -704,154 +728,162 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="Speedy"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="Speedy"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -918,154 +950,162 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="Emil"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="Emil"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1132,155 +1172,163 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            disabled=""
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1347,155 +1395,163 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="PreFilledNick!"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            disabled=""
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="PreFilledNick!"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1562,155 +1618,163 @@ exports[`GameJoinPage > renders title and message 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            disabled=""
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1777,155 +1841,163 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            disabled=""
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1992,154 +2064,162 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="KeyUser"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="KeyUser"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -2206,154 +2286,162 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
       </div>
     </div>
     <div
-      class="content fullWidth startAlign"
+      class="content startAlign"
     >
       <div
-        class="card kindCallToAction sizeLarge center"
-      >
-        <button
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-xmark "
-            data-icon="xmark"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 384 512"
-          >
-            <path
-              d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-        <div
-          class="content"
-        >
-          <span>
-            Hey quiz champion! Did your brainy adventures happen on
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-            ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
-             
-            <a
-              href="https://quiz.emilhornlund.com"
-            >
-              quiz.emilhornlund.com
-            </a>
-             one last time, and we’ll magically teleport everything over to
-             
-            <b>
-              <i>
-                klurigo.com
-              </i>
-            </b>
-            . Ready to blast off your data?
-          </span>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <img
-          alt="Users"
-          src="users-icon.svg"
-        />
-      </div>
-      <div
-        class="typography title medium"
-      >
-        Join the game
-      </div>
-      <div
-        class="typography text small"
-      >
-        Pick a nickname and jump in!
-      </div>
-      <form
-        data-testid="join-form"
-        name="join-game-form"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="nicknameTextFieldContainer"
+          class="contentInner"
         >
           <div
-            class="inputContainer"
-          >
-            <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
-            >
-              <input
-                class="textfield"
-                data-testid="test-default-nickname-textfield-textfield"
-                id="default-nickname-textfield"
-                maxlength="20"
-                minlength="2"
-                name="default-nickname-textfield"
-                placeholder="Nickname"
-                type="text"
-                value="Emil"
-              />
-            </div>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+            class="card kindCallToAction sizeLarge center"
           >
             <button
-              data-testid="test-shuffle-nickname-button-button"
-              id="shuffle-nickname-button"
-              name="shuffle-nickname-button"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-arrows-rotate "
-                data-icon="arrows-rotate"
+                class="svg-inline--fa fa-xmark "
+                data-icon="xmark"
                 data-prefix="fas"
                 role="img"
-                viewBox="0 0 512 512"
+                viewBox="0 0 384 512"
               >
                 <path
-                  d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
                   fill="currentColor"
                 />
               </svg>
             </button>
-          </div>
-        </div>
-        <div
-          class="buttonInputContainer buttonInputKindCallToAction"
-        >
-          <button
-            data-testid="test-join-button"
-            id="join"
-            name="join"
-            type="submit"
-          >
-            <span>
-              OK, Go!
-            </span>
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
-              data-icon="arrow-right"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 512 512"
+            <div
+              class="content"
             >
-              <path
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="main"
+          >
+            <img
+              alt="Users"
+              src="users-icon.svg"
+            />
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Join the game
+          </div>
+          <div
+            class="typography text small"
+          >
+            Pick a nickname and jump in!
+          </div>
+          <form
+            data-testid="join-form"
+            name="join-game-form"
+          >
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Nickname"
+                    type="text"
+                    value="Emil"
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate "
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  OK, Go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right "
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

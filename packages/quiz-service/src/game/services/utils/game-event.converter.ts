@@ -402,13 +402,17 @@ function buildGameQuestionPreviewPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameQuestionPreviewPlayerEvent {
-  const { type, text: question } =
-    document.questions[document.currentTask.questionIndex]
+  const {
+    type,
+    text: question,
+    points,
+  } = document.questions[document.currentTask.questionIndex]
 
   const { nickname, totalScore: score } = participantPlayer
 
   return {
     type: GameEventType.GameQuestionPreviewPlayer,
+    game: { mode: document.mode },
     player: {
       nickname,
       score,
@@ -416,6 +420,7 @@ function buildGameQuestionPreviewPlayerEvent(
     question: {
       type,
       question,
+      points,
     },
     countdown: buildGameQuestionPreviewCountdownEvent(document),
     pagination: buildPaginationEvent(document),

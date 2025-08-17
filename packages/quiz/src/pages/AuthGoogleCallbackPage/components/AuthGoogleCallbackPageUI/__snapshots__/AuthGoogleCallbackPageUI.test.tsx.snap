@@ -34,24 +34,32 @@ exports[`AuthGoogleCallbackPageUI > should render AuthGoogleCallbackPageUI 1`] =
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography subtitle small"
+        class="contentWrapper fullWidth"
       >
-        Hold tight—calling in the Google cavalry!
-      </div>
-      <div
-        class="typography text small"
-      >
-        We’re doing the secret handshake with Google. Almost there…
-      </div>
-      <div
-        class="loadingSpinnerContainer"
-      >
-        <div />
-        <div />
-        <div />
+        <div
+          class="contentInner"
+        >
+          <div
+            class="typography subtitle small"
+          >
+            Hold tight—calling in the Google cavalry!
+          </div>
+          <div
+            class="typography text small"
+          >
+            We’re doing the secret handshake with Google. Almost there…
+          </div>
+          <div
+            class="loadingSpinnerContainer"
+          >
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
       </div>
     </div>
   </div>

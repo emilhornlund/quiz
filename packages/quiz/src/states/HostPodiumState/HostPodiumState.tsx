@@ -29,8 +29,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
   return (
     <GamePage
       width="medium"
-      height="full"
-      align="start"
+      align="center"
       header={
         <IconButtonArrowRight
           id={'skip-button'}

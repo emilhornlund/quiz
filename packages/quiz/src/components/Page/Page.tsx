@@ -140,16 +140,21 @@ const Page: React.FC<PageProps> = ({
       <div
         className={classNames(
           styles.content,
-          width === 'small' ? styles.smallWidth : undefined,
-          width === 'medium' ? styles.mediumWidth : undefined,
-          width === 'full' ? styles.fullWidth : undefined,
           height === 'full' ? styles.fullHeight : undefined,
           align === 'start' ? styles.startAlign : undefined,
           align === 'center' ? styles.centerAlign : undefined,
           align === 'space-between' ? styles.spaceBetweenAlign : undefined,
           noPadding ? styles.noPadding : undefined,
         )}>
-        {children}
+        <div
+          className={classNames(
+            styles.contentWrapper,
+            width === 'small' ? styles.smallWidth : undefined,
+            width === 'medium' ? styles.mediumWidth : undefined,
+            width === 'full' ? styles.fullWidth : undefined,
+          )}>
+          <div className={styles.contentInner}>{children}</div>
+        </div>
       </div>
       {footer && <div className={classNames(styles.footer)}>{footer}</div>}
     </div>

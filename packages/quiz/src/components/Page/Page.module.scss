@@ -201,9 +201,23 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: stretch;
     flex: 1;
-    overflow-y: scroll;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+
+    .contentWrapper {
+      display: block;
+
+      .contentInner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+    }
 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -216,61 +230,92 @@
     }
 
     &.startAlign {
-      justify-content: flex-start;
-      align-items: center;
+      > .contentWrapper {
+        margin: 0 auto; /* explicit start alignment */
+      }
     }
 
     &.centerAlign {
-      justify-content: center;
-      align-items: center;
+      > .contentWrapper {
+        margin-block: auto;
+        margin-inline: auto;
+      }
     }
 
     &.spaceBetweenAlign {
-      justify-content: space-between;
-      align-items: center;
+      > .contentWrapper {
+        margin: 0 auto;
+
+        > .contentInner {
+          justify-content: space-between;
+        }
+      }
     }
 
     &.fullHeight {
-      height: 100%;
+      > .contentWrapper {
+        height: 100%;
+
+        > .contentInner {
+          flex: 1;
+          height: 100%;
+        }
+      }
     }
 
     @include helpers.mobile {
-      row-gap: calc(#{variables.$mobile-layout-gutter} * 0.5);
       padding: variables.$mobile-layout-gutter;
-      width: 100%;
+
+      > .contentWrapper {
+        width: 100%;
+
+        > .contentInner {
+          row-gap: calc(#{variables.$mobile-layout-gutter} * 0.5);
+        }
+      }
     }
 
     @include helpers.tablet {
-      row-gap: variables.$tablet-layout-gutter;
       padding: variables.$tablet-layout-gutter;
 
-      &.smallWidth {
-        width: variables.$mobile-width;
-      }
+      > .contentWrapper {
+        &.smallWidth {
+          width: variables.$mobile-width;
+        }
 
-      &.mediumWidth {
-        width: variables.$tablet-width;
-      }
+        &.mediumWidth {
+          width: variables.$tablet-width;
+        }
 
-      &.fullWidth {
-        width: variables.$tablet-width;
+        &.fullWidth {
+          width: variables.$tablet-width;
+        }
+
+        > .contentInner {
+          row-gap: variables.$tablet-layout-gutter;
+        }
       }
     }
 
     @include helpers.desktop {
-      row-gap: variables.$desktop-layout-gutter;
       padding: variables.$desktop-layout-gutter;
 
-      &.smallWidth {
-        width: variables.$mobile-width;
-      }
+      > .contentWrapper {
+        &.smallWidth {
+          width: variables.$mobile-width;
+        }
 
-      &.mediumWidth {
-        width: variables.$tablet-width;
-      }
+        &.mediumWidth {
+          width: variables.$tablet-width;
+        }
 
-      &.fullWidth {
-        width: variables.$desktop-width;
+        &.fullWidth {
+          width: variables.$desktop-width;
+        }
+
+        > .contentInner {
+          row-gap: variables.$desktop-layout-gutter;
+        }
       }
     }
   }

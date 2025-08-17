@@ -56,12 +56,14 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       <Typography variant="subtitle" size="medium">
         {question.question}
       </Typography>
-      <ProgressBar countdown={countdown} />
+
       <QuestionAnswerPicker
         question={question}
         loading={isSubmittingQuestionAnswer}
         onChange={handleSubmitQuestionAnswer}
       />
+
+      <ProgressBar countdown={countdown} />
     </GamePage>
   )
 }

@@ -29,6 +29,7 @@ const GamePage: FC<PageProps> = ({ header, children, ...rest }) => {
           {header}
         </>
       }
+      hideLogin
       {...rest}>
       {children}
     </Page>

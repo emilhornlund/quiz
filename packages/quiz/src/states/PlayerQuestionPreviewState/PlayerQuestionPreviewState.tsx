@@ -2,7 +2,7 @@ import { GameQuestionPreviewPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
 import { PlayerGameFooter, ProgressBar, Typography } from '../../components'
-import { GamePage } from '../common'
+import QuestionTypePointsBar, { GamePage } from '../common'
 
 export interface PlayerQuestionPreviewStateProps {
   event: GameQuestionPreviewPlayerEvent
@@ -10,13 +10,19 @@ export interface PlayerQuestionPreviewStateProps {
 
 const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
   event: {
+    game: { mode },
     player: { nickname: playerNickname, score: playerTotalScore },
-    question: { type: questionType, question: questionValue },
+    question: {
+      type: questionType,
+      question: questionValue,
+      points: questionPoints,
+    },
     countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => (
   <GamePage
+    height="full"
     align="space-between"
     footer={
       <PlayerGameFooter
@@ -26,10 +32,16 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
         totalScore={playerTotalScore}
       />
     }>
-    <div>{questionType}</div>
+    <QuestionTypePointsBar
+      mode={mode}
+      questionType={questionType}
+      questionPoints={questionPoints}
+    />
+
     <Typography variant="subtitle" size="medium">
       {questionValue}
     </Typography>
+
     <ProgressBar countdown={countdown} />
   </GamePage>
 )
