@@ -34,24 +34,32 @@ exports[`AuthVerifyPageUI > should render AuthVerifyPageUI as loading 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography subtitle small"
+        class="contentWrapper fullWidth"
       >
-        One moment… verifying your magic link!
-      </div>
-      <div
-        class="loadingSpinnerContainer"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
-      <div
-        class="typography text small"
-      >
-        Good things come to those who wait!
+        <div
+          class="contentInner"
+        >
+          <div
+            class="typography subtitle small"
+          >
+            One moment… verifying your magic link!
+          </div>
+          <div
+            class="loadingSpinnerContainer"
+          >
+            <div />
+            <div />
+            <div />
+          </div>
+          <div
+            class="typography text small"
+          >
+            Good things come to those who wait!
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,45 +100,53 @@ exports[`AuthVerifyPageUI > should render AuthVerifyPageUI as verified 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="badge large green"
-      >
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-check "
-          data-icon="check"
-          data-prefix="fas"
-          role="img"
-          viewBox="0 0 448 512"
-        >
-          <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-            fill="currentColor"
-          />
-        </svg>
-      </div>
-      <div
-        class="typography subtitle medium"
-      >
-        Hooray! Your email’s all set!
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Welcome aboard the fun train. Let’s roll!
-      </div>
-      <a
-        data-discover="true"
-        href="/auth/login"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="typography link small"
+          class="contentInner"
         >
-          Log in to get started!
+          <div
+            class="badge large green"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-check "
+              data-icon="check"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            class="typography subtitle medium"
+          >
+            Hooray! Your email’s all set!
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Welcome aboard the fun train. Let’s roll!
+          </div>
+          <a
+            data-discover="true"
+            href="/auth/login"
+          >
+            <div
+              class="typography link small"
+            >
+              Log in to get started!
+            </div>
+          </a>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </div>
@@ -170,45 +186,53 @@ exports[`AuthVerifyPageUI > should render AuthVerifyPageUI as verified and logge
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="badge large green"
-      >
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-check "
-          data-icon="check"
-          data-prefix="fas"
-          role="img"
-          viewBox="0 0 448 512"
-        >
-          <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-            fill="currentColor"
-          />
-        </svg>
-      </div>
-      <div
-        class="typography subtitle medium"
-      >
-        Hooray! Your email’s all set!
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Welcome aboard the fun train. Let’s roll!
-      </div>
-      <a
-        data-discover="true"
-        href="/"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="typography link small"
+          class="contentInner"
         >
-          Take me home
+          <div
+            class="badge large green"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-check "
+              data-icon="check"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            class="typography subtitle medium"
+          >
+            Hooray! Your email’s all set!
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Welcome aboard the fun train. Let’s roll!
+          </div>
+          <a
+            data-discover="true"
+            href="/"
+          >
+            <div
+              class="typography link small"
+            >
+              Take me home
+            </div>
+          </a>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </div>
@@ -248,34 +272,42 @@ exports[`AuthVerifyPageUI > should render AuthVerifyPageUI with error 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="badge large red"
+        class="contentWrapper fullWidth"
       >
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-xmark "
-          data-icon="xmark"
-          data-prefix="fas"
-          role="img"
-          viewBox="0 0 384 512"
+        <div
+          class="contentInner"
         >
-          <path
-            d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-            fill="currentColor"
-          />
-        </svg>
-      </div>
-      <div
-        class="typography subtitle small"
-      >
-        Oops! Something went wrong.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        The supplied link is invalid or has expired.
+          <div
+            class="badge large red"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-xmark "
+              data-icon="xmark"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 384 512"
+            >
+              <path
+                d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            class="typography subtitle small"
+          >
+            Oops! Something went wrong.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            The supplied link is invalid or has expired.
+          </div>
+        </div>
       </div>
     </div>
   </div>

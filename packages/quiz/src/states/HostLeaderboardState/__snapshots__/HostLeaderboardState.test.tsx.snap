@@ -25,12 +25,6 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -85,170 +79,178 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
       </div>
     </div>
     <div
-      class="content mediumWidth fullHeight centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Leaderboard
-      </div>
-      <div
-        class="main"
+        class="contentWrapper mediumWidth"
       >
         <div
-          class="column podium"
+          class="contentInner"
         >
           <div
-            class="position"
+            class="typography subtitle full"
           >
-            <span>
-              1
-            </span>
+            Leaderboard
           </div>
-        </div>
-        <div
-          class="column podium"
-        >
           <div
-            class="row"
+            class="main"
           >
-            <span>
-              ShadowCyborg
-            </span>
+            <div
+              class="column podium"
+            >
+              <div
+                class="position"
+              >
+                <span>
+                  1
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  ShadowCyborg
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <span
+                class="score"
+              >
+                18456
+              </span>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="position"
+              >
+                <span>
+                  2
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  Radar
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <span
+                class="score"
+              >
+                18398
+              </span>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="position"
+              >
+                <span>
+                  3
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  ShadowWhirlwind
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <span
+                class="score"
+              >
+                15492
+              </span>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="position"
+              >
+                <span>
+                  4
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  WhiskerFox
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <span
+                class="score"
+              >
+                14118
+              </span>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="position"
+              >
+                <span>
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  JollyNimbus
+                </span>
+              </div>
+            </div>
+            <div
+              class="column podium"
+            >
+              <span
+                class="score"
+              >
+                13463
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <span
-            class="score"
-          >
-            18456
-          </span>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              2
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              Radar
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <span
-            class="score"
-          >
-            18398
-          </span>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              3
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              ShadowWhirlwind
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <span
-            class="score"
-          >
-            15492
-          </span>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              4
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              WhiskerFox
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <span
-            class="score"
-          >
-            14118
-          </span>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              5
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              JollyNimbus
-            </span>
-          </div>
-        </div>
-        <div
-          class="column podium"
-        >
-          <span
-            class="score"
-          >
-            13463
-          </span>
         </div>
       </div>
     </div>

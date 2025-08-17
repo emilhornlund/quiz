@@ -74,6 +74,9 @@ export type GameQuestionPreviewHostEvent = {
 
 export type GameQuestionPreviewPlayerEvent = {
   type: GameEventType.GameQuestionPreviewPlayer
+  game: {
+    mode: GameMode
+  }
   player: {
     nickname: string
     score: number
@@ -81,6 +84,7 @@ export type GameQuestionPreviewPlayerEvent = {
   question: {
     type: QuestionType
     question: string
+    points?: number
   }
   countdown: CountdownEvent
   pagination: PaginationEvent

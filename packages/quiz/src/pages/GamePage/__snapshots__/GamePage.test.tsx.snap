@@ -34,14 +34,22 @@ exports[`GamePage > should render GamePage 1`] = `
       </div>
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="loadingSpinnerContainer"
+        class="contentWrapper fullWidth"
       >
-        <div />
-        <div />
-        <div />
+        <div
+          class="contentInner"
+        >
+          <div
+            class="loadingSpinnerContainer"
+          >
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
       </div>
     </div>
   </div>

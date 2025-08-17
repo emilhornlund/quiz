@@ -34,260 +34,268 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight startAlign"
     >
       <div
-        class="gameResultsPage"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="typography subtitle full"
-        >
-          Classic Quiz Debug
-        </div>
-        <div
-          class="typography text full"
-        >
-          A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
-        </div>
-        <div
-          class="segmentedControl"
+          class="contentInner"
         >
           <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputActive"
+            class="gameResultsPage"
           >
-            <button
-              data-testid="test-section-segmented-control_SUMMARY-segmented-control"
-              id="section-segmented-control_SUMMARY"
-              name="section-segmented-control_SUMMARY"
-              type="button"
+            <div
+              class="typography subtitle full"
             >
-              Summary
-            </button>
-          </div>
-          <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
-          >
-            <button
-              data-testid="test-section-segmented-control_PLAYERS-segmented-control"
-              id="section-segmented-control_PLAYERS"
-              name="section-segmented-control_PLAYERS"
-              type="button"
+              Classic Quiz Debug
+            </div>
+            <div
+              class="typography text full"
             >
-              Players
-            </button>
-          </div>
-          <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
-          >
-            <button
-              data-testid="test-section-segmented-control_QUESTIONS-segmented-control"
-              id="section-segmented-control_QUESTIONS"
-              name="section-segmented-control_QUESTIONS"
-              type="button"
+              A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
+            </div>
+            <div
+              class="segmentedControl"
             >
-              Questions
-            </button>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputActive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_SUMMARY-segmented-control"
+                  id="section-segmented-control_SUMMARY"
+                  name="section-segmented-control_SUMMARY"
+                  type="button"
+                >
+                  Summary
+                </button>
+              </div>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_PLAYERS-segmented-control"
+                  id="section-segmented-control_PLAYERS"
+                  name="section-segmented-control_PLAYERS"
+                  type="button"
+                >
+                  Players
+                </button>
+              </div>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_QUESTIONS-segmented-control"
+                  id="section-segmented-control_QUESTIONS"
+                  name="section-segmented-control_QUESTIONS"
+                  type="button"
+                >
+                  Questions
+                </button>
+              </div>
+            </div>
+            <section>
+              <div
+                class="cards"
+              >
+                <div
+                  class="card progress"
+                >
+                  <svg
+                    class="circularProgressBar correct medium"
+                    height="100"
+                    width="100"
+                  >
+                    <circle
+                      class="circleBackground"
+                      cx="50"
+                      cy="50"
+                      fill="transparent"
+                      r="45"
+                      stroke-width="10"
+                    />
+                    <circle
+                      class="circleProgress"
+                      cx="50"
+                      cy="50"
+                      fill="transparent"
+                      r="45"
+                      stroke-linecap="round"
+                      stroke-width="10"
+                      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 93.30530181161686;"
+                    />
+                    <text
+                      class="progressText"
+                      dominant-baseline="middle"
+                      text-anchor="middle"
+                      x="50%"
+                      y="50%"
+                    >
+                      67
+                      %
+                    </text>
+                  </svg>
+                  <div
+                    class="text"
+                  >
+                    Well played! Most players handled the challenge with confidence.
+                  </div>
+                </div>
+                <div
+                  class="card details"
+                >
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-gamepad "
+                      data-icon="gamepad"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Game Mode
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    Classic
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-user icon"
+                      data-icon="user"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 448 512"
+                    >
+                      <path
+                        d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Players
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    3
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-circle-question icon"
+                      data-icon="circle-question"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Questions
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    4
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-clock icon"
+                      data-icon="clock"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Time
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    8 minutes
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Fastest Overall Player
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    2s
+                  </div>
+                  <div
+                    class="nickname"
+                  >
+                    ShadowCyborg
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Longest Correct Streak
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    4
+                  </div>
+                  <div
+                    class="nickname"
+                  >
+                    ShadowCyborg
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
-        <section>
-          <div
-            class="cards"
-          >
-            <div
-              class="card progress"
-            >
-              <svg
-                class="circularProgressBar correct medium"
-                height="100"
-                width="100"
-              >
-                <circle
-                  class="circleBackground"
-                  cx="50"
-                  cy="50"
-                  fill="transparent"
-                  r="45"
-                  stroke-width="10"
-                />
-                <circle
-                  class="circleProgress"
-                  cx="50"
-                  cy="50"
-                  fill="transparent"
-                  r="45"
-                  stroke-linecap="round"
-                  stroke-width="10"
-                  style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 93.30530181161686;"
-                />
-                <text
-                  class="progressText"
-                  dominant-baseline="middle"
-                  text-anchor="middle"
-                  x="50%"
-                  y="50%"
-                >
-                  67
-                  %
-                </text>
-              </svg>
-              <div
-                class="text"
-              >
-                Well played! Most players handled the challenge with confidence.
-              </div>
-            </div>
-            <div
-              class="card details"
-            >
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-gamepad "
-                  data-icon="gamepad"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 640 512"
-                >
-                  <path
-                    d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Game Mode
-              </div>
-              <div
-                class="value"
-              >
-                Classic
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-user icon"
-                  data-icon="user"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 448 512"
-                >
-                  <path
-                    d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Players
-              </div>
-              <div
-                class="value"
-              >
-                3
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-circle-question icon"
-                  data-icon="circle-question"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Questions
-              </div>
-              <div
-                class="value"
-              >
-                4
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-clock icon"
-                  data-icon="clock"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Time
-              </div>
-              <div
-                class="value"
-              >
-                8 minutes
-              </div>
-            </div>
-            <div
-              class="card metric"
-            >
-              <div
-                class="title"
-              >
-                Fastest Overall Player
-              </div>
-              <div
-                class="value"
-              >
-                2s
-              </div>
-              <div
-                class="nickname"
-              >
-                ShadowCyborg
-              </div>
-            </div>
-            <div
-              class="card metric"
-            >
-              <div
-                class="title"
-              >
-                Longest Correct Streak
-              </div>
-              <div
-                class="value"
-              >
-                4
-              </div>
-              <div
-                class="nickname"
-              >
-                ShadowCyborg
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   </div>
@@ -328,260 +336,268 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight startAlign"
+      class="content fullHeight startAlign"
     >
       <div
-        class="gameResultsPage"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="typography subtitle full"
-        >
-          0-100 Quiz Debug
-        </div>
-        <div
-          class="typography text full"
-        >
-          A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
-        </div>
-        <div
-          class="segmentedControl"
+          class="contentInner"
         >
           <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputActive"
+            class="gameResultsPage"
           >
-            <button
-              data-testid="test-section-segmented-control_SUMMARY-segmented-control"
-              id="section-segmented-control_SUMMARY"
-              name="section-segmented-control_SUMMARY"
-              type="button"
+            <div
+              class="typography subtitle full"
             >
-              Summary
-            </button>
-          </div>
-          <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
-          >
-            <button
-              data-testid="test-section-segmented-control_PLAYERS-segmented-control"
-              id="section-segmented-control_PLAYERS"
-              name="section-segmented-control_PLAYERS"
-              type="button"
+              0-100 Quiz Debug
+            </div>
+            <div
+              class="typography text full"
             >
-              Players
-            </button>
-          </div>
-          <div
-            class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
-          >
-            <button
-              data-testid="test-section-segmented-control_QUESTIONS-segmented-control"
-              id="section-segmented-control_QUESTIONS"
-              name="section-segmented-control_QUESTIONS"
-              type="button"
+              A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
+            </div>
+            <div
+              class="segmentedControl"
             >
-              Questions
-            </button>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputActive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_SUMMARY-segmented-control"
+                  id="section-segmented-control_SUMMARY"
+                  name="section-segmented-control_SUMMARY"
+                  type="button"
+                >
+                  Summary
+                </button>
+              </div>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_PLAYERS-segmented-control"
+                  id="section-segmented-control_PLAYERS"
+                  name="section-segmented-control_PLAYERS"
+                  type="button"
+                >
+                  Players
+                </button>
+              </div>
+              <div
+                class="segmentedControlItem segmentedControlInputKindPrimary segmentedControlInputSizeNormal segmentedControlInputInactive"
+              >
+                <button
+                  data-testid="test-section-segmented-control_QUESTIONS-segmented-control"
+                  id="section-segmented-control_QUESTIONS"
+                  name="section-segmented-control_QUESTIONS"
+                  type="button"
+                >
+                  Questions
+                </button>
+              </div>
+            </div>
+            <section>
+              <div
+                class="cards"
+              >
+                <div
+                  class="card progress"
+                >
+                  <svg
+                    class="circularProgressBar correct medium"
+                    height="100"
+                    width="100"
+                  >
+                    <circle
+                      class="circleBackground"
+                      cx="50"
+                      cy="50"
+                      fill="transparent"
+                      r="45"
+                      stroke-width="10"
+                    />
+                    <circle
+                      class="circleProgress"
+                      cx="50"
+                      cy="50"
+                      fill="transparent"
+                      r="45"
+                      stroke-linecap="round"
+                      stroke-width="10"
+                      style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 31.101767270538943;"
+                    />
+                    <text
+                      class="progressText"
+                      dominant-baseline="middle"
+                      text-anchor="middle"
+                      x="50%"
+                      y="50%"
+                    >
+                      89
+                      %
+                    </text>
+                  </svg>
+                  <div
+                    class="text"
+                  >
+                    Nice and smooth — players breezed through most questions!
+                  </div>
+                </div>
+                <div
+                  class="card details"
+                >
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-gamepad "
+                      data-icon="gamepad"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Game Mode
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    0 to 100
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-user icon"
+                      data-icon="user"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 448 512"
+                    >
+                      <path
+                        d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Players
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    3
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-circle-question icon"
+                      data-icon="circle-question"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Questions
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    4
+                  </div>
+                  <div
+                    class="icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-clock icon"
+                      data-icon="clock"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="title"
+                  >
+                    Time
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    2 minutes
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Fastest Overall Player
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    4s
+                  </div>
+                  <div
+                    class="nickname"
+                  >
+                    ShadowCyborg
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Longest Correct Streak
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    4
+                  </div>
+                  <div
+                    class="nickname"
+                  >
+                    ShadowCyborg
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
-        <section>
-          <div
-            class="cards"
-          >
-            <div
-              class="card progress"
-            >
-              <svg
-                class="circularProgressBar correct medium"
-                height="100"
-                width="100"
-              >
-                <circle
-                  class="circleBackground"
-                  cx="50"
-                  cy="50"
-                  fill="transparent"
-                  r="45"
-                  stroke-width="10"
-                />
-                <circle
-                  class="circleProgress"
-                  cx="50"
-                  cy="50"
-                  fill="transparent"
-                  r="45"
-                  stroke-linecap="round"
-                  stroke-width="10"
-                  style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 31.101767270538943;"
-                />
-                <text
-                  class="progressText"
-                  dominant-baseline="middle"
-                  text-anchor="middle"
-                  x="50%"
-                  y="50%"
-                >
-                  89
-                  %
-                </text>
-              </svg>
-              <div
-                class="text"
-              >
-                Nice and smooth — players breezed through most questions!
-              </div>
-            </div>
-            <div
-              class="card details"
-            >
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-gamepad "
-                  data-icon="gamepad"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 640 512"
-                >
-                  <path
-                    d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Game Mode
-              </div>
-              <div
-                class="value"
-              >
-                0 to 100
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-user icon"
-                  data-icon="user"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 448 512"
-                >
-                  <path
-                    d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Players
-              </div>
-              <div
-                class="value"
-              >
-                3
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-circle-question icon"
-                  data-icon="circle-question"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Questions
-              </div>
-              <div
-                class="value"
-              >
-                4
-              </div>
-              <div
-                class="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-clock icon"
-                  data-icon="clock"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <div
-                class="title"
-              >
-                Time
-              </div>
-              <div
-                class="value"
-              >
-                2 minutes
-              </div>
-            </div>
-            <div
-              class="card metric"
-            >
-              <div
-                class="title"
-              >
-                Fastest Overall Player
-              </div>
-              <div
-                class="value"
-              >
-                4s
-              </div>
-              <div
-                class="nickname"
-              >
-                ShadowCyborg
-              </div>
-            </div>
-            <div
-              class="card metric"
-            >
-              <div
-                class="title"
-              >
-                Longest Correct Streak
-              </div>
-              <div
-                class="value"
-              >
-                4
-              </div>
-              <div
-                class="nickname"
-              >
-                ShadowCyborg
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   </div>

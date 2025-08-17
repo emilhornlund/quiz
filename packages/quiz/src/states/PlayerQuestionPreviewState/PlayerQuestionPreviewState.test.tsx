@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, GameMode, QuestionType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -24,6 +24,7 @@ describe('PlayerQuestionPreviewState', () => {
         <PlayerQuestionPreviewState
           event={{
             type: GameEventType.GameQuestionPreviewPlayer,
+            game: { mode: GameMode.Classic },
             player: {
               nickname: 'FrostyBear',
               score: 10458,
@@ -31,6 +32,7 @@ describe('PlayerQuestionPreviewState', () => {
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
+              points: 1000,
             },
             countdown: {
               initiatedTime: new Date(now).toISOString(),

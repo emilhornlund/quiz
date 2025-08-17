@@ -25,12 +25,6 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -85,171 +79,179 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
       </div>
     </div>
     <div
-      class="content mediumWidth fullHeight startAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Podium
-      </div>
-      <div
-        class="main"
+        class="contentWrapper mediumWidth"
       >
         <div
-          class="column"
+          class="contentInner"
         >
           <div
-            class="spacer"
-          />
+            class="typography subtitle full"
+          >
+            Podium
+          </div>
           <div
-            class="nickname"
+            class="main"
           >
             <div
-              class="main"
+              class="column"
             >
-              Radar
+              <div
+                class="spacer"
+              />
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  Radar
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  2
+                </div>
+                <div
+                  class="score"
+                >
+                  18398
+                </div>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  ShadowCyborg
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  1
+                </div>
+                <div
+                  class="score"
+                >
+                  18456
+                </div>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <div
+                class="spacer"
+              />
+              <div
+                class="spacer"
+              />
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  ShadowWhirlwind
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  3
+                </div>
+                <div
+                  class="score"
+                >
+                  15492
+                </div>
+              </div>
             </div>
           </div>
           <div
-            class="stack"
+            class="main"
           >
             <div
-              class="position"
+              class="column"
             >
-              2
+              <div
+                class="position"
+              >
+                <span>
+                  4
+                </span>
+              </div>
             </div>
             <div
-              class="score"
+              class="column"
             >
-              18398
-            </div>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="nickname"
-          >
-            <div
-              class="main"
-            >
-              ShadowCyborg
-            </div>
-          </div>
-          <div
-            class="stack"
-          >
-            <div
-              class="position"
-            >
-              1
+              <div
+                class="row"
+              >
+                <span>
+                  WhiskerFox
+                </span>
+              </div>
             </div>
             <div
-              class="score"
+              class="column"
             >
-              18456
-            </div>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="spacer"
-          />
-          <div
-            class="spacer"
-          />
-          <div
-            class="nickname"
-          >
-            <div
-              class="main"
-            >
-              ShadowWhirlwind
-            </div>
-          </div>
-          <div
-            class="stack"
-          >
-            <div
-              class="position"
-            >
-              3
+              <span
+                class="score"
+              >
+                14118
+              </span>
             </div>
             <div
-              class="score"
+              class="column"
             >
-              15492
+              <div
+                class="position"
+              >
+                <span>
+                  5
+                </span>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <div
+                class="row"
+              >
+                <span>
+                  JollyNimbus
+                </span>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <span
+                class="score"
+              >
+                13463
+              </span>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="main"
-      >
-        <div
-          class="column"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              4
-            </span>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              WhiskerFox
-            </span>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <span
-            class="score"
-          >
-            14118
-          </span>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="position"
-          >
-            <span>
-              5
-            </span>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="row"
-          >
-            <span>
-              JollyNimbus
-            </span>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <span
-            class="score"
-          >
-            13463
-          </span>
         </div>
       </div>
     </div>
@@ -282,12 +284,6 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -342,110 +338,118 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
       </div>
     </div>
     <div
-      class="content mediumWidth fullHeight startAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography subtitle full"
-      >
-        Podium
-      </div>
-      <div
-        class="main"
+        class="contentWrapper mediumWidth"
       >
         <div
-          class="column"
+          class="contentInner"
         >
           <div
-            class="spacer"
+            class="typography subtitle full"
+          >
+            Podium
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="column"
+            >
+              <div
+                class="spacer"
+              />
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  Radar
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  2
+                </div>
+                <div
+                  class="score"
+                >
+                  18398
+                </div>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  ShadowCyborg
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  1
+                </div>
+                <div
+                  class="score"
+                >
+                  18456
+                </div>
+              </div>
+            </div>
+            <div
+              class="column"
+            >
+              <div
+                class="spacer"
+              />
+              <div
+                class="spacer"
+              />
+              <div
+                class="nickname"
+              >
+                <div
+                  class="main"
+                >
+                  ShadowWhirlwind
+                </div>
+              </div>
+              <div
+                class="stack"
+              >
+                <div
+                  class="position"
+                >
+                  3
+                </div>
+                <div
+                  class="score"
+                >
+                  15492
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="main"
           />
-          <div
-            class="nickname"
-          >
-            <div
-              class="main"
-            >
-              Radar
-            </div>
-          </div>
-          <div
-            class="stack"
-          >
-            <div
-              class="position"
-            >
-              2
-            </div>
-            <div
-              class="score"
-            >
-              18398
-            </div>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="nickname"
-          >
-            <div
-              class="main"
-            >
-              ShadowCyborg
-            </div>
-          </div>
-          <div
-            class="stack"
-          >
-            <div
-              class="position"
-            >
-              1
-            </div>
-            <div
-              class="score"
-            >
-              18456
-            </div>
-          </div>
-        </div>
-        <div
-          class="column"
-        >
-          <div
-            class="spacer"
-          />
-          <div
-            class="spacer"
-          />
-          <div
-            class="nickname"
-          >
-            <div
-              class="main"
-            >
-              ShadowWhirlwind
-            </div>
-          </div>
-          <div
-            class="stack"
-          >
-            <div
-              class="position"
-            >
-              3
-            </div>
-            <div
-              class="score"
-            >
-              15492
-            </div>
-          </div>
         </div>
       </div>
-      <div
-        class="main"
-      />
     </div>
   </div>
 </div>

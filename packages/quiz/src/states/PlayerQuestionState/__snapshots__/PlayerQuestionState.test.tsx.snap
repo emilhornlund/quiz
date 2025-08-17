@@ -25,12 +25,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -58,61 +52,69 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="grid"
+            class="typography subtitle medium"
           >
-            <button
-              class="item"
-              id="0_Vincent van Gogh"
-              type="button"
+            Who painted The Starry Night?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
             >
-              <div />
-              Vincent van Gogh
-            </button>
-            <button
-              class="item"
-              id="1_Pablo Picasso"
-              type="button"
-            >
-              <div />
-              Pablo Picasso
-            </button>
-            <button
-              class="item"
-              id="2_Leonardo da Vinci"
-              type="button"
-            >
-              <div />
-              Leonardo da Vinci
-            </button>
-            <button
-              class="item"
-              id="3_Claude Monet"
-              type="button"
-            >
-              <div />
-              Claude Monet
-            </button>
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+                <button
+                  class="item"
+                  id="2_Leonardo da Vinci"
+                  type="button"
+                >
+                  <div />
+                  Leonardo da Vinci
+                </button>
+                <button
+                  class="item"
+                  id="3_Claude Monet"
+                  type="button"
+                >
+                  <div />
+                  Claude Monet
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>
@@ -190,12 +192,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -223,77 +219,85 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="grid"
+            class="typography subtitle medium"
           >
-            <button
-              class="item"
-              id="0_Vincent van Gogh"
-              type="button"
+            Who painted The Starry Night?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
             >
-              <div />
-              Vincent van Gogh
-            </button>
-            <button
-              class="item"
-              id="1_Pablo Picasso"
-              type="button"
-            >
-              <div />
-              Pablo Picasso
-            </button>
-            <button
-              class="item"
-              id="2_Leonardo da Vinci"
-              type="button"
-            >
-              <div />
-              Leonardo da Vinci
-            </button>
-            <button
-              class="item"
-              id="3_Claude Monet"
-              type="button"
-            >
-              <div />
-              Claude Monet
-            </button>
-            <button
-              class="item"
-              id="4_Michelangelo"
-              type="button"
-            >
-              <div />
-              Michelangelo
-            </button>
-            <button
-              class="item"
-              id="5_Rembrandt"
-              type="button"
-            >
-              <div />
-              Rembrandt
-            </button>
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+                <button
+                  class="item"
+                  id="2_Leonardo da Vinci"
+                  type="button"
+                >
+                  <div />
+                  Leonardo da Vinci
+                </button>
+                <button
+                  class="item"
+                  id="3_Claude Monet"
+                  type="button"
+                >
+                  <div />
+                  Claude Monet
+                </button>
+                <button
+                  class="item"
+                  id="4_Michelangelo"
+                  type="button"
+                >
+                  <div />
+                  Michelangelo
+                </button>
+                <button
+                  class="item"
+                  id="5_Rembrandt"
+                  type="button"
+                >
+                  <div />
+                  Rembrandt
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>
@@ -371,12 +375,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -404,45 +402,53 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        Who painted The Starry Night?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="grid"
+            class="typography subtitle medium"
           >
-            <button
-              class="item"
-              id="0_Vincent van Gogh"
-              type="button"
+            Who painted The Starry Night?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
             >
-              <div />
-              Vincent van Gogh
-            </button>
-            <button
-              class="item"
-              id="1_Pablo Picasso"
-              type="button"
-            >
-              <div />
-              Pablo Picasso
-            </button>
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  id="0_Vincent van Gogh"
+                  type="button"
+                >
+                  <div />
+                  Vincent van Gogh
+                </button>
+                <button
+                  class="item"
+                  id="1_Pablo Picasso"
+                  type="button"
+                >
+                  <div />
+                  Pablo Picasso
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>
@@ -520,12 +526,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -553,75 +553,83 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        What percentage of the earth's surface is covered by water?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="interactive"
+            class="typography subtitle medium"
           >
-            <form>
-              <input
-                id="slider-range"
-                max="100"
-                min="0"
-                step="1"
-                type="range"
-                value="50"
-              />
+            What percentage of the earth's surface is covered by water?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
+            >
               <div
-                class="inputGroup"
+                class="interactive"
               >
-                <div
-                  class="inputContainer"
-                >
+                <form>
+                  <input
+                    id="slider-range"
+                    max="100"
+                    min="0"
+                    step="1"
+                    type="range"
+                    value="50"
+                  />
                   <div
-                    class="textFieldInputContainer textFieldInputKindPrimary"
+                    class="inputGroup"
                   >
-                    <input
-                      class="textfield"
-                      data-testid="test-slider-input-textfield"
-                      id="slider-input"
-                      max="100"
-                      min="0"
-                      name="slider-input"
-                      type="number"
-                      value="50"
-                    />
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer textFieldInputKindPrimary"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-slider-input-textfield"
+                          id="slider-input"
+                          max="100"
+                          min="0"
+                          name="slider-input"
+                          type="number"
+                          value="50"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="buttonInputContainer buttonInputKindPrimary"
+                    >
+                      <button
+                        data-testid="test-submit-button-button"
+                        id="submit-button"
+                        name="submit-button"
+                        type="submit"
+                      >
+                        <span>
+                          Submit
+                        </span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div
-                  class="buttonInputContainer buttonInputKindPrimary"
-                >
-                  <button
-                    data-testid="test-submit-button-button"
-                    id="submit-button"
-                    name="submit-button"
-                    type="submit"
-                  >
-                    <span>
-                      Submit
-                    </span>
-                  </button>
-                </div>
+                </form>
               </div>
-            </form>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>
@@ -699,12 +707,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -732,45 +734,53 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        Rabbits can't vomit?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="grid"
+            class="typography subtitle medium"
           >
-            <button
-              class="item"
-              id="0_True"
-              type="button"
+            Rabbits can't vomit?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
             >
-              <div />
-              True
-            </button>
-            <button
-              class="item"
-              id="1_False"
-              type="button"
-            >
-              <div />
-              False
-            </button>
+              <div
+                class="grid"
+              >
+                <button
+                  class="item"
+                  id="0_True"
+                  type="button"
+                >
+                  <div />
+                  True
+                </button>
+                <button
+                  class="item"
+                  id="1_False"
+                  type="button"
+                >
+                  <div />
+                  False
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>
@@ -848,12 +858,6 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
         >
@@ -881,65 +885,73 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullWidth fullHeight centerAlign"
+      class="content fullHeight centerAlign"
     >
       <div
-        class="typography subtitle medium"
-      >
-        Who painted the Mono Lisa?
-      </div>
-      <div
-        class="progressBar"
-      >
-        <span
-          style="width: 100%; transition: width 0.1s linear;"
-        />
-      </div>
-      <div
-        class="main"
+        class="contentWrapper fullWidth"
       >
         <div
-          class="main"
+          class="contentInner"
         >
           <div
-            class="interactive"
+            class="typography subtitle medium"
           >
-            <form>
+            Who painted the Mono Lisa?
+          </div>
+          <div
+            class="main"
+          >
+            <div
+              class="main"
+            >
               <div
-                class="inputContainer"
+                class="interactive"
               >
-                <div
-                  class="textFieldInputContainer textFieldInputKindPrimary"
-                >
-                  <input
-                    class="textfield"
-                    data-testid="test-answer-input-textfield"
-                    id="answer-input"
-                    maxlength="20"
-                    minlength="1"
-                    name="answer-input"
-                    placeholder="Answer"
-                    type="text"
-                    value=""
-                  />
-                </div>
+                <form>
+                  <div
+                    class="inputContainer"
+                  >
+                    <div
+                      class="textFieldInputContainer textFieldInputKindPrimary"
+                    >
+                      <input
+                        class="textfield"
+                        data-testid="test-answer-input-textfield"
+                        id="answer-input"
+                        maxlength="20"
+                        minlength="1"
+                        name="answer-input"
+                        placeholder="Answer"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="buttonInputContainer buttonInputKindPrimary"
+                  >
+                    <button
+                      data-testid="test-submit-button-button"
+                      disabled=""
+                      id="submit-button"
+                      name="submit-button"
+                      type="submit"
+                    >
+                      <span>
+                        Submit
+                      </span>
+                    </button>
+                  </div>
+                </form>
               </div>
-              <div
-                class="buttonInputContainer buttonInputKindPrimary"
-              >
-                <button
-                  data-testid="test-submit-button-button"
-                  disabled=""
-                  id="submit-button"
-                  name="submit-button"
-                  type="submit"
-                >
-                  <span>
-                    Submit
-                  </span>
-                </button>
-              </div>
-            </form>
+            </div>
+          </div>
+          <div
+            class="progressBar"
+          >
+            <span
+              style="width: 100%; transition: width 0.1s linear;"
+            />
           </div>
         </div>
       </div>

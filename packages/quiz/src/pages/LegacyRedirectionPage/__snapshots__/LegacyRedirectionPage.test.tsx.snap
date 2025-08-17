@@ -27,62 +27,70 @@ exports[`LegacyRedirectionPage > announces the remaining seconds in the aria-liv
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Fresh start—no past activity found on this device.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          7
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Fresh start—no past activity found on this device.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              7
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,62 +124,70 @@ exports[`LegacyRedirectionPage > redirects with window.location.replace and logs
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        We’ve saved your old profile and we’ll bring it along.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          0
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            We’ve saved your old profile and we’ll bring it along.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              0
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -205,62 +221,70 @@ exports[`LegacyRedirectionPage > renders title and shows target host in subtitle
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Fresh start—no past activity found on this device.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          10
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Fresh start—no past activity found on this device.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              10
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -294,62 +318,70 @@ exports[`LegacyRedirectionPage > shows the “fresh start” message when no mig
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Fresh start—no past activity found on this device.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          10
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Fresh start—no past activity found on this device.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              10
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -383,62 +415,70 @@ exports[`LegacyRedirectionPage > shows the “saved profile” message when a mi
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        We’ve saved your old profile and we’ll bring it along.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          10
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            We’ve saved your old profile and we’ll bring it along.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              10
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -472,62 +512,70 @@ exports[`LegacyRedirectionPage > starts the countdown on mount 1`] = `
       />
     </div>
     <div
-      class="content fullWidth centerAlign"
+      class="content centerAlign"
     >
       <div
-        class="typography title full"
+        class="contentWrapper fullWidth"
       >
-        We’ve moved—come with us!
-      </div>
-      <div
-        class="typography subtitle full"
-      >
-        Your new home is 
-        <strong>
-          example.com
-        </strong>
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Fresh start—no past activity found on this device.
-      </div>
-      <div
-        class="typography text medium"
-      >
-        Warping you over in 
-        <strong>
-          10
-          s
-        </strong>
-        …
-      </div>
-      <div
-        class="buttonInputContainer buttonInputKindCallToAction"
-      >
-        <button
-          data-testid="test-redirect-button-button"
-          id="redirect-button"
-          name="redirect-button"
-          type="button"
+        <div
+          class="contentInner"
         >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-paper-plane "
-            data-icon="paper-plane"
-            data-prefix="fas"
-            role="img"
-            viewBox="0 0 576 512"
+          <div
+            class="typography title full"
           >
-            <path
-              d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>
-            Take Me There Now!
-          </span>
-        </button>
+            We’ve moved—come with us!
+          </div>
+          <div
+            class="typography subtitle full"
+          >
+            Your new home is 
+            <strong>
+              example.com
+            </strong>
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Fresh start—no past activity found on this device.
+          </div>
+          <div
+            class="typography text medium"
+          >
+            Warping you over in 
+            <strong>
+              10
+              s
+            </strong>
+            …
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-redirect-button-button"
+              id="redirect-button"
+              name="redirect-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-paper-plane "
+                data-icon="paper-plane"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9L229.2 276.1c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8l496.9-178z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Take Me There Now!
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
