@@ -21,8 +21,10 @@ if (process.env.NODE_ENV === 'production') {
     environment: getSentryEnvironment(),
     tunnel: '/tunnel',
     sendDefaultPii: true,
-    enableLogs: true,
-    integrations: [Sentry.browserTracingIntegration()],
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.consoleLoggingIntegration({ levels: ['warn', 'error'] }),
+    ],
     tracesSampleRate: 1.0,
     tracePropagationTargets: [/^\/quiz-service\/api(\/|$)/],
   })

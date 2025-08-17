@@ -1,3 +1,4 @@
+import { setContext, setUser } from '@sentry/react'
 import React, { FC, ReactNode, useCallback, useMemo, useRef } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
@@ -42,6 +43,20 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
   const inflight = useRef<string | null>(null)
 
   /**
+   * Clears the current user from app state and Sentry.
+   *
+   * Intended for sign-out flows and auth failures. Performs:
+   * - Local cleanup via `clearCurrentUser()`.
+   * - `Sentry.setUser(null)` so subsequent events aren’t attributed to the user.
+   */
+  const handleClearCurrentUser = useCallback(() => {
+    console.debug('Cleaning up user...')
+    clearCurrentUser()
+    setUser(null)
+    setContext('auth', null)
+  }, [clearCurrentUser])
+
+  /**
    * Fetches the current user profile using the provided access token
    * and stores a minimal snapshot of it.
    *
@@ -52,17 +67,22 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
       if (inflight.current === accessToken) return Promise.resolve()
       inflight.current = accessToken
       return getUserProfile(accessToken)
-        .then(({ id, email, unverifiedEmail, defaultNickname }) => {
-          setCurrentUser({ id, email, unverifiedEmail, defaultNickname })
-        })
+        .then(
+          ({ id, email, unverifiedEmail, defaultNickname, authProvider }) => {
+            console.debug('Setting up user...')
+            setCurrentUser({ id, email, unverifiedEmail, defaultNickname })
+            setUser({ id, email, username: defaultNickname })
+            setContext('auth', { provider: authProvider })
+          },
+        )
         .catch(() => {
-          clearCurrentUser()
+          handleClearCurrentUser()
         })
         .finally(() => {
           if (inflight.current === accessToken) inflight.current = null
         })
     },
-    [getUserProfile, setCurrentUser, clearCurrentUser],
+    [getUserProfile, setCurrentUser, handleClearCurrentUser],
   )
 
   /**
@@ -73,9 +93,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
       currentUser,
       setCurrentUser,
       fetchCurrentUser,
-      clearCurrentUser,
+      clearCurrentUser: handleClearCurrentUser,
     }),
-    [currentUser, setCurrentUser, fetchCurrentUser, clearCurrentUser],
+    [currentUser, setCurrentUser, fetchCurrentUser, handleClearCurrentUser],
   )
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

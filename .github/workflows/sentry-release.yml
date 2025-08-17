@@ -16,6 +16,8 @@ on:
     secrets:
       SENTRY_AUTH_TOKEN:
         required: true
+      SENTRY_ORG:
+        required: true
 
 jobs:
   create-sentry-release:
@@ -64,3 +66,6 @@ jobs:
           npx @sentry/cli releases set-commits "$SENTRY_RELEASE" --auto --ignore-missing
           npx @sentry/cli sourcemaps upload "${{ env.SENTRY_SOURCEMAPS_PATH }}"
           npx @sentry/cli releases finalize "$SENTRY_RELEASE"
+          npx @sentry/cli deploys new --release "$SENTRY_RELEASE" \
+            --env "${{ inputs.environment }}" \
+            --name "GitHub Actions"

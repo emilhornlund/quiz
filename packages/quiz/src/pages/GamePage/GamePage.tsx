@@ -1,4 +1,5 @@
 import { GameEventType } from '@quiz/common'
+import { setContext } from '@sentry/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
@@ -45,7 +46,8 @@ import styles from './GamePage.module.scss'
 const GamePage = () => {
   const navigate = useNavigate()
 
-  const { gameID, gameToken, participantId, leaveGame } = useGameContext()
+  const { gameID, gameToken, participantId, participantType, leaveGame } =
+    useGameContext()
 
   const [event, connectionStatus] = useEventSource(gameID, gameToken)
   const [hasReconnected, setHasReconnected] = useState(false)
@@ -94,6 +96,23 @@ const GamePage = () => {
     }
   }, [event, navigate])
 
+  useEffect(() => {
+    if (gameID && gameToken) {
+      console.debug('Setting up game context for Sentry...')
+      setContext('game', { gameId: gameID, participantId, participantType })
+    } else {
+      console.debug('Cleaning up game context for Sentry...')
+      setContext('game', null)
+    }
+  }, [gameID, gameToken, participantId, participantType])
+
+  useEffect(() => {
+    return () => {
+      console.debug('Cleaning up game context for Sentry...')
+      setContext('game', null)
+    }
+  }, [])
+
   /**
    * Dynamically determines the appropriate component to render
    * based on the current game event type.
@@ -141,6 +160,7 @@ const GamePage = () => {
 
   const handleLeaveGame = () => {
     if (blocker.state === 'blocked' && participantId && leaveGame) {
+      console.log('Leaving game...')
       leaveGame(participantId).finally(() => {
         blocker.proceed()
       })
