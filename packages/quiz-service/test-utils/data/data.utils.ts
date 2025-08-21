@@ -4,6 +4,7 @@ import {
   GameStatus,
   LanguageCode,
   MediaType,
+  QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
   QuizCategory,
@@ -23,10 +24,14 @@ import {
   PlayerMetric,
   PodiumTask,
   QuestionResultTask,
+  QuestionResultTaskBaseCorrectAnswer,
+  QuestionResultTaskCorrectPinAnswer,
   QuestionResultTaskItem,
   QuestionTask,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
+  QuestionTaskPinAnswer,
+  QuestionTaskPuzzleAnswer,
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
@@ -38,6 +43,8 @@ import {
   BaseQuestionDao,
   QuestionDao,
   QuestionMultiChoiceDao,
+  QuestionPinDao,
+  QuestionPuzzleDao,
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
@@ -190,6 +197,39 @@ export function createMockTypeAnswerQuestionDocument(
   }
 }
 
+export function createMockPinQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionPinDao>,
+): BaseQuestionDao & QuestionPinDao {
+  return {
+    type: QuestionType.Pin,
+    text: 'Where is the Eiffel Tower located in Paris? Pin the answer on a map of Paris',
+    imageURL: 'https://example.com/question-image.png',
+    positionX: 0.5,
+    positionY: 0.5,
+    tolerance: QuestionPinTolerance.Medium,
+    points: 1000,
+    duration: 5,
+    ...(question ?? {}),
+  }
+}
+
+export function createMockPuzzleQuestionDocument(
+  question?: Partial<BaseQuestionDao & QuestionPuzzleDao>,
+): BaseQuestionDao & QuestionPuzzleDao {
+  return {
+    type: QuestionType.Puzzle,
+    text: 'Sort the oldest cities in Europe',
+    media: {
+      type: MediaType.Image,
+      url: 'https://example.com/question-image.png',
+    },
+    values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+    points: 1000,
+    duration: 30,
+    ...(question ?? {}),
+  }
+}
+
 export function createMockQuestionTaskDocument(
   task?: Partial<BaseTask & QuestionTask>,
 ): BaseTask & QuestionTask {
@@ -198,6 +238,9 @@ export function createMockQuestionTaskDocument(
     type: TaskType.Question,
     status: 'pending',
     questionIndex: 0,
+    metadata: {
+      type: QuestionType.MultiChoice,
+    },
     answers: [],
     presented: offsetSeconds(0),
     created: offsetSeconds(0),
@@ -280,6 +323,42 @@ export function createMockQuestionTaskTypeAnswer(
     type: QuestionType.TypeAnswer,
     playerId: MOCK_DEFAULT_PLAYER_ID,
     answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionTaskPinAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskPinAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskPinAnswer {
+  return {
+    type: QuestionType.Pin,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: '0.5,0.5',
+    created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskCorrectPinAnswer(
+  answer?: Partial<
+    QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPinAnswer
+  >,
+): QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPinAnswer {
+  return {
+    type: QuestionType.Pin,
+    value: '0.5,0.5',
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionTaskPuzzleAnswer(
+  answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer>,
+): QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer {
+  return {
+    type: QuestionType.Puzzle,
+    playerId: MOCK_DEFAULT_PLAYER_ID,
+    answer: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
     created: offsetSeconds(0),
     ...(answer ?? {}),
   }

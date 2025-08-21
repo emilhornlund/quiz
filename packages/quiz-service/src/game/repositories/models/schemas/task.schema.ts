@@ -60,6 +60,121 @@ export class LobbyTask {
 export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
 
 /**
+ * QuestionTaskBaseMetadata
+ */
+@Schema({ _id: false, discriminatorKey: 'type' })
+export class QuestionTaskBaseMetadata {
+  @Prop({
+    enum: [
+      QuestionType.MultiChoice,
+      QuestionType.Range,
+      QuestionType.TrueFalse,
+      QuestionType.TypeAnswer,
+      QuestionType.Pin,
+      QuestionType.Puzzle,
+    ],
+    required: true,
+  })
+  type!:
+    | QuestionType.MultiChoice
+    | QuestionType.Range
+    | QuestionType.TrueFalse
+    | QuestionType.TypeAnswer
+    | QuestionType.Pin
+    | QuestionType.Puzzle
+}
+
+export const QuestionTaskBaseMetadataSchema = SchemaFactory.createForClass(
+  QuestionTaskBaseMetadata,
+)
+
+/**
+ * QuestionTaskMultiChoiceMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskMultiChoiceMetadata {
+  type!: QuestionType.MultiChoice
+}
+
+export const QuestionTaskMultiChoiceMetadataSchema =
+  SchemaFactory.createForClass(QuestionTaskMultiChoiceMetadata)
+
+/**
+ * QuestionTaskRangeMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskRangeMetadata {
+  type!: QuestionType.Range
+}
+
+export const QuestionTaskRangeMetadataSchema = SchemaFactory.createForClass(
+  QuestionTaskRangeMetadata,
+)
+
+/**
+ * QuestionTaskTrueFalseMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskTrueFalseMetadata {
+  type!: QuestionType.TrueFalse
+}
+
+export const QuestionTaskTrueFalseMetadataSchema = SchemaFactory.createForClass(
+  QuestionTaskTrueFalseMetadata,
+)
+
+/**
+ * QuestionTaskTypeAnswerMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskTypeAnswerMetadata {
+  type!: QuestionType.TypeAnswer
+}
+
+export const QuestionTaskTypeAnswerMetadataSchema =
+  SchemaFactory.createForClass(QuestionTaskTypeAnswerMetadata)
+
+/**
+ * QuestionTaskPinMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskPinMetadata {
+  type!: QuestionType.Pin
+}
+
+export const QuestionTaskPinMetadataSchema = SchemaFactory.createForClass(
+  QuestionTaskPinMetadata,
+)
+
+/**
+ * QuestionTaskPuzzleMetadata
+ */
+@Schema({ _id: false })
+export class QuestionTaskPuzzleMetadata {
+  type!: QuestionType.Puzzle
+
+  @Prop({ type: [String], required: true })
+  randomizedValues: string[]
+}
+
+export const QuestionTaskPuzzleMetadataSchema = SchemaFactory.createForClass(
+  QuestionTaskPuzzleMetadata,
+)
+
+/**
+ * Represents question task metadata with its specific discriminator type.
+ */
+export type QuestionTaskMetadata = QuestionTaskBaseMetadata &
+  (
+    | QuestionTaskMultiChoiceMetadata
+    | QuestionTaskRangeMetadata
+    | QuestionTaskTrueFalseMetadata
+    | QuestionTaskTypeAnswerMetadata
+    | QuestionTaskPinMetadata
+    | QuestionTaskPuzzleMetadata
+  )
+
+/**
  * QuestionTaskBaseAnswer
  */
 
@@ -71,6 +186,8 @@ export class QuestionTaskBaseAnswer {
       QuestionType.Range,
       QuestionType.TrueFalse,
       QuestionType.TypeAnswer,
+      QuestionType.Pin,
+      QuestionType.Puzzle,
     ],
     required: true,
   })
@@ -79,6 +196,8 @@ export class QuestionTaskBaseAnswer {
     | QuestionType.Range
     | QuestionType.TrueFalse
     | QuestionType.TypeAnswer
+    | QuestionType.Pin
+    | QuestionType.Puzzle
 
   @Prop({ type: String, required: true })
   playerId: string
@@ -148,6 +267,45 @@ export const QuestionTaskTypeAnswerAnswerSchema = SchemaFactory.createForClass(
 )
 
 /**
+ * QuestionTaskPinAnswer
+ *
+ * The player’s submitted pin location encoded as a normalized CSV string `"x,y"`,
+ * where both coordinates are in the range 0..1 relative to the image.
+ * Example: `"0.25,0.25"`.
+ */
+@Schema({ _id: false })
+export class QuestionTaskPinAnswer {
+  /**
+   * Normalized coordinates encoded as `"x,y"`, e.g. `"0.50,0.50"`.
+   */
+  @Prop({ type: String, required: true })
+  answer: string
+}
+
+export const QuestionTaskPinAnswerSchema = SchemaFactory.createForClass(
+  QuestionTaskPinAnswer,
+)
+
+/**
+ * QuestionTaskPuzzleAnswer
+ *
+ * The player’s submitted ordering of the puzzle’s values.
+ * Must contain the same set of values as presented in the question.
+ */
+@Schema({ _id: false })
+export class QuestionTaskPuzzleAnswer {
+  /**
+   * Ordered list representing the player’s final arrangement.
+   */
+  @Prop({ type: [String], required: true })
+  answer: string[]
+}
+
+export const QuestionTaskPuzzleAnswerSchema = SchemaFactory.createForClass(
+  QuestionTaskPuzzleAnswer,
+)
+
+/**
  * Represents a question task answer with its specific discriminator type.
  */
 export type QuestionTaskAnswer = QuestionTaskBaseAnswer &
@@ -156,6 +314,8 @@ export type QuestionTaskAnswer = QuestionTaskBaseAnswer &
     | QuestionTaskRangeAnswer
     | QuestionTaskTrueFalseAnswer
     | QuestionTaskTypeAnswerAnswer
+    | QuestionTaskPinAnswer
+    | QuestionTaskPuzzleAnswer
   )
 
 /**
@@ -169,6 +329,9 @@ export class QuestionTask {
   @Prop({ type: Number, required: true })
   questionIndex: number
 
+  @Prop({ type: QuestionTaskBaseMetadataSchema, required: true })
+  metadata: QuestionTaskMetadata
+
   @Prop({ type: [QuestionTaskBaseAnswerSchema], required: true })
   answers: QuestionTaskAnswer[]
 
@@ -178,23 +341,58 @@ export class QuestionTask {
 
 export const QuestionTaskSchema = SchemaFactory.createForClass(QuestionTask)
 
-const questionTaskSchema =
+const questionTaskMetadataSchema =
+  QuestionTaskSchema.path<MongooseSchema.Types.Array>('metadata')
+questionTaskMetadataSchema.discriminator(
+  QuestionType.MultiChoice,
+  QuestionTaskMultiChoiceMetadataSchema,
+)
+questionTaskMetadataSchema.discriminator(
+  QuestionType.Range,
+  QuestionTaskRangeMetadataSchema,
+)
+questionTaskMetadataSchema.discriminator(
+  QuestionType.TrueFalse,
+  QuestionTaskTrueFalseMetadataSchema,
+)
+questionTaskMetadataSchema.discriminator(
+  QuestionType.TypeAnswer,
+  QuestionTaskTypeAnswerMetadataSchema,
+)
+questionTaskMetadataSchema.discriminator(
+  QuestionType.Pin,
+  QuestionTaskPinMetadataSchema,
+)
+questionTaskMetadataSchema.discriminator(
+  QuestionType.Puzzle,
+  QuestionTaskPuzzleMetadataSchema,
+)
+
+const questionTaskAnswerSchema =
   QuestionTaskSchema.path<MongooseSchema.Types.Array>('answers')
-questionTaskSchema.discriminator(
+questionTaskAnswerSchema.discriminator(
   QuestionType.MultiChoice,
   QuestionTaskMultiChoiceAnswerSchema,
 )
-questionTaskSchema.discriminator(
+questionTaskAnswerSchema.discriminator(
   QuestionType.Range,
   QuestionTaskRangeAnswerSchema,
 )
-questionTaskSchema.discriminator(
+questionTaskAnswerSchema.discriminator(
   QuestionType.TrueFalse,
   QuestionTaskTrueFalseAnswerSchema,
 )
-questionTaskSchema.discriminator(
+questionTaskAnswerSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionTaskTypeAnswerAnswerSchema,
+)
+questionTaskAnswerSchema.discriminator(
+  QuestionType.Pin,
+  QuestionTaskPinAnswerSchema,
+)
+questionTaskAnswerSchema.discriminator(
+  QuestionType.Puzzle,
+  QuestionTaskPuzzleAnswerSchema,
 )
 
 /**
@@ -209,6 +407,8 @@ export class QuestionResultTaskItem {
       QuestionType.Range,
       QuestionType.TrueFalse,
       QuestionType.TypeAnswer,
+      QuestionType.Pin,
+      QuestionType.Puzzle,
     ],
     required: true,
   })
@@ -217,6 +417,8 @@ export class QuestionResultTaskItem {
     | QuestionType.Range
     | QuestionType.TrueFalse
     | QuestionType.TypeAnswer
+    | QuestionType.Pin
+    | QuestionType.Puzzle
 
   @Prop({ type: String, required: true })
   playerId: string
@@ -265,6 +467,14 @@ questionResultTaskItemSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionTaskTypeAnswerAnswerSchema,
 )
+questionResultTaskItemSchema.discriminator(
+  QuestionType.Pin,
+  QuestionTaskPinAnswerSchema,
+)
+questionResultTaskItemSchema.discriminator(
+  QuestionType.Puzzle,
+  QuestionTaskPuzzleAnswerSchema,
+)
 
 /**
  * QuestionResultTaskBaseCorrectAnswer
@@ -278,6 +488,8 @@ export class QuestionResultTaskBaseCorrectAnswer {
       QuestionType.Range,
       QuestionType.TrueFalse,
       QuestionType.TypeAnswer,
+      QuestionType.Pin,
+      QuestionType.Puzzle,
     ],
     required: true,
   })
@@ -286,6 +498,8 @@ export class QuestionResultTaskBaseCorrectAnswer {
     | QuestionType.Range
     | QuestionType.TrueFalse
     | QuestionType.TypeAnswer
+    | QuestionType.Pin
+    | QuestionType.Puzzle
 }
 
 export const QuestionResultTaskBaseCorrectAnswerSchema =
@@ -344,6 +558,40 @@ export const QuestionResultTaskCorrectTypeAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectTypeAnswer)
 
 /**
+ * QuestionResultTaskCorrectPinAnswer
+ *
+ * The correct normalized coordinates for a pin question.
+ */
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectPinAnswer {
+  /**
+   * Normalized coordinates encoded as `"x,y"`, e.g. `"0.50,0.50"`.
+   */
+  @Prop({ type: String, required: true })
+  value: string
+}
+
+export const QuestionResultTaskCorrectPinAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectPinAnswer)
+
+/**
+ * QuestionResultTaskCorrectPuzzleAnswer
+ *
+ * The target ordering for a puzzle question.
+ */
+@Schema({ _id: false })
+export class QuestionResultTaskCorrectPuzzleAnswer {
+  /**
+   * Correct sequence of values.
+   */
+  @Prop({ type: [String], required: true })
+  value: string[]
+}
+
+export const QuestionResultTaskCorrectPuzzleAnswerSchema =
+  SchemaFactory.createForClass(QuestionResultTaskCorrectPuzzleAnswer)
+
+/**
  * Represents a question result task correct answer with its specific discriminator type.
  */
 export type QuestionResultTaskCorrectAnswer =
@@ -353,6 +601,8 @@ export type QuestionResultTaskCorrectAnswer =
       | QuestionResultTaskCorrectRangeAnswer
       | QuestionResultTaskCorrectTrueFalseAnswer
       | QuestionResultTaskCorrectTypeAnswer
+      | QuestionResultTaskCorrectPinAnswer
+      | QuestionResultTaskCorrectPuzzleAnswer
     )
 
 /**
@@ -396,6 +646,14 @@ questionResultTaskSchema.discriminator(
 questionResultTaskSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionResultTaskCorrectTypeAnswerSchema,
+)
+questionResultTaskSchema.discriminator(
+  QuestionType.Pin,
+  QuestionResultTaskCorrectPinAnswerSchema,
+)
+questionResultTaskSchema.discriminator(
+  QuestionType.Puzzle,
+  QuestionResultTaskCorrectPuzzleAnswerSchema,
 )
 
 /**

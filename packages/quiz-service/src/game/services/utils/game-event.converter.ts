@@ -25,9 +25,13 @@ import {
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
+import { arraysEqual } from '@quiz/common'
 
+import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
+  isPinQuestion,
+  isPuzzleQuestion,
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
@@ -38,12 +42,17 @@ import {
   ParticipantBase,
   ParticipantPlayer,
   QuestionResultTaskItem,
+  QuestionTaskMetadata,
   TaskType,
 } from '../../repositories/models/schemas'
 
 import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
+  isPinAnswer,
+  isPinCorrectAnswer,
+  isPuzzleAnswer,
+  isPuzzleCorrectAnswer,
   isRangeAnswer,
   isRangeCorrectAnswer,
   isTrueFalseAnswer,
@@ -51,6 +60,7 @@ import {
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
 } from './question-answer.utils'
+import { isPuzzleMetadata } from './question-task-metadata.utils'
 import {
   isLeaderboardTask,
   isLobbyTask,
@@ -430,45 +440,60 @@ function buildGameQuestionPreviewPlayerEvent(
 /**
  * Builds a game event question object based on the question type.
  *
- * @param {GameDocument['questions'][number]} question - The question object from the game document.
+ * @param question - The question object from the game document.
+ * @param metadata - The metadata object of the current question task.
  *
  * @returns {GameEventQuestion} A formatted question object depending on the question type.
  */
 function buildGameEventQuestion(
-  question: GameDocument['questions'][number],
+  question: QuestionDao,
+  metadata: QuestionTaskMetadata,
 ): GameEventQuestion {
   const common = {
     question: question.text,
     media: question.media
       ? { type: question.media.type, url: question.media.url }
-      : null,
+      : undefined,
     duration: question.duration,
   }
-  switch (question.type) {
-    case QuestionType.MultiChoice:
-      return {
-        type: QuestionType.MultiChoice,
-        answers: question.options.map(({ value }) => ({ value })),
-        ...common,
-      }
-    case QuestionType.Range:
-      return {
-        type: QuestionType.Range,
-        min: question.min,
-        max: question.max,
-        step: question.step,
-        ...common,
-      }
-    case QuestionType.TrueFalse:
-      return {
-        type: QuestionType.TrueFalse,
-        ...common,
-      }
-    case QuestionType.TypeAnswer:
-      return {
-        type: QuestionType.TypeAnswer,
-        ...common,
-      }
+
+  if (isMultiChoiceQuestion(question)) {
+    return {
+      type: QuestionType.MultiChoice,
+      answers: question.options.map(({ value }) => ({ value })),
+      ...common,
+    }
+  }
+  if (isRangeQuestion(question)) {
+    return {
+      type: QuestionType.Range,
+      min: question.min,
+      max: question.max,
+      step: question.step,
+      ...common,
+    }
+  }
+  if (isTrueFalseQuestion(question)) {
+    return {
+      type: QuestionType.TrueFalse,
+      ...common,
+    }
+  }
+  if (isTypeAnswerQuestion(question)) {
+    return {
+      type: QuestionType.TypeAnswer,
+      ...common,
+    }
+  }
+  if (isPinQuestion(question)) {
+    return { type: QuestionType.Pin, imageURL: question.imageURL, ...common }
+  }
+  if (isPuzzleQuestion(question) && isPuzzleMetadata(metadata)) {
+    return {
+      type: QuestionType.Puzzle,
+      values: metadata.randomizedValues,
+      ...common,
+    }
   }
 }
 
@@ -487,13 +512,17 @@ function buildGameQuestionHostEvent(
   totalAnswerSubmissions: number,
 ): GameQuestionHostEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
+  const currentQuestionTask = document.currentTask
 
   return {
     type: GameEventType.GameQuestionHost,
     game: {
       pin: document.pin,
     },
-    question: buildGameEventQuestion(currentQuestion),
+    question: buildGameEventQuestion(
+      currentQuestion,
+      currentQuestionTask.metadata,
+    ),
     countdown: buildGameQuestionCountdownEvent(document),
     submissions: {
       current: currentAnswerSubmissions,
@@ -516,6 +545,7 @@ function buildGameQuestionPlayerEvent(
   participantPlayer: ParticipantBase & ParticipantPlayer,
 ): GameQuestionPlayerEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
+  const currentQuestionTask = document.currentTask
 
   const { nickname, totalScore: total } = participantPlayer
 
@@ -527,7 +557,10 @@ function buildGameQuestionPlayerEvent(
         total,
       },
     },
-    question: buildGameEventQuestion(currentQuestion),
+    question: buildGameEventQuestion(
+      currentQuestion,
+      currentQuestionTask.metadata,
+    ),
     countdown: buildGameQuestionCountdownEvent(document),
     pagination: buildPaginationEvent(document),
   }
@@ -733,6 +766,98 @@ function buildGameEventQuestionResults(
             .filter(isTypeAnswerCorrectAnswer)
             .map(({ value }) => ({
               value: value.toLowerCase(),
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
+          }
+          return b.count - a.count
+        }),
+    }
+  }
+
+  if (isPinQuestion(question)) {
+    return {
+      type: QuestionType.Pin,
+      imageURL: question.imageURL,
+      positionX: question.positionX,
+      positionY: question.positionY,
+      tolerance: question.tolerance,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isPinAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.value === answer,
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else if (
+                /^(0(\.\d+)?|1(\.0+)?)\s*,\s*(0(\.\d+)?|1(\.0+)?)$/.test(answer)
+              ) {
+                prev.push({
+                  value: answer,
+                  count: 1,
+                  correct: playerResultItem.correct,
+                })
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isPinCorrectAnswer)
+            .map(({ value }) => ({
+              value,
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
+          }
+          return b.count - a.count
+        }),
+    }
+  }
+
+  if (isPuzzleQuestion(question)) {
+    return {
+      type: QuestionType.Puzzle,
+      values: question.values,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isPuzzleAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              if (answer && Array.isArray(answer)) {
+                const distributionIndex = prev.findIndex(
+                  (item) =>
+                    Array.isArray(item.value) &&
+                    Array.isArray(answer) &&
+                    arraysEqual(item.value, answer),
+                )
+                if (distributionIndex >= 0) {
+                  prev[distributionIndex].count += 1
+                } else {
+                  prev.push({
+                    value: answer,
+                    count: 1,
+                    correct: playerResultItem.correct,
+                  })
+                }
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isPuzzleCorrectAnswer)
+            .map(({ value }) => ({
+              value,
               count: 0,
               correct: true,
             })),

@@ -11,12 +11,16 @@ import {
   QuestionResultTaskBaseCorrectAnswer,
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskCorrectMultiChoiceAnswer,
+  QuestionResultTaskCorrectPinAnswer,
+  QuestionResultTaskCorrectPuzzleAnswer,
   QuestionResultTaskCorrectRangeAnswer,
   QuestionResultTaskCorrectTrueFalseAnswer,
   QuestionResultTaskCorrectTypeAnswer,
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
+  QuestionTaskPinAnswer,
+  QuestionTaskPuzzleAnswer,
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
@@ -30,6 +34,8 @@ type Answer = QuestionTaskBaseAnswer &
     | QuestionTaskRangeAnswer
     | QuestionTaskTrueFalseAnswer
     | QuestionTaskTypeAnswerAnswer
+    | QuestionTaskPinAnswer
+    | QuestionTaskPuzzleAnswer
   )
 
 /**
@@ -97,6 +103,36 @@ export function isTypeAnswerAnswer(
 }
 
 /**
+ * Checks if the given answer is of type `Pin`.
+ *
+ * @param {Answer} answer - The answer object to check.
+ *
+ * @returns {boolean} Returns `true` if the answer is of type `Pin`, otherwise `false`.
+ */
+export function isPinAnswer(answer?: Answer): answer is QuestionTaskBaseAnswer &
+  QuestionTaskPinAnswer & {
+    type: QuestionType.Pin
+  } {
+  return answer?.type === QuestionType.Pin
+}
+
+/**
+ * Checks if the given answer is of type `Puzzle`.
+ *
+ * @param {Answer} answer - The answer object to check.
+ *
+ * @returns {boolean} Returns `true` if the answer is of type `Puzzle`, otherwise `false`.
+ */
+export function isPuzzleAnswer(
+  answer?: Answer,
+): answer is QuestionTaskBaseAnswer &
+  QuestionTaskPuzzleAnswer & {
+    type: QuestionType.Puzzle
+  } {
+  return answer?.type === QuestionType.Puzzle
+}
+
+/**
  * Converts a player's submitted answer into a question task answer format.
  *
  * This function takes the player ID and the submitted answer data, and returns a
@@ -117,7 +153,7 @@ export function toQuestionTaskAnswer(
 ): QuestionTaskAnswer {
   const { type } = submitQuestionAnswerRequest
 
-  let answer: string | number | boolean
+  let answer: string | string[] | number | boolean
 
   if (type === QuestionType.MultiChoice) {
     answer = submitQuestionAnswerRequest.optionIndex
@@ -127,6 +163,10 @@ export function toQuestionTaskAnswer(
     type === QuestionType.TypeAnswer
   ) {
     answer = submitQuestionAnswerRequest.value
+  } else if (type === QuestionType.Pin) {
+    answer = `${submitQuestionAnswerRequest.positionX},${submitQuestionAnswerRequest.positionY}`
+  } else if (type === QuestionType.Puzzle) {
+    answer = submitQuestionAnswerRequest.values
   }
 
   return {
@@ -155,7 +195,7 @@ export function toQuestionTaskAnswerFromString(
     created: new Date(deserializedValue.created as Date),
   }
 
-  let answer: string | number | boolean
+  let answer: string | string[] | number | boolean
 
   switch (deserializedValue.type) {
     case QuestionType.MultiChoice:
@@ -169,6 +209,12 @@ export function toQuestionTaskAnswerFromString(
       break
     case QuestionType.TypeAnswer:
       answer = deserializedValue.answer as string
+      break
+    case QuestionType.Pin:
+      answer = deserializedValue.answer as string
+      break
+    case QuestionType.Puzzle:
+      answer = deserializedValue.answer as string[]
       break
   }
 
@@ -282,4 +328,36 @@ export function isTypeAnswerCorrectAnswer(
     type: QuestionType.TypeAnswer
   } {
   return answer?.type === QuestionType.TypeAnswer
+}
+
+/**
+ * Checks if the given correct answer is of type `Pin`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `Pin`, otherwise `false`.
+ */
+export function isPinCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectPinAnswer & {
+    type: QuestionType.Pin
+  } {
+  return answer?.type === QuestionType.Pin
+}
+
+/**
+ * Checks if the given correct answer is of type `Puzzle`.
+ *
+ * @param answer - The answer object to check.
+ *
+ * @returns Returns `true` if the correct answer is of type `Puzzle`, otherwise `false`.
+ */
+export function isPuzzleCorrectAnswer(
+  answer?: QuestionResultTaskCorrectAnswer,
+): answer is QuestionResultTaskBaseCorrectAnswer &
+  QuestionResultTaskCorrectPuzzleAnswer & {
+    type: QuestionType.Puzzle
+  } {
+  return answer?.type === QuestionType.Puzzle
 }
