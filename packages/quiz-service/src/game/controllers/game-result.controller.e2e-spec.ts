@@ -48,12 +48,6 @@ describe('GameResultController (e2e)', () => {
     it('should succeed in retrieving game results for a classic mode game', async () => {
       const gameId = uuidv4()
 
-      // const { accessToken, user: hostUser } =
-      //   await createDefaultUserAndAuthenticate(app, TokenScope.Game, {
-      //     gameId,
-      //     participantType: GameParticipantType.HOST,
-      //   })
-
       const { accessToken, user: hostUser } =
         await createDefaultUserAndAuthenticate(app)
 

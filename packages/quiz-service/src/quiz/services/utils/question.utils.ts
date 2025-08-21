@@ -4,6 +4,8 @@ import {
   BaseQuestionDao,
   QuestionDao,
   QuestionMultiChoiceDao,
+  QuestionPinDao,
+  QuestionPuzzleDao,
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
@@ -63,6 +65,33 @@ export function isTypeAnswerQuestion(
 ): question is BaseQuestionDao &
   QuestionTypeAnswerDao & { type: QuestionType.TypeAnswer } {
   return question?.type === QuestionType.TypeAnswer
+}
+
+/**
+ * Checks if the given question is of type `Pin`.
+ *
+ * @param {QuestionDao} question - The question object to check.
+ *
+ * @returns {boolean} Returns `true` if the question is of type `Pin`, otherwise `false`.
+ */
+export function isPinQuestion(
+  question?: QuestionDao,
+): question is BaseQuestionDao & QuestionPinDao & { type: QuestionType.Pin } {
+  return question?.type === QuestionType.Pin
+}
+
+/**
+ * Checks if the given question is of type `Puzzle`.
+ *
+ * @param {QuestionDao} question - The question object to check.
+ *
+ * @returns {boolean} Returns `true` if the question is of type `Puzzle`, otherwise `false`.
+ */
+export function isPuzzleQuestion(
+  question?: QuestionDao,
+): question is BaseQuestionDao &
+  QuestionPuzzleDao & { type: QuestionType.Puzzle } {
+  return question?.type === QuestionType.Puzzle
 }
 
 /**

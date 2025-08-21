@@ -28,6 +28,8 @@ import {
 
 import {
   isMultiChoiceQuestion,
+  isPinQuestion,
+  isPuzzleQuestion,
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
@@ -44,6 +46,10 @@ import {
 import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
+  isPinAnswer,
+  isPinCorrectAnswer,
+  isPuzzleAnswer,
+  isPuzzleCorrectAnswer,
   isRangeAnswer,
   isRangeCorrectAnswer,
   isTrueFalseAnswer,
@@ -733,6 +739,94 @@ function buildGameEventQuestionResults(
             .filter(isTypeAnswerCorrectAnswer)
             .map(({ value }) => ({
               value: value.toLowerCase(),
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
+          }
+          return b.count - a.count
+        }),
+    }
+  }
+
+  if (isPinQuestion(question)) {
+    return {
+      type: QuestionType.Pin,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isPinAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              const distributionIndex = prev.findIndex(
+                (item) => item.value === answer,
+              )
+              if (distributionIndex >= 0) {
+                prev[distributionIndex].count += 1
+              } else if (
+                /^(0(\.\d+)?|1(\.0+)?)\s*,\s*(0(\.\d+)?|1(\.0+)?)$/.test(answer)
+              ) {
+                prev.push({
+                  value: answer,
+                  count: 1,
+                  correct: playerResultItem.correct,
+                })
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isPinCorrectAnswer)
+            .map(({ value }) => ({
+              value,
+              count: 0,
+              correct: true,
+            })),
+        )
+        .sort((a, b) => {
+          if (a.correct !== b.correct) {
+            return a.correct ? -1 : 1
+          }
+          return b.count - a.count
+        }),
+    }
+  }
+
+  if (isPuzzleQuestion(question)) {
+    return {
+      type: QuestionType.Puzzle,
+      distribution: document.currentTask.results
+        .reduce(
+          (prev, playerResultItem) => {
+            if (isPuzzleAnswer(playerResultItem.answer)) {
+              const answer = playerResultItem.answer.answer
+              if (answer && Array.isArray(answer)) {
+                const distributionIndex = prev.findIndex(
+                  (item) =>
+                    Array.isArray(item.value) &&
+                    Array.isArray(answer) &&
+                    item.value.length === answer.length &&
+                    item.value.every((value, i) => value === answer[i]),
+                )
+                if (distributionIndex >= 0) {
+                  prev[distributionIndex].count += 1
+                } else {
+                  prev.push({
+                    value: answer,
+                    count: 1,
+                    correct: playerResultItem.correct,
+                  })
+                }
+              }
+            }
+            return prev
+          },
+          document.currentTask.correctAnswers
+            .filter(isPuzzleCorrectAnswer)
+            .map(({ value }) => ({
+              value,
               count: 0,
               correct: true,
             })),

@@ -6,6 +6,8 @@ import {
   PaginatedQuizResponseDto,
   QuestionDto,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPuzzleDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -26,6 +28,8 @@ import {
   BaseQuestionDao,
   QuestionDao,
   QuestionMultiChoiceDao,
+  QuestionPinDao,
+  QuestionPuzzleDao,
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
@@ -346,7 +350,6 @@ export class QuizService {
         const common: Partial<BaseQuestionDao> = {
           type: question.type,
           text: question.question,
-          media: question.media,
           points: question.points,
           duration: question.duration,
         }
@@ -357,6 +360,7 @@ export class QuizService {
               ...common,
               ...({
                 type: QuestionType.MultiChoice,
+                media: question.media,
                 options: question.options,
               } as BaseQuestionDao & QuestionMultiChoiceDao),
             }
@@ -365,6 +369,7 @@ export class QuizService {
               ...common,
               ...({
                 type: QuestionType.Range,
+                media: question.media,
                 min: question.min,
                 max: question.max,
                 step: calculateRangeStep(question.min, question.max),
@@ -377,6 +382,7 @@ export class QuizService {
               ...common,
               ...({
                 type: QuestionType.TrueFalse,
+                media: question.media,
                 correct: question.correct,
               } as BaseQuestionDao & QuestionTrueFalseDao),
             }
@@ -385,9 +391,31 @@ export class QuizService {
               ...common,
               ...({
                 type: QuestionType.TypeAnswer,
+                media: question.media,
                 options: question.options,
               } as BaseQuestionDao & QuestionTypeAnswerDao),
             }
+          case QuestionType.Pin:
+            return {
+              ...common,
+              ...{
+                type: QuestionType.Pin,
+                media: undefined,
+                imageURL: question.imageURL,
+                positionX: question.positionX,
+                positionY: question.positionY,
+                tolerance: question.tolerance,
+              },
+            } as BaseQuestionDao & QuestionPinDao
+          case QuestionType.Puzzle:
+            return {
+              ...common,
+              ...{
+                type: QuestionType.Puzzle,
+                media: question.media,
+                values: question.values,
+              },
+            } as BaseQuestionDao & QuestionPuzzleDao
         }
       })
     }
@@ -469,6 +497,25 @@ export class QuizService {
             type: QuestionType.TypeAnswer,
             options: cast.options,
           } as QuestionTypeAnswerDto
+        }
+        case QuestionType.Pin: {
+          const cast = question as BaseQuestionDao & QuestionPinDao
+          return {
+            ...common,
+            type: QuestionType.Pin,
+            imageURL: cast.imageURL,
+            positionX: cast.positionX,
+            positionY: cast.positionY,
+            tolerance: cast.tolerance,
+          } as QuestionPinDto
+        }
+        case QuestionType.Puzzle: {
+          const cast = question as BaseQuestionDao & QuestionPuzzleDao
+          return {
+            ...common,
+            type: QuestionType.Puzzle,
+            values: cast.values,
+          } as QuestionPuzzleDto
         }
       }
     }

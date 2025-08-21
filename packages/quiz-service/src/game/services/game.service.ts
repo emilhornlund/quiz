@@ -10,6 +10,8 @@ import {
   GameParticipantType,
   MultiChoiceQuestionCorrectAnswerDto,
   PaginatedGameHistoryDto,
+  PinQuestionCorrectAnswerDto,
+  PuzzleQuestionCorrectAnswerDto,
   QuestionType,
   RangeQuestionCorrectAnswerDto,
   SubmitQuestionAnswerRequestDto,
@@ -35,7 +37,9 @@ import {
   getRedisPlayerParticipantAnswerKey,
   isMultiChoiceCorrectAnswer,
   isNicknameUnique,
+  isPinCorrectAnswer,
   isPlayerUnique,
+  isPuzzleCorrectAnswer,
   isQuestionResultTask,
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
@@ -372,7 +376,9 @@ export class GameService {
       | MultiChoiceQuestionCorrectAnswerDto
       | RangeQuestionCorrectAnswerDto
       | TrueFalseQuestionCorrectAnswerDto
-      | TypeAnswerQuestionCorrectAnswerDto,
+      | TypeAnswerQuestionCorrectAnswerDto
+      | PinQuestionCorrectAnswerDto
+      | PuzzleQuestionCorrectAnswerDto,
   ): Promise<void> {
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 
@@ -414,6 +420,22 @@ export class GameService {
               },
             ]
           : []),
+        ...(correctAnswerRequest.type === QuestionType.Pin
+          ? [
+              {
+                type: QuestionType.Pin,
+                value: `${correctAnswerRequest.positionX},${correctAnswerRequest.positionY}`,
+              },
+            ]
+          : []),
+        ...(correctAnswerRequest.type === QuestionType.Puzzle
+          ? [
+              {
+                type: QuestionType.Puzzle,
+                value: correctAnswerRequest.values,
+              },
+            ]
+          : []),
       ]
 
       const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
@@ -448,7 +470,9 @@ export class GameService {
       | MultiChoiceQuestionCorrectAnswerDto
       | RangeQuestionCorrectAnswerDto
       | TrueFalseQuestionCorrectAnswerDto
-      | TypeAnswerQuestionCorrectAnswerDto,
+      | TypeAnswerQuestionCorrectAnswerDto
+      | PinQuestionCorrectAnswerDto
+      | PuzzleQuestionCorrectAnswerDto,
   ): Promise<void> {
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 
@@ -478,11 +502,24 @@ export class GameService {
             correctAnswerRequest.type === QuestionType.TypeAnswer &&
             correctAnswer.value === correctAnswerRequest.value
 
+          const isExistingCorrectPinAnswer =
+            isPinCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.Pin &&
+            correctAnswer.value ===
+              `${correctAnswerRequest.positionX},${correctAnswerRequest.positionY}`
+
+          const isExistingCorrectPuzzleAnswer =
+            isPuzzleCorrectAnswer(correctAnswer) &&
+            correctAnswerRequest.type === QuestionType.Puzzle &&
+            correctAnswer.value === correctAnswerRequest.values
+
           return !(
             isExistingCorrectMultiChoiceAnswer ||
             isExistingCorrectRangeAnswer ||
             isExistingCorrectTrueFalseAnswer ||
-            isExistingCorrectTypeAnswer
+            isExistingCorrectTypeAnswer ||
+            isExistingCorrectPinAnswer ||
+            isExistingCorrectPuzzleAnswer
           )
         })
 

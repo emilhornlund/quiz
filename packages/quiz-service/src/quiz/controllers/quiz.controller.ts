@@ -41,6 +41,8 @@ import {
   PaginatedQuizResponse,
   PublicQuizPageFilter,
   QuestionMultiChoice,
+  QuestionPin,
+  QuestionPuzzle,
   QuestionRange,
   QuestionTrueFalse,
   QuestionTypeAnswer,
@@ -61,6 +63,8 @@ import { QuestionResponseMultiChoiceExample } from './utils/question-examples.ut
   QuestionRange,
   QuestionTrueFalse,
   QuestionTypeAnswer,
+  QuestionPin,
+  QuestionPuzzle,
   QuestionZeroToOneHundredRange,
   QuizClassicRequest,
   QuizZeroToOneHundredRequest,
@@ -271,7 +275,7 @@ export class QuizController {
    *
    * @param {string} quizId - The unique identifier of the quiz for which to retrieve questions.
    *
-   * @returns {Promise<(QuestionMultiChoice | QuestionRange | QuestionZeroToOneHundredRange | QuestionTrueFalse | QuestionTypeAnswer)[]>} - An array of questions associated with the specified quiz.
+   * @returns {Promise<(QuestionMultiChoice | QuestionRange | QuestionZeroToOneHundredRange | QuestionTrueFalse | QuestionTypeAnswer | QuestionPin | QuestionPuzzle)[]>} - An array of questions associated with the specified quiz.
    */
   @Get('/:quizId/questions')
   @AuthorizedQuiz()
@@ -292,6 +296,8 @@ export class QuizController {
           { $ref: getSchemaPath(QuestionZeroToOneHundredRange) },
           { $ref: getSchemaPath(QuestionTrueFalse) },
           { $ref: getSchemaPath(QuestionTypeAnswer) },
+          { $ref: getSchemaPath(QuestionPin) },
+          { $ref: getSchemaPath(QuestionPuzzle) },
         ],
       },
     },
@@ -313,6 +319,8 @@ export class QuizController {
       | QuestionZeroToOneHundredRange
       | QuestionTrueFalse
       | QuestionTypeAnswer
+      | QuestionPin
+      | QuestionPuzzle
     )[]
   > {
     return this.quizService.findAllQuestion(quizId)

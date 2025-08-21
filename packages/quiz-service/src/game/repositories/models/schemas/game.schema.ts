@@ -11,6 +11,8 @@ import {
   BaseQuestionDaoSchema,
   QuestionDao,
   QuestionMultiChoiceDaoSchema,
+  QuestionPinDaoSchema,
+  QuestionPuzzleDaoSchema,
   QuestionRangeDaoSchema,
   QuestionTrueFalseDaoSchema,
   QuestionTypeAnswerDaoSchema,
@@ -138,6 +140,8 @@ questionsSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionTypeAnswerDaoSchema,
 )
+questionsSchema.discriminator(QuestionType.Pin, QuestionPinDaoSchema)
+questionsSchema.discriminator(QuestionType.Puzzle, QuestionPuzzleDaoSchema)
 
 const currentTaskSchema =
   GameSchema.path<MongooseSchema.Types.Subdocument>('currentTask')

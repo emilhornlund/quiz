@@ -11,6 +11,8 @@ import { validate } from 'class-validator'
 import { ValidationException } from '../../app/exceptions'
 import {
   SubmitMultiChoiceQuestionAnswerRequest,
+  SubmitPinQuestionAnswerRequest,
+  SubmitPuzzleQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
@@ -26,6 +28,8 @@ export class ParseSubmitQuestionAnswerRequestPipe
         | SubmitRangeQuestionAnswerRequest
         | SubmitTrueFalseQuestionAnswerRequest
         | SubmitTypeAnswerQuestionAnswerRequest
+        | SubmitPinQuestionAnswerRequest
+        | SubmitPuzzleQuestionAnswerRequest
       >
     >
 {
@@ -38,6 +42,8 @@ export class ParseSubmitQuestionAnswerRequestPipe
     | SubmitRangeQuestionAnswerRequest
     | SubmitTrueFalseQuestionAnswerRequest
     | SubmitTypeAnswerQuestionAnswerRequest
+    | SubmitPinQuestionAnswerRequest
+    | SubmitPuzzleQuestionAnswerRequest
   > {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let object: any
@@ -49,6 +55,10 @@ export class ParseSubmitQuestionAnswerRequestPipe
       object = plainToInstance(SubmitTrueFalseQuestionAnswerRequest, value)
     } else if (value['type'] == QuestionType.TypeAnswer) {
       object = plainToInstance(SubmitTypeAnswerQuestionAnswerRequest, value)
+    } else if (value['type'] == QuestionType.Pin) {
+      object = plainToInstance(SubmitPinQuestionAnswerRequest, value)
+    } else if (value['type'] == QuestionType.Puzzle) {
+      object = plainToInstance(SubmitPuzzleQuestionAnswerRequest, value)
     } else {
       throw new BadRequestException('Validation failed')
     }
