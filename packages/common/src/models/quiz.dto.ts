@@ -2,6 +2,8 @@ import { GameMode } from './game-mode.enum'
 import { LanguageCode } from './language-code.enum'
 import {
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPuzzleDto,
   QuestionRangeDto,
   QuestionTrueFalseDto,
   QuestionTypeAnswerDto,
@@ -84,6 +86,8 @@ export type QuizRequestDto = {
         | QuestionRangeDto
         | QuestionTrueFalseDto
         | QuestionTypeAnswerDto
+        | QuestionPinDto
+        | QuestionPuzzleDto
       )[]
     }
   | {

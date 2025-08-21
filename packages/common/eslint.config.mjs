@@ -4,6 +4,10 @@ import prettier from 'eslint-plugin-prettier'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+const browserGlobals = Object.fromEntries(
+  Object.entries(globals.browser).map(([k, v]) => [k.trim(), v]),
+)
+
 export default [
   {
     ignores: ['node_modules', 'dist'],
@@ -13,7 +17,7 @@ export default [
   },
   {
     languageOptions: {
-      globals: globals.browser,
+      globals: browserGlobals,
     },
   },
   {
