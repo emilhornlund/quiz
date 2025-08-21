@@ -122,11 +122,27 @@ export type GameEventQuestionTypeAnswer = {
   duration: number
 }
 
+export type GameEventQuestionPin = {
+  readonly type: QuestionType.Pin
+  readonly question: string
+  readonly imageURL: string
+  readonly duration: number
+}
+
+export type GameEventQuestionPuzzle = {
+  readonly type: QuestionType.Puzzle
+  readonly question: string
+  readonly media?: QuestionMediaEvent
+  readonly duration: number
+}
+
 export type GameEventQuestion =
   | GameEventQuestionMultiChoice
   | GameEventQuestionRange
   | GameEventQuestionTrueFalse
   | GameEventQuestionTypeAnswer
+  | GameEventQuestionPin
+  | GameEventQuestionPuzzle
 
 export type GameQuestionHostEvent = {
   type: GameEventType.GameQuestionHost
@@ -191,11 +207,31 @@ export type GameEventQuestionResultsTypeAnswer = {
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
+export type GameEventQuestionResultsPin = {
+  readonly type: QuestionType.Pin
+  readonly distribution: {
+    readonly value: string
+    readonly count: number
+    readonly correct: boolean
+  }[]
+}
+
+export type GameEventQuestionResultsPuzzle = {
+  readonly type: QuestionType.Puzzle
+  readonly distribution: {
+    readonly value: string[]
+    readonly count: number
+    readonly correct: boolean
+  }[]
+}
+
 export type GameEventQuestionResults =
   | GameEventQuestionResultsMultiChoice
   | GameEventQuestionResultsRange
   | GameEventQuestionResultsTrueFalse
   | GameEventQuestionResultsTypeAnswer
+  | GameEventQuestionResultsPin
+  | GameEventQuestionResultsPuzzle
 
 export type GameResultHostEvent = {
   type: GameEventType.GameResultHost

@@ -20,8 +20,21 @@ export interface SubmitTypeAnswerQuestionAnswerRequestDto {
   value: string
 }
 
+export interface SubmitPinQuestionAnswerRequestDto {
+  readonly type: QuestionType.Pin
+  readonly positionX: number
+  readonly positionY: number
+}
+
+export interface SubmitPuzzleQuestionAnswerRequestDto {
+  readonly type: QuestionType.Puzzle
+  readonly values: string[]
+}
+
 export type SubmitQuestionAnswerRequestDto =
   | SubmitMultiChoiceQuestionAnswerRequestDto
   | SubmitRangeQuestionAnswerRequestDto
   | SubmitTrueFalseQuestionAnswerRequestDto
   | SubmitTypeAnswerQuestionAnswerRequestDto
+  | SubmitPinQuestionAnswerRequestDto
+  | SubmitPuzzleQuestionAnswerRequestDto
