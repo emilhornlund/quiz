@@ -11,11 +11,13 @@
   width: 100%;
 
   .previewWrapper {
+    flex: 1 0 40vh;   /* grow:1, shrink:0, basis:40vh */
+    min-height: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
 
     @include helpers.mobile {
       row-gap: variables.$mobile-narrow-layout-gutter;
@@ -30,8 +32,6 @@
     }
 
     .preview {
-      display: flex;
-      flex-direction: column;
       flex: 1 1 auto;
       min-height: 0;
       overflow: hidden;

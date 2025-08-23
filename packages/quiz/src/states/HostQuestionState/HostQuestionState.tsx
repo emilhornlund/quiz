@@ -1,7 +1,7 @@
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameQuestionHostEvent, MediaType } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import { GameQuestionHostEvent, MediaType, QuestionType } from '@quiz/common'
+import React, { FC, useMemo, useState } from 'react'
 
 import {
   HostGameFooter,
@@ -34,6 +34,26 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
   const [isSkippingQuestion, setIsSkippingQuestion] = useState<boolean>(false)
 
   const { completeTask } = useGameContext()
+
+  const imageURL = useMemo(() => {
+    if (question.type === QuestionType.Pin) {
+      return question.imageURL
+    } else if (question.media?.type === MediaType.Image) {
+      return question.media.url
+    }
+    return null
+  }, [question])
+
+  const audioOrVideoURL = useMemo(() => {
+    if (
+      question.type !== QuestionType.Pin &&
+      (question.media?.type === MediaType.Audio ||
+        question.media?.type === MediaType.Video)
+    ) {
+      return question.media?.url
+    }
+    return null
+  }, [question])
 
   const handleSkipQuestion = () => {
     setIsSkippingQuestion(true)
@@ -77,18 +97,11 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
           </div>
         </div>
       </div>
-      <div
-        className={classNames(styles.row, styles.fullHeight, styles.fullWidth)}>
-        {question.media?.type === MediaType.Image && (
-          <ResponsiveImage
-            imageURL={question.media.url}
-            alt={question.question}
-          />
+      <div className={classNames(styles.row, styles.media)}>
+        {imageURL && (
+          <ResponsiveImage imageURL={imageURL} alt={question.question} />
         )}
-        {(question.media?.type === MediaType.Audio ||
-          question.media?.type === MediaType.Video) && (
-          <ResponsivePlayer url={question.media.url} />
-        )}
+        {audioOrVideoURL && <ResponsivePlayer url={audioOrVideoURL} />}
       </div>
       <div
         className={classNames(

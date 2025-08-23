@@ -2,6 +2,9 @@ import {
   GameMode,
   MediaType,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPinTolerance,
+  QuestionPuzzleDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -13,6 +16,11 @@ import {
   QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX,
   QUIZ_MULTI_CHOICE_OPTIONS_MAX,
   QUIZ_MULTI_CHOICE_OPTIONS_MIN,
+  QUIZ_PUZZLE_VALUE_MAX_LENGTH,
+  QUIZ_PUZZLE_VALUE_MIN_LENGTH,
+  QUIZ_PUZZLE_VALUE_REGEX,
+  QUIZ_PUZZLE_VALUES_MAX,
+  QUIZ_PUZZLE_VALUES_MIN,
   QUIZ_QUESTION_MAX,
   QUIZ_QUESTION_MIN,
   QUIZ_QUESTION_TEXT_MAX_LENGTH,
@@ -158,6 +166,22 @@ const assertQuestionMarginType = (margin: string) => {
       ([...Object.values(QuestionRangeAnswerMargin)] as string[]).includes(
         margin,
       ),
+  })
+}
+
+const assertQuestionPinToleranceType = (tolerance: string) => {
+  return assertType<string>(tolerance, 'string', 'tolerance', {
+    validate: (tolerance: string): boolean =>
+      ([...Object.values(QuestionPinTolerance)] as string[]).includes(
+        tolerance,
+      ),
+  })
+}
+
+const assertPinPosition = (position: number, fieldName: string) => {
+  return assertType<number>(position, 'number', fieldName, {
+    min: 0,
+    max: 1,
   })
 }
 
@@ -363,6 +387,82 @@ export const parseQuestionsJson = (
                 `[${questionIndex}].duration`,
               ),
             } as QuestionTypeAnswerDto,
+            'object',
+            `[${questionIndex}]`,
+          )
+        } else if (question.type === QuestionType.Pin) {
+          return assertType(
+            {
+              type: QuestionType.Pin,
+              question: assertQuestionType(
+                question.question,
+                `[${questionIndex}].question`,
+              ),
+              imageURL: assertType<string>(
+                question.imageURL,
+                'string',
+                `[${questionIndex}].imageURL`,
+                {
+                  regex: URL_REGEX,
+                },
+              ),
+              positionX: assertPinPosition(question.positionX, 'positionX'),
+              positionY: assertPinPosition(question.positionY, 'positionY'),
+              tolerance: assertQuestionPinToleranceType(question.tolerance),
+              points: assertPointsType(
+                question.points,
+                `[${questionIndex}].points`,
+              ),
+              duration: assertDurationType(
+                question.duration,
+                `[${questionIndex}].duration`,
+              ),
+            } as QuestionPinDto,
+            'object',
+            `[${questionIndex}]`,
+          )
+        } else if (question.type === QuestionType.Puzzle) {
+          return assertType(
+            {
+              type: QuestionType.Puzzle,
+              question: assertQuestionType(
+                question.question,
+                `[${questionIndex}].question`,
+              ),
+              media: assertMediaType(
+                question.media,
+                `[${questionIndex}].question.media`,
+              ),
+              values: assertType(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                question.values.map((value: any, valueIndex: number) =>
+                  assertType<string>(
+                    value,
+                    'string',
+                    `[${questionIndex}].values[${valueIndex}]`,
+                    {
+                      minLength: QUIZ_PUZZLE_VALUE_MIN_LENGTH,
+                      maxLength: QUIZ_PUZZLE_VALUE_MAX_LENGTH,
+                      regex: QUIZ_PUZZLE_VALUE_REGEX,
+                    },
+                  ),
+                ),
+                'object',
+                `[${questionIndex}].values`,
+                {
+                  arrayMinLength: QUIZ_PUZZLE_VALUES_MIN,
+                  arrayMaxLength: QUIZ_PUZZLE_VALUES_MAX,
+                },
+              ),
+              points: assertPointsType(
+                question.points,
+                `[${questionIndex}].points`,
+              ),
+              duration: assertDurationType(
+                question.duration,
+                `[${questionIndex}].duration`,
+              ),
+            } as QuestionPuzzleDto,
             'object',
             `[${questionIndex}]`,
           )

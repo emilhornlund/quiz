@@ -3,32 +3,78 @@
 @use '../../styles/variables';
 
 .container {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box,
+.boxNoBorder {
+  position: relative;
+  display: block;
+  transition: none !important; /* avoid slow resize animations */
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;              /* box already preserves aspect ratio */
+  transition: none !important;
+  border: helpers.pxToRem(4px) solid colors.$white-1-50;
+  background-color: colors.$white-1-50;
+
+  @include helpers.mobile  { border-radius: variables.$mobile-narrow-layout-gutter; }
+  @include helpers.tablet  { border-radius: variables.$tablet-narrow-layout-gutter; }
+  @include helpers.desktop { border-radius: variables.$desktop-narrow-layout-gutter; }
+}
+.boxNoBorder .img { border: none; }
+
+/* width-only fallback when we couldn't compute a box yet */
+.imgLoose {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: none !important;
+  border: helpers.pxToRem(4px) solid colors.$white-1-50;
+  background-color: colors.$white-1-50;
+
+  @include helpers.mobile  { border-radius: variables.$mobile-narrow-layout-gutter; }
+  @include helpers.tablet  { border-radius: variables.$tablet-narrow-layout-gutter; }
+  @include helpers.desktop { border-radius: variables.$desktop-narrow-layout-gutter; }
+}
+.boxNoBorder .imgLoose { border: none; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* IMPORTANT: allow dragging on children like your pin overlay */
+  pointer-events: auto; /* if you previously had none */
+}
+.centerOverlay { position: absolute; inset: 0; display: grid; place-items: center; }
+.inner {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  max-width: 100%;
-  max-height: 100%;
+  justify-content: center;
 
-  img {
-    display: flex;
-    max-width: 100%;
-    min-height: 100%;
-    box-sizing: border-box;
-    border: helpers.pxToRem(4px) solid colors.$white-1-50;
-    background-color: colors.$white-1-50;
-    object-fit: contain;
+  @include helpers.mobile  { row-gap: variables.$mobile-narrow-layout-gutter; }
+  @include helpers.tablet  { row-gap: variables.$tablet-narrow-layout-gutter; }
+  @include helpers.desktop { row-gap: variables.$desktop-narrow-layout-gutter; }
+}
+.icon {
+  color: colors.$white-1-50;
 
-    @include helpers.mobile {
-      border-radius: variables.$mobile-narrow-layout-gutter;
-    }
-
-    @include helpers.tablet {
-      border-radius: variables.$tablet-narrow-layout-gutter;
-    }
-
-    @include helpers.desktop {
-      border-radius: variables.$desktop-narrow-layout-gutter;
-    }
-  }
+  @include helpers.mobile  { @include helpers.fontSize(28px); }
+  @include helpers.tablet  { @include helpers.fontSize(48px); }
+  @include helpers.desktop { @include helpers.fontSize(68px); }
 }

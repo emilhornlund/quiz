@@ -14,6 +14,7 @@ export type { NicknameChipProps } from './NicknameChip'
 export type { NicknameTextFieldProps } from './NicknameTextField'
 export type { PageProps } from './Page'
 export type { PaginationProps } from './Pagination'
+export type { PinImageProps } from './PinImage'
 export type { PlayerGameFooterProps } from './PlayerGameFooter'
 export type { PodiumProps } from './Podium'
 export type { ProgressBarProps } from './ProgressBar'
@@ -40,7 +41,7 @@ export {
   IconButtonArrowLeft,
   IconButtonArrowRight,
 } from './Button'
-export { default } from './Card'
+export { default as Card } from './Card'
 export {
   default as CircularProgressBar,
   CircularProgressBarSize,
@@ -62,6 +63,7 @@ export { default as Page } from './Page'
 export { default as PageDivider } from './PageDivider'
 export { default as PageProminentIcon } from './PageProminentIcon'
 export { default as Pagination } from './Pagination'
+export { default as PinImage } from './PinImage'
 export { default as PlayerGameFooter } from './PlayerGameFooter'
 export { default as Podium } from './Podium'
 export { default as ProgressBar } from './ProgressBar'

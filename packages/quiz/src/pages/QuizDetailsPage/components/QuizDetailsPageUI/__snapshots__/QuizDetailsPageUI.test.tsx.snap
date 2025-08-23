@@ -82,10 +82,17 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
           <div
             class="container"
           >
-            <img
-              class="image"
-              src="https://0utwqfl7.cdn.imgeng.in/explore-academics/programs/images/undergraduate/henson/geographymajorMH.jpg"
-            />
+            <div
+              class="centerOverlay"
+            >
+              <div
+                class="loadingSpinnerContainer"
+              >
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
           </div>
           <div
             class="details"

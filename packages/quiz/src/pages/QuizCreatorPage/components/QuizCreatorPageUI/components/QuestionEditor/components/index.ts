@@ -6,6 +6,8 @@ export {
   ClassicRangeQuestionForm,
   ClassicTrueFalseQuestionForm,
   ClassicTypeAnswerQuestionForm,
+  ClassicPinQuestionForm,
+  ClassicPuzzleQuestionForm,
   ZeroToOneHundredRangeQuestionForm,
 } from './QuestionForm'
 export { QuestionFieldType } from './QuestionField'

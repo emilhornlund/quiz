@@ -233,10 +233,17 @@ exports[`QuestionField > renders a image media question field 1`] = `
             <div
               class="container"
             >
-              <img
-                class="image"
-                src="https://example.com/image.png"
-              />
+              <div
+                class="centerOverlay"
+              >
+                <div
+                  class="loadingSpinnerContainer"
+                >
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -594,6 +601,16 @@ exports[`QuestionField > renders a multiple choice type question field 1`] = `
               value="TYPE_ANSWER"
             >
               Type Answer
+            </option>
+            <option
+              value="PIN"
+            >
+              Pin
+            </option>
+            <option
+              value="PUZZLE"
+            >
+              Puzzle
             </option>
           </select>
           <svg
@@ -1036,6 +1053,16 @@ exports[`QuestionField > renders a range type question field 1`] = `
             >
               Type Answer
             </option>
+            <option
+              value="PIN"
+            >
+              Pin
+            </option>
+            <option
+              value="PUZZLE"
+            >
+              Puzzle
+            </option>
           </select>
           <svg
             aria-hidden="true"
@@ -1207,6 +1234,16 @@ exports[`QuestionField > renders a true or false question field 1`] = `
               value="TYPE_ANSWER"
             >
               Type Answer
+            </option>
+            <option
+              value="PIN"
+            >
+              Pin
+            </option>
+            <option
+              value="PUZZLE"
+            >
+              Puzzle
             </option>
           </select>
           <svg
@@ -1400,6 +1437,16 @@ exports[`QuestionField > renders a type answer question field 1`] = `
               value="TYPE_ANSWER"
             >
               Type Answer
+            </option>
+            <option
+              value="PIN"
+            >
+              Pin
+            </option>
+            <option
+              value="PUZZLE"
+            >
+              Puzzle
             </option>
           </select>
           <svg

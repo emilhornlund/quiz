@@ -2,6 +2,7 @@ import {
   GameMode,
   LanguageCode,
   MediaType,
+  QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
   QuizCategory,
@@ -233,6 +234,8 @@ export const QuestionTypeLabels: { [key in QuestionType]: string } = {
   [QuestionType.Range]: 'Range',
   [QuestionType.TrueFalse]: 'True or False',
   [QuestionType.TypeAnswer]: 'Type Answer',
+  [QuestionType.Pin]: 'Pin',
+  [QuestionType.Puzzle]: 'Puzzle',
 }
 
 export const QuestionRangeAnswerMarginLabels: {
@@ -243,6 +246,15 @@ export const QuestionRangeAnswerMarginLabels: {
   [QuestionRangeAnswerMargin.Medium]: 'Medium',
   [QuestionRangeAnswerMargin.High]: 'High',
   [QuestionRangeAnswerMargin.Maximum]: 'Maximum',
+}
+
+export const QuestionPinToleranceLabels: {
+  [key in QuestionPinTolerance]: string
+} = {
+  [QuestionPinTolerance.Low]: 'Low',
+  [QuestionPinTolerance.Medium]: 'Medium',
+  [QuestionPinTolerance.High]: 'High',
+  [QuestionPinTolerance.Maximum]: 'Maximum',
 }
 
 export const MediaTypeLabels: { [key in MediaType]: string } = {

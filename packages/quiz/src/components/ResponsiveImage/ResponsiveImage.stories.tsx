@@ -1,9 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 
 import ResponsiveImage from './ResponsiveImage'
 
 const meta = {
   component: ResponsiveImage,
+  parameters: { layout: 'fullscreen' },
+  decorators: [
+    (Story) => (
+      <div style={{ height: '100vh', display: 'flex', minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0 }}>
+          <Story />
+        </div>
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof ResponsiveImage>
 
 export default meta
@@ -28,5 +39,12 @@ export const Portrait = {
   args: {
     imageURL: 'https://wallpaperaccess.com/full/157316.jpg',
     alt: 'Who painted The Starry Night?',
+  },
+} satisfies Story
+
+export const Error = {
+  args: {
+    imageURL: 'https://example.com/image.png',
+    alt: 'Error loading image',
   },
 } satisfies Story

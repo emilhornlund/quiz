@@ -1,6 +1,9 @@
 import {
   GameMode,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPinTolerance,
+  QuestionPuzzleDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -90,10 +93,12 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
         | QuestionRangeDto
         | QuestionTrueFalseDto
         | QuestionTypeAnswerDto
+        | QuestionPinDto
+        | QuestionPuzzleDto
         | QuestionZeroToOneHundredRangeDto,
     >(
       key: keyof T,
-      value: T[keyof T],
+      value?: T[keyof T],
     ) => {
       setModel((prevModel) => {
         const { selectedIndex, questions } = prevModel
@@ -129,6 +134,8 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
         | QuestionRangeDto
         | QuestionTrueFalseDto
         | QuestionTypeAnswerDto
+        | QuestionPinDto
+        | QuestionPuzzleDto
         | QuestionZeroToOneHundredRangeDto,
     >(
       key: keyof T,
@@ -264,7 +271,6 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
               data: {
                 type,
                 question: currentQuestion.data.question,
-                media: currentQuestion.data.media,
                 options: [],
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
@@ -278,7 +284,6 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
               data: {
                 type,
                 question: currentQuestion.data.question,
-                media: currentQuestion.data.media,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
               },
@@ -291,7 +296,6 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
               data: {
                 type,
                 question: currentQuestion.data.question,
-                media: currentQuestion.data.media,
                 min: 0,
                 max: 100,
                 correct: 0,
@@ -308,8 +312,34 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
               data: {
                 type,
                 question: currentQuestion.data.question,
-                media: currentQuestion.data.media,
                 options: [],
+                points: currentQuestion.data.points,
+                duration: currentQuestion.data.duration,
+              },
+              validation: {},
+            }
+          }
+          if (type === QuestionType.Pin) {
+            updatedQuestions[selectedIndex] = {
+              mode: GameMode.Classic,
+              data: {
+                type,
+                question: currentQuestion.data.question,
+                positionX: 0.5,
+                positionY: 0.5,
+                tolerance: QuestionPinTolerance.Medium,
+                points: currentQuestion.data.points,
+                duration: currentQuestion.data.duration,
+              },
+              validation: {},
+            }
+          }
+          if (type === QuestionType.Puzzle) {
+            updatedQuestions[selectedIndex] = {
+              mode: GameMode.Classic,
+              data: {
+                type,
+                question: currentQuestion.data.question,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
               },

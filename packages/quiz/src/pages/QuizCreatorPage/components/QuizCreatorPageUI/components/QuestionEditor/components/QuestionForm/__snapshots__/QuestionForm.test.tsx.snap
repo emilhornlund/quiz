@@ -64,10 +64,17 @@ exports[`QuestionForm > renders a classic multi choice option question form 1`] 
               <div
                 class="container"
               >
-                <img
-                  class="image"
-                  src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-                />
+                <div
+                  class="centerOverlay"
+                >
+                  <div
+                    class="loadingSpinnerContainer"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -633,10 +640,17 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
               <div
                 class="container"
               >
-                <img
-                  class="image"
-                  src="https://editalconcursosbrasil.com.br/wp-content/uploads/2022/12/planeta-terra-scaled.jpg"
-                />
+                <div
+                  class="centerOverlay"
+                >
+                  <div
+                    class="loadingSpinnerContainer"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -1201,10 +1215,17 @@ exports[`QuestionForm > renders a classic true or false question form 1`] = `
               <div
                 class="container"
               >
-                <img
-                  class="image"
-                  src="https://assets.petco.com/petco/image/upload/f_auto,q_auto/rabbit-care-sheet"
-                />
+                <div
+                  class="centerOverlay"
+                >
+                  <div
+                    class="loadingSpinnerContainer"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -1629,10 +1650,17 @@ exports[`QuestionForm > renders a classic type answer question form 1`] = `
               <div
                 class="container"
               >
-                <img
-                  class="image"
-                  src="https://i.pinimg.com/originals/a1/4a/04/a14a0433d085057106b61a5ef63c7249.jpg"
-                />
+                <div
+                  class="centerOverlay"
+                >
+                  <div
+                    class="loadingSpinnerContainer"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -2078,10 +2106,17 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
               <div
                 class="container"
               >
-                <img
-                  class="image"
-                  src="https://editalconcursosbrasil.com.br/wp-content/uploads/2022/12/planeta-terra-scaled.jpg"
-                />
+                <div
+                  class="centerOverlay"
+                >
+                  <div
+                    class="loadingSpinnerContainer"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>
               </div>
             </div>
             <div

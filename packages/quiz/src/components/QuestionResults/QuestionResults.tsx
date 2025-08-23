@@ -141,6 +141,10 @@ const getResultChips = (
               }
             />
           )
+        case QuestionType.Pin:
+          return <div>Pin</div>
+        case QuestionType.Puzzle:
+          return <div>Puzzle</div>
       }
     })
 

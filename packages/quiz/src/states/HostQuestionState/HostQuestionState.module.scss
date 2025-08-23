@@ -34,6 +34,14 @@
     overflow: auto;
   }
 
+  &.media {
+    min-height: 0;
+    min-width: 0;
+    flex: 1 1 0%;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .column {
     display: flex;
     flex-direction: column;

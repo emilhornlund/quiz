@@ -1,6 +1,8 @@
 import {
   calculateRangeMargin,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPuzzleDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -249,6 +251,111 @@ export const ClassicTypeAnswerQuestionForm: FC<
     </>
   )
 }
+
+export const ClassicPinQuestionForm: FC<QuestionFormProps<QuestionPinDto>> = ({
+  data,
+  onChange,
+  onValidChange,
+}) => (
+  <>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonQuestion}
+        value={data.question}
+        onChange={(newValue) => onChange('question', newValue)}
+        onValid={(valid) => onValidChange('question', valid)}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.Pin}
+        imageURL={data.imageURL}
+        position={{
+          x: data?.positionX,
+          y: data?.positionY,
+        }}
+        tolerance={data.tolerance}
+        onImageUrlChange={(newValue) => onChange('imageURL', newValue)}
+        onImageUrlValid={(newValid) => onValidChange('imageURL', newValid)}
+        onPositionChange={(pos) => {
+          onChange('positionX', pos?.x)
+          onChange('positionY', pos?.y)
+        }}
+        onPositionValid={(valid) => {
+          onValidChange('positionX', valid)
+          onValidChange('positionY', valid)
+        }}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.PinTolerance}
+        value={data.tolerance}
+        onChange={(newValue) => onChange('tolerance', newValue)}
+        onValid={(valid) => onValidChange('tolerance', valid)}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonPoints}
+        value={data.points}
+        onChange={(newValue) => onChange('points', newValue)}
+        onValid={(valid) => onValidChange('points', valid)}
+      />
+      <QuestionField
+        type={QuestionFieldType.CommonDuration}
+        value={data.duration}
+        onChange={(newValue) => onChange('duration', newValue)}
+        onValid={(valid) => onValidChange('duration', valid)}
+      />
+    </div>
+  </>
+)
+
+export const ClassicPuzzleQuestionForm: FC<
+  QuestionFormProps<QuestionPuzzleDto>
+> = ({ data, onChange, onValidChange }) => (
+  <>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonQuestion}
+        value={data.question}
+        onChange={(newValue) => onChange('question', newValue)}
+        onValid={(valid) => onValidChange('question', valid)}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonMedia}
+        value={data.media}
+        onChange={(newValue) => onChange('media', newValue)}
+        onValid={(valid) => onValidChange('media', valid)}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.PuzzleValues}
+        value={data.values}
+        onChange={(newValue) => onChange('values', newValue)}
+        onValid={(valid) => onValidChange('values', valid)}
+      />
+    </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonPoints}
+        value={data.points}
+        onChange={(newValue) => onChange('points', newValue)}
+        onValid={(valid) => onValidChange('points', valid)}
+      />
+      <QuestionField
+        type={QuestionFieldType.CommonDuration}
+        value={data.duration}
+        onChange={(newValue) => onChange('duration', newValue)}
+        onValid={(valid) => onValidChange('duration', valid)}
+      />
+    </div>
+  </>
+)
 
 export const ZeroToOneHundredRangeQuestionForm: FC<
   QuestionFormProps<QuestionZeroToOneHundredRangeDto>
