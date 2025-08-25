@@ -54,6 +54,7 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
     <>
       <GamePage
         width="medium"
+        height="full"
         header={
           <IconButtonArrowRight
             id="start-game-button"

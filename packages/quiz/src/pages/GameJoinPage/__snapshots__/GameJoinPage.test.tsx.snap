@@ -25,12 +25,6 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -247,12 +241,6 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -470,12 +458,6 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -692,12 +674,6 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -914,12 +890,6 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -1136,12 +1106,6 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -1359,12 +1323,6 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -1582,12 +1540,6 @@ exports[`GameJoinPage > renders title and message 1`] = `
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -1805,12 +1757,6 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -2028,12 +1974,6 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
@@ -2250,12 +2190,6 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
       <div
         class="side"
       >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
         <div
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >

@@ -60,7 +60,8 @@ const GameJoinPage: FC = () => {
           value="Back"
           onClick={() => navigate(-1)}
         />
-      }>
+      }
+      hideLogin>
       <LegacyInfoCard />
       <PageProminentIcon src={UsersIcon} alt="Users" />
       <Typography variant="title" size="medium">
