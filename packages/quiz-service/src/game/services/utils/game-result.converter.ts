@@ -113,9 +113,9 @@ function buildPlayerMetrics(
         ) || {}
       return questionResultTasks.reduce(
         (accumulator, { results }) => {
-          const { correct, answer, streak, lastScore } = results.find(
+          const { correct, answer, streak, lastScore } = results?.find(
             ({ playerId }) => playerId === participantPlayer.participantId,
-          )
+          ) || { correct: false, answer: undefined, streak: 0, lastScore: 0 }
           return {
             ...accumulator,
             correct:
