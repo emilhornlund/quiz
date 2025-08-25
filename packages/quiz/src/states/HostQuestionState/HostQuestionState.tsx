@@ -36,9 +36,10 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
   const { completeTask } = useGameContext()
 
   const imageURL = useMemo(() => {
-    if (question.type === QuestionType.Pin) {
-      return question.imageURL
-    } else if (question.media?.type === MediaType.Image) {
+    if (
+      question.type !== QuestionType.Pin &&
+      question.media?.type === MediaType.Image
+    ) {
       return question.media.url
     }
     return null

@@ -475,6 +475,10 @@ function buildGameEventQuestion(
         type: QuestionType.TypeAnswer,
         ...common,
       }
+    case QuestionType.Pin:
+      return { type: QuestionType.Pin, imageURL: question.imageURL, ...common }
+    case QuestionType.Puzzle:
+      return { type: QuestionType.Puzzle, values: question.values, ...common }
   }
 }
 

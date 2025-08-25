@@ -133,6 +133,7 @@ export type GameEventQuestionPuzzle = {
   readonly type: QuestionType.Puzzle
   readonly question: string
   readonly media?: QuestionMediaEvent
+  readonly values: string[]
   readonly duration: number
 }
 

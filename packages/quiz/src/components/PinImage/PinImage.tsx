@@ -183,7 +183,10 @@ const PinImage: FC<PinImageProps> = ({
             {tolDiameterPx > 0 && (
               <div
                 className={styles.tolerance}
-                style={{ width: '100px', height: '100px' }}
+                style={{
+                  width: `${tolDiameterPx}px`,
+                  height: `${tolDiameterPx}px`,
+                }}
               />
             )}
 

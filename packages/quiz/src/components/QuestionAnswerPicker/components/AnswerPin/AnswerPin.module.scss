@@ -1,0 +1,19 @@
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  //min-height: 0;
+  //min-width: 0;
+  //flex: 1 1 0%;
+  //width: 100%;
+  //overflow: hidden;
+
+  height: 100%;
+  width: 100%;
+
+  background-color: #F0F;
+}
