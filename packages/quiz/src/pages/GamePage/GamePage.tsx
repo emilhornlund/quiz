@@ -151,7 +151,7 @@ const GamePage = () => {
         return <PlayerPodiumState event={event} />
       default:
         return (
-          <Page>
+          <Page hideLogin>
             <LoadingSpinner />
           </Page>
         )

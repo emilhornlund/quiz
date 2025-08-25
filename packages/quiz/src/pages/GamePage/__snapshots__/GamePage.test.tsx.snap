@@ -24,14 +24,7 @@ exports[`GamePage > should render GamePage 1`] = `
       </button>
       <div
         class="side"
-      >
-        <a
-          data-discover="true"
-          href="/auth/login"
-        >
-          Login
-        </a>
-      </div>
+      />
     </div>
     <div
       class="content centerAlign"
