@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout infra repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: emilhornlund/infra
           path: infra
