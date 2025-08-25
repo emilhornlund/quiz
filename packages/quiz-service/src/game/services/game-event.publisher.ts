@@ -54,19 +54,27 @@ export class GameEventPublisher {
     )
 
     await Promise.all(
-      document.participants.map((participant) =>
-        this.publishParticipantEvent(
-          participant,
-          participant.type === GameParticipantType.HOST
-            ? buildHostGameEvent(document, metaData)
-            : buildPlayerGameEvent(document, participant, {
-                ...metaData,
-                ...(document.currentTask.type === TaskType.Question
-                  ? toPlayerQuestionPlayerEventMetaData(answers, participant)
-                  : {}),
-              }),
-        ),
-      ),
+      document.participants.map((participant) => {
+        try {
+          this.publishParticipantEvent(
+            participant,
+            participant.type === GameParticipantType.HOST
+              ? buildHostGameEvent(document, metaData)
+              : buildPlayerGameEvent(document, participant, {
+                  ...metaData,
+                  ...(document.currentTask.type === TaskType.Question
+                    ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                    : {}),
+                }),
+          )
+        } catch (error) {
+          const { message, stack } = error as Error
+          this.logger.warn(
+            `Error publishing event for participant ${participant.participantId}: ${message}`,
+            stack,
+          )
+        }
+      }),
     )
   }
 
@@ -80,8 +88,10 @@ export class GameEventPublisher {
    */
   public async publishParticipantEvent(
     participant: Participant,
-    event: GameEvent,
+    event?: GameEvent,
   ): Promise<void> {
+    if (!event) return Promise.resolve()
+
     return this.publishDistributedEvent({
       playerId: participant.participantId,
       event,

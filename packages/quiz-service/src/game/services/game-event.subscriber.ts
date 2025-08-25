@@ -150,23 +150,34 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
       document.participants,
     )
 
-    const initialEvent: DistributedEvent = {
-      playerId: participantId,
-      event:
-        participant.type === GameParticipantType.PLAYER
-          ? buildPlayerGameEvent(document, participant, {
-              ...metaData,
-              ...(document.currentTask.type === TaskType.Question
-                ? toPlayerQuestionPlayerEventMetaData(answers, participant)
-                : {}),
-            })
-          : buildHostGameEvent(document, metaData),
+    let initialEvent: DistributedEvent | undefined
+
+    try {
+      initialEvent = {
+        playerId: participantId,
+        event:
+          participant.type === GameParticipantType.PLAYER
+            ? buildPlayerGameEvent(document, participant, {
+                ...metaData,
+                ...(document.currentTask.type === TaskType.Question
+                  ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                  : {}),
+              })
+            : buildHostGameEvent(document, metaData),
+      }
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Error building initial event for participant ${participantId}: ${message}`,
+        stack,
+      )
     }
 
     return concat(from([initialEvent]), source).pipe(
       filter(
         (event) =>
-          event.playerId === undefined || event.playerId === participantId,
+          !!event &&
+          (event.playerId === undefined || event.playerId === participantId),
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),
       finalize(() => this.activePlayers.delete(participantId)),
