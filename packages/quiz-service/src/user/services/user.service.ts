@@ -12,6 +12,7 @@ import {
   AuthProvider,
   CreateUserRequestDto,
   CreateUserResponseDto,
+  generateNickname,
   UpdateGoogleUserProfileRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
@@ -220,7 +221,7 @@ export class UserService {
       unverifiedEmail: profile.verified_email ? undefined : profile.email,
       givenName: profile.given_name,
       familyName: profile.family_name,
-      defaultNickname: undefined,
+      defaultNickname: generateNickname(),
     }
 
     let createdUser: GoogleUser
