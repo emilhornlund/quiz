@@ -5,11 +5,17 @@ exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
   <div
     class="container"
   >
-    <img
-      alt="Who painted The Starry Night?"
-      class="image"
-      src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-    />
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
   </div>
 </div>
 `;

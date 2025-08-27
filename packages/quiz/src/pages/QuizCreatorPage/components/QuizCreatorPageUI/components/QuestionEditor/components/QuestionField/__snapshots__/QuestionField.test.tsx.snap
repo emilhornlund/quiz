@@ -233,10 +233,17 @@ exports[`QuestionField > renders a image media question field 1`] = `
             <div
               class="container"
             >
-              <img
-                class="image"
-                src="https://example.com/image.png"
-              />
+              <div
+                class="centerOverlay"
+              >
+                <div
+                  class="loadingSpinnerContainer"
+                >
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
             </div>
           </div>
           <div
