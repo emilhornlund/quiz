@@ -312,8 +312,11 @@ export const useQuizServiceClient = () => {
     scope: TokenScope,
     request: AuthRefreshRequestDto,
   ): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>('/auth/refresh', request).then((res) => {
+    apiPost<AuthResponseDto>('/auth/refresh', request).then(async (res) => {
       setTokenPair(scope, res.accessToken, res.refreshToken)
+      if (scope === TokenScope.User) {
+        await fetchCurrentUser(res.accessToken)
+      }
       return res
     })
 
