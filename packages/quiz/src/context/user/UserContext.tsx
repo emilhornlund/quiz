@@ -13,12 +13,12 @@ import { createContext } from 'react'
 export type UserContextType = {
   currentUser?: Pick<
     UserProfileResponseDto,
-    'id' | 'email' | 'unverifiedEmail' | 'defaultNickname'
+    'id' | 'email' | 'unverifiedEmail' | 'defaultNickname' | 'authProvider'
   >
   setCurrentUser: (
     currentUser: Pick<
       UserProfileResponseDto,
-      'id' | 'email' | 'unverifiedEmail' | 'defaultNickname'
+      'id' | 'email' | 'unverifiedEmail' | 'defaultNickname' | 'authProvider'
     >,
   ) => void
   fetchCurrentUser: (accessToken: string) => Promise<void>

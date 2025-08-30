@@ -1,6 +1,13 @@
 import { setContext, setUser } from '@sentry/react'
-import React, { FC, ReactNode, useCallback, useMemo, useRef } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
+import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
@@ -70,7 +77,13 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         .then(
           ({ id, email, unverifiedEmail, defaultNickname, authProvider }) => {
             console.debug('Setting up user...')
-            setCurrentUser({ id, email, unverifiedEmail, defaultNickname })
+            setCurrentUser({
+              id,
+              email,
+              unverifiedEmail,
+              defaultNickname,
+              authProvider,
+            })
             setUser({ id, email, username: defaultNickname })
             setContext('auth', { provider: authProvider })
           },
@@ -84,6 +97,57 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     },
     [getUserProfile, setCurrentUser, handleClearCurrentUser],
   )
+
+  /**
+   * Tracks whether the component is still mounted.
+   * Prevents state updates if the component unmounts during async operations.
+   */
+  const isMounted = useIsMounted()
+
+  /**
+   * Remember the last Sentry context we applied to avoid duplicate updates/logs.
+   */
+  const lastAppliedContextKeyRef = useRef<string | null>(null)
+
+  /**
+   * Build a stable fingerprint for the Sentry context.
+   * This keeps the dependency array size constant across renders.
+   */
+  const sentryContextKey = useMemo(() => {
+    if (!currentUser) return 'NO_USER'
+    const {
+      id = '',
+      email = '',
+      defaultNickname = '',
+      authProvider = '',
+    } = currentUser
+    return [id, email, defaultNickname, authProvider].join('|')
+  }, [currentUser])
+
+  /**
+   * Synchronize the current user with the monitoring context (Sentry).
+   * Idempotent and StrictMode-safe.
+   */
+  useEffect(() => {
+    if (!isMounted()) return
+
+    // Skip if we already applied this exact context
+    if (lastAppliedContextKeyRef.current === sentryContextKey) return
+    lastAppliedContextKeyRef.current = sentryContextKey
+
+    if (sentryContextKey !== 'NO_USER' && currentUser) {
+      // We know currentUser is defined if key isn't "NO_USER"
+      const { id, email, defaultNickname, authProvider } = currentUser
+      console.debug('Setting up Sentry user context...')
+      setUser({ id, email, username: defaultNickname })
+      setContext('auth', { provider: authProvider })
+    } else {
+      console.debug('Cleaning up Sentry user context...')
+      setUser(null)
+      setContext('auth', null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted, sentryContextKey])
 
   /**
    * Memoized context value to avoid unnecessary re-renders.
