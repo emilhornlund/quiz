@@ -142,16 +142,36 @@
       a {
         font-weight: bold;
         color: colors.$white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
 
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
 
         @include helpers.mobile {
           @include helpers.fontSize(16px);
+          padding: 6px 12px;
         }
         @include helpers.tablet {
           @include helpers.fontSize(18px);
+          padding: 8px 16px;
         }
         @include helpers.desktop {
           @include helpers.fontSize(20px);
+          padding: 10px 20px;
         }
       }
 

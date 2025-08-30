@@ -47,44 +47,49 @@ const HomePage: FC = () => {
 
   return (
     <Page discover profile>
-      <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
-      <Typography variant="title" size="medium">
-        Let’s play
-      </Typography>
-      <Typography variant="text" size="small">
-        {message}
-      </Typography>
+      <div className={styles.animatedLogo}>
+        <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
+      </div>
+      <div className={styles.heroSection}>
+        <h1 className={styles.heroTitle}>
+          Think Fast. Score Big. Win Live.
+        </h1>
+        <p className={styles.heroSubtitle}>
+          Real-time multiplayer quizzes with leaderboards, power-ups, and bragging rights.
+        </p>
+      </div>
       <form className={styles.joinForm} onSubmit={handleJoinSubmit}>
-        <TextField
-          id="game-pin"
-          type="text"
-          placeholder="Game PIN"
-          value={gamePIN ?? ''}
-          minLength={GAME_PIN_LENGTH}
-          maxLength={GAME_PIN_LENGTH}
-          regex={GAME_PIN_REGEX}
-          onChange={(value) => setGamePIN(value as string)}
-          onValid={setGamePINValid}
-          required
-        />
-        <IconButtonArrowRight
-          id="join"
+        <div className={styles.modernInput}>
+          <input
+            id="game-pin"
+            type="text"
+            placeholder="Game PIN"
+            value={gamePIN ?? ''}
+            minLength={GAME_PIN_LENGTH}
+            maxLength={GAME_PIN_LENGTH}
+            pattern={GAME_PIN_REGEX.source}
+            onChange={(e) => setGamePIN(e.target.value)}
+            onBlur={(e) => setGamePINValid(e.target.checkValidity())}
+            required
+          />
+        </div>
+        <button
           type="submit"
-          kind="call-to-action"
-          value="Join the game"
-          disabled={!gamePINValid}
-        />
+          className={styles.modernJoinButton}
+          disabled={!gamePINValid}>
+          Join the game →
+        </button>
       </form>
       {isUserAuthenticated ? (
         <Link to={'/quiz/create'}>
           <Typography variant="link" size="small">
-            Create your own quiz and challenge others!
+            Create a quiz. Log in to start.
           </Typography>
         </Link>
       ) : (
         <Link to={'/auth/login'}>
           <Typography variant="link" size="small">
-            Want to create your own quiz? Log in to get started!
+            Create a quiz. Log in to start.
           </Typography>
         </Link>
       )}
