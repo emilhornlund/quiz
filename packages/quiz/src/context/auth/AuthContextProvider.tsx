@@ -1,8 +1,15 @@
 import { GameTokenDto, TokenDto, TokenScope, TokenType } from '@quiz/common'
 import { jwtDecode } from 'jwt-decode'
-import React, { FC, ReactNode, useCallback, useMemo } from 'react'
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useLocalStorage } from 'usehooks-ts'
+import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { AuthState, ScopePayload } from '../../models'
@@ -32,7 +39,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
    * revoke() — function from useQuizServiceClient for invalidating
    * an access or refresh token on the server.
    */
-  const { revoke } = useQuizServiceClient()
+  const { revoke, refresh } = useQuizServiceClient()
 
   /**
    * Navigation function from react-router for programmatic route changes.
@@ -167,6 +174,52 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
     },
     [authState, clearAuthState, revoke, navigate],
   )
+
+  /**
+   * Tracks whether the component is still mounted.
+   * Used to avoid updating state after unmount in async flows.
+   */
+  const isMounted = useIsMounted()
+
+  /**
+   * In-flight guard for the token refresh request.
+   * Prevents multiple simultaneous refresh calls.
+   */
+  const isRefreshingUserToken = useRef<boolean>(false)
+
+  /**
+   * Refresh the user access token when:
+   * - no access token exists OR it has expired, AND
+   * - a refresh token exists AND is still valid.
+   */
+  useEffect(() => {
+    if (!isMounted()) return
+
+    const currentTimeSec = Math.floor(Date.now() / 1000)
+
+    const needsAccessRefresh =
+      (!authState.USER?.ACCESS || authState.USER.ACCESS.exp < currentTimeSec) &&
+      !!authState.USER?.REFRESH &&
+      authState.USER.REFRESH.exp > currentTimeSec
+
+    if (!isRefreshingUserToken.current && needsAccessRefresh) {
+      isRefreshingUserToken.current = true
+      console.log('refreshing user token')
+
+      refresh(TokenScope.User, { refreshToken: authState.USER!.REFRESH!.token })
+        .then((response) => {
+          console.log('refreshed user token')
+          handleSetTokenPair(
+            TokenScope.User,
+            response.accessToken,
+            response.refreshToken,
+          )
+        })
+        .finally(() => {
+          isRefreshingUserToken.current = false
+        })
+    }
+  }, [isMounted, authState, handleSetTokenPair, refresh])
 
   /**
    * Memoized value for the `AuthContext`, containing the current authentication state

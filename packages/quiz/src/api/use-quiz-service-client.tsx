@@ -812,6 +812,7 @@ export const useQuizServiceClient = () => {
     login,
     googleExchangeCode,
     authenticateGame,
+    refresh,
     revoke,
     verifyEmail,
     resendVerificationEmail,
