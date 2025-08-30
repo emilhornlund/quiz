@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Authority, GameTokenDto, TokenDto, TokenScope } from '@quiz/common'
+import * as Sentry from '@sentry/nestjs'
 import { Request } from 'express'
 
 import { User, UserRepository } from '../../user/repositories'
@@ -107,6 +108,14 @@ export class AuthGuard implements CanActivate {
     if (scope === TokenScope.User) {
       try {
         request.user = await this.userRepository.findUserByIdOrThrow(sub)
+        const {
+          _id: id,
+          email,
+          defaultNickname: username,
+          authProvider,
+        } = request.user
+        Sentry.setUser({ id, email, username })
+        Sentry.setContext('auth', { provider: authProvider })
       } catch {
         throw new UnauthorizedException()
       }
@@ -118,6 +127,8 @@ export class AuthGuard implements CanActivate {
       if (!gameId || !participantType) {
         throw new UnauthorizedException('No gameId or participantType in token')
       }
+
+      Sentry.setContext('game', { gameId, participantId: sub, participantType })
     }
 
     return true
