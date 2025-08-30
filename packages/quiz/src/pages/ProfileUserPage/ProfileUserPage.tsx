@@ -50,9 +50,17 @@ const ProfileUserPage: FC = () => {
               defaultNickname: request.defaultNickname,
             }),
       })
-        .then(({ id, email, unverifiedEmail, defaultNickname }) => {
-          setCurrentUser({ id, email, unverifiedEmail, defaultNickname })
-        })
+        .then(
+          ({ id, email, unverifiedEmail, defaultNickname, authProvider }) => {
+            setCurrentUser({
+              id,
+              email,
+              unverifiedEmail,
+              defaultNickname,
+              authProvider,
+            })
+          },
+        )
         .then(() => refetch())
         .finally(() => setIsSavingUserProfile(false))
     }
