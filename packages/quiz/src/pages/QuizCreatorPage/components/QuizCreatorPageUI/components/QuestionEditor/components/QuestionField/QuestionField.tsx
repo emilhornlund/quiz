@@ -2,6 +2,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import {
   QuestionMediaDto,
   QuestionMultiChoiceOptionDto,
+  QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
   QUIZ_QUESTION_TEXT_MAX_LENGTH,
@@ -13,6 +14,7 @@ import React, { FC, ReactNode } from 'react'
 import { Select, TextField } from '../../../../../../../../components'
 import IconTooltip from '../../../../../../../../components/IconTooltip'
 import {
+  QuestionPinToleranceLabels,
   QuestionRangeAnswerMarginLabels,
   QuestionTypeLabels,
 } from '../../../../../../../../models'
@@ -20,6 +22,8 @@ import { classNames } from '../../../../../../../../utils/helpers.ts'
 
 import MediaQuestionField from './MediaQuestionField'
 import MultiChoiceOptions from './MultiChoiceOptions.tsx'
+import PinQuestionField, { PinQuestionFieldProps } from './PinQuestionField'
+import PuzzleValues from './PuzzleValues.tsx'
 import styles from './QuestionField.module.scss'
 import TrueFalseOptions from './TrueFalseOptions.tsx'
 import TypeAnswerOptions from './TypeAnswerOptions.tsx'
@@ -60,6 +64,21 @@ export type QuestionFieldProps = (
       type: QuestionFieldType.MultiChoiceOptions
       values?: QuestionMultiChoiceOptionDto[]
       onChange: (value: QuestionMultiChoiceOptionDto[]) => void
+      onValid: (valid: boolean) => void
+    }
+  | ({
+      type: QuestionFieldType.Pin
+    } & PinQuestionFieldProps)
+  | {
+      type: QuestionFieldType.PinTolerance
+      value?: QuestionPinTolerance
+      onChange: (value?: QuestionPinTolerance) => void
+      onValid: (valid: boolean) => void
+    }
+  | {
+      type: QuestionFieldType.PuzzleValues
+      value?: string[]
+      onChange: (values?: string[]) => void
       onValid: (valid: boolean) => void
     }
   | {
@@ -310,6 +329,69 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           info="The list of possible answers for a question."
           footer={props.footer}>
           <MultiChoiceOptions {...props} />
+        </QuestionFieldWrapper>
+      )
+
+    case QuestionFieldType.Pin:
+      return (
+        <QuestionFieldWrapper layout="full" footer={props.footer}>
+          <PinQuestionField {...props} />
+        </QuestionFieldWrapper>
+      )
+    case QuestionFieldType.PinTolerance:
+      return (
+        <QuestionFieldWrapper
+          label="Tolerance"
+          layout="half"
+          info={
+            <>
+              Each level sets the maximum distance from the correct location
+              that still counts as correct. Within this distance, points are
+              awarded on a sliding scale: closer pins earn more points.
+              <ul>
+                <li>
+                  Low: Smallest margin of error — strictest, only near-exact
+                  placements score.
+                </li>
+                <li>Medium: Moderate margin of error — balanced strictness</li>
+                <li>
+                  High: Wide margin of error — forgiving, but still excludes
+                  extreme outliers.
+                </li>
+                <li>
+                  Maximum: Largest margin of error — all placements score, but
+                  closer pins earn more points.
+                </li>
+              </ul>
+            </>
+          }
+          footer={props.footer}>
+          <Select
+            id="pin-tolerance-select"
+            value={props.value}
+            values={Object.values(QuestionPinTolerance).map((type) => ({
+              key: type,
+              value: type,
+              valueLabel: QuestionPinToleranceLabels[type],
+            }))}
+            onChange={(value) => props.onChange(value as QuestionPinTolerance)}
+            onValid={props.onValid}
+          />
+        </QuestionFieldWrapper>
+      )
+    case QuestionFieldType.PuzzleValues:
+      return (
+        <QuestionFieldWrapper
+          label="Values"
+          layout="full"
+          info={
+            <>
+              Add at least 3 answers in the correct order. They will be
+              automatically randomized during the game.
+            </>
+          }
+          footer={props.footer}>
+          <PuzzleValues {...props} />
         </QuestionFieldWrapper>
       )
     case QuestionFieldType.RangeCorrect:

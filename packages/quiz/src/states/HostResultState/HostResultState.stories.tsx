@@ -1,4 +1,4 @@
-import { GameEventType, QuestionType } from '@quiz/common'
+import { GameEventType, QuestionPinTolerance, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -176,6 +176,82 @@ export const QuestionTypeAnswer = {
           { value: 'leonardo', count: 4, correct: false },
           { value: 'picasso', count: 3, correct: false },
           { value: 'rembrandt', count: 1, correct: false },
+        ],
+      },
+      pagination: {
+        current: 1,
+        total: 20,
+      },
+    },
+  },
+} satisfies Story
+
+export const QuestionPin = {
+  name: 'Question Pin',
+  args: {
+    event: {
+      type: GameEventType.GameResultHost,
+      game: {
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.Pin,
+        question:
+          'Where is the capital Stockholm located? Pin the answer on a map of Europe',
+      },
+      results: {
+        type: QuestionType.Pin,
+        imageURL:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Europe_laea_location_map.svg/1401px-Europe_laea_location_map.svg.png',
+        positionX: 0.45838,
+        positionY: 0.35438,
+        tolerance: QuestionPinTolerance.Medium,
+        distribution: [
+          { value: '0.42838,0.39438', count: 1, correct: true },
+          { value: '0.68271,0.79206', count: 1, correct: false },
+          { value: '0.59385,0.21256', count: 1, correct: false },
+          { value: '0.60786,0.97867', count: 1, correct: false },
+        ],
+      },
+      pagination: {
+        current: 1,
+        total: 20,
+      },
+    },
+  },
+} satisfies Story
+
+export const QuestionPuzzle = {
+  name: 'Question Puzzle',
+  args: {
+    event: {
+      type: GameEventType.GameResultHost,
+      game: {
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.Puzzle,
+        question: 'Sort these planets from closest to farthest from the Sun',
+      },
+      results: {
+        type: QuestionType.Puzzle,
+        values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+        distribution: [
+          {
+            value: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+            count: 1,
+            correct: true,
+          },
+          {
+            value: ['Athens', 'Plovdiv', 'Argos', 'Lisbon'],
+            count: 2,
+            correct: false,
+          },
+          {
+            value: ['Athens', 'Lisbon', 'Argos', 'Plovdiv'],
+            count: 1,
+            correct: false,
+          },
         ],
       },
       pagination: {

@@ -7,6 +7,7 @@ import React, { FC } from 'react'
 
 import { LoadingSpinner } from '../index.ts'
 
+import AnswerPin, { AnswerSort } from './components'
 import AnswerInput from './components/AnswerInput'
 import AnswerPicker from './components/AnswerPicker'
 import AnswerRange from './components/AnswerRange'
@@ -71,6 +72,26 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
         onSubmit={(value) =>
           onChange?.({ type: QuestionType.TypeAnswer, value })
         }
+      />
+    )}
+    {!loading && question.type === QuestionType.Pin && (
+      <AnswerPin
+        imageURL={question.imageURL}
+        interactive={interactive}
+        onSubmit={({ x: positionX, y: positionY }) =>
+          onChange?.({
+            type: QuestionType.Pin,
+            positionX,
+            positionY,
+          })
+        }
+      />
+    )}
+    {!loading && question.type === QuestionType.Puzzle && (
+      <AnswerSort
+        values={question.values}
+        interactive={interactive}
+        onSubmit={(values) => onChange?.({ type: QuestionType.Puzzle, values })}
       />
     )}
   </div>

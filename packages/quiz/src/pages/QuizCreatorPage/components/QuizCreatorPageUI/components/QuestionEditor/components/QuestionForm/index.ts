@@ -4,5 +4,7 @@ export {
   ClassicRangeQuestionForm,
   ClassicTrueFalseQuestionForm,
   ClassicTypeAnswerQuestionForm,
+  ClassicPinQuestionForm,
+  ClassicPuzzleQuestionForm,
   ZeroToOneHundredRangeQuestionForm,
 } from './QuestionForm'

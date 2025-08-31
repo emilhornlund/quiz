@@ -1,0 +1,153 @@
+@use '../../../../styles/colors';
+@use '../../../../styles/helpers';
+@use '../../../../styles/variables';
+
+.puzzleQuestionResults {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+
+  @include helpers.mobile {
+    flex-direction: column;
+    gap: variables.$mobile-layout-gutter;
+    padding: 0 variables.$mobile-narrow-layout-gutter;
+  }
+  @include helpers.tablet {
+    flex-direction: column;
+    gap: variables.$tablet-layout-gutter;
+    padding: 0 variables.$tablet-narrow-layout-gutter;
+  }
+  @include helpers.desktop {
+    flex-direction: row;
+    gap: variables.$desktop-layout-gutter;
+    padding: 0 variables.$desktop-narrow-layout-gutter;
+  }
+
+  .bars, .puzzle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bars {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
+    }
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
+    }
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
+    }
+
+    .bar {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      height: 100%;
+
+      .spacer {
+        display: flex;
+        flex-direction: column;
+        flex: 0 1 auto;
+      }
+
+      .inner {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+
+        @include helpers.mobile {
+          border-radius: variables.$mobile-control-normal-border-radius;
+        }
+
+        @include helpers.tablet {
+          border-radius: variables.$tablet-control-normal-border-radius;
+        }
+
+        @include helpers.desktop {
+          border-radius: variables.$desktop-control-normal-border-radius;
+        }
+
+        &.green {
+          background-color: colors.$green-1;
+
+          .footer {
+            background-color: colors.$green-2;
+          }
+        }
+
+        &.red {
+          background-color: colors.$red-1;
+
+          .footer {
+            background-color: colors.$red-2;
+          }
+        }
+
+        .spacer {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .footer {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          font-weight: bold;
+
+          @include helpers.mobile {
+            column-gap: variables.$mobile-narrow-layout-gutter;
+            padding: variables.$mobile-narrow-layout-gutter;
+
+            @include helpers.fontSize(18px);
+          }
+
+          @include helpers.tablet {
+            column-gap: variables.$tablet-narrow-layout-gutter;
+            padding: variables.$tablet-narrow-layout-gutter;
+
+            @include helpers.fontSize(20px);
+          }
+
+          @include helpers.desktop {
+            column-gap: variables.$desktop-narrow-layout-gutter;
+            padding: variables.$desktop-narrow-layout-gutter;
+
+            @include helpers.fontSize(22px);
+          }
+        }
+      }
+    }
+  }
+
+  .puzzle {
+    @include helpers.mobile {
+      row-gap: variables.$mobile-narrow-layout-gutter * 0.5;
+    }
+
+    @include helpers.tablet {
+      row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+    }
+
+    @include helpers.desktop {
+      row-gap: variables.$desktop-narrow-layout-gutter * 0.5;
+    }
+  }
+}

@@ -1,0 +1,211 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SortableTable > renders initial list (enabled) and matches snapshot 1`] = `
+<div
+  class="sortableTable"
+>
+  <div
+    data-testid="dnd-context"
+  >
+    <div
+      class="item draggable"
+      data-sortable-id="1"
+    >
+      <div
+        class="value"
+      >
+        Alpha
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <div
+      class="item draggable"
+      data-sortable-id="2"
+    >
+      <div
+        class="value"
+      >
+        Bravo
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <div
+      class="item draggable"
+      data-sortable-id="3"
+    >
+      <div
+        class="value"
+      >
+        Charlie
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <button
+      data-testid="trigger-drag"
+      type="button"
+    />
+  </div>
+</div>
+`;
+
+exports[`SortableTable > renders with disabled=true (no grip icons) and matches snapshot 1`] = `
+<div
+  class="sortableTable"
+>
+  <div
+    data-testid="dnd-context"
+  >
+    <div
+      class="item"
+      data-sortable-id="1"
+    >
+      <div
+        class="value"
+      >
+        Alpha
+      </div>
+    </div>
+    <div
+      class="item"
+      data-sortable-id="2"
+    >
+      <div
+        class="value"
+      >
+        Bravo
+      </div>
+    </div>
+    <div
+      class="item"
+      data-sortable-id="3"
+    >
+      <div
+        class="value"
+      >
+        Charlie
+      </div>
+    </div>
+    <button
+      data-testid="trigger-drag"
+      type="button"
+    />
+  </div>
+</div>
+`;
+
+exports[`SortableTable > reorders on drag end and calls onChange with new order 1`] = `
+<div
+  class="sortableTable"
+>
+  <div
+    data-testid="dnd-context"
+  >
+    <div
+      class="item draggable"
+      data-sortable-id="2"
+    >
+      <div
+        class="value"
+      >
+        Bravo
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <div
+      class="item draggable"
+      data-sortable-id="1"
+    >
+      <div
+        class="value"
+      >
+        Alpha
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <button
+      data-testid="trigger-drag"
+      type="button"
+    />
+  </div>
+</div>
+`;
+
+exports[`SortableTable > updates when values prop changes and calls onChange with updated list 1`] = `
+<div
+  class="sortableTable"
+>
+  <div
+    data-testid="dnd-context"
+  >
+    <div
+      class="item draggable"
+      data-sortable-id="1"
+    >
+      <div
+        class="value"
+      >
+        Alpha
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <div
+      class="item draggable"
+      data-sortable-id="2"
+    >
+      <div
+        class="value"
+      >
+        Bravo
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <div
+      class="item draggable"
+      data-sortable-id="9"
+    >
+      <div
+        class="value"
+      >
+        Delta
+      </div>
+      <i
+        class="icon"
+        data-icon="grip"
+        data-mock="fa"
+      />
+    </div>
+    <button
+      data-testid="trigger-drag"
+      type="button"
+    />
+  </div>
+</div>
+`;

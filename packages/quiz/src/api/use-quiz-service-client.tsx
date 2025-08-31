@@ -18,7 +18,6 @@ import {
   PaginatedQuizResponseDto,
   QuestionCorrectAnswerDto,
   QuestionDto,
-  QuestionType,
   QuizRequestDto,
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
@@ -661,28 +660,10 @@ export const useQuizServiceClient = () => {
   const submitQuestionAnswer = async (
     gameID: string,
     submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
-  ) => {
-    let requestBody: ApiPostBody = {}
-    if (submitQuestionAnswerRequest.type === QuestionType.MultiChoice) {
-      const { type, optionIndex } = submitQuestionAnswerRequest
-      requestBody = { type, optionIndex }
-    }
-    if (submitQuestionAnswerRequest.type === QuestionType.Range) {
-      const { type, value } = submitQuestionAnswerRequest
-      requestBody = { type, value }
-    }
-    if (submitQuestionAnswerRequest.type === QuestionType.TrueFalse) {
-      const { type, value } = submitQuestionAnswerRequest
-      requestBody = { type, value }
-    }
-    if (submitQuestionAnswerRequest.type === QuestionType.TypeAnswer) {
-      const { type, value } = submitQuestionAnswerRequest
-      requestBody = { type, value }
-    }
-    await apiPost(`/games/${gameID}/answers`, requestBody, {
+  ): Promise<void> =>
+    apiPost(`/games/${gameID}/answers`, submitQuestionAnswerRequest, {
       scope: TokenScope.Game,
     })
-  }
 
   /**
    * Adds a correct answer to the current task in the specified game.

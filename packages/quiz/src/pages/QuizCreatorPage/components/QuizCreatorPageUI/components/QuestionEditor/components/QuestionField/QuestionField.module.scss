@@ -108,5 +108,9 @@
     @include helpers.desktop {
       width: calc(50% - #{variables.$desktop-narrow-layout-gutter} * 0.5);
     }
+
+    &.fullWidth {
+      width: 100%;
+    }
   }
 }

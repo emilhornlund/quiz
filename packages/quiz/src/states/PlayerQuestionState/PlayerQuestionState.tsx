@@ -13,6 +13,8 @@ import {
 import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
+import styles from './PlayerQuestionState.module.scss'
+
 export interface PlayerQuestionStateProps {
   event: GameQuestionPlayerEvent
 }
@@ -45,6 +47,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
   return (
     <GamePage
       height="full"
+      align="space-between"
       footer={
         <PlayerGameFooter
           currentQuestion={currentQuestion}
@@ -57,11 +60,13 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
         {question.question}
       </Typography>
 
-      <QuestionAnswerPicker
-        question={question}
-        loading={isSubmittingQuestionAnswer}
-        onChange={handleSubmitQuestionAnswer}
-      />
+      <div className={styles.fullHeight}>
+        <QuestionAnswerPicker
+          question={question}
+          loading={isSubmittingQuestionAnswer}
+          onChange={handleSubmitQuestionAnswer}
+        />
+      </div>
 
       <ProgressBar countdown={countdown} />
     </GamePage>

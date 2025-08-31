@@ -389,6 +389,16 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                           >
                             Type Answer
                           </option>
+                          <option
+                            value="PIN"
+                          >
+                            Pin
+                          </option>
+                          <option
+                            value="PUZZLE"
+                          >
+                            Puzzle
+                          </option>
                         </select>
                         <svg
                           aria-hidden="true"

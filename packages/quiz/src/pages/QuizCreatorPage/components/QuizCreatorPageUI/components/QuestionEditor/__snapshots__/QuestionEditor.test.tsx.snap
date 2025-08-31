@@ -52,6 +52,16 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                 >
                   Type Answer
                 </option>
+                <option
+                  value="PIN"
+                >
+                  Pin
+                </option>
+                <option
+                  value="PUZZLE"
+                >
+                  Puzzle
+                </option>
               </select>
               <svg
                 aria-hidden="true"
@@ -699,6 +709,16 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
                 >
                   Type Answer
                 </option>
+                <option
+                  value="PIN"
+                >
+                  Pin
+                </option>
+                <option
+                  value="PUZZLE"
+                >
+                  Puzzle
+                </option>
               </select>
               <svg
                 aria-hidden="true"
@@ -1345,6 +1365,16 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
                 >
                   Type Answer
                 </option>
+                <option
+                  value="PIN"
+                >
+                  Pin
+                </option>
+                <option
+                  value="PUZZLE"
+                >
+                  Puzzle
+                </option>
               </select>
               <svg
                 aria-hidden="true"
@@ -1850,6 +1880,16 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                   value="TYPE_ANSWER"
                 >
                   Type Answer
+                </option>
+                <option
+                  value="PIN"
+                >
+                  Pin
+                </option>
+                <option
+                  value="PUZZLE"
+                >
+                  Puzzle
                 </option>
               </select>
               <svg
