@@ -6,19 +6,18 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 2rem;
-  user-select: text;
+  margin-bottom: variables.$desktop-layout-gutter;
 
   @include helpers.mobile {
-    gap: 1.5rem;
+    gap: variables.$mobile-layout-gutter;
   }
 
   @include helpers.tablet {
-    gap: 2rem;
+    gap: variables.$tablet-layout-gutter;
   }
 
   @include helpers.desktop {
-    gap: 2.5rem;
+    gap: variables.$desktop-layout-gutter;
   }
 }
 
@@ -33,10 +32,10 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(helpers.pxToRem(-10px));
   }
 }
 
@@ -69,188 +68,10 @@
   }
 }
 
-.modernInput {
-  position: relative;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  
-  &:focus-within {
-    border-color: #ffd700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    background: rgba(255, 255, 255, 0.15);
-  }
-  
-  input {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 16px;
-    padding: 16px 20px;
-    width: 100%;
-    outline: none;
-    
-    &::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-    
-    @include helpers.mobile {
-      font-size: 14px;
-      padding: 14px 18px;
-    }
-    
-    @include helpers.tablet {
-      font-size: 15px;
-      padding: 15px 19px;
-    }
-    
-    @include helpers.desktop {
-      font-size: 16px;
-      padding: 16px 20px;
-    }
-  }
-  
-  @include helpers.mobile {
-    font-size: 14px;
-  }
-  
-  @include helpers.tablet {
-    font-size: 15px;
-  }
-  
-  @include helpers.desktop {
-    font-size: 16px;
-  }
-}
-
-.modernJoinButton {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  border: none;
-  color: #333;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 16px 32px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
-    
-    &::before {
-      transform: translateX(100%);
-    }
-  }
-  
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
-    transition: transform 0.6s ease;
-  }
-  
-  &:disabled {
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    opacity: 1;
-    cursor: pointer;
-    transform: none;
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
-      
-      &::before {
-        transform: translateX(100%);
-      }
-    }
-  }
-  
-  @include helpers.mobile {
-    font-size: 14px;
-    padding: 14px 28px;
-  }
-  
-  @include helpers.tablet {
-    font-size: 15px;
-    padding: 15px 30px;
-  }
-  
-  @include helpers.desktop {
-    font-size: 16px;
-    padding: 16px 32px;
-  }
-}
-
-.heroTitle {
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin: 0;
-  user-select: text;
-  
-  @include helpers.mobile {
-    font-size: 40px;
-    line-height: 1.1;
-  }
-
-  @include helpers.tablet {
-    font-size: 60px;
-    line-height: 1.1;
-  }
-
-  @include helpers.desktop {
-    font-size: 66px;
-    line-height: 1.1;
-  }
-}
-
-.heroSubtitle {
-  font-weight: 400;
-  line-height: 1.4;
-  max-width: 600px;
-  margin: 0;
-  text-align: center;
-  user-select: text;
-  animation: fadeInUp 1.5s ease-out 0.5s both;
-  
-  @include helpers.mobile {
-    font-size: 22px;
-  }
-
-  @include helpers.tablet {
-    font-size: 28px;
-  }
-
-  @include helpers.desktop {
-    font-size: 34px;
-  }
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(helpers.pxToRem(30px));
   }
   to {
     opacity: 1;

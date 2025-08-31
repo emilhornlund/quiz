@@ -35,4 +35,17 @@ describe('Button', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  it('should render a Button with modern variant', async () => {
+    const { container } = render(
+      <Button
+        id="my-modern-button"
+        type="button"
+        variant="modern"
+        value="Modern Button"
+      />,
+    )
+
+    expect(container).toMatchSnapshot()
+  })
 })

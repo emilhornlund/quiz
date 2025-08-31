@@ -26,6 +26,10 @@ $outline-offset: helpers.pxToRem(2px);
       @extend .input-kind-secondary;
     }
 
+    &.textareaInputKindModern {
+      @extend .input-kind-modern;
+    }
+
     &.error {
       @extend .input-kind-destructive;
     }

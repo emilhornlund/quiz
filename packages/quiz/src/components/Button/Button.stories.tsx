@@ -304,3 +304,22 @@ export const CallToActionLoadingSmall = {
     loading: true,
   },
 } satisfies Story
+
+export const Modern = {
+  args: {
+    id: 'my-modern-button',
+    type: 'button',
+    variant: 'modern',
+    value: 'Join the game →',
+  },
+} satisfies Story
+
+export const ModernDisabled = {
+  args: {
+    id: 'my-modern-button',
+    type: 'button',
+    variant: 'modern',
+    value: 'Join the game →',
+    disabled: true,
+  },
+} satisfies Story
