@@ -1,17 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import {
-  GameMode,
-  GameParticipantType,
-  GameStatus,
-  LanguageCode,
-  MediaType,
-  QuestionRangeAnswerMargin,
-  QuestionType,
-  QuizCategory,
-  QuizRequestDto,
-  QuizVisibility,
-} from '@quiz/common'
+import { GameParticipantType, GameStatus, QuestionType } from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -20,6 +9,7 @@ import {
   buildMockQuaternaryUser,
   buildMockSecondaryUser,
   buildMockTertiaryUser,
+  createMockClassicQuizRequestDto,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
@@ -52,6 +42,8 @@ import {
   QuestionResultTaskItem,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
+  QuestionTaskPinAnswer,
+  QuestionTaskPuzzleAnswer,
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
@@ -88,7 +80,7 @@ describe('GameController (e2e)', () => {
   describe('/api/games/:gameID/players (POST)', () => {
     it('should succeed in joining an existing active classic mode game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -113,7 +105,7 @@ describe('GameController (e2e)', () => {
 
     it('should succeed in joining an existing active classic mode game when not on question task', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -147,7 +139,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail in joining when a player has already joined', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -192,7 +184,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail in joining when nickname already taken', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -238,7 +230,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail in joining an expired game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -324,7 +316,7 @@ describe('GameController (e2e)', () => {
   describe('/api/games/:gameID/players (DELETE)', () => {
     it('should allow a player to leave a game they are part of', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -370,7 +362,7 @@ describe('GameController (e2e)', () => {
 
     it('should allow the host to remove a player from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -416,7 +408,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail when attempting to remove a player who does not exist', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -457,7 +449,7 @@ describe('GameController (e2e)', () => {
 
     it('should prevent a player from removing another player from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -518,7 +510,7 @@ describe('GameController (e2e)', () => {
 
     it('should prevent a host from removing themselves from the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -561,7 +553,7 @@ describe('GameController (e2e)', () => {
   describe('/api/games/:gameID/events (GET)', () => {
     it('should allow event subscription after game creation with a valid token', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -588,7 +580,7 @@ describe('GameController (e2e)', () => {
 
     it('should allow event subscription for a player who joined the game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -621,7 +613,7 @@ describe('GameController (e2e)', () => {
 
     it('should deny event subscription without an authorization token', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -666,14 +658,14 @@ describe('GameController (e2e)', () => {
 
     it('should return Forbidden when subscribing to events with a token for a different game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
       const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -704,7 +696,7 @@ describe('GameController (e2e)', () => {
   describe('/api/games/:gameID/tasks/current/complete (POST)', () => {
     it('should succeed in completing the current task', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -732,7 +724,7 @@ describe('GameController (e2e)', () => {
 
     it('should succeed in completing the current podium task with players', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -783,7 +775,7 @@ describe('GameController (e2e)', () => {
 
     it('should succeed in completing the current podium task without players', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -820,7 +812,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail in completing the current task if its current status is pending', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -853,7 +845,7 @@ describe('GameController (e2e)', () => {
 
     it('should fail in completing the current task if its current status is already completed', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -886,7 +878,7 @@ describe('GameController (e2e)', () => {
 
     it('should deny completing the current task without an authorization token', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -931,14 +923,14 @@ describe('GameController (e2e)', () => {
 
     it('should return 401 when completing the current task with a token for a different game', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
       const { id: gameId } = await gameService.createGame(quizId, hostUser)
 
       const { id: quizIdSecond } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         playerUser,
       )
 
@@ -969,7 +961,7 @@ describe('GameController (e2e)', () => {
   describe('/api/games/:gameID/answers (POST)', () => {
     it('should submit a valid multi-choice answer successfully', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -988,6 +980,7 @@ describe('GameController (e2e)', () => {
             type: TaskType.Question,
             status: 'active',
             questionIndex: 0,
+            metadata: { type: QuestionType.MultiChoice },
             answers: [],
             created: new Date(),
           },
@@ -1013,7 +1006,7 @@ describe('GameController (e2e)', () => {
 
     it('should return Forbidden when a host tries to submit an answer', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -1053,7 +1046,7 @@ describe('GameController (e2e)', () => {
 
     it('should return BadRequest for invalid task status', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -1102,7 +1095,7 @@ describe('GameController (e2e)', () => {
 
     it('should return BadRequest for non-question task type', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -1142,7 +1135,7 @@ describe('GameController (e2e)', () => {
 
     it('should return BadRequest when the player has already submitted an answer', async () => {
       const { id: quizId } = await quizService.createQuiz(
-        classicQuizRequest,
+        createMockClassicQuizRequestDto(),
         hostUser,
       )
 
@@ -1161,6 +1154,7 @@ describe('GameController (e2e)', () => {
             type: TaskType.Question,
             status: 'active',
             questionIndex: 0,
+            metadata: { type: QuestionType.MultiChoice },
             answers: [],
             created: new Date(),
           },
@@ -2490,82 +2484,6 @@ describe('GameController (e2e)', () => {
   })
 })
 
-const classicQuizRequest: QuizRequestDto = {
-  title: 'Trivia Battle',
-  description: 'A fun and engaging trivia quiz for all ages.',
-  mode: GameMode.Classic,
-  visibility: QuizVisibility.Public,
-  category: QuizCategory.GeneralKnowledge,
-  imageCoverURL: 'https://example.com/question-cover-image.png',
-  languageCode: LanguageCode.English,
-  questions: [
-    {
-      type: QuestionType.MultiChoice,
-      question: 'What is the capital of Sweden?',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      options: [
-        {
-          value: 'Stockholm',
-          correct: true,
-        },
-        {
-          value: 'Copenhagen',
-          correct: false,
-        },
-        {
-          value: 'London',
-          correct: false,
-        },
-        {
-          value: 'Berlin',
-          correct: false,
-        },
-      ],
-      points: 1000,
-      duration: 30,
-    },
-    {
-      type: QuestionType.Range,
-      question: 'Guess the temperature of the hottest day ever recorded.',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      min: 0,
-      max: 100,
-      correct: 50,
-      margin: QuestionRangeAnswerMargin.Medium,
-      points: 1000,
-      duration: 30,
-    },
-    {
-      type: QuestionType.TrueFalse,
-      question: 'The earth is flat.',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      correct: false,
-      points: 1000,
-      duration: 30,
-    },
-    {
-      type: QuestionType.TypeAnswer,
-      question: 'What is the capital of Denmark?',
-      media: {
-        type: MediaType.Image,
-        url: 'https://example.com/question-image.png',
-      },
-      options: ['Copenhagen'],
-      points: 1000,
-      duration: 30,
-    },
-  ],
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toPlain(instance: any): any {
   return JSON.parse(JSON.stringify(instance))
@@ -2653,6 +2571,8 @@ function buildCorrectQuestionResultTaskItem(
       | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskPinAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer, 'playerId'>
   } & Pick<QuestionResultTaskItem, 'lastScore' | 'totalScore' | 'position'>,
 ): QuestionResultTaskItem {
   return {
@@ -2681,6 +2601,8 @@ function buildIncorrectQuestionResultTaskItem(
       | Omit<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTrueFalseAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskPinAnswer, 'playerId'>
+      | Omit<QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer, 'playerId'>
   } & Partial<Pick<QuestionResultTaskItem, 'position'>>,
 ): QuestionResultTaskItem {
   return {

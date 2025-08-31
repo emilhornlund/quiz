@@ -43,8 +43,12 @@ import { RouteGameIdParam, RoutePlayerIdParam } from './decorators/params'
 import {
   JoinGameRequest,
   MultiChoiceQuestionCorrectAnswerRequest,
+  PinQuestionCorrectAnswerRequest,
+  PuzzleQuestionCorrectAnswerRequest,
   RangeQuestionCorrectAnswerRequest,
   SubmitMultiChoiceQuestionAnswerRequest,
+  SubmitPinQuestionAnswerRequest,
+  SubmitPuzzleQuestionAnswerRequest,
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
@@ -64,10 +68,14 @@ import {
   SubmitRangeQuestionAnswerRequest,
   SubmitTrueFalseQuestionAnswerRequest,
   SubmitTypeAnswerQuestionAnswerRequest,
+  SubmitPinQuestionAnswerRequest,
+  SubmitPuzzleQuestionAnswerRequest,
   MultiChoiceQuestionCorrectAnswerRequest,
   RangeQuestionCorrectAnswerRequest,
   TrueFalseQuestionCorrectAnswerRequest,
   TypeAnswerQuestionCorrectAnswerRequest,
+  PinQuestionCorrectAnswerRequest,
+  PuzzleQuestionCorrectAnswerRequest,
 )
 @ApiTags('game')
 @RequiresScopes(TokenScope.Game)
@@ -267,6 +275,8 @@ export class GameController {
         { $ref: getSchemaPath(RangeQuestionCorrectAnswerRequest) },
         { $ref: getSchemaPath(TrueFalseQuestionCorrectAnswerRequest) },
         { $ref: getSchemaPath(TypeAnswerQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(PinQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(PuzzleQuestionCorrectAnswerRequest) },
       ],
     },
   })
@@ -289,7 +299,9 @@ export class GameController {
       | MultiChoiceQuestionCorrectAnswerRequest
       | RangeQuestionCorrectAnswerRequest
       | TrueFalseQuestionCorrectAnswerRequest
-      | TypeAnswerQuestionCorrectAnswerRequest,
+      | TypeAnswerQuestionCorrectAnswerRequest
+      | PinQuestionCorrectAnswerRequest
+      | PuzzleQuestionCorrectAnswerRequest,
   ): Promise<void> {
     return this.gameService.addCorrectAnswer(gameId, correctAnswerRequest)
   }
@@ -318,6 +330,8 @@ export class GameController {
         { $ref: getSchemaPath(RangeQuestionCorrectAnswerRequest) },
         { $ref: getSchemaPath(TrueFalseQuestionCorrectAnswerRequest) },
         { $ref: getSchemaPath(TypeAnswerQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(PinQuestionCorrectAnswerRequest) },
+        { $ref: getSchemaPath(PuzzleQuestionCorrectAnswerRequest) },
       ],
     },
   })
@@ -340,7 +354,9 @@ export class GameController {
       | MultiChoiceQuestionCorrectAnswerRequest
       | RangeQuestionCorrectAnswerRequest
       | TrueFalseQuestionCorrectAnswerRequest
-      | TypeAnswerQuestionCorrectAnswerRequest,
+      | TypeAnswerQuestionCorrectAnswerRequest
+      | PinQuestionCorrectAnswerRequest
+      | PuzzleQuestionCorrectAnswerRequest,
   ): Promise<void> {
     return this.gameService.deleteCorrectAnswer(gameId, correctAnswerRequest)
   }
@@ -369,6 +385,8 @@ export class GameController {
         { $ref: getSchemaPath(SubmitRangeQuestionAnswerRequest) },
         { $ref: getSchemaPath(SubmitTrueFalseQuestionAnswerRequest) },
         { $ref: getSchemaPath(SubmitTypeAnswerQuestionAnswerRequest) },
+        { $ref: getSchemaPath(SubmitPinQuestionAnswerRequest) },
+        { $ref: getSchemaPath(SubmitPuzzleQuestionAnswerRequest) },
       ],
     },
   })
@@ -385,7 +403,9 @@ export class GameController {
       | SubmitMultiChoiceQuestionAnswerRequest
       | SubmitRangeQuestionAnswerRequest
       | SubmitTrueFalseQuestionAnswerRequest
-      | SubmitTypeAnswerQuestionAnswerRequest,
+      | SubmitTypeAnswerQuestionAnswerRequest
+      | SubmitPinQuestionAnswerRequest
+      | SubmitPuzzleQuestionAnswerRequest,
   ): Promise<void> {
     return this.gameService.submitQuestionAnswer(
       gameId,

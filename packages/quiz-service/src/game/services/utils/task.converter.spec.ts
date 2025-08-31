@@ -3,11 +3,18 @@ import {
   GameMode,
   GameParticipantType,
   MediaType,
+  QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  createMockPinQuestionDocument,
+  createMockPuzzleQuestionDocument,
+  createMockQuestionTaskPinAnswer,
+  createMockQuestionTaskPuzzleAnswer,
+} from '../../../../test-utils/data'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -21,6 +28,8 @@ import {
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
+  QuestionTaskPinAnswer,
+  QuestionTaskPuzzleAnswer,
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
@@ -29,6 +38,7 @@ import {
 
 import {
   buildQuestionResultTask,
+  calculateClassicModePinQuestionScore,
   calculateClassicModeRangeQuestionScore,
   calculateClassicModeRawScore,
   calculateClassicModeScore,
@@ -452,6 +462,303 @@ describe('TaskConverter', () => {
         ).toBe(false)
       })
     })
+
+    describe('QuestionType is Pin', () => {
+      describe('should validate Pin answers within Low tolerance (0.06)', () => {
+        // Correct point at (0.50, 0.50)
+        const correct = [
+          {
+            type: QuestionType.Pin,
+            value: '0.50,0.50',
+          },
+        ]
+
+        it('should be within 0.06 tolerance', () => {
+          // 1) Within 0.06 tolerance (dx = 0.04, dy = 0) -> distance = 0.04 < 0.06
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.54,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Low,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be exactly at 0.06 tolerance', () => {
+          // 2) Exactly at 0.06 tolerance (dx = 0.06, dy = 0) -> distance = 0.06
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.56,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Low,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be outside 0.06 tolerance', () => {
+          // 3) Outside 0.06 tolerance (dx = 0.07, dy = 0) -> distance = 0.07 > 0.06
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.57,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Low,
+            ),
+          ).toBe(false)
+        })
+      })
+
+      describe('should validate Pin answers within Medium tolerance (0.12)', () => {
+        // Correct point at (0.50, 0.50)
+        const correct = [
+          {
+            type: QuestionType.Pin,
+            value: '0.50,0.50',
+          },
+        ]
+
+        it('should be within 0.12 tolerance', () => {
+          // Within 0.12 tolerance (dx = 0.10, dy = 0) -> distance = 0.10 < 0.12
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.60,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Medium,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be exactly at 0.12 tolerance', () => {
+          // Exactly at 0.12 tolerance (dx = 0.12, dy = 0) -> distance = 0.12
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.62,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Medium,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be outside 0.12 tolerance', () => {
+          // Outside 0.12 tolerance (dx = 0.13, dy = 0) -> distance = 0.13 > 0.12
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.63,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Medium,
+            ),
+          ).toBe(false)
+        })
+      })
+
+      describe('should validate Pin answers within High tolerance (0.20)', () => {
+        // Correct point at (0.50, 0.50)
+        const correct = [
+          {
+            type: QuestionType.Pin,
+            value: '0.50,0.50',
+          },
+        ]
+
+        it('should be within 0.20 tolerance', () => {
+          // Within 0.20 tolerance (dx = 0.15, dy = 0) -> distance = 0.15 < 0.20
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.65,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.High,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be exactly at 0.20 tolerance', () => {
+          // Exactly at 0.20 tolerance (dx = 0.20, dy = 0) -> distance = 0.20
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.70,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.High,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be outside 0.20 tolerance', () => {
+          // Outside 0.20 tolerance (dx = 0.21, dy = 0) -> distance = 0.21 > 0.20
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.71,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.High,
+            ),
+          ).toBe(false)
+        })
+      })
+
+      describe('should validate Pin answers within Maximum tolerance (all answers correct)', () => {
+        // Correct point at (0.50, 0.50)
+        const correct = [
+          {
+            type: QuestionType.Pin,
+            value: '0.50,0.50',
+          },
+        ]
+
+        it('should be correct at the exact location', () => {
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.50,0.50',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Maximum,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be correct far away from the correct location', () => {
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.95,0.95',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Maximum,
+            ),
+          ).toBe(true)
+        })
+
+        it('should be correct even at the opposite corner', () => {
+          expect(
+            isQuestionAnswerCorrect(
+              correct,
+              {
+                type: QuestionType.Pin,
+                answer: '0.00,0.00',
+              } as unknown as QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
+              undefined,
+              QuestionPinTolerance.Maximum,
+            ),
+          ).toBe(true)
+        })
+      })
+    })
+
+    describe('QuestionType is Puzzle', () => {
+      it('should be correct when order matches exactly', () => {
+        const correct = [
+          { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
+        ]
+
+        const answer = {
+          type: QuestionType.Puzzle,
+          answer: ['A', 'B', 'C', 'D'],
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, answer)).toBe(true)
+      })
+
+      it('should be correct when matching any of multiple valid orderings', () => {
+        const correct = [
+          { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
+          { type: QuestionType.Puzzle, value: ['B', 'A', 'D', 'C'] }, // alternate valid ordering
+        ]
+
+        const answer = {
+          type: QuestionType.Puzzle,
+          answer: ['B', 'A', 'D', 'C'],
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, answer)).toBe(true)
+      })
+
+      it('should be incorrect when order does not match any valid ordering', () => {
+        const correct = [
+          { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
+          { type: QuestionType.Puzzle, value: ['B', 'A', 'D', 'C'] },
+        ]
+
+        const answer = {
+          type: QuestionType.Puzzle,
+          answer: ['A', 'C', 'B', 'D'], // not in the set of valid orderings
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, answer)).toBe(false)
+      })
+
+      it('should be incorrect when values are missing or extra', () => {
+        const correct = [
+          { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
+        ]
+
+        const missingOne = {
+          type: QuestionType.Puzzle,
+          answer: ['A', 'B', 'C'], // missing D
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        const extraOne = {
+          type: QuestionType.Puzzle,
+          answer: ['A', 'B', 'C', 'D', 'E'], // extra E
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, missingOne)).toBe(false)
+        expect(isQuestionAnswerCorrect(correct, extraOne)).toBe(false)
+      })
+
+      it('should be incorrect when values match but casing differs', () => {
+        const correct = [
+          {
+            type: QuestionType.Puzzle,
+            value: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+          },
+        ]
+
+        const answer = {
+          type: QuestionType.Puzzle,
+          answer: ['athens', 'argos', 'plovdiv', 'lisbon'], // case differs
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, answer)).toBe(false)
+      })
+    })
   })
 
   describe('calculateClassicModeRawScore', () => {
@@ -759,6 +1066,215 @@ describe('TaskConverter', () => {
     })
   })
 
+  describe('calculateClassicModePinQuestionScore', () => {
+    const presented = new Date()
+
+    it('exact location → full precision (0.8 * points) + speed, rounded', () => {
+      const question = createMockPinQuestionDocument({
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium, // radius = 0.12
+        points: 1000,
+      })
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: `0.5,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+
+      const score = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        answer,
+      )
+      expect(score).toBe(900)
+    })
+
+    it('within tolerance (half radius) → half precision + speed', () => {
+      const question = createMockPinQuestionDocument({
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium, // radius = 0.12
+        points: 1000,
+      })
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: `0.56,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+
+      const score = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        answer,
+      )
+      expect(score).toBe(500)
+    })
+
+    it('exactly at tolerance boundary → precision 0 + speed only', () => {
+      const question = createMockPinQuestionDocument({
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium, // radius = 0.12
+        points: 1000,
+      })
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: `0.62,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+
+      const score = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        answer,
+      )
+      expect(score).toBe(100)
+    })
+
+    it('outside tolerance → total score 0 (even if answer is fast)', () => {
+      const question = createMockPinQuestionDocument({
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium, // radius = 0.12
+        points: 1000,
+      })
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      // distance = 0.13 (> 0.12) → not correct → score 0
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: `0.63,0.5`,
+        created: new Date(presented.getTime() + 1000),
+      })
+      const score = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        answer,
+      )
+      expect(score).toBe(0)
+    })
+
+    it('multiple correct points: picks the maximum resulting score (nearest correct point)', () => {
+      const question = createMockPinQuestionDocument({
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium,
+        points: 1000,
+      })
+
+      // Two valid correct points; answer is closer to the second
+      const correct = [
+        { type: QuestionType.Pin, value: '0.50,0.50' },
+        { type: QuestionType.Pin, value: '0.60,0.50' },
+      ]
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: `0.59,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+      const score = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        answer,
+      )
+      expect(score).toBe(833)
+    })
+
+    it('monotonicity: closer answer yields strictly higher score (same timing)', () => {
+      const question = createMockPinQuestionDocument()
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      const farther = createMockQuestionTaskPinAnswer({
+        answer: `0.6,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+      const closer = createMockQuestionTaskPinAnswer({
+        answer: `0.55,0.5`,
+        created: new Date(presented.getTime() + 5000),
+      })
+
+      const scoreFar = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        farther,
+      )
+      const scoreClose = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        closer,
+      )
+      expect(scoreClose).toBeGreaterThan(scoreFar)
+    })
+
+    it('timing matters: same position, slower answer → lower score', () => {
+      const question = createMockPinQuestionDocument()
+      const correct = [
+        {
+          type: QuestionType.Pin,
+          value: `${question.positionX},${question.positionY}`,
+        },
+      ]
+
+      const fast = createMockQuestionTaskPinAnswer({
+        answer: `0.55,0.5`,
+        created: new Date(presented.getTime() + 2000),
+      })
+      const slow = createMockQuestionTaskPinAnswer({
+        answer: `0.55,0.5`,
+        created: new Date(presented.getTime() + 15000),
+      })
+
+      const fastScore = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        fast,
+      )
+      const slowScore = calculateClassicModePinQuestionScore(
+        correct,
+        presented,
+        question,
+        slow,
+      )
+      expect(fastScore).toBeGreaterThan(slowScore)
+    })
+  })
+
   describe('calculateClassicModeScore', () => {
     it('should calculate score for a multi-choice question and correct answer', () => {
       const presented = new Date()
@@ -985,6 +1501,141 @@ describe('TaskConverter', () => {
         answer,
       )
       expect(score).toEqual(0)
+    })
+
+    it('should calculate score for a pin question and correct answer', () => {
+      const presented = new Date()
+
+      const question = createMockPinQuestionDocument()
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: '0.5,0.5',
+        created: new Date(presented.getTime() + 1000), // 1 second
+      })
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Pin,
+            value: `${question.positionX},${question.positionY}`,
+          },
+        ],
+        answer,
+      )
+      expect(score).toEqual(980)
+    })
+
+    it('should return 0 for a pin question and incorrect answer', () => {
+      const presented = new Date()
+
+      const question = createMockPinQuestionDocument()
+
+      const answer = createMockQuestionTaskPinAnswer({
+        answer: '0.0,0.0',
+        created: new Date(presented.getTime() + 1000), // 1 second
+      })
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Pin,
+            value: `${question.positionX},${question.positionY}`,
+          },
+        ],
+        answer,
+      )
+      expect(score).toEqual(0)
+    })
+
+    it('should return 0 for a pin question and undefined answers', () => {
+      const presented = new Date()
+
+      const question = createMockPinQuestionDocument()
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Pin,
+            value: `${question.positionX},${question.positionY}`,
+          },
+        ],
+        undefined,
+      )
+      expect(score).toEqual(0) // No answer provided
+    })
+
+    //PUZZLE
+    it('should calculate score for a puzzle question and correct answer', () => {
+      const presented = new Date()
+
+      const question = createMockPuzzleQuestionDocument()
+
+      const answer = createMockQuestionTaskPuzzleAnswer({
+        answer: question.values,
+        created: new Date(presented.getTime() + 1000), // 1 second
+      })
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Puzzle,
+            value: question.values,
+          },
+        ],
+        answer,
+      )
+      expect(score).toEqual(983)
+    })
+
+    it('should return 0 for a puzzle question and incorrect answer', () => {
+      const presented = new Date()
+
+      const question = createMockPuzzleQuestionDocument()
+
+      const answer = createMockQuestionTaskPuzzleAnswer({
+        answer: ['Lisbon', 'Plovdiv', 'Argos', 'Athens'],
+        created: new Date(presented.getTime() + 1000), // 1 second
+      })
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Puzzle,
+            value: question.values,
+          },
+        ],
+        answer,
+      )
+      expect(score).toEqual(0)
+    })
+
+    it('should return 0 for a puzzle question and undefined answers', () => {
+      const presented = new Date()
+
+      const question = createMockPuzzleQuestionDocument()
+
+      const score = calculateClassicModeScore(
+        presented,
+        question,
+        [
+          {
+            type: QuestionType.Puzzle,
+            value: question.values,
+          },
+        ],
+        undefined,
+      )
+      expect(score).toEqual(0) // No answer provided
     })
   })
 
@@ -1485,6 +2136,147 @@ describe('TaskConverter', () => {
           },
           {
             type: QuestionType.TypeAnswer,
+            playerId: PARTICIPANT_PLAYER_ID_03,
+            correct: false,
+            lastScore: 0,
+            totalScore: 0,
+            position: 3,
+            streak: 0,
+          },
+        ],
+        created: expect.anything(),
+      })
+    })
+
+    it('should build a question result task item for a classic mode game when question type is pin', () => {
+      const player1Answer = createMockQuestionTaskPinAnswer({
+        playerId: PARTICIPANT_PLAYER_ID_01,
+        created: offset(3),
+        answer: '0.5,0.5',
+      })
+      const player2Answer = createMockQuestionTaskPinAnswer({
+        playerId: PARTICIPANT_PLAYER_ID_02,
+        created: offset(4),
+        answer: '0.0,0.0',
+      })
+
+      const gameDocument = buildGameDocument(
+        [createMockPinQuestionDocument()],
+        [player1Answer, player2Answer],
+      )
+
+      expect(buildQuestionResultTask(gameDocument)).toEqual({
+        _id: expect.anything(),
+        type: TaskType.QuestionResult,
+        status: 'pending',
+        questionIndex: 0,
+        correctAnswers: [{ type: QuestionType.Pin, value: '0.5,0.5' }],
+        results: [
+          {
+            type: QuestionType.Pin,
+            playerId: PARTICIPANT_PLAYER_ID_01,
+            answer: {
+              type: QuestionType.Pin,
+              playerId: PARTICIPANT_PLAYER_ID_01,
+              answer: '0.5,0.5',
+              created: offset(3),
+            },
+            correct: true,
+            lastScore: 980,
+            totalScore: 980,
+            position: 1,
+            streak: 1,
+          },
+          {
+            type: QuestionType.Pin,
+            playerId: PARTICIPANT_PLAYER_ID_02,
+            answer: {
+              type: QuestionType.Pin,
+              playerId: PARTICIPANT_PLAYER_ID_02,
+              answer: '0.0,0.0',
+              created: offset(4),
+            },
+            correct: false,
+            lastScore: 0,
+            totalScore: 0,
+            position: 2,
+            streak: 0,
+          },
+          {
+            type: QuestionType.Pin,
+            playerId: PARTICIPANT_PLAYER_ID_03,
+            correct: false,
+            lastScore: 0,
+            totalScore: 0,
+            position: 3,
+            streak: 0,
+          },
+        ],
+        created: expect.anything(),
+      })
+    })
+
+    it('should build a question result task item for a classic mode game when question type is puzzle', () => {
+      const player1Answer = createMockQuestionTaskPuzzleAnswer({
+        playerId: PARTICIPANT_PLAYER_ID_01,
+        created: offset(3),
+        answer: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+      })
+      const player2Answer = createMockQuestionTaskPuzzleAnswer({
+        playerId: PARTICIPANT_PLAYER_ID_02,
+        created: offset(4),
+        answer: ['Lisbon', 'Plovdiv', 'Argos', 'Athens'],
+      })
+
+      const gameDocument = buildGameDocument(
+        [createMockPuzzleQuestionDocument()],
+        [player1Answer, player2Answer],
+      )
+
+      expect(buildQuestionResultTask(gameDocument)).toEqual({
+        _id: expect.anything(),
+        type: TaskType.QuestionResult,
+        status: 'pending',
+        questionIndex: 0,
+        correctAnswers: [
+          {
+            type: QuestionType.Puzzle,
+            value: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+          },
+        ],
+        results: [
+          {
+            type: QuestionType.Puzzle,
+            playerId: PARTICIPANT_PLAYER_ID_01,
+            answer: {
+              type: QuestionType.Puzzle,
+              playerId: PARTICIPANT_PLAYER_ID_01,
+              answer: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+              created: offset(3),
+            },
+            correct: true,
+            lastScore: 983,
+            totalScore: 983,
+            position: 1,
+            streak: 1,
+          },
+          {
+            type: QuestionType.Puzzle,
+            playerId: PARTICIPANT_PLAYER_ID_02,
+            answer: {
+              type: QuestionType.Puzzle,
+              playerId: PARTICIPANT_PLAYER_ID_02,
+              answer: ['Lisbon', 'Plovdiv', 'Argos', 'Athens'],
+              created: offset(4),
+            },
+            correct: false,
+            lastScore: 0,
+            totalScore: 0,
+            position: 2,
+            streak: 0,
+          },
+          {
+            type: QuestionType.Puzzle,
             playerId: PARTICIPANT_PLAYER_ID_03,
             correct: false,
             lastScore: 0,

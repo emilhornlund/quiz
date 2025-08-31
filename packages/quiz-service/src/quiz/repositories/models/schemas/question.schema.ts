@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import {
   MediaType,
+  QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -232,6 +233,75 @@ export const QuestionTypeAnswerDaoSchema = SchemaFactory.createForClass(
 )
 
 /**
+ * Mongoose schema for the pin question.
+ * Stores the correct point and tolerance on an image.
+ */
+@Schema({ _id: false })
+export class QuestionPinDao {
+  /**
+   * The type of the question, set to `Pin`.
+   */
+  type!: QuestionType.Pin
+
+  /**
+   * Public URL of the background image on which the pin is placed.
+   */
+  @Prop({ type: String, required: true })
+  imageURL: string
+
+  /**
+   * Correct X coordinate normalized to image width (0..1).
+   */
+  @Prop({ type: Number, required: true })
+  positionX: number
+
+  /**
+   * Correct Y coordinate normalized to image height (0..1).
+   */
+  @Prop({ type: Number, required: true })
+  positionY: number
+
+  /**
+   * Allowed distance preset around the correct point.
+   */
+  @Prop({
+    type: String,
+    required: true,
+    enum: QuestionPinTolerance,
+  })
+  tolerance: QuestionPinTolerance
+}
+
+/**
+ * Schema factory for the QuestionTypeAnswerDao class.
+ */
+export const QuestionPinDaoSchema = SchemaFactory.createForClass(QuestionPinDao)
+
+/**
+ * Mongoose schema for the puzzle question.
+ * Holds the list of values that must be ordered by the player.
+ */
+@Schema({ _id: false })
+export class QuestionPuzzleDao {
+  /**
+   * The type of the question, set to `Puzzle`.
+   */
+  type!: QuestionType.Puzzle
+
+  /**
+   * Values to be ordered into the correct sequence.
+   */
+  @Prop({ type: [String], required: true })
+  values: string[]
+}
+
+/**
+ * Schema factory for the QuestionTypeAnswerDao class.
+ */
+export const QuestionPuzzleDaoSchema =
+  SchemaFactory.createForClass(QuestionPuzzleDao)
+
+/**
  * Represents a question document with its specific discriminator type.
  *
  * Combines the base question schema (`BaseQuestion`) with the possible
@@ -245,4 +315,6 @@ export type QuestionDao = BaseQuestionDao &
     | QuestionRangeDao
     | QuestionTrueFalseDao
     | QuestionTypeAnswerDao
+    | QuestionPinDao
+    | QuestionPuzzleDao
   )

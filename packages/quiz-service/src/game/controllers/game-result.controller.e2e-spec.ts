@@ -48,12 +48,6 @@ describe('GameResultController (e2e)', () => {
     it('should succeed in retrieving game results for a classic mode game', async () => {
       const gameId = uuidv4()
 
-      // const { accessToken, user: hostUser } =
-      //   await createDefaultUserAndAuthenticate(app, TokenScope.Game, {
-      //     gameId,
-      //     participantType: GameParticipantType.HOST,
-      //   })
-
       const { accessToken, user: hostUser } =
         await createDefaultUserAndAuthenticate(app)
 
@@ -339,6 +333,7 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
         currentTransitionInitiated: offset(21.785),
         created: offset(17.311),
         questionIndex: 0,
+        metadata: { type: QuestionType.MultiChoice },
         answers: [
           {
             type: QuestionType.MultiChoice,
@@ -400,6 +395,7 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
         currentTransitionInitiated: offset(33.223),
         created: offset(24.67),
         questionIndex: 1,
+        metadata: { type: QuestionType.Range },
         answers: [
           {
             type: QuestionType.Range,
@@ -461,6 +457,7 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
         currentTransitionInitiated: offset(39.433),
         created: offset(36.626),
         questionIndex: 2,
+        metadata: { type: QuestionType.TrueFalse },
         answers: [
           {
             type: QuestionType.TrueFalse,
@@ -522,6 +519,7 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
         currentTransitionInitiated: offset(52.119),
         created: offset(42.254),
         questionIndex: 3,
+        metadata: { type: QuestionType.TypeAnswer },
         answers: [
           {
             type: QuestionType.TypeAnswer,
@@ -706,6 +704,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(27.296),
         created: offset(15.212),
         questionIndex: 0,
+        metadata: { type: QuestionType.Range },
         answers: [
           {
             type: QuestionType.Range,
@@ -767,6 +766,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(40.298),
         created: offset(31.574),
         questionIndex: 1,
+        metadata: { type: QuestionType.Range },
         answers: [
           {
             type: QuestionType.Range,
@@ -828,6 +828,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(51.257),
         created: offset(44.124),
         questionIndex: 2,
+        metadata: { type: QuestionType.Range },
         answers: [
           {
             type: QuestionType.Range,
@@ -889,6 +890,7 @@ function buildMockZeroToOneHundredModeGame(
         currentTransitionInitiated: offset(63.098),
         created: offset(55.353),
         questionIndex: 3,
+        metadata: { type: QuestionType.Range },
         answers: [
           {
             type: QuestionType.Range,

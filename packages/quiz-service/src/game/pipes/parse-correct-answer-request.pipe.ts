@@ -11,6 +11,8 @@ import { validate } from 'class-validator'
 import { ValidationException } from '../../app/exceptions'
 import {
   MultiChoiceQuestionCorrectAnswerRequest,
+  PinQuestionCorrectAnswerRequest,
+  PuzzleQuestionCorrectAnswerRequest,
   RangeQuestionCorrectAnswerRequest,
   TrueFalseQuestionCorrectAnswerRequest,
   TypeAnswerQuestionCorrectAnswerRequest,
@@ -32,6 +34,8 @@ export class ParseCorrectAnswerRequestPipe
         | RangeQuestionCorrectAnswerRequest
         | TrueFalseQuestionCorrectAnswerRequest
         | TypeAnswerQuestionCorrectAnswerRequest
+        | PinQuestionCorrectAnswerRequest
+        | PuzzleQuestionCorrectAnswerRequest
       >
     >
 {
@@ -53,6 +57,8 @@ export class ParseCorrectAnswerRequestPipe
     | RangeQuestionCorrectAnswerRequest
     | TrueFalseQuestionCorrectAnswerRequest
     | TypeAnswerQuestionCorrectAnswerRequest
+    | PinQuestionCorrectAnswerRequest
+    | PuzzleQuestionCorrectAnswerRequest
   > {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let object: any
@@ -64,6 +70,10 @@ export class ParseCorrectAnswerRequestPipe
       object = plainToInstance(TrueFalseQuestionCorrectAnswerRequest, value)
     } else if (value['type'] == QuestionType.TypeAnswer) {
       object = plainToInstance(TypeAnswerQuestionCorrectAnswerRequest, value)
+    } else if (value['type'] == QuestionType.Pin) {
+      object = plainToInstance(PinQuestionCorrectAnswerRequest, value)
+    } else if (value['type'] == QuestionType.Puzzle) {
+      object = plainToInstance(PuzzleQuestionCorrectAnswerRequest, value)
     } else {
       throw new BadRequestException('Validation failed')
     }

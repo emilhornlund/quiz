@@ -1,135 +1,24 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import {
-  GameMode,
-  LanguageCode,
-  MediaType,
-  QuestionMultiChoiceDto,
-  QuestionRangeAnswerMargin,
-  QuestionRangeDto,
-  QuestionTrueFalseDto,
-  QuestionType,
-  QuestionTypeAnswerDto,
-  QuestionZeroToOneHundredRangeDto,
-  QuizCategory,
-  QuizRequestDto,
-  QuizResponseDto,
-  QuizVisibility,
-} from '@quiz/common'
+import { GameMode, QuizResponseDto, QuizVisibility } from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
-import { buildMockSecondaryUser } from '../../../test-utils/data'
+import {
+  buildMockSecondaryUser,
+  createMockClassicQuizRequestDto,
+  createMockZeroToOneHundredQuizRequestDto,
+} from '../../../test-utils/data'
 import { createDefaultUserAndAuthenticate } from '../../../test-utils/utils'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
 import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
-const multiChoiceQuestion: QuestionMultiChoiceDto = {
-  type: QuestionType.MultiChoice,
-  question: 'What is the capital of Sweden?',
-  media: {
-    type: MediaType.Image,
-    url: 'https://example.com/question-image.png',
-  },
-  options: [
-    {
-      value: 'Stockholm',
-      correct: true,
-    },
-    {
-      value: 'Copenhagen',
-      correct: false,
-    },
-    {
-      value: 'London',
-      correct: false,
-    },
-    {
-      value: 'Berlin',
-      correct: false,
-    },
-  ],
-  points: 1000,
-  duration: 30,
-}
+const originalData = createMockClassicQuizRequestDto()
 
-const rangeQuestion: QuestionRangeDto = {
-  type: QuestionType.Range,
-  question: 'Guess the temperature of the hottest day ever recorded.',
-  media: {
-    type: MediaType.Image,
-    url: 'https://example.com/question-image.png',
-  },
-  min: 0,
-  max: 100,
-  correct: 50,
-  margin: QuestionRangeAnswerMargin.Medium,
-  points: 1000,
-  duration: 30,
-}
-
-const trueFalseQuestion: QuestionTrueFalseDto = {
-  type: QuestionType.TrueFalse,
-  question: 'The earth is flat.',
-  media: {
-    type: MediaType.Image,
-    url: 'https://example.com/question-image.png',
-  },
-  correct: false,
-  points: 1000,
-  duration: 30,
-}
-
-const typeAnswerQuestion: QuestionTypeAnswerDto = {
-  type: QuestionType.TypeAnswer,
-  question: 'What is the capital of Denmark?',
-  media: {
-    type: MediaType.Image,
-    url: 'https://example.com/question-image.png',
-  },
-  options: ['Copenhagen'],
-  points: 1000,
-  duration: 30,
-}
-
-const zeroToOneHundredRangeQuestion: QuestionZeroToOneHundredRangeDto = {
-  type: QuestionType.Range,
-  question: 'Guess the temperature of the hottest day ever recorded.',
-  media: {
-    type: MediaType.Image,
-    url: 'https://example.com/question-image.png',
-  },
-  correct: 50,
-  duration: 30,
-}
-
-const originalData: QuizRequestDto = {
-  title: 'Trivia Battle',
-  description: 'A fun and engaging trivia quiz for all ages.',
-  mode: GameMode.Classic,
-  visibility: QuizVisibility.Public,
-  category: QuizCategory.GeneralKnowledge,
-  imageCoverURL: 'https://example.com/question-cover-image.png',
-  languageCode: LanguageCode.English,
-  questions: [
-    multiChoiceQuestion,
-    rangeQuestion,
-    trueFalseQuestion,
-    typeAnswerQuestion,
-  ],
-}
-
-const updatedData: QuizRequestDto = {
-  title: 'Updated Trivia Battle',
-  description: 'A fun and engaging updated trivia quiz for all ages.',
-  mode: GameMode.ZeroToOneHundred,
+const updatedData = createMockZeroToOneHundredQuizRequestDto({
   visibility: QuizVisibility.Private,
-  category: QuizCategory.GeneralKnowledge,
-  imageCoverURL: 'https://example.com/updated-question-cover-image.png',
-  languageCode: LanguageCode.Swedish,
-  questions: [zeroToOneHundredRangeQuestion],
-}
+})
 
 describe('QuizController (e2e)', () => {
   let app: INestApplication

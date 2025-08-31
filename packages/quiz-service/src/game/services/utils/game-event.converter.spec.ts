@@ -1,6 +1,8 @@
 import {
   GameEventQuestionResults,
   GameEventQuestionResultsMultiChoice,
+  GameEventQuestionResultsPin,
+  GameEventQuestionResultsPuzzle,
   GameEventQuestionResultsRange,
   GameEventQuestionResultsTrueFalse,
   GameEventQuestionResultsTypeAnswer,
@@ -9,18 +11,24 @@ import {
   GamePodiumHostEvent,
   GameResultHostEvent,
   generateNickname,
+  QuestionPinTolerance,
   QuestionType,
 } from '@quiz/common'
+import { arraysEqual } from '@quiz/common'
 
 import {
   createMockGameDocument,
   createMockLeaderboardTaskDocument,
   createMockLeaderboardTaskItem,
   createMockMultiChoiceQuestionDocument,
+  createMockPinQuestionDocument,
   createMockPodiumTaskDocument,
+  createMockPuzzleQuestionDocument,
   createMockQuestionResultTaskDocument,
   createMockQuestionResultTaskItemDocument,
   createMockQuestionTaskMultiChoiceAnswer,
+  createMockQuestionTaskPinAnswer,
+  createMockQuestionTaskPuzzleAnswer,
   createMockQuestionTaskRangeAnswer,
   createMockQuestionTaskTrueFalseAnswer,
   createMockQuestionTaskTypeAnswer,
@@ -429,6 +437,254 @@ describe('Game Event Converter', () => {
       })
     })
 
+    describe('aggregates Pin distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createPinGame(
+          ['0.0,0.5', '0.1,0.5', '0.0,0.5'],
+          ['0.0,0.5'],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 2, correct: true },
+          { value: '0.1,0.5', count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createPinGame(
+          ['0.0,0.5', '0.2,0.5', '0.2,0.5', '0.1,0.5'],
+          ['0.0,0.5', '0.2,0.5'],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.2,0.5', count: 2, correct: true },
+          { value: '0.0,0.5', count: 1, correct: true },
+          { value: '0.1,0.5', count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being correct', () => {
+        const gameDocument = createPinGame(
+          ['0.0,0.5', '0.0,0.5', '0.0,0.5'],
+          ['0.0,0.5'],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 3, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createPinGame(
+          ['0.1,0.5', '0.2,0.5', '0.1,0.5'],
+          ['0.0,0.5'],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 0, correct: true },
+          { value: '0.1,0.5', count: 2, correct: false },
+          { value: '0.2,0.5', count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createPinGame([], ['0.0,0.5'])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no correct answers', () => {
+        const gameDocument = createPinGame(
+          ['0.0,0.5', '0.1,0.5', '0.2,0.5'],
+          [],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 1, correct: false },
+          { value: '0.1,0.5', count: 1, correct: false },
+          { value: '0.2,0.5', count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should ignore out-of-bounds answers', () => {
+        const gameDocument = createPinGame(
+          ['0.0,0.5', '1.1,1.5', '0.1,0.5'],
+          ['0.0,0.5'],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPinDistribution(gameDocument, [
+          { value: '0.0,0.5', count: 1, correct: true },
+          { value: '0.1,0.5', count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('aggregates Puzzle distribution when current task is QuestionResult', () => {
+      it('should handle mixed correct and incorrect answers', () => {
+        const gameDocument = createPuzzleGame(
+          [
+            ['A', 'B', 'C'],
+            ['C', 'B', 'A'],
+            ['A', 'B', 'C'],
+          ],
+          [['A', 'B', 'C']],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 2, correct: true },
+          { value: ['C', 'B', 'A'], count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle multiple correct answers', () => {
+        const gameDocument = createPuzzleGame(
+          [
+            ['A', 'B', 'C'],
+            ['C', 'B', 'A'],
+            ['C', 'B', 'A'],
+            ['B', 'A', 'C'],
+          ],
+          [
+            ['A', 'B', 'C'],
+            ['C', 'B', 'A'],
+          ],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['C', 'B', 'A'], count: 2, correct: true },
+          { value: ['A', 'B', 'C'], count: 1, correct: true },
+          { value: ['B', 'A', 'C'], count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being correct', () => {
+        const gameDocument = createPuzzleGame(
+          [
+            ['A', 'B', 'C'],
+            ['A', 'B', 'C'],
+            ['A', 'B', 'C'],
+          ],
+          [['A', 'B', 'C']],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 3, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle all answers being incorrect', () => {
+        const gameDocument = createPuzzleGame(
+          [
+            ['C', 'B', 'A'],
+            ['B', 'C', 'A'],
+            ['C', 'B', 'A'],
+          ],
+          [['A', 'B', 'C']],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 0, correct: true },
+          { value: ['C', 'B', 'A'], count: 2, correct: false },
+          { value: ['B', 'C', 'A'], count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no submitted answers', () => {
+        const gameDocument = createPuzzleGame([], [['A', 'B', 'C']])
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 0, correct: true },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should handle no correct answers', () => {
+        const gameDocument = createPuzzleGame(
+          [
+            ['A', 'B', 'C'],
+            ['B', 'C', 'A'],
+            ['A', 'C', 'B'],
+          ],
+          [],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 1, correct: false },
+          { value: ['B', 'C', 'A'], count: 1, correct: false },
+          { value: ['A', 'C', 'B'], count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+
+      it('should ignore null answers', () => {
+        const gameDocument = createPuzzleGame(
+          [['A', 'B', 'C'], null, ['C', 'B', 'A']],
+          [['A', 'B', 'C']],
+        )
+
+        const actual = buildHostGameEvent(gameDocument as GameDocument)
+
+        const expected = buildExpectedPuzzleDistribution(gameDocument, [
+          { value: ['A', 'B', 'C'], count: 1, correct: true },
+          { value: ['C', 'B', 'A'], count: 1, correct: false },
+        ])
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
     describe('buildGameLeaderboardHostEvent', () => {
       it('should not include more than 5 players in the leaderboard', () => {
         const gameDocument = createMockGameDocument({
@@ -615,6 +871,54 @@ function withTypeAnswers(answers: string[], correctValues: string[]) {
   })
 }
 
+function createPinGame(answers: string[], correctValues?: string[]) {
+  return createMockGameDocument({
+    questions: [createMockPinQuestionDocument()],
+    currentTask: withPinAnswers(answers, correctValues),
+  })
+}
+
+function withPinAnswers(answers: string[], correctValues: string[]) {
+  return createMockQuestionResultTaskDocument({
+    status: 'active',
+    correctAnswers: correctValues.map((value) => ({
+      type: QuestionType.Pin,
+      value,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.Pin,
+        answer: createMockQuestionTaskPinAnswer({ answer }),
+        correct: correctValues.includes(answer),
+      }),
+    ),
+  })
+}
+
+function createPuzzleGame(answers: string[][], correctValues?: string[][]) {
+  return createMockGameDocument({
+    questions: [createMockPuzzleQuestionDocument()],
+    currentTask: withPuzzleAnswers(answers, correctValues),
+  })
+}
+
+function withPuzzleAnswers(answers: string[][], correctValues: string[][]) {
+  return createMockQuestionResultTaskDocument({
+    status: 'active',
+    correctAnswers: correctValues.map((value) => ({
+      type: QuestionType.Puzzle,
+      value,
+    })),
+    results: answers.map((answer) =>
+      createMockQuestionResultTaskItemDocument({
+        type: QuestionType.Puzzle,
+        answer: createMockQuestionTaskPuzzleAnswer({ answer }),
+        correct: correctValues.some((cv) => arraysEqual(cv, answer)),
+      }),
+    ),
+  })
+}
+
 function buildExpectedMultiChoiceDistribution(
   game: Game,
   distribution: GameEventQuestionResultsMultiChoice['distribution'],
@@ -651,6 +955,31 @@ function buildExpectedTypeAnswerDistribution(
 ) {
   return expectGameResultHostEvent(game, {
     type: QuestionType.TypeAnswer,
+    distribution,
+  })
+}
+
+function buildExpectedPinDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsPin['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.Pin,
+    imageURL: 'https://example.com/question-image.png',
+    positionX: 0.5,
+    positionY: 0.5,
+    tolerance: QuestionPinTolerance.Medium,
+    distribution,
+  })
+}
+
+function buildExpectedPuzzleDistribution(
+  game: Game,
+  distribution: GameEventQuestionResultsPuzzle['distribution'],
+) {
+  return expectGameResultHostEvent(game, {
+    type: QuestionType.Puzzle,
+    values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
     distribution,
   })
 }

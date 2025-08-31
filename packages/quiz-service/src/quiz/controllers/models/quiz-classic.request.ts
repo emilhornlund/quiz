@@ -29,6 +29,8 @@ import {
 } from '../decorators/api'
 
 import { QuestionMultiChoice } from './question-multi-choice'
+import { QuestionPin } from './question-pin'
+import { QuestionPuzzle } from './question-puzzle'
 import { QuestionRange } from './question-range'
 import { QuestionTrueFalse } from './question-true-false'
 import { QuestionTypeAnswer } from './question-type-answer'
@@ -44,6 +46,10 @@ function transformQuestionClassicBasedOnType(question: any) {
       return plainToInstance(QuestionTrueFalse, question)
     case QuestionType.TypeAnswer:
       return plainToInstance(QuestionTypeAnswer, question)
+    case QuestionType.Pin:
+      return plainToInstance(QuestionPin, question)
+    case QuestionType.Puzzle:
+      return plainToInstance(QuestionPuzzle, question)
     default:
       throw new BadRequestException('Validation failed')
   }
@@ -57,6 +63,8 @@ function transformQuestionClassicBasedOnType(question: any) {
   QuestionRange,
   QuestionTrueFalse,
   QuestionTypeAnswer,
+  QuestionPin,
+  QuestionPuzzle,
 )
 export class QuizClassicRequest implements QuizClassicModeRequestDto {
   /**
@@ -114,6 +122,8 @@ export class QuizClassicRequest implements QuizClassicModeRequestDto {
       { $ref: getSchemaPath(QuestionRange) },
       { $ref: getSchemaPath(QuestionTrueFalse) },
       { $ref: getSchemaPath(QuestionTypeAnswer) },
+      { $ref: getSchemaPath(QuestionPin) },
+      { $ref: getSchemaPath(QuestionPuzzle) },
     ],
   })
   @IsArray()
@@ -128,5 +138,7 @@ export class QuizClassicRequest implements QuizClassicModeRequestDto {
     | QuestionRange
     | QuestionTrueFalse
     | QuestionTypeAnswer
+    | QuestionPin
+    | QuestionPuzzle
   )[]
 }

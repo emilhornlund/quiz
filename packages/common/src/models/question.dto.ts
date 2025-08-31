@@ -1,4 +1,5 @@
 import { MediaType } from './media-type.enum'
+import { QuestionPinTolerance } from './question-pin-tolerance.enum'
 import { QuestionRangeAnswerMargin } from './question-range-answer-margin.enum'
 import { QuestionType } from './question-type.enum'
 
@@ -141,6 +142,58 @@ export interface QuestionTypeAnswerDto extends QuestionCommonDto {
 }
 
 /**
+ * Describes a “Pin” question where players place a single marker on an image.
+ * The correct location is defined by normalized coordinates and a tolerance preset.
+ */
+export interface QuestionPinDto extends Omit<QuestionCommonDto, 'media'> {
+  /**
+   * The type of the question, set to `Pin`.
+   */
+  readonly type: QuestionType.Pin
+
+  /**
+   * Public URL of the background image on which the player places the pin.
+   * Must be reachable over HTTP(S).
+   */
+  readonly imageURL: string
+
+  /**
+   * Correct X coordinate for the pin, normalized to the image width.
+   * Range: 0 (left) … 1 (right).
+   */
+  readonly positionX: number
+
+  /**
+   * Correct Y coordinate for the pin, normalized to the image height.
+   * Range: 0 (top) … 1 (bottom).
+   */
+  readonly positionY: number
+
+  /**
+   * Allowed distance preset around the correct spot that counts as correct.
+   * Higher tolerance values accept pins farther from the exact position.
+   */
+  readonly tolerance: QuestionPinTolerance
+}
+
+/**
+ * Describes a “Puzzle” question where players sort a small list of values
+ * into the correct order.
+ */
+export interface QuestionPuzzleDto extends QuestionCommonDto {
+  /**
+   * The type of the question, set to `Puzzle`.
+   */
+  readonly type: QuestionType.Puzzle
+
+  /**
+   * Values to be ordered by the player. Client submits an ordered array as the answer.
+   * Length constraints and character rules are enforced elsewhere via constants.
+   */
+  readonly values: string[]
+}
+
+/**
  * Represents any question type supported in the system.
  */
 export type QuestionDto =
@@ -148,6 +201,8 @@ export type QuestionDto =
   | QuestionRangeDto
   | QuestionTrueFalseDto
   | QuestionTypeAnswerDto
+  | QuestionPinDto
+  | QuestionPuzzleDto
   | QuestionZeroToOneHundredRangeDto
 
 /**
@@ -160,6 +215,8 @@ export type QuestionCorrectAnswerDto = {
   | { type: QuestionType.Range; value: number }
   | { type: QuestionType.TrueFalse; value: boolean }
   | { type: QuestionType.TypeAnswer; value: string }
+  | { type: QuestionType.Pin; positionX: number; positionY: number }
+  | { type: QuestionType.Puzzle; values: string[] }
 )
 
 /**
@@ -192,4 +249,24 @@ export type TrueFalseQuestionCorrectAnswerDto = Extract<
 export type TypeAnswerQuestionCorrectAnswerDto = Extract<
   QuestionCorrectAnswerDto,
   { type: QuestionType.TypeAnswer }
+>
+
+/**
+ * Data transfer object for a pin correct answer.
+ *
+ * Contains the normalized X/Y coordinates of the correct location.
+ */
+export type PinQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.Pin }
+>
+
+/**
+ * Data transfer object for a puzzle correct answer.
+ *
+ * Contains the target ordering of the values.
+ */
+export type PuzzleQuestionCorrectAnswerDto = Extract<
+  QuestionCorrectAnswerDto,
+  { type: QuestionType.Puzzle }
 >

@@ -1,6 +1,9 @@
 import {
   GameMode,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPinTolerance,
+  QuestionPuzzleDto,
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
@@ -70,6 +73,32 @@ export const createQuestionValidationModel = (
         validation: {},
       }
     }
+    if (type === QuestionType.Pin) {
+      return {
+        mode: GameMode.Classic,
+        data: {
+          type: QuestionType.Pin,
+          positionX: 0.5,
+          positionY: 0.5,
+          tolerance: QuestionPinTolerance.Medium,
+          points: 1000,
+          duration: 30,
+        },
+        validation: {},
+      }
+    }
+    if (type === QuestionType.Puzzle) {
+      return {
+        mode: GameMode.Classic,
+        data: {
+          type: QuestionType.Puzzle,
+          values: [],
+          points: 1000,
+          duration: 30,
+        },
+        validation: {},
+      }
+    }
   }
   if (mode === GameMode.ZeroToOneHundred) {
     return {
@@ -126,6 +155,28 @@ export function isClassicTypeAnswerQuestion(
   return (
     question.mode === GameMode.Classic &&
     question.data?.type === QuestionType.TypeAnswer
+  )
+}
+
+export function isClassicPinQuestion(
+  question: QuestionData,
+): question is ClassicModeQuestionValidationModel & {
+  data: QuestionPinDto
+} {
+  return (
+    question.mode === GameMode.Classic &&
+    question.data?.type === QuestionType.Pin
+  )
+}
+
+export function isClassicPuzzleQuestion(
+  question: QuestionData,
+): question is ClassicModeQuestionValidationModel & {
+  data: QuestionPuzzleDto
+} {
+  return (
+    question.mode === GameMode.Classic &&
+    question.data?.type === QuestionType.Puzzle
   )
 }
 

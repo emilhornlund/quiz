@@ -1,0 +1,88 @@
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+.sortableTable {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+
+  @include helpers.mobile {
+    row-gap: variables.$mobile-narrow-layout-gutter * 0.5;
+  }
+
+  @include helpers.tablet {
+    row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+  }
+
+  @include helpers.desktop {
+    row-gap: variables.$desktop-narrow-layout-gutter * 0.5;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-width: variables.$control-outside-border-width;
+    border-style: solid;
+    border-color: colors.$white;
+    background: colors.$white;
+    color: colors.$gray-4;
+    flex: 1;
+    width: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+
+    @include helpers.mobile {
+      padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+      border-radius: variables.$mobile-control-normal-border-radius;
+
+      @include helpers.fontSize(14px);
+    }
+
+    @include helpers.tablet {
+      padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+      border-radius: variables.$tablet-control-normal-border-radius;
+
+      @include helpers.fontSize(18px);
+    }
+
+    @include helpers.desktop {
+      padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+      border-radius: variables.$desktop-control-normal-border-radius;
+
+      @include helpers.fontSize(24px);
+    }
+
+    &.draggable {
+      &:hover {
+        cursor: grab;
+      }
+    }
+
+    .value {
+      flex: 1;
+      flex-wrap: wrap;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .icon {
+      @include helpers.mobile {
+        @include helpers.fontSize(26px);
+      }
+
+      @include helpers.tablet {
+        @include helpers.fontSize(30px);
+      }
+
+      @include helpers.desktop {
+        @include helpers.fontSize(34px);
+      }
+    }
+  }
+}

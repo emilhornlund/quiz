@@ -8,6 +8,8 @@ import {
 } from '../../../../utils/QuestionDataSource/question-data-source.types.ts'
 import {
   isClassicMultiChoiceQuestion,
+  isClassicPinQuestion,
+  isClassicPuzzleQuestion,
   isClassicRangeQuestion,
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
@@ -16,6 +18,8 @@ import {
 
 import {
   ClassicMultiChoiceOptionQuestionForm,
+  ClassicPinQuestionForm,
+  ClassicPuzzleQuestionForm,
   ClassicRangeQuestionForm,
   ClassicTrueFalseQuestionForm,
   ClassicTypeAnswerQuestionForm,
@@ -77,6 +81,22 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
 
       {isClassicTypeAnswerQuestion(question) && (
         <ClassicTypeAnswerQuestionForm
+          data={question.data}
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
+        />
+      )}
+
+      {isClassicPinQuestion(question) && (
+        <ClassicPinQuestionForm
+          data={question.data}
+          onChange={onQuestionValueChange}
+          onValidChange={onQuestionValueValidChange}
+        />
+      )}
+
+      {isClassicPuzzleQuestion(question) && (
+        <ClassicPuzzleQuestionForm
           data={question.data}
           onChange={onQuestionValueChange}
           onValidChange={onQuestionValueValidChange}

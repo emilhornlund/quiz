@@ -1,6 +1,8 @@
 import {
   GameMode,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPuzzleDto,
   QuestionRangeDto,
   QuestionTrueFalseDto,
   QuestionTypeAnswerDto,
@@ -13,6 +15,8 @@ export type QuestionDataMapping = {
     | QuestionRangeDto
     | QuestionTrueFalseDto
     | QuestionTypeAnswerDto
+    | QuestionPinDto
+    | QuestionPuzzleDto
   [GameMode.ZeroToOneHundred]: QuestionZeroToOneHundredRangeDto
 }
 
@@ -22,10 +26,12 @@ export type QuestionValueChangeFunction = <
     | QuestionRangeDto
     | QuestionTrueFalseDto
     | QuestionTypeAnswerDto
+    | QuestionPinDto
+    | QuestionPuzzleDto
     | QuestionZeroToOneHundredRangeDto,
 >(
   key: keyof T,
-  value: T[keyof T],
+  value?: T[keyof T],
 ) => void
 
 export type QuestionValueValidChangeFunction = <
@@ -34,6 +40,8 @@ export type QuestionValueValidChangeFunction = <
     | QuestionRangeDto
     | QuestionTrueFalseDto
     | QuestionTypeAnswerDto
+    | QuestionPinDto
+    | QuestionPuzzleDto
     | QuestionZeroToOneHundredRangeDto,
 >(
   key: keyof T,

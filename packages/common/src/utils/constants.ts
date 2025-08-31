@@ -1,3 +1,5 @@
+import { QuestionPinTolerance } from '../models'
+
 /* Quiz Title */
 export const QUIZ_TITLE_MIN_LENGTH = 3
 export const QUIZ_TITLE_MAX_LENGTH = 95
@@ -47,6 +49,24 @@ export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH = 20
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX =
   /^[\p{L}\p{N}\p{P}\p{Zs}]{1,20}$/u
+
+/* Quiz Question Pin Tolerance Radius's */
+export const QUESTION_PIN_TOLERANCE_RADIUS: Record<
+  QuestionPinTolerance,
+  number
+> = {
+  MAXIMUM: 1,
+  HIGH: 0.2,
+  MEDIUM: 0.12,
+  LOW: 0.06,
+}
+
+/* Quiz Question Puzzle Values */
+export const QUIZ_PUZZLE_VALUES_MIN = 3
+export const QUIZ_PUZZLE_VALUES_MAX = 4
+export const QUIZ_PUZZLE_VALUE_MIN_LENGTH = 1
+export const QUIZ_PUZZLE_VALUE_MAX_LENGTH = 75
+export const QUIZ_PUZZLE_VALUE_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,75}$/u
 
 export const QUIZ_ZERO_POINTS = 0
 export const QUIZ_STANDARD_POINTS = 1000

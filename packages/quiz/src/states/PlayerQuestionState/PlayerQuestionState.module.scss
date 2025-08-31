@@ -1,0 +1,12 @@
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+.fullHeight {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  overflow: auto;
+}

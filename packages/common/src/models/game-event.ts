@@ -1,6 +1,7 @@
 import { GameEventType } from './game-event-type.enum'
 import { GameMode } from './game-mode.enum'
 import { MediaType } from './media-type.enum'
+import { QuestionPinTolerance } from './question-pin-tolerance.enum'
 import { QuestionType } from './question-type.enum'
 
 export type CountdownEvent = {
@@ -122,11 +123,28 @@ export type GameEventQuestionTypeAnswer = {
   duration: number
 }
 
+export type GameEventQuestionPin = {
+  readonly type: QuestionType.Pin
+  readonly question: string
+  readonly imageURL: string
+  readonly duration: number
+}
+
+export type GameEventQuestionPuzzle = {
+  readonly type: QuestionType.Puzzle
+  readonly question: string
+  readonly media?: QuestionMediaEvent
+  readonly values: string[]
+  readonly duration: number
+}
+
 export type GameEventQuestion =
   | GameEventQuestionMultiChoice
   | GameEventQuestionRange
   | GameEventQuestionTrueFalse
   | GameEventQuestionTypeAnswer
+  | GameEventQuestionPin
+  | GameEventQuestionPuzzle
 
 export type GameQuestionHostEvent = {
   type: GameEventType.GameQuestionHost
@@ -191,11 +209,58 @@ export type GameEventQuestionResultsTypeAnswer = {
   distribution: { value: string; count: number; correct: boolean }[]
 }
 
+export type GameEventQuestionResultsPin = {
+  /**
+   * The type of the question result, set to `Pin`.
+   */
+  readonly type: QuestionType.Pin
+
+  /**
+   * Public URL of the background image on which the player places the pin.
+   */
+  readonly imageURL: string
+
+  /**
+   * Correct X coordinate for the pin, normalized to the image width.
+   * Range: 0 (left) … 1 (right).
+   */
+  readonly positionX: number
+
+  /**
+   * Correct Y coordinate for the pin, normalized to the image height.
+   * Range: 0 (top) … 1 (bottom).
+   */
+  readonly positionY: number
+
+  /**
+   * Allowed distance preset around the correct spot that counts as correct.
+   * Higher tolerance values accept pins farther from the exact position.
+   */
+  readonly tolerance: QuestionPinTolerance
+  readonly distribution: {
+    readonly value: string
+    readonly count: number
+    readonly correct: boolean
+  }[]
+}
+
+export type GameEventQuestionResultsPuzzle = {
+  readonly type: QuestionType.Puzzle
+  readonly values: string[]
+  readonly distribution: {
+    readonly value: string[]
+    readonly count: number
+    readonly correct: boolean
+  }[]
+}
+
 export type GameEventQuestionResults =
   | GameEventQuestionResultsMultiChoice
   | GameEventQuestionResultsRange
   | GameEventQuestionResultsTrueFalse
   | GameEventQuestionResultsTypeAnswer
+  | GameEventQuestionResultsPin
+  | GameEventQuestionResultsPuzzle
 
 export type GameResultHostEvent = {
   type: GameEventType.GameResultHost

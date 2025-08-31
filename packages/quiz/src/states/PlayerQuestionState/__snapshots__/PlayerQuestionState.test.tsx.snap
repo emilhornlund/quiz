@@ -52,7 +52,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -66,46 +66,50 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             Who painted The Starry Night?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="grid"
+                class="main"
               >
-                <button
-                  class="item"
-                  id="0_Vincent van Gogh"
-                  type="button"
+                <div
+                  class="grid"
                 >
-                  <div />
-                  Vincent van Gogh
-                </button>
-                <button
-                  class="item"
-                  id="1_Pablo Picasso"
-                  type="button"
-                >
-                  <div />
-                  Pablo Picasso
-                </button>
-                <button
-                  class="item"
-                  id="2_Leonardo da Vinci"
-                  type="button"
-                >
-                  <div />
-                  Leonardo da Vinci
-                </button>
-                <button
-                  class="item"
-                  id="3_Claude Monet"
-                  type="button"
-                >
-                  <div />
-                  Claude Monet
-                </button>
+                  <button
+                    class="item"
+                    id="0_Vincent van Gogh"
+                    type="button"
+                  >
+                    <div />
+                    Vincent van Gogh
+                  </button>
+                  <button
+                    class="item"
+                    id="1_Pablo Picasso"
+                    type="button"
+                  >
+                    <div />
+                    Pablo Picasso
+                  </button>
+                  <button
+                    class="item"
+                    id="2_Leonardo da Vinci"
+                    type="button"
+                  >
+                    <div />
+                    Leonardo da Vinci
+                  </button>
+                  <button
+                    class="item"
+                    id="3_Claude Monet"
+                    type="button"
+                  >
+                    <div />
+                    Claude Monet
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -219,7 +223,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -233,62 +237,66 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             Who painted The Starry Night?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="grid"
+                class="main"
               >
-                <button
-                  class="item"
-                  id="0_Vincent van Gogh"
-                  type="button"
+                <div
+                  class="grid"
                 >
-                  <div />
-                  Vincent van Gogh
-                </button>
-                <button
-                  class="item"
-                  id="1_Pablo Picasso"
-                  type="button"
-                >
-                  <div />
-                  Pablo Picasso
-                </button>
-                <button
-                  class="item"
-                  id="2_Leonardo da Vinci"
-                  type="button"
-                >
-                  <div />
-                  Leonardo da Vinci
-                </button>
-                <button
-                  class="item"
-                  id="3_Claude Monet"
-                  type="button"
-                >
-                  <div />
-                  Claude Monet
-                </button>
-                <button
-                  class="item"
-                  id="4_Michelangelo"
-                  type="button"
-                >
-                  <div />
-                  Michelangelo
-                </button>
-                <button
-                  class="item"
-                  id="5_Rembrandt"
-                  type="button"
-                >
-                  <div />
-                  Rembrandt
-                </button>
+                  <button
+                    class="item"
+                    id="0_Vincent van Gogh"
+                    type="button"
+                  >
+                    <div />
+                    Vincent van Gogh
+                  </button>
+                  <button
+                    class="item"
+                    id="1_Pablo Picasso"
+                    type="button"
+                  >
+                    <div />
+                    Pablo Picasso
+                  </button>
+                  <button
+                    class="item"
+                    id="2_Leonardo da Vinci"
+                    type="button"
+                  >
+                    <div />
+                    Leonardo da Vinci
+                  </button>
+                  <button
+                    class="item"
+                    id="3_Claude Monet"
+                    type="button"
+                  >
+                    <div />
+                    Claude Monet
+                  </button>
+                  <button
+                    class="item"
+                    id="4_Michelangelo"
+                    type="button"
+                  >
+                    <div />
+                    Michelangelo
+                  </button>
+                  <button
+                    class="item"
+                    id="5_Rembrandt"
+                    type="button"
+                  >
+                    <div />
+                    Rembrandt
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -402,7 +410,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -416,30 +424,34 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             Who painted The Starry Night?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="grid"
+                class="main"
               >
-                <button
-                  class="item"
-                  id="0_Vincent van Gogh"
-                  type="button"
+                <div
+                  class="grid"
                 >
-                  <div />
-                  Vincent van Gogh
-                </button>
-                <button
-                  class="item"
-                  id="1_Pablo Picasso"
-                  type="button"
-                >
-                  <div />
-                  Pablo Picasso
-                </button>
+                  <button
+                    class="item"
+                    id="0_Vincent van Gogh"
+                    type="button"
+                  >
+                    <div />
+                    Vincent van Gogh
+                  </button>
+                  <button
+                    class="item"
+                    id="1_Pablo Picasso"
+                    type="button"
+                  >
+                    <div />
+                    Pablo Picasso
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -553,7 +565,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -567,60 +579,64 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             What percentage of the earth's surface is covered by water?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="interactive"
+                class="main"
               >
-                <form>
-                  <input
-                    id="slider-range"
-                    max="100"
-                    min="0"
-                    step="1"
-                    type="range"
-                    value="50"
-                  />
-                  <div
-                    class="inputGroup"
-                  >
+                <div
+                  class="interactive"
+                >
+                  <form>
+                    <input
+                      id="slider-range"
+                      max="100"
+                      min="0"
+                      step="1"
+                      type="range"
+                      value="50"
+                    />
                     <div
-                      class="inputContainer"
+                      class="inputGroup"
                     >
                       <div
-                        class="textFieldInputContainer textFieldInputKindPrimary"
+                        class="inputContainer"
                       >
-                        <input
-                          class="textfield"
-                          data-testid="test-slider-input-textfield"
-                          id="slider-input"
-                          max="100"
-                          min="0"
-                          name="slider-input"
-                          type="number"
-                          value="50"
-                        />
+                        <div
+                          class="textFieldInputContainer textFieldInputKindPrimary"
+                        >
+                          <input
+                            class="textfield"
+                            data-testid="test-slider-input-textfield"
+                            id="slider-input"
+                            max="100"
+                            min="0"
+                            name="slider-input"
+                            type="number"
+                            value="50"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="buttonInputContainer buttonInputKindPrimary"
+                      >
+                        <button
+                          data-testid="test-submit-button-button"
+                          id="submit-button"
+                          name="submit-button"
+                          type="submit"
+                        >
+                          <span>
+                            Submit
+                          </span>
+                        </button>
                       </div>
                     </div>
-                    <div
-                      class="buttonInputContainer buttonInputKindPrimary"
-                    >
-                      <button
-                        data-testid="test-submit-button-button"
-                        id="submit-button"
-                        name="submit-button"
-                        type="submit"
-                      >
-                        <span>
-                          Submit
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -734,7 +750,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -748,30 +764,34 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             Rabbits can't vomit?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="grid"
+                class="main"
               >
-                <button
-                  class="item"
-                  id="0_True"
-                  type="button"
+                <div
+                  class="grid"
                 >
-                  <div />
-                  True
-                </button>
-                <button
-                  class="item"
-                  id="1_False"
-                  type="button"
-                >
-                  <div />
-                  False
-                </button>
+                  <button
+                    class="item"
+                    id="0_True"
+                    type="button"
+                  >
+                    <div />
+                    True
+                  </button>
+                  <button
+                    class="item"
+                    id="1_False"
+                    type="button"
+                  >
+                    <div />
+                    False
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -885,7 +905,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
       </div>
     </div>
     <div
-      class="content fullHeight centerAlign"
+      class="content fullHeight spaceBetweenAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -899,50 +919,54 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
             Who painted the Mono Lisa?
           </div>
           <div
-            class="main"
+            class="fullHeight"
           >
             <div
               class="main"
             >
               <div
-                class="interactive"
+                class="main"
               >
-                <form>
-                  <div
-                    class="inputContainer"
-                  >
+                <div
+                  class="interactive"
+                >
+                  <form>
                     <div
-                      class="textFieldInputContainer textFieldInputKindPrimary"
+                      class="inputContainer"
                     >
-                      <input
-                        class="textfield"
-                        data-testid="test-answer-input-textfield"
-                        id="answer-input"
-                        maxlength="20"
-                        minlength="1"
-                        name="answer-input"
-                        placeholder="Answer"
-                        type="text"
-                        value=""
-                      />
+                      <div
+                        class="textFieldInputContainer textFieldInputKindPrimary"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-answer-input-textfield"
+                          id="answer-input"
+                          maxlength="20"
+                          minlength="1"
+                          name="answer-input"
+                          placeholder="Answer"
+                          type="text"
+                          value=""
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    class="buttonInputContainer buttonInputKindPrimary"
-                  >
-                    <button
-                      data-testid="test-submit-button-button"
-                      disabled=""
-                      id="submit-button"
-                      name="submit-button"
-                      type="submit"
+                    <div
+                      class="buttonInputContainer buttonInputKindPrimary"
                     >
-                      <span>
-                        Submit
-                      </span>
-                    </button>
-                  </div>
-                </form>
+                      <button
+                        data-testid="test-submit-button-button"
+                        disabled=""
+                        id="submit-button"
+                        name="submit-button"
+                        type="submit"
+                      >
+                        <span>
+                          Submit
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

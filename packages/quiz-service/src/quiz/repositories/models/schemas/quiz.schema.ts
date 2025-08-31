@@ -15,6 +15,10 @@ import {
   BaseQuestionDaoSchema,
   QuestionMultiChoiceDao,
   QuestionMultiChoiceDaoSchema,
+  QuestionPinDao,
+  QuestionPinDaoSchema,
+  QuestionPuzzleDao,
+  QuestionPuzzleDaoSchema,
   QuestionRangeDao,
   QuestionRangeDaoSchema,
   QuestionTrueFalseDao,
@@ -87,6 +91,8 @@ export class Quiz {
       | QuestionRangeDao
       | QuestionTrueFalseDao
       | QuestionTypeAnswerDao
+      | QuestionPinDao
+      | QuestionPuzzleDao
     ))[]
 
   /**
@@ -137,3 +143,5 @@ questionsSchema.discriminator(
   QuestionType.TypeAnswer,
   QuestionTypeAnswerDaoSchema,
 )
+questionsSchema.discriminator(QuestionType.Pin, QuestionPinDaoSchema)
+questionsSchema.discriminator(QuestionType.Puzzle, QuestionPuzzleDaoSchema)

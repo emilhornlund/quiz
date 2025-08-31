@@ -1,4 +1,10 @@
-import { GameResultHostEvent, QuestionCorrectAnswerDto } from '@quiz/common'
+import {
+  GameEventQuestionResultsPin,
+  GameEventQuestionResultsPuzzle,
+  GameResultHostEvent,
+  QuestionCorrectAnswerDto,
+  QuestionType,
+} from '@quiz/common'
 import React, { FC, useState } from 'react'
 
 import {
@@ -10,6 +16,8 @@ import {
 import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
+import { PinQuestionResults, PuzzleQuestionResults } from './components'
+
 export interface HostResultStateProps {
   event: GameResultHostEvent
 }
@@ -17,7 +25,7 @@ export interface HostResultStateProps {
 const HostResultState: FC<HostResultStateProps> = ({
   event: {
     game: { pin: gamePIN },
-    question: { question: questionValue },
+    question: { type, question: questionValue },
     pagination: { current: currentQuestion, total: totalQuestions },
     results,
   },
@@ -71,12 +79,22 @@ const HostResultState: FC<HostResultStateProps> = ({
         />
       }>
       <Typography variant="subtitle">{questionValue}</Typography>
-      <QuestionResults
-        results={results}
-        loading={isProcessingCorrectAnswer}
-        onAddCorrectAnswer={handleAddCorrectAnswer}
-        onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
-      />
+      {type === QuestionType.Pin && (
+        <PinQuestionResults results={results as GameEventQuestionResultsPin} />
+      )}
+      {type === QuestionType.Puzzle && (
+        <PuzzleQuestionResults
+          results={results as GameEventQuestionResultsPuzzle}
+        />
+      )}
+      {type !== QuestionType.Pin && type !== QuestionType.Puzzle && (
+        <QuestionResults
+          results={results}
+          loading={isProcessingCorrectAnswer}
+          onAddCorrectAnswer={handleAddCorrectAnswer}
+          onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
+        />
+      )}
     </GamePage>
   )
 }

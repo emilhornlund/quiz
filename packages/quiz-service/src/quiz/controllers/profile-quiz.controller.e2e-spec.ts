@@ -1,16 +1,13 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import {
-  GameMode,
-  LanguageCode,
-  MediaType,
-  QuestionType,
-  QuizCategory,
-  QuizVisibility,
-} from '@quiz/common'
 import supertest from 'supertest'
 
-import { buildMockSecondaryUser } from '../../../test-utils/data'
+import {
+  buildMockSecondaryUser,
+  createMockClassicQuizRequestDto,
+  createMockQuestionMultiChoiceDto,
+  createMockZeroToOneHundredQuizRequestDto,
+} from '../../../test-utils/data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
@@ -55,73 +52,15 @@ describe('ProfileQuizController (e2e)', () => {
         await createDefaultUserAndAuthenticate(app)
 
       const originalQuiz = await quizService.createQuiz(
-        {
-          title: 'Trivia Battle',
-          description: 'A fun and engaging trivia quiz for all ages.',
-          mode: GameMode.Classic,
-          visibility: QuizVisibility.Public,
-          category: QuizCategory.GeneralKnowledge,
-          imageCoverURL: 'https://example.com/question-cover-image.png',
-          languageCode: LanguageCode.English,
-          questions: [
-            {
-              type: QuestionType.MultiChoice,
-              question: 'What is the capital of Sweden?',
-              media: {
-                type: MediaType.Image,
-                url: 'https://example.com/question-image.png',
-              },
-              options: [
-                {
-                  value: 'Stockholm',
-                  correct: true,
-                },
-                {
-                  value: 'Copenhagen',
-                  correct: false,
-                },
-                {
-                  value: 'London',
-                  correct: false,
-                },
-                {
-                  value: 'Berlin',
-                  correct: false,
-                },
-              ],
-              points: 1000,
-              duration: 30,
-            },
-          ],
-        },
+        createMockClassicQuizRequestDto({
+          questions: [createMockQuestionMultiChoiceDto()],
+        }),
         user1,
       )
 
       const user2 = await userModel.create(buildMockSecondaryUser())
       await quizService.createQuiz(
-        {
-          title: 'Geography Explorer',
-          description:
-            'Test your knowledge about countries, capitals, and landmarks.',
-          mode: GameMode.ZeroToOneHundred,
-          visibility: QuizVisibility.Private,
-          category: QuizCategory.GeneralKnowledge,
-          imageCoverURL: 'https://example.com/geography-cover-image.png',
-          languageCode: LanguageCode.Swedish,
-          questions: [
-            {
-              type: QuestionType.Range,
-              question:
-                'Guess the temperature of the hottest day ever recorded.',
-              media: {
-                type: MediaType.Image,
-                url: 'https://example.com/question-image.png',
-              },
-              correct: 50,
-              duration: 30,
-            },
-          ],
-        },
+        createMockZeroToOneHundredQuizRequestDto(),
         user2,
       )
 

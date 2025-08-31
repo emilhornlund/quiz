@@ -1038,6 +1038,45 @@
     gonzales-pe "^4.3.0"
     node-source-walk "^7.0.1"
 
+"@dnd-kit/accessibility@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"
+  integrity sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==
+  dependencies:
+    tslib "^2.0.0"
+
+"@dnd-kit/core@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-6.3.1.tgz#4c36406a62c7baac499726f899935f93f0e6d003"
+  integrity sha512-xkGBRQQab4RLwgXxoqETICr6S5JlogafbhNsidmrkVv2YRs5MLwpjoF2qpiGjQt8S9AoxtIV603s0GIUpY5eYQ==
+  dependencies:
+    "@dnd-kit/accessibility" "^3.1.1"
+    "@dnd-kit/utilities" "^3.2.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/modifiers@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/modifiers/-/modifiers-9.0.0.tgz#96a0280c77b10c716ef79d9792ce7ad04370771d"
+  integrity sha512-ybiLc66qRGuZoC20wdSSG6pDXFikui/dCNGthxv4Ndy8ylErY0N3KVxY2bgo7AWwIbxDmXDg3ylAFmnrjcbVvw==
+  dependencies:
+    "@dnd-kit/utilities" "^3.2.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/sortable@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-10.0.0.tgz#1f9382b90d835cd5c65d92824fa9dafb78c4c3e8"
+  integrity sha512-+xqhmIIzvAYMGfBYYnbKuNicfSsk4RksY2XdmJhT+HAC01nix6fHCztU68jooFiMUB01Ky3F0FyOvhG/BZrWkg==
+  dependencies:
+    "@dnd-kit/utilities" "^3.2.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/utilities@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/utilities/-/utilities-3.2.2.tgz#5a32b6af356dc5f74d61b37d6f7129a4040ced7b"
+  integrity sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==
+  dependencies:
+    tslib "^2.0.0"
+
 "@emnapi/core@^1.4.3":
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/@emnapi/core/-/core-1.4.3.tgz#9ac52d2d5aea958f67e52c40a065f51de59b77d6"
@@ -1327,12 +1366,12 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "7.0.0"
 
-"@fortawesome/react-fontawesome@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-3.0.0.tgz#20ed596fc402d6f607511d3ec33f325794fb0be9"
-  integrity sha512-x6boc1RLEjf/QPrMS20VJcabTZeGCb1hbwNybPPLjJohGPowXfjOpwQlVK6aH6MVKfCq2JXeHRIlx+tYpS18FA==
+"@fortawesome/react-fontawesome@^0.2.3":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.2.6.tgz#b75d0c7710c646c9bb6b9bb61cb5b8548a9ef2f5"
+  integrity sha512-mtBFIi1UsYQo7rYonYFkjgYKGoL8T+fEH6NGUpvuqtY3ytMsAoDaPo5rk25KuMtKDipY4bGYM/CkmCHA1N3FUg==
   dependencies:
-    semver "^7.7.2"
+    prop-types "^15.8.1"
 
 "@hapi/address@^5.1.1":
   version "5.1.1"
@@ -2171,6 +2210,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@juggle/resize-observer@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
+  integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
 "@keyv/redis@^5.1.1":
   version "5.1.1"
@@ -3166,51 +3210,56 @@
     domhandler "^5.0.3"
     selderee "^0.11.0"
 
-"@sentry-internal/browser-utils@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-10.5.0.tgz#bf56b0c3e77bbc26b23bea302976ec60a1bded18"
-  integrity sha512-4KIJdEj/8Ip9yqJleVSFe68r/U5bn5o/lYUwnFNEnDNxmpUbOlr7x3DXYuRFi1sfoMUxK9K1DrjnBkR7YYF00g==
+"@sentry-internal/browser-utils@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-10.7.0.tgz#5edfcd84f8d0745be4e06cff2c4edd01d2a2493f"
+  integrity sha512-M5L1XKVkhRhIV2nfUwNxBoqir4SVDcHdqRBq+k1EK6Z6DCVF9GMTiLg46+egBwgUDlAAGIQImdKgtJTH/47Z9g==
   dependencies:
-    "@sentry/core" "10.5.0"
+    "@sentry/core" "10.7.0"
 
-"@sentry-internal/feedback@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-10.5.0.tgz#53f7b78e4320f09d49eb40052f81a6f815e267bc"
-  integrity sha512-x79P4VZwUxb1EGZb9OQ5EEgrDWFCUlrbzHBwV/oocQA5Ss1SFz5u6cP5Ak7yJtILiJtdGzAyAoQOy4GKD13D4Q==
+"@sentry-internal/feedback@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-10.7.0.tgz#9d3b23d4ed19b219a2885939931f114c106baa7d"
+  integrity sha512-wTyoLjEKz6dwl9uyy5wfwmrlM59WmUM1DXMSyGr6j6ncDA9iPmoftU4O4+Kirkk8mRYoc0fHxjp21Z5BYtAehw==
   dependencies:
-    "@sentry/core" "10.5.0"
+    "@sentry/core" "10.7.0"
 
-"@sentry-internal/replay-canvas@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-10.5.0.tgz#fbefe5431391fb3c066ad372bcb2298e334e96e2"
-  integrity sha512-5nrRKd5swefd9+sFXFZ/NeL3bz/VxBls3ubAQ3afak15FikkSyHq3oKRKpMOtDsiYKXE3Bc0y3rF5A+y3OXjIA==
+"@sentry-internal/replay-canvas@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-10.7.0.tgz#936c441a460092df49ef1abd2093131e74f11d01"
+  integrity sha512-68jJfqa8r9UPGO4+S2IthkhhohTItgHjVj7S7dH5g1YUHUS1N03dZMrDMc2jOAhWURi3EOqmCkSjd2xxogRUVQ==
   dependencies:
-    "@sentry-internal/replay" "10.5.0"
-    "@sentry/core" "10.5.0"
+    "@sentry-internal/replay" "10.7.0"
+    "@sentry/core" "10.7.0"
 
-"@sentry-internal/replay@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-10.5.0.tgz#7c53f574daa483cf143ede26aea498ded673687c"
-  integrity sha512-Dp4coE/nPzhFrYH3iVrpVKmhNJ1m/jGXMEDBCNg3wJZRszI41Hrj0jCAM0Y2S3Q4IxYOmFYaFbGtVpAznRyOHg==
+"@sentry-internal/replay@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-10.7.0.tgz#f357c838d3973be7335d031a183fb1d05da6b2a3"
+  integrity sha512-lKK7NGSy20c0ArBQtGWP+ITMantNGOAeeILG2c2VaOxJUTe5EH3OcelHMNPEFTTXnYZt7RzMT03Tzmzto2LBdg==
   dependencies:
-    "@sentry-internal/browser-utils" "10.5.0"
-    "@sentry/core" "10.5.0"
+    "@sentry-internal/browser-utils" "10.7.0"
+    "@sentry/core" "10.7.0"
 
-"@sentry/browser@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-10.5.0.tgz#0a76918386ec10c13a851a62555e82ee61260dbe"
-  integrity sha512-o5pEJeZ/iZ7Fmaz2sIirThfnmSVNiP5ZYhacvcDi0qc288TmBbikCX3fXxq3xiSkhXfe1o5QIbNyovzfutyuVw==
+"@sentry/browser@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-10.7.0.tgz#1e437bf8a5a85ca4e62436d4543c1d80b81ff844"
+  integrity sha512-KPnKOIKFqxCpRMydyH8dn+MrPai2BEc+easWf8p3IWgUCx70+tZs5AXc0yWRgcXT534284waMnky2isn6Jbkvg==
   dependencies:
-    "@sentry-internal/browser-utils" "10.5.0"
-    "@sentry-internal/feedback" "10.5.0"
-    "@sentry-internal/replay" "10.5.0"
-    "@sentry-internal/replay-canvas" "10.5.0"
-    "@sentry/core" "10.5.0"
+    "@sentry-internal/browser-utils" "10.7.0"
+    "@sentry-internal/feedback" "10.7.0"
+    "@sentry-internal/replay" "10.7.0"
+    "@sentry-internal/replay-canvas" "10.7.0"
+    "@sentry/core" "10.7.0"
 
 "@sentry/core@10.5.0":
   version "10.5.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-10.5.0.tgz#191fa6f08020858903496dfad188d48c7cd55061"
   integrity sha512-jTJ8NhZSKB2yj3QTVRXfCCngQzAOLThQUxCl9A7Mv+XF10tP7xbH/88MVQ5WiOr2IzcmrB9r2nmUe36BnMlLjA==
+
+"@sentry/core@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-10.7.0.tgz#4a371b3449879956be665a6747c6792d14205b5a"
+  integrity sha512-y1Ni71O6TqeSi2Ug78StkVLHnybHZVYhnbYtj2w4g89XnQcqo4GUeR8dQRQBJpCX98UrHw22OAE8BXtKb03yXw==
 
 "@sentry/nestjs@^10.5.0":
   version "10.5.0"
@@ -3282,13 +3331,13 @@
   dependencies:
     "@sentry/core" "10.5.0"
 
-"@sentry/react@^10.4.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-10.5.0.tgz#e4b57c04a4ce66a8cb6c3b86838f262038574da3"
-  integrity sha512-UHanvg+oIAvE/Hm76QCCdxYgb+tIuF0JszQoROApl5C5RxRfJJcU643pASQs6BDvrtxbuMQ/AHTacLTYpsn0cg==
+"@sentry/react@^10.5.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-10.7.0.tgz#d58dcc62407d69733354e2efa58d8c76bd6e4c65"
+  integrity sha512-A7y6tmREluH6OxWdwhIytQhThsUyl23cIz6isxQXqml7AMgt381JygRnm47nNl+NQLm+Uo1EGwxyvjdKPzJ9rw==
   dependencies:
-    "@sentry/browser" "10.5.0"
-    "@sentry/core" "10.5.0"
+    "@sentry/browser" "10.7.0"
+    "@sentry/core" "10.7.0"
     hoist-non-react-statics "^3.3.2"
 
 "@sinclair/typebox@^0.34.0":
