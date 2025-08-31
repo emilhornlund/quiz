@@ -1,6 +1,53 @@
 @use '../../styles/helpers';
 @use '../../styles/variables';
 
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: variables.$desktop-layout-gutter;
+
+  @include helpers.mobile {
+    gap: variables.$mobile-layout-gutter;
+  }
+
+  @include helpers.tablet {
+    gap: variables.$tablet-layout-gutter;
+  }
+
+  @include helpers.desktop {
+    gap: variables.$desktop-layout-gutter;
+  }
+}
+
+.animatedLogo {
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(helpers.pxToRem(-10px));
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .joinForm {
   display: flex;
   flex-direction: column;
@@ -18,5 +65,16 @@
   @include helpers.desktop {
     row-gap: variables.$desktop-narrow-layout-gutter;
     width: variables.$mobile-width;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(helpers.pxToRem(30px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -19,7 +19,7 @@ export interface TextareaProps {
   id: string
   name?: string
   type?: 'text' | 'code'
-  kind?: 'primary' | 'secondary'
+  kind?: 'primary' | 'secondary' | 'modern'
   value?: string
   placeholder?: string
   regex?: RegExp | { value: RegExp; message: string }
@@ -120,6 +120,7 @@ const Textarea: FC<TextareaProps> = ({
           type === 'code' ? styles.code : undefined,
           kind === 'primary' ? styles.textareaInputKindPrimary : undefined,
           kind === 'secondary' ? styles.textareaInputKindSecondary : undefined,
+          kind === 'modern' ? styles.textareaInputKindModern : undefined,
         )}>
         <textarea
           id={id}

@@ -44,6 +44,10 @@ $desktop-checkbox-small-font-size: calc($desktop-checkbox-normal-font-size * 0.8
       @extend .input-kind-secondary;
     }
 
+    &.textFieldInputKindModern {
+      @extend .input-kind-modern;
+    }
+
     .checkboxLabel {
       display: inline-flex;
       justify-content: center;

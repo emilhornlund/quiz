@@ -30,3 +30,11 @@ export const Disabled = {
     disabled: true,
   },
 } satisfies Story
+
+export const Modern = {
+  args: {
+    id: 'my-modern-textarea',
+    kind: 'modern',
+    placeholder: 'Enter your message...',
+  },
+} satisfies Story

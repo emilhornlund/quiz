@@ -26,7 +26,7 @@ export interface TextFieldProps {
   id: string
   name?: string
   type: 'text' | 'number' | 'password'
-  kind?: 'primary' | 'secondary'
+  kind?: 'primary' | 'secondary' | 'modern'
   size?: 'normal' | 'small'
   placeholder?: string
   value?: string | number
@@ -168,6 +168,7 @@ const TextField: React.FC<TextFieldProps> = ({
           styles.textFieldInputContainer,
           kind === 'primary' ? styles.textFieldInputKindPrimary : undefined,
           kind === 'secondary' ? styles.textFieldInputKindSecondary : undefined,
+          kind === 'modern' ? styles.textFieldInputKindModern : undefined,
           deviceSize === 'small' ? styles.small : undefined,
           disabled ? styles.disabled : undefined,
           showError ? styles.error : undefined,

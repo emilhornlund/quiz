@@ -79,6 +79,28 @@
     }
   }
 
+  &.hero {
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+    
+    @include helpers.mobile {
+      font-size: 40px;
+      line-height: 1.1;
+    }
+
+    @include helpers.tablet {
+      font-size: 60px;
+      line-height: 1.1;
+    }
+
+    @include helpers.desktop {
+      font-size: 66px;
+      line-height: 1.1;
+    }
+  }
+
   &.small {
     @include helpers.mobile {
       width: 100%;

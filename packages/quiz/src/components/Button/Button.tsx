@@ -18,6 +18,7 @@ export interface ButtonProps {
     | 'success'
     | 'destructive'
     | 'plain'
+  variant?: 'default' | 'modern'
   size?: 'normal' | 'small'
   value?: React.ReactNode | string | undefined
   hideValue?: 'mobile' | 'never'
@@ -35,6 +36,7 @@ const Button: React.FC<ButtonProps> = ({
   name,
   type,
   kind = 'primary',
+  variant = 'default',
   size = 'normal',
   value,
   hideValue = 'never',
@@ -72,6 +74,7 @@ const Button: React.FC<ButtonProps> = ({
         kind === 'success' ? styles.buttonInputKindSuccess : undefined,
         kind === 'destructive' ? styles.buttonInputKindDestructive : undefined,
         kind === 'plain' ? styles.buttonInputKindPlain : undefined,
+        variant === 'modern' ? styles.buttonInputVariantModern : undefined,
         deviceSize === 'small' ? styles.buttonInputSizeSmall : undefined,
       )}>
       <button

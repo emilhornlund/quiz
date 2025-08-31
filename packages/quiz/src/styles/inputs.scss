@@ -249,6 +249,45 @@
   }
 }
 
+.input-kind-modern {
+  position: relative;
+  border-radius: helpers.pxToRem(12px);
+  background: rgba(255, 255, 255, 0.1);
+  border: helpers.pxToRem(2px) solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(helpers.pxToRem(10px));
+  transition: all 0.3s ease;
+  outline-color: transparent;
+  
+  &:focus-within {
+    border-color: #ffd700;
+    box-shadow: 0 0 helpers.pxToRem(20px) rgba(255, 215, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  input, select, textarea, button {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+  
+  @include helpers.mobile {
+    @include helpers.fontSize(14px);
+  }
+  
+  @include helpers.tablet {
+    @include helpers.fontSize(15px);
+  }
+  
+  @include helpers.desktop {
+    @include helpers.fontSize(16px);
+  }
+}
+
 .input-size-small {
   @include helpers.mobile {
     border-radius: variables.$mobile-control-small-border-radius;

@@ -1,10 +1,10 @@
 import { GAME_PIN_LENGTH, GAME_PIN_REGEX } from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { FC, FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
-  IconButtonArrowRight,
+  Button,
   Page,
   PageProminentIcon,
   TextField,
@@ -14,15 +14,6 @@ import { useAuthContext } from '../../context/auth'
 
 import styles from './HomePage.module.scss'
 
-const MESSAGES = [
-  'Ready to show off your skills? Let’s go!',
-  'Think you’ve got what it takes?',
-  'The clock is ticking! Are you prepared?',
-  'Time to put your knowledge to the test!',
-  'Get your game face on. It’s time to win!',
-  'Eyes on the prize! Are you ready?',
-]
-
 const HomePage: FC = () => {
   const { isUserAuthenticated } = useAuthContext()
 
@@ -30,12 +21,6 @@ const HomePage: FC = () => {
 
   const [gamePIN, setGamePIN] = useState<string>()
   const [gamePINValid, setGamePINValid] = useState<boolean>(false)
-
-  const message = useMemo(
-    () =>
-      `Do you feel confident? ${MESSAGES[Math.floor(Math.random() * MESSAGES.length)]}`,
-    [],
-  )
 
   const handleJoinSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -45,21 +30,33 @@ const HomePage: FC = () => {
     }
   }
 
+  const handleCreateQuizClick = () => {
+    if (isUserAuthenticated) {
+      navigate('/quiz/create')
+    } else {
+      navigate('/auth/login')
+    }
+  }
+
   return (
     <Page discover profile>
-      <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
-      <Typography variant="title" size="medium">
-        Let’s play
-      </Typography>
-      <Typography variant="text" size="small">
-        {message}
-      </Typography>
+      <div className={styles.animatedLogo}>
+        <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
+      </div>
+      <div className={styles.heroSection}>
+        <Typography variant="hero">Think Fast. Score Big. Win Live.</Typography>
+        <Typography variant="text" size="medium">
+          Real-time multiplayer quizzes with leaderboards, power-ups, and
+          bragging rights.
+        </Typography>
+      </div>
       <form className={styles.joinForm} onSubmit={handleJoinSubmit}>
         <TextField
           id="game-pin"
           type="text"
+          kind="modern"
           placeholder="Game PIN"
-          value={gamePIN ?? ''}
+          value={gamePIN}
           minLength={GAME_PIN_LENGTH}
           maxLength={GAME_PIN_LENGTH}
           regex={GAME_PIN_REGEX}
@@ -67,27 +64,23 @@ const HomePage: FC = () => {
           onValid={setGamePINValid}
           required
         />
-        <IconButtonArrowRight
-          id="join"
+        <Button
+          id="join-game"
           type="submit"
-          kind="call-to-action"
-          value="Join the game"
-          disabled={!gamePINValid}
-        />
+          variant="modern"
+          disabled={!gamePINValid}>
+          Join the game →
+        </Button>
       </form>
-      {isUserAuthenticated ? (
-        <Link to={'/quiz/create'}>
-          <Typography variant="link" size="small">
-            Create your own quiz and challenge others!
-          </Typography>
-        </Link>
-      ) : (
-        <Link to={'/auth/login'}>
-          <Typography variant="link" size="small">
-            Want to create your own quiz? Log in to get started!
-          </Typography>
-        </Link>
-      )}
+      <Button
+        id="create-quiz"
+        type="button"
+        kind="plain"
+        onClick={handleCreateQuizClick}>
+        {isUserAuthenticated
+          ? 'Create your own quiz and challenge others!'
+          : 'Want to create your own quiz? Log in to get started.'}
+      </Button>
     </Page>
   )
 }

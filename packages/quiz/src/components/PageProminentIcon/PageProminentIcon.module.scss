@@ -7,11 +7,11 @@
 
   > img {
     @include helpers.mobile {
-      height: 160px;
+      height: 120px;
     }
 
     @include helpers.tablet {
-      height: 224px;
+      height: 168px;
     }
 
     @include helpers.desktop {

@@ -86,3 +86,12 @@ export const CheckboxSmallDisabled = {
     disabled: true,
   },
 } satisfies Story
+
+export const Modern = {
+  args: {
+    id: 'my-modern-text-field',
+    type: 'text',
+    kind: 'modern',
+    placeholder: 'Game PIN',
+  },
+} satisfies Story
