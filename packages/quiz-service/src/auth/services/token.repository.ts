@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
+import { BaseRepository } from '../../app/shared/repository'
 import { TokenNotFoundException } from '../exceptions'
 
 import { Token, TokenModel } from './models/schemas'
@@ -8,29 +9,28 @@ import { Token, TokenModel } from './models/schemas'
 /**
  * Repository for managing token documents in MongoDB.
  *
- * Provides methods to create, retrieve, and delete token records.
+ * Extends BaseRepository to provide common CRUD operations and adds token-specific methods.
  */
 @Injectable()
-export class TokenRepository {
-  // Logger instance for recording repository operations.
-  private readonly logger: Logger = new Logger(TokenRepository.name)
-
+export class TokenRepository extends BaseRepository<Token> {
   /**
    * Constructs the TokenRepository.
    *
    * @param tokenModel - The Mongoose model representing the Token schema.
    */
   public constructor(
-    @InjectModel(Token.name) private readonly tokenModel: TokenModel,
-  ) {}
+    @InjectModel(Token.name) protected readonly tokenModel: TokenModel,
+  ) {
+    super(tokenModel, 'Token')
+  }
 
   /**
    * Creates and persists a new token record.
    *
    * @returns The newly created Token document.
    */
-  public async create(token: Token): Promise<Token> {
-    return new this.tokenModel(token).save()
+  public async createToken(token: Partial<Token>): Promise<Token> {
+    return this.create(token)
   }
 
   /**
@@ -39,8 +39,8 @@ export class TokenRepository {
    * @param id – The JWT ID (`jti`) of the token.
    * @returns The matching Token document or `null` if not found.
    */
-  public async findById(id: string): Promise<Token | null> {
-    return this.tokenModel.findById(id)
+  public async findTokenById(id: string): Promise<Token | null> {
+    return this.findById(id)
   }
 
   /**
@@ -50,10 +50,9 @@ export class TokenRepository {
    * @returns The matching Token document.
    * @throws TokenNotFoundException if no token exists with the given `id`.
    */
-  public async findByIdOrThrow(id: string): Promise<Token | null> {
+  public async findTokenByIdOrThrow(id: string): Promise<Token> {
     const document = await this.findById(id)
     if (!document) {
-      this.logger.warn(`Token was not found by id '${id}.`)
       throw new TokenNotFoundException(id)
     }
     return document
@@ -65,7 +64,7 @@ export class TokenRepository {
    * @param pairId - Identifier linking access and refresh tokens.
    * @returns Promise that resolves when deletion is complete.
    */
-  public async deleteByPairId(pairId: string): Promise<void> {
-    await this.tokenModel.deleteMany({ pairId })
+  public async deleteTokensByPairId(pairId: string): Promise<number> {
+    return this.deleteMany({ pairId })
   }
 }
