@@ -36,7 +36,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -63,7 +63,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -142,7 +142,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -164,7 +164,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -186,7 +186,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -208,7 +208,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -230,7 +230,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -252,7 +252,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -274,7 +274,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -296,7 +296,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -318,7 +318,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"
@@ -340,7 +340,7 @@ exports[`HostLobbyState > should render HostLobbyState 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-xmark "
+                    class="svg-inline--fa fa-xmark"
                     data-icon="xmark"
                     data-prefix="fas"
                     role="img"

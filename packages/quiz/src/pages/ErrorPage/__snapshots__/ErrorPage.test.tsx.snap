@@ -42,7 +42,7 @@ exports[`ErrorPage > should match snapshot 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -74,7 +74,7 @@ exports[`ErrorPage > should match snapshot 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-heart-crack "
+              class="svg-inline--fa fa-heart-crack"
               data-icon="heart-crack"
               data-prefix="fas"
               role="img"

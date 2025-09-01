@@ -150,7 +150,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-gamepad "
+                      class="svg-inline--fa fa-gamepad"
                       data-icon="gamepad"
                       data-prefix="fas"
                       role="img"
@@ -452,7 +452,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-gamepad "
+                      class="svg-inline--fa fa-gamepad"
                       data-icon="gamepad"
                       data-prefix="fas"
                       role="img"

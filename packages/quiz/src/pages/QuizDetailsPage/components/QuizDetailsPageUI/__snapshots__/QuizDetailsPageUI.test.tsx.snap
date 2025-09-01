@@ -42,7 +42,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-play "
+              class="svg-inline--fa fa-play"
               data-icon="play"
               data-prefix="fas"
               role="img"
@@ -102,7 +102,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-eye "
+                class="svg-inline--fa fa-eye"
                 data-icon="eye"
                 data-prefix="fas"
                 role="img"
@@ -120,7 +120,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-icons "
+                class="svg-inline--fa fa-icons"
                 data-icon="icons"
                 data-prefix="fas"
                 role="img"
@@ -138,7 +138,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-language "
+                class="svg-inline--fa fa-language"
                 data-icon="language"
                 data-prefix="fas"
                 role="img"
@@ -156,7 +156,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gamepad "
+                class="svg-inline--fa fa-gamepad"
                 data-icon="gamepad"
                 data-prefix="fas"
                 role="img"
@@ -174,7 +174,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-circle-question "
+                class="svg-inline--fa fa-circle-question"
                 data-icon="circle-question"
                 data-prefix="fas"
                 role="img"
@@ -195,7 +195,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-calendar-plus "
+                class="svg-inline--fa fa-calendar-plus"
                 data-icon="calendar-plus"
                 data-prefix="fas"
                 role="img"
@@ -214,7 +214,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-calendar-check "
+                class="svg-inline--fa fa-calendar-check"
                 data-icon="calendar-check"
                 data-prefix="fas"
                 role="img"
@@ -232,7 +232,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-user "
+                class="svg-inline--fa fa-user"
                 data-icon="user"
                 data-prefix="fas"
                 role="img"

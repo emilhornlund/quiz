@@ -7,7 +7,7 @@ exports[`IconTooltip > should render IconTooltip with default props 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-circle-info "
+      class="svg-inline--fa fa-circle-info"
       data-icon="circle-info"
       data-prefix="fas"
       role="img"

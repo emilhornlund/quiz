@@ -24,7 +24,7 @@ exports[`TextField > should not receive onChange event when not a number changes
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-triangle-exclamation "
+        class="svg-inline--fa fa-triangle-exclamation"
         data-icon="triangle-exclamation"
         data-prefix="fas"
         role="img"
@@ -66,7 +66,7 @@ exports[`TextField > should not receive onChange event when number above max cha
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-triangle-exclamation "
+        class="svg-inline--fa fa-triangle-exclamation"
         data-icon="triangle-exclamation"
         data-prefix="fas"
         role="img"
@@ -108,7 +108,7 @@ exports[`TextField > should not receive onChange event when number bellow min ch
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-triangle-exclamation "
+        class="svg-inline--fa fa-triangle-exclamation"
         data-icon="triangle-exclamation"
         data-prefix="fas"
         role="img"

@@ -36,7 +36,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -63,7 +63,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -265,7 +265,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -287,7 +287,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"

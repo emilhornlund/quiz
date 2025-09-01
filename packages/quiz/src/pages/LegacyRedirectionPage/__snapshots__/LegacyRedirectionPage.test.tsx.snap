@@ -74,7 +74,7 @@ exports[`LegacyRedirectionPage > announces the remaining seconds in the aria-liv
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"
@@ -171,7 +171,7 @@ exports[`LegacyRedirectionPage > redirects with window.location.replace and logs
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"
@@ -268,7 +268,7 @@ exports[`LegacyRedirectionPage > renders title and shows target host in subtitle
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"
@@ -365,7 +365,7 @@ exports[`LegacyRedirectionPage > shows the “fresh start” message when no mig
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"
@@ -462,7 +462,7 @@ exports[`LegacyRedirectionPage > shows the “saved profile” message when a mi
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"
@@ -559,7 +559,7 @@ exports[`LegacyRedirectionPage > starts the countdown on mount 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-paper-plane "
+                class="svg-inline--fa fa-paper-plane"
                 data-icon="paper-plane"
                 data-prefix="fas"
                 role="img"

@@ -10,7 +10,7 @@ exports[`PlayerGameFooter > should render PlayerGameFooter with default props 1`
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-circle-question "
+        class="svg-inline--fa fa-circle-question"
         data-icon="circle-question"
         data-prefix="fas"
         role="img"

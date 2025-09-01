@@ -36,7 +36,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -134,7 +134,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -207,7 +207,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -321,7 +321,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -394,7 +394,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -476,7 +476,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -549,7 +549,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -661,7 +661,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -734,7 +734,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -816,7 +816,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -889,7 +889,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -991,7 +991,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"

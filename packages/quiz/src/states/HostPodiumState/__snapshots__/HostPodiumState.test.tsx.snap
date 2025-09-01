@@ -36,7 +36,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -63,7 +63,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -295,7 +295,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -322,7 +322,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"

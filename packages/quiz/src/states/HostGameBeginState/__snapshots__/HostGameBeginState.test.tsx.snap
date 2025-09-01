@@ -36,7 +36,7 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"

@@ -50,7 +50,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -201,7 +201,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -227,7 +227,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -301,7 +301,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -449,7 +449,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -475,7 +475,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -577,7 +577,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-lock "
+                  class="svg-inline--fa fa-lock"
                   data-icon="lock"
                   data-prefix="fas"
                   role="img"
@@ -651,7 +651,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -802,7 +802,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -827,7 +827,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -901,7 +901,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1049,7 +1049,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1074,7 +1074,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -1176,7 +1176,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-lock "
+                  class="svg-inline--fa fa-lock"
                   data-icon="lock"
                   data-prefix="fas"
                   role="img"
@@ -1250,7 +1250,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1421,7 +1421,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1446,7 +1446,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -1520,7 +1520,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1688,7 +1688,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1713,7 +1713,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-floppy-disk "
+                  class="svg-inline--fa fa-floppy-disk"
                   data-icon="floppy-disk"
                   data-prefix="fas"
                   role="img"
@@ -1815,7 +1815,7 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-lock "
+                  class="svg-inline--fa fa-lock"
                   data-icon="lock"
                   data-prefix="fas"
                   role="img"

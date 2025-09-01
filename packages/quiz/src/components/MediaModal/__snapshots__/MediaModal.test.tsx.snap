@@ -41,7 +41,7 @@ exports[`MediaModal > should render a MediaModal with default props 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-xmark "
+              class="svg-inline--fa fa-xmark"
               color="gray"
               data-icon="xmark"
               data-prefix="fas"
@@ -205,7 +205,7 @@ exports[`MediaModal > should render a MediaModal with default props 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-magnifying-glass "
+                  class="svg-inline--fa fa-magnifying-glass"
                   data-icon="magnifying-glass"
                   data-prefix="fas"
                   role="img"

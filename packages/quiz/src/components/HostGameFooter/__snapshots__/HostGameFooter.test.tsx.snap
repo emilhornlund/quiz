@@ -10,7 +10,7 @@ exports[`HostGameFooter > should render HostGameFooter with default props 1`] = 
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-circle-question "
+        class="svg-inline--fa fa-circle-question"
         data-icon="circle-question"
         data-prefix="fas"
         role="img"
@@ -32,7 +32,7 @@ exports[`HostGameFooter > should render HostGameFooter with default props 1`] = 
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-lock-open "
+        class="svg-inline--fa fa-lock-open"
         data-icon="lock-open"
         data-prefix="fas"
         role="img"

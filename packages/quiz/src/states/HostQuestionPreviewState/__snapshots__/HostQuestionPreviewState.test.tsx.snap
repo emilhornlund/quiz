@@ -36,7 +36,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -68,7 +68,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-circle-question "
+                class="svg-inline--fa fa-circle-question"
                 color="white"
                 data-icon="circle-question"
                 data-prefix="fas"
@@ -87,7 +87,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-star "
+                class="svg-inline--fa fa-star"
                 color="yellow2"
                 data-icon="star"
                 data-prefix="fas"
@@ -128,7 +128,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -150,7 +150,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
