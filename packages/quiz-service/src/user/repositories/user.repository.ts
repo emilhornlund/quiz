@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import { BaseRepository } from '../../app/shared/repository'
 import {
   EmailNotUniqueException,
   UserNotFoundByMigrationTokenException,
@@ -14,20 +15,21 @@ import { GoogleUser, LocalUser, User, UserModel } from './models'
 
 /**
  * Repository for interacting with the User collection in the database.
+ *
+ * Extends BaseRepository to provide common CRUD operations and adds user-specific methods.
  */
 @Injectable()
-export class UserRepository {
-  // Logger instance for recording repository operations.
-  private readonly logger: Logger = new Logger(UserRepository.name)
-
+export class UserRepository extends BaseRepository<User> {
   /**
    * Constructs the UserRepository.
    *
    * @param userModel - The Mongoose model representing the User schema.
    */
   public constructor(
-    @InjectModel(User.name) private readonly userModel: UserModel,
-  ) {}
+    @InjectModel(User.name) protected readonly userModel: UserModel,
+  ) {
+    super(userModel, 'User')
+  }
 
   /**
    * Finds a user by their unique identifier.
@@ -36,11 +38,8 @@ export class UserRepository {
    * @returns A Promise resolving to the User document of type T, or null if none exists.
    */
   public async findUserById<T extends User>(id: string): Promise<T | null> {
-    const user = await this.userModel.findById(id).exec()
-    if (user) {
-      return user as T
-    }
-    return null
+    const user = await this.findById(id)
+    return user as T | null
   }
 
   /**
@@ -53,7 +52,6 @@ export class UserRepository {
   public async findUserByIdOrThrow<T extends User>(id: string): Promise<T> {
     const user = await this.findUserById<T>(id)
     if (!user) {
-      this.logger.warn(`User was not found by id '${id}.`)
       throw new UserNotFoundException(id)
     }
     return user
@@ -65,8 +63,8 @@ export class UserRepository {
    * @param email - The email address to search for.
    * @returns The matching User document, or null if none exists.
    */
-  public async findUserByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email }).exec()
+  public async findUserByEmail(email: string): Promise<User | null> {
+    return this.findOne({ email })
   }
 
   /**
@@ -91,7 +89,7 @@ export class UserRepository {
    * @returns The newly created User document.
    */
   public async createUser<T extends User>(details: Partial<T>): Promise<T> {
-    const createdUser = await new this.userModel(details).save()
+    const createdUser = await this.create(details)
     return createdUser as T
   }
 
@@ -144,14 +142,16 @@ export class UserRepository {
     id: string,
     details: Partial<T>,
   ): Promise<T> {
-    const user = await this.userModel.findById(id).exec()
-
-    if (!user) {
-      this.logger.warn(`User was not found by id '${id}.`)
+    // Check if user exists first
+    const existingUser = await this.findById(id)
+    if (!existingUser) {
       throw new UserNotFoundException(id)
     }
 
-    if (details.authProvider && details.authProvider !== user.authProvider) {
+    if (
+      details.authProvider &&
+      details.authProvider !== existingUser.authProvider
+    ) {
       const updatedUser = await this.userModel
         .findByIdAndUpdate(id, details, {
           new: true,
@@ -163,7 +163,11 @@ export class UserRepository {
       return updatedUser as T
     }
 
-    const updatedUser = await user.set(details).save()
+    const updatedUser = await this.update(id, details)
+    if (!updatedUser) {
+      throw new UserNotFoundException(id)
+    }
+
     return updatedUser as T
   }
 
@@ -201,7 +205,7 @@ export class UserRepository {
    * @returns A Promise that resolves once the user has been removed.
    */
   public async deleteUserById(userId: string): Promise<void> {
-    await this.userModel.deleteOne({ _id: userId })
+    await this.delete(userId)
   }
 
   /**

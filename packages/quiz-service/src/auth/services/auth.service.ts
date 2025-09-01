@@ -249,7 +249,7 @@ export class AuthService {
     }
 
     try {
-      await this.tokenRepository.findByIdOrThrow(payload.jti)
+      await this.tokenRepository.findTokenByIdOrThrow(payload.jti)
     } catch (error) {
       const { message, stack } = error as Error
       this.logger.debug(
@@ -299,9 +299,9 @@ export class AuthService {
     try {
       const { jti } = this.jwtService.decode<TokenDto>(token)
 
-      const document = await this.tokenRepository.findById(jti)
+      const document = await this.tokenRepository.findTokenById(jti)
       if (document) {
-        return this.tokenRepository.deleteByPairId(document.pairId)
+        await this.tokenRepository.deleteTokensByPairId(document.pairId)
       }
     } catch (error) {
       const { message, stack } = error as Error

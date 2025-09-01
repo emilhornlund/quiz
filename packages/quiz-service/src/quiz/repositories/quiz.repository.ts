@@ -1,7 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { RootFilterQuery } from 'mongoose'
 
+import {
+  BaseRepository,
+  buildSortObject,
+  SortOptions,
+} from '../../app/shared/repository'
 import { QuizNotFoundException } from '../exceptions'
 
 import { Quiz, QuizModel } from './models/schemas'
@@ -9,19 +14,18 @@ import { Quiz, QuizModel } from './models/schemas'
 /**
  * Repository for accessing and manipulating quiz data.
  *
- * Provides methods to query, create, update, and delete quizzes using the Mongoose model.
+ * Extends BaseRepository to provide common CRUD operations and adds quiz-specific methods.
  */
 @Injectable()
-export class QuizRepository {
-  // Logger for logging repository operations
-  private logger: Logger = new Logger(QuizRepository.name)
-
+export class QuizRepository extends BaseRepository<Quiz> {
   /**
    * Creates an instance of QuizRepository.
    *
    * @param quizModel - The Mongoose model for the Quiz schema.
    */
-  constructor(@InjectModel(Quiz.name) private quizModel: QuizModel) {}
+  constructor(@InjectModel(Quiz.name) protected readonly quizModel: QuizModel) {
+    super(quizModel, 'Quiz')
+  }
 
   /**
    * Finds a quiz document by its ID or throws an exception if not found.
@@ -36,7 +40,6 @@ export class QuizRepository {
     const document = await this.quizModel.findById(quizId).populate('owner')
 
     if (!document) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
       throw new QuizNotFoundException(quizId)
     }
 
@@ -51,7 +54,7 @@ export class QuizRepository {
    * @returns The total number of quizzes that match the filter.
    */
   public async countQuizzes(filter: RootFilterQuery<Quiz>): Promise<number> {
-    return this.quizModel.countDocuments(filter)
+    return this.count(filter)
   }
 
   /**
@@ -72,12 +75,19 @@ export class QuizRepository {
     limit: number = 10,
     offset: number = 0,
   ): Promise<Quiz[]> {
-    return this.quizModel
-      .find(filter)
-      .sort({ [sortField]: sortOrder })
-      .skip(offset)
-      .limit(limit)
-      .populate('owner')
+    const sortOptions: SortOptions = {
+      field: sortField,
+      direction: sortOrder === 'asc' ? 1 : -1,
+    }
+
+    const result = await this.findWithPagination(filter, {
+      skip: offset,
+      limit,
+      sort: buildSortObject(sortOptions),
+      populate: 'owner',
+    })
+
+    return result.documents
   }
 
   /**
@@ -87,12 +97,8 @@ export class QuizRepository {
    *
    * @returns The created quiz document.
    */
-  public async createQuiz(quiz: Quiz): Promise<Quiz> {
-    const document = await this.quizModel.create(quiz)
-
-    this.logger.log(`Created quiz with id '${quiz._id}.'`)
-
-    return document
+  public async createQuiz(quiz: Partial<Quiz>): Promise<Quiz> {
+    return this.create(quiz)
   }
 
   /**
@@ -106,20 +112,11 @@ export class QuizRepository {
    * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async updateQuiz(quizId: string, quiz: Partial<Quiz>): Promise<Quiz> {
-    const document = await this.quizModel.findByIdAndUpdate(
-      quizId,
-      { ...quiz, updated: new Date() },
-      {
-        new: true,
-      },
-    )
+    const document = await this.update(quizId, { ...quiz, updated: new Date() })
 
     if (!document) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
       throw new QuizNotFoundException(quizId)
     }
-
-    this.logger.log(`Updated quiz with id '${quizId}.'`)
 
     return document
   }
@@ -132,14 +129,11 @@ export class QuizRepository {
    * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async deleteQuiz(quizId: string): Promise<void> {
-    const document = await this.quizModel.findByIdAndDelete(quizId)
+    const deleted = await this.delete(quizId)
 
-    if (!document) {
-      this.logger.warn(`Quiz was not found by id '${quizId}.`)
+    if (!deleted) {
       throw new QuizNotFoundException(quizId)
     }
-
-    this.logger.log(`Deleted quiz by id '${quizId}'.`)
   }
 
   /**
@@ -153,12 +147,8 @@ export class QuizRepository {
     fromUserId: string,
     toUserId: string,
   ): Promise<void> {
-    this.logger.log(
-      `Updating quiz owner from '${fromUserId}' to '${toUserId}'.`,
-    )
-
     try {
-      await this.quizModel.updateMany(
+      await this.updateMany(
         { owner: fromUserId },
         { $set: { owner: toUserId } },
       )
@@ -168,6 +158,7 @@ export class QuizRepository {
         `Unable update quiz owner from '${fromUserId} to '${toUserId}': ${message}`,
         stack,
       )
+      throw error
     }
   }
 }
