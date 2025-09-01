@@ -10,7 +10,7 @@ exports[`LegacyInfoCardUI > should render a LegacyInfoCardUI as migrated 1`] = `
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-xmark "
+        class="svg-inline--fa fa-xmark"
         data-icon="xmark"
         data-prefix="fas"
         role="img"
@@ -43,7 +43,7 @@ exports[`LegacyInfoCardUI > should render a LegacyInfoCardUI as not migrated 1`]
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-xmark "
+        class="svg-inline--fa fa-xmark"
         data-icon="xmark"
         data-prefix="fas"
         role="img"

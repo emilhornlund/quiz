@@ -36,7 +36,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -63,7 +63,7 @@ exports[`HostResultState > should render HostResultState with question type mult
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -105,7 +105,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -148,7 +148,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -187,7 +187,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -226,7 +226,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -274,7 +274,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -296,7 +296,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -356,7 +356,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -383,7 +383,7 @@ exports[`HostResultState > should render HostResultState with question type mult
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -425,7 +425,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -468,7 +468,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -507,7 +507,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -546,7 +546,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -585,7 +585,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -624,7 +624,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -672,7 +672,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -694,7 +694,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -754,7 +754,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -781,7 +781,7 @@ exports[`HostResultState > should render HostResultState with question type mult
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -823,7 +823,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -866,7 +866,7 @@ exports[`HostResultState > should render HostResultState with question type mult
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -914,7 +914,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -936,7 +936,7 @@ exports[`HostResultState > should render HostResultState with question type mult
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -996,7 +996,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -1023,7 +1023,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -1085,7 +1085,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -1107,7 +1107,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -1167,7 +1167,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -1194,7 +1194,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -1251,7 +1251,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
                     <div>
                       <svg
                         aria-hidden="true"
-                        class="svg-inline--fa fa-check "
+                        class="svg-inline--fa fa-check"
                         data-icon="check"
                         data-prefix="fas"
                         role="img"
@@ -1288,7 +1288,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
                     <div>
                       <svg
                         aria-hidden="true"
-                        class="svg-inline--fa fa-xmark "
+                        class="svg-inline--fa fa-xmark"
                         data-icon="xmark"
                         data-prefix="fas"
                         role="img"
@@ -1456,7 +1456,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -1478,7 +1478,7 @@ exports[`HostResultState > should render HostResultState with question type puzz
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -1538,7 +1538,7 @@ exports[`HostResultState > should render HostResultState with question type rang
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -1565,7 +1565,7 @@ exports[`HostResultState > should render HostResultState with question type rang
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -1607,7 +1607,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1633,7 +1633,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1655,7 +1655,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1677,7 +1677,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1699,7 +1699,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1721,7 +1721,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1743,7 +1743,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1765,7 +1765,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1787,7 +1787,7 @@ exports[`HostResultState > should render HostResultState with question type rang
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1818,7 +1818,7 @@ exports[`HostResultState > should render HostResultState with question type rang
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -1840,7 +1840,7 @@ exports[`HostResultState > should render HostResultState with question type rang
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -1900,7 +1900,7 @@ exports[`HostResultState > should render HostResultState with question type true
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -1927,7 +1927,7 @@ exports[`HostResultState > should render HostResultState with question type true
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -1969,7 +1969,7 @@ exports[`HostResultState > should render HostResultState with question type true
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -1995,7 +1995,7 @@ exports[`HostResultState > should render HostResultState with question type true
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -2026,7 +2026,7 @@ exports[`HostResultState > should render HostResultState with question type true
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -2048,7 +2048,7 @@ exports[`HostResultState > should render HostResultState with question type true
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"
@@ -2108,7 +2108,7 @@ exports[`HostResultState > should render HostResultState with question type type
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-maximize "
+              class="svg-inline--fa fa-maximize"
               data-icon="maximize"
               data-prefix="fas"
               role="img"
@@ -2135,7 +2135,7 @@ exports[`HostResultState > should render HostResultState with question type type
             </span>
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-right "
+              class="svg-inline--fa fa-arrow-right"
               data-icon="arrow-right"
               data-prefix="fas"
               role="img"
@@ -2177,7 +2177,7 @@ exports[`HostResultState > should render HostResultState with question type type
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -2220,7 +2220,7 @@ exports[`HostResultState > should render HostResultState with question type type
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -2259,7 +2259,7 @@ exports[`HostResultState > should render HostResultState with question type type
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -2298,7 +2298,7 @@ exports[`HostResultState > should render HostResultState with question type type
                 <span>
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-user-group "
+                    class="svg-inline--fa fa-user-group"
                     data-icon="user-group"
                     data-prefix="fas"
                     role="img"
@@ -2346,7 +2346,7 @@ exports[`HostResultState > should render HostResultState with question type type
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-circle-question "
+            class="svg-inline--fa fa-circle-question"
             data-icon="circle-question"
             data-prefix="fas"
             role="img"
@@ -2368,7 +2368,7 @@ exports[`HostResultState > should render HostResultState with question type type
         >
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-lock-open "
+            class="svg-inline--fa fa-lock-open"
             data-icon="lock-open"
             data-prefix="fas"
             role="img"

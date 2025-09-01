@@ -36,7 +36,7 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -71,7 +71,7 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -167,7 +167,7 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -195,7 +195,7 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -252,7 +252,7 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -287,7 +287,7 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -383,7 +383,7 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -412,7 +412,7 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -469,7 +469,7 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -504,7 +504,7 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -600,7 +600,7 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -628,7 +628,7 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -685,7 +685,7 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -720,7 +720,7 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -816,7 +816,7 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -844,7 +844,7 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -901,7 +901,7 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -936,7 +936,7 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1032,7 +1032,7 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1060,7 +1060,7 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -1117,7 +1117,7 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -1152,7 +1152,7 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1248,7 +1248,7 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1277,7 +1277,7 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -1334,7 +1334,7 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -1369,7 +1369,7 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1465,7 +1465,7 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1494,7 +1494,7 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -1551,7 +1551,7 @@ exports[`GameJoinPage > renders title and message 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -1586,7 +1586,7 @@ exports[`GameJoinPage > renders title and message 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1682,7 +1682,7 @@ exports[`GameJoinPage > renders title and message 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1711,7 +1711,7 @@ exports[`GameJoinPage > renders title and message 1`] = `
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -1768,7 +1768,7 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -1803,7 +1803,7 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -1899,7 +1899,7 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -1928,7 +1928,7 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -1985,7 +1985,7 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -2020,7 +2020,7 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -2116,7 +2116,7 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -2144,7 +2144,7 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"
@@ -2201,7 +2201,7 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-arrow-left "
+              class="svg-inline--fa fa-arrow-left"
               data-icon="arrow-left"
               data-prefix="fas"
               role="img"
@@ -2236,7 +2236,7 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-xmark "
+                class="svg-inline--fa fa-xmark"
                 data-icon="xmark"
                 data-prefix="fas"
                 role="img"
@@ -2332,7 +2332,7 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-arrows-rotate "
+                    class="svg-inline--fa fa-arrows-rotate"
                     data-icon="arrows-rotate"
                     data-prefix="fas"
                     role="img"
@@ -2360,7 +2360,7 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
                 </span>
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-arrow-right "
+                  class="svg-inline--fa fa-arrow-right"
                   data-icon="arrow-right"
                   data-prefix="fas"
                   role="img"

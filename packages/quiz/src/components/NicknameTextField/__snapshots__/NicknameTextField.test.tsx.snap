@@ -35,7 +35,7 @@ exports[`NicknameTextField > should render NicknameTextField with default props 
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-arrows-rotate "
+          class="svg-inline--fa fa-arrows-rotate"
           data-icon="arrows-rotate"
           data-prefix="fas"
           role="img"

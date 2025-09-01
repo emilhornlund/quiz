@@ -64,7 +64,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gear "
+                class="svg-inline--fa fa-gear"
                 data-icon="gear"
                 data-prefix="fas"
                 role="img"
@@ -92,7 +92,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
+                class="svg-inline--fa fa-floppy-disk"
                 data-icon="floppy-disk"
                 data-prefix="fas"
                 role="img"
@@ -170,7 +170,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                       >
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-copy "
+                          class="svg-inline--fa fa-copy"
                           data-icon="copy"
                           data-prefix="far"
                           role="img"
@@ -187,7 +187,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                       >
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-trash "
+                          class="svg-inline--fa fa-trash"
                           data-icon="trash"
                           data-prefix="fas"
                           role="img"
@@ -325,7 +325,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class="svg-inline--fa fa-circle-plus fa-width-auto "
+                    class="svg-inline--fa fa-circle-plus fa-width-auto"
                     data-icon="circle-plus"
                     data-prefix="fas"
                     role="img"
@@ -508,7 +508,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                             >
                               <svg
                                 aria-hidden="true"
-                                class="svg-inline--fa fa-trash "
+                                class="svg-inline--fa fa-trash"
                                 data-icon="trash"
                                 data-prefix="fas"
                                 role="img"
@@ -535,7 +535,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                             >
                               <svg
                                 aria-hidden="true"
-                                class="svg-inline--fa fa-retweet "
+                                class="svg-inline--fa fa-retweet"
                                 data-icon="retweet"
                                 data-prefix="fas"
                                 role="img"
@@ -574,7 +574,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                     >
                       <svg
                         aria-hidden="true"
-                        class="svg-inline--fa fa-circle-info "
+                        class="svg-inline--fa fa-circle-info"
                         data-icon="circle-info"
                         data-prefix="fas"
                         role="img"
@@ -626,7 +626,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                               >
                                 <svg
                                   aria-hidden="true"
-                                  class="svg-inline--fa fa-check "
+                                  class="svg-inline--fa fa-check"
                                   data-icon="check"
                                   data-prefix="fas"
                                   role="img"
@@ -818,7 +818,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                     >
                       <svg
                         aria-hidden="true"
-                        class="svg-inline--fa fa-circle-info "
+                        class="svg-inline--fa fa-circle-info"
                         data-icon="circle-info"
                         data-prefix="fas"
                         role="img"
@@ -893,7 +893,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                     >
                       <svg
                         aria-hidden="true"
-                        class="svg-inline--fa fa-circle-info "
+                        class="svg-inline--fa fa-circle-info"
                         data-icon="circle-info"
                         data-prefix="fas"
                         role="img"
@@ -1011,7 +1011,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-code "
+                      class="svg-inline--fa fa-code"
                       data-icon="code"
                       data-prefix="fas"
                       role="img"
@@ -1101,7 +1101,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gear "
+                class="svg-inline--fa fa-gear"
                 data-icon="gear"
                 data-prefix="fas"
                 role="img"
@@ -1129,7 +1129,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
+                class="svg-inline--fa fa-floppy-disk"
                 data-icon="floppy-disk"
                 data-prefix="fas"
                 role="img"
@@ -1180,7 +1180,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-code "
+                      class="svg-inline--fa fa-code"
                       data-icon="code"
                       data-prefix="fas"
                       role="img"
@@ -1270,7 +1270,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gear "
+                class="svg-inline--fa fa-gear"
                 data-icon="gear"
                 data-prefix="fas"
                 role="img"
@@ -1298,7 +1298,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
+                class="svg-inline--fa fa-floppy-disk"
                 data-icon="floppy-disk"
                 data-prefix="fas"
                 role="img"
@@ -1349,7 +1349,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-code "
+                      class="svg-inline--fa fa-code"
                       data-icon="code"
                       data-prefix="fas"
                       role="img"
@@ -1439,7 +1439,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gear "
+                class="svg-inline--fa fa-gear"
                 data-icon="gear"
                 data-prefix="fas"
                 role="img"
@@ -1467,7 +1467,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
+                class="svg-inline--fa fa-floppy-disk"
                 data-icon="floppy-disk"
                 data-prefix="fas"
                 role="img"
@@ -1518,7 +1518,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-code "
+                      class="svg-inline--fa fa-code"
                       data-icon="code"
                       data-prefix="fas"
                       role="img"
@@ -1610,7 +1610,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-gear "
+                class="svg-inline--fa fa-gear"
                 data-icon="gear"
                 data-prefix="fas"
                 role="img"
@@ -1638,7 +1638,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-floppy-disk "
+                class="svg-inline--fa fa-floppy-disk"
                 data-icon="floppy-disk"
                 data-prefix="fas"
                 role="img"
@@ -1681,10 +1681,10 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
                 tabindex="0"
               />
               <div
-                aria-labelledby="«r2»"
+                aria-labelledby="«r6»"
                 class="modalContainer sizeNormal"
                 data-floating-ui-focusable=""
-                id="«r0»"
+                id="«r4»"
                 role="dialog"
                 tabindex="-1"
               >
@@ -1693,7 +1693,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
                 >
                   <div
                     class="title"
-                    id="«r2»"
+                    id="«r6»"
                   >
                     Choose Your Game Mode
                   </div>

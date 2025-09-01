@@ -63,7 +63,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-plus "
+                class="svg-inline--fa fa-plus"
                 data-icon="plus"
                 data-prefix="fas"
                 role="img"
@@ -118,7 +118,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-magnifying-glass "
+                      class="svg-inline--fa fa-magnifying-glass"
                       data-icon="magnifying-glass"
                       data-prefix="fas"
                       role="img"
@@ -146,7 +146,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-filter "
+                      class="svg-inline--fa fa-filter"
                       data-icon="filter"
                       data-prefix="fas"
                       role="img"
@@ -199,7 +199,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-gamepad "
+                          class="svg-inline--fa fa-gamepad"
                           data-icon="gamepad"
                           data-prefix="fas"
                           role="img"
@@ -215,7 +215,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-icons "
+                          class="svg-inline--fa fa-icons"
                           data-icon="icons"
                           data-prefix="fas"
                           role="img"
@@ -231,7 +231,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-eye "
+                          class="svg-inline--fa fa-eye"
                           data-icon="eye"
                           data-prefix="fas"
                           role="img"
@@ -247,7 +247,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-language "
+                          class="svg-inline--fa fa-language"
                           data-icon="language"
                           data-prefix="fas"
                           role="img"
@@ -263,7 +263,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-circle-question "
+                          class="svg-inline--fa fa-circle-question"
                           data-icon="circle-question"
                           data-prefix="fas"
                           role="img"
@@ -314,7 +314,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-gamepad "
+                          class="svg-inline--fa fa-gamepad"
                           data-icon="gamepad"
                           data-prefix="fas"
                           role="img"
@@ -330,7 +330,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-icons "
+                          class="svg-inline--fa fa-icons"
                           data-icon="icons"
                           data-prefix="fas"
                           role="img"
@@ -346,7 +346,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-eye "
+                          class="svg-inline--fa fa-eye"
                           data-icon="eye"
                           data-prefix="fas"
                           role="img"
@@ -362,7 +362,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-language "
+                          class="svg-inline--fa fa-language"
                           data-icon="language"
                           data-prefix="fas"
                           role="img"
@@ -378,7 +378,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-circle-question "
+                          class="svg-inline--fa fa-circle-question"
                           data-icon="circle-question"
                           data-prefix="fas"
                           role="img"
@@ -429,7 +429,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-gamepad "
+                          class="svg-inline--fa fa-gamepad"
                           data-icon="gamepad"
                           data-prefix="fas"
                           role="img"
@@ -445,7 +445,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-icons "
+                          class="svg-inline--fa fa-icons"
                           data-icon="icons"
                           data-prefix="fas"
                           role="img"
@@ -461,7 +461,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-eye "
+                          class="svg-inline--fa fa-eye"
                           data-icon="eye"
                           data-prefix="fas"
                           role="img"
@@ -477,7 +477,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-language "
+                          class="svg-inline--fa fa-language"
                           data-icon="language"
                           data-prefix="fas"
                           role="img"
@@ -493,7 +493,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-circle-question "
+                          class="svg-inline--fa fa-circle-question"
                           data-icon="circle-question"
                           data-prefix="fas"
                           role="img"
@@ -544,7 +544,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-gamepad "
+                          class="svg-inline--fa fa-gamepad"
                           data-icon="gamepad"
                           data-prefix="fas"
                           role="img"
@@ -560,7 +560,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-icons "
+                          class="svg-inline--fa fa-icons"
                           data-icon="icons"
                           data-prefix="fas"
                           role="img"
@@ -576,7 +576,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-eye "
+                          class="svg-inline--fa fa-eye"
                           data-icon="eye"
                           data-prefix="fas"
                           role="img"
@@ -592,7 +592,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-language "
+                          class="svg-inline--fa fa-language"
                           data-icon="language"
                           data-prefix="fas"
                           role="img"
@@ -608,7 +608,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-circle-question "
+                          class="svg-inline--fa fa-circle-question"
                           data-icon="circle-question"
                           data-prefix="fas"
                           role="img"
@@ -659,7 +659,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-gamepad "
+                          class="svg-inline--fa fa-gamepad"
                           data-icon="gamepad"
                           data-prefix="fas"
                           role="img"
@@ -675,7 +675,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-icons "
+                          class="svg-inline--fa fa-icons"
                           data-icon="icons"
                           data-prefix="fas"
                           role="img"
@@ -691,7 +691,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-eye "
+                          class="svg-inline--fa fa-eye"
                           data-icon="eye"
                           data-prefix="fas"
                           role="img"
@@ -707,7 +707,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-language "
+                          class="svg-inline--fa fa-language"
                           data-icon="language"
                           data-prefix="fas"
                           role="img"
@@ -723,7 +723,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                       <span>
                         <svg
                           aria-hidden="true"
-                          class="svg-inline--fa fa-circle-question "
+                          class="svg-inline--fa fa-circle-question"
                           data-icon="circle-question"
                           data-prefix="fas"
                           role="img"
@@ -761,7 +761,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-arrow-left "
+                      class="svg-inline--fa fa-arrow-left"
                       data-icon="arrow-left"
                       data-prefix="fas"
                       role="img"
@@ -797,7 +797,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-arrow-right "
+                      class="svg-inline--fa fa-arrow-right"
                       data-icon="arrow-right"
                       data-prefix="fas"
                       role="img"
