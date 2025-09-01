@@ -5,6 +5,7 @@ import {
 import React, {
   FC,
   PointerEvent,
+  ReactNode,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -21,12 +22,23 @@ import Pin from './Pin.tsx'
 import styles from './PinImage.module.scss'
 import { PinImagePosition, PinImageValue } from './types.ts'
 
+const toPinImagePosition = (
+  value?: PinImageValue,
+): PinImagePosition | undefined =>
+  value
+    ? {
+        x: clamp01(value.x),
+        y: clamp01(value.y),
+      }
+    : undefined
+
 export type PinImageProps = {
   value?: PinImageValue
   values?: PinImageValue[]
   disabled?: boolean
   onChange?: (position: PinImagePosition) => void
   onValid?: (valid: boolean) => void
+  children?: ReactNode | ReactNode[]
 } & Pick<ResponsiveImageProps, 'imageURL' | 'alt'>
 
 const PinImage: FC<PinImageProps> = ({
@@ -37,6 +49,7 @@ const PinImage: FC<PinImageProps> = ({
   alt,
   onChange,
   onValid,
+  children,
 }) => {
   const deviceType = useDeviceSizeType()
 
@@ -53,14 +66,17 @@ const PinImage: FC<PinImageProps> = ({
 
   const [interactivePinPosition, setInteractivePinPosition] = useState<
     PinImagePosition | undefined
-  >(
-    value
-      ? {
-          x: clamp01(value.x),
-          y: clamp01(value.y),
-        }
-      : undefined,
-  )
+  >(toPinImagePosition(value))
+
+  useEffect(() => {
+    const newInteractivePinPosition = toPinImagePosition(value)
+    if (
+      interactivePinPosition?.x !== newInteractivePinPosition?.x &&
+      interactivePinPosition?.y !== newInteractivePinPosition?.y
+    ) {
+      setInteractivePinPosition(newInteractivePinPosition)
+    }
+  }, [value, interactivePinPosition])
 
   const [positions, setPositions] = useState<PinImageValue[]>()
   useEffect(() => {
@@ -167,6 +183,9 @@ const PinImage: FC<PinImageProps> = ({
   } | null>(null)
 
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    const t = e.target as HTMLElement
+    if (![...t.classList].some((cls) => cls.includes('overlay'))) return
+
     const overlay = overlayRef.current
     if (disabled || !interactivePinPosition || !overlay) return
 
@@ -258,6 +277,8 @@ const PinImage: FC<PinImageProps> = ({
             disabled={disabled}
           />
         ))}
+
+        {children && <div className={styles.children}>{children}</div>}
       </div>
     </ResponsiveImage>
   )

@@ -26,7 +26,7 @@
       width: 100%;
       height: 100%;
       transition: none !important;
-      border: helpers.pxToRem(4px) solid colors.$white-1-50;
+      border: variables.$control-outside-border-width solid colors.$white;
       background-color: colors.$white-1-50;
 
       @include helpers.mobile {

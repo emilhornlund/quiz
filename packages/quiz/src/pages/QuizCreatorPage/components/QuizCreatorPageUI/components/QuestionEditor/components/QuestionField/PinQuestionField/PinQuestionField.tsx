@@ -1,9 +1,10 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faRetweet, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { MediaType, QuestionPinDto, QuestionPinTolerance } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
   Button,
+  ConfirmDialog,
   MediaModal,
   PinImage,
 } from '../../../../../../../../../components'
@@ -35,6 +36,11 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
   onPositionValid,
 }) => {
   const [showMediaModal, setShowMediaModal] = useState(false)
+  const [showConfirmDeleteImage, setShowConfirmDeleteImage] = useState(false)
+
+  useEffect(() => {
+    console.log('showMediaModal', showMediaModal)
+  }, [showMediaModal])
 
   return (
     <>
@@ -45,8 +51,31 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
             value={{ x: position?.x ?? 0.5, y: position?.y ?? 0.5, tolerance }}
             alt={imageURL}
             onChange={onPositionChange}
-            onValid={onPositionValid}
-          />
+            onValid={onPositionValid}>
+            <div className={styles.overlay}>
+              <div className={styles.actions}>
+                <Button
+                  id="replace-image-button"
+                  type="button"
+                  kind="call-to-action"
+                  size="small"
+                  icon={faRetweet}
+                  onClick={() => {
+                    console.log('FOOO')
+                    setShowMediaModal(true)
+                  }}
+                />
+                <Button
+                  id="delete-image-button"
+                  type="button"
+                  kind="destructive"
+                  size="small"
+                  icon={faTrash}
+                  onClick={() => setShowConfirmDeleteImage(true)}
+                />
+              </div>
+            </div>
+          </PinImage>
         ) : (
           <Button
             id="add-image-button"
@@ -70,6 +99,21 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
           imageOnly
         />
       )}
+
+      <ConfirmDialog
+        title="Confirm Remove Image"
+        message="Are you sure you want to remove this image?"
+        open={showConfirmDeleteImage}
+        confirmTitle="Yes"
+        closeTitle="No"
+        onConfirm={() => {
+          onImageUrlChange(undefined)
+          onImageUrlValid(false)
+          setShowConfirmDeleteImage(false)
+        }}
+        onClose={() => setShowConfirmDeleteImage(false)}
+        destructive
+      />
     </>
   )
 }
