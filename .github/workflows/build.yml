@@ -1,14 +1,20 @@
 # .github/workflows/build.yml
 name: Build
-permissions:
-  contents: read
 on:
   workflow_call:
+    inputs:
+      ref:
+        description: 'Git ref/sha to check out'
+        required: false
+        type: string
+
+permissions:
+  contents: read
 
 jobs:
   build-test:
     name: Build & Test
-    runs-on: [self-hosted]
+    runs-on: self-hosted
     env:
       REDIS_HOST: redis
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
@@ -20,6 +26,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          ref: ${{ inputs.ref || '' }}
 
       - uses: actions/setup-node@v4
         with:
@@ -46,8 +53,7 @@ jobs:
         run: yarn lint
 
       - name: Test & Coverage
-        run: |
-          yarn test:coverage
+        run: yarn test:coverage
 
       - name: Upload Klurigo artifacts for Sentry
         uses: actions/upload-artifact@v4

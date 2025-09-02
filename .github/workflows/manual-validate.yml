@@ -1,0 +1,77 @@
+# .github/workflows/manual-validate.yml
+name: Manual PR Validation
+permissions: {} # set granular perms per job
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number or PR URL (e.g. 123 or https://github.com/<owner>/<repo>/pull/123)'
+        required: true
+        type: string
+
+jobs:
+  resolve:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      PR_INPUT: ${{ github.event.inputs.pr }}
+    outputs:
+      head_sha: ${{ steps.out.outputs.head_sha }}
+      merge_ref: ${{ steps.out.outputs.merge_ref }}
+      pr_number: ${{ steps.out.outputs.pr_number }}
+    steps:
+      - id: out
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const raw = (process.env.PR_INPUT || '').trim();
+            // Accept "123" or ".../pull/123"
+            const m = raw.match(/(\d+)$/);
+            if (!m) {
+              core.setFailed(`Invalid "pr" input: "${raw}". Provide a PR number or a PR URL ending with the number.`);
+              return;
+            }
+            const prNumber = Number(m[1]);
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              pull_number: prNumber,
+            });
+            core.setOutput('head_sha', pr.head.sha);
+            core.setOutput('merge_ref', `refs/pull/${prNumber}/merge`);
+            core.setOutput('pr_number', String(prNumber));
+            core.info(`Resolved PR #${prNumber} -> head=${pr.head.sha}, mergeRef=refs/pull/${prNumber}/merge`);
+
+  build:
+    needs: resolve
+    if: ${{ needs.resolve.outputs.merge_ref != '' }}
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ needs.resolve.outputs.merge_ref }}
+    secrets: inherit
+    permissions:
+      contents: read
+
+  mark-required-check:
+    needs: [resolve, build]
+    runs-on: self-hosted
+    permissions:
+      statuses: write
+      contents: read
+    steps:
+      - name: Mark required check as success
+        uses: actions/github-script@v7
+        env:
+          SHA: ${{ needs.resolve.outputs.head_sha }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              sha:   process.env.SHA,
+              state: 'success',
+              context: 'pr/required',
+              description: 'Manual validation workflow passed'
+            });
