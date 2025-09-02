@@ -1,0 +1,59 @@
+# .github/workflows/manual-validate.yml
+name: Manual PR Validation
+permissions: {}
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to validate'
+        required: true
+        type: string
+
+jobs:
+  resolve-sha:
+    runs-on: self-hosted
+    outputs:
+      sha: ${{ steps.get.outputs.sha }}
+    permissions:
+      contents: read
+    steps:
+      - id: get
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: Number(core.getInput('pr'))
+            });
+            core.setOutput('sha', pr.data.head.sha);
+
+  build:
+    needs: resolve-sha
+    permissions:
+      contents: read
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ needs.resolve-sha.outputs.sha }}
+    secrets: inherit
+
+  mark-required-check:
+    if: ${{ !github.event.pull_request.head.repo.fork }}
+    needs: build
+    runs-on: self-hosted
+    permissions:
+      statuses: write
+      contents: read
+    steps:
+      - name: Mark required check as success
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ needs.resolve-sha.outputs.sha }}',
+              state: 'success',
+              context: 'pr/required',
+              description: 'Manual validation workflow passed'
+            })
