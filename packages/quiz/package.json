@@ -75,7 +75,7 @@
     "sass": "^1.92.1",
     "storybook": "^8.6.14",
     "storybook-addon-remix-react-router": "^4.0.1",
-    "vite": "^7.1.4",
+    "vite": "^7.1.5",
     "vitest": "^3.2.4"
   }
 }
