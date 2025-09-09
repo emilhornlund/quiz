@@ -28,7 +28,7 @@ const AnswerPin: FC<AnswerPinProps> = ({ imageURL, interactive, onSubmit }) => {
       {interactive ? (
         <div className={styles.interactive}>
           <PinImage
-            value={{ x: 0.5, y: 0.5 }}
+            value={position}
             imageURL={imageURL}
             onChange={setPosition}
           />
