@@ -11,7 +11,6 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/build.yml
-    secrets: inherit
 
   docker-build-and-push:
     needs: build
