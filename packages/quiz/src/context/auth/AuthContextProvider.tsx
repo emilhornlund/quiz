@@ -176,50 +176,101 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   )
 
   /**
+   * Converts an epoch expiration value to seconds.
+   * Accepts either seconds or milliseconds and normalizes to seconds.
+   *
+   * @param exp - Epoch timestamp in seconds or milliseconds.
+   * @returns The expiration time in seconds, or `undefined` if input is falsy.
+   */
+  const toSec = (exp?: number) =>
+    !exp ? undefined : exp > 1_000_000_000_000 ? Math.floor(exp / 1000) : exp // ms→s if needed
+
+  /**
+   * Allowed clock skew in seconds when evaluating token expiration.
+   * Prevents premature refresh attempts caused by small client–server time differences.
+   */
+  const SKEW_SEC = 5 // tolerate small clock skew
+
+  /**
+   * Minimum delay between refresh attempts, in milliseconds.
+   * Avoids hammering the backend during transient failures or race conditions.
+   */
+  const COOLDOWN_MS = 10_000 // avoid hammering on transient errors
+
+  /**
    * Tracks whether the component is still mounted.
    * Used to avoid updating state after unmount in async flows.
    */
   const isMounted = useIsMounted()
 
   /**
-   * In-flight guard for the token refresh request.
-   * Prevents multiple simultaneous refresh calls.
+   * In-flight guard & dedupe/cooldown.
+   *
+   * - `isRefreshingUserToken` prevents concurrent refresh calls.
+   * - `lastRefreshTokenTriedRef` dedupes attempts for the same refresh token value.
+   * - `lastAttemptAtRef` enforces a short cooldown between attempts.
    */
-  const isRefreshingUserToken = useRef<boolean>(false)
+  const isRefreshingUserToken = useRef(false)
+  const lastRefreshTokenTriedRef = useRef<string | null>(null)
+  const lastAttemptAtRef = useRef<number>(0)
 
   /**
-   * Refresh the user access token when:
-   * - no access token exists OR it has expired, AND
-   * - a refresh token exists AND is still valid.
+   * Refreshes the **user** access token when:
+   *  - The access token is missing or expired (with a small skew tolerance), **and**
+   *  - A refresh token exists and is still valid.
+   *
+   * Safety features:
+   *  - Converts expiration units to seconds to avoid ms/sec mismatches.
+   *  - Dedupe: avoids retrying with the same refresh token until state changes.
+   *  - Cooldown: throttles attempts to prevent backend hammering.
+   *
+   * Dependencies are narrowed to only the specific token fields used in the decision,
+   * plus `refresh` and `handleSetTokenPair`, to avoid unnecessary re-runs.
    */
   useEffect(() => {
     if (!isMounted()) return
 
-    const currentTimeSec = Math.floor(Date.now() / 1000)
+    const accessExpSec = toSec(authState.USER?.ACCESS?.exp)
+    const refreshExpSec = toSec(authState.USER?.REFRESH?.exp)
+    const refreshToken = authState.USER?.REFRESH?.token
 
-    const needsAccessRefresh =
-      (!authState.USER?.ACCESS || authState.USER.ACCESS.exp < currentTimeSec) &&
-      !!authState.USER?.REFRESH &&
-      authState.USER.REFRESH.exp > currentTimeSec
+    const nowSec = Math.floor(Date.now() / 1000)
 
-    if (!isRefreshingUserToken.current && needsAccessRefresh) {
-      isRefreshingUserToken.current = true
-      console.log('refreshing user token')
+    const accessMissingOrExpired =
+      !authState.USER?.ACCESS || (accessExpSec ?? 0) <= nowSec + SKEW_SEC
+    const hasValidRefresh =
+      !!refreshToken && (refreshExpSec ?? 0) > nowSec + SKEW_SEC
 
-      refresh(TokenScope.User, { refreshToken: authState.USER!.REFRESH!.token })
-        .then((response) => {
-          console.log('refreshed user token')
-          handleSetTokenPair(
-            TokenScope.User,
-            response.accessToken,
-            response.refreshToken,
-          )
-        })
-        .finally(() => {
-          isRefreshingUserToken.current = false
-        })
-    }
-  }, [isMounted, authState, handleSetTokenPair, refresh])
+    const needsAccessRefresh = accessMissingOrExpired && hasValidRefresh
+
+    if (!needsAccessRefresh) return
+
+    const nowMs = Date.now()
+    const coolingDown = nowMs - lastAttemptAtRef.current < COOLDOWN_MS
+    const alreadyTriedThisToken =
+      lastRefreshTokenTriedRef.current === refreshToken
+
+    if (isRefreshingUserToken.current || coolingDown || alreadyTriedThisToken)
+      return
+
+    isRefreshingUserToken.current = true
+    lastAttemptAtRef.current = nowMs
+    lastRefreshTokenTriedRef.current = refreshToken
+
+    refresh(TokenScope.User, { refreshToken })
+      .then((response) => {
+        if (!isMounted()) return
+        handleSetTokenPair(
+          TokenScope.User,
+          response.accessToken,
+          response.refreshToken,
+        )
+        lastRefreshTokenTriedRef.current = null
+      })
+      .finally(() => {
+        isRefreshingUserToken.current = false
+      })
+  }, [isMounted, authState, refresh, handleSetTokenPair])
 
   /**
    * Memoized value for the `AuthContext`, containing the current authentication state
