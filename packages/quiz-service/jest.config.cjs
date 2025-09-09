@@ -13,7 +13,7 @@ module.exports = {
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  transformIgnorePatterns: ['/node_modules/(?!@quiz/common)'],
+  transformIgnorePatterns: ['/node_modules/(?!(@quiz/common|uuid)/)'],
   detectOpenHandles: true,
   forceExit: true,
   maxWorkers: 1,
