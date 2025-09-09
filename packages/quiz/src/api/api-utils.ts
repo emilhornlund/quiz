@@ -13,12 +13,19 @@ export type ApiPostBody = object
  */
 class ApiError extends Error {
   /**
-   * Creates a new instance of ApiError.
-   *
-   * @param message - The error message.
+   * HTTP status code returned by the API (e.g., 400, 401, 500).
    */
-  constructor(message: string) {
+  status: number
+
+  /**
+   * Creates a new instance of `ApiError`.
+   *
+   * @param message - Human-readable error message.
+   * @param status - HTTP status code associated with the error.
+   */
+  constructor(message: string, status: number) {
     super(message)
+    this.status = status
   }
 }
 
@@ -58,7 +65,7 @@ export const parseResponseAndHandleError = async <T extends object | void>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { message } = (await response.json()) as Record<string, any>
     notifyError(message ?? 'Unknown error')
-    throw new ApiError(message)
+    throw new ApiError(message, response.status)
   }
 }
 
