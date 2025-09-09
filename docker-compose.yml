@@ -10,6 +10,11 @@ services:
       - '6379:6379'
     volumes:
       - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
 
   mongodb:
     image: mongo:8.0.9
@@ -20,6 +25,11 @@ services:
       - '27017:27017'
     volumes:
       - mongodb:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
 
 volumes:
   redis:
