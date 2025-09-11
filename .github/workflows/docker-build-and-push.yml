@@ -26,8 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - id: get_sha
-        run: |
-          echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
   docker_build_and_push:
     needs: prepare
