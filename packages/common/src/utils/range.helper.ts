@@ -126,7 +126,7 @@ export function calculateRangeStep(
  *
  * @returns The clamped value within the interval `[a, b]`.
  */
-function clamp(x: number, a: number, b: number): number {
+export function clamp(x: number, a: number, b: number): number {
   return Math.max(a, Math.min(b, x))
 }
 
@@ -140,7 +140,7 @@ function clamp(x: number, a: number, b: number): number {
  *
  * @returns The largest multiple of `step` ≥ `min` and ≤ `x`.
  */
-function floorToStep(x: number, min: number, step: number): number {
+export function floorToStep(x: number, min: number, step: number): number {
   return Math.floor((x - min) / step) * step + min
 }
 
@@ -154,7 +154,7 @@ function floorToStep(x: number, min: number, step: number): number {
  *
  * @returns The smallest multiple of `step` ≥ `x`.
  */
-function ceilToStep(x: number, min: number, step: number): number {
+export function ceilToStep(x: number, min: number, step: number): number {
   return Math.ceil((x - min) / step) * step + min
 }
 
@@ -168,7 +168,7 @@ function ceilToStep(x: number, min: number, step: number): number {
  *
  * @returns The closest multiple of `step` relative to `min`.
  */
-function snapToStep(x: number, min: number, step: number): number {
+export function snapToStep(x: number, min: number, step: number): number {
   return Math.round((x - min) / step) * step + min
 }
 
@@ -186,7 +186,7 @@ function snapToStep(x: number, min: number, step: number): number {
  *
  * @returns A widened interval that spans at least one step.
  */
-function ensureAtLeastOneStep(
+export function ensureAtLeastOneStep(
   b: { lower: number; upper: number },
   min: number,
   max: number,
@@ -211,7 +211,7 @@ function ensureAtLeastOneStep(
  *
  * @returns An interval expanded outward to the nearest step grid.
  */
-function widenToStepGrid(
+export function widenToStepGrid(
   b: { lower: number; upper: number },
   min: number,
   max: number,

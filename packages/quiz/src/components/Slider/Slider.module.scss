@@ -1,0 +1,379 @@
+@use 'sass:color';
+
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+.slider {
+  @include helpers.mobile {
+    /* Dimensions */
+    --slider-height: #{variables.$mobile-control-small-height * 2};
+    --tick-width: #{helpers.pxToRem(2px)};
+    --tick-height: #{variables.$mobile-control-small-height * 1.25};
+    --bubble-pointer-size: #{helpers.pxToRem(4px)};
+    --overlay-radius: #{variables.$mobile-control-small-border-radius};
+
+    /* Bubble paddings & sizes */
+    --bubble-padding-x: #{helpers.pxToRem(6px)};
+    --bubble-padding-y: #{helpers.pxToRem(4px)};
+    --bubble-font-size-lg: #{helpers.pxToRem(22px)};
+    --bubble-min-width-lg: #{helpers.pxToRem(52px)};
+    --bubble-font-size-sm: #{helpers.pxToRem(14px)};
+    --bubble-min-width-sm: #{helpers.pxToRem(32px)};
+
+    /* Bubble shadows */
+    --shadow-bubble-y1: #{helpers.pxToRem(4px)};
+    --shadow-bubble-blur1: #{helpers.pxToRem(14px)};
+
+    /* Overlay shadows */
+    --shadow-overlay-y2: #{helpers.pxToRem(4px)};
+    --shadow-overlay-blur2: #{helpers.pxToRem(14px)};
+  }
+
+  @include helpers.tablet {
+    /* Dimensions */
+    --slider-height: #{variables.$tablet-control-small-height * 2};
+    --tick-width: #{helpers.pxToRem(3px)};
+    --tick-height: #{variables.$tablet-control-small-height * 1.25};
+    --bubble-pointer-size: #{helpers.pxToRem(5px)};
+    --overlay-radius: #{variables.$tablet-control-small-border-radius};
+
+    /* Bubble paddings & sizes */
+    --bubble-padding-x: #{helpers.pxToRem(8px)};
+    --bubble-padding-y: #{helpers.pxToRem(5px)};
+    --bubble-font-size-lg: #{helpers.pxToRem(24px)};
+    --bubble-min-width-lg: #{helpers.pxToRem(58px)};
+    --bubble-font-size-sm: #{helpers.pxToRem(16px)};
+    --bubble-min-width-sm: #{helpers.pxToRem(38px)};
+
+    /* Bubble shadows */
+    --shadow-bubble-y1: #{helpers.pxToRem(5px)};
+    --shadow-bubble-blur1: #{helpers.pxToRem(16px)};
+
+    /* Overlay shadows */
+    --shadow-overlay-y2: #{helpers.pxToRem(5px)};
+    --shadow-overlay-blur2: #{helpers.pxToRem(16px)};
+  }
+
+  @include helpers.desktop {
+    /* Dimensions */
+    --slider-height: #{variables.$desktop-control-normal-height * 2};
+    --tick-width: #{helpers.pxToRem(4px)};
+    --tick-height: #{variables.$desktop-control-normal-height * 1.25};
+    --bubble-pointer-size: #{helpers.pxToRem(6px)};
+    --overlay-radius: #{variables.$desktop-control-small-border-radius};
+
+    /* Bubble paddings & sizes */
+    --bubble-padding-x: #{helpers.pxToRem(10px)};
+    --bubble-padding-y: #{helpers.pxToRem(6px)};
+    --bubble-font-size-lg: #{helpers.pxToRem(26px)};
+    --bubble-min-width-lg: #{helpers.pxToRem(64px)};
+    --bubble-font-size-sm: #{helpers.pxToRem(18px)};
+    --bubble-min-width-sm: #{helpers.pxToRem(44px)};
+
+    /* Bubble shadows */
+    --shadow-bubble-y1: #{helpers.pxToRem(6px)};
+    --shadow-bubble-blur1: #{helpers.pxToRem(18px)};
+
+    /* Overlay shadows */
+    --shadow-overlay-y2: #{helpers.pxToRem(6px)};
+    --shadow-overlay-blur2: #{helpers.pxToRem(18px)};
+  }
+
+  /* Colors */
+  $color-track-bg: colors.$white;
+  $color-tick-selected: colors.$blue-1;
+  $color-tick-active: color.mix(colors.$white, colors.$blue-1, 50%);
+  $color-tick-inactive: colors.$gray-1;
+
+  $color-center-bubble-bg: colors.$turquoise-2;
+  $color-center-bubble-text: colors.$white;
+  $color-center-correct-bubble-bg: colors.$green-1;
+  $color-center-correct-bubble-text: colors.$white;
+
+  $color-margin-bubble-bg: colors.$orange-1;
+  $color-margin-bubble-text: colors.$white;
+
+  $color-bounds-bubble-bg: colors.$gray-1;
+  $color-bounds-bubble-text: colors.$white;
+
+  $color-accent: rgb(0, 106, 255);
+
+  --shadow-bubble-color1: rgba(0, 45, 120, 0.18);
+  --shadow-bubble-color2: rgba(0, 45, 120, 0.10);
+  --shadow-overlay-color1: rgba(0, 106, 255, 0.10);
+  --shadow-overlay-color2: rgba(0, 106, 255, 0.12);
+
+  /* Shadows */
+  --shadow-drop-soft: rgba(0, 45, 120, 0.15);
+  --shadow-bubble-x1: 0;
+  --shadow-bubble-x2: 0;
+  --shadow-bubble-y2: 0;
+  --shadow-bubble-blur2: 0;
+  --shadow-bubble-spread2: helpers.pxToRem(1px);
+  --shadow-bubble:
+          var(--shadow-bubble-x1) var(--shadow-bubble-y1) var(--shadow-bubble-blur1) var(--shadow-bubble-color1),
+          var(--shadow-bubble-x2) var(--shadow-bubble-y2) var(--shadow-bubble-blur2) var(--shadow-bubble-spread2) var(--shadow-bubble-color2);
+  --shadow-overlay-x1: 0;
+  --shadow-overlay-y1: 0;
+  --shadow-overlay-blur1: 0;
+  --shadow-overlay-spread1: helpers.pxToRem(1px);
+  --shadow-overlay-x2: 0;
+  --shadow-overlay:
+          var(--shadow-overlay-x1) var(--shadow-overlay-y1) var(--shadow-overlay-blur1) var(--shadow-overlay-spread1) var(--shadow-overlay-color1),
+          var(--shadow-overlay-x2) var(--shadow-overlay-y2) var(--shadow-overlay-blur2) var(--shadow-overlay-color2);
+  --shadow-focus-ring-color: color.change($color-accent, $alpha: 0.35);
+
+  /* Shadow filter tokens */
+  --filter-drop-shadow-center: drop-shadow(0 2px 2px var(--shadow-drop-soft));
+  --filter-drop-shadow-margin: drop-shadow(0 -2px 2px var(--shadow-drop-soft));
+
+  /* Z-index */
+  $z-track: 1;
+  $z-overlay: 2;
+  $z-input: 3;
+  $z-bubble: 4;
+
+  /* ================================
+     Derived (runtime-dependent)
+  ================================ */
+  $tick-spacing: calc((100% - var(--tick-width)) / (var(--ticks, 1) + 1));
+  $tick-radius: calc(var(--tick-width) / 2);
+  $track-center-spacing: calc($tick-spacing + (var(--tick-width) / 2));
+  $track-progress: var(--p, 0.5);
+  $overlay-edge-cushion: calc($tick-spacing / 2);
+
+  $overlay-width-base:  calc(var(--ticks-margin, 0) * $tick-spacing);
+  $overlay-width-total: calc($overlay-width-base + $tick-spacing);
+  $overlay-height:      calc(var(--tick-height) + (var(--tick-width) * 2));
+
+  /* ================================
+     Helper Functions
+  ================================ */
+  @function center-no-overlay() {
+    $minC: $track-center-spacing;
+    $valC: calc($track-center-spacing + ($track-progress * (100% - ($track-center-spacing * 2))));
+    $maxC: calc(100% - $tick-spacing - (var(--tick-width) / 2));
+    @return clamp($minC, $valC, $maxC);
+  }
+
+  @function center-with-overlay($overlay-w) {
+    $minC: calc($overlay-edge-cushion + ($overlay-w / 2) + (var(--tick-width) / 2));
+    $valC: calc($track-center-spacing + ($track-progress * (100% - ($track-center-spacing * 2))));
+    $maxC: calc(100% - $overlay-edge-cushion - ($overlay-w / 2) - (var(--tick-width) / 2));
+    @return clamp($minC, $valC, $maxC);
+  }
+
+  @function lower-anchor-left($overlay-w) {
+    $center: center-with-overlay($overlay-w);
+    @return calc($center - ($overlay-w / 2) + $overlay-edge-cushion);
+  }
+
+  @function upper-anchor-left($overlay-w) {
+    $center: center-with-overlay($overlay-w);
+    @return calc($center + ($overlay-w / 2) - $overlay-edge-cushion);
+  }
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: var(--slider-height);
+
+  .sliderBackground,
+  .sliderProgress,
+  .sliderTicks {
+    position: absolute;
+    left: 0;
+    pointer-events: none;
+    z-index: $z-track;
+  }
+
+  .sliderBackground {
+    width: 100%;
+    height: 100%;
+    background-color: $color-track-bg;
+    border-radius: variables.$desktop-control-normal-border-radius;
+  }
+
+  .sliderTicks {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 0;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 0 0 var(--tick-width);
+      height: var(--tick-height);
+      opacity: 0;
+    }
+
+    .sliderTick {
+      width: var(--tick-width);
+      height: var(--tick-height);
+      background-color: $color-tick-inactive;
+      border-radius: $tick-radius;
+
+      &.active { background-color: $color-tick-active; }
+    }
+  }
+
+  /* Overlay (selection block) */
+  .sliderOverlayContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .sliderOverlay {
+      position: absolute;
+      top: 50%;
+      left: center-with-overlay($overlay-width-total);
+      transform: translate(-50%, -50%);
+      width: $overlay-width-total;
+      height: $overlay-height; /* token used */
+      background-color: color.change($color-accent, $alpha: 0.16);
+      border-radius: var(--overlay-radius);
+      box-shadow: var(--shadow-overlay);
+      pointer-events: none;
+      z-index: $z-overlay;
+    }
+  }
+
+  /* Bubble base */
+  .sliderBubble {
+    position: absolute;
+    max-width: calc(100% - ($tick-spacing * 2));
+    padding: var(--bubble-padding-y) var(--bubble-padding-x);
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+    border-radius: calc(var(--tick-width) * 2);
+    box-shadow: var(--shadow-bubble);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: $z-bubble;
+    will-change: left, transform, translate;
+    translate: clamp(
+            calc(-50% + ($tick-spacing * -2)),
+            -50%,
+            calc(-50% + ($tick-spacing * 2))
+    );
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translateX(-50%);
+      border-left:  var(--bubble-pointer-size) solid transparent;
+      border-right: var(--bubble-pointer-size) solid transparent;
+    }
+
+    /* Center value bubble (above) */
+    &.sliderCenterValueBubble {
+      min-width: var(--bubble-min-width-lg);
+      font-size: var(--bubble-font-size-lg);
+      background-color: $color-center-bubble-bg;
+      color: $color-center-bubble-text;
+      left: center-no-overlay();
+      bottom: calc(100% - var(--tick-width));
+      filter: var(--filter-drop-shadow-center);
+
+      &::after {
+        top: 100%;
+        border-top: var(--bubble-pointer-size) solid $color-center-bubble-bg;
+      }
+
+      &.sliderCenterCorrectBubble {
+        background-color: $color-center-correct-bubble-bg;
+        color: $color-center-correct-bubble-text;
+        &::after { border-top-color: $color-center-correct-bubble-bg; }
+      }
+    }
+
+    /* Lower/Upper + Bounds (below) */
+    &.sliderMinBoundsBubble,
+    &.sliderMaxBoundsBubble,
+    &.sliderLowerMarginBubble,
+    &.sliderUpperMarginBubble {
+      min-width: var(--bubble-min-width-sm);
+      font-size: var(--bubble-font-size-sm);
+      top: calc(100% - var(--tick-width));
+      filter: var(--filter-drop-shadow-margin);
+
+      &::after {
+        bottom: 100%;
+        border-bottom-width: var(--bubble-pointer-size);
+        border-bottom-style: solid;
+      }
+    }
+
+    /* Margin bubbles (orange) */
+    &.sliderMarginBubble {
+      background-color: $color-margin-bubble-bg;
+      color: $color-margin-bubble-text;
+
+      &::after { border-bottom-color: $color-margin-bubble-bg; }
+
+      &.sliderLowerMarginBubble { left: lower-anchor-left($overlay-width-total); }
+      &.sliderUpperMarginBubble { left: upper-anchor-left($overlay-width-total); }
+    }
+
+    /* Bounds bubbles (gray) */
+    &.sliderBoundsBubble {
+      background-color: $color-bounds-bubble-bg;
+      color: $color-bounds-bubble-text;
+
+      &::after { border-bottom-color: $color-bounds-bubble-bg; }
+
+      &.sliderMinBoundsBubble { left: $track-center-spacing; }
+      &.sliderMaxBoundsBubble { left: calc(100% - $track-center-spacing); }
+    }
+  }
+
+  /* Native input */
+  .sliderInput {
+    position: absolute;
+    inset: 0;
+    width: calc(100% - ($tick-spacing * 2));
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0 $tick-spacing;
+    padding: 0;
+    z-index: $z-input;
+    box-sizing: content-box;
+    border-radius: inherit;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--shadow-focus-ring-color);
+      border-radius: variables.$desktop-control-normal-border-radius;
+    }
+  }
+
+  .sliderInput::-webkit-slider-runnable-track,
+  .sliderInput::-moz-range-track {
+    background: transparent;
+    height: 100%;
+  }
+
+  .sliderInput::-webkit-slider-thumb,
+  .sliderInput::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--tick-width);
+    height: var(--tick-height);
+    background-color: $color-tick-selected;
+    border: none;
+    border-radius: $tick-radius;
+    cursor: pointer;
+  }
+}
