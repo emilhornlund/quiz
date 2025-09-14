@@ -1,5 +1,5 @@
 import {
-  calculateRangeMargin,
+  calculateRangeBounds,
   GameMode,
   GameParticipantType,
   MediaType,
@@ -47,62 +47,147 @@ import {
 } from './task.converter'
 
 describe('TaskConverter', () => {
-  describe('calculateRangeMargin', () => {
-    it('should return 5% of correct for Low margin', () => {
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.Low, 100)).toEqual(
-        5,
-      )
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.Low, 200)).toEqual(
-        10,
-      )
+  describe('calculateRangeBounds', () => {
+    describe('Core levels (5% / 10% / 20% of full range)', () => {
+      // min=0, max=100, step=2 ⇒ full range = 100
+      it('Low (5%) centered and snapped outward', () => {
+        // half-width = 5 → raw [45..55] → outward to [44..56]
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 50, 0, 100, 2),
+        ).toEqual({ lower: 44, upper: 56 })
+      })
+
+      it('Medium (10%) centered and snapped outward', () => {
+        // half-width = 10 → raw [40..60] → already on grid [40..60]
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Medium, 50, 0, 100, 2),
+        ).toEqual({ lower: 40, upper: 60 })
+      })
+
+      it('High (20%) centered and snapped outward', () => {
+        // half-width = 20 → raw [30..70] → already on grid [30..70]
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.High, 50, 0, 100, 2),
+        ).toEqual({ lower: 30, upper: 70 })
+      })
     })
 
-    it('should return 10% of correct for Medium margin', () => {
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.Medium, 100),
-      ).toEqual(10)
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.Medium, 200),
-      ).toEqual(20)
+    describe('Edge proximity & clamping', () => {
+      it('Clamps at min and still snaps outward', () => {
+        // Low (5%): half=5 → raw [-2..8] → floorToStep(-2)= -2 → clamp to 0, ceilToStep(8)=8
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 3, 0, 100, 2),
+        ).toEqual({ lower: 0, upper: 8 })
+      })
+
+      it('Clamps at max and still snaps outward', () => {
+        // Low (5%): half=5 → raw [93..103] → floorToStep(93)=92, ceilToStep(103)=104 → clamp to 100
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 98, 0, 100, 2),
+        ).toEqual({ lower: 92, upper: 100 })
+      })
     })
 
-    it('should return 20% of correct for High margin', () => {
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.High, 100)).toEqual(
-        20,
-      )
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.High, 200)).toEqual(
-        40,
-      )
+    describe('Special levels', () => {
+      it('Maximum returns the whole range regardless of correct', () => {
+        expect(
+          calculateRangeBounds(
+            QuestionRangeAnswerMargin.Maximum,
+            50,
+            0,
+            100,
+            2,
+          ),
+        ).toEqual({ lower: 0, upper: 100 })
+
+        // even if "correct" is outside, we still just accept the entire range
+        expect(
+          calculateRangeBounds(
+            QuestionRangeAnswerMargin.Maximum,
+            1_000,
+            0,
+            100,
+            2,
+          ),
+        ).toEqual({ lower: 0, upper: 100 })
+      })
+
+      it('None collapses around the nearest step and widens to the step grid', () => {
+        // correct=50 → nearest step 50
+        // provisional [49..51] → widen to grid: floor(49)=48, ceil(51)=52
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.None, 50, 0, 100, 2),
+        ).toEqual({ lower: 48, upper: 52 })
+      })
+
+      it('None near an edge widens sensibly on-grid', () => {
+        // correct=1 → snap to step: 2
+        // provisional [1..3] → widen to grid: [0..4]
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.None, 1, 0, 100, 2),
+        ).toEqual({ lower: 0, upper: 4 })
+      })
     })
 
-    it('should return Number.MAX_VALUE for Maximum margin', () => {
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.Maximum, 100),
-      ).toEqual(Number.MAX_VALUE)
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.Maximum, 200),
-      ).toEqual(Number.MAX_VALUE)
+    describe('Step behavior', () => {
+      it('Handles non-integer steps', () => {
+        // Low (5%): half=5 → raw [45..55]
+        // step=2.5 → outward: floor(45)=45, ceil(55)=55 → on grid already
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 50, 0, 100, 2.5),
+        ).toEqual({ lower: 45, upper: 55 })
+      })
+
+      it('Falls back when step <= 0 (uses full range as step size)', () => {
+        // Low (5%): half=5 → raw [45..55]
+        // fallback step=range=100 → outward → [0..100]
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 50, 0, 100, 0),
+        ).toEqual({ lower: 0, upper: 100 })
+        expect(
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 50, 0, 100, -3),
+        ).toEqual({ lower: 0, upper: 100 })
+      })
     })
 
-    it('should return 0 for None margin', () => {
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.None, 100)).toEqual(
-        0,
-      )
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.None, 200)).toEqual(
-        0,
-      )
-    })
+    describe('Validation', () => {
+      it('Throws for invalid min/max', () => {
+        expect(() =>
+          calculateRangeBounds(QuestionRangeAnswerMargin.Low, 50, 10, 0, 2),
+        ).toThrow(/Invalid min\/max/i)
+        expect(() =>
+          calculateRangeBounds(
+            QuestionRangeAnswerMargin.Low,
+            50,
+            Number.NaN,
+            100,
+            2,
+          ),
+        ).toThrow(/Invalid min\/max/i)
+        expect(() =>
+          calculateRangeBounds(
+            QuestionRangeAnswerMargin.Low,
+            50,
+            0,
+            Number.NaN,
+            2,
+          ),
+        ).toThrow(/Invalid min\/max/i)
+      })
 
-    it('should handle negative correct values by using absolute value', () => {
-      expect(calculateRangeMargin(QuestionRangeAnswerMargin.Low, -100)).toEqual(
-        5,
-      )
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.Medium, -200),
-      ).toEqual(20)
-      expect(
-        calculateRangeMargin(QuestionRangeAnswerMargin.High, -300),
-      ).toEqual(60)
+      it('Gracefully handles zero range (min === max)', () => {
+        // With zero range, None returns a tiny snapped interval around the single point
+        // Implementation ensures at least one "step" wide or clamps to [min,max]
+        const result = calculateRangeBounds(
+          QuestionRangeAnswerMargin.None,
+          5,
+          5,
+          5,
+          2,
+        )
+        expect(result.lower).toBeLessThanOrEqual(5)
+        expect(result.upper).toBeGreaterThanOrEqual(5)
+      })
     })
   })
 
@@ -167,6 +252,13 @@ describe('TaskConverter', () => {
 
     describe('QuestionType is Range', () => {
       it('should validate range questions with exact match for None margin', () => {
+        const range = {
+          margin: QuestionRangeAnswerMargin.None,
+          min: 0,
+          max: 100,
+          step: 2,
+        }
+
         const answer = {
           type: QuestionType.Range,
           answer: 100,
@@ -175,6 +267,7 @@ describe('TaskConverter', () => {
           isQuestionAnswerCorrect(
             [{ type: QuestionType.Range, value: 100 }],
             answer,
+            range,
           ),
         ).toBe(true)
 
@@ -186,149 +279,178 @@ describe('TaskConverter', () => {
           isQuestionAnswerCorrect(
             [{ type: QuestionType.Range, value: 100 }],
             wrongAnswer,
+            range,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within Low margin', () => {
+        const range = {
+          margin: QuestionRangeAnswerMargin.Low,
+          min: 0,
+          max: 100,
+          step: 2,
+        }
+
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 95,
+              answer: 44,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 5% margin
-            QuestionRangeAnswerMargin.Low,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 105,
+              answer: 56,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 5% margin
-            QuestionRangeAnswerMargin.Low,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 94,
+              answer: 43,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 5% margin
-            QuestionRangeAnswerMargin.Low,
+            range,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 106,
+              answer: 57,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 5% margin
-            QuestionRangeAnswerMargin.Low,
+            range,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within Medium margin', () => {
+        const range = {
+          margin: QuestionRangeAnswerMargin.Medium,
+          min: 0,
+          max: 100,
+          step: 2,
+        }
+
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 90,
+              answer: 40,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 10% margin
-            QuestionRangeAnswerMargin.Medium,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 110,
+              answer: 60,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 10% margin
-            QuestionRangeAnswerMargin.Medium,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 89,
+              answer: 39,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 10% margin
-            QuestionRangeAnswerMargin.Medium,
+            range,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 111,
+              answer: 61,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 10% margin
-            QuestionRangeAnswerMargin.Medium,
+            range,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within High margin', () => {
+        const range = {
+          margin: QuestionRangeAnswerMargin.High,
+          min: 0,
+          max: 100,
+          step: 2,
+        }
+
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 80,
+              answer: 30,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 20% margin
-            QuestionRangeAnswerMargin.High,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 120,
+              answer: 70,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within 20% margin
-            QuestionRangeAnswerMargin.High,
+            range,
           ),
         ).toBe(true)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 79,
+              answer: 29,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 20% margin
-            QuestionRangeAnswerMargin.High,
+            range,
           ),
         ).toBe(false)
 
         expect(
           isQuestionAnswerCorrect(
-            [{ type: QuestionType.Range, value: 100 }],
+            [{ type: QuestionType.Range, value: 50 }],
             {
               type: QuestionType.Range,
-              answer: 121,
+              answer: 71,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Outside 20% margin
-            QuestionRangeAnswerMargin.High,
+            range,
           ),
         ).toBe(false)
       })
 
       it('should validate range questions within Maximum margin', () => {
+        const range = {
+          margin: QuestionRangeAnswerMargin.Maximum,
+          min: 0,
+          max: 100,
+          step: 2,
+        }
+
         expect(
           isQuestionAnswerCorrect(
             [{ type: QuestionType.Range, value: 100 }],
@@ -336,7 +458,7 @@ describe('TaskConverter', () => {
               type: QuestionType.Range,
               answer: 0,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within maximum margin
-            QuestionRangeAnswerMargin.Maximum,
+            range,
           ),
         ).toBe(true)
 
@@ -347,7 +469,7 @@ describe('TaskConverter', () => {
               type: QuestionType.Range,
               answer: 100,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer, // Within maximum margin
-            QuestionRangeAnswerMargin.Maximum,
+            range,
           ),
         ).toBe(true)
       })
@@ -360,7 +482,12 @@ describe('TaskConverter', () => {
               type: QuestionType.Range,
               answer: undefined,
             } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
-            QuestionRangeAnswerMargin.None,
+            {
+              margin: QuestionRangeAnswerMargin.None,
+              min: 0,
+              max: 100,
+              step: 2,
+            },
           ),
         ).toBe(false)
 
@@ -888,15 +1015,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 100,
+        answer: 50,
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -914,15 +1044,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 100,
+        answer: 50,
         created: new Date(presented.getTime() + 25000), // Answered in 25 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -940,15 +1073,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 110,
+        answer: 60,
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -966,15 +1102,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 115,
+        answer: 61,
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -992,15 +1131,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Maximum,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 500,
+        answer: 100,
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -1010,7 +1152,7 @@ describe('TaskConverter', () => {
         question,
         answer,
       )
-      expect(score).toEqual(983)
+      expect(score).toEqual(183)
     })
 
     it('should handle exact matches for None margin', () => {
@@ -1044,15 +1186,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 100,
+        answer: 50,
         created: new Date(presented.getTime() + 30000), // Answered in 30 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -1337,15 +1482,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 100,
+        answer: 50,
         created: new Date(presented.getTime() + 5000), // Answered in 5 seconds
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -1382,15 +1530,18 @@ describe('TaskConverter', () => {
 
       const question = {
         type: QuestionType.Range,
-        correct: 100,
+        correct: 50,
         margin: QuestionRangeAnswerMargin.Medium,
+        min: 0,
+        max: 100,
+        step: 2,
         points: 1000,
         duration: 30,
       } as BaseQuestionDao & QuestionRangeDao
 
       const answer = {
         type: QuestionType.Range,
-        answer: 200,
+        answer: 61,
         created: new Date(presented.getTime() + 5000),
       } as QuestionTaskBaseAnswer & QuestionTaskRangeAnswer
 
@@ -1899,7 +2050,7 @@ describe('TaskConverter', () => {
             min: 0,
             max: 100,
             margin: QuestionRangeAnswerMargin.Medium,
-            step: 1,
+            step: 2,
             correct: 50,
             points: 1000,
             duration: 30,
@@ -1916,13 +2067,13 @@ describe('TaskConverter', () => {
             type: QuestionType.Range,
             playerId: PARTICIPANT_PLAYER_ID_02,
             created: offset(4),
-            answer: 40,
+            answer: 39,
           },
           {
             type: QuestionType.Range,
             playerId: PARTICIPANT_PLAYER_ID_03,
             created: offset(5),
-            answer: 60,
+            answer: 61,
           },
         ],
       )
@@ -1953,7 +2104,7 @@ describe('TaskConverter', () => {
             type: QuestionType.Range,
             playerId: PARTICIPANT_PLAYER_ID_02,
             answer: {
-              answer: 40,
+              answer: 39,
               created: offset(4),
               playerId: PARTICIPANT_PLAYER_ID_02,
               type: QuestionType.Range,
@@ -1968,7 +2119,7 @@ describe('TaskConverter', () => {
             type: QuestionType.Range,
             playerId: PARTICIPANT_PLAYER_ID_03,
             answer: {
-              answer: 60,
+              answer: 61,
               created: offset(5),
               playerId: PARTICIPANT_PLAYER_ID_03,
               type: QuestionType.Range,

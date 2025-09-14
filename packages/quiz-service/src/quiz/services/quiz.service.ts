@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import {
+  calculateRangeStep,
   GameMode,
   LanguageCode,
   PaginatedQuizResponseDto,
@@ -35,8 +36,6 @@ import {
   QuestionTypeAnswerDao,
   Quiz,
 } from '../repositories/models/schemas'
-
-import { calculateRangeStep } from './utils'
 
 /**
  * Service for managing quiz-related operations.
