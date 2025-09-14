@@ -1,5 +1,6 @@
 import {
-  calculateRangeMargin,
+  calculateRangeBounds,
+  calculateRangeStep,
   QuestionMultiChoiceDto,
   QuestionPinDto,
   QuestionPuzzleDto,
@@ -86,9 +87,13 @@ export const ClassicRangeQuestionForm: FC<
       return `All answers within the range ${min}–${max} will be accepted as correct.`
     }
 
-    const marginValue = calculateRangeMargin(margin, correct)
-    const lowerBound = Math.floor(Math.max(min, correct - marginValue))
-    const upperBound = Math.ceil(Math.min(max, correct + marginValue))
+    const { lower: lowerBound, upper: upperBound } = calculateRangeBounds(
+      margin,
+      correct,
+      min,
+      max,
+      calculateRangeStep(min, max),
+    )
 
     return `Answers between ${lowerBound} and ${upperBound} will be considered correct.`
   }, [data])

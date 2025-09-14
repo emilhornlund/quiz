@@ -1,4 +1,4 @@
-import { calculateRangeStep } from './question.utils'
+import { calculateRangeStep } from '@quiz/common'
 
 describe('Question Utils', () => {
   describe('calculateRangeStep', () => {

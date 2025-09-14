@@ -1,5 +1,5 @@
 import {
-  calculateRangeMargin,
+  calculateRangeBounds,
   GameMode,
   GameParticipantType,
   QUESTION_PIN_TOLERANCE_RADIUS,
@@ -193,14 +193,19 @@ export function calculateDistanceNorm(
  *
  * @param correctAnswers - An array of correct answers for the current question.
  * @param answer - The player's submitted answer.
- * @param margin - Optional margin for range-type questions.
+ * @param rangeData - description here (optional)
  * @param tolerance - Optional allowed distance preset for Pin questions.
  * @returns `true` if the answer is correct; otherwise `false`.
  */
 export function isQuestionAnswerCorrect(
   correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer?: QuestionTaskAnswer,
-  margin?: QuestionRangeAnswerMargin,
+  rangeData?: {
+    margin: QuestionRangeAnswerMargin
+    min: number
+    max: number
+    step: number
+  },
   tolerance?: QuestionPinTolerance,
 ): boolean {
   if (isMultiChoiceAnswer(answer)) {
@@ -209,13 +214,20 @@ export function isQuestionAnswerCorrect(
       .some((correctAnswer) => correctAnswer.index === answer.answer)
   }
 
-  if (isRangeAnswer(answer)) {
+  if (isRangeAnswer(answer) && rangeData) {
     return correctAnswers.filter(isRangeCorrectAnswer).some(({ value }) => {
-      if (!margin || margin === QuestionRangeAnswerMargin.None) {
+      const { margin, min, max, step } = rangeData
+      if (margin === QuestionRangeAnswerMargin.None) {
         return value === answer.answer
       }
-      const rangeMargin = calculateRangeMargin(margin, value)
-      return Math.abs(value - answer.answer) <= rangeMargin
+      const { lower, upper } = calculateRangeBounds(
+        margin,
+        value,
+        min,
+        max,
+        step,
+      )
+      return answer.answer >= lower && answer.answer <= upper
     })
   }
 
@@ -343,11 +355,13 @@ export function calculateClassicModeRangeQuestionScore(
   question: BaseQuestionDao & QuestionRangeDao,
   answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
 ): number {
-  const { margin, points } = question
+  const { margin, min, max, step, points } = question
   const { answer: userAnswer } = answer
 
   // If the answer is not correct based on the question logic, return 0
-  if (!isQuestionAnswerCorrect(correctAnswers, answer, margin)) {
+  if (
+    !isQuestionAnswerCorrect(correctAnswers, answer, { margin, min, max, step })
+  ) {
     return 0
   }
 
@@ -364,11 +378,27 @@ export function calculateClassicModeRangeQuestionScore(
     .filter(isRangeCorrectAnswer)
     .map(({ value }) => {
       // For other margins, calculate precision-based score (80%)
-      const difference = Math.abs(value - userAnswer)
-      const rangeMargin = calculateRangeMargin(margin, value)
+      const { lower, upper } = calculateRangeBounds(
+        margin,
+        value,
+        min,
+        max,
+        step,
+      )
 
+      // distance from the correct value
+      const difference = Math.abs(value - userAnswer)
+
+      // use the larger side in case bounds are asymmetric near edges
+      const radius = Math.max(value - lower, upper - value)
+
+      // precision: 1 at the center, 0 at/ beyond the edge
       const precisionMultiplier =
-        difference > rangeMargin ? 0 : 1 - difference / rangeMargin
+        radius > 0
+          ? Math.max(0, 1 - difference / radius)
+          : userAnswer === value
+            ? 1
+            : 0
 
       const precisionScore = points * precisionMultiplier * 0.8
 
@@ -785,13 +815,20 @@ function buildQuestionResultTaskItem(
 
   const { type } = question
 
-  const margin = isRangeQuestion(question) ? question.margin : undefined
+  const rangeData = isRangeQuestion(question)
+    ? {
+        margin: question.margin,
+        min: question.min,
+        max: question.max,
+        step: question.step,
+      }
+    : undefined
   const tolerance = isPinQuestion(question) ? question.tolerance : undefined
 
   const correct = isQuestionAnswerCorrect(
     correctAnswers,
     answer,
-    margin,
+    rangeData,
     tolerance,
   )
 
