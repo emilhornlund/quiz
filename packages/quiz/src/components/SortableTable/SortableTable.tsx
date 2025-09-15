@@ -101,10 +101,14 @@ const SortableTable: FC<SortableTableProps> = ({
   }, [values])
 
   const sensors = useSensors(
-    useSensor(TouchSensor),
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { distance: 5 },
     }),
   )
 
