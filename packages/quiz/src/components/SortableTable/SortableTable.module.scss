@@ -58,6 +58,8 @@
     }
 
     &.draggable {
+      touch-action: none;
+
       &:hover {
         cursor: grab;
       }
