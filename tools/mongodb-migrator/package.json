@@ -13,7 +13,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "devDependencies": {
-    "@types/node": "^24.4.0"
+    "@types/node": "^24.5.2"
   },
   "dependencies": {
     "bson": "^6.10.4",
