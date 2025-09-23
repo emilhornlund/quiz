@@ -9,7 +9,7 @@ import {
   floorToStep,
   snapToStep,
   snapToStepInside,
-} from './range.helper'
+} from './range.utils'
 
 describe('range.helper', () => {
   describe('clamp', () => {
