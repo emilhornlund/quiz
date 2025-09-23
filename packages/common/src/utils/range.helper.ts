@@ -44,13 +44,8 @@ export function calculateRangeBounds(
     return { lower: min, upper: max }
   }
   if (margin === QuestionRangeAnswerMargin.None || range === 0) {
-    // Snap `correct` to the grid and clamp
-    const snapped = snapToStep(correct, min, s)
-    const clamped = clamp(snapped, min, max)
-    // Ensure at least one step wide so there's a sensible interval
-    const lower = clamp(clamped - s / 2, min, max)
-    const upper = clamp(clamped + s / 2, min, max)
-    return widenToStepGrid({ lower, upper }, min, max, s)
+    const gridValue = snapToStepInside(correct, min, max, s)
+    return { lower: gridValue, upper: gridValue }
   }
 
   // Map levels to percentages of the FULL range
@@ -126,7 +121,7 @@ export function calculateRangeStep(
  *
  * @returns The clamped value within the interval `[a, b]`.
  */
-function clamp(x: number, a: number, b: number): number {
+export function clamp(x: number, a: number, b: number): number {
   return Math.max(a, Math.min(b, x))
 }
 
@@ -140,7 +135,7 @@ function clamp(x: number, a: number, b: number): number {
  *
  * @returns The largest multiple of `step` ≥ `min` and ≤ `x`.
  */
-function floorToStep(x: number, min: number, step: number): number {
+export function floorToStep(x: number, min: number, step: number): number {
   return Math.floor((x - min) / step) * step + min
 }
 
@@ -154,7 +149,7 @@ function floorToStep(x: number, min: number, step: number): number {
  *
  * @returns The smallest multiple of `step` ≥ `x`.
  */
-function ceilToStep(x: number, min: number, step: number): number {
+export function ceilToStep(x: number, min: number, step: number): number {
   return Math.ceil((x - min) / step) * step + min
 }
 
@@ -168,7 +163,7 @@ function ceilToStep(x: number, min: number, step: number): number {
  *
  * @returns The closest multiple of `step` relative to `min`.
  */
-function snapToStep(x: number, min: number, step: number): number {
+export function snapToStep(x: number, min: number, step: number): number {
   return Math.round((x - min) / step) * step + min
 }
 
@@ -186,7 +181,7 @@ function snapToStep(x: number, min: number, step: number): number {
  *
  * @returns A widened interval that spans at least one step.
  */
-function ensureAtLeastOneStep(
+export function ensureAtLeastOneStep(
   b: { lower: number; upper: number },
   min: number,
   max: number,
@@ -199,26 +194,70 @@ function ensureAtLeastOneStep(
 }
 
 /**
- * Widens an interval so that both bounds align with the step grid.
+ * Choose the nearest step-grid value to `x` that lies **inside** `[min, max]`.
  *
- * - The lower bound is floored to the nearest step from `min`.
- * - The upper bound is ceiled to the nearest step from `min`.
+ * Prefers the closest candidate; on ties, chooses the lower one (stable).
+ * The grid is anchored at `min` with step `step`. If neither neighbor around `x`
+ * lies inside the range, the nearest endpoint grid (either `min` or `min + N*step`)
+ * is returned. Invalid inputs or non-positive `step` fall back to `clamp(x, min, max)`.
  *
- * @param b - The current interval with `lower` and `upper` bounds.
+ * @param x - The value to snap.
  * @param min - The minimum anchor point of the range.
  * @param max - The maximum anchor point of the range.
- * @param step - The step size to align to.
+ * @param step - The step size used for the grid.
  *
- * @returns An interval expanded outward to the nearest step grid.
+ * @returns The nearest in-range grid value.
+ *
+ * @example
+ * // Grid: 0, 4, 8, 12; only {0,4,8,10}∩grid inside [0,10] are {0,4,8}
+ * snapToStepInside(10, 0, 10, 4) // → 8
+ *
+ * @example
+ * snapToStepInside(50.9, 0, 100, 2) // → 50
  */
-function widenToStepGrid(
-  b: { lower: number; upper: number },
+export function snapToStepInside(
+  x: number,
   min: number,
   max: number,
   step: number,
-): { lower: number; upper: number } {
-  return {
-    lower: floorToStep(b.lower, min, step),
-    upper: ceilToStep(b.upper, min, step),
+): number {
+  if (!Number.isFinite(min) || !Number.isFinite(max) || max < min) {
+    return clamp(x, min, max)
   }
+  const s = Number(step)
+  if (!(s > 0)) return clamp(x, min, max)
+
+  const span = max - min
+  const N = Math.floor(span / s) // number of steps available from min
+  const gridAt = (n: number) => min + n * s
+
+  if (N <= 0) {
+    // No full step fits; the only in-range grid candidate is min itself
+    return min
+  }
+
+  // Compute the floating index of x on the min-anchored grid
+  const nFloat = (x - min) / s
+  const nDown = Math.floor(nFloat)
+  const nUp = nDown + 1
+
+  const candidates: number[] = []
+  if (nDown >= 0 && nDown <= N) candidates.push(gridAt(nDown))
+  if (nUp >= 0 && nUp <= N && nUp !== nDown) candidates.push(gridAt(nUp))
+
+  if (candidates.length === 0) {
+    // Neither neighbor lies inside. Choose the nearest endpoint grid (min or maxGrid).
+    const minGrid = gridAt(0)
+    const maxGrid = gridAt(N)
+    return Math.abs(x - minGrid) <= Math.abs(x - maxGrid) ? minGrid : maxGrid
+  }
+
+  if (candidates.length === 1) return candidates[0]
+
+  // Two candidates inside; choose nearest, tie-break to lower value (stable)
+  const [a, b] = candidates
+  const da = Math.abs(a - x)
+  const db = Math.abs(b - x)
+  if (da === db) return Math.min(a, b)
+  return da < db ? a : b
 }

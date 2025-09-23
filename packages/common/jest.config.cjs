@@ -3,17 +3,17 @@
 module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
-  testRegex: '.*\\.(e2e-)?spec\\.ts$',
+  testRegex: '.*\\.spec\\.ts$',
   transform: {
-    '^.+\\.(t|j)s$': 'ts-jest',
+    '^.+\\.(t|j)s$': [
+      'ts-jest',
+      { tsconfig: '<rootDir>/../tsconfig.test.json' },
+    ],
   },
-  moduleNameMapper: {
-    '^@quiz/common(.*)$': '<rootDir>/../../common/src$1',
-  },
-  collectCoverageFrom: ['**/*.{ts,js}', '!**/*.(e2e-)?spec.{ts,js}'],
+  collectCoverageFrom: ['**/*.{ts,js}', '!**/*.spec.{ts,js}'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  transformIgnorePatterns: ['/node_modules/(?!(@quiz/common|uuid)/)'],
+  transformIgnorePatterns: [],
   detectOpenHandles: true,
   forceExit: true,
   maxWorkers: 1,
