@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   build-test:
@@ -45,23 +46,50 @@ jobs:
       - name: Test & Coverage
         run: yarn test:coverage
 
+      - name: Docker compose down
+        if: always()
+        run: docker compose down -v
+
       - name: Upload Klurigo artifacts for Sentry
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
           name: klurigo-sentry-artifacts
           path: packages/quiz/dist/assets/**/*.map
 
       - name: Upload Klurigo Service artifacts for Sentry
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
           name: klurigo-service-sentry-artifacts
           path: packages/quiz-service/dist/**/*.map
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage (common)
         uses: codecov/codecov-action@v5
         with:
-          files: ./packages/common/coverage/lcov.info,./packages/quiz/coverage/lcov.info,./packages/quiz-service/coverage/lcov.info
+          files: ./packages/common/coverage/lcov.info
+          flags: common
+          name: common
+          disable_search: true
+          fail_ci_if_error: true
+          verbose: true
 
-      - name: Docker compose down
-        if: always()
-        run: docker compose down -v
+      - name: Upload coverage (quiz)
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./packages/quiz/coverage/lcov.info
+          flags: quiz
+          name: quiz
+          disable_search: true
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload coverage (quiz-service)
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./packages/quiz-service/coverage/lcov.info
+          flags: quiz-service
+          name: quiz-service
+          disable_search: true
+          fail_ci_if_error: true
+          verbose: true
