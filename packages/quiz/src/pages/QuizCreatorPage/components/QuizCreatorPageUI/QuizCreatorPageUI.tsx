@@ -17,7 +17,7 @@ import { Button, Page, TextField } from '../../../../components'
 import {
   DeviceType,
   useDeviceSizeType,
-} from '../../../../utils/use-device-size.tsx'
+} from '../../../../utils/useDeviceSizeType'
 import {
   QuestionData,
   QuestionValueChangeFunction,

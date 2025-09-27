@@ -6,8 +6,8 @@
  */
 export const classNames = (...classes: (string | null | undefined)[]) => {
   return classes
-    .filter((value) => !!value)
-    .map((value) => value!.trim())
+    .map((value) => value?.trim())
+    .filter((value) => !!value?.length)
     .join(' ')
 }
 

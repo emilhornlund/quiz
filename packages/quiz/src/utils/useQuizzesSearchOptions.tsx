@@ -11,6 +11,12 @@ import { useSearchParams } from 'react-router-dom'
 type Sort = 'title' | 'created' | 'updated'
 type Order = 'asc' | 'desc'
 
+/**
+ * Options for listing/profile quiz searches parsed from the URL query string.
+ *
+ * - Optional text, enum filters, and sort/order are `undefined` when not present or invalid.
+ * - `limit` and `offset` always resolve to finite numbers (with sensible fallbacks).
+ */
 export type ProfileQuizzesOptions = {
   search?: string
   visibility?: QuizVisibility
@@ -23,11 +29,18 @@ export type ProfileQuizzesOptions = {
   offset: number
 }
 
+/**
+ * Parses a string into a finite number, or returns `fallback` if parsing fails.
+ */
 const parseNumber = (v: string | null, fallback: number) => {
   const n = v ? Number(v) : NaN
   return Number.isFinite(n) ? n : fallback
 }
 
+/**
+ * Parses a string into a member of a string enum (or union-like record).
+ * Returns `undefined` when the string is missing or not part of the enum values.
+ */
 const parseEnum = <T extends string>(
   enumObj: Record<string, string>,
   v: string | null,
@@ -37,6 +50,18 @@ const parseEnum = <T extends string>(
   return values.includes(v) ? (v as T) : undefined
 }
 
+/**
+ * React hook that synchronizes quiz list filters with the URL query string.
+ *
+ * Reads the current `URLSearchParams` and exposes:
+ * - `options`: a normalized `ProfileQuizzesOptions` object derived from the URL.
+ * - `setOptions(patch)`: merges a partial update into the current options and writes a clean query string.
+ *
+ * Behavior:
+ * - Omits `undefined`/empty values to keep the URL minimal.
+ * - Uses sane defaults for pagination (`limit`: `DEFAULT_QUIZ_PAGINATION_LIMIT`, `offset`: `0`).
+ * - Ignores invalid enum values (they become `undefined`).
+ */
 export function useQuizzesSearchOptions() {
   const [searchParams, setSearchParams] = useSearchParams()
 

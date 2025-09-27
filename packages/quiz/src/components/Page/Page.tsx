@@ -13,7 +13,7 @@ import Bars from '../../assets/images/bars.svg'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import { useAuthContext } from '../../context/auth'
 import { classNames } from '../../utils/helpers'
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import { Menu, MenuItem, MenuSeparator } from '../Menu'
 
 import styles from './Page.module.scss'
