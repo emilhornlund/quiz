@@ -4,6 +4,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import config from '../config.ts'
 
+/**
+ * Connection lifecycle statuses for the EventSource stream.
+ *
+ * - `INITIALIZED`: Hook is set up or reconnect has just started.
+ * - `CONNECTED`: The SSE connection is open.
+ * - `RECONNECTING`: A transient error occurred; an automatic retry is scheduled.
+ * - `RECONNECTING_FAILED`: Retries exhausted; no further attempts will be made.
+ */
 export enum ConnectionStatus {
   INITIALIZED = 'INITIALIZED',
   CONNECTED = 'CONNECTED',
@@ -11,6 +19,21 @@ export enum ConnectionStatus {
   RECONNECTING_FAILED = 'RECONNECTING_FAILED',
 }
 
+/**
+ * Subscribes to server-sent events (SSE) for a given game and token, returning
+ * the most recent **non-heartbeat** `GameEvent` and the current connection status.
+ *
+ * Behavior:
+ * - Opens an `EventSource` to: `${config.quizServiceUrl}/games/${gameID}/events`.
+ * - Sends `Authorization: Bearer <token>` via headers (using `EventSourcePolyfill`).
+ * - Filters out `GameEventType.GameHeartbeat` messages (they do not update `gameEvent`).
+ * - On error, retries with exponential backoff (1s, 2s, 4s, ... capped at 30s) up to 10 attempts.
+ * - Cleans up the EventSource on unmount and when `gameID`/`token` change.
+ *
+ * @param gameID Game identifier to subscribe to (required to connect).
+ * @param token  Bearer token for authentication (required to connect).
+ * @returns A tuple: `[latestNonHeartbeatEvent, connectionStatus]`.
+ */
 export const useEventSource = (
   gameID?: string,
   token?: string,

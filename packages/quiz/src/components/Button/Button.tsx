@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useMemo } from 'react'
 
 import { classNames } from '../../utils/helpers'
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
 
 import styles from './Button.module.scss'
 

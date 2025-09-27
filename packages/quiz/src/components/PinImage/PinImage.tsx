@@ -14,7 +14,7 @@ import React, {
   useState,
 } from 'react'
 
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import ResponsiveImage, { ResponsiveImageProps } from '../ResponsiveImage'
 
 import { clamp01 } from './pin-utils.ts'

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
 
 import styles from './SegmentedControl.module.scss'
 

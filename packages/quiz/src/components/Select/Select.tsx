@@ -14,7 +14,7 @@ import React, {
 } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
-import { DeviceType, useDeviceSizeType } from '../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import { isCallbackValid } from '../../utils/validation.ts'
 
 import styles from './Select.module.scss'

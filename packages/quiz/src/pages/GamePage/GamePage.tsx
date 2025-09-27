@@ -31,7 +31,7 @@ import {
 import {
   ConnectionStatus,
   useEventSource,
-} from '../../utils/use-event-source.tsx'
+} from '../../utils/useEventSource.tsx'
 
 import styles from './GamePage.module.scss'
 

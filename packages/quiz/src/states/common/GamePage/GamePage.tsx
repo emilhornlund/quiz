@@ -3,10 +3,7 @@ import React, { FC } from 'react'
 
 import { Button, Page, PageProps } from '../../../components'
 import { useGameContext } from '../../../context/game'
-import {
-  DeviceType,
-  useDeviceSizeType,
-} from '../../../utils/use-device-size.tsx'
+import { DeviceType, useDeviceSizeType } from '../../../utils/useDeviceSizeType'
 
 const GamePage: FC<PageProps> = ({ header, children, ...rest }) => {
   const { isFullscreenActive, toggleFullscreen } = useGameContext()
