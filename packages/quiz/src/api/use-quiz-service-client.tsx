@@ -42,7 +42,7 @@ import {
   parseQueryParams,
   parseResponseAndHandleError,
   resolveUrl,
-} from './api-utils.ts'
+} from './api.utils'
 
 /**
  * Options that control how authenticated requests are performed.

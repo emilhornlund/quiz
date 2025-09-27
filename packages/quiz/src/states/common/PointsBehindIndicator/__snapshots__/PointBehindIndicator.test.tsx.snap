@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PointBehindIndicator > renders another set of props and matches snapshot 1`] = `
+<div>
+  <div
+    class="pointsBehindIndicator"
+  >
+    <strong>
+      1
+    </strong>
+     points behind 
+    <strong>
+      Bob the Builder
+    </strong>
+  </div>
+</div>
+`;
+
+exports[`PointBehindIndicator > renders points and nickname with strong emphasis 1`] = `
+<div
+  class="pointsBehindIndicator"
+>
+  <strong>
+    12
+  </strong>
+   points behind 
+  <strong>
+    Alice
+  </strong>
+</div>
+`;

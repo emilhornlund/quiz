@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { isTokenExpired } from '../../api/api-utils.ts'
+import { isTokenExpired } from '../../api/api.utils'
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
 import {
