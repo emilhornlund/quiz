@@ -1,12 +1,28 @@
 import { GameEventType } from '@quiz/common'
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+const h = vi.hoisted(() => ({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
+}))
+
+vi.mock('../../context/game', () => ({
+  useGameContext: () => ({
+    completeTask: h.completeTask,
+  }),
+}))
 
 import HostPodiumState from './HostPodiumState'
 
 describe('HostPodiumState', () => {
+  beforeEach(() => {
+    h.completeTask.mockClear()
+  })
+
   it('should render HostPodiumState', async () => {
     const { container } = render(
       <MemoryRouter>
@@ -49,6 +65,74 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
+    expect(container).toMatchSnapshot()
+  })
+
+  it('renders subtitle and leaderboard entries', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <HostPodiumState
+          event={{
+            type: GameEventType.GamePodiumHost,
+            leaderboard: [
+              { position: 1, nickname: 'Alpha', score: 100 },
+              { position: 2, nickname: 'Beta', score: 90 },
+              { position: 3, nickname: 'Gamma', score: 80 },
+            ],
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Podium')).toBeInTheDocument()
+    expect(screen.getByText('Alpha')).toBeInTheDocument()
+    expect(screen.getByText('Beta')).toBeInTheDocument()
+    expect(screen.getByText('Gamma')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
+
+  it('clicks Quit and calls completeTask', async () => {
+    const { container } = render(
+      <MemoryRouter>
+        <HostPodiumState
+          event={{
+            type: GameEventType.GamePodiumHost,
+            leaderboard: [
+              { position: 1, nickname: 'Alpha', score: 100 },
+              { position: 2, nickname: 'Beta', score: 90 },
+              { position: 3, nickname: 'Gamma', score: 80 },
+            ],
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    const quit = container.querySelector('#skip-button') as HTMLButtonElement
+    fireEvent.click(quit)
+    expect(h.completeTask).toHaveBeenCalledTimes(1)
+    expect(container).toMatchSnapshot()
+  })
+
+  it('clicks Quit when completeTask is undefined', async () => {
+    // @ts-expect-error undefined
+    h.completeTask = undefined
+    const { container } = render(
+      <MemoryRouter>
+        <HostPodiumState
+          event={{
+            type: GameEventType.GamePodiumHost,
+            leaderboard: [
+              { position: 1, nickname: 'Alpha', score: 100 },
+              { position: 2, nickname: 'Beta', score: 90 },
+              { position: 3, nickname: 'Gamma', score: 80 },
+            ],
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    const quit = container.querySelector('#skip-button') as HTMLButtonElement
+    fireEvent.click(quit)
     expect(container).toMatchSnapshot()
   })
 })

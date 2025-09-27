@@ -1,21 +1,68 @@
 import { GameEventType, QuestionPinTolerance, QuestionType } from '@quiz/common'
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+const h = vi.hoisted(() => ({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  addCorrectAnswer: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  deleteCorrectAnswer: vi.fn<[], Promise<void>>().mockResolvedValue(),
+}))
+
+vi.mock('../../context/game', () => ({
+  useGameContext: () => ({
+    completeTask: h.completeTask,
+    addCorrectAnswer: h.addCorrectAnswer,
+    deleteCorrectAnswer: h.deleteCorrectAnswer,
+  }),
+}))
 
 import HostResultState from './HostResultState'
 
+function escapeRe(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function findActionButtonForAnswer(answerText: string, actionWords: RegExp) {
+  const byAria = screen.queryByRole('button', {
+    name: new RegExp(`${actionWords.source}.*${escapeRe(answerText)}`, 'i'),
+  })
+  if (byAria) return byAria
+  const node = screen.getByText(new RegExp(escapeRe(answerText), 'i'))
+  const row =
+    node.closest('[role="row"]') ??
+    node.closest('li') ??
+    node.closest('tr') ??
+    node.closest('div') ??
+    node.parentElement
+  if (!row) return null
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const buttons = within(row).queryAllByRole('button')
+  return buttons[0] ?? null
+}
+
 describe('HostResultState', () => {
+  beforeEach(() => {
+    h.completeTask.mockClear()
+    h.addCorrectAnswer.mockClear()
+    h.deleteCorrectAnswer.mockClear()
+  })
+
   it('should render HostResultState with question type multi-choice and two answers', () => {
     const { container } = render(
       <MemoryRouter>
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -32,15 +79,15 @@ describe('HostResultState', () => {
                 { value: 'Pablo Picasso', count: 7, correct: false, index: 0 },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
     )
 
+    expect(
+      screen.getByText('Who painted The Starry Night?'),
+    ).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 
@@ -50,9 +97,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -76,10 +121,7 @@ describe('HostResultState', () => {
                 { value: 'Claude Monet', count: 5, correct: false, index: 0 },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -94,9 +136,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -122,10 +162,7 @@ describe('HostResultState', () => {
                 { value: 'Rembrandt', count: 3, correct: false, index: 0 },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -140,9 +177,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.Range,
               question:
@@ -162,10 +197,7 @@ describe('HostResultState', () => {
                 { value: 83, count: 1, correct: false },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -180,9 +212,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.TrueFalse,
               question: "Rabbits can't vomit?",
@@ -194,10 +224,7 @@ describe('HostResultState', () => {
                 { value: false, count: 6, correct: false },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -212,9 +239,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.TypeAnswer,
               question: 'Who painted the Mono Lisa?',
@@ -228,10 +253,7 @@ describe('HostResultState', () => {
                 { value: 'rembrandt', count: 1, correct: false },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -246,9 +268,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.Pin,
               question:
@@ -268,10 +288,7 @@ describe('HostResultState', () => {
                 { value: '0.60786,0.97867', count: 1, correct: false },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
@@ -286,9 +303,7 @@ describe('HostResultState', () => {
         <HostResultState
           event={{
             type: GameEventType.GameResultHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             question: {
               type: QuestionType.Puzzle,
               question:
@@ -315,15 +330,114 @@ describe('HostResultState', () => {
                 },
               ],
             },
-            pagination: {
-              current: 1,
-              total: 20,
-            },
+            pagination: { current: 1, total: 20 },
           }}
         />
       </MemoryRouter>,
     )
 
     expect(container).toMatchSnapshot()
+  })
+
+  it('clicks Next to initiate leaderboard task', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '999999' },
+            question: { type: QuestionType.TrueFalse, question: 'Proceed?' },
+            results: {
+              type: QuestionType.TrueFalse,
+              distribution: [
+                { value: true, count: 1, correct: true },
+                { value: false, count: 0, correct: false },
+              ],
+            },
+            pagination: { current: 3, total: 5 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    const next = container.querySelector('#next-button') as HTMLButtonElement
+    fireEvent.click(next)
+    expect(h.completeTask).toHaveBeenCalledTimes(1)
+    expect(container).toMatchSnapshot()
+  })
+  it('marks an incorrect option as correct via QuestionResults UI', async () => {
+    render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '123456' },
+            question: { type: QuestionType.MultiChoice, question: 'Q?' },
+            results: {
+              type: QuestionType.MultiChoice,
+              distribution: [
+                {
+                  value: 'Vincent van Gogh',
+                  count: 3,
+                  correct: true,
+                  index: 0,
+                },
+                { value: 'Pablo Picasso', count: 2, correct: false, index: 1 },
+              ],
+            },
+            pagination: { current: 1, total: 2 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    const btn = findActionButtonForAnswer(
+      'Pablo Picasso',
+      /(add|mark|set|correct)/i,
+    )
+    expect(btn).toBeTruthy()
+    fireEvent.click(btn as HTMLButtonElement)
+
+    expect(h.addCorrectAnswer).toHaveBeenCalledTimes(1)
+    const arg = h.addCorrectAnswer.mock.calls[0][0]
+    expect(arg).toBeTruthy()
+  })
+
+  it('removes an already-correct option via QuestionResults UI', async () => {
+    render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '123456' },
+            question: { type: QuestionType.MultiChoice, question: 'Q?' },
+            results: {
+              type: QuestionType.MultiChoice,
+              distribution: [
+                {
+                  value: 'Vincent van Gogh',
+                  count: 3,
+                  correct: true,
+                  index: 0,
+                },
+                { value: 'Pablo Picasso', count: 2, correct: false, index: 1 },
+              ],
+            },
+            pagination: { current: 1, total: 2 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    const btn = findActionButtonForAnswer(
+      'Vincent van Gogh',
+      /(remove|unset|unmark|delete)/i,
+    )
+    expect(btn).toBeTruthy()
+    fireEvent.click(btn as HTMLButtonElement)
+
+    expect(h.deleteCorrectAnswer).toHaveBeenCalledTimes(1)
+    const arg = h.deleteCorrectAnswer.mock.calls[0][0]
+    expect(arg).toBeTruthy()
   })
 })

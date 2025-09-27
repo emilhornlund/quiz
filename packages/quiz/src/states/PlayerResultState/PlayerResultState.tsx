@@ -11,7 +11,7 @@ import {
 } from '../../components'
 import { GamePage, PointsBehindIndicator } from '../common'
 
-import { getPositionMessage } from './messages.ts'
+import { getPositionMessage } from './message.utils.ts'
 import styles from './PlayerResultState.module.scss'
 
 export interface PlayerResultStateProps {
@@ -28,9 +28,10 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {
-  const message = useMemo(() => {
-    return getPositionMessage(position, correct)
-  }, [position, correct])
+  const message = useMemo(
+    () => getPositionMessage(position, correct),
+    [position, correct],
+  )
 
   return (
     <GamePage
