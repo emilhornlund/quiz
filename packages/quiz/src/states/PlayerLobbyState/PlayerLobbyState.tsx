@@ -14,11 +14,7 @@ import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
-const MESSAGES = [
-  'Get ready, the questions are coming! Sharpen your mind.',
-  'Hold tight! The challenge awaits. Are you ready to ace it?',
-  'A few moments before the fun begins. Get your thinking cap on!',
-]
+import { getMessage } from './message.utils.ts'
 
 export interface PlayerLobbyStateProps {
   event: GameLobbyPlayerEvent
@@ -50,10 +46,7 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
     }
   }
 
-  const message = useMemo(
-    () => MESSAGES[Math.floor(Math.random() * MESSAGES.length)],
-    [],
-  )
+  const message = useMemo(() => getMessage(), [])
 
   return (
     <>

@@ -1,4 +1,4 @@
-const POSITION_MESSAGES = {
+export const POSITION_MESSAGES = {
   1: {
     correct: [
       "You're on the podium! First place, and you nailed it!",

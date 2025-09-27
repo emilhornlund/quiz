@@ -1,4 +1,4 @@
-const POSITION_MESSAGES = {
+export const POSITION_MESSAGES = {
   1: [
     'You did it! First place and ultimate champion!',
     'What a performance! You claimed the top spot!',

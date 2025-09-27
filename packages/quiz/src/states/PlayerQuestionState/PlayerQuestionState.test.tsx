@@ -1,8 +1,20 @@
 import { GameEventType, MediaType, QuestionType } from '@quiz/common'
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+const h = vi.hoisted(() => ({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  submitQuestionAnswer: vi.fn<[], Promise<void>>().mockResolvedValue(),
+}))
+
+vi.mock('../../context/game', () => ({
+  useGameContext: () => ({
+    submitQuestionAnswer: h.submitQuestionAnswer,
+  }),
+}))
 
 import PlayerQuestionState from './PlayerQuestionState'
 
@@ -12,6 +24,7 @@ describe('PlayerQuestionState', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(now))
+    h.submitQuestionAnswer.mockClear()
   })
 
   afterEach(() => {
@@ -24,10 +37,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -51,7 +61,6 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
   })
 
@@ -61,10 +70,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -90,7 +96,6 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
   })
 
@@ -100,10 +105,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
@@ -131,7 +133,6 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
   })
 
@@ -141,10 +142,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.Range,
               question:
@@ -164,7 +162,6 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
   })
 
@@ -174,10 +171,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.TrueFalse,
               question: "Rabbits can't vomit?",
@@ -193,7 +187,6 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
   })
 
@@ -203,10 +196,7 @@ describe('PlayerQuestionState', () => {
         <PlayerQuestionState
           event={{
             type: GameEventType.GameQuestionPlayer,
-            player: {
-              nickname: 'FrostyBear',
-              score: { total: 10458 },
-            },
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
             question: {
               type: QuestionType.TypeAnswer,
               question: 'Who painted the Mono Lisa?',
@@ -222,7 +212,64 @@ describe('PlayerQuestionState', () => {
         />
       </MemoryRouter>,
     )
-
     expect(container).toMatchSnapshot()
+  })
+
+  it('submits answer when clicking an option (multi-choice)', async () => {
+    render(
+      <MemoryRouter>
+        <PlayerQuestionState
+          event={{
+            type: GameEventType.GameQuestionPlayer,
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
+            question: {
+              type: QuestionType.MultiChoice,
+              question: 'Who painted The Starry Night?',
+              answers: [
+                { value: 'Vincent van Gogh' },
+                { value: 'Pablo Picasso' },
+              ],
+              duration: 30,
+            },
+            countdown: {
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
+            },
+            pagination: { current: 1, total: 20 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+    fireEvent.click(screen.getByText('Vincent van Gogh'))
+    expect(h.submitQuestionAnswer).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not throw when submitQuestionAnswer is undefined', () => {
+    // @ts-expect-error undefined
+    h.submitQuestionAnswer = undefined
+    render(
+      <MemoryRouter>
+        <PlayerQuestionState
+          event={{
+            type: GameEventType.GameQuestionPlayer,
+            player: { nickname: 'FrostyBear', score: { total: 10458 } },
+            question: {
+              type: QuestionType.MultiChoice,
+              question: 'Pick one',
+              answers: [{ value: 'A' }, { value: 'B' }],
+              duration: 30,
+            },
+            countdown: {
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 60 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
+            },
+            pagination: { current: 1, total: 20 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+    fireEvent.click(screen.getByText('A'))
   })
 })

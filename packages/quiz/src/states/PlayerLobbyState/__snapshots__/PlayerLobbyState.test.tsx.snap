@@ -1,0 +1,663 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerLobbyState > confirms leave, calls leaveGame with participant id and navigates home 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-leave-game-button-button"
+            id="leave-game-button"
+            name="leave-game-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-left"
+              data-icon="arrow-left"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Leave
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="main"
+          >
+            <img
+              alt="Hourglass"
+              src="data:image/svg+xml,%3csvg%20width='170'%20height='224'%20viewBox='0%200%20170%20224'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M150%200C161.046%200%20170%208.95431%20170%2020C170%2027.8081%20165.525%2034.5695%20159%2037.8633V51C159%2076.3133%20146.29%2098.6573%20126.903%20112C146.29%20125.343%20159%20147.687%20159%20173V186.136C165.525%20189.429%20170%20196.192%20170%20204C170%20215.046%20161.046%20224%20150%20224H20C8.95431%20224%200%20215.046%200%20204C0%20196.192%204.4751%20189.429%2011%20186.136V173C11%20147.687%2023.7098%20125.343%2043.0957%20112C23.7098%2098.6573%2011%2076.313%2011%2051V37.8633C4.47531%2034.5695%200%2027.8081%200%2020C0%208.95431%208.95431%204.02661e-08%2020%200H150ZM20%208C13.3726%208%208%2013.3726%208%2020C8%2026.6274%2013.3726%2032%2020%2032H19V51C19%2078.51%2035.8314%20102.088%2059.7578%20112C35.8314%20121.912%2019%20145.49%2019%20173V192H20C13.3726%20192%208%20197.373%208%20204C8%20210.627%2013.3726%20216%2020%20216H150C156.627%20216%20162%20210.627%20162%20204C162%20197.709%20157.16%20192.549%20151%20192.041V173C151%20145.49%20134.168%20121.912%20110.241%20112C134.168%20102.088%20151%2078.5103%20151%2051V32H150C156.627%2032%20162%2026.6274%20162%2020C162%2013.3726%20156.627%208%20150%208H20Z'%20fill='white'/%3e%3cpath%20d='M151%2032V51C151%2078.5103%20134.168%20102.088%20110.241%20112C134.168%20121.912%20151%20145.49%20151%20173V192H19V173C19%20145.49%2035.8314%20121.912%2059.7578%20112C35.8314%20102.088%2019%2078.51%2019%2051V32H151Z'%20fill='%23FFD32A'/%3e%3cpath%20d='M150%20192C156.627%20192%20162%20197.373%20162%20204C162%20210.627%20156.627%20216%20150%20216H20C13.3726%20216%208%20210.627%208%20204C8%20197.373%2013.3726%20192%2020%20192H150ZM150%208C156.627%208%20162%2013.3726%20162%2020C162%2026.6274%20156.627%2032%20150%2032H20C13.3726%2032%208%2026.6274%208%2020C8%2013.3726%2013.3726%208%2020%208H150Z'%20fill='%233C40C6'/%3e%3cpath%20d='M120.732%2060C126.5%2060.0002%20133.5%2064.0002%20125.5%2072C117.5%2080%2089.5%2089%2089%20105.5C88.9642%20106.681%2088.9333%20107.624%2088.9072%20108.368C88.956%20109.495%2089%20113.118%2089%20122C89%20152%20136.5%20142.5%20136.5%20192H33.5C33.5%20142.5%2081%20152%2081%20122C81%20113.118%2081.044%20109.495%2081.0928%20108.368C81.0667%20107.624%2081.0358%20106.681%2081%20105.5C80.5%2089%2052.5%2080%2044.5%2072C36.5002%2064.0002%2043.4997%2060.0002%2049.2676%2060H120.732Z'%20fill='%23F53B57'/%3e%3c/svg%3e"
+            />
+          </div>
+          <div
+            class="main"
+          >
+            FrostyBear
+          </div>
+          <div
+            class="typography title medium"
+          >
+            You’re in the waiting room
+          </div>
+          <div
+            class="typography text small"
+          >
+            Be nice and wait
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerLobbyState > does nothing when gameID is undefined 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-leave-game-button-button"
+            id="leave-game-button"
+            name="leave-game-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-left"
+              data-icon="arrow-left"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Leave
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="main"
+          >
+            <img
+              alt="Hourglass"
+              src="data:image/svg+xml,%3csvg%20width='170'%20height='224'%20viewBox='0%200%20170%20224'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M150%200C161.046%200%20170%208.95431%20170%2020C170%2027.8081%20165.525%2034.5695%20159%2037.8633V51C159%2076.3133%20146.29%2098.6573%20126.903%20112C146.29%20125.343%20159%20147.687%20159%20173V186.136C165.525%20189.429%20170%20196.192%20170%20204C170%20215.046%20161.046%20224%20150%20224H20C8.95431%20224%200%20215.046%200%20204C0%20196.192%204.4751%20189.429%2011%20186.136V173C11%20147.687%2023.7098%20125.343%2043.0957%20112C23.7098%2098.6573%2011%2076.313%2011%2051V37.8633C4.47531%2034.5695%200%2027.8081%200%2020C0%208.95431%208.95431%204.02661e-08%2020%200H150ZM20%208C13.3726%208%208%2013.3726%208%2020C8%2026.6274%2013.3726%2032%2020%2032H19V51C19%2078.51%2035.8314%20102.088%2059.7578%20112C35.8314%20121.912%2019%20145.49%2019%20173V192H20C13.3726%20192%208%20197.373%208%20204C8%20210.627%2013.3726%20216%2020%20216H150C156.627%20216%20162%20210.627%20162%20204C162%20197.709%20157.16%20192.549%20151%20192.041V173C151%20145.49%20134.168%20121.912%20110.241%20112C134.168%20102.088%20151%2078.5103%20151%2051V32H150C156.627%2032%20162%2026.6274%20162%2020C162%2013.3726%20156.627%208%20150%208H20Z'%20fill='white'/%3e%3cpath%20d='M151%2032V51C151%2078.5103%20134.168%20102.088%20110.241%20112C134.168%20121.912%20151%20145.49%20151%20173V192H19V173C19%20145.49%2035.8314%20121.912%2059.7578%20112C35.8314%20102.088%2019%2078.51%2019%2051V32H151Z'%20fill='%23FFD32A'/%3e%3cpath%20d='M150%20192C156.627%20192%20162%20197.373%20162%20204C162%20210.627%20156.627%20216%20150%20216H20C13.3726%20216%208%20210.627%208%20204C8%20197.373%2013.3726%20192%2020%20192H150ZM150%208C156.627%208%20162%2013.3726%20162%2020C162%2026.6274%20156.627%2032%20150%2032H20C13.3726%2032%208%2026.6274%208%2020C8%2013.3726%2013.3726%208%2020%208H150Z'%20fill='%233C40C6'/%3e%3cpath%20d='M120.732%2060C126.5%2060.0002%20133.5%2064.0002%20125.5%2072C117.5%2080%2089.5%2089%2089%20105.5C88.9642%20106.681%2088.9333%20107.624%2088.9072%20108.368C88.956%20109.495%2089%20113.118%2089%20122C89%20152%20136.5%20142.5%20136.5%20192H33.5C33.5%20142.5%2081%20152%2081%20122C81%20113.118%2081.044%20109.495%2081.0928%20108.368C81.0667%20107.624%2081.0358%20106.681%2081%20105.5C80.5%2089%2052.5%2080%2044.5%2072C36.5002%2064.0002%2043.4997%2060.0002%2049.2676%2060H120.732Z'%20fill='%23F53B57'/%3e%3c/svg%3e"
+            />
+          </div>
+          <div
+            class="main"
+          >
+            FrostyBear
+          </div>
+          <div
+            class="typography title medium"
+          >
+            You’re in the waiting room
+          </div>
+          <div
+            class="typography text small"
+          >
+            Be nice and wait
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerLobbyState > does nothing when participant id is missing 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-leave-game-button-button"
+            id="leave-game-button"
+            name="leave-game-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-left"
+              data-icon="arrow-left"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Leave
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="main"
+          >
+            <img
+              alt="Hourglass"
+              src="data:image/svg+xml,%3csvg%20width='170'%20height='224'%20viewBox='0%200%20170%20224'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M150%200C161.046%200%20170%208.95431%20170%2020C170%2027.8081%20165.525%2034.5695%20159%2037.8633V51C159%2076.3133%20146.29%2098.6573%20126.903%20112C146.29%20125.343%20159%20147.687%20159%20173V186.136C165.525%20189.429%20170%20196.192%20170%20204C170%20215.046%20161.046%20224%20150%20224H20C8.95431%20224%200%20215.046%200%20204C0%20196.192%204.4751%20189.429%2011%20186.136V173C11%20147.687%2023.7098%20125.343%2043.0957%20112C23.7098%2098.6573%2011%2076.313%2011%2051V37.8633C4.47531%2034.5695%200%2027.8081%200%2020C0%208.95431%208.95431%204.02661e-08%2020%200H150ZM20%208C13.3726%208%208%2013.3726%208%2020C8%2026.6274%2013.3726%2032%2020%2032H19V51C19%2078.51%2035.8314%20102.088%2059.7578%20112C35.8314%20121.912%2019%20145.49%2019%20173V192H20C13.3726%20192%208%20197.373%208%20204C8%20210.627%2013.3726%20216%2020%20216H150C156.627%20216%20162%20210.627%20162%20204C162%20197.709%20157.16%20192.549%20151%20192.041V173C151%20145.49%20134.168%20121.912%20110.241%20112C134.168%20102.088%20151%2078.5103%20151%2051V32H150C156.627%2032%20162%2026.6274%20162%2020C162%2013.3726%20156.627%208%20150%208H20Z'%20fill='white'/%3e%3cpath%20d='M151%2032V51C151%2078.5103%20134.168%20102.088%20110.241%20112C134.168%20121.912%20151%20145.49%20151%20173V192H19V173C19%20145.49%2035.8314%20121.912%2059.7578%20112C35.8314%20102.088%2019%2078.51%2019%2051V32H151Z'%20fill='%23FFD32A'/%3e%3cpath%20d='M150%20192C156.627%20192%20162%20197.373%20162%20204C162%20210.627%20156.627%20216%20150%20216H20C13.3726%20216%208%20210.627%208%20204C8%20197.373%2013.3726%20192%2020%20192H150ZM150%208C156.627%208%20162%2013.3726%20162%2020C162%2026.6274%20156.627%2032%20150%2032H20C13.3726%2032%208%2026.6274%208%2020C8%2013.3726%2013.3726%208%2020%208H150Z'%20fill='%233C40C6'/%3e%3cpath%20d='M120.732%2060C126.5%2060.0002%20133.5%2064.0002%20125.5%2072C117.5%2080%2089.5%2089%2089%20105.5C88.9642%20106.681%2088.9333%20107.624%2088.9072%20108.368C88.956%20109.495%2089%20113.118%2089%20122C89%20152%20136.5%20142.5%20136.5%20192H33.5C33.5%20142.5%2081%20152%2081%20122C81%20113.118%2081.044%20109.495%2081.0928%20108.368C81.0667%20107.624%2081.0358%20106.681%2081%20105.5C80.5%2089%2052.5%2080%2044.5%2072C36.5002%2064.0002%2043.4997%2060.0002%2049.2676%2060H120.732Z'%20fill='%23F53B57'/%3e%3c/svg%3e"
+            />
+          </div>
+          <div
+            class="main"
+          >
+            FrostyBear
+          </div>
+          <div
+            class="typography title medium"
+          >
+            You’re in the waiting room
+          </div>
+          <div
+            class="typography text small"
+          >
+            Be nice and wait
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
+<div>
+  <div
+    aria-hidden="true"
+    class="main"
+    data-floating-ui-inert=""
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-leave-game-button-button"
+            id="leave-game-button"
+            name="leave-game-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-left"
+              data-icon="arrow-left"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Leave
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="main"
+          >
+            <img
+              alt="Hourglass"
+              src="data:image/svg+xml,%3csvg%20width='170'%20height='224'%20viewBox='0%200%20170%20224'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M150%200C161.046%200%20170%208.95431%20170%2020C170%2027.8081%20165.525%2034.5695%20159%2037.8633V51C159%2076.3133%20146.29%2098.6573%20126.903%20112C146.29%20125.343%20159%20147.687%20159%20173V186.136C165.525%20189.429%20170%20196.192%20170%20204C170%20215.046%20161.046%20224%20150%20224H20C8.95431%20224%200%20215.046%200%20204C0%20196.192%204.4751%20189.429%2011%20186.136V173C11%20147.687%2023.7098%20125.343%2043.0957%20112C23.7098%2098.6573%2011%2076.313%2011%2051V37.8633C4.47531%2034.5695%200%2027.8081%200%2020C0%208.95431%208.95431%204.02661e-08%2020%200H150ZM20%208C13.3726%208%208%2013.3726%208%2020C8%2026.6274%2013.3726%2032%2020%2032H19V51C19%2078.51%2035.8314%20102.088%2059.7578%20112C35.8314%20121.912%2019%20145.49%2019%20173V192H20C13.3726%20192%208%20197.373%208%20204C8%20210.627%2013.3726%20216%2020%20216H150C156.627%20216%20162%20210.627%20162%20204C162%20197.709%20157.16%20192.549%20151%20192.041V173C151%20145.49%20134.168%20121.912%20110.241%20112C134.168%20102.088%20151%2078.5103%20151%2051V32H150C156.627%2032%20162%2026.6274%20162%2020C162%2013.3726%20156.627%208%20150%208H20Z'%20fill='white'/%3e%3cpath%20d='M151%2032V51C151%2078.5103%20134.168%20102.088%20110.241%20112C134.168%20121.912%20151%20145.49%20151%20173V192H19V173C19%20145.49%2035.8314%20121.912%2059.7578%20112C35.8314%20102.088%2019%2078.51%2019%2051V32H151Z'%20fill='%23FFD32A'/%3e%3cpath%20d='M150%20192C156.627%20192%20162%20197.373%20162%20204C162%20210.627%20156.627%20216%20150%20216H20C13.3726%20216%208%20210.627%208%20204C8%20197.373%2013.3726%20192%2020%20192H150ZM150%208C156.627%208%20162%2013.3726%20162%2020C162%2026.6274%20156.627%2032%20150%2032H20C13.3726%2032%208%2026.6274%208%2020C8%2013.3726%2013.3726%208%2020%208H150Z'%20fill='%233C40C6'/%3e%3cpath%20d='M120.732%2060C126.5%2060.0002%20133.5%2064.0002%20125.5%2072C117.5%2080%2089.5%2089%2089%20105.5C88.9642%20106.681%2088.9333%20107.624%2088.9072%20108.368C88.956%20109.495%2089%20113.118%2089%20122C89%20152%20136.5%20142.5%20136.5%20192H33.5C33.5%20142.5%2081%20152%2081%20122C81%20113.118%2081.044%20109.495%2081.0928%20108.368C81.0667%20107.624%2081.0358%20106.681%2081%20105.5C80.5%2089%2052.5%2080%2044.5%2072C36.5002%2064.0002%2043.4997%2060.0002%2049.2676%2060H120.732Z'%20fill='%23F53B57'/%3e%3c/svg%3e"
+            />
+          </div>
+          <div
+            class="main"
+          >
+            FrostyBear
+          </div>
+          <div
+            class="typography title medium"
+          >
+            You’re in the waiting room
+          </div>
+          <div
+            class="typography text small"
+          >
+            Be nice and wait
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="floatingOverlay"
+    style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"
+  >
+    <span
+      data-floating-ui-focus-guard=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; clip: rect(0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+    <div
+      aria-labelledby="«rd»"
+      class="modalContainer sizeNormal"
+      data-floating-ui-focusable=""
+      id="«rb»"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div
+        class="header"
+      >
+        <div
+          class="title"
+          id="«rd»"
+        >
+          Confirm Leave Game
+        </div>
+      </div>
+      <div
+        class="content"
+      >
+        Are you sure you want to leave the game? Once you leave, you will need to rejoin to participate again.
+        <div
+          class="actions"
+        >
+          <div
+            class="buttonInputContainer buttonInputKindDestructive buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-confirm-button-button"
+              id="confirm-button"
+              name="confirm-button"
+              type="button"
+            >
+              <span>
+                Leave Game
+              </span>
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindSecondary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-close-button-button"
+              id="close-button"
+              name="close-button"
+              type="button"
+            >
+              <span>
+                Close
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span
+      data-floating-ui-focus-guard=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; clip: rect(0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;
+
+exports[`PlayerLobbyState > renders lobby with nickname, title and message 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-leave-game-button-button"
+            id="leave-game-button"
+            name="leave-game-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-left"
+              data-icon="arrow-left"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Leave
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="main"
+          >
+            <img
+              alt="Hourglass"
+              src="data:image/svg+xml,%3csvg%20width='170'%20height='224'%20viewBox='0%200%20170%20224'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M150%200C161.046%200%20170%208.95431%20170%2020C170%2027.8081%20165.525%2034.5695%20159%2037.8633V51C159%2076.3133%20146.29%2098.6573%20126.903%20112C146.29%20125.343%20159%20147.687%20159%20173V186.136C165.525%20189.429%20170%20196.192%20170%20204C170%20215.046%20161.046%20224%20150%20224H20C8.95431%20224%200%20215.046%200%20204C0%20196.192%204.4751%20189.429%2011%20186.136V173C11%20147.687%2023.7098%20125.343%2043.0957%20112C23.7098%2098.6573%2011%2076.313%2011%2051V37.8633C4.47531%2034.5695%200%2027.8081%200%2020C0%208.95431%208.95431%204.02661e-08%2020%200H150ZM20%208C13.3726%208%208%2013.3726%208%2020C8%2026.6274%2013.3726%2032%2020%2032H19V51C19%2078.51%2035.8314%20102.088%2059.7578%20112C35.8314%20121.912%2019%20145.49%2019%20173V192H20C13.3726%20192%208%20197.373%208%20204C8%20210.627%2013.3726%20216%2020%20216H150C156.627%20216%20162%20210.627%20162%20204C162%20197.709%20157.16%20192.549%20151%20192.041V173C151%20145.49%20134.168%20121.912%20110.241%20112C134.168%20102.088%20151%2078.5103%20151%2051V32H150C156.627%2032%20162%2026.6274%20162%2020C162%2013.3726%20156.627%208%20150%208H20Z'%20fill='white'/%3e%3cpath%20d='M151%2032V51C151%2078.5103%20134.168%20102.088%20110.241%20112C134.168%20121.912%20151%20145.49%20151%20173V192H19V173C19%20145.49%2035.8314%20121.912%2059.7578%20112C35.8314%20102.088%2019%2078.51%2019%2051V32H151Z'%20fill='%23FFD32A'/%3e%3cpath%20d='M150%20192C156.627%20192%20162%20197.373%20162%20204C162%20210.627%20156.627%20216%20150%20216H20C13.3726%20216%208%20210.627%208%20204C8%20197.373%2013.3726%20192%2020%20192H150ZM150%208C156.627%208%20162%2013.3726%20162%2020C162%2026.6274%20156.627%2032%20150%2032H20C13.3726%2032%208%2026.6274%208%2020C8%2013.3726%2013.3726%208%2020%208H150Z'%20fill='%233C40C6'/%3e%3cpath%20d='M120.732%2060C126.5%2060.0002%20133.5%2064.0002%20125.5%2072C117.5%2080%2089.5%2089%2089%20105.5C88.9642%20106.681%2088.9333%20107.624%2088.9072%20108.368C88.956%20109.495%2089%20113.118%2089%20122C89%20152%20136.5%20142.5%20136.5%20192H33.5C33.5%20142.5%2081%20152%2081%20122C81%20113.118%2081.044%20109.495%2081.0928%20108.368C81.0667%20107.624%2081.0358%20106.681%2081%20105.5C80.5%2089%2052.5%2080%2044.5%2072C36.5002%2064.0002%2043.4997%2060.0002%2049.2676%2060H120.732Z'%20fill='%23F53B57'/%3e%3c/svg%3e"
+            />
+          </div>
+          <div
+            class="main"
+          >
+            FrostyBear
+          </div>
+          <div
+            class="typography title medium"
+          >
+            You’re in the waiting room
+          </div>
+          <div
+            class="typography text small"
+          >
+            Be nice and wait
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

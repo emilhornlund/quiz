@@ -37,7 +37,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
       align="center"
       header={
         <IconButtonArrowRight
-          id={'next-button'}
+          id="next-button"
           type="button"
           kind="call-to-action"
           size="small"

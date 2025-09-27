@@ -11,7 +11,7 @@ import {
 } from '../../components'
 import { GamePage } from '../common'
 
-import { getPodiumPositionMessage } from './messages.ts'
+import { getPodiumPositionMessage } from './message.utils.ts'
 import styles from './PlayerPodiumState.module.scss'
 
 export interface PlayerPodiumStateProps {
@@ -29,9 +29,7 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
 }) => {
   const navigate = useNavigate()
 
-  const message = useMemo(() => {
-    return getPodiumPositionMessage(position)
-  }, [position])
+  const message = useMemo(() => getPodiumPositionMessage(position), [position])
 
   return (
     <GamePage
