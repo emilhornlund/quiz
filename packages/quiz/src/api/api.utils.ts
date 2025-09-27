@@ -11,7 +11,7 @@ export type ApiPostBody = object
 /**
  * Represents an error that occurs during an API call.
  */
-class ApiError extends Error {
+export class ApiError extends Error {
   /**
    * HTTP status code returned by the API (e.g., 400, 401, 500).
    */
