@@ -1,5 +1,5 @@
-import { GameMode, QuestionType } from '@quiz/common'
-import { render } from '@testing-library/react'
+import { GameMode, type GameResultDto, QuestionType } from '@quiz/common'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
@@ -168,6 +168,175 @@ describe('GameResultsPageUI', () => {
       </MemoryRouter>,
     )
 
+    expect(container).toMatchSnapshot()
+  })
+
+  const classicMinimal = (): GameResultDto => ({
+    id: uuidv4(),
+    mode: GameMode.Classic,
+    name: 'Classic Minimal',
+    host: { id: uuidv4(), nickname: 'Hosty' },
+    playerMetrics: [
+      {
+        player: { id: uuidv4(), nickname: 'Alice' },
+        rank: 1,
+        correct: 2,
+        incorrect: 1,
+        unanswered: 0,
+        averageResponseTime: 1500,
+        longestCorrectStreak: 2,
+        score: 200,
+      },
+      {
+        player: { id: uuidv4(), nickname: 'Bob' },
+        rank: 2,
+        correct: 1,
+        incorrect: 1,
+        unanswered: 1,
+        averageResponseTime: 2500,
+        longestCorrectStreak: 1,
+        score: 120,
+      },
+    ],
+    questionMetrics: [
+      {
+        text: 'Q1: Capital of Sweden?',
+        type: QuestionType.MultiChoice,
+        correct: 2,
+        incorrect: 0,
+        unanswered: 0,
+        averageResponseTime: 1800,
+      },
+      {
+        text: 'Q2: 2 + 2?',
+        type: QuestionType.TrueFalse,
+        correct: 1,
+        incorrect: 1,
+        unanswered: 0,
+        averageResponseTime: 2200,
+      },
+    ],
+    duration: 300,
+    created: new Date(),
+  })
+
+  const z2hMinimal = (): GameResultDto => ({
+    id: uuidv4(),
+    mode: GameMode.ZeroToOneHundred,
+    name: '0-100 Minimal',
+    host: { id: uuidv4(), nickname: 'Hosty' },
+    playerMetrics: [
+      {
+        player: { id: uuidv4(), nickname: 'Carol' },
+        rank: 1,
+        averagePrecision: 0.8,
+        unanswered: 0,
+        averageResponseTime: 2100,
+        longestCorrectStreak: 2,
+        score: 10,
+      },
+      {
+        player: { id: uuidv4(), nickname: 'Dave' },
+        rank: 2,
+        averagePrecision: 0.6,
+        unanswered: 1,
+        averageResponseTime: 2600,
+        longestCorrectStreak: 1,
+        score: 5,
+      },
+    ],
+    questionMetrics: [
+      {
+        text: 'Q1: Estimate distance',
+        type: QuestionType.Range,
+        averagePrecision: 0.7,
+        unanswered: 0,
+        averageResponseTime: 3000,
+      },
+      {
+        text: 'Q2: Estimate height',
+        type: QuestionType.Range,
+        averagePrecision: 0.5,
+        unanswered: 1,
+        averageResponseTime: 4000,
+      },
+    ],
+    duration: 90,
+    created: new Date(),
+  })
+
+  const clickSegment = (label: string) => {
+    const btn = screen.queryByRole('button', {
+      name: label,
+    }) as HTMLElement | null
+    if (btn) {
+      fireEvent.click(btn)
+      return
+    }
+    const el = screen.getByText(label)
+    const target = (el.closest('button') as HTMLElement) ?? (el as HTMLElement)
+    fireEvent.click(target)
+  }
+
+  it('shows Summary by default and switches to Players and Questions (Classic)', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <GameResultsPageUI results={classicMinimal()} />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Summary')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        /A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out\./,
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Game Mode')).toBeInTheDocument()
+    expect(screen.getByText('Classic')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Players')
+    expect(screen.getByText('Alice')).toBeInTheDocument()
+    expect(screen.getByText('Bob')).toBeInTheDocument()
+    expect(screen.queryByText('Q1: Capital of Sweden?')).toBeNull()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Questions')
+    expect(screen.getByText('Q1: Capital of Sweden?')).toBeInTheDocument()
+    expect(screen.getByText('Q2: 2 + 2?')).toBeInTheDocument()
+    expect(screen.queryByText('Alice')).toBeNull()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Summary')
+    expect(screen.getByText('Game Mode')).toBeInTheDocument()
+    expect(screen.getByText('Classic')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
+
+  it('switches sections and shows 0 to 100 label in Summary (ZeroToOneHundred)', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <GameResultsPageUI results={z2hMinimal()} />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Summary')).toBeInTheDocument()
+    expect(screen.getByText('Game Mode')).toBeInTheDocument()
+    expect(screen.getByText('0 to 100')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Players')
+    expect(screen.getByText('Carol')).toBeInTheDocument()
+    expect(screen.getByText('Dave')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Questions')
+    expect(screen.getByText('Q1: Estimate distance')).toBeInTheDocument()
+    expect(screen.getByText('Q2: Estimate height')).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+
+    clickSegment('Summary')
+    expect(screen.getByText('0 to 100')).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 })
