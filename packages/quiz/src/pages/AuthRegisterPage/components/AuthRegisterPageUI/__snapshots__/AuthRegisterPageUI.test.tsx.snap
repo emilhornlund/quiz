@@ -1,0 +1,544 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AuthRegisterPageUI > renders default state 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content startAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="card kindCallToAction sizeLarge center"
+          >
+            <button
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-xmark"
+                data-icon="xmark"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 384 512"
+              >
+                <path
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <div
+              class="content"
+            >
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Create your account
+          </div>
+          <div
+            class="typography text small"
+          >
+            Join the party — make an account in seconds.
+          </div>
+          <form
+            class="createUserForm"
+          >
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-email-textfield"
+                  id="email"
+                  maxlength="128"
+                  minlength="6"
+                  name="email"
+                  placeholder="Email"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-password-textfield"
+                  id="password"
+                  maxlength="128"
+                  minlength="8"
+                  name="password"
+                  placeholder="Password"
+                  type="password"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-givenName-textfield"
+                  id="givenName"
+                  maxlength="64"
+                  minlength="1"
+                  name="givenName"
+                  placeholder="Given Name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-familyName-textfield"
+                  id="familyName"
+                  maxlength="64"
+                  minlength="1"
+                  name="familyName"
+                  placeholder="Family Name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Default Nickname"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate"
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  Let's go!
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right"
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+          <a
+            data-discover="true"
+            href="/auth/login"
+          >
+            <div
+              class="typography link small"
+            >
+              Got an account? Flash your credentials and come on in!
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AuthRegisterPageUI > renders loading state 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content startAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="card kindCallToAction sizeLarge center"
+          >
+            <button
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-xmark"
+                data-icon="xmark"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 384 512"
+              >
+                <path
+                  d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <div
+              class="content"
+            >
+              <span>
+                Hey quiz champion! Did your brainy adventures happen on
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                ? No worries— we can save all your quiz creations and epic game stats! Just pop back to
+                 
+                <a
+                  href="https://quiz.emilhornlund.com"
+                >
+                  quiz.emilhornlund.com
+                </a>
+                 one last time, and we’ll magically teleport everything over to
+                 
+                <b>
+                  <i>
+                    klurigo.com
+                  </i>
+                </b>
+                . Ready to blast off your data?
+              </span>
+            </div>
+          </div>
+          <div
+            class="typography title medium"
+          >
+            Create your account
+          </div>
+          <div
+            class="typography text small"
+          >
+            Join the party — make an account in seconds.
+          </div>
+          <form
+            class="createUserForm"
+          >
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary disabled"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-email-textfield"
+                  disabled=""
+                  id="email"
+                  maxlength="128"
+                  minlength="6"
+                  name="email"
+                  placeholder="Email"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary disabled"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-password-textfield"
+                  disabled=""
+                  id="password"
+                  maxlength="128"
+                  minlength="8"
+                  name="password"
+                  placeholder="Password"
+                  type="password"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary disabled"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-givenName-textfield"
+                  disabled=""
+                  id="givenName"
+                  maxlength="64"
+                  minlength="1"
+                  name="givenName"
+                  placeholder="Given Name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary disabled"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-familyName-textfield"
+                  disabled=""
+                  id="familyName"
+                  maxlength="64"
+                  minlength="1"
+                  name="familyName"
+                  placeholder="Family Name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="nicknameTextFieldContainer"
+            >
+              <div
+                class="inputContainer"
+              >
+                <div
+                  class="textFieldInputContainer textFieldInputKindPrimary disabled"
+                >
+                  <input
+                    class="textfield"
+                    data-testid="test-default-nickname-textfield-textfield"
+                    disabled=""
+                    id="default-nickname-textfield"
+                    maxlength="20"
+                    minlength="2"
+                    name="default-nickname-textfield"
+                    placeholder="Default Nickname"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="buttonInputContainer buttonInputKindPrimary"
+              >
+                <button
+                  data-testid="test-shuffle-nickname-button-button"
+                  disabled=""
+                  id="shuffle-nickname-button"
+                  name="shuffle-nickname-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-arrows-rotate"
+                    data-icon="arrows-rotate"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <div
+                  class="loadingSpinner"
+                >
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </button>
+            </div>
+          </form>
+          <a
+            data-discover="true"
+            href="/auth/login"
+          >
+            <div
+              class="typography link small"
+            >
+              Got an account? Flash your credentials and come on in!
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

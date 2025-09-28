@@ -22,7 +22,7 @@ import {
 } from '../../../../components'
 
 import styles from './AuthLoginPageUI.module.scss'
-import { getMessage, getTitle } from './helpers.ts'
+import { getMessage, getTitle } from './text.utils.ts'
 
 export type LoginFormFields = AuthLoginRequestDto
 

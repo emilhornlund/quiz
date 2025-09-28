@@ -1,4 +1,4 @@
-const TITLES = [
+export const TITLES = [
   'Welcome back, Quizmaster!',
   'Hello again, genius!',
   'Your quiz hub awaits!',
@@ -6,7 +6,7 @@ const TITLES = [
   'Back to the quiz zone!',
 ]
 
-const MESSAGES = [
+export const MESSAGES = [
   'Sign in to access your quizzes, stats, and the brilliant chaos you left behind.',
   'Rejoin your quiz universe — your profile, history, and leaderboard spot are all waiting.',
   'Time to log in and reconnect with your inner trivia titan.',
