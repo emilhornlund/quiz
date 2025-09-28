@@ -30,14 +30,9 @@ vi.mock('../../context/user', () => ({
   }),
 }))
 
-vi.mock('./helpers.ts', () => ({
+vi.mock('./text.utils.ts', () => ({
   getTitle: () => 'Join the game',
   getMessage: () => 'Pick a nickname and jump in!',
-}))
-
-vi.mock('./GameJoinPage.module.scss', () => ({ default: {} }))
-vi.mock('../../assets/images/users-icon.svg', () => ({
-  default: 'users-icon.svg',
 }))
 
 import GameJoinPage from './GameJoinPage'

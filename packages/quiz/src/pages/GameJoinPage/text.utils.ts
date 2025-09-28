@@ -1,11 +1,11 @@
-const TITLES = [
+export const TITLES = [
   'Get Ready to Join the Fun!',
   'Enter the Game Arena!',
   'Your Journey Begins Here!',
   'Join the Challenge!',
 ]
 
-const MESSAGES = [
+export const MESSAGES = [
   'Enter your nickname and get ready to compete for glory!',
   'Pick your name wisely, champion—your quest for the podium begins now!',
   'Step into the game! What’s your nickname for the leaderboard?',

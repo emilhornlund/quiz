@@ -31,12 +31,12 @@ function getProgress(
   return 0
 }
 
-export interface QuestionsSectionProps {
+export interface QuestionSectionProps {
   mode: GameMode
   questionMetrics: GameResultDto['questionMetrics']
 }
 
-const QuestionSection: FC<QuestionsSectionProps> = ({
+const QuestionSection: FC<QuestionSectionProps> = ({
   mode,
   questionMetrics,
 }) => {

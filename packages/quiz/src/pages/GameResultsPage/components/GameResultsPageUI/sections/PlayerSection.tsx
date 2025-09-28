@@ -29,12 +29,12 @@ function getProgress(
   return 0
 }
 
-export interface PlayersSectionProps {
+export interface PlayerSectionProps {
   mode: GameMode
   playerMetrics: GameResultDto['playerMetrics']
 }
 
-const PlayerSection: FC<PlayersSectionProps> = ({ mode, playerMetrics }) => {
+const PlayerSection: FC<PlayerSectionProps> = ({ mode, playerMetrics }) => {
   return (
     <section>
       <GameResultTable

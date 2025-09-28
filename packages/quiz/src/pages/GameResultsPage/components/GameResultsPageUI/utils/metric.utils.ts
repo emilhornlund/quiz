@@ -18,7 +18,7 @@ import {
 
 import colors from '../../../../../styles/colors.module.scss'
 
-import { formatRoundedSeconds } from './format.util.ts'
+import { formatRoundedSeconds } from './format.utils.ts'
 
 /**
  * Calculates the percentage of correct answers for a given metric.

@@ -27,7 +27,12 @@ export interface GameResultTableProps {
   items: TableItem[]
 }
 
-const TableRow: FC<TableItem> = ({ badge, value, progress, details }) => {
+const GameResultTableRow: FC<TableItem> = ({
+  badge,
+  value,
+  progress,
+  details,
+}) => {
   const [showDetails, setShowDetails] = useState<boolean>(false)
 
   return (
@@ -79,7 +84,7 @@ const GameResultTable: FC<GameResultTableProps> = ({ items }) => {
   return (
     <div className={styles.table}>
       {items.map((metric, index) => (
-        <TableRow key={index} {...metric} />
+        <GameResultTableRow key={index} {...metric} />
       ))}
     </div>
   )

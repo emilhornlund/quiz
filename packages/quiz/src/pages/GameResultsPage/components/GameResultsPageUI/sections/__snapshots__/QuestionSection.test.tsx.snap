@@ -1,0 +1,652 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuestionSection > renders rows for ZeroToOneHundred and uses getAveragePrecision 1`] = `
+<div>
+  <section>
+    <div
+      class="table"
+    >
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            1
+          </div>
+          <div
+            class="value"
+            title="Q1: Estimate the distance"
+          >
+            Q1: Estimate the distance
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                47
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            2
+          </div>
+          <div
+            class="value"
+            title="Q2: Estimate the height"
+          >
+            Q2: Estimate the height
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                47
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            3
+          </div>
+          <div
+            class="value"
+            title="Q3: Estimate the weight"
+          >
+            Q3: Estimate the weight
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                47
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`QuestionSection > renders rows with badges and question text for Classic and uses getCorrectPercentage 1`] = `
+<div>
+  <section>
+    <div
+      class="table"
+    >
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            1
+          </div>
+          <div
+            class="value"
+            title="Q1: Capital of Sweden?"
+          >
+            Q1: Capital of Sweden?
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                80
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            2
+          </div>
+          <div
+            class="value"
+            title="Q2: 2 + 2?"
+          >
+            Q2: 2 + 2?
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                80
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`QuestionSection > toggles details on row click and shows detail items 1`] = `
+<div>
+  <section>
+    <div
+      class="table"
+    >
+      <div
+        class="tableRow"
+      >
+        <div
+          class="main"
+        >
+          <div
+            class="badge"
+          >
+            1
+          </div>
+          <div
+            class="value"
+            title="Q1: Capital of Sweden?"
+          >
+            Q1: Capital of Sweden?
+          </div>
+          <div>
+            <svg
+              class="circularProgressBar correct small"
+              height="60"
+              width="60"
+            >
+              <circle
+                class="circleBackground"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-width="6"
+              />
+              <circle
+                class="circleProgress"
+                cx="30"
+                cy="30"
+                fill="transparent"
+                r="27"
+                stroke-linecap="round"
+                stroke-width="6"
+                style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
+              />
+              <text
+                class="progressText"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                x="50%"
+                y="50%"
+              >
+                80
+                %
+              </text>
+            </svg>
+          </div>
+          <div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="black"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="details"
+        >
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Correct
+            </div>
+            <div
+              class="value"
+            >
+              8/10
+            </div>
+          </div>
+          <div
+            class="item"
+          >
+            <div
+              class="title"
+            >
+              Avg Time
+            </div>
+            <div
+              class="value"
+            >
+              5.1s
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;

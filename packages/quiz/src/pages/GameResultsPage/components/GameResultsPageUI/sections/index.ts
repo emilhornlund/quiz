@@ -1,3 +1,3 @@
-export { default as PlayersSection } from './PlayersSection'
-export { default as QuestionsSection } from './QuestionsSection'
+export { default as PlayerSection } from './PlayerSection'
+export { default as QuestionSection } from './QuestionSection'
 export { default as SummarySection } from './SummarySection'

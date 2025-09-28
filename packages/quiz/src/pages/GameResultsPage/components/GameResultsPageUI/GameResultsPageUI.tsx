@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react'
 import { Page, SegmentedControl, Typography } from '../../../../components'
 
 import styles from './GameResultsPageUI.module.scss'
-import { PlayersSection, QuestionsSection, SummarySection } from './sections'
+import { PlayerSection, QuestionSection, SummarySection } from './sections'
 
 export interface GameResultsPageUIProps {
   results: GameResultDto
@@ -59,14 +59,14 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({ results }) => {
         )}
 
         {selectedSection === GameResultSection.Players && (
-          <PlayersSection
+          <PlayerSection
             mode={results.mode}
             playerMetrics={results.playerMetrics}
           />
         )}
 
         {selectedSection === GameResultSection.Questions && (
-          <QuestionsSection
+          <QuestionSection
             mode={results.mode}
             questionMetrics={results.questionMetrics}
           />

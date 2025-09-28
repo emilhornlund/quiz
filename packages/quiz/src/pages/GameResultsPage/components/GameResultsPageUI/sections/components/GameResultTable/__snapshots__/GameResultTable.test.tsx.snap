@@ -1,0 +1,684 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GameResultTable > does not crash when details are missing 1`] = `
+<div>
+  <div
+    class="table"
+  >
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          3
+        </div>
+        <div
+          class="value"
+          title="Charlie"
+        >
+          Charlie
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 152.68140296446393;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              10
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details active"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GameResultTable > hides details by default and toggles them on row click 1`] = `
+<div>
+  <div
+    class="table"
+  >
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          1
+        </div>
+        <div
+          class="value"
+          title="Alice Anderson"
+        >
+          Alice Anderson
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              82
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      >
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="#333"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+            Correct
+          </div>
+          <div
+            class="value"
+          >
+            8/10
+          </div>
+        </div>
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            Fastest
+          </div>
+          <div
+            class="value"
+          >
+            3.2s
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          2
+        </div>
+        <div
+          class="value"
+          title="Bob Brown"
+        >
+          Bob Brown
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              50
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GameResultTable > renders badge and value, and sets title attribute on value 1`] = `
+<div>
+  <div
+    class="table"
+  >
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          1
+        </div>
+        <div
+          class="value"
+          title="Alice Anderson"
+        >
+          Alice Anderson
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              82
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      >
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="#333"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+            Correct
+          </div>
+          <div
+            class="value"
+          >
+            8/10
+          </div>
+        </div>
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            Fastest
+          </div>
+          <div
+            class="value"
+          >
+            3.2s
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          2
+        </div>
+        <div
+          class="value"
+          title="Bob Brown"
+        >
+          Bob Brown
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              50
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GameResultTable > renders one row per item 1`] = `
+<div>
+  <div
+    class="table"
+  >
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          1
+        </div>
+        <div
+          class="value"
+          title="Alice Anderson"
+        >
+          Alice Anderson
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              82
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      >
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-down"
+              color="#333"
+              data-icon="chevron-down"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                fill="currentColor"
+              />
+            </svg>
+            Correct
+          </div>
+          <div
+            class="value"
+          >
+            8/10
+          </div>
+        </div>
+        <div
+          class="item"
+        >
+          <div
+            class="title"
+          >
+            Fastest
+          </div>
+          <div
+            class="value"
+          >
+            3.2s
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tableRow"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="badge"
+        >
+          2
+        </div>
+        <div
+          class="value"
+          title="Bob Brown"
+        >
+          Bob Brown
+        </div>
+        <div>
+          <svg
+            class="circularProgressBar correct small"
+            height="60"
+            width="60"
+          >
+            <circle
+              class="circleBackground"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-width="6"
+            />
+            <circle
+              class="circleProgress"
+              cx="30"
+              cy="30"
+              fill="transparent"
+              r="27"
+              stroke-linecap="round"
+              stroke-width="6"
+              style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
+            />
+            <text
+              class="progressText"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              x="50%"
+              y="50%"
+            >
+              50
+              %
+            </text>
+          </svg>
+        </div>
+        <div>
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down"
+            color="black"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="details"
+      />
+    </div>
+  </div>
+</div>
+`;
