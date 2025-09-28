@@ -1,0 +1,133 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AuthGoogleCallbackPage > exchanges code and navigates to / on success 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="typography subtitle small"
+          >
+            Hold tight—calling in the Google cavalry!
+          </div>
+          <div
+            class="typography text small"
+          >
+            We’re doing the secret handshake with Google. Almost there…
+          </div>
+          <div
+            class="loadingSpinnerContainer"
+          >
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AuthGoogleCallbackPage > shows error and redirects to /auth/login when required params are missing 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="typography subtitle small"
+          >
+            Hold tight—calling in the Google cavalry!
+          </div>
+          <div
+            class="typography text small"
+          >
+            We’re doing the secret handshake with Google. Almost there…
+          </div>
+          <div
+            class="loadingSpinnerContainer"
+          >
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

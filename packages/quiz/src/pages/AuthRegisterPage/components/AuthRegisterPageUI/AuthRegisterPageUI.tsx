@@ -26,7 +26,7 @@ import {
 import NicknameTextField from '../../../../components/NicknameTextField'
 
 import styles from './AuthRegisterPageUI.module.scss'
-import { getMessage, getTitle } from './helpers.ts'
+import { getMessage, getTitle } from './text.utils.ts'
 
 export type CreateUserFormFields = CreateUserRequestDto
 

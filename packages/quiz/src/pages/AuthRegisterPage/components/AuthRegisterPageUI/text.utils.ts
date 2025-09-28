@@ -1,4 +1,4 @@
-const TITLES = [
+export const TITLES = [
   'Join the quiz zone!',
   'Welcome, newcomer!',
   'Create your quiz identity',
@@ -11,7 +11,7 @@ const TITLES = [
   'New here? Let’s fix that!',
 ]
 
-const MESSAGES = [
+export const MESSAGES = [
   'Create an account to start building quizzes, tracking your progress, and challenging others to brainy showdowns.',
   'Join a growing world of trivia lovers and unlock access to all the quizzes, stats, and features you never knew you needed.',
   'Sign up and claim your spot on the leaderboard — your quiz legacy starts here.',
