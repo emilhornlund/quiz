@@ -90,7 +90,7 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -448,7 +448,7 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
