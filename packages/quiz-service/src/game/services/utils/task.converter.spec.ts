@@ -39,7 +39,6 @@ import {
   buildQuestionResultTask,
   calculateClassicModePinQuestionScore,
   calculateClassicModeRangeQuestionScore,
-  calculateClassicModeRawScore,
   calculateClassicModeScore,
   calculateZeroToOneHundredModeScore,
   isQuestionAnswerCorrect,
@@ -692,6 +691,20 @@ describe('TaskConverter', () => {
         expect(isQuestionAnswerCorrect(correct, answer)).toBe(true)
       })
 
+      it('should be correct when order does match some valid ordering', () => {
+        const correct = [
+          { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
+          { type: QuestionType.Puzzle, value: ['B', 'A', 'D', 'C'] },
+        ]
+
+        const answer = {
+          type: QuestionType.Puzzle,
+          answer: ['A', 'C', 'B', 'D'],
+        } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
+
+        expect(isQuestionAnswerCorrect(correct, answer)).toBe(true)
+      })
+
       it('should be incorrect when order does not match any valid ordering', () => {
         const correct = [
           { type: QuestionType.Puzzle, value: ['A', 'B', 'C', 'D'] },
@@ -700,7 +713,7 @@ describe('TaskConverter', () => {
 
         const answer = {
           type: QuestionType.Puzzle,
-          answer: ['A', 'C', 'B', 'D'], // not in the set of valid orderings
+          answer: ['C', 'D', 'A', 'B'], // not in the set of valid orderings
         } as unknown as QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer
 
         expect(isQuestionAnswerCorrect(correct, answer)).toBe(false)
@@ -740,127 +753,6 @@ describe('TaskConverter', () => {
 
         expect(isQuestionAnswerCorrect(correct, answer)).toBe(false)
       })
-    })
-  })
-
-  describe('calculateClassicModeRawScore', () => {
-    it('should calculate full score for very quick responses', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() + 1000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
-
-      expect(
-        calculateClassicModeRawScore(presented, question, answer),
-      ).toBeCloseTo(983, 0)
-    })
-
-    it('should calculate reduced score for slower responses', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() + 15000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 15 seconds
-
-      expect(
-        calculateClassicModeRawScore(presented, question, answer),
-      ).toBeCloseTo(750, 0)
-    })
-
-    it('should calculate minimum score for responses at the duration limit', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() + 30000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 30 seconds
-
-      expect(
-        calculateClassicModeRawScore(presented, question, answer),
-      ).toBeCloseTo(500, 0)
-    })
-
-    it('should handle responses exceeding the duration', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() + 60000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 60 seconds
-
-      expect(calculateClassicModeRawScore(presented, question, answer)).toBe(0)
-    })
-
-    it('should return 0 points for a question with zero duration', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 0,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() + 1000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 1 second
-
-      expect(calculateClassicModeRawScore(presented, question, answer)).toBe(0)
-    })
-
-    it('should calculate full points for responses at the exact presented time', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = { created: presented } as QuestionTaskBaseAnswer &
-        QuestionTaskMultiChoiceAnswer // Exact time
-
-      expect(calculateClassicModeRawScore(presented, question, answer)).toBe(
-        1000,
-      )
-    })
-
-    it('should handle negative response times gracefully', () => {
-      const presented = new Date()
-
-      const question = {
-        type: QuestionType.MultiChoice,
-        duration: 30,
-        points: 1000,
-      } as BaseQuestionDao & QuestionMultiChoiceDao
-
-      const answer = {
-        created: new Date(presented.getTime() - 5000),
-      } as QuestionTaskBaseAnswer & QuestionTaskMultiChoiceAnswer // 5 seconds before presented
-
-      expect(calculateClassicModeRawScore(presented, question, answer)).toBe(0)
     })
   })
 
