@@ -63,7 +63,7 @@ export const QUESTION_PIN_TOLERANCE_RADIUS: Record<
 
 /* Quiz Question Puzzle Values */
 export const QUIZ_PUZZLE_VALUES_MIN = 3
-export const QUIZ_PUZZLE_VALUES_MAX = 4
+export const QUIZ_PUZZLE_VALUES_MAX = 6
 export const QUIZ_PUZZLE_VALUE_MIN_LENGTH = 1
 export const QUIZ_PUZZLE_VALUE_MAX_LENGTH = 75
 export const QUIZ_PUZZLE_VALUE_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,75}$/u

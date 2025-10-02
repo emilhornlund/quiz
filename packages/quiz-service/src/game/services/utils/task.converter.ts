@@ -66,6 +66,11 @@ import {
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
 } from './question-answer.utils'
+import {
+  calculateClassicModeRawScore,
+  calculatePuzzleScore,
+  isPuzzleQuestionAnswerCorrect,
+} from './scoring-strategies.utils'
 import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
 /**
@@ -266,74 +271,10 @@ export function isQuestionAnswerCorrect(
   if (isPuzzleAnswer(answer)) {
     return correctAnswers
       .filter(isPuzzleCorrectAnswer)
-      .some(
-        ({ value }) =>
-          !!value &&
-          !!answer?.answer &&
-          value.length === answer.answer.length &&
-          value.every((v, i) => v === answer.answer[i]),
-      )
+      .some((correct) => isPuzzleQuestionAnswerCorrect(correct, answer))
   }
 
   return false
-}
-
-/**
- * Calculates the raw score for a question in classic mode based on the response time.
- *
- * The faster the response, the higher the score. The score is reduced based on the
- * time taken relative to the question's duration, with a minimum multiplier of 0
- * for responses that exceed the question's duration.
- *
- * @param {Date} presented - The time when the question was presented.
- * @param {QuestionDao} question - The question object containing duration and points.
- * @param {QuestionTaskBaseAnswer & (QuestionTaskMultiChoiceAnswer | QuestionTaskRangeAnswer | QuestionTaskTrueFalseAnswer | QuestionTaskTypeAnswerAnswer | QuestionTaskPinAnswer | QuestionTaskPuzzleAnswer)} answer - The user's answer, including the time it was created.
- *
- * @returns {number} - The raw score calculated based on response time and the maximum points for the question.
- */
-export function calculateClassicModeRawScore(
-  presented: Date,
-  question: QuestionDao,
-  answer?: QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-      | QuestionTaskPinAnswer
-      | QuestionTaskPuzzleAnswer
-    ),
-): number {
-  const { duration, points } = question
-  const { created: answered } = answer || {}
-
-  if (
-    !answered ||
-    !duration ||
-    !points ||
-    answered.getTime() < presented.getTime() ||
-    answered.getTime() > presented.getTime() + duration * 1000
-  ) {
-    return 0
-  }
-
-  // Calculate the response time in seconds
-  const responseTime = (answered.getTime() - presented.getTime()) / 1000
-
-  // Ensure response time doesn't exceed the duration
-  const normalizedTime = Math.min(responseTime, duration)
-
-  // Step 1: Divide response time by the question timer
-  const responseRatio = normalizedTime / duration
-
-  // Step 2: Divide that value by 2
-  const adjustment = responseRatio / 2
-
-  // Step 3: Subtract that value from 1
-  const scoreMultiplier = 1 - adjustment
-
-  // Step 4: Multiply points possible by that value
-  return points * scoreMultiplier
 }
 
 /**
@@ -355,8 +296,8 @@ export function calculateClassicModeRangeQuestionScore(
   question: BaseQuestionDao & QuestionRangeDao,
   answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
 ): number {
-  const { margin, min, max, step, points } = question
-  const { answer: userAnswer } = answer
+  const { margin, min, max, step, duration, points } = question
+  const { answer: userAnswer, created: answered } = answer
 
   // If the answer is not correct based on the question logic, return 0
   if (
@@ -367,7 +308,7 @@ export function calculateClassicModeRangeQuestionScore(
 
   // Calculate speed-based score (20%)
   const speedScore =
-    calculateClassicModeRawScore(presented, question, answer) * 0.2
+    calculateClassicModeRawScore(presented, answered, duration, points) * 0.2
 
   // Special handling for None margin (exact match required)
   if (margin === QuestionRangeAnswerMargin.None) {
@@ -434,8 +375,8 @@ export function calculateClassicModePinQuestionScore(
   question: BaseQuestionDao & QuestionPinDao,
   answer: QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
 ): number {
-  const { tolerance, points } = question
-  const { answer: userAnswer } = answer
+  const { tolerance, duration, points } = question
+  const { answer: userAnswer, created: answered } = answer
 
   // If the answer is not correct based on the question logic, return 0
   if (!isQuestionAnswerCorrect(correctAnswers, answer, undefined, tolerance)) {
@@ -444,7 +385,7 @@ export function calculateClassicModePinQuestionScore(
 
   // Calculate speed-based score (20%)
   const speedScore =
-    calculateClassicModeRawScore(presented, question, answer) * 0.2
+    calculateClassicModeRawScore(presented, answered, duration, points) * 0.2
 
   // For other tolerances, calculate precision-based score (80%)
   const scores = correctAnswers
@@ -517,11 +458,32 @@ export function calculateClassicModeScore(
     )
   }
 
+  if (isPuzzleQuestion(question) && isPuzzleAnswer(answer)) {
+    const scores = correctAnswers
+      .filter(isPuzzleCorrectAnswer)
+      .map((correct) =>
+        calculatePuzzleScore(
+          presented,
+          question.duration,
+          question.points,
+          correct,
+          answer,
+        ),
+      )
+      .sort((lhs, rhs) => rhs - lhs)
+    return scores[0] ?? 0
+  }
+
   if (!isQuestionAnswerCorrect(correctAnswers, answer, undefined)) {
     return 0
   }
 
-  const rawScore = calculateClassicModeRawScore(presented, question, answer)
+  const rawScore = calculateClassicModeRawScore(
+    presented,
+    answer.created,
+    question.duration,
+    question.points,
+  )
   return Math.round(rawScore)
 }
 
