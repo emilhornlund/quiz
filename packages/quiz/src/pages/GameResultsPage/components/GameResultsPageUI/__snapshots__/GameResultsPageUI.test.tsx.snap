@@ -34,7 +34,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -336,7 +336,7 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -638,7 +638,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -940,7 +940,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -1535,7 +1535,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -2018,7 +2018,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -2320,7 +2320,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -2622,7 +2622,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -3105,7 +3105,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -3476,7 +3476,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper fullWidth"

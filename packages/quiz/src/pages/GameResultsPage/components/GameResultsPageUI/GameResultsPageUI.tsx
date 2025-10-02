@@ -27,7 +27,7 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({ results }) => {
     GameResultSection.Summary,
   )
   return (
-    <Page align="start" height="full" discover profile>
+    <Page align="start" height="normal" discover profile>
       <div className={styles.gameResultsPage}>
         <Typography variant="subtitle">{results.name}</Typography>
 
