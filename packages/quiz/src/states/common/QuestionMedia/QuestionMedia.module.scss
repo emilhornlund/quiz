@@ -1,0 +1,14 @@
+@use '../../../styles/colors';
+@use '../../../styles/helpers';
+@use '../../../styles/variables';
+
+.questionMedia {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: auto;
+}

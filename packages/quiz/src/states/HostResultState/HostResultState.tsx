@@ -1,3 +1,4 @@
+import { faChartSimple, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import {
   GameEventQuestionResultsPin,
   GameEventQuestionResultsPuzzle,
@@ -8,13 +9,14 @@ import {
 import React, { FC, useState } from 'react'
 
 import {
+  Button,
   HostGameFooter,
   IconButtonArrowRight,
   QuestionResults,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
-import { GamePage } from '../common'
+import { GamePage, QuestionMedia } from '../common'
 
 import { PinQuestionResults, PuzzleQuestionResults } from './components'
 
@@ -25,7 +27,7 @@ export interface HostResultStateProps {
 const HostResultState: FC<HostResultStateProps> = ({
   event: {
     game: { pin: gamePIN },
-    question: { type, question: questionValue },
+    question: { type, question: text, media },
     pagination: { current: currentQuestion, total: totalQuestions },
     results,
   },
@@ -34,6 +36,8 @@ const HostResultState: FC<HostResultStateProps> = ({
     useState<boolean>(false)
   const [isProcessingCorrectAnswer, setIsProcessingCorrectAnswer] =
     useState(false)
+
+  const [showMedia, setShowMedia] = useState(false)
 
   const { completeTask, addCorrectAnswer, deleteCorrectAnswer } =
     useGameContext()
@@ -78,22 +82,40 @@ const HostResultState: FC<HostResultStateProps> = ({
           totalQuestions={totalQuestions}
         />
       }>
-      <Typography variant="subtitle">{questionValue}</Typography>
-      {type === QuestionType.Pin && (
-        <PinQuestionResults results={results as GameEventQuestionResultsPin} />
+      <Typography variant="subtitle">{text}</Typography>
+      {(!showMedia || type === QuestionType.Pin) && (
+        <>
+          {type === QuestionType.Pin && (
+            <PinQuestionResults
+              results={results as GameEventQuestionResultsPin}
+            />
+          )}
+          {type === QuestionType.Puzzle && (
+            <PuzzleQuestionResults
+              results={results as GameEventQuestionResultsPuzzle}
+            />
+          )}
+          {type !== QuestionType.Pin && type !== QuestionType.Puzzle && (
+            <QuestionResults
+              results={results}
+              loading={isProcessingCorrectAnswer}
+              onAddCorrectAnswer={handleAddCorrectAnswer}
+              onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
+            />
+          )}
+        </>
       )}
-      {type === QuestionType.Puzzle && (
-        <PuzzleQuestionResults
-          results={results as GameEventQuestionResultsPuzzle}
-        />
+      {showMedia && type !== QuestionType.Pin && (
+        <QuestionMedia type={type} media={media} alt={text} />
       )}
-      {type !== QuestionType.Pin && type !== QuestionType.Puzzle && (
-        <QuestionResults
-          results={results}
-          loading={isProcessingCorrectAnswer}
-          onAddCorrectAnswer={handleAddCorrectAnswer}
-          onDeleteCorrectAnswer={handleDeleteCorrectAnswer}
-        />
+      {media && (
+        <Button
+          id="toggle-media-button"
+          type="button"
+          icon={showMedia ? faChartSimple : faPhotoFilm}
+          onClick={() => setShowMedia(!showMedia)}>
+          {showMedia ? 'Show results' : 'Show media'}
+        </Button>
       )}
     </GamePage>
   )

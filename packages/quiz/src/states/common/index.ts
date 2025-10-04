@@ -1,4 +1,6 @@
 export { default as GamePage } from './GamePage'
 export { default as PointsBehindIndicator } from './PointsBehindIndicator'
+export type { QuestionMediaProps } from './QuestionMedia'
+export { default as QuestionMedia } from './QuestionMedia'
 export type { QuestionTypePointsBarProps } from './QuestionTypePointsBar'
 export { default } from './QuestionTypePointsBar'

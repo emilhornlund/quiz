@@ -1,6 +1,11 @@
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameQuestionHostEvent, MediaType, QuestionType } from '@quiz/common'
+import {
+  GameQuestionHostEvent,
+  MediaType,
+  QuestionMediaEvent,
+  QuestionType,
+} from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 
 import {
@@ -10,11 +15,9 @@ import {
   QuestionAnswerPicker,
   Typography,
 } from '../../components'
-import ResponsiveImage from '../../components/ResponsiveImage'
-import ResponsivePlayer from '../../components/ResponsivePlayer'
 import { useGameContext } from '../../context/game'
 import { classNames } from '../../utils/helpers.ts'
-import { GamePage } from '../common'
+import { GamePage, QuestionMedia } from '../common'
 
 import styles from './HostQuestionState.module.scss'
 
@@ -35,31 +38,12 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
 
   const { completeTask } = useGameContext()
 
-  const imageURL = useMemo(() => {
-    if (
-      question.type !== QuestionType.Pin &&
-      question.media?.type === MediaType.Image
-    ) {
-      return question.media.url
+  const media = useMemo<QuestionMediaEvent | undefined>(() => {
+    if (question.type !== QuestionType.Pin) {
+      return question.media
     }
-    return null
+    return { type: MediaType.Image, url: question.imageURL }
   }, [question])
-
-  const audioOrVideoURL = useMemo(() => {
-    if (
-      question.type !== QuestionType.Pin &&
-      (question.media?.type === MediaType.Audio ||
-        question.media?.type === MediaType.Video)
-    ) {
-      return question.media?.url
-    }
-    return null
-  }, [question])
-
-  const hasMedia = useMemo(
-    () => imageURL || audioOrVideoURL,
-    [imageURL, audioOrVideoURL],
-  )
 
   const handleSkipQuestion = () => {
     setIsSkippingQuestion(true)
@@ -103,24 +87,16 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
           </div>
         </div>
       </div>
-      {hasMedia && (
-        <div
-          className={classNames(
-            styles.row,
-            styles.fullHeight,
-            styles.fullWidth,
-          )}>
-          {imageURL && (
-            <ResponsiveImage imageURL={imageURL} alt={question.question} />
-          )}
-          {audioOrVideoURL && <ResponsivePlayer url={audioOrVideoURL} />}
-        </div>
-      )}
+      <QuestionMedia
+        type={question.type}
+        media={media}
+        alt={question.question}
+      />
       <div
         className={classNames(
           styles.row,
           styles.fullWidth,
-          question.type === QuestionType.Pin || !hasMedia
+          question.type === QuestionType.Pin || !media
             ? styles.fullHeight
             : styles.flexibleHeight,
         )}>
