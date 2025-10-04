@@ -1,9 +1,10 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
+import { BaseRepository } from '../../app/shared/repository'
 import { Quiz } from '../../quiz/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import {
@@ -18,12 +19,11 @@ import { Game, GameDocument, TaskType } from './models/schemas'
 
 /**
  * Repository for interacting with the Game collection in the database.
+ *
+ * Extends BaseRepository to provide common CRUD operations and adds game-specific methods.
  */
 @Injectable()
-export class GameRepository {
-  // Logger for logging repository operations
-  private logger: Logger = new Logger(GameRepository.name)
-
+export class GameRepository extends BaseRepository<Game> {
   /**
    * Constructs the GameRepository.
    *
@@ -31,10 +31,12 @@ export class GameRepository {
    * @param {GameEventPublisher} gameEventPublisher - Service responsible for publishing game events to clients.
    */
   constructor(
-    @InjectModel(Game.name) private gameModel: Model<Game>,
+    @InjectModel(Game.name) protected readonly gameModel: Model<Game>,
     @Inject(forwardRef(() => GameEventPublisher))
     private gameEventPublisher: GameEventPublisher,
-  ) {}
+  ) {
+    super(gameModel, 'Game')
+  }
 
   /**
    * Finds a game by its ID.
@@ -48,17 +50,14 @@ export class GameRepository {
     gameID: string,
     active: boolean = true,
   ): Promise<GameDocument | null> {
+    const filter = {
+      _id: gameID,
+      ...(active ? { status: GameStatus.Active } : {}),
+    }
+
     return this.gameModel
-      .findOne({
-        _id: gameID,
-        ...(active ? { status: GameStatus.Active } : {}),
-      })
-      .populate([
-        {
-          path: 'quiz',
-          model: 'Quiz',
-        },
-      ])
+      .findOne(filter)
+      .populate('quiz') as Promise<GameDocument | null>
   }
 
   /**
@@ -99,17 +98,14 @@ export class GameRepository {
     gamePIN: string,
     active: boolean = true,
   ): Promise<GameDocument | null> {
+    const filter = {
+      pin: gamePIN,
+      ...(active ? { status: { $eq: GameStatus.Active } } : {}),
+    }
+
     return this.gameModel
-      .findOne({
-        pin: gamePIN,
-        ...(active ? { status: { $eq: GameStatus.Active } } : {}),
-      })
-      .populate([
-        {
-          path: 'quiz',
-          model: 'Quiz',
-        },
-      ])
+      .findOne(filter)
+      .populate('quiz') as Promise<GameDocument | null>
   }
 
   /**
@@ -182,23 +178,16 @@ export class GameRepository {
       'participants.participantId': participantId,
     }
 
-    const total = await this.gameModel.countDocuments(filter)
-
-    const results = await this.gameModel
-      .find(filter)
-      .sort({ status: 1, created: 'desc' })
-      .skip(offset)
-      .limit(limit)
-      .populate([
-        {
-          path: 'quiz',
-          model: 'Quiz',
-        },
-      ])
+    const result = await this.findWithPagination(filter, {
+      skip: offset,
+      limit,
+      sort: { status: 1, created: -1 },
+      populate: 'quiz',
+    })
 
     return {
-      results,
-      total,
+      results: result.documents as GameDocument[],
+      total: result.total,
     }
   }
 
@@ -241,7 +230,7 @@ export class GameRepository {
 
     const game = buildGameModel(quiz, gamePIN, user)
 
-    return new this.gameModel(game).save()
+    return this.create(game) as Promise<GameDocument>
   }
 
   /**
@@ -261,7 +250,7 @@ export class GameRepository {
 
     const quitTask = buildQuitTask()
 
-    const result = await this.gameModel.updateMany(filter, [
+    return this.updateMany(filter, [
       {
         $set: {
           previousTasks: {
@@ -272,8 +261,6 @@ export class GameRepository {
         },
       },
     ])
-
-    return result.modifiedCount ?? 0
   }
 
   /**
@@ -293,7 +280,7 @@ export class GameRepository {
 
     const quitTask = buildQuitTask()
 
-    const result = await this.gameModel.updateMany(filter, [
+    return this.updateMany(filter, [
       {
         $set: {
           previousTasks: {
@@ -304,8 +291,6 @@ export class GameRepository {
         },
       },
     ])
-
-    return result.modifiedCount ?? 0
   }
 
   /**
@@ -315,11 +300,9 @@ export class GameRepository {
    * @returns {Promise<number>} - The number of deleted game documents.
    */
   public async deleteGamesByQuizId(quizId: string): Promise<number> {
-    const result = await this.gameModel.deleteMany({
+    return this.deleteMany({
       quiz: quizId,
     })
-
-    return result.deletedCount ?? 0
   }
 
   /**
