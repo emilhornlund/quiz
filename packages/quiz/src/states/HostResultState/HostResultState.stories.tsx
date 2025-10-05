@@ -1,4 +1,9 @@
-import { GameEventType, QuestionPinTolerance, QuestionType } from '@quiz/common'
+import {
+  GameEventType,
+  MediaType,
+  QuestionPinTolerance,
+  QuestionType,
+} from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -25,6 +30,10 @@ export const QuestionMultiTwoAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+        },
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -51,6 +60,10 @@ export const QuestionMultiFourAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://wallpapercave.com/wp/wp2824407.jpg',
+        },
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -79,6 +92,10 @@ export const QuestionMultiSixAnswers = {
       question: {
         type: QuestionType.MultiChoice,
         question: 'Who painted The Starry Night?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://wallpaperaccess.com/full/157316.jpg',
+        },
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -109,6 +126,10 @@ export const QuestionSlider = {
       question: {
         type: QuestionType.Range,
         question: "What percentage of the earth's surface is covered by water?",
+        media: {
+          type: MediaType.Video,
+          url: 'https://www.youtube.com/watch?v=LXb3EKWsInQ',
+        },
       },
       results: {
         type: QuestionType.Range,
@@ -142,6 +163,10 @@ export const QuestionTrueFalse = {
       question: {
         type: QuestionType.TrueFalse,
         question: "Rabbits can't vomit?",
+        media: {
+          type: MediaType.Audio,
+          url: 'https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3',
+        },
       },
       results: {
         type: QuestionType.TrueFalse,
@@ -231,7 +256,11 @@ export const QuestionPuzzle = {
       },
       question: {
         type: QuestionType.Puzzle,
-        question: 'Sort these planets from closest to farthest from the Sun',
+        question: 'Sort the oldest cities in Europe',
+        media: {
+          type: MediaType.Image,
+          url: 'https://www.usnews.com/cmsmedia/20/b8/03270e8449baab54f83218beb5ca/181120-athens-editorial.jpg',
+        },
       },
       results: {
         type: QuestionType.Puzzle,

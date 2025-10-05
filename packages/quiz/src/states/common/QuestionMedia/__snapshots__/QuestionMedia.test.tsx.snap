@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuestionMedia > renders ResponsiveImage for image media when type is not Pin (snapshot) 1`] = `
+<div>
+  <div
+    class="questionMedia"
+    data-testid="question-media"
+  >
+    <img
+      alt="cute cat"
+      data-src="https://img/a.jpg"
+      data-testid="responsive-image"
+    />
+  </div>
+</div>
+`;
+
+exports[`QuestionMedia > renders ResponsivePlayer for audio media (snapshot) 1`] = `
+<div>
+  <div
+    class="questionMedia"
+    data-testid="question-media"
+  >
+    <div
+      data-testid="responsive-player"
+      data-url="https://cdn/a.mp3"
+    />
+  </div>
+</div>
+`;
+
+exports[`QuestionMedia > renders ResponsivePlayer for video media (snapshot) 1`] = `
+<div>
+  <div
+    class="questionMedia"
+    data-testid="question-media"
+  >
+    <div
+      data-testid="responsive-player"
+      data-url="https://cdn/v.mp4"
+    />
+  </div>
+</div>
+`;
