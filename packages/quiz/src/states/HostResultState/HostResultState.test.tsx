@@ -1,4 +1,9 @@
-import { GameEventType, QuestionPinTolerance, QuestionType } from '@quiz/common'
+import {
+  GameEventType,
+  MediaType,
+  QuestionPinTolerance,
+  QuestionType,
+} from '@quiz/common'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -439,5 +444,112 @@ describe('HostResultState', () => {
     expect(h.deleteCorrectAnswer).toHaveBeenCalledTimes(1)
     const arg = h.deleteCorrectAnswer.mock.calls[0][0]
     expect(arg).toBeTruthy()
+  })
+
+  it('for non-Pin question: default shows results; clicking toggles to media, then back', () => {
+    render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '111111' },
+            question: {
+              type: QuestionType.MultiChoice,
+              question: 'Q with media',
+              media: { type: MediaType.Image, url: 'https://img/a.jpg' },
+            },
+            results: {
+              type: QuestionType.MultiChoice,
+              distribution: [
+                { value: 'A', count: 1, correct: true, index: 0 },
+                { value: 'B', count: 2, correct: false, index: 1 },
+              ],
+            },
+            pagination: { current: 1, total: 10 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    // Initially: results visible, media hidden
+    expect(screen.getByTestId('question-results')).toBeInTheDocument()
+    expect(screen.queryByTestId('question-media')).toBeNull()
+
+    // Toggle button present with "Show media" and faPhotoFilm icon
+    const toggle = screen.getByTestId(`test-toggle-media-button-button`)
+    expect(toggle).toHaveTextContent('Show media')
+
+    // Click → media visible, results hidden; label changes to "Show results" with chart icon
+    fireEvent.click(toggle)
+    expect(screen.queryByTestId('question-results')).toBeNull()
+    expect(screen.getByTestId('question-media')).toBeInTheDocument()
+    expect(toggle).toHaveTextContent('Show results')
+
+    // Click again → back to results
+    fireEvent.click(toggle)
+    expect(screen.getByTestId('question-results')).toBeInTheDocument()
+    expect(screen.queryByTestId('question-media')).toBeNull()
+    expect(toggle).toHaveTextContent('Show media')
+  })
+
+  it('for Pin question: toggle button exists but media never renders; results stay visible', () => {
+    render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '222222' },
+            question: {
+              type: QuestionType.Pin,
+              question: 'Pin Q with image',
+              media: { type: MediaType.Image, url: 'https://img/pin.jpg' },
+            },
+            results: {
+              type: QuestionType.Pin,
+              imageURL: 'https://img/pin.jpg',
+              positionX: 0.5,
+              positionY: 0.5,
+              tolerance: QuestionPinTolerance.Medium,
+              distribution: [],
+            },
+            pagination: { current: 2, total: 10 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByTestId('pin-question-results')).toBeInTheDocument()
+    expect(screen.queryByTestId('test-toggle-media-button-button')).toBeNull()
+    expect(screen.queryByTestId('question-media')).toBeNull()
+  })
+
+  it('renders toggle button only when media exists', () => {
+    render(
+      <MemoryRouter>
+        <HostResultState
+          event={{
+            type: GameEventType.GameResultHost,
+            game: { pin: '333333' },
+            question: {
+              type: QuestionType.TrueFalse,
+              question: 'No media here',
+              // media: undefined
+            },
+            results: {
+              type: QuestionType.TrueFalse,
+              distribution: [
+                { value: true, count: 1, correct: true },
+                { value: false, count: 0, correct: false },
+              ],
+            },
+            pagination: { current: 1, total: 2 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByTestId('question-results')).toBeInTheDocument()
+    expect(screen.queryByTestId('test-toggle-media-button-button')).toBeNull()
+    expect(screen.queryByTestId('question-media')).toBeNull()
   })
 })

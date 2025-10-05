@@ -86,6 +86,7 @@ exports[`HostResultState > clicks Next to initiate leaderboard task 1`] = `
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -294,6 +295,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -614,6 +616,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -1012,6 +1015,7 @@ exports[`HostResultState > should render HostResultState with question type mult
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -1254,6 +1258,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
           </div>
           <div
             class="pinQuestionResults"
+            data-testid="pin-question-results"
           >
             <div
               class="container"
@@ -1796,6 +1801,7 @@ exports[`HostResultState > should render HostResultState with question type rang
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -2158,6 +2164,7 @@ exports[`HostResultState > should render HostResultState with question type true
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"
@@ -2366,6 +2373,7 @@ exports[`HostResultState > should render HostResultState with question type type
           </div>
           <div
             class="questionResults"
+            data-testid="question-results"
           >
             <div
               class="chips"

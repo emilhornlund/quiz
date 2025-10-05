@@ -231,7 +231,7 @@ export const QuestionPuzzle = {
           type: MediaType.Image,
           url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Solar_sys8.jpg/960px-Solar_sys8.jpg',
         },
-        values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+        values: ['Mercury', 'Venus', 'Earth', 'Mars'],
         duration: 30,
       },
       countdown: {

@@ -566,7 +566,8 @@ exports[`HostQuestionState > renders with audio media 1`] = `
             </div>
           </div>
           <div
-            class="row fullHeight fullWidth"
+            class="questionMedia"
+            data-testid="question-media"
           >
             <div
               class="playerWrapper"
@@ -811,7 +812,8 @@ exports[`HostQuestionState > renders with video media 1`] = `
             </div>
           </div>
           <div
-            class="row fullHeight fullWidth"
+            class="questionMedia"
+            data-testid="question-media"
           >
             <div
               class="playerWrapper"
@@ -1056,7 +1058,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             </div>
           </div>
           <div
-            class="row fullHeight fullWidth"
+            class="questionMedia"
+            data-testid="question-media"
           >
             <div
               class="container"
@@ -1324,7 +1327,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             </div>
           </div>
           <div
-            class="row fullHeight fullWidth"
+            class="questionMedia"
+            data-testid="question-media"
           >
             <div
               class="container"
@@ -1610,7 +1614,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             </div>
           </div>
           <div
-            class="row fullHeight fullWidth"
+            class="questionMedia"
+            data-testid="question-media"
           >
             <div
               class="container"

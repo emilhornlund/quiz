@@ -11,6 +11,7 @@ import {
   GamePodiumHostEvent,
   GameResultHostEvent,
   generateNickname,
+  QuestionMediaEvent,
   QuestionPinTolerance,
   QuestionType,
 } from '@quiz/common'
@@ -988,6 +989,9 @@ function expectGameResultHostEvent(
   game: Game,
   results: GameEventQuestionResults,
 ): GameResultHostEvent {
+  const media: QuestionMediaEvent | undefined = game.questions[0]?.media
+    ? { type: game.questions[0].media.type, url: game.questions[0].media.url }
+    : undefined
   return {
     type: GameEventType.GameResultHost,
     game: {
@@ -996,6 +1000,7 @@ function expectGameResultHostEvent(
     question: {
       type: game.questions[0].type,
       question: game.questions[0].text,
+      media,
     },
     results,
     pagination: {

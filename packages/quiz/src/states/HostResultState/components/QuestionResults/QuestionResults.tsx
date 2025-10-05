@@ -12,7 +12,7 @@ import {
 } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../../../utils/helpers'
 
 import styles from './QuestionResults.module.scss'
 
@@ -159,7 +159,7 @@ const QuestionResults: FC<QuestionResultsProps> = ({
     [results, loading, onAddCorrectAnswer],
   )
   return (
-    <div className={styles.questionResults}>
+    <div className={styles.questionResults} data-testid="question-results">
       {correctElements?.length > 0 && (
         <div className={styles.chips}>{correctElements}</div>
       )}

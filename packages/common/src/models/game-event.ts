@@ -270,6 +270,7 @@ export type GameResultHostEvent = {
   question: {
     type: QuestionType
     question: string
+    media?: QuestionMediaEvent
   }
   results: GameEventQuestionResults
   pagination: PaginationEvent

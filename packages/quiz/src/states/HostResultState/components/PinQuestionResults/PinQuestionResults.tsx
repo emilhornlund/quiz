@@ -33,7 +33,9 @@ const PinQuestionResults: FC<PinQuestionResultsProps> = ({ results }) => {
   }, [results.distribution])
 
   return (
-    <div className={styles.pinQuestionResults}>
+    <div
+      className={styles.pinQuestionResults}
+      data-testid="pin-question-results">
       <PinImage
         value={value}
         values={values}
