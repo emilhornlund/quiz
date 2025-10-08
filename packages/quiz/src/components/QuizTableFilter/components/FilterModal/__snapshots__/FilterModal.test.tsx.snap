@@ -14,10 +14,10 @@ exports[`FilterModal > should render FilterModal 1`] = `
       tabindex="0"
     />
     <div
-      aria-labelledby="«r2»"
+      aria-labelledby="_r_2_"
       class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
-      id="«r0»"
+      id="_r_0_"
       role="dialog"
       tabindex="-1"
     >
@@ -26,7 +26,7 @@ exports[`FilterModal > should render FilterModal 1`] = `
       >
         <div
           class="title"
-          id="«r2»"
+          id="_r_2_"
         >
           Refine Your Quiz Search
         </div>
