@@ -479,10 +479,10 @@ exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
       tabindex="0"
     />
     <div
-      aria-labelledby="«rd»"
+      aria-labelledby="_r_d_"
       class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
-      id="«rb»"
+      id="_r_b_"
       role="dialog"
       tabindex="-1"
     >
@@ -491,7 +491,7 @@ exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
       >
         <div
           class="title"
-          id="«rd»"
+          id="_r_d_"
         >
           Confirm Leave Game
         </div>

@@ -326,10 +326,10 @@ exports[`HostLobbyState > opens confirm dialog when starting with no players, th
       tabindex="0"
     />
     <div
-      aria-labelledby="«r23»"
+      aria-labelledby="_r_23_"
       class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
-      id="«r21»"
+      id="_r_21_"
       role="dialog"
       tabindex="-1"
     >
@@ -338,7 +338,7 @@ exports[`HostLobbyState > opens confirm dialog when starting with no players, th
       >
         <div
           class="title"
-          id="«r23»"
+          id="_r_23_"
         >
           Start Game Without Players?
         </div>

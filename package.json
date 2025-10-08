@@ -21,9 +21,9 @@
     "test:coverage": "concurrently --kill-others-on-fail \"yarn workspace @quiz/common test:coverage\" \"yarn workspace @quiz/quiz-service test:coverage\" \"yarn workspace @quiz/quiz test:coverage\""
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
+    "@eslint/js": "^9.37.0",
     "concurrently": "^9.2.1",
-    "eslint": "^9.36.0",
+    "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
@@ -31,7 +31,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.45.0"
   }
 }
