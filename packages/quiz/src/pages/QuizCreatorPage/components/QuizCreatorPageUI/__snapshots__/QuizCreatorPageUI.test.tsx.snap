@@ -990,6 +990,44 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                   </div>
                 </div>
               </div>
+              <div
+                class="section"
+              >
+                <div
+                  class="questionFieldContainer layoutFull"
+                >
+                  <div
+                    class="label"
+                  >
+                    <span>
+                      Info
+                    </span>
+                  </div>
+                  <div
+                    class="content"
+                  >
+                    <div
+                      class="inputContainer"
+                    >
+                      <div
+                        class="textFieldInputContainer textFieldInputKindPrimary"
+                      >
+                        <input
+                          class="textfield"
+                          data-testid="test-question-info-textfield-textfield"
+                          id="question-info-textfield"
+                          maxlength="256"
+                          minlength="1"
+                          name="question-info-textfield"
+                          placeholder="Info"
+                          type="text"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div
               class="editorToggleSection"

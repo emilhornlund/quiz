@@ -16,6 +16,7 @@ import {
 } from '../../components'
 import { useGameContext } from '../../context/game'
 import { GamePage, QuestionMedia } from '../common'
+import NonInteractiveInfoBox from '../common/NonInteractiveInfoBox'
 
 import {
   PinQuestionResults,
@@ -30,7 +31,7 @@ export interface HostResultStateProps {
 const HostResultState: FC<HostResultStateProps> = ({
   event: {
     game: { pin: gamePIN },
-    question: { type, question: text, media },
+    question: { type, question: text, media, info },
     pagination: { current: currentQuestion, total: totalQuestions },
     results,
   },
@@ -120,6 +121,7 @@ const HostResultState: FC<HostResultStateProps> = ({
           {showMedia ? 'Show results' : 'Show media'}
         </Button>
       )}
+      {!showMedia && info && <NonInteractiveInfoBox info={info} />}
     </GamePage>
   )
 }

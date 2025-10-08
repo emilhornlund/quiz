@@ -2,6 +2,7 @@ import { QuestionPuzzleDto, QuestionType } from '@quiz/common'
 
 import {
   ApiQuestionDurationProperty,
+  ApiQuestionInfoProperty,
   ApiQuestionMediaProperty,
   ApiQuestionPointsProperty,
   ApiQuestionProperty,
@@ -54,4 +55,11 @@ export class QuestionPuzzle implements QuestionPuzzleDto {
    */
   @ApiQuestionDurationProperty()
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @ApiQuestionInfoProperty()
+  info?: string
 }

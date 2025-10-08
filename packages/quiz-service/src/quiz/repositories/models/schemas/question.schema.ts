@@ -74,6 +74,13 @@ export class BaseQuestionDao {
    */
   @Prop({ type: Number, required: true })
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @Prop({ type: String, required: false })
+  info?: string
 }
 
 /**

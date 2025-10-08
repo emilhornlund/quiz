@@ -34,6 +34,7 @@ export const QuestionMultiTwoAnswers = {
           type: MediaType.Image,
           url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
         },
+        info: 'Beneath the crimson evening sky, the calm sea shimmered like liquid glass as distant gulls traced lazy arcs above the horizon, their cries fading into the whisper of waves that carried secrets from forgotten shores across time and endless tides.',
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -64,6 +65,7 @@ export const QuestionMultiFourAnswers = {
           type: MediaType.Image,
           url: 'https://wallpapercave.com/wp/wp2824407.jpg',
         },
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -96,6 +98,7 @@ export const QuestionMultiSixAnswers = {
           type: MediaType.Image,
           url: 'https://wallpaperaccess.com/full/157316.jpg',
         },
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.MultiChoice,
@@ -130,6 +133,7 @@ export const QuestionSlider = {
           type: MediaType.Video,
           url: 'https://www.youtube.com/watch?v=LXb3EKWsInQ',
         },
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.Range,
@@ -167,6 +171,7 @@ export const QuestionTrueFalse = {
           type: MediaType.Audio,
           url: 'https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3',
         },
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.TrueFalse,
@@ -193,6 +198,7 @@ export const QuestionTypeAnswer = {
       question: {
         type: QuestionType.TypeAnswer,
         question: 'Who painted the Mono Lisa?',
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.TypeAnswer,
@@ -223,6 +229,7 @@ export const QuestionPin = {
         type: QuestionType.Pin,
         question:
           'Where is the capital Stockholm located? Pin the answer on a map of Europe',
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.Pin,
@@ -261,6 +268,7 @@ export const QuestionPuzzle = {
           type: MediaType.Image,
           url: 'https://www.usnews.com/cmsmedia/20/b8/03270e8449baab54f83218beb5ca/181120-athens-editorial.jpg',
         },
+        info: 'This is an info text displayed along the question result.',
       },
       results: {
         type: QuestionType.Puzzle,

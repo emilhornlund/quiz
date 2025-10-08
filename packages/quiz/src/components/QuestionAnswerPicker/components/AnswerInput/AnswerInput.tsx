@@ -1,5 +1,3 @@
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
@@ -7,6 +5,7 @@ import {
 } from '@quiz/common'
 import React, { FC, FormEvent, useCallback, useState } from 'react'
 
+import NonInteractiveInfoBox from '../../../../states/common/NonInteractiveInfoBox'
 import Button from '../../../Button'
 import TextField from '../../../TextField'
 
@@ -60,10 +59,10 @@ const AnswerInput: FC<AnswerInputProps> = ({
           </form>
         </div>
       ) : (
-        <div className={styles.nonInteractive}>
-          <FontAwesomeIcon icon={faCircleInfo} />
-          <span>Type an answer on your screen</span>
-        </div>
+        <>
+          <div style={{ display: 'flex', flex: 1 }} />
+          <NonInteractiveInfoBox info="Type an answer on your screen" />
+        </>
       )}
     </div>
   )

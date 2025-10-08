@@ -274,6 +274,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 options: [],
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -286,6 +287,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 question: currentQuestion.data.question,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -302,6 +304,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 margin: QuestionRangeAnswerMargin.Medium,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -315,6 +318,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 options: [],
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -330,6 +334,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 tolerance: QuestionPinTolerance.Medium,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -342,6 +347,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 question: currentQuestion.data.question,
                 points: currentQuestion.data.points,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }
@@ -356,6 +362,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 media: currentQuestion.data.media,
                 correct: 0,
                 duration: currentQuestion.data.duration,
+                info: currentQuestion.data.info,
               },
               validation: {},
             }

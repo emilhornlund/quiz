@@ -1874,7 +1874,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                 class="main"
               >
                 <div
-                  class="nonInteractive"
+                  style="display: flex; flex: 1 1 0%;"
+                />
+                <div
+                  class="nonInteractiveInfoBox"
                 >
                   <svg
                     aria-hidden="true"
@@ -1890,11 +1893,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     />
                   </svg>
                   <span>
-                    Pick an answer between 
-                    0
-                     and 
-                    100
-                     on your screen
+                    Pick an answer between 0 and 100 on your screen
                   </span>
                 </div>
               </div>
@@ -2338,7 +2337,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                 class="main"
               >
                 <div
-                  class="nonInteractive"
+                  style="display: flex; flex: 1 1 0%;"
+                />
+                <div
+                  class="nonInteractiveInfoBox"
                 >
                   <svg
                     aria-hidden="true"

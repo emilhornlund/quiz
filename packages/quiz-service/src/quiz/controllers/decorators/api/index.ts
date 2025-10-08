@@ -1,5 +1,6 @@
 export * from './api-game-mode-property.decorator'
 export * from './api-question-duration-property.decorator'
+export * from './api-question-info-property.decorator'
 export * from './api-question-media-property.decorator'
 export * from './api-question-media-type-property.decorator'
 export * from './api-question-media-url-property.decorator'

@@ -6,6 +6,7 @@ import {
 
 import {
   ApiQuestionDurationProperty,
+  ApiQuestionInfoProperty,
   ApiQuestionPinImageUrlProperty,
   ApiQuestionPinPositionXProperty,
   ApiQuestionPinPositionYProperty,
@@ -73,4 +74,11 @@ export class QuestionPin implements QuestionPinDto {
    */
   @ApiQuestionDurationProperty()
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @ApiQuestionInfoProperty()
+  info?: string
 }

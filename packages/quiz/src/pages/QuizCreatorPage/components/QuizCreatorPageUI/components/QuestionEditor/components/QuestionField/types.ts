@@ -1,5 +1,6 @@
 export enum QuestionFieldType {
   CommonDuration = 'DURATION',
+  CommonInfo = 'INFO',
   CommonMedia = 'MEDIA',
   CommonPoints = 'POINTS',
   CommonQuestion = 'QUESTION',

@@ -57,6 +57,7 @@ export function createMockQuestionMultiChoiceDto(
     ],
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -74,6 +75,7 @@ export function createMockQuestionRangeDto(
     margin: QuestionRangeAnswerMargin.Medium,
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -88,6 +90,7 @@ export function createMockQuestionTrueFalseDto(
     correct: false,
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -102,6 +105,7 @@ export function createMockQuestionTypeAnswerDto(
     options: ['Copenhagen'],
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -119,6 +123,7 @@ export function createMockQuestionPinDto(
     tolerance: QuestionPinTolerance.Medium,
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -133,6 +138,7 @@ export function createMockQuestionPuzzleDto(
     values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
     points: 1000,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }
@@ -146,6 +152,7 @@ export function createMockQuestionZeroToOneHundredRangeDto(
     media: createMockQuestionMediaDto(),
     correct: 50,
     duration: 30,
+    info: 'This is an info text displayed along the question result.',
     ...(dto ?? {}),
   }
 }

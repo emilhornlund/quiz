@@ -573,6 +573,44 @@ exports[`QuestionForm > renders a classic multi choice option question form 1`] 
       </div>
     </div>
   </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutFull"
+    >
+      <div
+        class="label"
+      >
+        <span>
+          Info
+        </span>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-question-info-textfield-textfield"
+              id="question-info-textfield"
+              maxlength="256"
+              minlength="1"
+              name="question-info-textfield"
+              placeholder="Info"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -1148,6 +1186,44 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutFull"
+    >
+      <div
+        class="label"
+      >
+        <span>
+          Info
+        </span>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-question-info-textfield-textfield"
+              id="question-info-textfield"
+              maxlength="256"
+              minlength="1"
+              name="question-info-textfield"
+              placeholder="Info"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -1578,6 +1654,44 @@ exports[`QuestionForm > renders a classic true or false question form 1`] = `
                 fill="currentColor"
               />
             </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutFull"
+    >
+      <div
+        class="label"
+      >
+        <span>
+          Info
+        </span>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-question-info-textfield-textfield"
+              id="question-info-textfield"
+              maxlength="256"
+              minlength="1"
+              name="question-info-textfield"
+              placeholder="Info"
+              type="text"
+              value=""
+            />
           </div>
         </div>
       </div>
@@ -2039,6 +2153,44 @@ exports[`QuestionForm > renders a classic type answer question form 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutFull"
+    >
+      <div
+        class="label"
+      >
+        <span>
+          Info
+        </span>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-question-info-textfield-textfield"
+              id="question-info-textfield"
+              maxlength="256"
+              minlength="1"
+              name="question-info-textfield"
+              placeholder="Info"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -2346,6 +2498,44 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
                 fill="currentColor"
               />
             </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="section"
+  >
+    <div
+      class="questionFieldContainer layoutFull"
+    >
+      <div
+        class="label"
+      >
+        <span>
+          Info
+        </span>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="inputContainer"
+        >
+          <div
+            class="textFieldInputContainer textFieldInputKindPrimary"
+          >
+            <input
+              class="textfield"
+              data-testid="test-question-info-textfield-textfield"
+              id="question-info-textfield"
+              maxlength="256"
+              minlength="1"
+              name="question-info-textfield"
+              placeholder="Info"
+              type="text"
+              value=""
+            />
           </div>
         </div>
       </div>
