@@ -351,6 +351,7 @@ export class QuizService {
           text: question.question,
           points: question.points,
           duration: question.duration,
+          info: question.info,
         }
 
         switch (question.type) {
@@ -432,6 +433,7 @@ export class QuizService {
           margin: QuestionRangeAnswerMargin.None,
           points: 0,
           duration: question.duration,
+          info: question.info,
         } as BaseQuestionDao & QuestionRangeDao
       })
     }
@@ -450,7 +452,7 @@ export class QuizService {
     mode: GameMode,
     question: BaseQuestionDao,
   ): QuestionDto {
-    const { type, text, media, points, duration } = question
+    const { type, text, media, points, duration, info } = question
 
     if (mode === GameMode.Classic) {
       const common: Partial<QuestionDto> = {
@@ -459,6 +461,7 @@ export class QuizService {
         media,
         points,
         duration,
+        info,
       }
 
       switch (type) {
@@ -527,6 +530,7 @@ export class QuizService {
         media,
         duration,
         correct: cast.correct,
+        info,
       } as QuestionZeroToOneHundredRangeDto
     }
   }

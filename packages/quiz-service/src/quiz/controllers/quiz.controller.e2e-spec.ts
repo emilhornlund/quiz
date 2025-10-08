@@ -472,27 +472,20 @@ describe('QuizController (e2e)', () => {
         .send(updatedData)
         .expect(200)
         .expect((res) => {
-          expect(res.body).toHaveProperty('id', originalQuiz.id)
-          expect(res.body).toHaveProperty('title', updatedData.title)
-          expect(res.body).toHaveProperty(
-            'description',
-            updatedData.description,
-          )
-          expect(res.body).toHaveProperty('visibility', updatedData.visibility)
-          expect(res.body).toHaveProperty('category', originalData.category)
-          expect(res.body).toHaveProperty(
-            'imageCoverURL',
-            updatedData.imageCoverURL,
-          )
-          expect(res.body).toHaveProperty(
-            'languageCode',
-            updatedData.languageCode,
-          )
-          expect(res.body).toHaveProperty(
-            'created',
-            originalQuiz.created.toISOString(),
-          )
-          expect(res.body).toHaveProperty('updated')
+          expect(res.body).toEqual({
+            id: originalQuiz.id,
+            title: updatedData.title,
+            mode: updatedData.mode,
+            visibility: updatedData.visibility,
+            description: updatedData.description,
+            category: originalData.category,
+            imageCoverURL: updatedData.imageCoverURL,
+            languageCode: updatedData.languageCode,
+            numberOfQuestions: updatedData.questions.length,
+            author: {},
+            created: originalQuiz.created.toISOString(),
+            updated: expect.any(String),
+          })
         })
     })
 

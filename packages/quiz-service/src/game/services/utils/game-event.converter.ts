@@ -886,6 +886,7 @@ function buildGameResultHostEvent(
     type,
     text: question,
     media,
+    info,
   } = document.questions[document.currentTask.questionIndex]
 
   return {
@@ -897,6 +898,7 @@ function buildGameResultHostEvent(
       type,
       question,
       media: media ? { type: media.type, url: media.url } : undefined,
+      info,
     },
     results: buildGameEventQuestionResults(document),
     pagination: buildPaginationEvent(document),

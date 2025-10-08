@@ -41,6 +41,13 @@ export interface QuestionCommonDto {
    * The duration in seconds allowed for answering the question.
    */
   duration: number
+
+  /**
+   * Optional info text shown together with the question’s result/review.
+   * Use it for explanations, fun facts, or sources related to the question.
+   * Length: 1–256 characters; allowed: letters, numbers, punctuation, and spaces.
+   */
+  info?: string
 }
 
 /**

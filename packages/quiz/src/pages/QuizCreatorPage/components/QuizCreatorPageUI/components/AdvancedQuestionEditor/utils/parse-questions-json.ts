@@ -21,6 +21,9 @@ import {
   QUIZ_PUZZLE_VALUE_REGEX,
   QUIZ_PUZZLE_VALUES_MAX,
   QUIZ_PUZZLE_VALUES_MIN,
+  QUIZ_QUESTION_INFO_MAX_LENGTH,
+  QUIZ_QUESTION_INFO_MIN_LENGTH,
+  QUIZ_QUESTION_INFO_REGEX,
   QUIZ_QUESTION_MAX,
   QUIZ_QUESTION_MIN,
   QUIZ_QUESTION_TEXT_MAX_LENGTH,
@@ -132,6 +135,15 @@ const assertQuestionType = (question: string, fieldName: string) =>
     maxLength: QUIZ_QUESTION_TEXT_MAX_LENGTH,
     regex: QUIZ_QUESTION_TEXT_REGEX,
   })
+
+const assertQuestionInfoType = (info: string | undefined, fieldName: string) =>
+  info !== null && typeof info !== 'undefined'
+    ? assertType<string>(info, 'string', fieldName, {
+        minLength: QUIZ_QUESTION_INFO_MIN_LENGTH,
+        maxLength: QUIZ_QUESTION_INFO_MAX_LENGTH,
+        regex: QUIZ_QUESTION_INFO_REGEX,
+      })
+    : undefined
 
 const assertMediaType = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -272,6 +284,10 @@ export const parseQuestionsJson = (
                 question.duration,
                 `[${questionIndex}].duration`,
               ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
+              ),
             } as QuestionMultiChoiceDto,
             'object',
             `[${questionIndex}]`,
@@ -300,6 +316,10 @@ export const parseQuestionsJson = (
               duration: assertDurationType(
                 question.duration,
                 `[${questionIndex}].duration`,
+              ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
               ),
             } as QuestionTrueFalseDto,
             'object',
@@ -340,6 +360,10 @@ export const parseQuestionsJson = (
               duration: assertDurationType(
                 question.duration,
                 `[${questionIndex}].duration`,
+              ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
               ),
             } as QuestionRangeDto,
             'object',
@@ -386,6 +410,10 @@ export const parseQuestionsJson = (
                 question.duration,
                 `[${questionIndex}].duration`,
               ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
+              ),
             } as QuestionTypeAnswerDto,
             'object',
             `[${questionIndex}]`,
@@ -416,6 +444,10 @@ export const parseQuestionsJson = (
               duration: assertDurationType(
                 question.duration,
                 `[${questionIndex}].duration`,
+              ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
               ),
             } as QuestionPinDto,
             'object',
@@ -462,6 +494,10 @@ export const parseQuestionsJson = (
                 question.duration,
                 `[${questionIndex}].duration`,
               ),
+              info: assertQuestionInfoType(
+                question.info,
+                `[${questionIndex}].info`,
+              ),
             } as QuestionPuzzleDto,
             'object',
             `[${questionIndex}]`,
@@ -488,6 +524,10 @@ export const parseQuestionsJson = (
             duration: assertDurationType(
               question.duration,
               `[${questionIndex}].duration`,
+            ),
+            info: assertQuestionInfoType(
+              question.info,
+              `[${questionIndex}].info`,
             ),
           } as QuestionZeroToOneHundredRangeDto,
           'object',

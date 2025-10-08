@@ -2,6 +2,7 @@ import { QuestionMultiChoiceDto, QuestionType } from '@quiz/common'
 
 import {
   ApiQuestionDurationProperty,
+  ApiQuestionInfoProperty,
   ApiQuestionMediaProperty,
   ApiQuestionOptionsProperty,
   ApiQuestionPointsProperty,
@@ -54,4 +55,11 @@ export class QuestionMultiChoice implements QuestionMultiChoiceDto {
    */
   @ApiQuestionDurationProperty()
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @ApiQuestionInfoProperty()
+  info?: string
 }

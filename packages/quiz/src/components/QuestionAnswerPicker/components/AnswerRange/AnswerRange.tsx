@@ -1,7 +1,6 @@
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { ChangeEvent, FC, FormEvent, useCallback, useState } from 'react'
 
+import NonInteractiveInfoBox from '../../../../states/common/NonInteractiveInfoBox'
 import { isValidNumber } from '../../../../utils/helpers.ts'
 import Button from '../../../Button'
 import TextField from '../../../TextField'
@@ -80,12 +79,12 @@ const AnswerRange: FC<AnswerRangeProps> = ({
           </form>
         </div>
       ) : (
-        <div className={styles.nonInteractive}>
-          <FontAwesomeIcon icon={faCircleInfo} />
-          <span>
-            Pick an answer between {min} and {max} on your screen
-          </span>
-        </div>
+        <>
+          <div style={{ display: 'flex', flex: 1 }} />
+          <NonInteractiveInfoBox
+            info={`Pick an answer between ${min} and ${max} on your screen`}
+          />
+        </>
       )}
     </div>
   )

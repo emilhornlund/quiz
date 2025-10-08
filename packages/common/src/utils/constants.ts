@@ -34,6 +34,11 @@ export const QUIZ_QUESTION_TEXT_MIN_LENGTH = 3
 export const QUIZ_QUESTION_TEXT_MAX_LENGTH = 120
 export const QUIZ_QUESTION_TEXT_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{3,120}$/u
 
+/* Quiz Question Info — optional explanatory text shown with results/review */
+export const QUIZ_QUESTION_INFO_MIN_LENGTH = 1
+export const QUIZ_QUESTION_INFO_MAX_LENGTH = 256
+export const QUIZ_QUESTION_INFO_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,256}$/u
+
 /* Quiz Question Multi Choice Options */
 export const QUIZ_MULTI_CHOICE_OPTIONS_MIN = 2
 export const QUIZ_MULTI_CHOICE_OPTIONS_MAX = 6

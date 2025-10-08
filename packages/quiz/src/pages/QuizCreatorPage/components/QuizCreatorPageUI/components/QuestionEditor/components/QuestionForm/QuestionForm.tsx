@@ -64,6 +64,14 @@ export const ClassicMultiChoiceOptionQuestionForm: FC<
           onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
+      <div className={styles.section}>
+        <QuestionField
+          type={QuestionFieldType.CommonInfo}
+          value={data.info}
+          onChange={(newValue) => onChange('info', newValue)}
+          onValid={(valid) => onValidChange('info', valid)}
+        />
+      </div>
     </>
   )
 }
@@ -159,6 +167,14 @@ export const ClassicRangeQuestionForm: FC<
           onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
+      <div className={styles.section}>
+        <QuestionField
+          type={QuestionFieldType.CommonInfo}
+          value={data.info}
+          onChange={(newValue) => onChange('info', newValue)}
+          onValid={(valid) => onValidChange('info', valid)}
+        />
+      </div>
     </>
   )
 }
@@ -206,6 +222,14 @@ export const ClassicTrueFalseQuestionForm: FC<
           onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
+      <div className={styles.section}>
+        <QuestionField
+          type={QuestionFieldType.CommonInfo}
+          value={data.info}
+          onChange={(newValue) => onChange('info', newValue)}
+          onValid={(valid) => onValidChange('info', valid)}
+        />
+      </div>
     </>
   )
 }
@@ -251,6 +275,14 @@ export const ClassicTypeAnswerQuestionForm: FC<
           value={data.duration}
           onChange={(newValue) => onChange('duration', newValue)}
           onValid={(valid) => onValidChange('duration', valid)}
+        />
+      </div>
+      <div className={styles.section}>
+        <QuestionField
+          type={QuestionFieldType.CommonInfo}
+          value={data.info}
+          onChange={(newValue) => onChange('info', newValue)}
+          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>
@@ -314,6 +346,14 @@ export const ClassicPinQuestionForm: FC<QuestionFormProps<QuestionPinDto>> = ({
         onValid={(valid) => onValidChange('duration', valid)}
       />
     </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonInfo}
+        value={data.info}
+        onChange={(newValue) => onChange('info', newValue)}
+        onValid={(valid) => onValidChange('info', valid)}
+      />
+    </div>
   </>
 )
 
@@ -359,6 +399,14 @@ export const ClassicPuzzleQuestionForm: FC<
         onValid={(valid) => onValidChange('duration', valid)}
       />
     </div>
+    <div className={styles.section}>
+      <QuestionField
+        type={QuestionFieldType.CommonInfo}
+        value={data.info}
+        onChange={(newValue) => onChange('info', newValue)}
+        onValid={(valid) => onValidChange('info', valid)}
+      />
+    </div>
   </>
 )
 
@@ -399,6 +447,14 @@ export const ZeroToOneHundredRangeQuestionForm: FC<
           value={data.duration}
           onChange={(newValue) => onChange('duration', newValue)}
           onValid={(valid) => onValidChange('duration', valid)}
+        />
+      </div>
+      <div className={styles.section}>
+        <QuestionField
+          type={QuestionFieldType.CommonInfo}
+          value={data.info}
+          onChange={(newValue) => onChange('info', newValue)}
+          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>

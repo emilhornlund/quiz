@@ -49,6 +49,7 @@ describe('QuizRequest', () => {
         ],
         points: 1000,
         duration: 30,
+        info: 'This is an info text displayed along the question result.',
       },
     ],
   }

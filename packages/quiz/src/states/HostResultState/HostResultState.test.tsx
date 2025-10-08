@@ -71,6 +71,7 @@ describe('HostResultState', () => {
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.MultiChoice,
@@ -106,6 +107,7 @@ describe('HostResultState', () => {
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.MultiChoice,
@@ -145,6 +147,7 @@ describe('HostResultState', () => {
             question: {
               type: QuestionType.MultiChoice,
               question: 'Who painted The Starry Night?',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.MultiChoice,
@@ -187,6 +190,7 @@ describe('HostResultState', () => {
               type: QuestionType.Range,
               question:
                 "What percentage of the earth's surface is covered by water?",
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.Range,
@@ -221,6 +225,7 @@ describe('HostResultState', () => {
             question: {
               type: QuestionType.TrueFalse,
               question: "Rabbits can't vomit?",
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.TrueFalse,
@@ -248,6 +253,7 @@ describe('HostResultState', () => {
             question: {
               type: QuestionType.TypeAnswer,
               question: 'Who painted the Mono Lisa?',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.TypeAnswer,
@@ -278,6 +284,7 @@ describe('HostResultState', () => {
               type: QuestionType.Pin,
               question:
                 'Where is the capital Stockholm located? Pin the answer on a map of Europe',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.Pin,
@@ -313,6 +320,7 @@ describe('HostResultState', () => {
               type: QuestionType.Puzzle,
               question:
                 'Sort these planets from closest to farthest from the Sun',
+              info: 'This is an info text displayed along the question result.',
             },
             results: {
               type: QuestionType.Puzzle,
@@ -370,6 +378,7 @@ describe('HostResultState', () => {
     expect(h.completeTask).toHaveBeenCalledTimes(1)
     expect(container).toMatchSnapshot()
   })
+
   it('marks an incorrect option as correct via QuestionResults UI', async () => {
     render(
       <MemoryRouter>

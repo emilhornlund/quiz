@@ -5,6 +5,9 @@ import {
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
+  QUIZ_QUESTION_INFO_MAX_LENGTH,
+  QUIZ_QUESTION_INFO_MIN_LENGTH,
+  QUIZ_QUESTION_INFO_REGEX,
   QUIZ_QUESTION_TEXT_MAX_LENGTH,
   QUIZ_QUESTION_TEXT_MIN_LENGTH,
   QUIZ_QUESTION_TEXT_REGEX,
@@ -18,7 +21,10 @@ import {
   QuestionRangeAnswerMarginLabels,
   QuestionTypeLabels,
 } from '../../../../../../../../models'
-import { classNames } from '../../../../../../../../utils/helpers.ts'
+import {
+  classNames,
+  trimToUndefined,
+} from '../../../../../../../../utils/helpers.ts'
 
 import MediaQuestionField from './MediaQuestionField'
 import MultiChoiceOptions from './MultiChoiceOptions.tsx'
@@ -34,6 +40,12 @@ export type QuestionFieldProps = (
       type: QuestionFieldType.CommonDuration
       value?: number
       onChange: (value: number) => void
+      onValid: (valid: boolean) => void
+    }
+  | {
+      type: QuestionFieldType.CommonInfo
+      value?: string
+      onChange: (value?: string) => void
       onValid: (valid: boolean) => void
     }
   | {
@@ -229,6 +241,26 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             ]}
             onChange={(value) => props.onChange(parseInt(value))}
             onValid={props.onValid}
+          />
+        </QuestionFieldWrapper>
+      )
+    case QuestionFieldType.CommonInfo:
+      return (
+        <QuestionFieldWrapper label="Info" layout="full" footer={props.footer}>
+          <TextField
+            id="question-info-textfield"
+            type="text"
+            placeholder="Info"
+            value={props.value}
+            minLength={QUIZ_QUESTION_INFO_MIN_LENGTH}
+            maxLength={QUIZ_QUESTION_INFO_MAX_LENGTH}
+            regex={QUIZ_QUESTION_INFO_REGEX}
+            required={false}
+            onChange={(value) =>
+              props.onChange(trimToUndefined(value as string))
+            }
+            onValid={props.onValid}
+            forceValidate
           />
         </QuestionFieldWrapper>
       )

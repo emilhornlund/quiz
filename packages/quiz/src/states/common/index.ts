@@ -1,4 +1,6 @@
 export { default as GamePage } from './GamePage'
+export type { NonInteractiveInfoBoxProps } from './NonInteractiveInfoBox'
+export { default as NonInteractiveInfoBox } from './NonInteractiveInfoBox'
 export { default as PointsBehindIndicator } from './PointsBehindIndicator'
 export type { QuestionMediaProps } from './QuestionMedia'
 export { default as QuestionMedia } from './QuestionMedia'

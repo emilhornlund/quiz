@@ -8,6 +8,7 @@ import { IsNumber, Max, Min, Validate } from 'class-validator'
 
 import {
   ApiQuestionDurationProperty,
+  ApiQuestionInfoProperty,
   ApiQuestionMediaProperty,
   ApiQuestionPointsProperty,
   ApiQuestionProperty,
@@ -92,4 +93,11 @@ export class QuestionRange implements QuestionRangeDto {
    */
   @ApiQuestionDurationProperty()
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @ApiQuestionInfoProperty()
+  info?: string
 }

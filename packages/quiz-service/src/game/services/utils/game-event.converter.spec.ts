@@ -989,8 +989,9 @@ function expectGameResultHostEvent(
   game: Game,
   results: GameEventQuestionResults,
 ): GameResultHostEvent {
-  const media: QuestionMediaEvent | undefined = game.questions[0]?.media
-    ? { type: game.questions[0].media.type, url: game.questions[0].media.url }
+  const question = game.questions[0]
+  const media: QuestionMediaEvent | undefined = question?.media
+    ? { type: question.media.type, url: question.media.url }
     : undefined
   return {
     type: GameEventType.GameResultHost,
@@ -998,9 +999,10 @@ function expectGameResultHostEvent(
       pin: game.pin,
     },
     question: {
-      type: game.questions[0].type,
-      question: game.questions[0].text,
+      type: question.type,
+      question: question.text,
       media,
+      info: question.info,
     },
     results,
     pagination: {

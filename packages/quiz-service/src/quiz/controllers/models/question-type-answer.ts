@@ -2,6 +2,7 @@ import { QuestionType, QuestionTypeAnswerDto } from '@quiz/common'
 
 import {
   ApiQuestionDurationProperty,
+  ApiQuestionInfoProperty,
   ApiQuestionMediaProperty,
   ApiQuestionPointsProperty,
   ApiQuestionProperty,
@@ -53,4 +54,11 @@ export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
    */
   @ApiQuestionDurationProperty()
   duration: number
+
+  /**
+   * Optional info text shown with the question result/review
+   * (explanation, fun fact, or source).
+   */
+  @ApiQuestionInfoProperty()
+  info?: string
 }
