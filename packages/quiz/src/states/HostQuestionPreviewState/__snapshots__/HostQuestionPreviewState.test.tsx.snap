@@ -103,9 +103,13 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
             </div>
           </div>
           <div
-            class="typography title medium"
+            class="questionTextContainer"
           >
-            Who painted The Starry Night?
+            <div
+              class="typography title medium"
+            >
+              Who painted The Starry Night?
+            </div>
           </div>
           <div
             class="progressBar"
