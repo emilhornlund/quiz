@@ -1,8 +1,8 @@
 import { GameQuestionPreviewPlayerEvent } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { PlayerGameFooter, ProgressBar, Typography } from '../../components'
-import QuestionTypePointsBar, { GamePage } from '../common'
+import { PlayerGameFooter, ProgressBar } from '../../components'
+import { GamePage, QuestionTextPreview, QuestionTypePointsBar } from '../common'
 
 export interface PlayerQuestionPreviewStateProps {
   event: GameQuestionPreviewPlayerEvent
@@ -38,9 +38,7 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
       questionPoints={questionPoints}
     />
 
-    <Typography variant="subtitle" size="medium">
-      {questionValue}
-    </Typography>
+    <QuestionTextPreview text={questionValue} />
 
     <ProgressBar countdown={countdown} />
   </GamePage>
