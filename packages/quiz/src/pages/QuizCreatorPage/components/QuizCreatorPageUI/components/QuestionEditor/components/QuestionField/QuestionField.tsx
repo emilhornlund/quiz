@@ -246,7 +246,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
       )
     case QuestionFieldType.CommonInfo:
       return (
-        <QuestionFieldWrapper label="Info" layout="full" footer={props.footer}>
+        <QuestionFieldWrapper
+          label="Info"
+          layout="full"
+          info="Text displayed with the question results — use it to explain the answer, share context, or add a fun fact."
+          footer={props.footer}>
           <TextField
             id="question-info-textfield"
             type="text"
