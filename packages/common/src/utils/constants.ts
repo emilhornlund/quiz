@@ -1,24 +1,52 @@
 import { QuestionPinTolerance } from '../models'
 
+// Common emoji blocks + components + ZWJ/VS16/keycap:
+// 2600–27BF, 1F300–1F5FF, 1F600–1F64F, 1F680–1F6FF, 1F900–1F9FF, 1FA70–1FAFF,
+// 1F1E6–1F1FF (regional indicators), FE0F (VS16), 200D (ZWJ), 20E3 (keycap)
+const EMOJI_RANGE =
+  '\\u{1F300}-\\u{1F5FF}' + // Misc Symbols & Pictographs
+  '\\u{1F900}-\\u{1F9FF}' + // Supplemental Symbols & Pictographs
+  '\\u{1F600}-\\u{1F64F}' + // Emoticons
+  '\\u{1F680}-\\u{1F6FF}' + // Transport & Map
+  '\\u{2600}-\\u{26FF}' + // Misc Symbols
+  '\\u{2700}-\\u{27BF}' + // Dingbats
+  '\\u{1F1E6}-\\u{1F1FF}' + // Regional Indicators
+  '\\u{1F191}-\\u{1F251}' + // Enclosed Characters
+  '\\u{1F004}\\u{1F0CF}' + // Mahjong / Joker tiles
+  '\\u{1F170}-\\u{1F171}\\u{1F17E}-\\u{1F17F}\\u{1F18E}' + // Enclosed letters
+  '\\u{3030}\\u{2B50}\\u{2B55}' + // Common standalone emoji
+  '\\u{2934}-\\u{2935}\\u{2B05}-\\u{2B07}\\u{2B1B}-\\u{2B1C}' + // Arrows
+  '\\u{3297}\\u{3299}\\u{303D}\\u{00A9}\\u{00AE}\\u{2122}' + // Symbols
+  '\\u{23F3}\\u{24C2}\\u{23E9}-\\u{23EF}\\u{25B6}\\u{23F8}-\\u{23FA}' // Misc UI icons
+
 /* Quiz Title */
 export const QUIZ_TITLE_MIN_LENGTH = 3
 export const QUIZ_TITLE_MAX_LENGTH = 95
-export const QUIZ_TITLE_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{3,95}$/u
+export const QUIZ_TITLE_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{3,95}$`,
+  'u',
+)
 
 /* Quiz Description */
 export const QUIZ_DESCRIPTION_MAX_LENGTH = 500
-export const QUIZ_DESCRIPTION_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}\n\r]{1,500}$/u
+export const QUIZ_DESCRIPTION_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}\\n\\r]{1,500}$`,
+  'u',
+)
 
-export const GAME_NAME_REGEX = /^[a-zA-Z0-9_ ]{3,25}$/
 export const GAME_PIN_REGEX = /^[1-9]\d{5}$/
 export const GAME_PIN_LENGTH = 6
+
 export const GAME_MIN_PLAYERS = 0
 export const GAME_MAX_PLAYERS = 20
 
 /* Player Nickname */
 export const PLAYER_NICKNAME_MIN_LENGTH = 2
 export const PLAYER_NICKNAME_MAX_LENGTH = 20
-export const PLAYER_NICKNAME_REGEX = /^[\p{L}\p{N}_\p{Emoji}]{2,20}$/u
+export const PLAYER_NICKNAME_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}_${EMOJI_RANGE}]{2,20}$`,
+  'u',
+)
 
 /* URL */
 export const URL_REGEX =
@@ -32,20 +60,28 @@ export const QUIZ_QUESTION_MAX = 50
 /* Quiz Question Text */
 export const QUIZ_QUESTION_TEXT_MIN_LENGTH = 3
 export const QUIZ_QUESTION_TEXT_MAX_LENGTH = 120
-export const QUIZ_QUESTION_TEXT_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{3,120}$/u
+export const QUIZ_QUESTION_TEXT_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{3,120}$`,
+  'u',
+)
 
 /* Quiz Question Info — optional explanatory text shown with results/review */
 export const QUIZ_QUESTION_INFO_MIN_LENGTH = 1
 export const QUIZ_QUESTION_INFO_MAX_LENGTH = 256
-export const QUIZ_QUESTION_INFO_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,256}$/u
+export const QUIZ_QUESTION_INFO_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,256}$`,
+  'u',
+)
 
 /* Quiz Question Multi Choice Options */
 export const QUIZ_MULTI_CHOICE_OPTIONS_MIN = 2
 export const QUIZ_MULTI_CHOICE_OPTIONS_MAX = 6
 export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MIN_LENGTH = 1
 export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MAX_LENGTH = 75
-export const QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX =
-  /^[\p{L}\p{N}\p{P}\p{Zs}]{1,75}$/u
+export const QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
+  'u',
+)
 
 /* Quiz Question Type Answer Options */
 export const QUIZ_TYPE_ANSWER_OPTIONS_MIN = 1
@@ -71,7 +107,10 @@ export const QUIZ_PUZZLE_VALUES_MIN = 3
 export const QUIZ_PUZZLE_VALUES_MAX = 6
 export const QUIZ_PUZZLE_VALUE_MIN_LENGTH = 1
 export const QUIZ_PUZZLE_VALUE_MAX_LENGTH = 75
-export const QUIZ_PUZZLE_VALUE_REGEX = /^[\p{L}\p{N}\p{P}\p{Zs}]{1,75}$/u
+export const QUIZ_PUZZLE_VALUE_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
+  'u',
+)
 
 export const QUIZ_ZERO_POINTS = 0
 export const QUIZ_STANDARD_POINTS = 1000
