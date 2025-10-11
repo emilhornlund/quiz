@@ -146,7 +146,6 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
       setUser(null)
       setContext('auth', null)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, sentryContextKey])
 
   /**

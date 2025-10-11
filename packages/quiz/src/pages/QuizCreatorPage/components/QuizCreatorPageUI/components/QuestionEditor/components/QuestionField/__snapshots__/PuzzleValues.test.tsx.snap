@@ -1,0 +1,280 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PuzzleValues > renders and matches snapshot 1`] = `
+<div>
+  <div
+    class="optionsContainer fullWidth"
+  >
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--0-textfield"
+          id="puzzle-value--0-textfield"
+          placeholder="Value 1"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--1-textfield"
+          id="puzzle-value--1-textfield"
+          placeholder="Value 2"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--2-textfield"
+          id="puzzle-value--2-textfield"
+          placeholder="Value 3"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--3-textfield"
+          id="puzzle-value--3-textfield"
+          placeholder="Value 4"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--4-textfield"
+          id="puzzle-value--4-textfield"
+          placeholder="Value 5"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--5-textfield"
+          id="puzzle-value--5-textfield"
+          placeholder="Value 6"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PuzzleValues > updates from external prop changes without remounting inputs (snapshot) 1`] = `
+<div>
+  <div
+    class="optionsContainer fullWidth"
+  >
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--0-textfield"
+          id="puzzle-value--0-textfield"
+          placeholder="Value 1"
+          value="A"
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--1-textfield"
+          id="puzzle-value--1-textfield"
+          placeholder="Value 2"
+          value="B"
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--2-textfield"
+          id="puzzle-value--2-textfield"
+          placeholder="Value 3"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--3-textfield"
+          id="puzzle-value--3-textfield"
+          placeholder="Value 4"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--4-textfield"
+          id="puzzle-value--4-textfield"
+          placeholder="Value 5"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--5-textfield"
+          id="puzzle-value--5-textfield"
+          placeholder="Value 6"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PuzzleValues > updates from external prop changes without remounting inputs (snapshot) 2`] = `
+<div>
+  <div
+    class="optionsContainer fullWidth"
+  >
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--0-textfield"
+          id="puzzle-value--0-textfield"
+          placeholder="Value 1"
+          value="AA"
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--1-textfield"
+          id="puzzle-value--1-textfield"
+          placeholder="Value 2"
+          value="BB"
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--2-textfield"
+          id="puzzle-value--2-textfield"
+          placeholder="Value 3"
+          value="CC"
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--3-textfield"
+          id="puzzle-value--3-textfield"
+          placeholder="Value 4"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--4-textfield"
+          id="puzzle-value--4-textfield"
+          placeholder="Value 5"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="option"
+    >
+      <div
+        class="content"
+      >
+        <input
+          data-testid="input-puzzle-value--5-textfield"
+          id="puzzle-value--5-textfield"
+          placeholder="Value 6"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

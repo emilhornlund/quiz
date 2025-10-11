@@ -1,15 +1,9 @@
 import {
   QUIZ_TYPE_ANSWER_OPTIONS_MAX,
+  QUIZ_TYPE_ANSWER_OPTIONS_MIN,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
 } from '@quiz/common'
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
 
@@ -26,43 +20,47 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
   onChange,
   onValid,
 }) => {
-  const options = useMemo<string[]>(
-    () =>
-      Array.from(Array(QUIZ_TYPE_ANSWER_OPTIONS_MAX).keys()).map(
-        (index) => values?.[index] || '',
-      ),
-    [values],
+  const [options, setOptions] = useState<string[]>(() =>
+    Array.from(
+      { length: QUIZ_TYPE_ANSWER_OPTIONS_MAX },
+      (_, i) => values?.[i] ?? '',
+    ),
   )
 
+  useEffect(() => {
+    setOptions((prev) => prev.map((_, i) => values?.[i] ?? ''))
+  }, [values])
+
   const isRequired = useCallback(
-    (index: number): boolean => (values?.length || 1) > index,
-    [values],
+    (index: number): boolean => {
+      const lastFilled = [...options].reverse().findIndex((v) => v.length > 0)
+      const cutoff =
+        lastFilled >= 0
+          ? Math.max(options.length - lastFilled, QUIZ_TYPE_ANSWER_OPTIONS_MIN)
+          : QUIZ_TYPE_ANSWER_OPTIONS_MIN
+      return index < cutoff
+    },
+    [options],
   )
 
   const handleChange = useCallback(
     (updatedIndex: number, newValue?: string) => {
-      let newValues = [...options]
+      setOptions((prev) => {
+        const next = [...prev]
+        if (newValue !== undefined) next[updatedIndex] = newValue
 
-      if (newValue !== undefined) {
-        newValues[updatedIndex] = newValue
-      }
+        // compute trimmed length to emit
+        const lastFilled = [...next].reverse().findIndex((v) => v.length > 0)
+        const cutoff =
+          lastFilled >= 0
+            ? Math.max(next.length - lastFilled, QUIZ_TYPE_ANSWER_OPTIONS_MIN)
+            : QUIZ_TYPE_ANSWER_OPTIONS_MIN
 
-      const reversedIndexToRemove = [...newValues]
-        .reverse()
-        .findIndex((option) => option.length)
-
-      const indexToRemove =
-        reversedIndexToRemove >= 0
-          ? Math.max(options.length - reversedIndexToRemove, 1)
-          : 1
-
-      if (indexToRemove < options.length) {
-        newValues = newValues.slice(0, indexToRemove)
-      }
-
-      onChange(newValues)
+        onChange(next.slice(0, cutoff))
+        return next
+      })
     },
-    [options, onChange],
+    [onChange],
   )
 
   const [validOptions, setValidOptions] = useState<boolean[]>(
@@ -83,12 +81,11 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
   )
 
   const previousValid = useRef<boolean | undefined>(undefined)
-
   useEffect(() => {
-    const isValid = validOptions.every((valid) => valid)
-    if (previousValid.current !== isValid) {
-      previousValid.current = isValid
-      onValid(isValid)
+    const allValid = validOptions.every(Boolean)
+    if (previousValid.current !== allValid) {
+      previousValid.current = allValid
+      onValid(allValid)
     }
   }, [validOptions, onValid])
 
@@ -96,17 +93,19 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
     <div className={styles.optionsContainer}>
       {options.map((option, index) => (
         <div key={`type-answer-option-${index}`} className={styles.option}>
-          <TextField
-            id={`type-answer-option-${index}-textfield`}
-            type="text"
-            placeholder={`Option ${index + 1}`}
-            value={option}
-            regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
-            onChange={(newValue) => handleChange(index, newValue as string)}
-            onValid={(newValid) => handleValidChange(index, newValid)}
-            required={isRequired(index)}
-            forceValidate
-          />
+          <div className={styles.content}>
+            <TextField
+              id={`type-answer-option-${index}-textfield`}
+              type="text"
+              placeholder={`Option ${index + 1}`}
+              value={option}
+              regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
+              onChange={(newValue) => handleChange(index, newValue as string)}
+              onValid={(newValid) => handleValidChange(index, newValid)}
+              required={isRequired(index)}
+              forceValidate
+            />
+          </div>
         </div>
       ))}
     </div>

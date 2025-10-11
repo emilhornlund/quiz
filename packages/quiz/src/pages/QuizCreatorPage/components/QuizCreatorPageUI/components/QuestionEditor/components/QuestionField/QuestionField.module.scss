@@ -73,44 +73,80 @@
 }
 
 .optionsContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  justify-content: center;
+  overflow: visible;
+  align-items: start;
+  grid-auto-rows: min-content;
 
   @include helpers.mobile {
-    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
-    column-gap: variables.$mobile-narrow-layout-gutter;
+    grid-gap: variables.$mobile-narrow-layout-gutter;
   }
-
   @include helpers.tablet {
-    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
-    column-gap: variables.$tablet-narrow-layout-gutter;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: variables.$tablet-narrow-layout-gutter;
+  }
+  @include helpers.desktop {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: variables.$desktop-narrow-layout-gutter;
   }
 
-  @include helpers.desktop {
-    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
-    column-gap: variables.$desktop-narrow-layout-gutter;
+  &.fullWidth {
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .option {
-    position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    transition: transform 120ms ease;
+
+    &.dragging {
+      z-index: variables.$reorder-z-index;
+      position: relative;
+      will-change: transform;
+      transition: none;
+    }
 
     @include helpers.mobile {
-      width: calc(50% - #{variables.$mobile-narrow-layout-gutter} * 0.5);
+      column-gap: variables.$mobile-narrow-layout-gutter;
     }
-
     @include helpers.tablet {
-      width: calc(50% - #{variables.$tablet-narrow-layout-gutter} * 0.5);
+      column-gap: variables.$tablet-narrow-layout-gutter;
     }
-
     @include helpers.desktop {
-      width: calc(50% - #{variables.$desktop-narrow-layout-gutter} * 0.5);
+      column-gap: variables.$desktop-narrow-layout-gutter;
     }
 
-    &.fullWidth {
-      width: 100%;
+    .content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .handle {
+      display: flex;
+      flex-direction: column;
+      cursor: grab;
+
+      &.dragging {
+        cursor: grabbing;
+      }
+
+      .icon {
+        @include helpers.mobile {
+          @include helpers.fontSize(24px);
+        }
+        @include helpers.tablet {
+          @include helpers.fontSize(26px);
+        }
+        @include helpers.desktop {
+          @include helpers.fontSize(28px);
+        }
+      }
     }
   }
 }

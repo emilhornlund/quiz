@@ -3,14 +3,7 @@ import {
   QUIZ_PUZZLE_VALUES_MAX,
   QUIZ_PUZZLE_VALUES_MIN,
 } from '@quiz/common'
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
@@ -28,47 +21,46 @@ const PuzzleValues: FC<PuzzleValuesProps> = ({
   onChange,
   onValid,
 }) => {
-  const values = useMemo<string[]>(
-    () =>
-      Array.from(Array(QUIZ_PUZZLE_VALUES_MAX).keys()).map(
-        (index) => initialValues?.[index] || '',
-      ),
-    [initialValues],
+  const [values, setValues] = useState<string[]>(() =>
+    Array.from(
+      { length: QUIZ_PUZZLE_VALUES_MAX },
+      (_, i) => initialValues?.[i] ?? '',
+    ),
   )
 
+  useEffect(() => {
+    setValues((prev) => prev.map((_, i) => initialValues?.[i] ?? ''))
+  }, [initialValues])
+
   const isRequired = useCallback(
-    (index: number): boolean =>
-      (initialValues?.length || QUIZ_PUZZLE_VALUES_MIN) > index,
-    [initialValues],
+    (index: number): boolean => {
+      const lastFilled = [...values].reverse().findIndex((v) => v.length > 0)
+      const cutoff =
+        lastFilled >= 0
+          ? Math.max(values.length - lastFilled, QUIZ_PUZZLE_VALUES_MIN)
+          : QUIZ_PUZZLE_VALUES_MIN
+      return index < cutoff
+    },
+    [values],
   )
 
   const handleChange = useCallback(
     (updatedIndex: number, newValue?: string) => {
-      let newValues = [...values]
+      setValues((prev) => {
+        const next = [...prev]
+        if (newValue !== undefined) next[updatedIndex] = newValue
 
-      if (newValue !== undefined) {
-        newValues[updatedIndex] = newValue
-      }
+        const lastFilled = [...next].reverse().findIndex((v) => v.length > 0)
+        const cutoff =
+          lastFilled >= 0
+            ? Math.max(next.length - lastFilled, QUIZ_PUZZLE_VALUES_MIN)
+            : QUIZ_PUZZLE_VALUES_MIN
 
-      const reversedIndexToRemove = [...newValues]
-        .reverse()
-        .findIndex((value) => value.length)
-
-      const indexToRemove =
-        reversedIndexToRemove >= 0
-          ? Math.max(
-              values.length - reversedIndexToRemove,
-              QUIZ_PUZZLE_VALUES_MIN,
-            )
-          : QUIZ_PUZZLE_VALUES_MIN
-
-      if (indexToRemove < values.length) {
-        newValues = newValues.slice(0, indexToRemove)
-      }
-
-      onChange(newValues)
+        onChange(next.slice(0, cutoff))
+        return next
+      })
     },
-    [values, onChange],
+    [onChange],
   )
 
   const [validValues, setValidValues] = useState<boolean[]>(
@@ -88,33 +80,32 @@ const PuzzleValues: FC<PuzzleValuesProps> = ({
     [validValues],
   )
 
-  const previousValid = useRef<boolean | undefined>(undefined)
-
+  const wasAllValid = useRef<boolean | undefined>(undefined)
   useEffect(() => {
-    const isValid = validValues.every((valid) => valid)
-    if (previousValid.current !== isValid) {
-      previousValid.current = isValid
-      onValid(isValid)
+    const allValid = validValues.every(Boolean)
+    if (wasAllValid.current !== allValid) {
+      wasAllValid.current = allValid
+      onValid(allValid)
     }
   }, [validValues, onValid])
 
   return (
-    <div className={styles.optionsContainer}>
+    <div className={classNames(styles.optionsContainer, styles.fullWidth)}>
       {values.map((value, index) => (
-        <div
-          key={`puzzle-value--${index}`}
-          className={classNames(styles.option, styles.fullWidth)}>
-          <TextField
-            id={`puzzle-value--${index}-textfield`}
-            type="text"
-            placeholder={`Value ${index + 1}`}
-            value={value}
-            regex={QUIZ_PUZZLE_VALUE_REGEX}
-            onChange={(newValue) => handleChange(index, newValue as string)}
-            onValid={(newValid) => handleValidChange(index, newValid)}
-            required={isRequired(index)}
-            forceValidate
-          />
+        <div key={`puzzle-value--${index}`} className={styles.option}>
+          <div className={styles.content}>
+            <TextField
+              id={`puzzle-value--${index}-textfield`}
+              type="text"
+              placeholder={`Value ${index + 1}`}
+              value={value}
+              regex={QUIZ_PUZZLE_VALUE_REGEX}
+              onChange={(newValue) => handleChange(index, newValue as string)}
+              onValid={(newValid) => handleValidChange(index, newValid)}
+              required={isRequired(index)}
+              forceValidate
+            />
+          </div>
         </div>
       ))}
     </div>

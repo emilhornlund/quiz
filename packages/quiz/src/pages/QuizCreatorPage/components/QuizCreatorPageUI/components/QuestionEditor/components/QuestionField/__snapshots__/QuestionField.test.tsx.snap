@@ -349,208 +349,387 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
       >
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-0-textfield-textfield"
-                id="multi-choice-option-0-textfield"
-                name="multi-choice-option-0-textfield"
-                placeholder="Option 1"
-                type="text"
-                value="Stockholm"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-0-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  checked=""
-                  class="checkbox"
-                  id="multi-choice-option-0-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-0-textfield"
+                  id="multi-choice-option-_r_16_-0"
+                  name="multi-choice-option-_r_16_-0"
+                  placeholder="Option 1"
+                  type="text"
+                  value="Stockholm"
                 />
-                <span
-                  class="checkboxIcon"
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-0-checkbox"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-check"
-                    data-icon="check"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 448 512"
+                  <input
+                    checked=""
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-0-checkbox"
+                    type="checkbox"
+                  />
+                  <span
+                    class="checkboxIcon"
                   >
-                    <path
-                      d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </span>
-              </label>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-check"
+                      data-icon="check"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 448 512"
+                    >
+                      <path
+                        d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </label>
+              </div>
             </div>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
           </div>
         </div>
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-1-textfield-textfield"
-                id="multi-choice-option-1-textfield"
-                name="multi-choice-option-1-textfield"
-                placeholder="Option 2"
-                type="text"
-                value="Paris"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-1-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="multi-choice-option-1-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-1-textfield"
+                  id="multi-choice-option-_r_16_-1"
+                  name="multi-choice-option-_r_16_-1"
+                  placeholder="Option 2"
+                  type="text"
+                  value="Paris"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-1-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-1-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
           </div>
         </div>
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-2-textfield-textfield"
-                id="multi-choice-option-2-textfield"
-                name="multi-choice-option-2-textfield"
-                placeholder="Option 3"
-                type="text"
-                value="Copenhagen"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-2-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="multi-choice-option-2-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-2-textfield"
+                  id="multi-choice-option-_r_16_-2"
+                  name="multi-choice-option-_r_16_-2"
+                  placeholder="Option 3"
+                  type="text"
+                  value="Copenhagen"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-2-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-2-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
           </div>
         </div>
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-3-textfield-textfield"
-                id="multi-choice-option-3-textfield"
-                name="multi-choice-option-3-textfield"
-                placeholder="Option 4"
-                type="text"
-                value="London"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-3-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="multi-choice-option-3-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-3-textfield"
+                  id="multi-choice-option-_r_16_-3"
+                  name="multi-choice-option-_r_16_-3"
+                  placeholder="Option 4"
+                  type="text"
+                  value="London"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-3-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-3-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
           </div>
         </div>
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-4-textfield-textfield"
-                id="multi-choice-option-4-textfield"
-                name="multi-choice-option-4-textfield"
-                placeholder="Option 5"
-                type="text"
-                value="Oslo"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-4-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="multi-choice-option-4-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-4-textfield"
+                  id="multi-choice-option-_r_16_-4"
+                  name="multi-choice-option-_r_16_-4"
+                  placeholder="Option 5"
+                  type="text"
+                  value="Oslo"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-4-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-4-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
           </div>
         </div>
         <div
           class="option"
+          style="transition: transform 0ms linear;"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-multi-choice-option-5-textfield-textfield"
-                id="multi-choice-option-5-textfield"
-                name="multi-choice-option-5-textfield"
-                placeholder="Option 6"
-                type="text"
-                value="Berlin"
-              />
-              <label
-                class="checkboxLabel"
-                for="multi-choice-option-5-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="multi-choice-option-5-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-multi-choice-option-_r_16_-5-textfield"
+                  id="multi-choice-option-_r_16_-5"
+                  name="multi-choice-option-_r_16_-5"
+                  placeholder="Option 6"
+                  type="text"
+                  value="Berlin"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="multi-choice-option-_r_16_-5-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="multi-choice-option-_r_16_-5-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
           </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="handle"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
         </div>
+        <div
+          id="DndDescribedBy-0"
+          style="display: none;"
+        >
+          
+    To pick up a draggable item, press the space bar.
+    While dragging, use the arrow keys to move the item.
+    Press space again to drop the item in its new position, or press escape to cancel.
+  
+        </div>
+        <div
+          aria-atomic="true"
+          aria-live="assertive"
+          id="DndLiveRegion-0"
+          role="status"
+          style="position: fixed; top: 0px; left: 0px; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip: rect(0px); clip-path: inset(100%); white-space: nowrap;"
+        />
       </div>
     </div>
   </div>
@@ -1099,7 +1278,7 @@ exports[`QuestionField > renders a true or false options question field 1`] = `
       </span>
     </div>
     <div
-      class="content optionsContainer"
+      class="content"
     >
       <div
         class="optionsContainer"
@@ -1108,48 +1287,52 @@ exports[`QuestionField > renders a true or false options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-true-false-option-0-textfield-textfield"
-                id="true-false-option-0-textfield"
-                name="true-false-option-0-textfield"
-                readonly=""
-                type="text"
-                value="True"
-              />
-              <label
-                class="checkboxLabel"
-                for="true-false-option-0-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  checked=""
-                  class="checkbox"
-                  id="true-false-option-0-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-true-false-option-0-textfield-textfield"
+                  id="true-false-option-0-textfield"
+                  name="true-false-option-0-textfield"
+                  readonly=""
+                  type="text"
+                  value="True"
                 />
-                <span
-                  class="checkboxIcon"
+                <label
+                  class="checkboxLabel"
+                  for="true-false-option-0-textfield-checkbox"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-check"
-                    data-icon="check"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 448 512"
+                  <input
+                    checked=""
+                    class="checkbox"
+                    id="true-false-option-0-textfield-checkbox"
+                    type="checkbox"
+                  />
+                  <span
+                    class="checkboxIcon"
                   >
-                    <path
-                      d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </span>
-              </label>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-check"
+                      data-icon="check"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 448 512"
+                    >
+                      <path
+                        d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -1157,30 +1340,34 @@ exports[`QuestionField > renders a true or false options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-true-false-option-1-textfield-textfield"
-                id="true-false-option-1-textfield"
-                name="true-false-option-1-textfield"
-                readonly=""
-                type="text"
-                value="False"
-              />
-              <label
-                class="checkboxLabel"
-                for="true-false-option-1-textfield-checkbox"
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
               >
                 <input
-                  class="checkbox"
-                  id="true-false-option-1-textfield-checkbox"
-                  type="checkbox"
+                  class="textfield"
+                  data-testid="test-true-false-option-1-textfield-textfield"
+                  id="true-false-option-1-textfield"
+                  name="true-false-option-1-textfield"
+                  readonly=""
+                  type="text"
+                  value="False"
                 />
-              </label>
+                <label
+                  class="checkboxLabel"
+                  for="true-false-option-1-textfield-checkbox"
+                >
+                  <input
+                    class="checkbox"
+                    id="true-false-option-1-textfield-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -1298,7 +1485,7 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
       </button>
     </div>
     <div
-      class="content optionsContainer"
+      class="content"
     >
       <div
         class="optionsContainer"
@@ -1307,20 +1494,24 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-type-answer-option-0-textfield-textfield"
-                id="type-answer-option-0-textfield"
-                name="type-answer-option-0-textfield"
-                placeholder="Option 1"
-                type="text"
-                value="first"
-              />
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-type-answer-option-0-textfield-textfield"
+                  id="type-answer-option-0-textfield"
+                  name="type-answer-option-0-textfield"
+                  placeholder="Option 1"
+                  type="text"
+                  value="first"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -1328,20 +1519,24 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-type-answer-option-1-textfield-textfield"
-                id="type-answer-option-1-textfield"
-                name="type-answer-option-1-textfield"
-                placeholder="Option 2"
-                type="text"
-                value="second"
-              />
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-type-answer-option-1-textfield-textfield"
+                  id="type-answer-option-1-textfield"
+                  name="type-answer-option-1-textfield"
+                  placeholder="Option 2"
+                  type="text"
+                  value="second"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -1349,20 +1544,24 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-type-answer-option-2-textfield-textfield"
-                id="type-answer-option-2-textfield"
-                name="type-answer-option-2-textfield"
-                placeholder="Option 3"
-                type="text"
-                value="third"
-              />
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-type-answer-option-2-textfield-textfield"
+                  id="type-answer-option-2-textfield"
+                  name="type-answer-option-2-textfield"
+                  placeholder="Option 3"
+                  type="text"
+                  value="third"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -1370,20 +1569,24 @@ exports[`QuestionField > renders a type answer options question field 1`] = `
           class="option"
         >
           <div
-            class="inputContainer"
+            class="content"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindPrimary"
+              class="inputContainer"
             >
-              <input
-                class="textfield"
-                data-testid="test-type-answer-option-3-textfield-textfield"
-                id="type-answer-option-3-textfield"
-                name="type-answer-option-3-textfield"
-                placeholder="Option 4"
-                type="text"
-                value="fourth"
-              />
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-type-answer-option-3-textfield-textfield"
+                  id="type-answer-option-3-textfield"
+                  name="type-answer-option-3-textfield"
+                  placeholder="Option 4"
+                  type="text"
+                  value="fourth"
+                />
+              </div>
             </div>
           </div>
         </div>
