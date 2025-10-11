@@ -528,8 +528,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper
           label="Options"
           layout="full"
-          footer={props.footer}
-          className={styles.optionsContainer}>
+          footer={props.footer}>
           <TrueFalseOptions {...props} />
         </QuestionFieldWrapper>
       )
@@ -539,8 +538,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           label="Options"
           layout="full"
           info="The list of allowed typed answers for a question."
-          footer={props.footer}
-          className={styles.optionsContainer}>
+          footer={props.footer}>
           <TypeAnswerOptions {...props} />
         </QuestionFieldWrapper>
       )
