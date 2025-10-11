@@ -10,6 +10,7 @@ exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
     >
       <div
         class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
       >
         <div />
         <div />

@@ -1,8 +1,11 @@
 import { faRocket } from '@fortawesome/free-solid-svg-icons'
 import React, { FC, useState } from 'react'
 
-import Button from '../../../Button'
-import { SortableTable, SortableTableValue } from '../../../index.ts'
+import {
+  Button,
+  SortableTable,
+  SortableTableValue,
+} from '../../../../../components'
 
 import styles from './AnswerSort.module.scss'
 

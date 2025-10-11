@@ -1,9 +1,7 @@
 import { faRocket } from '@fortawesome/free-solid-svg-icons'
 import React, { FC, useState } from 'react'
 
-import Button from '../../../Button'
-import PinImage from '../../../PinImage'
-import ResponsiveImage from '../../../ResponsiveImage'
+import { Button, PinImage, ResponsiveImage } from '../../../../../components'
 
 import styles from './AnswerPin.module.scss'
 
@@ -24,7 +22,7 @@ const AnswerPin: FC<AnswerPinProps> = ({ imageURL, interactive, onSubmit }) => {
   }
 
   return (
-    <div className={styles.main}>
+    <div className={styles.answerPin}>
       {interactive ? (
         <div className={styles.interactive}>
           <PinImage

@@ -1,0 +1,97 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AnswerRange > renders interactive mode with initial midpoint and disabled submit 1`] = `
+<div>
+  <div
+    class="answerRange"
+  >
+    <div
+      class="interactive"
+    >
+      <form>
+        <input
+          id="slider-range"
+          max="100"
+          min="0"
+          step="5"
+          type="range"
+          value="50"
+        />
+        <div
+          class="inputGroup"
+        >
+          <div>
+            <input
+              data-testid="tf-input"
+              id="slider-input"
+              max="100"
+              min="0"
+              type="number"
+              value="50"
+            />
+            <button
+              data-testid="tf-valid"
+              type="button"
+            >
+              make-valid
+            </button>
+            <button
+              data-testid="tf-invalid"
+              type="button"
+            >
+              make-invalid
+            </button>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary"
+          >
+            <button
+              data-testid="test-submit-button-button"
+              disabled=""
+              id="submit-button"
+              name="submit-button"
+              type="submit"
+            >
+              <span>
+                Submit
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AnswerRange > renders non-interactive mode with info message and no form 1`] = `
+<div>
+  <div
+    class="answerRange"
+  >
+    <div
+      style="display: flex; flex: 1 1 0%;"
+    />
+    <div
+      class="nonInteractiveInfoBox"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-circle-info"
+        data-icon="circle-info"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 512 512"
+      >
+        <path
+          d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM224 160a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm-8 64l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z"
+          fill="currentColor"
+        />
+      </svg>
+      <span>
+        Pick an answer between 5 and 15 on your screen
+      </span>
+    </div>
+  </div>
+</div>
+`;

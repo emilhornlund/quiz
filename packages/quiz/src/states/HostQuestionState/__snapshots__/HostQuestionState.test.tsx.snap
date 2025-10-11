@@ -126,10 +126,10 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
             class="row fullWidth fullHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -357,10 +357,10 @@ exports[`HostQuestionState > does not render media when question type is Pin (ev
             class="row fullWidth fullHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPin"
               >
                 <div
                   class="container"
@@ -584,10 +584,10 @@ exports[`HostQuestionState > renders with audio media 1`] = `
             class="row fullWidth flexibleHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -830,10 +830,10 @@ exports[`HostQuestionState > renders with video media 1`] = `
             class="row fullWidth flexibleHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -1069,6 +1069,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
               >
                 <div
                   class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
                 >
                   <div />
                   <div />
@@ -1081,10 +1082,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth flexibleHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -1338,6 +1339,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
               >
                 <div
                   class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
                 >
                   <div />
                   <div />
@@ -1350,10 +1352,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth flexibleHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -1625,6 +1627,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
               >
                 <div
                   class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
                 >
                   <div />
                   <div />
@@ -1637,10 +1640,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth flexibleHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -1868,10 +1871,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth fullHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerRange"
               >
                 <div
                   style="display: flex; flex: 1 1 0%;"
@@ -2100,10 +2103,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth fullHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerPicker"
               >
                 <div
                   class="grid"
@@ -2331,10 +2334,10 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="row fullWidth fullHeight"
           >
             <div
-              class="main"
+              class="questionAnswerPicker"
             >
               <div
-                class="main"
+                class="answerInput"
               >
                 <div
                   style="display: flex; flex: 1 1 0%;"

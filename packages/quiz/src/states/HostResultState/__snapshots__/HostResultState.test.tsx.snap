@@ -1328,6 +1328,7 @@ exports[`HostResultState > should render HostResultState with question type pin 
               >
                 <div
                   class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
                 >
                   <div />
                   <div />

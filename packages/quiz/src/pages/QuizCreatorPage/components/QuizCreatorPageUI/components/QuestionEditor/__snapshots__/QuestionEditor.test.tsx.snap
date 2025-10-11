@@ -149,6 +149,7 @@ exports[`QuestionEditor > renders a classic multi choice option question editor 
                   >
                     <div
                       class="loadingSpinnerContainer"
+                      data-testid="loading-spinner"
                     >
                       <div />
                       <div />
@@ -861,6 +862,7 @@ exports[`QuestionEditor > renders a classic range question editor 1`] = `
                   >
                     <div
                       class="loadingSpinnerContainer"
+                      data-testid="loading-spinner"
                     >
                       <div />
                       <div />
@@ -1572,6 +1574,7 @@ exports[`QuestionEditor > renders a classic true or false question editor 1`] = 
                   >
                     <div
                       class="loadingSpinnerContainer"
+                      data-testid="loading-spinner"
                     >
                       <div />
                       <div />
@@ -2143,6 +2146,7 @@ exports[`QuestionEditor > renders a classic type answer question editor 1`] = `
                   >
                     <div
                       class="loadingSpinnerContainer"
+                      data-testid="loading-spinner"
                     >
                       <div />
                       <div />
@@ -2658,6 +2662,7 @@ exports[`QuestionEditor > renders a zero to one hundred range question editor 1`
                   >
                     <div
                       class="loadingSpinnerContainer"
+                      data-testid="loading-spinner"
                     >
                       <div />
                       <div />

@@ -297,6 +297,7 @@ exports[`AuthVerifyPageUI > renders verifying state 1`] = `
           </div>
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

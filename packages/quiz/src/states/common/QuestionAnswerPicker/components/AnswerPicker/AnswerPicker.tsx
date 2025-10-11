@@ -13,7 +13,7 @@ const AnswerPicker: FC<AnswerPickerProps> = ({
   interactive,
   onClick,
 }) => (
-  <div className={styles.main}>
+  <div className={styles.answerPicker}>
     <div className={styles.grid}>
       {answers.map((value, optionIndex) => (
         <button

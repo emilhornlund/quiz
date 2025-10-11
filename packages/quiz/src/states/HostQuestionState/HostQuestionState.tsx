@@ -12,12 +12,11 @@ import {
   HostGameFooter,
   IconButtonArrowRight,
   ProgressBar,
-  QuestionAnswerPicker,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
 import { classNames } from '../../utils/helpers.ts'
-import { GamePage, QuestionMedia } from '../common'
+import { GamePage, QuestionAnswerPicker, QuestionMedia } from '../common'
 
 import styles from './HostQuestionState.module.scss'
 

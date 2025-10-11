@@ -238,6 +238,7 @@ exports[`QuestionField > renders a image media question field 1`] = `
               >
                 <div
                   class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
                 >
                   <div />
                   <div />

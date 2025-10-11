@@ -5,12 +5,15 @@ import {
 } from '@quiz/common'
 import React, { FC } from 'react'
 
-import { LoadingSpinner } from '../index.ts'
+import { LoadingSpinner } from '../../../components'
 
-import AnswerPin, { AnswerSort } from './components'
-import AnswerInput from './components/AnswerInput'
-import AnswerPicker from './components/AnswerPicker'
-import AnswerRange from './components/AnswerRange'
+import {
+  AnswerInput,
+  AnswerPicker,
+  AnswerPin,
+  AnswerRange,
+  AnswerSort,
+} from './components'
 import styles from './QuestionAnswerPicker.module.scss'
 
 export interface QuestionAnswerPickerProps {
@@ -26,7 +29,7 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
   loading = false,
   onChange,
 }) => (
-  <div className={styles.main}>
+  <div className={styles.questionAnswerPicker}>
     {loading && (
       <div className={styles.loadingWrapper}>
         <LoadingSpinner />

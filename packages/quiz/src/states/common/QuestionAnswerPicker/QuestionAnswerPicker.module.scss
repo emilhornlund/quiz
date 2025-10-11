@@ -1,7 +1,7 @@
-@use '../../styles/colors';
-@use '../../styles/helpers';
+@use '../../../styles/colors';
+@use '../../../styles/helpers';
 
-.main {
+.questionAnswerPicker {
   display: flex;
   flex-direction: column;
   flex: 1;

@@ -10,6 +10,7 @@ exports[`PinImage > should render PinImage with all props 1`] = `
     >
       <div
         class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
       >
         <div />
         <div />
@@ -38,6 +39,7 @@ exports[`PinImage > should render PinImage with multiple pins 1`] = `
     >
       <div
         class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
       >
         <div />
         <div />
