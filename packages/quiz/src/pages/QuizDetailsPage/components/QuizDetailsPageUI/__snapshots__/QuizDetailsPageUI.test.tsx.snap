@@ -87,6 +87,7 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
             >
               <div
                 class="loadingSpinnerContainer"
+                data-testid="loading-spinner"
               >
                 <div />
                 <div />

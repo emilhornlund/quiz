@@ -75,6 +75,7 @@ exports[`PlayerAwaitingResultState > should render PlayerAwaitingResultState wit
           </div>
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

@@ -80,6 +80,7 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
           </div>
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

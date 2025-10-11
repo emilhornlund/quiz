@@ -5,9 +5,8 @@ import {
 } from '@quiz/common'
 import React, { FC, FormEvent, useCallback, useState } from 'react'
 
-import NonInteractiveInfoBox from '../../../../states/common/NonInteractiveInfoBox'
-import Button from '../../../Button'
-import TextField from '../../../TextField'
+import { Button, TextField } from '../../../../../components'
+import NonInteractiveInfoBox from '../../../NonInteractiveInfoBox'
 
 import styles from './AnswerInput.module.scss'
 
@@ -34,7 +33,7 @@ const AnswerInput: FC<AnswerInputProps> = ({
   )
 
   return (
-    <div className={styles.main}>
+    <div className={styles.answerInput}>
       {interactive ? (
         <div className={styles.interactive}>
           <form onSubmit={handleSubmit}>

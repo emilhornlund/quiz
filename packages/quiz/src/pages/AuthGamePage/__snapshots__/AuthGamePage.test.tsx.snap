@@ -44,6 +44,7 @@ exports[`AuthGamePage > authenticates with both id and pin and navigates to /joi
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -100,6 +101,7 @@ exports[`AuthGamePage > authenticates with gameId and navigates to /join on succ
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -156,6 +158,7 @@ exports[`AuthGamePage > authenticates with gamePIN and navigates to /join on suc
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -212,6 +215,7 @@ exports[`AuthGamePage > does nothing when no id or pin 1`] = `
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -268,6 +272,7 @@ exports[`AuthGamePage > navigates home and notifies on failure 1`] = `
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -324,6 +329,7 @@ exports[`AuthGamePage > runs only once even if user clicks back/forward causing 
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

@@ -20,7 +20,6 @@ export type { PlayerGameFooterProps } from './PlayerGameFooter'
 export type { PodiumProps } from './Podium'
 export type { ProgressBarProps } from './ProgressBar'
 export type { ProtectedRouteProps } from './ProtectedRoute'
-export type { QuestionAnswerPickerProps } from './QuestionAnswerPicker'
 export type {
   QuizTableItem,
   QuizTablePagination,
@@ -69,7 +68,6 @@ export { default as PlayerGameFooter } from './PlayerGameFooter'
 export { default as Podium } from './Podium'
 export { default as ProgressBar } from './ProgressBar'
 export { default as ProtectedRoute } from './ProtectedRoute'
-export { default as QuestionAnswerPicker } from './QuestionAnswerPicker'
 export { default as QuizTable } from './QuizTable'
 export { default as QuizTableFilter } from './QuizTableFilter'
 export { default as ResponsiveImage } from './ResponsiveImage'

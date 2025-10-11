@@ -44,6 +44,7 @@ exports[`GameResultsPage > does not query when gameID is missing 1`] = `
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -402,6 +403,7 @@ exports[`GameResultsPage > navigates back on query error and keeps spinner 1`] =
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

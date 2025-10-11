@@ -1,9 +1,8 @@
 import React, { ChangeEvent, FC, FormEvent, useCallback, useState } from 'react'
 
-import NonInteractiveInfoBox from '../../../../states/common/NonInteractiveInfoBox'
-import { isValidNumber } from '../../../../utils/helpers.ts'
-import Button from '../../../Button'
-import TextField from '../../../TextField'
+import { Button, TextField } from '../../../../../components'
+import { isValidNumber } from '../../../../../utils/helpers'
+import NonInteractiveInfoBox from '../../../NonInteractiveInfoBox'
 
 import styles from './AnswerRange.module.scss'
 
@@ -45,7 +44,7 @@ const AnswerRange: FC<AnswerRangeProps> = ({
   )
 
   return (
-    <div className={styles.main}>
+    <div className={styles.answerRange}>
       {interactive ? (
         <div className={styles.interactive}>
           <form onSubmit={handleSubmit}>

@@ -1,0 +1,222 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AnswerSort > disables interaction and hides submit button in non-interactive mode 1`] = `
+<div>
+  <div
+    class="answerSort"
+  >
+    <div
+      class="table"
+    >
+      <div
+        data-disabled="true"
+        data-testid="sortable"
+      >
+        <ul>
+          <li
+            data-id="A_0"
+            data-value="A"
+          >
+            <span>
+              A
+            </span>
+            <button
+              aria-label="move-down-0"
+              type="button"
+            >
+              ↓
+            </button>
+            <button
+              aria-label="move-up-0"
+              type="button"
+            >
+              ↑
+            </button>
+          </li>
+          <li
+            data-id="B_1"
+            data-value="B"
+          >
+            <span>
+              B
+            </span>
+            <button
+              aria-label="move-down-1"
+              type="button"
+            >
+              ↓
+            </button>
+            <button
+              aria-label="move-up-1"
+              type="button"
+            >
+              ↑
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AnswerSort > handles empty list 1`] = `
+<div>
+  <div
+    class="answerSort"
+  >
+    <div
+      class="table"
+    >
+      <div
+        data-disabled="false"
+        data-testid="sortable"
+      >
+        <ul />
+      </div>
+    </div>
+    <div
+      class="buttonWrapper"
+    >
+      <div
+        class="buttonInputContainer buttonInputKindCallToAction"
+      >
+        <button
+          data-testid="test-submit-button-button"
+          id="submit-button"
+          name="submit-button"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-rocket"
+            data-icon="rocket"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            Submit My Answer
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AnswerSort > renders interactive table with initial values 1`] = `
+<div>
+  <div
+    class="answerSort"
+  >
+    <div
+      class="table"
+    >
+      <div
+        data-disabled="false"
+        data-testid="sortable"
+      >
+        <ul>
+          <li
+            data-id="Alpha_0"
+            data-value="Alpha"
+          >
+            <span>
+              Alpha
+            </span>
+            <button
+              aria-label="move-down-0"
+              type="button"
+            >
+              ↓
+            </button>
+            <button
+              aria-label="move-up-0"
+              type="button"
+            >
+              ↑
+            </button>
+          </li>
+          <li
+            data-id="Beta_1"
+            data-value="Beta"
+          >
+            <span>
+              Beta
+            </span>
+            <button
+              aria-label="move-down-1"
+              type="button"
+            >
+              ↓
+            </button>
+            <button
+              aria-label="move-up-1"
+              type="button"
+            >
+              ↑
+            </button>
+          </li>
+          <li
+            data-id="Gamma_2"
+            data-value="Gamma"
+          >
+            <span>
+              Gamma
+            </span>
+            <button
+              aria-label="move-down-2"
+              type="button"
+            >
+              ↓
+            </button>
+            <button
+              aria-label="move-up-2"
+              type="button"
+            >
+              ↑
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="buttonWrapper"
+    >
+      <div
+        class="buttonInputContainer buttonInputKindCallToAction"
+      >
+        <button
+          data-testid="test-submit-button-button"
+          id="submit-button"
+          name="submit-button"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-rocket"
+            data-icon="rocket"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            Submit My Answer
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

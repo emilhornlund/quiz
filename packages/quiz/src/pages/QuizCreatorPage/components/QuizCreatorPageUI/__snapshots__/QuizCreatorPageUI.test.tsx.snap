@@ -486,6 +486,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                             >
                               <div
                                 class="loadingSpinnerContainer"
+                                data-testid="loading-spinner"
                               >
                                 <div />
                                 <div />

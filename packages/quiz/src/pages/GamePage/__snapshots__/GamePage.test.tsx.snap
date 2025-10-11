@@ -37,6 +37,7 @@ exports[`GamePage (extended) > should render GamePage (snapshot) 1`] = `
         >
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

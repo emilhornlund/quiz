@@ -54,6 +54,7 @@ exports[`AuthGoogleCallbackPage > exchanges code and navigates to / on success 1
           </div>
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />
@@ -120,6 +121,7 @@ exports[`AuthGoogleCallbackPage > shows error and redirects to /auth/login when 
           </div>
           <div
             class="loadingSpinnerContainer"
+            data-testid="loading-spinner"
           >
             <div />
             <div />

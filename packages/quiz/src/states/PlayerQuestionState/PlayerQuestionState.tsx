@@ -4,14 +4,9 @@ import {
 } from '@quiz/common'
 import React, { FC, useState } from 'react'
 
-import {
-  PlayerGameFooter,
-  ProgressBar,
-  QuestionAnswerPicker,
-  Typography,
-} from '../../components'
+import { PlayerGameFooter, ProgressBar, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
-import { GamePage } from '../common'
+import { GamePage, QuestionAnswerPicker } from '../common'
 
 import styles from './PlayerQuestionState.module.scss'
 

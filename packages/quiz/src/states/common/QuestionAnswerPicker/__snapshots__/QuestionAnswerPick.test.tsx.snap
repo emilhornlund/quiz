@@ -1,0 +1,395 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuestionAnswerPicker > renders MultiChoice and maps selected index to onChange payload 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="answerPicker"
+    >
+      <div
+        class="grid"
+      >
+        <button
+          class="item"
+          id="0_Alpha"
+          type="button"
+        >
+          <div />
+          Alpha
+        </button>
+        <button
+          class="item"
+          id="1_Beta"
+          type="button"
+        >
+          <div />
+          Beta
+        </button>
+        <button
+          class="item"
+          id="2_Gamma"
+          type="button"
+        >
+          <div />
+          Gamma
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionAnswerPicker > renders Pin and maps coordinates on submit 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="answerPin"
+    >
+      <div
+        class="interactive"
+      >
+        <div
+          class="container"
+        >
+          <div
+            class="centerOverlay"
+          >
+            <div
+              class="loadingSpinnerContainer"
+              data-testid="loading-spinner"
+            >
+              <div />
+              <div />
+              <div />
+            </div>
+          </div>
+        </div>
+        <div
+          class="buttonWrapper"
+        >
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction"
+          >
+            <button
+              data-testid="test-submit-button-button"
+              id="submit-button"
+              name="submit-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-rocket"
+                data-icon="rocket"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Submit My Pin
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionAnswerPicker > renders Puzzle and forwards values on submit without reordering 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="answerSort"
+    >
+      <div
+        class="table"
+      >
+        <div
+          class="sortableTable"
+        >
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="item draggable"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="value"
+            >
+              A
+            </div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              color="gray4"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="item draggable"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="value"
+            >
+              B
+            </div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              color="gray4"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            aria-describedby="DndDescribedBy-0"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="item draggable"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="value"
+            >
+              C
+            </div>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-grip icon"
+              color="gray4"
+              data-icon="grip"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M88 96c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM280 224l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm192 0l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zm0 192l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40zM280 288c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0zM88 416l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div
+            id="DndDescribedBy-0"
+            style="display: none;"
+          >
+            
+    To pick up a draggable item, press the space bar.
+    While dragging, use the arrow keys to move the item.
+    Press space again to drop the item in its new position, or press escape to cancel.
+  
+          </div>
+          <div
+            aria-atomic="true"
+            aria-live="assertive"
+            id="DndLiveRegion-0"
+            role="status"
+            style="position: fixed; top: 0px; left: 0px; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip: rect(0px); clip-path: inset(100%); white-space: nowrap;"
+          />
+        </div>
+      </div>
+      <div
+        class="buttonWrapper"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction"
+        >
+          <button
+            data-testid="test-submit-button-button"
+            id="submit-button"
+            name="submit-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-rocket"
+              data-icon="rocket"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Submit My Answer
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionAnswerPicker > renders Range and forwards numeric value from slider submit 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="answerRange"
+    >
+      <div
+        class="interactive"
+      >
+        <form>
+          <input
+            id="slider-range"
+            max="100"
+            min="0"
+            step="5"
+            type="range"
+            value="25"
+          />
+          <div
+            class="inputGroup"
+          >
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-slider-input-textfield"
+                  id="slider-input"
+                  max="100"
+                  min="0"
+                  name="slider-input"
+                  type="number"
+                  value="25"
+                />
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindPrimary"
+            >
+              <button
+                data-testid="test-submit-button-button"
+                id="submit-button"
+                name="submit-button"
+                type="submit"
+              >
+                <span>
+                  Submit
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionAnswerPicker > renders TypeAnswer and forwards typed value on submit 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="answerInput"
+    >
+      <div
+        class="interactive"
+      >
+        <form>
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="textFieldInputContainer textFieldInputKindPrimary"
+            >
+              <input
+                class="textfield"
+                data-testid="test-answer-input-textfield"
+                id="answer-input"
+                maxlength="20"
+                minlength="1"
+                name="answer-input"
+                placeholder="Answer"
+                type="text"
+                value="typed-value"
+              />
+            </div>
+          </div>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary"
+          >
+            <button
+              data-testid="test-submit-button-button"
+              id="submit-button"
+              name="submit-button"
+              type="submit"
+            >
+              <span>
+                Submit
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionAnswerPicker > shows loading spinner and hides content when loading 1`] = `
+<div>
+  <div
+    class="questionAnswerPicker"
+  >
+    <div
+      class="loadingWrapper"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,58 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AnswerPicker > renders nothing inside grid when answers is empty 1`] = `
+<div>
+  <div
+    class="answerPicker"
+  >
+    <div
+      class="grid"
+    />
+  </div>
+</div>
+`;
+
+exports[`AnswerPicker > renders with answers in interactive mode 1`] = `
+<div>
+  <div
+    class="answerPicker"
+  >
+    <div
+      class="grid"
+    >
+      <button
+        class="item"
+        id="0_Alpha"
+        type="button"
+      >
+        <div />
+        Alpha
+      </button>
+      <button
+        class="item"
+        id="1_Beta"
+        type="button"
+      >
+        <div />
+        Beta
+      </button>
+      <button
+        class="item"
+        id="2_Gamma"
+        type="button"
+      >
+        <div />
+        Gamma
+      </button>
+      <button
+        class="item"
+        id="3_Delta"
+        type="button"
+      >
+        <div />
+        Delta
+      </button>
+    </div>
+  </div>
+</div>
+`;

@@ -69,6 +69,7 @@ exports[`QuestionForm > renders a classic multi choice option question form 1`] 
                 >
                   <div
                     class="loadingSpinnerContainer"
+                    data-testid="loading-spinner"
                   >
                     <div />
                     <div />
@@ -700,6 +701,7 @@ exports[`QuestionForm > renders a classic range question form 1`] = `
                 >
                   <div
                     class="loadingSpinnerContainer"
+                    data-testid="loading-spinner"
                   >
                     <div />
                     <div />
@@ -1330,6 +1332,7 @@ exports[`QuestionForm > renders a classic true or false question form 1`] = `
                 >
                   <div
                     class="loadingSpinnerContainer"
+                    data-testid="loading-spinner"
                   >
                     <div />
                     <div />
@@ -1820,6 +1823,7 @@ exports[`QuestionForm > renders a classic type answer question form 1`] = `
                 >
                   <div
                     class="loadingSpinnerContainer"
+                    data-testid="loading-spinner"
                   >
                     <div />
                     <div />
@@ -2331,6 +2335,7 @@ exports[`QuestionForm > renders a zero to one hundred range question form 1`] = 
                 >
                   <div
                     class="loadingSpinnerContainer"
+                    data-testid="loading-spinner"
                   >
                     <div />
                     <div />

@@ -4,6 +4,7 @@ exports[`LoadingSpinner > should render a LoadingSpinner with default props 1`] 
 <div>
   <div
     class="loadingSpinnerContainer"
+    data-testid="loading-spinner"
   >
     <div />
     <div />
