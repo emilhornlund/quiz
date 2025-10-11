@@ -1,4 +1,9 @@
-import { MediaType, QuestionMediaEvent, QuestionType } from '@quiz/common'
+import {
+  CountdownEvent,
+  MediaType,
+  QuestionMediaEvent,
+  QuestionType,
+} from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
 import ResponsiveImage from '../../../components/ResponsiveImage'
@@ -10,9 +15,15 @@ export type QuestionMediaProps = {
   type: QuestionType
   media?: QuestionMediaEvent
   alt?: string
+  countdown?: CountdownEvent
 }
 
-const QuestionMedia: FC<QuestionMediaProps> = ({ type, media, alt }) => {
+const QuestionMedia: FC<QuestionMediaProps> = ({
+  type,
+  media,
+  alt,
+  countdown,
+}) => {
   const imageURL = useMemo(() => {
     if (type !== QuestionType.Pin && media?.type === MediaType.Image) {
       return media.url
@@ -34,7 +45,15 @@ const QuestionMedia: FC<QuestionMediaProps> = ({ type, media, alt }) => {
 
   return (
     <div className={styles.questionMedia} data-testid="question-media">
-      {imageURL && <ResponsiveImage imageURL={imageURL} alt={alt} />}
+      {imageURL && (
+        <ResponsiveImage
+          imageURL={imageURL}
+          alt={alt}
+          effect={media?.effect}
+          numberOfSquares={media?.numberOfSquares}
+          countdown={countdown}
+        />
+      )}
       {audioOrVideoURL && <ResponsivePlayer url={audioOrVideoURL} />}
     </div>
   )

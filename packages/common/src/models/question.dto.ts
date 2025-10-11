@@ -16,6 +16,16 @@ export interface QuestionMediaDto {
    * The URL of the media.
    */
   url: string
+
+  /**
+   * Optional effect for the media.
+   */
+  effect?: 'blur' | 'square'
+
+  /**
+   * Optional number of squares if the effect is 'square'.
+   */
+  numberOfSquares?: number
 }
 
 /**
