@@ -18,6 +18,8 @@ export type PaginationEvent = {
 export type QuestionMediaEvent = {
   type: MediaType
   url: string
+  effect?: 'none' | 'blur' | 'square'
+  numberOfSquares?: number
 }
 
 export type GameHeartbeatEvent = {
