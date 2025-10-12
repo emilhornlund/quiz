@@ -333,11 +333,15 @@ export const useQuizServiceClient = () => {
     request: AuthRevokeRequestDto,
     scope: TokenScope,
   ): Promise<void> =>
-    apiPost<void>('/auth/revoke', request).then(() => {
-      if (scope === TokenScope.User) {
-        clearCurrentUser()
-      }
-    })
+    apiPost<void>('/auth/revoke', request)
+      .catch(() => {
+        // swallow exception
+      })
+      .finally(() => {
+        if (scope === TokenScope.User) {
+          clearCurrentUser()
+        }
+      })
 
   /**
    * Verifies a user’s email address by sending the provided token to the backend.

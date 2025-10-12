@@ -254,4 +254,35 @@ describe('AuthContextProvider', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  it('revokeUser swallows errors and still clears & navigates', async () => {
+    // seed user scope only
+    setLocalStorageAuth({
+      USER: {
+        [TokenType.Access]: { token: 'u.acc', exp: 1 },
+        [TokenType.Refresh]: { token: 'u.ref', exp: 2 },
+      },
+      GAME: undefined,
+    })
+
+    mockRevoke.mockRejectedValueOnce(new Error('boom'))
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let ctx: any
+    const { container } = renderWithProvider((c) => (ctx = c))
+
+    await act(async () => {
+      await ctx.revokeUser()
+    })
+
+    await waitFor(() => {
+      expect(mockRevoke).toHaveBeenCalledWith({ token: 'u.acc' }, 'USER')
+      expect(mockNavigate).toHaveBeenCalledWith('/')
+      expect(ctx.user).toBeUndefined()
+      const persisted = JSON.parse(localStorage.getItem('auth') ?? '{}')
+      expect(persisted.USER).toBeUndefined()
+    })
+
+    expect(container).toMatchSnapshot()
+  })
 })

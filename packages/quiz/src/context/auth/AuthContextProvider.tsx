@@ -166,10 +166,14 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
       const token =
         authState[scope]?.ACCESS.token || authState[scope]?.REFRESH.token
       if (token) {
-        revoke({ token }, scope).then(() => {
-          clearAuthState(scope)
-          navigate('/')
-        })
+        revoke({ token }, scope)
+          .catch(() => {
+            // swallow exception
+          })
+          .finally(() => {
+            clearAuthState(scope)
+            navigate('/')
+          })
       }
     },
     [authState, clearAuthState, revoke, navigate],
