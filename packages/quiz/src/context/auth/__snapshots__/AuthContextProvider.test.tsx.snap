@@ -8,6 +8,8 @@ exports[`AuthContextProvider > removes storage entry when both scopes are cleare
 
 exports[`AuthContextProvider > removes storage when the last remaining scope is cleared 1`] = `<div />`;
 
+exports[`AuthContextProvider > revokeUser swallows errors and still clears & navigates 1`] = `<div />`;
+
 exports[`AuthContextProvider > setTokenPair(Game) decodes game fields and persists to localStorage 1`] = `<div />`;
 
 exports[`AuthContextProvider > setTokenPair(User) decodes tokens and persists to localStorage 1`] = `<div />`;
