@@ -1,25 +1,41 @@
 export default {
+  /**
+   * The base URL of the application (e.g., https://klurigo.com).
+   * Used for building absolute links and redirects.
+   */
   baseUrl: import.meta.env.VITE_BASE_URL as string,
+
+  /**
+   * The base URL for the Quiz Service backend API.
+   * All API requests are prefixed with this path.
+   */
   quizServiceUrl: import.meta.env.VITE_QUIZ_SERVICE_URL as string,
+
+  /**
+   * The base URL for accessing uploaded images hosted by the Quiz Service backend.
+   * Used to load quiz-related media assets.
+   */
   quizServiceImagesUrl: import.meta.env.VITE_QUIZ_SERVICE_IMAGES_URL as string,
 
   /**
-   * Google OAuth client ID for initiating the PKCE flow.
+   * Google OAuth client ID used to initiate the PKCE authorization flow.
    */
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID as string,
 
   /**
-   * Redirect URI registered in Google Console for OAuth callbacks.
+   * Redirect URI registered in the Google Cloud Console.
+   * Determines where users are redirected after a successful OAuth login.
    */
   googleRedirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI as string,
 
   /**
-   * The Sentry Data Source Name (DSN) for the application.
+   * Sentry Data Source Name (DSN) for error tracking and performance monitoring.
    */
-  VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN as string,
+  sentryDSN: import.meta.env.VITE_SENTRY_DSN as string,
 
   /**
-   * The release identifier injected at build time and passed to Sentry.
+   * Release identifier for Sentry, injected at build time to link errors
+   * and performance data to the correct application version.
    */
-  VITE_SENTRY_RELEASE: import.meta.env.VITE_SENTRY_RELEASE as string,
+  sentryRelease: import.meta.env.VITE_SENTRY_RELEASE as string,
 }

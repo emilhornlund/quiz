@@ -16,8 +16,8 @@ function getSentryEnvironment() {
 if (process.env.NODE_ENV === 'production') {
   console.log('Initializing Sentry')
   Sentry.init({
-    dsn: config.VITE_SENTRY_DSN,
-    release: config.VITE_SENTRY_RELEASE,
+    dsn: config.sentryDSN,
+    release: config.sentryRelease,
     environment: getSentryEnvironment(),
     tunnel: '/tunnel',
     sendDefaultPii: true,
