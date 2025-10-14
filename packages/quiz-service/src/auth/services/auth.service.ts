@@ -19,7 +19,7 @@ import {
   TokenScope,
   TokenType,
 } from '@quiz/common'
-import ms, { StringValue } from 'ms'
+import ms from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
 import { GameRepository } from '../../game/repositories'
@@ -417,7 +417,7 @@ export class AuthService {
       ipAddress,
       userAgent,
       createdAt: new Date(),
-      expiresAt: new Date(Date.now() + ms(expiresIn as StringValue)),
+      expiresAt: new Date(Date.now() + ms(expiresIn)),
     })
 
     return token
