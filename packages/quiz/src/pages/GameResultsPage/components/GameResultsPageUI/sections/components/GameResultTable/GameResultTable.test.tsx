@@ -8,6 +8,7 @@ import GameResultTable, { TableItem } from './GameResultTable'
 describe('GameResultTable', () => {
   const items: TableItem[] = [
     {
+      type: 'table-row',
       badge: 1,
       value: 'Alice Anderson',
       progress: 82,
@@ -22,6 +23,7 @@ describe('GameResultTable', () => {
       ],
     },
     {
+      type: 'table-row',
       badge: 2,
       value: 'Bob Brown',
       progress: 50,
@@ -91,13 +93,29 @@ describe('GameResultTable', () => {
   })
 
   it('does not crash when details are missing', () => {
-    const minimal: TableItem[] = [{ badge: 3, value: 'Charlie', progress: 10 }]
+    const minimal: TableItem[] = [
+      {
+        type: 'table-row',
+        badge: 3,
+        value: 'Charlie',
+        progress: 10,
+      },
+    ]
     const { container } = render(<GameResultTable items={minimal} />)
     const row = container.querySelector('.tableRow') as HTMLElement
     const details = row.querySelector('.details') as HTMLElement
     fireEvent.click(row)
     expect(details.className).toContain('active')
 
+    expect(container).toMatchSnapshot()
+  })
+
+  it('renders separator correctly', () => {
+    const { container } = render(
+      <GameResultTable items={[{ type: 'table-separator' }]} />,
+    )
+    const rows = container.querySelectorAll('.tableSeparator')
+    expect(rows.length).toBe(1)
     expect(container).toMatchSnapshot()
   })
 })

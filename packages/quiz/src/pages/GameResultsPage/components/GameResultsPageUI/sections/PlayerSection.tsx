@@ -4,7 +4,7 @@ import {
   GameResultDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 
 import {
   buildPlayerSectionMetricDetails,
@@ -12,7 +12,7 @@ import {
   getCorrectPercentage,
 } from '../utils'
 
-import GameResultTable from './components/GameResultTable'
+import { GameResultTable, TableItem, TableSeparator } from './components'
 
 function getProgress(
   mode: GameMode,
@@ -32,19 +32,52 @@ function getProgress(
 export interface PlayerSectionProps {
   mode: GameMode
   playerMetrics: GameResultDto['playerMetrics']
+  currentParticipantId: string
 }
 
-const PlayerSection: FC<PlayerSectionProps> = ({ mode, playerMetrics }) => {
+const PlayerSection: FC<PlayerSectionProps> = ({
+  mode,
+  playerMetrics,
+  currentParticipantId,
+}) => {
+  const items = useMemo<(TableItem | TableSeparator)[]>(() => {
+    if (!playerMetrics?.length) return []
+
+    const out: (TableItem | TableSeparator)[] = []
+    let prevRank: number | null = null
+
+    for (const metric of playerMetrics) {
+      // gap between shown rows (e.g., 5 -> 7)
+      if (prevRank !== null && metric.rank !== prevRank + 1) {
+        out.push({ type: 'table-separator' as const })
+      }
+
+      out.push({
+        type: 'table-row' as const,
+        badge: metric.rank,
+        value: metric.player.nickname,
+        label: metric.player.id === currentParticipantId ? 'You' : undefined,
+        progress: getProgress(mode, metric),
+        details: buildPlayerSectionMetricDetails(mode, metric),
+      })
+
+      prevRank = metric.rank
+    }
+
+    // trailing separator only if we showed at least top 5
+    if (playerMetrics.length >= 5) {
+      // guard against accidental double-separator (shouldn’t happen with logic above, but cheap to ensure)
+      if (out[out.length - 1]?.type !== 'table-separator') {
+        out.push({ type: 'table-separator' as const })
+      }
+    }
+
+    return out
+  }, [playerMetrics, currentParticipantId, mode])
+
   return (
     <section>
-      <GameResultTable
-        items={playerMetrics.map((metric) => ({
-          badge: metric.rank,
-          value: metric.player.nickname,
-          progress: getProgress(mode, metric),
-          details: buildPlayerSectionMetricDetails(mode, metric),
-        }))}
-      />
+      <GameResultTable items={items} />
     </section>
   )
 }

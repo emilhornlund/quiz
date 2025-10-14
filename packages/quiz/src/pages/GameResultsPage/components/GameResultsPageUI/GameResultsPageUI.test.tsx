@@ -86,6 +86,7 @@ describe('GameResultsPageUI', () => {
             duration: 456,
             created: new Date(),
           }}
+          currentParticipantId="participant-id-1"
         />
       </MemoryRouter>,
     )
@@ -164,6 +165,7 @@ describe('GameResultsPageUI', () => {
             duration: 123.772,
             created: new Date(),
           }}
+          currentParticipantId="participant-id-1"
         />
       </MemoryRouter>,
     )
@@ -281,7 +283,10 @@ describe('GameResultsPageUI', () => {
   it('shows Summary by default and switches to Players and Questions (Classic)', () => {
     const { container } = render(
       <MemoryRouter>
-        <GameResultsPageUI results={classicMinimal()} />
+        <GameResultsPageUI
+          results={classicMinimal()}
+          currentParticipantId="participant-id-1"
+        />
       </MemoryRouter>,
     )
 
@@ -316,7 +321,10 @@ describe('GameResultsPageUI', () => {
   it('switches sections and shows 0 to 100 label in Summary (ZeroToOneHundred)', () => {
     const { container } = render(
       <MemoryRouter>
-        <GameResultsPageUI results={z2hMinimal()} />
+        <GameResultsPageUI
+          results={z2hMinimal()}
+          currentParticipantId="participant-id-1"
+        />
       </MemoryRouter>,
     )
 

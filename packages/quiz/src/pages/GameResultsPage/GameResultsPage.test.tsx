@@ -16,6 +16,14 @@ vi.mock('../../api/use-quiz-service-client.tsx', () => ({
   useQuizServiceClient: () => ({ getGameResults: h.getGameResultsMock }),
 }))
 
+vi.mock('../../context/auth', () => ({
+  useAuthContext: () => ({
+    user: {
+      ACCESS: { sub: 'user-id-1' },
+    },
+  }),
+}))
+
 vi.mock('react-router-dom', async () => {
   const actual =
     await vi.importActual<typeof import('react-router-dom')>('react-router-dom')

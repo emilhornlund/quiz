@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
+import { useAuthContext } from '../../context/auth'
 
 import { GameResultsPageUI } from './components'
 
@@ -13,6 +14,8 @@ const GameResultsPage: FC = () => {
   const { gameID } = useParams<{ gameID: string }>()
 
   const { getGameResults } = useQuizServiceClient()
+
+  const { user } = useAuthContext()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['game_results', gameID],
@@ -27,7 +30,9 @@ const GameResultsPage: FC = () => {
     }
   }, [isError, navigate])
 
-  if (!data || isLoading || isError) {
+  const currentParticipantId = useMemo(() => user?.ACCESS.sub, [user])
+
+  if (!data || !currentParticipantId || isLoading || isError) {
     return (
       <Page>
         <LoadingSpinner />
@@ -35,7 +40,12 @@ const GameResultsPage: FC = () => {
     )
   }
 
-  return <GameResultsPageUI results={data} />
+  return (
+    <GameResultsPageUI
+      results={data}
+      currentParticipantId={currentParticipantId}
+    />
+  )
 }
 
 export default GameResultsPage
