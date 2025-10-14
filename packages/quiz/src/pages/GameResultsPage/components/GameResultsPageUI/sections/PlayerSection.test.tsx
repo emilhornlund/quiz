@@ -28,6 +28,13 @@ beforeEach(() => {
   h.buildPlayerSectionMetricDetails.mockClear()
 })
 
+function buildMetrics(ranks: number[]): GameResultDto['playerMetrics'] {
+  return ranks.map((rank) => ({
+    rank,
+    player: { id: `p-${rank}`, nickname: `Player ${rank}` },
+  })) as unknown as GameResultDto['playerMetrics']
+}
+
 describe('PlayerSection', () => {
   it('renders rows with badges and nicknames for Classic mode and uses getCorrectPercentage', () => {
     const metrics = [
@@ -36,7 +43,11 @@ describe('PlayerSection', () => {
     ] as unknown as GameResultDto['playerMetrics']
 
     const { container } = render(
-      <PlayerSection mode={GameMode.Classic} playerMetrics={metrics} />,
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
     )
 
     const rows = container.querySelectorAll('.tableRow')
@@ -69,7 +80,11 @@ describe('PlayerSection', () => {
     ] as unknown as GameResultDto['playerMetrics']
 
     const { container } = render(
-      <PlayerSection mode={GameMode.Classic} playerMetrics={metrics} />,
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
     )
     const row = container.querySelector('.tableRow') as HTMLElement
     const details = row.querySelector('.details') as HTMLElement
@@ -99,6 +114,7 @@ describe('PlayerSection', () => {
       <PlayerSection
         mode={GameMode.ZeroToOneHundred}
         playerMetrics={metrics}
+        currentParticipantId="participant-id"
       />,
     )
 
@@ -118,5 +134,96 @@ describe('PlayerSection', () => {
     )
 
     expect(container).toMatchSnapshot()
+  })
+
+  it('inserts a separator for rank gaps and a trailing separator when length >= 5 (e.g., 1..5, 7)', () => {
+    const metrics = buildMetrics([1, 2, 3, 4, 5, 7])
+
+    const { container } = render(
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
+    )
+
+    const rows = container.querySelectorAll('.tableRow')
+    const seps = container.querySelectorAll('.tableSeparator')
+    expect(rows.length).toBe(6) // 1..5,7
+    expect(seps.length).toBe(2) // one for gap (5->7) + trailing
+
+    // Verify order: r,r,r,r,r,sep,r,sep
+    const sequence = Array.from(
+      container.querySelectorAll('.tableRow, .tableSeparator'),
+    ).map((el) => (el.classList.contains('tableRow') ? 'row' : 'sep'))
+    expect(sequence).toEqual([
+      'row',
+      'row',
+      'row',
+      'row',
+      'row',
+      'sep',
+      'row',
+      'sep',
+    ])
+  })
+
+  it('adds only a trailing separator when exactly top 5 (e.g., 1..5)', () => {
+    const metrics = buildMetrics([1, 2, 3, 4, 5])
+
+    const { container } = render(
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
+    )
+
+    const rows = container.querySelectorAll('.tableRow')
+    const seps = container.querySelectorAll('.tableSeparator')
+    expect(rows.length).toBe(5)
+    expect(seps.length).toBe(1)
+
+    // Last element should be the separator
+    const all = Array.from(
+      container.querySelectorAll('.tableRow, .tableSeparator'),
+    )
+    expect(all.length).toBeGreaterThan(0)
+    const last = all[all.length - 1]
+    expect(last.classList.contains('tableSeparator')).toBe(true)
+  })
+
+  it('adds trailing separator when no gaps and >= 6 rows (e.g., 1..6)', () => {
+    const metrics = buildMetrics([1, 2, 3, 4, 5, 6])
+
+    const { container } = render(
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
+    )
+
+    const rows = container.querySelectorAll('.tableRow')
+    const seps = container.querySelectorAll('.tableSeparator')
+    expect(rows.length).toBe(6)
+    expect(seps.length).toBe(1)
+  })
+
+  it('renders no trailing separator when fewer than 5 rows (e.g., 1..4)', () => {
+    const metrics = buildMetrics([1, 2, 3, 4])
+
+    const { container } = render(
+      <PlayerSection
+        mode={GameMode.Classic}
+        playerMetrics={metrics}
+        currentParticipantId="participant-id"
+      />,
+    )
+
+    const rows = container.querySelectorAll('.tableRow')
+    const seps = container.querySelectorAll('.tableSeparator')
+    expect(rows.length).toBe(4)
+    expect(seps.length).toBe(0)
   })
 })

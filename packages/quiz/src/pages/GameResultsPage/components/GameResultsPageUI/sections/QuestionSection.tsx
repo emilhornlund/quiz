@@ -44,6 +44,7 @@ const QuestionSection: FC<QuestionSectionProps> = ({
     <section>
       <GameResultTable
         items={questionMetrics.map((metric, index) => ({
+          type: 'table-row',
           badge: index + 1,
           value: metric.text,
           progress: getProgress(mode, metric),

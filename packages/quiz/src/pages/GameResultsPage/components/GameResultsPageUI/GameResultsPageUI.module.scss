@@ -324,11 +324,52 @@
           }
 
           .value {
-            flex: 1;
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            align-items: center;
             flex-wrap: wrap;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            flex: 1;
+
+            @include helpers.mobile {
+              column-gap: variables.$mobile-control-normal-layout-gutter;
+            }
+
+            @include helpers.tablet {
+              column-gap: variables.$tablet-control-normal-layout-gutter;
+            }
+
+            @include helpers.desktop {
+              column-gap: variables.$desktop-control-normal-layout-gutter;
+            }
+
+            .label {
+              font-weight: bold;
+              text-transform: uppercase;
+              background-color: colors.$blue-1;
+              color: colors.$white;
+
+              @include helpers.mobile {
+                padding: variables.$mobile-control-normal-layout-gutter * 0.5 variables.$mobile-control-normal-layout-gutter;
+                border-radius: variables.$mobile-control-normal-border-radius;
+
+                @include helpers.fontSize(variables.$mobile-control-small-font-size);
+              }
+
+              @include helpers.tablet {
+                padding: variables.$mobile-control-normal-layout-gutter * 0.5 variables.$mobile-control-normal-layout-gutter;
+                border-radius: variables.$mobile-control-normal-border-radius;
+
+                @include helpers.fontSize(variables.$mobile-control-small-font-size);
+              }
+
+              @include helpers.desktop {
+                padding: variables.$desktop-control-normal-layout-gutter * 0.5 variables.$desktop-control-normal-layout-gutter;
+                border-radius: variables.$desktop-control-normal-border-radius;
+
+                @include helpers.fontSize(variables.$desktop-control-small-font-size);
+              }
+            }
           }
         }
 
@@ -421,6 +462,30 @@
               font-weight: bold;
             }
           }
+        }
+      }
+
+      .tableSeparator {
+        position: relative;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 8%;
+          right: 8%;
+          height: 1px;
+          background: linear-gradient(
+                          to right,
+                          transparent 0%,
+                          rgba(255, 255, 255, 0.4) 15%,
+                          rgba(255, 255, 255, 0.7) 50%,
+                          rgba(255, 255, 255, 0.4) 85%,
+                          transparent 100%
+          );
         }
       }
     }

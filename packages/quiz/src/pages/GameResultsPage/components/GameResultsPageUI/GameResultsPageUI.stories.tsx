@@ -19,6 +19,8 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const CURRENT_PARTICIPANT_ID = uuidv4()
+
 export const Classic = {
   args: {
     results: {
@@ -28,34 +30,82 @@ export const Classic = {
       host: { id: uuidv4(), nickname: 'FrostyBear' },
       playerMetrics: [
         {
-          player: { id: uuidv4(), nickname: 'ShadowCyborg' },
+          player: {
+            id: uuidv4(),
+            nickname: 'GuessMachine',
+          },
           rank: 1,
           correct: 4,
           incorrect: 0,
           unanswered: 0,
-          averageResponseTime: 1961,
+          averageResponseTime: 2924,
           longestCorrectStreak: 4,
-          score: 3891,
+          score: 3846,
         },
         {
-          player: { id: uuidv4(), nickname: 'ShadowWhirlwind' },
+          player: {
+            id: uuidv4(),
+            nickname: 'QuizWhiz',
+          },
           rank: 2,
+          correct: 4,
+          incorrect: 0,
+          unanswered: 0,
+          averageResponseTime: 3310,
+          longestCorrectStreak: 4,
+          score: 3721,
+        },
+        {
+          player: {
+            id: uuidv4(),
+            nickname: 'BrainiacBert',
+          },
+          rank: 3,
           correct: 3,
           incorrect: 1,
           unanswered: 0,
-          averageResponseTime: 5127,
-          longestCorrectStreak: 2,
-          score: 2742,
+          averageResponseTime: 3582,
+          longestCorrectStreak: 3,
+          score: 3458,
         },
         {
-          player: { id: uuidv4(), nickname: 'WhiskerFox' },
-          rank: 3,
-          correct: 1,
+          player: {
+            id: uuidv4(),
+            nickname: 'TriviaTitan',
+          },
+          rank: 4,
+          correct: 3,
           incorrect: 1,
-          unanswered: 2,
-          averageResponseTime: 16999,
+          unanswered: 0,
+          averageResponseTime: 4120,
+          longestCorrectStreak: 2,
+          score: 3264,
+        },
+        {
+          player: {
+            id: uuidv4(),
+            nickname: 'SmartyPants',
+          },
+          rank: 5,
+          correct: 3,
+          incorrect: 1,
+          unanswered: 0,
+          averageResponseTime: 4682,
+          longestCorrectStreak: 2,
+          score: 3097,
+        },
+        {
+          player: {
+            id: CURRENT_PARTICIPANT_ID,
+            nickname: 'FrostyBear',
+          },
+          rank: 7,
+          correct: 2,
+          incorrect: 1,
+          unanswered: 1,
+          averageResponseTime: 4853,
           longestCorrectStreak: 1,
-          score: 948,
+          score: 2542,
         },
       ],
       questionMetrics: [
@@ -95,6 +145,7 @@ export const Classic = {
       duration: 456,
       created: new Date(),
     },
+    currentParticipantId: CURRENT_PARTICIPANT_ID,
   },
 } satisfies Story
 
@@ -107,31 +158,64 @@ export const ZeroToOneHundred = {
       host: { id: uuidv4(), nickname: 'FrostyBear' },
       playerMetrics: [
         {
-          player: { id: uuidv4(), nickname: 'ShadowCyborg' },
+          player: {
+            id: uuidv4(),
+            nickname: 'GuessLord',
+          },
           rank: 1,
-          averagePrecision: 1,
+          averagePrecision: 0.89,
           unanswered: 0,
-          averageResponseTime: 4015,
-          longestCorrectStreak: 4,
-          score: -40,
+          averageResponseTime: 2915,
+          longestCorrectStreak: 2,
+          score: 13,
         },
         {
-          player: { id: uuidv4(), nickname: 'ShadowWhirlwind' },
+          player: {
+            id: uuidv4(),
+            nickname: 'QuickThinker',
+          },
           rank: 2,
-          averagePrecision: 0.95,
+          averagePrecision: 0.87,
           unanswered: 0,
-          averageResponseTime: 10662,
-          longestCorrectStreak: 1,
-          score: 10,
+          averageResponseTime: 3082,
+          longestCorrectStreak: 2,
+          score: 15,
         },
         {
-          player: { id: uuidv4(), nickname: 'WhiskerFox' },
+          player: {
+            id: uuidv4(),
+            nickname: 'SharpShooter',
+          },
           rank: 3,
-          averagePrecision: 0.72,
+          averagePrecision: 0.84,
+          unanswered: 0,
+          averageResponseTime: 3275,
+          longestCorrectStreak: 2,
+          score: 17,
+        },
+        {
+          player: {
+            id: uuidv4(),
+            nickname: 'ThinkFast',
+          },
+          rank: 4,
+          averagePrecision: 0.82,
+          unanswered: 0,
+          averageResponseTime: 3492,
+          longestCorrectStreak: 2,
+          score: 18,
+        },
+        {
+          player: {
+            id: uuidv4(),
+            nickname: 'PrecisionPete',
+          },
+          rank: 5,
+          averagePrecision: 0.79,
           unanswered: 1,
-          averageResponseTime: 27251,
-          longestCorrectStreak: 0,
-          score: 113,
+          averageResponseTime: 3768,
+          longestCorrectStreak: 1,
+          score: 19,
         },
       ],
       questionMetrics: [
@@ -167,5 +251,6 @@ export const ZeroToOneHundred = {
       duration: 123.772,
       created: new Date(),
     },
+    currentParticipantId: CURRENT_PARTICIPANT_ID,
   },
 } satisfies Story

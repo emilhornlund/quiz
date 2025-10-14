@@ -682,3 +682,15 @@ exports[`GameResultTable > renders one row per item 1`] = `
   </div>
 </div>
 `;
+
+exports[`GameResultTable > renders separator correctly 1`] = `
+<div>
+  <div
+    class="table"
+  >
+    <div
+      class="tableSeparator"
+    />
+  </div>
+</div>
+`;

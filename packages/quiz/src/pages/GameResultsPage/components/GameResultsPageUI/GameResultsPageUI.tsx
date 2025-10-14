@@ -6,8 +6,9 @@ import { Page, SegmentedControl, Typography } from '../../../../components'
 import styles from './GameResultsPageUI.module.scss'
 import { PlayerSection, QuestionSection, SummarySection } from './sections'
 
-export interface GameResultsPageUIProps {
+export type GameResultsPageUIProps = {
   results: GameResultDto
+  currentParticipantId: string
 }
 
 enum GameResultSection {
@@ -22,7 +23,10 @@ const GameResultSectionLabels: { [key in GameResultSection]: string } = {
   [GameResultSection.Questions]: 'Questions',
 }
 
-const GameResultsPageUI: FC<GameResultsPageUIProps> = ({ results }) => {
+const GameResultsPageUI: FC<GameResultsPageUIProps> = ({
+  results,
+  currentParticipantId,
+}) => {
   const [selectedSection, setSelectedSection] = useState<GameResultSection>(
     GameResultSection.Summary,
   )
@@ -62,6 +66,7 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({ results }) => {
           <PlayerSection
             mode={results.mode}
             playerMetrics={results.playerMetrics}
+            currentParticipantId={currentParticipantId}
           />
         )}
 

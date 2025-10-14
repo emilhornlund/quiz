@@ -11,9 +11,11 @@ import {
 import { classNames } from '../../../../../../../utils/helpers.ts'
 import styles from '../../../GameResultsPageUI.module.scss'
 
-export interface TableItem {
+export type TableItem = {
+  type: 'table-row'
   badge: number
   value: string
+  label?: string
   progress: number
   details?: {
     title: string
@@ -23,13 +25,18 @@ export interface TableItem {
   }[]
 }
 
+export type TableSeparator = {
+  type: 'table-separator'
+}
+
 export interface GameResultTableProps {
-  items: TableItem[]
+  items: (TableItem | TableSeparator)[]
 }
 
 const GameResultTableRow: FC<TableItem> = ({
   badge,
   value,
+  label,
   progress,
   details,
 }) => {
@@ -47,6 +54,7 @@ const GameResultTableRow: FC<TableItem> = ({
         <div className={styles.badge}>{`${badge}`}</div>
         <div className={styles.value} title={value}>
           {value}
+          {label && <div className={styles.label}>{label}</div>}
         </div>
         <div>
           <CircularProgressBar
@@ -83,9 +91,19 @@ const GameResultTableRow: FC<TableItem> = ({
 const GameResultTable: FC<GameResultTableProps> = ({ items }) => {
   return (
     <div className={styles.table}>
-      {items.map((metric, index) => (
-        <GameResultTableRow key={index} {...metric} />
-      ))}
+      {items.map((item, index) =>
+        item.type === 'table-row' ? (
+          <GameResultTableRow
+            key={`game-result-table-row-${index}`}
+            {...item}
+          />
+        ) : (
+          <div
+            key={`game-result-table-separator-${index}`}
+            className={styles.tableSeparator}
+          />
+        ),
+      )}
     </div>
   )
 }
