@@ -1,4 +1,5 @@
 import { Authority, TokenScope } from '@quiz/common'
+import { StringValue } from 'ms'
 
 import {
   DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME,
@@ -38,7 +39,7 @@ export function getTokenAuthorities(
  * @param isRefreshToken - Whether this token is a refresh token.
  * @returns A string value (e.g. '15m', '1h', or '30d').
  */
-export function getTokenExpiresIn(isRefreshToken: boolean): string {
+export function getTokenExpiresIn(isRefreshToken: boolean): StringValue {
   if (isRefreshToken) {
     return DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME
   }

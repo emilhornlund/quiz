@@ -27,14 +27,18 @@ import { Token, TokenSchema } from './services/models/schemas'
       useFactory: async (
         configService: ConfigService<EnvironmentVariables>,
       ) => {
-        const jwtSecret = configService.get('JWT_SECRET')
-        const jwtPrivateKeyPath = configService.get('JWT_PRIVATE_KEY_PATH')
-        const jwtPublicKeyPath = configService.get('JWT_PUBLIC_KEY_PATH')
+        const jwtSecret = configService.get<string>('JWT_SECRET')
+        const jwtPrivateKeyPath = configService.get<string>(
+          'JWT_PRIVATE_KEY_PATH',
+        )
+        const jwtPublicKeyPath = configService.get<string>(
+          'JWT_PUBLIC_KEY_PATH',
+        )
 
-        const COMMON_JWT_OPTIONS: jwt.VerifyOptions | jwt.SignOptions = {
+        const COMMON_JWT_OPTIONS: jwt.VerifyOptions & jwt.SignOptions = {
           algorithm: 'HS256',
           issuer: 'quiz',
-          audience: `${configService.get('ENVIRONMENT')}-quiz`,
+          audience: `${configService.get<string>('ENVIRONMENT')}-quiz`,
         }
 
         return {
