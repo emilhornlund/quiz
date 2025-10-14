@@ -1,5 +1,4 @@
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import {
   GameMode,
   GameResultClassicModePlayerMetricDto,
@@ -11,12 +10,9 @@ import {
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
 
-import { Cacheable } from '../../app/cache'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
 import { PlayerMetric, QuestionMetric } from '../repositories/models/schemas'
-
-const CACHE_GAME_RESULTS_TTL = 60 * 60 // 1h in seconds
 
 /**
  * Service for retrieving and formatting quiz game results.
@@ -26,23 +22,28 @@ export class GameResultService {
   /**
    * Constructs a new GameResultService.
    *
-   * @param cacheManager - The cache manager used for caching responses.
    * @param gameResultRepository - Repository for accessing stored game results.
    */
-  constructor(
-    @Inject(CACHE_MANAGER) public readonly cacheManager: Cache,
-    private readonly gameResultRepository: GameResultRepository,
-  ) {}
+  constructor(private readonly gameResultRepository: GameResultRepository) {}
 
   /**
    * Retrieves the result of a completed quiz game.
+   * Player metrics are filtered to include:
+   * - Top 5 by rank, and
+   * - The requesting participant’s own metrics (if not already in the top 5).
    *
    * @param gameID - The ID of the game to retrieve.
+   * @param participantId - participantId The authenticated participant’s ID. Used to ensure
+   * the caller’s metric is included even if outside the top 5.
+   *
    * @returns The structured result of the game.
+   *
    * @throws GameResultsNotFoundException if the result is not found.
    */
-  @Cacheable(CACHE_GAME_RESULTS_TTL)
-  public async getGameResult(gameID: string): Promise<GameResultDto> {
+  public async getGameResult(
+    gameID: string,
+    participantId: string,
+  ): Promise<GameResultDto> {
     const gameResultDocument =
       await this.gameResultRepository.findGameResult(gameID)
 
@@ -66,18 +67,24 @@ export class GameResultService {
       ...(mode === GameMode.Classic
         ? {
             mode: GameMode.Classic,
-            playerMetrics: players.map(
-              GameResultService.toClassicModePlayerMetricDto,
-            ),
+            playerMetrics: players
+              .map(GameResultService.toClassicModePlayerMetricDto)
+              .filter((metric) =>
+                GameResultService.playerMetricFilter(metric, participantId),
+              )
+              .sort((a, b) => a.rank - b.rank),
             questionMetrics: questions.map(
               GameResultService.toClassicModeQuestionMetricDto,
             ),
           }
         : {
             mode: GameMode.ZeroToOneHundred,
-            playerMetrics: players.map(
-              GameResultService.toZeroToOneHundredModePlayerMetricDto,
-            ),
+            playerMetrics: players
+              .map(GameResultService.toZeroToOneHundredModePlayerMetricDto)
+              .filter((metric) =>
+                GameResultService.playerMetricFilter(metric, participantId),
+              )
+              .sort((a, b) => a.rank - b.rank),
             questionMetrics: questions.map(
               GameResultService.toZeroToOneHundredModeQuestionMetricDto,
             ),
@@ -85,6 +92,28 @@ export class GameResultService {
       duration: (completed.getTime() - created.getTime()) / 1000,
       created,
     }
+  }
+
+  /**
+   * Returns whether a player metric should be included in the response.
+   *
+   * Inclusion rule:
+   * - Include ranks 1–5 (top 5), OR
+   * - Include the requesting participant’s metric (by `participantId`) regardless of rank.
+   *
+   * @param playerMetricDto A player’s metric DTO.
+   * @param participantId The authenticated participant’s ID.
+   *
+   * @returns `true` if the metric should be included; otherwise `false`.
+   *
+   * @private
+   */
+  private static playerMetricFilter(
+    playerMetricDto: GameResultPlayerMetricDto,
+    participantId: string,
+  ): boolean {
+    const { rank, player } = playerMetricDto
+    return (rank > 0 && rank <= 5) || player.id === participantId
   }
 
   /**

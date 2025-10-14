@@ -45,7 +45,7 @@ describe('GameResultController (e2e)', () => {
   })
 
   describe('/api/games/:gameID/results (GET)', () => {
-    it('should succeed in retrieving game results for a classic mode game', async () => {
+    it('should succeed in retrieving game results for a classic mode game as a host participant', async () => {
       const gameId = uuidv4()
 
       const { accessToken, user: hostUser } =
@@ -76,8 +76,8 @@ describe('GameResultController (e2e)', () => {
             playerMetrics: [
               {
                 player: {
-                  id: playerUser._id,
-                  nickname: playerUser.defaultNickname,
+                  id: expect.any(String),
+                  nickname: 'GuessMachine',
                 },
                 rank: 1,
                 correct: 4,
@@ -86,6 +86,58 @@ describe('GameResultController (e2e)', () => {
                 averageResponseTime: 2924,
                 longestCorrectStreak: 4,
                 score: 3846,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'QuizWhiz',
+                },
+                rank: 2,
+                correct: 4,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 3310,
+                longestCorrectStreak: 4,
+                score: 3721,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'BrainiacBert',
+                },
+                rank: 3,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 3582,
+                longestCorrectStreak: 3,
+                score: 3458,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'TriviaTitan',
+                },
+                rank: 4,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 4120,
+                longestCorrectStreak: 2,
+                score: 3264,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'SmartyPants',
+                },
+                rank: 5,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 4682,
+                longestCorrectStreak: 2,
+                score: 3097,
               },
             ],
             questionMetrics: [
@@ -128,7 +180,157 @@ describe('GameResultController (e2e)', () => {
         })
     })
 
-    it('should succeed in retrieving game results for a zero to one hundred mode game', async () => {
+    it('should succeed in retrieving game results for a classic mode game as a player participant', async () => {
+      const gameId = uuidv4()
+
+      const { accessToken, user: playerUser } =
+        await createDefaultUserAndAuthenticate(app)
+
+      const hostUser = await userModel.create(buildMockTertiaryUser())
+
+      const game = await gameModel.create({
+        ...buildMockClassicModeGame(hostUser, playerUser),
+        _id: gameId,
+      })
+
+      const gameResult = await gameResultModel.create(
+        buildMockClassicModeGameResult(game, hostUser, playerUser),
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/results`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: gameResult.game._id,
+            name: 'Classic Quiz Debug',
+            mode: GameMode.Classic,
+            host: {
+              id: hostUser._id,
+              nickname: 'N/A',
+            },
+            playerMetrics: [
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'GuessMachine',
+                },
+                rank: 1,
+                correct: 4,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 2924,
+                longestCorrectStreak: 4,
+                score: 3846,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'QuizWhiz',
+                },
+                rank: 2,
+                correct: 4,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 3310,
+                longestCorrectStreak: 4,
+                score: 3721,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'BrainiacBert',
+                },
+                rank: 3,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 3582,
+                longestCorrectStreak: 3,
+                score: 3458,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'TriviaTitan',
+                },
+                rank: 4,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 4120,
+                longestCorrectStreak: 2,
+                score: 3264,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'SmartyPants',
+                },
+                rank: 5,
+                correct: 3,
+                incorrect: 1,
+                unanswered: 0,
+                averageResponseTime: 4682,
+                longestCorrectStreak: 2,
+                score: 3097,
+              },
+              {
+                player: {
+                  id: playerUser._id,
+                  nickname: playerUser.defaultNickname,
+                },
+                rank: 7,
+                correct: 2,
+                incorrect: 1,
+                unanswered: 1,
+                averageResponseTime: 4853,
+                longestCorrectStreak: 1,
+                score: 2542,
+              },
+            ],
+            questionMetrics: [
+              {
+                text: 'What is the capital of Sweden?',
+                type: QuestionType.MultiChoice,
+                correct: 1,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 1284,
+              },
+              {
+                text: 'Guess the temperature of the hottest day ever recorded.',
+                type: QuestionType.Range,
+                correct: 1,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 3035,
+              },
+              {
+                text: 'The earth is flat.',
+                type: QuestionType.TrueFalse,
+                correct: 1,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 811,
+              },
+              {
+                text: 'What is the capital of Denmark?',
+                type: QuestionType.TypeAnswer,
+                correct: 1,
+                incorrect: 0,
+                unanswered: 0,
+                averageResponseTime: 6566,
+              },
+            ],
+            duration: 36.035,
+            created: gameResult.hosted.toISOString(),
+          })
+        })
+    })
+
+    it('should succeed in retrieving game results for a zero to one hundred mode game as a host participant', async () => {
       const { accessToken, user: hostUser } =
         await createDefaultUserAndAuthenticate(app)
 
@@ -156,15 +358,200 @@ describe('GameResultController (e2e)', () => {
             playerMetrics: [
               {
                 player: {
-                  id: playerUser._id,
-                  nickname: playerUser.defaultNickname,
+                  id: expect.any(String),
+                  nickname: 'GuessLord',
                 },
                 rank: 1,
                 averagePrecision: 0.89,
                 unanswered: 0,
                 averageResponseTime: 2915,
                 longestCorrectStreak: 2,
-                score: 26,
+                score: 13,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'QuickThinker',
+                },
+                rank: 2,
+                averagePrecision: 0.87,
+                unanswered: 0,
+                averageResponseTime: 3082,
+                longestCorrectStreak: 2,
+                score: 15,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'SharpShooter',
+                },
+                rank: 3,
+                averagePrecision: 0.84,
+                unanswered: 0,
+                averageResponseTime: 3275,
+                longestCorrectStreak: 2,
+                score: 17,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'ThinkFast',
+                },
+                rank: 4,
+                averagePrecision: 0.82,
+                unanswered: 0,
+                averageResponseTime: 3492,
+                longestCorrectStreak: 2,
+                score: 18,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'PrecisionPete',
+                },
+                rank: 5,
+                averagePrecision: 0.79,
+                unanswered: 1,
+                averageResponseTime: 3768,
+                longestCorrectStreak: 1,
+                score: 19,
+              },
+            ],
+            questionMetrics: [
+              {
+                text: '2002 levererades den första Koenigseggbilen av modell CC8S. Hur många tillverkades totalt?',
+                type: QuestionType.Range,
+                averagePrecision: 0.98,
+                averageResponseTime: 2890,
+                unanswered: 0,
+              },
+              {
+                text: 'Hur många år blev Kubas förre president Fidel Castro?',
+                type: QuestionType.Range,
+                averagePrecision: 1,
+                averageResponseTime: 3274,
+                unanswered: 0,
+              },
+              {
+                text: 'Vilka är de två första decimalerna i talet pi?',
+                type: QuestionType.Range,
+                averagePrecision: 1,
+                averageResponseTime: 2426,
+                unanswered: 0,
+              },
+              {
+                text: 'Hur många klädda kort finns det i en kortlek?',
+                type: QuestionType.Range,
+                averagePrecision: 0.56,
+                averageResponseTime: 3071,
+                unanswered: 0,
+              },
+            ],
+            duration: 57.077,
+            created: gameResult.hosted.toISOString(),
+          })
+        })
+    })
+
+    it('should succeed in retrieving game results for a zero to one hundred mode game as a player participant', async () => {
+      const { accessToken, user: playerUser } =
+        await createDefaultUserAndAuthenticate(app)
+
+      const hostUser = await userModel.create(buildMockTertiaryUser())
+
+      const game = await gameModel.create(
+        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+      )
+
+      const gameResult = await gameResultModel.create(
+        buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/results`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: gameResult.game._id,
+            name: '0-100 Quiz Debug',
+            mode: GameMode.ZeroToOneHundred,
+            host: {
+              id: hostUser._id,
+              nickname: 'N/A',
+            },
+            playerMetrics: [
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'GuessLord',
+                },
+                rank: 1,
+                averagePrecision: 0.89,
+                unanswered: 0,
+                averageResponseTime: 2915,
+                longestCorrectStreak: 2,
+                score: 13,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'QuickThinker',
+                },
+                rank: 2,
+                averagePrecision: 0.87,
+                unanswered: 0,
+                averageResponseTime: 3082,
+                longestCorrectStreak: 2,
+                score: 15,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'SharpShooter',
+                },
+                rank: 3,
+                averagePrecision: 0.84,
+                unanswered: 0,
+                averageResponseTime: 3275,
+                longestCorrectStreak: 2,
+                score: 17,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'ThinkFast',
+                },
+                rank: 4,
+                averagePrecision: 0.82,
+                unanswered: 0,
+                averageResponseTime: 3492,
+                longestCorrectStreak: 2,
+                score: 18,
+              },
+              {
+                player: {
+                  id: expect.any(String),
+                  nickname: 'PrecisionPete',
+                },
+                rank: 5,
+                averagePrecision: 0.79,
+                unanswered: 1,
+                averageResponseTime: 3768,
+                longestCorrectStreak: 1,
+                score: 19,
+              },
+              {
+                player: {
+                  id: playerUser._id,
+                  nickname: playerUser.defaultNickname,
+                },
+                rank: 7,
+                averagePrecision: 0.71,
+                unanswered: 1,
+                averageResponseTime: 4210,
+                longestCorrectStreak: 1,
+                score: 21,
               },
             ],
             questionMetrics: [
@@ -1024,8 +1411,8 @@ function buildMockClassicModeGameResult(
     hostParticipantId: hostUser._id,
     players: [
       {
-        participantId: playerUser._id,
-        nickname: playerUser.defaultNickname,
+        participantId: uuidv4(),
+        nickname: 'GuessMachine',
         rank: 1,
         correct: 4,
         incorrect: 0,
@@ -1033,6 +1420,105 @@ function buildMockClassicModeGameResult(
         averageResponseTime: 2924,
         longestCorrectStreak: 4,
         score: 3846,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'QuizWhiz',
+        rank: 2,
+        correct: 4,
+        incorrect: 0,
+        unanswered: 0,
+        averageResponseTime: 3310,
+        longestCorrectStreak: 4,
+        score: 3721,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'BrainiacBert',
+        rank: 3,
+        correct: 3,
+        incorrect: 1,
+        unanswered: 0,
+        averageResponseTime: 3582,
+        longestCorrectStreak: 3,
+        score: 3458,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'TriviaTitan',
+        rank: 4,
+        correct: 3,
+        incorrect: 1,
+        unanswered: 0,
+        averageResponseTime: 4120,
+        longestCorrectStreak: 2,
+        score: 3264,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'SmartyPants',
+        rank: 5,
+        correct: 3,
+        incorrect: 1,
+        unanswered: 0,
+        averageResponseTime: 4682,
+        longestCorrectStreak: 2,
+        score: 3097,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'MindMarauder',
+        rank: 6,
+        correct: 2,
+        incorrect: 2,
+        unanswered: 0,
+        averageResponseTime: 4215,
+        longestCorrectStreak: 2,
+        score: 2776,
+      },
+      {
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
+        rank: 7,
+        correct: 2,
+        incorrect: 1,
+        unanswered: 1,
+        averageResponseTime: 4853,
+        longestCorrectStreak: 1,
+        score: 2542,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'QuizzyMcQuizface',
+        rank: 8,
+        correct: 1,
+        incorrect: 2,
+        unanswered: 1,
+        averageResponseTime: 5128,
+        longestCorrectStreak: 1,
+        score: 1927,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'AlmostRight',
+        rank: 9,
+        correct: 1,
+        incorrect: 3,
+        unanswered: 0,
+        averageResponseTime: 5834,
+        longestCorrectStreak: 1,
+        score: 1684,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'IDontKnow',
+        rank: 10,
+        correct: 0,
+        incorrect: 2,
+        unanswered: 2,
+        averageResponseTime: 0,
+        longestCorrectStreak: 0,
+        score: 975,
       },
     ],
     questions: [
@@ -1086,13 +1572,103 @@ function buildMockZeroToOneHundredModeGameResult(
     name: game.name,
     players: [
       {
-        participantId: playerUser._id,
-        nickname: playerUser.defaultNickname,
+        participantId: uuidv4(),
+        nickname: 'GuessLord',
         rank: 1,
         averagePrecision: 0.89,
         unanswered: 0,
         averageResponseTime: 2915,
         longestCorrectStreak: 2,
+        score: 13,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'QuickThinker',
+        rank: 2,
+        averagePrecision: 0.87,
+        unanswered: 0,
+        averageResponseTime: 3082,
+        longestCorrectStreak: 2,
+        score: 15,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'SharpShooter',
+        rank: 3,
+        averagePrecision: 0.84,
+        unanswered: 0,
+        averageResponseTime: 3275,
+        longestCorrectStreak: 2,
+        score: 17,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'ThinkFast',
+        rank: 4,
+        averagePrecision: 0.82,
+        unanswered: 0,
+        averageResponseTime: 3492,
+        longestCorrectStreak: 2,
+        score: 18,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'PrecisionPete',
+        rank: 5,
+        averagePrecision: 0.79,
+        unanswered: 1,
+        averageResponseTime: 3768,
+        longestCorrectStreak: 1,
+        score: 19,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'BrainStormer',
+        rank: 6,
+        averagePrecision: 0.75,
+        unanswered: 0,
+        averageResponseTime: 3984,
+        longestCorrectStreak: 1,
+        score: 20,
+      },
+      {
+        participantId: playerUser._id,
+        nickname: playerUser.defaultNickname,
+        rank: 7,
+        averagePrecision: 0.71,
+        unanswered: 1,
+        averageResponseTime: 4210,
+        longestCorrectStreak: 1,
+        score: 21,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'QuizRanger',
+        rank: 8,
+        averagePrecision: 0.68,
+        unanswered: 1,
+        averageResponseTime: 4438,
+        longestCorrectStreak: 1,
+        score: 23,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'CloseCall',
+        rank: 9,
+        averagePrecision: 0.63,
+        unanswered: 2,
+        averageResponseTime: 4721,
+        longestCorrectStreak: 1,
+        score: 25,
+      },
+      {
+        participantId: uuidv4(),
+        nickname: 'IDontKnow',
+        rank: 10,
+        averagePrecision: 0.58,
+        unanswered: 3,
+        averageResponseTime: 4985,
+        longestCorrectStreak: 0,
         score: 26,
       },
     ],

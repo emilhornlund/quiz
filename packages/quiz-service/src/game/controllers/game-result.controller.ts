@@ -13,6 +13,7 @@ import {
 import { Authority, TokenScope } from '@quiz/common'
 
 import {
+  PrincipalId,
   RequiredAuthorities,
   RequiresScopes,
 } from '../../auth/controllers/decorators'
@@ -64,7 +65,9 @@ export class GameResultController {
    * - The user must have permission to access the requested game results.
    *
    * @param gameID The unique identifier of the game.
-   * @returns An array containing the game result, depending on the game mode.
+   * @param participantId The authenticated participant's ID (extracted via `@PrincipalId`),
+   * used to ensure the caller’s own metrics are included even if outside the top 5.
+   * @returns The game result object for the requested game and mode.
    */
   @Get()
   @AuthorizedGame()
@@ -97,9 +100,10 @@ export class GameResultController {
   @HttpCode(HttpStatus.OK)
   public async getGameResults(
     @RouteGameIdParam() gameID: string,
+    @PrincipalId() participantId: string,
   ): Promise<
     GameResultClassicModeResponse | GameResultZeroToOneHundredModeResponse
   > {
-    return this.gameResultService.getGameResult(gameID)
+    return this.gameResultService.getGameResult(gameID, participantId)
   }
 }
