@@ -63,7 +63,7 @@ import { Token, TokenSchema } from './services/models/schemas'
     ]),
     EventEmitterModule,
     HttpModule,
-    GameModule,
+    forwardRef(() => GameModule),
     forwardRef(() => MigrationModule),
     forwardRef(() => UserModule),
   ],

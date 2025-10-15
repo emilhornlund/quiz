@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common'
 
 import { GameRepository, GameResultRepository } from '../../game/repositories'
 import { QuizRepository } from '../../quiz/repositories'
@@ -22,7 +28,9 @@ export class MigrationService {
    * @param userRepository        Repository for user document operations.
    */
   constructor(
+    @Inject(forwardRef(() => GameRepository))
     private readonly gameRepository: GameRepository,
+    @Inject(forwardRef(() => GameResultRepository))
     private readonly gameResultRepository: GameResultRepository,
     private readonly quizRepository: QuizRepository,
     private readonly userRepository: UserRepository,
