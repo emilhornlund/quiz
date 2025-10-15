@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
 import { Model, RootFilterQuery } from 'mongoose'
@@ -12,7 +12,6 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
-import { GameEventPublisher } from '../services'
 import { buildGameModel, buildQuitTask } from '../services/utils'
 
 import { Game, GameDocument, TaskType } from './models/schemas'
@@ -28,12 +27,9 @@ export class GameRepository extends BaseRepository<Game> {
    * Constructs the GameRepository.
    *
    * @param {Model<Game>} gameModel - The Mongoose model representing the Game schema.
-   * @param {GameEventPublisher} gameEventPublisher - Service responsible for publishing game events to clients.
    */
   constructor(
     @InjectModel(Game.name) protected readonly gameModel: Model<Game>,
-    @Inject(forwardRef(() => GameEventPublisher))
-    private gameEventPublisher: GameEventPublisher,
   ) {
     super(gameModel, 'Game')
   }
@@ -150,11 +146,7 @@ export class GameRepository extends BaseRepository<Game> {
 
     const updatedGameDocument = await callback(gameDocument)
     updatedGameDocument.updated = new Date()
-    const savedGameDocument = await updatedGameDocument.save()
-
-    await this.gameEventPublisher.publish(savedGameDocument)
-
-    return savedGameDocument
+    return await updatedGameDocument.save()
   }
 
   /**

@@ -5,6 +5,7 @@ import { Job, Queue } from 'bullmq'
 import { GameRepository } from '../repositories'
 import { GameDocument, TaskType } from '../repositories/models/schemas'
 
+import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionService } from './game-task-transition.service'
 
 export const TASK_QUEUE_NAME = 'task'
@@ -26,12 +27,14 @@ export class GameTaskTransitionScheduler extends WorkerHost {
    * @param taskQueue - Task queue for scheduling deferred transitions.
    * @param gameRepository - Repository for accessing and modifying game data.
    * @param gameTaskTransitionService - Service containing logic for determining task callbacks and delays.
+   * @param gameEventPublisher - Service responsible for publishing game events to clients.
    */
   constructor(
     @InjectQueue(TASK_QUEUE_NAME)
     private taskQueue: Queue<GameDocument, void, string>,
     private gameRepository: GameRepository,
     private gameTaskTransitionService: GameTaskTransitionService,
+    private gameEventPublisher: GameEventPublisher,
   ) {
     super()
   }
@@ -77,14 +80,19 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       const delay =
         this.gameTaskTransitionService.getTaskTransitionDelay(gameDocument)
 
-      await this.gameRepository.findAndSaveWithLock(gameID, async (doc) => {
-        const now = new Date()
-        doc.currentTask.currentTransitionInitiated = now
-        doc.currentTask.currentTransitionExpires = delay
-          ? new Date(now.getTime() + delay)
-          : undefined
-        return doc
-      })
+      const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
+        gameID,
+        async (doc) => {
+          const now = new Date()
+          doc.currentTask.currentTransitionInitiated = now
+          doc.currentTask.currentTransitionExpires = delay
+            ? new Date(now.getTime() + delay)
+            : undefined
+          return doc
+        },
+      )
+
+      await this.gameEventPublisher.publish(savedGameDocument)
 
       if (delay > 0) {
         await this.scheduleDeferredTransition(gameDocument, delay, nextStatus)
@@ -169,6 +177,8 @@ export class GameTaskTransitionScheduler extends WorkerHost {
           return doc
         },
       )
+
+      await this.gameEventPublisher.publish(updatedGameDocument)
 
       this.logger.debug(
         `Successfully performed transition for task ${type} to status ${nextStatus} for Game ID: ${_id}`,

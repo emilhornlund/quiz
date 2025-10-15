@@ -175,7 +175,7 @@ export class GameService {
 
     const now = new Date()
 
-    await this.gameRepository.findAndSaveWithLock(
+    const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
       gameId,
       async (currentDocument) => {
         currentDocument.participants.push({
@@ -191,6 +191,8 @@ export class GameService {
         return currentDocument
       },
     )
+
+    await this.gameEventPublisher.publish(savedGameDocument)
   }
 
   /**
@@ -237,7 +239,7 @@ export class GameService {
       throw new ForbiddenException('Forbidden to remove player')
     }
 
-    await this.gameRepository.findAndSaveWithLock(
+    const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
       gameId,
       async (currentDocument) => {
         currentDocument.participants = currentDocument.participants.filter(
@@ -246,6 +248,8 @@ export class GameService {
         return currentDocument
       },
     )
+
+    await this.gameEventPublisher.publish(savedGameDocument)
 
     if (currentParticipant.type === GameParticipantType.HOST) {
       await this.gameEventPublisher.publishParticipantEvent(
@@ -440,13 +444,15 @@ export class GameService {
 
       const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
 
-      await this.gameRepository.findAndSaveWithLock(
+      const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,
         async (currentDocument) => {
           currentDocument.currentTask = updatedQuestionResultTask
           return currentDocument
         },
       )
+
+      await this.gameEventPublisher.publish(savedGameDocument)
     } else {
       throw new BadRequestException(
         'Current task is either not of question result type or not in active status',
@@ -525,13 +531,15 @@ export class GameService {
 
       const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
 
-      await this.gameRepository.findAndSaveWithLock(
+      const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,
         async (currentDocument) => {
           currentDocument.currentTask = updatedQuestionResultTask
           return currentDocument
         },
       )
+
+      await this.gameEventPublisher.publish(savedGameDocument)
     } else {
       throw new BadRequestException(
         'Current task is either not of question result type or not in active status',

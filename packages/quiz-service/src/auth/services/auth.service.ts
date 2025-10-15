@@ -60,6 +60,7 @@ export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(forwardRef(() => GameRepository))
     private readonly gameRepository: GameRepository,
     private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
