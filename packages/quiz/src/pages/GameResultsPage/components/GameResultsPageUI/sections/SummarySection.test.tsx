@@ -31,6 +31,8 @@ beforeEach(() => {
   h.formatRoundedSeconds.mockReset()
 })
 
+const CREATED_DATE = new Date('2025-01-01T12:00:00.000Z')
+
 describe('SummarySection', () => {
   it('renders Classic summary, uses getCorrectPercentage, shows fastest and longest streak', () => {
     h.getCorrectPercentage
@@ -55,10 +57,12 @@ describe('SummarySection', () => {
 
     const { container } = render(
       <SummarySection
+        hostNickname="FrostyBear"
         mode={GameMode.Classic}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={123}
+        created={CREATED_DATE}
       />,
     )
 
@@ -111,10 +115,12 @@ describe('SummarySection', () => {
 
     const { container } = render(
       <SummarySection
+        hostNickname="FrostyBear"
         mode={GameMode.ZeroToOneHundred}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={45}
+        created={CREATED_DATE}
       />,
     )
 
@@ -146,10 +152,12 @@ describe('SummarySection', () => {
 
     const { container } = render(
       <SummarySection
+        hostNickname="FrostyBear"
         mode={GameMode.Classic}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={0}
+        created={CREATED_DATE}
       />,
     )
 

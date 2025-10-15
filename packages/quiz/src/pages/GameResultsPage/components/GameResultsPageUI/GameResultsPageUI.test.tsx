@@ -7,6 +7,8 @@ import { describe, expect, it } from 'vitest'
 
 import GameResultsPageUI from './GameResultsPageUI'
 
+const CREATED_DATE = new Date('2025-01-01T12:00:00.000Z')
+
 describe('GameResultsPageUI', () => {
   it('should render GameResultsPageUI for classic game mode', async () => {
     const { container } = render(
@@ -84,7 +86,7 @@ describe('GameResultsPageUI', () => {
               },
             ],
             duration: 456,
-            created: new Date(),
+            created: CREATED_DATE,
           }}
           currentParticipantId="participant-id-1"
         />
@@ -163,7 +165,7 @@ describe('GameResultsPageUI', () => {
               },
             ],
             duration: 123.772,
-            created: new Date(),
+            created: CREATED_DATE,
           }}
           currentParticipantId="participant-id-1"
         />
@@ -219,7 +221,7 @@ describe('GameResultsPageUI', () => {
       },
     ],
     duration: 300,
-    created: new Date(),
+    created: CREATED_DATE,
   })
 
   const z2hMinimal = (): GameResultDto => ({
@@ -264,7 +266,7 @@ describe('GameResultsPageUI', () => {
       },
     ],
     duration: 90,
-    created: new Date(),
+    created: CREATED_DATE,
   })
 
   const clickSegment = (label: string) => {
