@@ -71,7 +71,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             host: {
               id: hostUser._id,
-              nickname: 'N/A',
+              nickname: 'FrostyBear',
             },
             playerMetrics: [
               {
@@ -208,7 +208,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             host: {
               id: hostUser._id,
-              nickname: 'N/A',
+              nickname: 'ShadowWhirlwind',
             },
             playerMetrics: [
               {
@@ -353,7 +353,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             host: {
               id: hostUser._id,
-              nickname: 'N/A',
+              nickname: 'FrostyBear',
             },
             playerMetrics: [
               {
@@ -478,7 +478,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             host: {
               id: hostUser._id,
-              nickname: 'N/A',
+              nickname: 'ShadowWhirlwind',
             },
             playerMetrics: [
               {
@@ -587,6 +587,29 @@ describe('GameResultController (e2e)', () => {
             duration: 57.077,
             created: gameResult.hosted.toISOString(),
           })
+        })
+    })
+
+    it('should succeed return N/A default nickname for host when user not found', async () => {
+      const { accessToken, user: playerUser } =
+        await createDefaultUserAndAuthenticate(app)
+
+      const hostUser = { _id: uuidv4() } as User
+
+      const game = await gameModel.create(
+        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+      )
+
+      await gameResultModel.create(
+        buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/results`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.host.nickname).toEqual('N/A')
         })
     })
 

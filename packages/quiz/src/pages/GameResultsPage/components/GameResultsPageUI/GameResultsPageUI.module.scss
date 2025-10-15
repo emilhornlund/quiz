@@ -90,6 +90,10 @@
           @include helpers.fontSize(22px);
         }
 
+        &.full {
+          grid-column: span 2;
+        }
+
         &.progress {
           display: flex;
           flex-direction: row;
@@ -112,52 +116,114 @@
         }
 
         &.details {
-          display: grid;
+          display: flex;
+          flex-direction: row;
 
           @include helpers.mobile {
-            grid-template-columns: variables.$mobile-layout-gutter 1fr 1fr;
+            flex-direction: column;
             gap: variables.$mobile-layout-gutter * 0.5;
           }
 
           @include helpers.tablet {
-            grid-template-columns: variables.$tablet-layout-gutter 1fr 1fr;
-            gap: calc(#{variables.$tablet-layout-gutter} * 0.5);
+            gap: variables.$tablet-layout-gutter;
           }
 
           @include helpers.desktop {
-            grid-template-columns: variables.$desktop-layout-gutter 1fr 1fr;
-            gap: calc(#{variables.$desktop-layout-gutter} * 0.5);
+            gap: variables.$desktop-layout-gutter;
           }
 
-          .icon {
+          .column {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          }
-
-          .title {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+            flex: 1;
+            width: 100%;
 
             @include helpers.mobile {
-              column-gap: variables.$mobile-narrow-layout-gutter;
+              gap: variables.$mobile-layout-gutter * 0.5;
             }
 
             @include helpers.tablet {
-              column-gap: variables.$tablet-narrow-layout-gutter;
+              gap: variables.$tablet-layout-gutter * 0.5;
             }
 
             @include helpers.desktop {
-              column-gap: variables.$desktop-narrow-layout-gutter;
+              gap: variables.$desktop-layout-gutter * 0.5;
+            }
+
+            .item {
+              display: grid;
+
+              @include helpers.mobile {
+                grid-template-columns: variables.$mobile-layout-gutter 1fr 1fr;
+                gap: variables.$mobile-layout-gutter;
+              }
+
+              @include helpers.tablet {
+                grid-template-columns: variables.$tablet-layout-gutter 1fr 1fr;
+                gap: variables.$tablet-layout-gutter * 0.5;
+              }
+
+              @include helpers.desktop {
+                grid-template-columns: variables.$desktop-layout-gutter 1fr 1fr;
+                gap: variables.$desktop-layout-gutter * 0.5;
+              }
+
+              .icon {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+              }
+
+              .title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex: 1;
+
+                @include helpers.mobile {
+                  column-gap: variables.$mobile-narrow-layout-gutter;
+                }
+
+                @include helpers.tablet {
+                  column-gap: variables.$tablet-narrow-layout-gutter;
+                }
+
+                @include helpers.desktop {
+                  column-gap: variables.$desktop-narrow-layout-gutter;
+                }
+              }
+
+              .value {
+                font-weight: bold;
+                white-space: nowrap;
+                text-align: right;
+              }
             }
           }
 
-          .value {
-            font-weight: bold;
-            white-space: nowrap;
-            text-align: right;
+          .separator {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              width: helpers.pxToRem(1px);
+              background: linear-gradient(
+                              to bottom,
+                              transparent 0%,
+                              rgba(0, 0, 0, 0.15) 15%,
+                              rgba(0, 0, 0, 0.4) 50%,
+                              rgba(0, 0, 0, 0.15) 85%,
+                              transparent 100%
+              );
+            }
           }
         }
 

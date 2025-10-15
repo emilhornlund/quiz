@@ -10,6 +10,7 @@ import {
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
 
+import { UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
 import { PlayerMetric, QuestionMetric } from '../repositories/models/schemas'
@@ -23,8 +24,12 @@ export class GameResultService {
    * Constructs a new GameResultService.
    *
    * @param gameResultRepository - Repository for accessing stored game results.
+   * @param userRepository - Repository for accessing user data.
    */
-  constructor(private readonly gameResultRepository: GameResultRepository) {}
+  constructor(
+    private readonly gameResultRepository: GameResultRepository,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   /**
    * Retrieves the result of a completed quiz game.
@@ -60,10 +65,15 @@ export class GameResultService {
       completed,
     } = gameResultDocument
 
+    const hostUser = await this.userRepository.findUserById(hostParticipantId)
+
     return {
       id,
       name,
-      host: { id: hostParticipantId, nickname: 'N/A' },
+      host: {
+        id: hostParticipantId,
+        nickname: hostUser?.defaultNickname || 'N/A',
+      },
       ...(mode === GameMode.Classic
         ? {
             mode: GameMode.Classic,

@@ -33,6 +33,8 @@ vi.mock('react-router-dom', async () => {
 type ClassicResult = Extract<GameResultDto, { mode: GameMode.Classic }>
 type Z2HResult = Extract<GameResultDto, { mode: GameMode.ZeroToOneHundred }>
 
+const CREATED_DATE = new Date('2025-01-01T12:00:00.000Z')
+
 const makeClassicResults = (name: string): ClassicResult => ({
   id: 'game-1',
   mode: GameMode.Classic,
@@ -79,7 +81,7 @@ const makeClassicResults = (name: string): ClassicResult => ({
     },
   ],
   duration: 300,
-  created: new Date(),
+  created: CREATED_DATE,
 })
 
 const makeZ2HResults = (name: string): Z2HResult => ({
@@ -124,7 +126,7 @@ const makeZ2HResults = (name: string): Z2HResult => ({
     },
   ],
   duration: 300,
-  created: new Date(),
+  created: CREATED_DATE,
 })
 
 const renderWithProviders = (initialEntry: string) => {

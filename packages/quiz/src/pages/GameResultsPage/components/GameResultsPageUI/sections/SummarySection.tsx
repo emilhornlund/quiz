@@ -1,8 +1,11 @@
+import { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import {
+  faCalendar,
   faCircleQuestion,
   faClock,
   faGamepad,
   faUser,
+  faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -12,7 +15,9 @@ import {
   GameResultParticipantDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import { format } from 'date-fns'
+import { toZonedTime } from 'date-fns-tz'
+import React, { FC, ReactElement, useMemo } from 'react'
 
 import {
   CircularProgressBar,
@@ -32,6 +37,20 @@ import {
 
 export type Metric = { value: number; player: GameResultParticipantDto }
 
+const DetailsItem: FC<{
+  title: string
+  icon: IconDefinition
+  children: ReactElement | string | number
+}> = ({ title, icon, children }) => (
+  <div className={styles.item}>
+    <div className={styles.icon}>
+      <FontAwesomeIcon icon={icon} />
+    </div>
+    <div className={styles.title}>{title}</div>
+    <div className={styles.value}>{children}</div>
+  </div>
+)
+
 const MetricCard: FC<{ title: string; value: string; nickname: string }> = ({
   title,
   value,
@@ -46,16 +65,20 @@ const MetricCard: FC<{ title: string; value: string; nickname: string }> = ({
 
 export interface SummarySectionProps {
   mode: GameMode
+  hostNickname: string
   playerMetrics: GameResultDto['playerMetrics']
   questionMetrics: GameResultDto['questionMetrics']
   duration: number
+  created: Date
 }
 
 const SummarySection: FC<SummarySectionProps> = ({
   mode,
+  hostNickname,
   playerMetrics,
   questionMetrics,
   duration,
+  created,
 }) => {
   const percentage = useMemo<number>(
     () =>
@@ -106,7 +129,7 @@ const SummarySection: FC<SummarySectionProps> = ({
   return (
     <section>
       <div className={styles.cards}>
-        <div className={classNames(styles.card, styles.progress)}>
+        <div className={classNames(styles.card, styles.full, styles.progress)}>
           <CircularProgressBar
             kind={CircularProgressBarKind.Correct}
             size={CircularProgressBarSize.Medium}
@@ -117,27 +140,36 @@ const SummarySection: FC<SummarySectionProps> = ({
           </div>
         </div>
 
-        <div className={classNames(styles.card, styles.details)}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon={faGamepad} />
+        <div className={classNames(styles.card, styles.full, styles.details)}>
+          <div className={styles.column}>
+            <DetailsItem title="Game Mode" icon={faGamepad}>
+              {GameModeLabels[mode]}
+            </DetailsItem>
+
+            <DetailsItem title="Players" icon={faUser}>
+              {playerMetrics.length}
+            </DetailsItem>
+
+            <DetailsItem title="Questions" icon={faCircleQuestion}>
+              {questionMetrics.length}
+            </DetailsItem>
           </div>
-          <div className={styles.title}>Game Mode</div>
-          <div className={styles.value}>{GameModeLabels[mode]}</div>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon={faUser} className={styles.icon} />
+
+          <div className={styles.separator} />
+
+          <div className={styles.column}>
+            <DetailsItem title="Host" icon={faUserTie}>
+              {hostNickname}
+            </DetailsItem>
+
+            <DetailsItem title="Date" icon={faCalendar}>
+              {format(toZonedTime(created, 'UTC'), 'y-LL-dd HH:mm')}
+            </DetailsItem>
+
+            <DetailsItem title="Duration" icon={faClock}>
+              {formatRoundedDuration(duration)}
+            </DetailsItem>
           </div>
-          <div className={styles.title}>Players</div>
-          <div className={styles.value}>{playerMetrics.length}</div>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon={faCircleQuestion} className={styles.icon} />
-          </div>
-          <div className={styles.title}>Questions</div>
-          <div className={styles.value}>{questionMetrics.length}</div>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon={faClock} className={styles.icon} />
-          </div>
-          <div className={styles.title}>Time</div>
-          <div className={styles.value}>{formatRoundedDuration(duration)}</div>
         </div>
 
         {averageResponseTimeMetric && (
