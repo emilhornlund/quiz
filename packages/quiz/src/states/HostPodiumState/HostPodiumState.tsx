@@ -1,5 +1,6 @@
 import { GamePodiumHostEvent } from '@quiz/common'
 import React, { FC, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   IconButtonArrowRight,
@@ -19,11 +20,16 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
 }) => {
   const [isCompletingGame, setIsCompletingGame] = useState<boolean>(false)
 
-  const { completeTask } = useGameContext()
+  const { gameID, completeTask } = useGameContext()
+
+  const navigate = useNavigate()
 
   const handleCompletingGame = () => {
     setIsCompletingGame(true)
-    completeTask?.().finally(() => setIsCompletingGame(false))
+    completeTask?.().finally(() => {
+      setIsCompletingGame(false)
+      navigate(`/game/results/${gameID}`)
+    })
   }
 
   return (
@@ -32,11 +38,11 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
       align="center"
       header={
         <IconButtonArrowRight
-          id={'skip-button'}
+          id="game-results-button"
           type="button"
           kind="call-to-action"
           size="small"
-          value="Quit"
+          value="Game Results"
           loading={isCompletingGame}
           onClick={handleCompletingGame}
         />

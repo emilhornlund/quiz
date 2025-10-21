@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`HostPodiumState > clicks Quit and calls completeTask 1`] = `
+exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
 <div>
   <div
     class="main"
@@ -53,19 +53,27 @@ exports[`HostPodiumState > clicks Quit and calls completeTask 1`] = `
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            data-testid="test-skip-button-button"
-            disabled=""
-            id="skip-button"
-            name="skip-button"
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
             type="button"
           >
-            <div
-              class="loadingSpinner"
+            <span>
+              Game Results
+            </span>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-right"
+              data-icon="arrow-right"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
             >
-              <div />
-              <div />
-              <div />
-            </div>
+              <path
+                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                fill="currentColor"
+              />
+            </svg>
           </button>
         </div>
       </div>
@@ -188,7 +196,7 @@ exports[`HostPodiumState > clicks Quit and calls completeTask 1`] = `
 </div>
 `;
 
-exports[`HostPodiumState > clicks Quit when completeTask is undefined 1`] = `
+exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`] = `
 <div>
   <div
     class="main"
@@ -241,10 +249,10 @@ exports[`HostPodiumState > clicks Quit when completeTask is undefined 1`] = `
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            data-testid="test-skip-button-button"
+            data-testid="test-game-results-button-button"
             disabled=""
-            id="skip-button"
-            name="skip-button"
+            id="game-results-button"
+            name="game-results-button"
             type="button"
           >
             <div
@@ -429,13 +437,13 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            data-testid="test-skip-button-button"
-            id="skip-button"
-            name="skip-button"
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
             type="button"
           >
             <span>
-              Quit
+              Game Results
             </span>
             <svg
               aria-hidden="true"
@@ -625,13 +633,13 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            data-testid="test-skip-button-button"
-            id="skip-button"
-            name="skip-button"
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
             type="button"
           >
             <span>
-              Quit
+              Game Results
             </span>
             <svg
               aria-hidden="true"
@@ -884,13 +892,13 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
           class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
         >
           <button
-            data-testid="test-skip-button-button"
-            id="skip-button"
-            name="skip-button"
+            data-testid="test-game-results-button-button"
+            id="game-results-button"
+            name="game-results-button"
             type="button"
           >
             <span>
-              Quit
+              Game Results
             </span>
             <svg
               aria-hidden="true"

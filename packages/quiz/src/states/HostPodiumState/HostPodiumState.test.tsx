@@ -1,17 +1,27 @@
 import { GameEventType } from '@quiz/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
+  gameID: '17b3a7e3-9ba5-486a-84ba-e9b9ce29681a',
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  navigate: vi.fn(),
 }))
+
+vi.mock('react-router-dom', async (orig) => {
+  const actual = await orig()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return { ...actual, useNavigate: () => h.navigate }
+})
 
 vi.mock('../../context/game', () => ({
   useGameContext: () => ({
+    gameID: h.gameID,
     completeTask: h.completeTask,
   }),
 }))
@@ -21,6 +31,7 @@ import HostPodiumState from './HostPodiumState'
 describe('HostPodiumState', () => {
   beforeEach(() => {
     h.completeTask.mockClear()
+    h.navigate.mockClear()
   })
 
   it('should render HostPodiumState', async () => {
@@ -91,7 +102,7 @@ describe('HostPodiumState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Quit and calls completeTask', async () => {
+  it('clicks Game Results and calls completeTask', async () => {
     const { container } = render(
       <MemoryRouter>
         <HostPodiumState
@@ -107,13 +118,18 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
-    const quit = container.querySelector('#skip-button') as HTMLButtonElement
-    fireEvent.click(quit)
+    const gameResultsBtn = container.querySelector(
+      '#game-results-button',
+    ) as HTMLButtonElement
+    fireEvent.click(gameResultsBtn)
     expect(h.completeTask).toHaveBeenCalledTimes(1)
+    await waitFor(() =>
+      expect(h.navigate).toHaveBeenCalledWith(`/game/results/${h.gameID}`),
+    )
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Quit when completeTask is undefined', async () => {
+  it('clicks Game Results when completeTask is undefined', async () => {
     // @ts-expect-error undefined
     h.completeTask = undefined
     const { container } = render(
@@ -131,8 +147,10 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
-    const quit = container.querySelector('#skip-button') as HTMLButtonElement
-    fireEvent.click(quit)
+    const gameResultsBtn = container.querySelector(
+      '#game-results-button',
+    ) as HTMLButtonElement
+    fireEvent.click(gameResultsBtn)
     expect(container).toMatchSnapshot()
   })
 })

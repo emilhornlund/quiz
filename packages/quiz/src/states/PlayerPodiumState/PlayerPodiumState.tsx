@@ -6,9 +6,12 @@ import {
   Badge,
   getBadgePositionBackgroundColor,
   IconButtonArrowLeft,
+  IconButtonArrowRight,
   NicknameChip,
   Typography,
 } from '../../components'
+import { useAuthContext } from '../../context/auth'
+import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
 import { getPodiumPositionMessage } from './message.utils.ts'
@@ -27,6 +30,9 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
     },
   },
 }) => {
+  const { isUserAuthenticated } = useAuthContext()
+  const { gameID } = useGameContext()
+
   const navigate = useNavigate()
 
   const message = useMemo(() => getPodiumPositionMessage(position), [position])
@@ -36,14 +42,25 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
       height="full"
       align="start"
       header={
-        <IconButtonArrowLeft
-          id="end-game-button"
-          type="button"
-          kind="call-to-action"
-          size="small"
-          value="End Game"
-          onClick={() => navigate('/')}
-        />
+        isUserAuthenticated ? (
+          <IconButtonArrowRight
+            id="game-results-button"
+            type="button"
+            kind="call-to-action"
+            size="small"
+            value="Game Results"
+            onClick={() => navigate(`/game/results/${gameID}`)}
+          />
+        ) : (
+          <IconButtonArrowLeft
+            id="end-game-button"
+            type="button"
+            kind="call-to-action"
+            size="small"
+            value="End Game"
+            onClick={() => navigate('/')}
+          />
+        )
       }>
       <Typography variant="subtitle" size="medium">
         {name}
