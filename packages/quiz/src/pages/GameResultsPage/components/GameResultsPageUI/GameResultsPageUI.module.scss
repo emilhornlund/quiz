@@ -44,19 +44,17 @@
 
     .cards {
       display: grid;
+      grid-template-columns: 1fr 1fr;
 
       @include helpers.mobile {
-        grid-template-columns: 1fr;
         gap: variables.$mobile-layout-gutter;
       }
 
       @include helpers.tablet {
-        grid-template-columns: 1fr 1fr;
         gap: variables.$tablet-layout-gutter;
       }
 
       @include helpers.desktop {
-        grid-template-columns: 1fr 1fr;
         gap: variables.$desktop-layout-gutter;
       }
 
@@ -209,6 +207,10 @@
             align-items: center;
             justify-content: center;
 
+            @include helpers.mobile {
+              display: none;
+            }
+
             &::before {
               content: '';
               position: absolute;
@@ -242,6 +244,7 @@
 
           .value {
             font-weight: bold;
+            text-align: center;
 
             @include helpers.mobile {
               @include helpers.fontSize(24px);
@@ -290,6 +293,7 @@
 
           .title {
             text-transform: capitalize;
+            text-align: center;
 
             @include helpers.mobile {
               @include helpers.fontSize(18px);

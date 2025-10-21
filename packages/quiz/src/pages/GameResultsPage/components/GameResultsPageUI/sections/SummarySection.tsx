@@ -66,6 +66,8 @@ const MetricCard: FC<{ title: string; value: string; nickname: string }> = ({
 export interface SummarySectionProps {
   mode: GameMode
   hostNickname: string
+  numberOfPlayers: number
+  numberOfQuestions: number
   playerMetrics: GameResultDto['playerMetrics']
   questionMetrics: GameResultDto['questionMetrics']
   duration: number
@@ -75,6 +77,8 @@ export interface SummarySectionProps {
 const SummarySection: FC<SummarySectionProps> = ({
   mode,
   hostNickname,
+  numberOfPlayers,
+  numberOfQuestions,
   playerMetrics,
   questionMetrics,
   duration,
@@ -147,11 +151,11 @@ const SummarySection: FC<SummarySectionProps> = ({
             </DetailsItem>
 
             <DetailsItem title="Players" icon={faUser}>
-              {playerMetrics.length}
+              {numberOfPlayers}
             </DetailsItem>
 
             <DetailsItem title="Questions" icon={faCircleQuestion}>
-              {questionMetrics.length}
+              {numberOfQuestions}
             </DetailsItem>
           </div>
 

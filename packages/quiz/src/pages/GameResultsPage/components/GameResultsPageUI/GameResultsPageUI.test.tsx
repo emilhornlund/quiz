@@ -19,6 +19,8 @@ describe('GameResultsPageUI', () => {
             mode: GameMode.Classic,
             name: 'Classic Quiz Debug',
             host: { id: uuidv4(), nickname: 'FrostyBear' },
+            numberOfPlayers: 3,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: { id: uuidv4(), nickname: 'ShadowCyborg' },
@@ -105,6 +107,8 @@ describe('GameResultsPageUI', () => {
             mode: GameMode.ZeroToOneHundred,
             name: '0-100 Quiz Debug',
             host: { id: uuidv4(), nickname: 'FrostyBear' },
+            numberOfPlayers: 3,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: { id: uuidv4(), nickname: 'ShadowCyborg' },
@@ -180,6 +184,8 @@ describe('GameResultsPageUI', () => {
     mode: GameMode.Classic,
     name: 'Classic Minimal',
     host: { id: uuidv4(), nickname: 'Hosty' },
+    numberOfPlayers: 2,
+    numberOfQuestions: 2,
     playerMetrics: [
       {
         player: { id: uuidv4(), nickname: 'Alice' },
@@ -229,6 +235,8 @@ describe('GameResultsPageUI', () => {
     mode: GameMode.ZeroToOneHundred,
     name: '0-100 Minimal',
     host: { id: uuidv4(), nickname: 'Hosty' },
+    numberOfPlayers: 2,
+    numberOfQuestions: 2,
     playerMetrics: [
       {
         player: { id: uuidv4(), nickname: 'Carol' },

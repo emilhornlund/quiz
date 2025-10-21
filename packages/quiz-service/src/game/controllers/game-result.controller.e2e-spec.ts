@@ -73,6 +73,8 @@ describe('GameResultController (e2e)', () => {
               id: hostUser._id,
               nickname: 'FrostyBear',
             },
+            numberOfPlayers: 10,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: {
@@ -210,6 +212,8 @@ describe('GameResultController (e2e)', () => {
               id: hostUser._id,
               nickname: 'ShadowWhirlwind',
             },
+            numberOfPlayers: 10,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: {
@@ -355,6 +359,8 @@ describe('GameResultController (e2e)', () => {
               id: hostUser._id,
               nickname: 'FrostyBear',
             },
+            numberOfPlayers: 10,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: {
@@ -480,6 +486,8 @@ describe('GameResultController (e2e)', () => {
               id: hostUser._id,
               nickname: 'ShadowWhirlwind',
             },
+            numberOfPlayers: 10,
+            numberOfQuestions: 4,
             playerMetrics: [
               {
                 player: {

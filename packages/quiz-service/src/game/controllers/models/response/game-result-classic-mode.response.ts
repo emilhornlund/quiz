@@ -16,6 +16,8 @@ import {
   ApiGameNameProperty,
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
+  ApiGameResultNumberOfPlayersProperty,
+  ApiGameResultNumberOfQuestionsProperty,
 } from '../../decorators/api'
 
 import { GameResultClassicModePlayerMetricResponse } from './game-result-classic-mode-player-metric.response'
@@ -58,6 +60,18 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
   @Type(() => GameResultParticipantResponse)
   @ValidateNested({ each: true })
   host: GameResultParticipantResponse
+
+  /**
+   * Total number of players who participated in the game (excludes the host).
+   */
+  @ApiGameResultNumberOfPlayersProperty()
+  numberOfPlayers: number
+
+  /**
+   * Total number of questions included in this game session.
+   */
+  @ApiGameResultNumberOfQuestionsProperty()
+  numberOfQuestions: number
 
   /**
    * A list of players and their final performance metrics for a classic mode game.

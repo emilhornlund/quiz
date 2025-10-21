@@ -40,6 +40,8 @@ const makeClassicResults = (name: string): ClassicResult => ({
   mode: GameMode.Classic,
   name,
   host: { id: 'host-1', nickname: 'Hosty' },
+  numberOfPlayers: 2,
+  numberOfQuestions: 2,
   playerMetrics: [
     {
       player: { id: 'p1', nickname: 'Alice' },
@@ -89,6 +91,8 @@ const makeZ2HResults = (name: string): Z2HResult => ({
   mode: GameMode.ZeroToOneHundred,
   name,
   host: { id: 'host-1', nickname: 'Hosty' },
+  numberOfPlayers: 2,
+  numberOfQuestions: 2,
   playerMetrics: [
     {
       player: { id: 'p1', nickname: 'Carol' },

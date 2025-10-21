@@ -114,7 +114,7 @@ exports[`SummarySection > omits metric cards when playerMetrics has no data 1`] 
             <div
               class="value"
             >
-              0
+              2
             </div>
           </div>
           <div
@@ -145,7 +145,7 @@ exports[`SummarySection > omits metric cards when playerMetrics has no data 1`] 
             <div
               class="value"
             >
-              1
+              2
             </div>
           </div>
         </div>

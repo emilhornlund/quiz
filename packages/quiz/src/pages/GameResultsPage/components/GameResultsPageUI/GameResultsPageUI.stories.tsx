@@ -28,6 +28,8 @@ export const Classic = {
       mode: GameMode.Classic,
       name: 'Classic Quiz Debug',
       host: { id: uuidv4(), nickname: 'FrostyBear' },
+      numberOfPlayers: 10,
+      numberOfQuestions: 4,
       playerMetrics: [
         {
           player: {
@@ -156,6 +158,8 @@ export const ZeroToOneHundred = {
       mode: GameMode.ZeroToOneHundred,
       name: '0-100 Quiz Debug',
       host: { id: uuidv4(), nickname: 'FrostyBear' },
+      numberOfPlayers: 10,
+      numberOfQuestions: 4,
       playerMetrics: [
         {
           player: {
