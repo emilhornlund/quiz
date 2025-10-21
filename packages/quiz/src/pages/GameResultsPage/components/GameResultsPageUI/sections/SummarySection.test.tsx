@@ -59,6 +59,8 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
+        numberOfPlayers={2}
+        numberOfQuestions={2}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={123}
@@ -117,6 +119,8 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.ZeroToOneHundred}
+        numberOfPlayers={2}
+        numberOfQuestions={2}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={45}
@@ -154,6 +158,8 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
+        numberOfPlayers={2}
+        numberOfQuestions={2}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
         duration={0}

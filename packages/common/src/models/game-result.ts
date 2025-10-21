@@ -24,6 +24,17 @@ export type GameResultDto = {
   readonly host: GameResultParticipantDto
 
   /**
+   * Total number of players who participated in the game (excludes the host).
+   * Matches the length of `playerMetrics`.
+   */
+  readonly numberOfPlayers: number
+
+  /**
+   * Total number of questions included in this game session.
+   */
+  readonly numberOfQuestions: number
+
+  /**
    * The duration in seconds the game session was active.
    */
   readonly duration: number

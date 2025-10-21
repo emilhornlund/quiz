@@ -16,6 +16,8 @@ import {
   ApiGameNameProperty,
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
+  ApiGameResultNumberOfPlayersProperty,
+  ApiGameResultNumberOfQuestionsProperty,
 } from '../../decorators/api'
 
 import { GameResultParticipantResponse } from './game-result-participant.response'
@@ -60,6 +62,18 @@ export class GameResultZeroToOneHundredModeResponse
   @Type(() => GameResultParticipantResponse)
   @ValidateNested({ each: true })
   host: GameResultParticipantResponse
+
+  /**
+   * Total number of players who participated in the game (excludes the host).
+   */
+  @ApiGameResultNumberOfPlayersProperty()
+  numberOfPlayers: number
+
+  /**
+   * Total number of questions included in this game session.
+   */
+  @ApiGameResultNumberOfQuestionsProperty()
+  numberOfQuestions: number
 
   /**
    * A list of players and their final performance metrics for a zero to one hundred mode game.

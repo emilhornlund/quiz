@@ -74,6 +74,8 @@ export class GameResultService {
         id: hostParticipantId,
         nickname: hostUser?.defaultNickname || 'N/A',
       },
+      numberOfPlayers: players.length,
+      numberOfQuestions: questions.length,
       ...(mode === GameMode.Classic
         ? {
             mode: GameMode.Classic,
