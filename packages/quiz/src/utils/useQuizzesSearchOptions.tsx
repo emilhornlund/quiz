@@ -8,6 +8,8 @@ import {
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { parseNumber } from './helpers.ts'
+
 type Sort = 'title' | 'created' | 'updated'
 type Order = 'asc' | 'desc'
 
@@ -27,14 +29,6 @@ export type ProfileQuizzesOptions = {
   order?: Order
   limit: number
   offset: number
-}
-
-/**
- * Parses a string into a finite number, or returns `fallback` if parsing fails.
- */
-const parseNumber = (v: string | null, fallback: number) => {
-  const n = v ? Number(v) : NaN
-  return Number.isFinite(n) ? n : fallback
 }
 
 /**
@@ -104,7 +98,7 @@ export function useQuizzesSearchOptions() {
 
     return {
       search,
-      visibility, // <- stays optional (undefined if not present)
+      visibility,
       category,
       languageCode,
       mode,

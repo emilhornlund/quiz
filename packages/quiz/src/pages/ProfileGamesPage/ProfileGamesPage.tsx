@@ -1,26 +1,39 @@
 import { GameStatus } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { FC, useEffect, useMemo } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
+import { parseNumber } from '../../utils/helpers.ts'
 
 import ProfileGamesPageUI from './ProfileGamesPageUI'
 
 const ProfileGamesPage: FC = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const [searchParams, setSearchParams] = useState<{
-    limit: number
-    offset: number
-  }>({ limit: 5, offset: 0 })
+  const offset = useMemo(
+    () => Math.max(parseNumber(searchParams.get('offset'), 0), 0),
+    [location.search],
+  )
+
+  const setOffset = (nextOffset: number) => {
+    const normalized = Math.max(nextOffset ?? 0, 0)
+    const cur = searchParams.get('offset') ?? '0'
+    if (cur !== String(normalized)) {
+      const params = new URLSearchParams(searchParams)
+      params.set('offset', String(normalized))
+      setSearchParams(params, { replace: true })
+    }
+  }
 
   const { getProfileGames, authenticateGame } = useQuizServiceClient()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['myProfileGames', searchParams],
-    queryFn: () => getProfileGames(searchParams),
+    queryKey: ['myProfileGames', offset],
+    queryFn: () => getProfileGames({ offset, limit: 5 }),
   })
 
   const handleClickGame = (id: string, status: GameStatus) => {
@@ -32,9 +45,7 @@ const ProfileGamesPage: FC = () => {
   }
 
   useEffect(() => {
-    if (isError) {
-      navigate('/')
-    }
+    if (isError) navigate('/')
   }, [isError, navigate])
 
   if (isLoading || !data) {
@@ -52,7 +63,7 @@ const ProfileGamesPage: FC = () => {
       limit={data.limit}
       offset={data.offset}
       onClick={handleClickGame}
-      onChangePagination={(limit, offset) => setSearchParams({ limit, offset })}
+      onChangePagination={(_, nextOffset) => setOffset(nextOffset)}
     />
   )
 }
