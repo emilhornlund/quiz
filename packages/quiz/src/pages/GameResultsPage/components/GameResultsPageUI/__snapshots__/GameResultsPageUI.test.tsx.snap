@@ -357,9 +357,13 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
                     2s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    ShadowCyborg
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
                   </div>
                 </div>
                 <div
@@ -376,9 +380,13 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
                     4
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    ShadowCyborg
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
                   </div>
                 </div>
               </div>
@@ -748,9 +756,13 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
                     4s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    ShadowCyborg
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
                   </div>
                 </div>
                 <div
@@ -767,9 +779,13 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
                     4
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    ShadowCyborg
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1139,9 +1155,13 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     1.5s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
                 <div
@@ -1158,9 +1178,13 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2608,9 +2632,13 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     1.5s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
                 <div
@@ -2627,9 +2655,13 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2999,9 +3031,13 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     2.1s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
                 <div
@@ -3018,9 +3054,13 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4244,9 +4284,13 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     2.1s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
                 <div
@@ -4263,9 +4307,13 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
               </div>

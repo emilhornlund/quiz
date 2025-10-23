@@ -35,7 +35,7 @@ import {
   getQuizDifficultyMessage,
 } from '../utils'
 
-export type Metric = { value: number; player: GameResultParticipantDto }
+export type Metric = { value: number; players: GameResultParticipantDto[] }
 
 const DetailsItem: FC<{
   title: string
@@ -51,15 +51,21 @@ const DetailsItem: FC<{
   </div>
 )
 
-const MetricCard: FC<{ title: string; value: string; nickname: string }> = ({
+const MetricCard: FC<{ title: string; value: string; nicknames: string[] }> = ({
   title,
   value,
-  nickname,
+  nicknames,
 }) => (
   <div className={classNames(styles.card, styles.metric)}>
     <div className={styles.title}>{title}</div>
     <div className={styles.value}>{value}</div>
-    <div className={styles.nickname}>{nickname}</div>
+    <div className={styles.nicknames}>
+      {nicknames.map((nickname, index) => (
+        <div key={`${nickname}_${index}`} className={styles.nickname}>
+          {nickname}
+        </div>
+      ))}
+    </div>
   </div>
 )
 
@@ -110,25 +116,31 @@ const SummarySection: FC<SummarySectionProps> = ({
     [mode, questionMetrics],
   )
 
-  const averageResponseTimeMetric = useMemo<Metric | undefined>(
-    () =>
-      playerMetrics.reduce<Metric | undefined>(
-        (prev, { averageResponseTime: value, player }) =>
-          prev === undefined || value < prev.value ? { value, player } : prev,
-        undefined,
-      ),
-    [playerMetrics],
-  )
+  const averageResponseTimeMetric = useMemo<Metric>(() => {
+    const value = Math.min(
+      ...playerMetrics.map(({ averageResponseTime }) => averageResponseTime),
+    )
 
-  const longestCorrectStreakMetric = useMemo<Metric | undefined>(
-    () =>
-      playerMetrics.reduce<Metric | undefined>(
-        (prev, { longestCorrectStreak: value, player }) =>
-          prev === undefined || value > prev.value ? { value, player } : prev,
-        undefined,
-      ),
-    [playerMetrics],
-  )
+    const players = playerMetrics
+      .filter(({ averageResponseTime }) => averageResponseTime === value)
+      .map(({ player }) => player)
+      .sort((a, b) => a.nickname.localeCompare(b.nickname))
+
+    return { value, players }
+  }, [playerMetrics])
+
+  const longestCorrectStreakMetric = useMemo<Metric>(() => {
+    const value = Math.max(
+      ...playerMetrics.map(({ longestCorrectStreak }) => longestCorrectStreak),
+    )
+
+    const players = playerMetrics
+      .filter(({ longestCorrectStreak }) => longestCorrectStreak === value)
+      .map(({ player }) => player)
+      .sort((a, b) => a.nickname.localeCompare(b.nickname))
+
+    return { value, players }
+  }, [playerMetrics])
 
   return (
     <section>
@@ -176,19 +188,23 @@ const SummarySection: FC<SummarySectionProps> = ({
           </div>
         </div>
 
-        {averageResponseTimeMetric && (
+        {averageResponseTimeMetric.players.length > 0 && (
           <MetricCard
             title="Fastest Overall Player"
             value={formatRoundedSeconds(averageResponseTimeMetric.value)}
-            nickname={averageResponseTimeMetric.player.nickname}
+            nicknames={averageResponseTimeMetric.players.map(
+              ({ nickname }) => nickname,
+            )}
           />
         )}
 
-        {longestCorrectStreakMetric && (
+        {longestCorrectStreakMetric.players.length > 0 && (
           <MetricCard
             title="Longest Correct Streak"
             value={`${longestCorrectStreakMetric.value}`}
-            nickname={longestCorrectStreakMetric.player.nickname}
+            nicknames={longestCorrectStreakMetric.players.map(
+              ({ nickname }) => nickname,
+            )}
           />
         )}
       </div>
