@@ -414,9 +414,13 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
                     1.5s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
                 <div
@@ -433,9 +437,13 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Alice
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
                   </div>
                 </div>
               </div>
@@ -862,9 +870,13 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
                     2.1s
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
                 <div
@@ -881,9 +893,13 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
                     2
                   </div>
                   <div
-                    class="nickname"
+                    class="nicknames"
                   >
-                    Carol
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
                   </div>
                 </div>
               </div>

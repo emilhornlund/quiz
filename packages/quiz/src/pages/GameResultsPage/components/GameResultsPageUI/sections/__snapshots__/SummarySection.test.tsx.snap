@@ -519,9 +519,13 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
           sec:3.2
         </div>
         <div
-          class="nickname"
+          class="nicknames"
         >
-          Alice
+          <div
+            class="nickname"
+          >
+            Alice
+          </div>
         </div>
       </div>
       <div
@@ -538,9 +542,13 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
           7
         </div>
         <div
-          class="nickname"
+          class="nicknames"
         >
-          Bob
+          <div
+            class="nickname"
+          >
+            Bob
+          </div>
         </div>
       </div>
     </div>
@@ -812,9 +820,13 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
           sec:2.1
         </div>
         <div
-          class="nickname"
+          class="nicknames"
         >
-          Carol
+          <div
+            class="nickname"
+          >
+            Carol
+          </div>
         </div>
       </div>
       <div
@@ -831,9 +843,13 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
           3
         </div>
         <div
-          class="nickname"
+          class="nicknames"
         >
-          Dave
+          <div
+            class="nickname"
+          >
+            Dave
+          </div>
         </div>
       </div>
     </div>

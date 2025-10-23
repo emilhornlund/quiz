@@ -259,35 +259,53 @@
             }
           }
 
-          .nickname {
+          .nicknames {
             display: flex;
-            background-color: colors.$blue-1;
-            color: colors.$white;
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
 
             @include helpers.mobile {
-              height: helpers.pxToRem(30px);
-              border-radius: calc(30px / 2);
-              padding: 0 helpers.pxToRem(calc(30px / 2));
-
-              @include helpers.fontSize(18px);
+              gap: variables.$mobile-narrow-layout-gutter;
             }
-
             @include helpers.tablet {
-              height: helpers.pxToRem(32px);
-              border-radius: calc(32px / 2);
-              padding: 0 helpers.pxToRem(calc(32px / 2));
-
-              @include helpers.fontSize(20px);
+              gap: variables.$tablet-narrow-layout-gutter;
+            }
+            @include helpers.desktop {
+              gap: variables.$desktop-narrow-layout-gutter;
             }
 
-            @include helpers.desktop {
-              height: helpers.pxToRem(34px);
-              border-radius: calc(34px / 2);
-              padding: 0 helpers.pxToRem(calc(34px / 2));
+            .nickname {
+              display: flex;
+              background-color: colors.$blue-1;
+              color: colors.$white;
+              justify-content: center;
+              align-items: center;
 
-              @include helpers.fontSize(22px);
+              @include helpers.mobile {
+                height: helpers.pxToRem(30px);
+                border-radius: calc(30px / 2);
+                padding: 0 helpers.pxToRem(calc(30px / 2));
+
+                @include helpers.fontSize(18px);
+              }
+
+              @include helpers.tablet {
+                height: helpers.pxToRem(32px);
+                border-radius: calc(32px / 2);
+                padding: 0 helpers.pxToRem(calc(32px / 2));
+
+                @include helpers.fontSize(20px);
+              }
+
+              @include helpers.desktop {
+                height: helpers.pxToRem(34px);
+                border-radius: calc(34px / 2);
+                padding: 0 helpers.pxToRem(calc(34px / 2));
+
+                @include helpers.fontSize(22px);
+              }
             }
           }
 
