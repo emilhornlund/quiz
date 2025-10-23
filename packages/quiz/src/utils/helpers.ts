@@ -64,3 +64,11 @@ export const trimToUndefined = (
 ): string | undefined => {
   return value?.trim() || undefined
 }
+
+/**
+ * Parses a string into a finite number, or returns `fallback` if parsing fails.
+ */
+export const parseNumber = (v: string | null, fallback: number) => {
+  const n = v ? Number(v) : NaN
+  return Number.isFinite(n) ? n : fallback
+}

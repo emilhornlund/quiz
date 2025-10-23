@@ -4,6 +4,7 @@ import {
   classNames,
   extractUrl,
   isValidNumber,
+  parseNumber,
   trimToUndefined,
 } from './helpers'
 
@@ -105,5 +106,30 @@ describe('trimToUndefined', () => {
   it('trims and returns non-empty strings', () => {
     expect(trimToUndefined('  hello  ')).toBe('hello')
     expect(trimToUndefined('\tfoo\n')).toBe('foo')
+  })
+})
+
+describe('parseNumber', () => {
+  it('returns parsed number when input is a valid number string', () => {
+    expect(parseNumber('42', 0)).toBe(42)
+    expect(parseNumber('3.14', 0)).toBeCloseTo(3.14)
+    expect(parseNumber('-10', 0)).toBe(-10)
+  })
+
+  it('returns fallback when input is null', () => {
+    expect(parseNumber(null, 5)).toBe(5)
+  })
+
+  it('returns fallback when input is an empty string', () => {
+    expect(parseNumber('', 9)).toBe(9)
+  })
+
+  it('returns fallback when input is not a number', () => {
+    expect(parseNumber('abc', 7)).toBe(7)
+  })
+
+  it('returns fallback when input is Infinity or NaN', () => {
+    expect(parseNumber('Infinity', 1)).toBe(1)
+    expect(parseNumber('NaN', 2)).toBe(2)
   })
 })
