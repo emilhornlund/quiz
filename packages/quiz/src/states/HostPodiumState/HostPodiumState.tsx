@@ -32,11 +32,11 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
       align="center"
       header={
         <IconButtonArrowRight
-          id={'skip-button'}
+          id="game-results-button"
           type="button"
           kind="call-to-action"
           size="small"
-          value="Quit"
+          value="Game Results"
           loading={isCompletingGame}
           onClick={handleCompletingGame}
         />

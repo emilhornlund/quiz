@@ -91,7 +91,7 @@ describe('HostPodiumState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Quit and calls completeTask', async () => {
+  it('clicks Game Results and calls completeTask', async () => {
     const { container } = render(
       <MemoryRouter>
         <HostPodiumState
@@ -107,13 +107,15 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
-    const quit = container.querySelector('#skip-button') as HTMLButtonElement
-    fireEvent.click(quit)
+    const gameResultsBtn = container.querySelector(
+      '#game-results-button',
+    ) as HTMLButtonElement
+    fireEvent.click(gameResultsBtn)
     expect(h.completeTask).toHaveBeenCalledTimes(1)
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Quit when completeTask is undefined', async () => {
+  it('clicks Game Results when completeTask is undefined', async () => {
     // @ts-expect-error undefined
     h.completeTask = undefined
     const { container } = render(
@@ -131,8 +133,10 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
-    const quit = container.querySelector('#skip-button') as HTMLButtonElement
-    fireEvent.click(quit)
+    const gameResultsBtn = container.querySelector(
+      '#game-results-button',
+    ) as HTMLButtonElement
+    fireEvent.click(gameResultsBtn)
     expect(container).toMatchSnapshot()
   })
 })

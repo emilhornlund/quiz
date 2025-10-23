@@ -254,7 +254,7 @@ export class GameService {
     if (currentParticipant.type === GameParticipantType.HOST) {
       await this.gameEventPublisher.publishParticipantEvent(
         participantToRemove,
-        buildGameQuitEvent(),
+        buildGameQuitEvent(savedGameDocument.status),
       )
     }
   }

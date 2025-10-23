@@ -1,10 +1,11 @@
-import { GameEventType } from '@quiz/common'
+import { GameEventType, GameStatus } from '@quiz/common'
 import { setContext } from '@sentry/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
 import Button from '../../components/Button'
+import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import {
   HostGameBeginState,
@@ -45,6 +46,8 @@ import styles from './GamePage.module.scss'
  */
 const GamePage = () => {
   const navigate = useNavigate()
+
+  const { isUserAuthenticated } = useAuthContext()
 
   const { gameID, gameToken, participantId, participantType, leaveGame } =
     useGameContext()
@@ -92,7 +95,15 @@ const GamePage = () => {
 
   useEffect(() => {
     if (event?.type === GameEventType.GameQuitEvent) {
-      navigate('/')
+      if (
+        event.status === GameStatus.Completed &&
+        isUserAuthenticated &&
+        gameID
+      ) {
+        navigate(`/game/results/${gameID}`)
+      } else {
+        navigate('/')
+      }
     }
   }, [event, navigate])
 
