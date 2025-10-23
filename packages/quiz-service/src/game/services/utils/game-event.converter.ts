@@ -22,6 +22,7 @@ import {
   GameQuitEvent,
   GameResultHostEvent,
   GameResultPlayerEvent,
+  GameStatus,
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
@@ -153,7 +154,7 @@ export function buildHostGameEvent(
   }
 
   if (isQuitTask(document)) {
-    return buildGameQuitEvent()
+    return buildGameQuitEvent(document.status)
   }
 
   throw new Error('Unknown task')
@@ -233,7 +234,7 @@ export function buildPlayerGameEvent(
   }
 
   if (isQuitTask(document)) {
-    return buildGameQuitEvent()
+    return buildGameQuitEvent(document.status)
   }
 
   throw new Error('Unknown task')
@@ -1108,8 +1109,9 @@ function buildGamePodiumPlayerEvent(
 /**
  * Builds a quit event for the game.
  *
+ * @param status - The current status of the game.
  * @returns {GameLoadingEvent} A quit event for the game, indicating that the game is terminated.
  */
-export function buildGameQuitEvent(): GameQuitEvent {
-  return { type: GameEventType.GameQuitEvent }
+export function buildGameQuitEvent(status: GameStatus): GameQuitEvent {
+  return { type: GameEventType.GameQuitEvent, status }
 }

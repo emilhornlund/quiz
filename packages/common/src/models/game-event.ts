@@ -1,5 +1,6 @@
 import { GameEventType } from './game-event-type.enum'
 import { GameMode } from './game-mode.enum'
+import { GameStatus } from './game-status.enum'
 import { MediaType } from './media-type.enum'
 import { QuestionPinTolerance } from './question-pin-tolerance.enum'
 import { QuestionType } from './question-type.enum'
@@ -348,6 +349,7 @@ export type GamePodiumPlayerEvent = {
 
 export type GameQuitEvent = {
   type: GameEventType.GameQuitEvent
+  status: GameStatus
 }
 
 export type GameEvent =
