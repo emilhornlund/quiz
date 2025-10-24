@@ -110,12 +110,14 @@ export type QuestionFieldProps = (
   | {
       type: QuestionFieldType.RangeMax
       value?: number
+      min?: number
       onChange: (value: number) => void
       onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.RangeMin
       value?: number
+      max?: number
       onChange: (value: number) => void
       onValid: (valid: boolean) => void
     }
@@ -498,6 +500,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="number"
             placeholder="Max"
             value={props.value}
+            min={props.min}
             onChange={(value) => props.onChange(value as number)}
             onValid={props.onValid}
             required
@@ -516,6 +519,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="number"
             placeholder="Min"
             value={props.value}
+            max={props.max}
             onChange={(value) => props.onChange(value as number)}
             onValid={(valid) => props.onValid(valid)}
             forceValidate
