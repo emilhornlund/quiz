@@ -12,6 +12,7 @@ import {
 } from '@quiz/common'
 import React, { FC, useMemo } from 'react'
 
+import { isValidNumber } from '../../../../../../../../utils/helpers.ts'
 import styles from '../../QuestionEditor.module.scss'
 import QuestionField, { QuestionFieldType } from '../QuestionField'
 
@@ -79,13 +80,17 @@ export const ClassicMultiChoiceOptionQuestionForm: FC<
 export const ClassicRangeQuestionForm: FC<
   QuestionFormProps<QuestionRangeDto>
 > = ({ data, onChange, onValidChange }) => {
-  const correctRangeMarginFooter = useMemo(() => {
+  const correctRangeMarginFooter = useMemo<string | undefined>(() => {
     const {
       correct = 0,
       margin = QuestionRangeAnswerMargin.Medium,
       min = 0,
       max = 100,
     } = data
+
+    if (!isValidNumber(correct, min, max)) {
+      return undefined
+    }
 
     if (margin === QuestionRangeAnswerMargin.None) {
       return `The correct answer must be exactly ${correct}.`
@@ -128,12 +133,14 @@ export const ClassicRangeQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.RangeMin}
           value={data.min}
+          max={data.max}
           onChange={(newValue) => onChange('min', newValue)}
           onValid={(valid) => onValidChange('min', valid)}
         />
         <QuestionField
           type={QuestionFieldType.RangeMax}
           value={data.max}
+          min={data.min}
           onChange={(newValue) => onChange('max', newValue)}
           onValid={(valid) => onValidChange('max', valid)}
         />
