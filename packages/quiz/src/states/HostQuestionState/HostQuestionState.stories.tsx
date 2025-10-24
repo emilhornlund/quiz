@@ -244,3 +244,62 @@ export const QuestionPuzzle = {
     },
   },
 } satisfies Story
+
+export const QuestionWithImageSquareEffect = {
+  args: {
+    event: {
+      type: GameEventType.GameQuestionHost,
+      game: {
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.MultiChoice,
+        question: 'Who painted The Starry Night?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+          effect: 'square',
+          numberOfSquares: 4,
+        },
+        answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
+        duration: 30,
+      },
+      countdown: {
+        initiatedTime: new Date().toISOString(),
+        expiryTime: new Date(Date.now() + 30 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
+      },
+      submissions: { current: 3, total: 10 },
+      pagination: { current: 1, total: 20 },
+    },
+  },
+} satisfies Story
+
+export const QuestionWithImageBlurEffect = {
+  args: {
+    event: {
+      type: GameEventType.GameQuestionHost,
+      game: {
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.MultiChoice,
+        question: 'Who painted The Starry Night?',
+        media: {
+          type: MediaType.Image,
+          url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+          effect: 'blur',
+        },
+        answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
+        duration: 30,
+      },
+      countdown: {
+        initiatedTime: new Date().toISOString(),
+        expiryTime: new Date(Date.now() + 30 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
+      },
+      submissions: { current: 3, total: 10 },
+      pagination: { current: 1, total: 20 },
+    },
+  },
+} satisfies Story

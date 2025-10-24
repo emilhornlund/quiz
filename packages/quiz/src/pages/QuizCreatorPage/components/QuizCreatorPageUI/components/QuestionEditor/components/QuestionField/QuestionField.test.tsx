@@ -263,4 +263,37 @@ describe('QuestionField', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  it('renders an image media question field with blur effect', () => {
+    const { container } = render(
+      <QuestionField
+        type={QuestionFieldType.CommonMedia}
+        value={{
+          type: MediaType.Image,
+          url: 'https://example.com/image.png',
+          effect: 'blur',
+        }}
+        onChange={() => undefined}
+        onValid={() => undefined}
+      />,
+    )
+    expect(container).toMatchSnapshot()
+  })
+
+  it('renders an image media question field with square effect', () => {
+    const { container } = render(
+      <QuestionField
+        type={QuestionFieldType.CommonMedia}
+        value={{
+          type: MediaType.Image,
+          url: 'https://example.com/image.png',
+          effect: 'square',
+          numberOfSquares: 6,
+        }}
+        onChange={() => undefined}
+        onValid={() => undefined}
+      />,
+    )
+    expect(container).toMatchSnapshot()
+  })
 })

@@ -1768,3 +1768,207 @@ exports[`QuestionField > renders a video media question field 1`] = `
   </div>
 </div>
 `;
+
+exports[`QuestionField > renders an image media question field with blur effect 1`] = `
+<div>
+  <div
+    class="questionFieldContainer layoutFull"
+  >
+    <div
+      class="label"
+    />
+    <div
+      class="content"
+    >
+      <div
+        class="mediaQuestionField"
+      >
+        <div
+          class="previewWrapper"
+        >
+          <div
+            class="preview"
+          >
+            <div
+              class="container"
+            >
+              <div
+                class="centerOverlay"
+              >
+                <div
+                  class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
+                >
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="actions"
+          >
+            <div
+              class="buttonInputContainer buttonInputKindDestructive buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-delete-media-button-button"
+                id="delete-media-button"
+                name="delete-media-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-trash"
+                  data-icon="trash"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M136.7 5.9L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-8.7-26.1C306.9-7.2 294.7-16 280.9-16L167.1-16c-13.8 0-26 8.8-30.4 21.9zM416 144L32 144 53.1 467.1C54.7 492.4 75.7 512 101 512L347 512c25.3 0 46.3-19.6 47.9-44.9L416 144z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Delete
+                </span>
+              </button>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-add-media-button-button"
+                id="add-media-button"
+                name="add-media-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-retweet"
+                  data-icon="retweet"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-64 64c-9.2 9.2-11.9 22.9-6.9 34.9S19.1 160 32 160l32 0 0 224c0 53 43 96 96 96l128 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-128 0c-17.7 0-32-14.3-32-32l0-224 32 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-64-64zM457.4 470.6c12.5 12.5 32.8 12.5 45.3 0l64-64c9.2-9.2 11.9-22.9 6.9-34.9S556.9 352 544 352l-32 0 0-224c0-53-43-96-96-96L288 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32 14.3 32 32l0 224-32 0c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l64 64z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Replace
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuestionField > renders an image media question field with square effect 1`] = `
+<div>
+  <div
+    class="questionFieldContainer layoutFull"
+  >
+    <div
+      class="label"
+    />
+    <div
+      class="content"
+    >
+      <div
+        class="mediaQuestionField"
+      >
+        <div
+          class="previewWrapper"
+        >
+          <div
+            class="preview"
+          >
+            <div
+              class="container"
+            >
+              <div
+                class="centerOverlay"
+              >
+                <div
+                  class="loadingSpinnerContainer"
+                  data-testid="loading-spinner"
+                >
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="actions"
+          >
+            <div
+              class="buttonInputContainer buttonInputKindDestructive buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-delete-media-button-button"
+                id="delete-media-button"
+                name="delete-media-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-trash"
+                  data-icon="trash"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M136.7 5.9L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-8.7-26.1C306.9-7.2 294.7-16 280.9-16L167.1-16c-13.8 0-26 8.8-30.4 21.9zM416 144L32 144 53.1 467.1C54.7 492.4 75.7 512 101 512L347 512c25.3 0 46.3-19.6 47.9-44.9L416 144z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Delete
+                </span>
+              </button>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-add-media-button-button"
+                id="add-media-button"
+                name="add-media-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-retweet"
+                  data-icon="retweet"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-64 64c-9.2 9.2-11.9 22.9-6.9 34.9S19.1 160 32 160l32 0 0 224c0 53 43 96 96 96l128 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-128 0c-17.7 0-32-14.3-32-32l0-224 32 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-64-64zM457.4 470.6c12.5 12.5 32.8 12.5 45.3 0l64-64c9.2-9.2 11.9-22.9 6.9-34.9S556.9 352 544 352l-32 0 0-224c0-53-43-96-96-96L288 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32 14.3 32 32l0 224-32 0c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l64 64z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Replace
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

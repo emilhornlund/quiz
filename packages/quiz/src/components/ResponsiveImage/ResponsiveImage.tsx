@@ -1,8 +1,8 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { CountdownEvent } from '@quiz/common'
 import React, {
   FC,
-  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -13,23 +13,32 @@ import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
 import { LoadingSpinner, Typography } from '../index.ts'
 
+import { ImageSquareEffect } from './components'
+import { useImageBlurEffect } from './hook'
 import styles from './ResponsiveImage.module.scss'
 
 export interface ResponsiveImageProps {
   imageURL?: string
   alt?: string
+  effect?: Effect
+  countdown?: CountdownEvent
   noBorder?: boolean
-  children?: ReactNode | ReactNode[]
+  children?: React.ReactNode | React.ReactNode[]
+  numberOfSquares?: number
 }
 
 type Phase = 'idle' | 'loading' | 'ready' | 'error'
 type Size = { width?: number; height?: number }
+type Effect = 'none' | 'blur' | 'square'
 
 const ResponsiveImage: FC<ResponsiveImageProps> = ({
   imageURL,
   alt,
   noBorder = false,
+  effect = 'none',
   children,
+  countdown,
+  numberOfSquares = 4,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -106,13 +115,27 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     return { w: iw * s, h: ih * s }
   }, [phase, containerSize, intrinsic])
 
+  const blurStyle = useImageBlurEffect(countdown)
+
   return (
     <div ref={ref} className={styles.container}>
       {phase === 'ready' && displaySrc && box && (
         <div
           className={noBorder ? styles.boxNoBorder : styles.box}
           style={{ width: box.w, height: box.h }}>
-          <img src={displaySrc} alt={alt ?? ''} className={styles.img} />
+          {effect === 'square' && (
+            <ImageSquareEffect
+              box={box}
+              countdown={countdown}
+              numberOfSquares={numberOfSquares}
+            />
+          )}
+          <img
+            src={displaySrc}
+            alt={alt ?? ''}
+            className={styles.img}
+            style={effect === 'blur' ? blurStyle : undefined}
+          />
           {children && <div className={styles.overlay}>{children}</div>}
         </div>
       )}

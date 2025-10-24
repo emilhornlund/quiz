@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`useImageBlurEffect > returns default filter and clipPath when no countdown 1`] = `
+{
+  "clipPath": "inset(2px)",
+  "filter": "blur(5.00rem)",
+}
+`;
+
+exports[`useImageBlurEffect > returns filter and clipPath with countdown 1`] = `
+{
+  "clipPath": "inset(2px)",
+  "filter": "blur(2.50rem)",
+}
+`;

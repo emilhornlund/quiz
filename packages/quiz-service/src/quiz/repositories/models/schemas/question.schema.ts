@@ -26,6 +26,18 @@ export class QuestionMediaDao {
    */
   @Prop({ type: String, required: true })
   url: string
+
+  /**
+   * Optional effect for the media (e.g., 'blur', 'square').
+   */
+  @Prop({ type: String, required: false, enum: ['blur', 'square'] })
+  effect?: 'blur' | 'square'
+
+  /**
+   * Optional number of squares if the effect is 'square'.
+   */
+  @Prop({ type: Number, required: false })
+  numberOfSquares?: number
 }
 
 /**
