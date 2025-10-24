@@ -34,7 +34,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with no results 1
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper mediumWidth"
@@ -156,7 +156,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
       </div>
     </div>
     <div
-      class="content fullHeight startAlign"
+      class="content startAlign"
     >
       <div
         class="contentWrapper mediumWidth"
