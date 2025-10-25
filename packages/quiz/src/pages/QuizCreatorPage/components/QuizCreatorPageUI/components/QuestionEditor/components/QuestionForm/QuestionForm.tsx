@@ -39,6 +39,7 @@ export const ClassicMultiChoiceOptionQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.CommonMedia}
           value={data.media}
+          duration={data.duration}
           onChange={(newValue) => onChange('media', newValue)}
           onValid={(valid) => onValidChange('media', valid)}
         />
@@ -125,6 +126,7 @@ export const ClassicRangeQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.CommonMedia}
           value={data.media}
+          duration={data.duration}
           onChange={(newValue) => onChange('media', newValue)}
           onValid={(valid) => onValidChange('media', valid)}
         />
@@ -203,6 +205,7 @@ export const ClassicTrueFalseQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.CommonMedia}
           value={data.media}
+          duration={data.duration}
           onChange={(newValue) => onChange('media', newValue)}
           onValid={(valid) => onValidChange('media', valid)}
         />
@@ -258,6 +261,7 @@ export const ClassicTypeAnswerQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.CommonMedia}
           value={data.media}
+          duration={data.duration}
           onChange={(newValue) => onChange('media', newValue)}
           onValid={(valid) => onValidChange('media', valid)}
         />
@@ -380,6 +384,7 @@ export const ClassicPuzzleQuestionForm: FC<
       <QuestionField
         type={QuestionFieldType.CommonMedia}
         value={data.media}
+        duration={data.duration}
         onChange={(newValue) => onChange('media', newValue)}
         onValid={(valid) => onValidChange('media', valid)}
       />
@@ -434,6 +439,7 @@ export const ZeroToOneHundredRangeQuestionForm: FC<
         <QuestionField
           type={QuestionFieldType.CommonMedia}
           value={data.media}
+          duration={data.duration}
           onChange={(newValue) => onChange('media', newValue)}
           onValid={(valid) => onValidChange('media', valid)}
         />
