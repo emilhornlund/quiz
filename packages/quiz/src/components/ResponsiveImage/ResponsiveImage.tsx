@@ -125,7 +125,6 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square8x8) && (
             <ImageSquareEffect
-              box={box}
               countdown={revealEffect.countdown}
               effect={revealEffect.type}
             />
