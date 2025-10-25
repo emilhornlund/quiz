@@ -10,7 +10,7 @@ import {
   QuestionImageRevealEffectType,
   QuestionMediaDto,
 } from '@quiz/common'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
 import {
   Button,
@@ -52,10 +52,6 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
       ...(value.type === MediaType.Image ? { effect } : {}),
     })
   }
-
-  useEffect(() => {
-    console.log('duration', duration)
-  }, [duration])
 
   const countdown = useMemo<CountdownEvent | undefined>(() => {
     const now = Date.now()
