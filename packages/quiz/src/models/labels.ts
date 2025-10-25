@@ -2,6 +2,7 @@ import {
   GameMode,
   LanguageCode,
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -261,4 +262,13 @@ export const MediaTypeLabels: { [key in MediaType]: string } = {
   [MediaType.Image]: 'Image',
   [MediaType.Audio]: 'Audio',
   [MediaType.Video]: 'Video',
+}
+
+export const ImageRevealEffectLabels: {
+  [key in QuestionImageRevealEffectType]: string
+} = {
+  [QuestionImageRevealEffectType.Blur]: 'Blur',
+  [QuestionImageRevealEffectType.Square3x3]: 'Square 3x3',
+  [QuestionImageRevealEffectType.Square5x5]: 'Square 5x5',
+  [QuestionImageRevealEffectType.Square8x8]: 'Square 8x8',
 }

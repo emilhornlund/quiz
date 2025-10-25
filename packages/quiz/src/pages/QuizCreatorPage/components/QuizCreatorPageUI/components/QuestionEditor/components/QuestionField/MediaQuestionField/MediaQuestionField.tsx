@@ -1,6 +1,16 @@
-import { faPlus, faRetweet, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { MediaType, QuestionMediaDto } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import {
+  faPlus,
+  faRetweet,
+  faTrash,
+  faWandMagicSparkles,
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  CountdownEvent,
+  MediaType,
+  QuestionImageRevealEffectType,
+  QuestionMediaDto,
+} from '@quiz/common'
+import React, { FC, useMemo, useState } from 'react'
 
 import {
   Button,
@@ -9,25 +19,48 @@ import {
   ResponsivePlayer,
 } from '../../../../../../../../../components'
 
+import { ImageEffectModal } from './components'
 import styles from './MediaQuestionField.module.scss'
 
 export interface MediaQuestionFieldProps {
   value?: QuestionMediaDto
+  duration?: number
   onChange: (value?: QuestionMediaDto) => void
   onValid: (valid: boolean) => void
 }
 
 const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
   value,
+  duration,
   onChange,
   onValid,
 }) => {
   const [showMediaModal, setShowMediaModal] = useState(false)
+  const [showImageEffectModal, setShowImageEffectModal] = useState(false)
 
   const handleDelete = () => {
     onChange(undefined)
     onValid(true)
   }
+
+  const onChangeImageEffect = (
+    effect: QuestionImageRevealEffectType | undefined,
+  ) => {
+    if (!value) return
+    onChange({
+      ...value,
+      ...(value.type === MediaType.Image ? { effect } : {}),
+    })
+  }
+
+  const countdown = useMemo<CountdownEvent | undefined>(() => {
+    const now = Date.now()
+    return {
+      initiatedTime: new Date(now).toISOString(),
+      expiryTime: new Date(now + (duration ?? 30) * 1000).toISOString(),
+      serverTime: new Date(now).toISOString(),
+    }
+  }, [duration])
 
   return (
     <>
@@ -36,7 +69,17 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
           <div className={styles.previewWrapper}>
             <div className={styles.preview}>
               {value.type === MediaType.Image && (
-                <ResponsiveImage imageURL={value.url} />
+                <ResponsiveImage
+                  imageURL={value.url}
+                  {...(value.effect
+                    ? {
+                        revealEffect: {
+                          type: value.effect,
+                          countdown,
+                        },
+                      }
+                    : {})}
+                />
               )}
               {(value.type === MediaType.Video ||
                 value.type === MediaType.Audio) && (
@@ -66,6 +109,17 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                 icon={faRetweet}
                 onClick={() => setShowMediaModal(true)}
               />
+              {value.type === MediaType.Image && (
+                <Button
+                  id="add-image-effect-button"
+                  type="button"
+                  kind="primary"
+                  size="small"
+                  value="Image Effect"
+                  icon={faWandMagicSparkles}
+                  onClick={() => setShowImageEffectModal(true)}
+                />
+              )}
             </div>
           </div>
         ) : (
@@ -87,6 +141,13 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
           onChange={onChange}
           onValid={onValid}
           onClose={() => setShowMediaModal(false)}
+        />
+      )}
+      {value?.type === MediaType.Image && showImageEffectModal && (
+        <ImageEffectModal
+          value={value.effect}
+          onClose={() => setShowImageEffectModal(false)}
+          onChangeImageEffect={onChangeImageEffect}
         />
       )}
     </>

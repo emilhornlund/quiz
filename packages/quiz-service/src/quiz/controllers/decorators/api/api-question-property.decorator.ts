@@ -18,7 +18,7 @@ import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
 export function ApiQuestionProperty(): PropertyDecorator {
   return applyDecorators(
     ApiProperty({
-      name: 'Text',
+      title: 'Text',
       description: `The actual question text. Must be between ${QUIZ_QUESTION_TEXT_MIN_LENGTH} and ${QUIZ_QUESTION_TEXT_MAX_LENGTH} characters long.`,
       example: 'What is the capital of Sweden?',
       required: true,

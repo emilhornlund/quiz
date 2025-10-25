@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger'
 import {
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
@@ -19,11 +19,16 @@ import {
 } from '../decorators/api'
 import { InRangeValidator } from '../decorators/api/in-range-validator.decorator'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 
 /**
  * Represents a data transfer object for a range-based question.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionRange implements QuestionRangeDto {
   /**
    * The type of the question, set to `Range`.
@@ -43,8 +48,12 @@ export class QuestionRange implements QuestionRangeDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * The minimum value of the range.

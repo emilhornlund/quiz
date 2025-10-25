@@ -1,5 +1,6 @@
 import {
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -261,6 +262,38 @@ describe('QuestionField', () => {
       />,
     )
 
+    expect(container).toMatchSnapshot()
+  })
+
+  it('renders an image media question field with blur effect', () => {
+    const { container } = render(
+      <QuestionField
+        type={QuestionFieldType.CommonMedia}
+        value={{
+          type: MediaType.Image,
+          url: 'https://example.com/image.png',
+          effect: QuestionImageRevealEffectType.Blur,
+        }}
+        onChange={() => undefined}
+        onValid={() => undefined}
+      />,
+    )
+    expect(container).toMatchSnapshot()
+  })
+
+  it('renders an image media question field with square effect', () => {
+    const { container } = render(
+      <QuestionField
+        type={QuestionFieldType.CommonMedia}
+        value={{
+          type: MediaType.Image,
+          url: 'https://example.com/image.png',
+          effect: QuestionImageRevealEffectType.Square3x3,
+        }}
+        onChange={() => undefined}
+        onValid={() => undefined}
+      />,
+    )
     expect(container).toMatchSnapshot()
   })
 })

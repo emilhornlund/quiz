@@ -23,6 +23,7 @@ import {
   GameResultHostEvent,
   GameResultPlayerEvent,
   GameStatus,
+  MediaType,
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
@@ -453,7 +454,13 @@ function buildGameEventQuestion(
   const common = {
     question: question.text,
     media: question.media
-      ? { type: question.media.type, url: question.media.url }
+      ? {
+          type: question.media.type,
+          url: question.media.url,
+          ...(question.media.type === MediaType.Image
+            ? { effect: question.media.effect }
+            : {}),
+        }
       : undefined,
     duration: question.duration,
   }
@@ -898,7 +905,13 @@ function buildGameResultHostEvent(
     question: {
       type,
       question,
-      media: media ? { type: media.type, url: media.url } : undefined,
+      media: media
+        ? {
+            type: media.type,
+            url: media.url,
+            ...(media.type === MediaType.Image ? { effect: media.effect } : {}),
+          }
+        : undefined,
       info,
     },
     results: buildGameEventQuestionResults(document),

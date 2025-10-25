@@ -1,3 +1,4 @@
+import { ApiExtraModels } from '@nestjs/swagger'
 import { QuestionMultiChoiceDto, QuestionType } from '@quiz/common'
 
 import {
@@ -10,12 +11,17 @@ import {
   ApiQuestionTypeProperty,
 } from '../decorators/api'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 import { QuestionMultiChoiceOption } from './question-multi-choice-option'
 
 /**
  * Represents a data transfer object for a multiple-choice question.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionMultiChoice implements QuestionMultiChoiceDto {
   /**
    * The type of the question, set to `MultiChoice`.
@@ -35,8 +41,12 @@ export class QuestionMultiChoice implements QuestionMultiChoiceDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * The list of options for the question.

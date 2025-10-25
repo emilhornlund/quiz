@@ -19,42 +19,58 @@
     margin: 0 auto;
     display: block;
     transition: none !important;
+    width: 100%;
+    height: 100%;
+  }
 
-    .img {
-      display: block;
-      object-fit: fill;
-      width: 100%;
-      height: 100%;
-      transition: none !important;
-      border: variables.$control-outside-border-width solid colors.$white;
-      background-color: colors.$white-1-50;
+  .box {
+    border: variables.$control-outside-border-width solid colors.$white;
+    background-color: colors.$white-1-50;
+    overflow: hidden;
 
-      @include helpers.mobile {
-        border-radius: variables.$mobile-narrow-layout-gutter;
-      }
-      @include helpers.tablet {
-        border-radius: variables.$tablet-narrow-layout-gutter;
-      }
-      @include helpers.desktop {
-        border-radius: variables.$desktop-narrow-layout-gutter;
-      }
+    @include helpers.mobile {
+      border-radius: variables.$mobile-narrow-layout-gutter;
     }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      /* IMPORTANT: allow dragging on children like your pin overlay */
-      pointer-events: auto;
+    @include helpers.tablet {
+      border-radius: variables.$tablet-narrow-layout-gutter;
+    }
+    @include helpers.desktop {
+      border-radius: variables.$desktop-narrow-layout-gutter;
     }
   }
 
   .boxNoBorder {
-    .img {
-      border: none;
+    border: none;
+    background-color: colors.$white-1-50;
+    overflow: hidden;
+
+    @include helpers.mobile {
+      border-radius: variables.$mobile-narrow-layout-gutter;
     }
+    @include helpers.tablet {
+      border-radius: variables.$tablet-narrow-layout-gutter;
+    }
+    @include helpers.desktop {
+      border-radius: variables.$desktop-narrow-layout-gutter;
+    }
+  }
+
+  .img {
+    display: block;
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+    transition: none !important;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* IMPORTANT: allow dragging on children like your pin overlay */
+    pointer-events: auto;
   }
 
   .centerOverlay {

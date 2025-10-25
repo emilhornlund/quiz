@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger'
 import { QuestionType, QuestionZeroToOneHundredRangeDto } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
@@ -10,11 +10,16 @@ import {
   ApiQuestionTypeProperty,
 } from '../decorators/api'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 
 /**
  * Represents a data transfer object for a range-based zero to one hundred question.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionZeroToOneHundredRange
   implements QuestionZeroToOneHundredRangeDto
 {
@@ -36,8 +41,12 @@ export class QuestionZeroToOneHundredRange
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * The correct answer within the range.
