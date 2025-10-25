@@ -1,3 +1,4 @@
+import { QuestionImageRevealEffectType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
@@ -47,12 +48,13 @@ export const imageEffect = {
     imageURL:
       'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
     alt: 'Who painted The Starry Night?',
-    effect: 'blur',
-    numberOfSquares: 4,
-    countdown: {
-      initiatedTime: new Date().toISOString(),
-      expiryTime: new Date(Date.now() + 30 * 1000).toISOString(),
-      serverTime: new Date().toISOString(),
+    revealEffect: {
+      type: QuestionImageRevealEffectType.Blur,
+      countdown: {
+        initiatedTime: new Date().toISOString(),
+        expiryTime: new Date(Date.now() + 30 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
+      },
     },
   },
 } satisfies Story

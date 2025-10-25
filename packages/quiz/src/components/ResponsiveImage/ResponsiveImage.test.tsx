@@ -1,3 +1,4 @@
+import { QuestionImageRevealEffectType } from '@quiz/common'
 import { render } from '@testing-library/react'
 import React from 'react'
 import { describe, expect, it } from 'vitest'
@@ -32,7 +33,7 @@ describe('ResponsiveImage', () => {
       <ResponsiveImage
         imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
         alt="blur"
-        effect="blur"
+        revealEffect={{ type: QuestionImageRevealEffectType.Blur }}
       />,
     )
     expect(container).toMatchSnapshot()
@@ -43,8 +44,7 @@ describe('ResponsiveImage', () => {
       <ResponsiveImage
         imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
         alt="square"
-        effect="square"
-        numberOfSquares={4}
+        revealEffect={{ type: QuestionImageRevealEffectType.Square3x3 }}
       />,
     )
     expect(container).toMatchSnapshot()

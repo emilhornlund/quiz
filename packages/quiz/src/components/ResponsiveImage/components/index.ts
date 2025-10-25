@@ -1,1 +1,2 @@
-export { ImageSquareEffect } from './ImageSquareEffect.tsx'
+export type { ImageSquareEffectProps } from './ImageSquareEffect'
+export { ImageSquareEffect } from './ImageSquareEffect'
