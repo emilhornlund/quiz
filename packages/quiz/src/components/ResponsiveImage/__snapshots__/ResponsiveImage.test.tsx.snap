@@ -6,16 +6,14 @@ exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
     class="container"
   >
     <div
-      class="centerOverlay"
+      class="box"
+      style="width: 800px; height: 600px;"
     >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
+      <img
+        alt="Who painted The Starry Night?"
+        class="img"
+        src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+      />
     </div>
   </div>
 </div>
@@ -30,12 +28,26 @@ exports[`ResponsiveImage > should render error state 1`] = `
       class="centerOverlay"
     >
       <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
+        class="inner"
       >
-        <div />
-        <div />
-        <div />
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-triangle-exclamation icon"
+          data-icon="triangle-exclamation"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M256 0c14.7 0 28.2 8.1 35.2 21l216 400c6.7 12.4 6.4 27.4-.8 39.5S486.1 480 472 480L40 480c-14.1 0-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9 20.5-21 35.2-21zm0 352a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.5 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"
+            fill="currentColor"
+          />
+        </svg>
+        <div
+          data-testid="typography"
+        >
+          Oh no! Unable to load image
+        </div>
       </div>
     </div>
   </div>
@@ -56,16 +68,15 @@ exports[`ResponsiveImage > should render with blur effect 1`] = `
     class="container"
   >
     <div
-      class="centerOverlay"
+      class="box"
+      style="width: 800px; height: 600px;"
     >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
+      <img
+        alt="blur"
+        class="img"
+        src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+        style="filter: blur(0px);"
+      />
     </div>
   </div>
 </div>
@@ -77,16 +88,14 @@ exports[`ResponsiveImage > should render with noBorder 1`] = `
     class="container"
   >
     <div
-      class="centerOverlay"
+      class="boxNoBorder"
+      style="width: 800px; height: 600px;"
     >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
+      <img
+        alt="noBorder"
+        class="img"
+        src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+      />
     </div>
   </div>
 </div>
@@ -98,15 +107,20 @@ exports[`ResponsiveImage > should render with overlay children 1`] = `
     class="container"
   >
     <div
-      class="centerOverlay"
+      class="box"
+      style="width: 800px; height: 600px;"
     >
+      <img
+        alt="overlay"
+        class="img"
+        src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+      />
       <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
+        class="overlay"
       >
-        <div />
-        <div />
-        <div />
+        <span>
+          Overlay Content
+        </span>
       </div>
     </div>
   </div>
@@ -119,16 +133,20 @@ exports[`ResponsiveImage > should render with square effect 1`] = `
     class="container"
   >
     <div
-      class="centerOverlay"
+      class="box"
+      style="width: 800px; height: 600px;"
     >
       <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
+        data-effect="SQUARE_3X3"
+        data-h="600"
+        data-testid="square-effect"
+        data-w="800"
+      />
+      <img
+        alt="square"
+        class="img"
+        src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
+      />
     </div>
   </div>
 </div>

@@ -76,12 +76,8 @@ export function ApiQuestionMediaProperty(
     IsObject(),
     IsOptional(),
     ValidateNested(),
-    Transform(
-      ({ value }) =>
-        transformMediaByType(value == null ? undefined : value, factories),
-      {
-        toClassOnly: true,
-      },
-    ),
+    Transform(({ value }) => transformMediaByType(value, factories), {
+      toClassOnly: true,
+    }),
   )
 }
