@@ -1,5 +1,6 @@
 import {
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
@@ -271,7 +272,7 @@ describe('QuestionField', () => {
         value={{
           type: MediaType.Image,
           url: 'https://example.com/image.png',
-          effect: 'blur',
+          effect: QuestionImageRevealEffectType.Blur,
         }}
         onChange={() => undefined}
         onValid={() => undefined}
@@ -287,8 +288,7 @@ describe('QuestionField', () => {
         value={{
           type: MediaType.Image,
           url: 'https://example.com/image.png',
-          effect: 'square',
-          numberOfSquares: 6,
+          effect: QuestionImageRevealEffectType.Square3x3,
         }}
         onChange={() => undefined}
         onValid={() => undefined}

@@ -304,6 +304,33 @@ exports[`QuestionField > renders a image media question field 1`] = `
                 </span>
               </button>
             </div>
+            <div
+              class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-add-image-effect-button-button"
+                id="add-image-effect-button"
+                name="add-image-effect-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-wand-magic-sparkles"
+                  data-icon="wand-magic-sparkles"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M263.4-27L278.2 9.8 315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4L278.2 54.2 263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5L233.8 54.2 197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4L233.8 9.8 248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5zM110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7L59.8 164.2 9.7 142.7C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7L59.8 91.8 81.3 41.7C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7zM464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7zM460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0zM44.2 398.5L308.4 134.3 409.7 235.6 145.5 499.8C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2L44.2 457.5C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Image Effect
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -362,21 +389,21 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-0-textfield"
-                  id="multi-choice-option-_r_16_-0"
-                  name="multi-choice-option-_r_16_-0"
+                  data-testid="test-multi-choice-option-_r_18_-0-textfield"
+                  id="multi-choice-option-_r_18_-0"
+                  name="multi-choice-option-_r_18_-0"
                   placeholder="Option 1"
                   type="text"
                   value="Stockholm"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-0-checkbox"
+                  for="multi-choice-option-_r_18_-0-checkbox"
                 >
                   <input
                     checked=""
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-0-checkbox"
+                    id="multi-choice-option-_r_18_-0-checkbox"
                     type="checkbox"
                   />
                   <span
@@ -438,20 +465,20 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-1-textfield"
-                  id="multi-choice-option-_r_16_-1"
-                  name="multi-choice-option-_r_16_-1"
+                  data-testid="test-multi-choice-option-_r_18_-1-textfield"
+                  id="multi-choice-option-_r_18_-1"
+                  name="multi-choice-option-_r_18_-1"
                   placeholder="Option 2"
                   type="text"
                   value="Paris"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-1-checkbox"
+                  for="multi-choice-option-_r_18_-1-checkbox"
                 >
                   <input
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-1-checkbox"
+                    id="multi-choice-option-_r_18_-1-checkbox"
                     type="checkbox"
                   />
                 </label>
@@ -496,20 +523,20 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-2-textfield"
-                  id="multi-choice-option-_r_16_-2"
-                  name="multi-choice-option-_r_16_-2"
+                  data-testid="test-multi-choice-option-_r_18_-2-textfield"
+                  id="multi-choice-option-_r_18_-2"
+                  name="multi-choice-option-_r_18_-2"
                   placeholder="Option 3"
                   type="text"
                   value="Copenhagen"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-2-checkbox"
+                  for="multi-choice-option-_r_18_-2-checkbox"
                 >
                   <input
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-2-checkbox"
+                    id="multi-choice-option-_r_18_-2-checkbox"
                     type="checkbox"
                   />
                 </label>
@@ -554,20 +581,20 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-3-textfield"
-                  id="multi-choice-option-_r_16_-3"
-                  name="multi-choice-option-_r_16_-3"
+                  data-testid="test-multi-choice-option-_r_18_-3-textfield"
+                  id="multi-choice-option-_r_18_-3"
+                  name="multi-choice-option-_r_18_-3"
                   placeholder="Option 4"
                   type="text"
                   value="London"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-3-checkbox"
+                  for="multi-choice-option-_r_18_-3-checkbox"
                 >
                   <input
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-3-checkbox"
+                    id="multi-choice-option-_r_18_-3-checkbox"
                     type="checkbox"
                   />
                 </label>
@@ -612,20 +639,20 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-4-textfield"
-                  id="multi-choice-option-_r_16_-4"
-                  name="multi-choice-option-_r_16_-4"
+                  data-testid="test-multi-choice-option-_r_18_-4-textfield"
+                  id="multi-choice-option-_r_18_-4"
+                  name="multi-choice-option-_r_18_-4"
                   placeholder="Option 5"
                   type="text"
                   value="Oslo"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-4-checkbox"
+                  for="multi-choice-option-_r_18_-4-checkbox"
                 >
                   <input
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-4-checkbox"
+                    id="multi-choice-option-_r_18_-4-checkbox"
                     type="checkbox"
                   />
                 </label>
@@ -670,20 +697,20 @@ exports[`QuestionField > renders a multiple choice options question field 1`] = 
               >
                 <input
                   class="textfield"
-                  data-testid="test-multi-choice-option-_r_16_-5-textfield"
-                  id="multi-choice-option-_r_16_-5"
-                  name="multi-choice-option-_r_16_-5"
+                  data-testid="test-multi-choice-option-_r_18_-5-textfield"
+                  id="multi-choice-option-_r_18_-5"
+                  name="multi-choice-option-_r_18_-5"
                   placeholder="Option 6"
                   type="text"
                   value="Berlin"
                 />
                 <label
                   class="checkboxLabel"
-                  for="multi-choice-option-_r_16_-5-checkbox"
+                  for="multi-choice-option-_r_18_-5-checkbox"
                 >
                   <input
                     class="checkbox"
-                    id="multi-choice-option-_r_16_-5-checkbox"
+                    id="multi-choice-option-_r_18_-5-checkbox"
                     type="checkbox"
                   />
                 </label>
@@ -1863,6 +1890,33 @@ exports[`QuestionField > renders an image media question field with blur effect 
                 </span>
               </button>
             </div>
+            <div
+              class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-add-image-effect-button-button"
+                id="add-image-effect-button"
+                name="add-image-effect-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-wand-magic-sparkles"
+                  data-icon="wand-magic-sparkles"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M263.4-27L278.2 9.8 315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4L278.2 54.2 263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5L233.8 54.2 197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4L233.8 9.8 248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5zM110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7L59.8 164.2 9.7 142.7C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7L59.8 91.8 81.3 41.7C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7zM464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7zM460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0zM44.2 398.5L308.4 134.3 409.7 235.6 145.5 499.8C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2L44.2 457.5C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Image Effect
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1962,6 +2016,33 @@ exports[`QuestionField > renders an image media question field with square effec
                 </svg>
                 <span>
                   Replace
+                </span>
+              </button>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+            >
+              <button
+                data-testid="test-add-image-effect-button-button"
+                id="add-image-effect-button"
+                name="add-image-effect-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-wand-magic-sparkles"
+                  data-icon="wand-magic-sparkles"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M263.4-27L278.2 9.8 315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4L278.2 54.2 263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5L233.8 54.2 197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4L233.8 9.8 248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5zM110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7L59.8 164.2 9.7 142.7C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7L59.8 91.8 81.3 41.7C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7zM464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7zM460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0zM44.2 398.5L308.4 134.3 409.7 235.6 145.5 499.8C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2L44.2 457.5C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Image Effect
                 </span>
               </button>
             </div>

@@ -74,14 +74,29 @@ exports[`ImageEffectModal > renders correctly (snapshot) 1`] = `
                 name="select-image-effect"
               >
                 <option
-                  value="blur"
+                  value="none"
+                >
+                  None
+                </option>
+                <option
+                  value="BLUR"
                 >
                   Blur
                 </option>
                 <option
-                  value="square"
+                  value="SQUARE_3X3"
                 >
-                  Square
+                  Square 3x3
+                </option>
+                <option
+                  value="SQUARE_5X5"
+                >
+                  Square 5x5
+                </option>
+                <option
+                  value="SQUARE_8X8"
+                >
+                  Square 8x8
                 </option>
               </select>
               <svg

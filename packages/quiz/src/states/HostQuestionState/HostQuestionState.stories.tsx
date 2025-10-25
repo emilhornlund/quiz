@@ -1,4 +1,9 @@
-import { GameEventType, MediaType, QuestionType } from '@quiz/common'
+import {
+  GameEventType,
+  MediaType,
+  QuestionImageRevealEffectType,
+  QuestionType,
+} from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -258,8 +263,7 @@ export const QuestionWithImageSquareEffect = {
         media: {
           type: MediaType.Image,
           url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
-          effect: 'square',
-          numberOfSquares: 4,
+          effect: QuestionImageRevealEffectType.Square3x3,
         },
         answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
         duration: 30,
@@ -288,7 +292,7 @@ export const QuestionWithImageBlurEffect = {
         media: {
           type: MediaType.Image,
           url: 'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
-          effect: 'blur',
+          effect: QuestionImageRevealEffectType.Blur,
         },
         answers: [{ value: 'Vincent van Gogh' }, { value: 'Pablo Picasso' }],
         duration: 30,

@@ -1,6 +1,6 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { CountdownEvent } from '@quiz/common'
+import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
 import React, {
   FC,
   useCallback,
@@ -20,25 +20,23 @@ import styles from './ResponsiveImage.module.scss'
 export interface ResponsiveImageProps {
   imageURL?: string
   alt?: string
-  effect?: Effect
-  countdown?: CountdownEvent
+  revealEffect?: {
+    type: QuestionImageRevealEffectType
+    countdown?: CountdownEvent
+  }
   noBorder?: boolean
   children?: React.ReactNode | React.ReactNode[]
-  numberOfSquares?: number
 }
 
 type Phase = 'idle' | 'loading' | 'ready' | 'error'
 type Size = { width?: number; height?: number }
-type Effect = 'none' | 'blur' | 'square'
 
 const ResponsiveImage: FC<ResponsiveImageProps> = ({
   imageURL,
   alt,
   noBorder = false,
-  effect = 'none',
+  revealEffect,
   children,
-  countdown,
-  numberOfSquares = 4,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -115,7 +113,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     return { w: iw * s, h: ih * s }
   }, [phase, containerSize, intrinsic])
 
-  const blurStyle = useImageBlurEffect(countdown)
+  const blurStyle = useImageBlurEffect(revealEffect?.countdown)
 
   return (
     <div ref={ref} className={styles.container}>
@@ -123,18 +121,24 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
         <div
           className={noBorder ? styles.boxNoBorder : styles.box}
           style={{ width: box.w, height: box.h }}>
-          {effect === 'square' && (
+          {(revealEffect?.type === QuestionImageRevealEffectType.Square3x3 ||
+            revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
+            revealEffect?.type === QuestionImageRevealEffectType.Square8x8) && (
             <ImageSquareEffect
               box={box}
-              countdown={countdown}
-              numberOfSquares={numberOfSquares}
+              countdown={revealEffect.countdown}
+              effect={revealEffect.type}
             />
           )}
           <img
             src={displaySrc}
             alt={alt ?? ''}
             className={styles.img}
-            style={effect === 'blur' ? blurStyle : undefined}
+            style={
+              revealEffect?.type === QuestionImageRevealEffectType.Blur
+                ? blurStyle
+                : undefined
+            }
           />
           {children && <div className={styles.overlay}>{children}</div>}
         </div>
