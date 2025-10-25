@@ -1,3 +1,4 @@
+import { ApiExtraModels } from '@nestjs/swagger'
 import { QuestionPuzzleDto, QuestionType } from '@quiz/common'
 
 import {
@@ -10,12 +11,17 @@ import {
   ApiQuestionTypeProperty,
 } from '../decorators/api'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 
 /**
  * Represents a data transfer object for a puzzle question.
  * Players must sort the provided values into the correct order.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionPuzzle implements QuestionPuzzleDto {
   /**
    * The type of the question, set to `Puzzle`.
@@ -35,8 +41,12 @@ export class QuestionPuzzle implements QuestionPuzzleDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * Values that the player must sort into the correct order.
