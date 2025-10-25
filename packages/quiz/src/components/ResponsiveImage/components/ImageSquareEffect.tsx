@@ -1,5 +1,5 @@
 import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 export type ImageSquareEffectProps = {
   box: { w: number; h: number }
@@ -10,7 +10,7 @@ export type ImageSquareEffectProps = {
     | QuestionImageRevealEffectType.Square8x8
 }
 
-export const ImageSquareEffect: React.FC<ImageSquareEffectProps> = ({
+export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
   box,
   countdown,
   effect,

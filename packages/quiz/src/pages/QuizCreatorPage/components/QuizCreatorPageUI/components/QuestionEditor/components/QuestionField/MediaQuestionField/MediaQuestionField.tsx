@@ -17,8 +17,8 @@ import {
   ResponsiveImage,
   ResponsivePlayer,
 } from '../../../../../../../../../components'
-import ImageEffectModal from '../../../../../../../../../components/ImageEffectModal/ImageEffectModal.tsx'
 
+import { ImageEffectModal } from './components'
 import styles from './MediaQuestionField.module.scss'
 
 export interface MediaQuestionFieldProps {
@@ -126,8 +126,9 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
           onClose={() => setShowMediaModal(false)}
         />
       )}
-      {showImageEffectModal && (
+      {value?.type === MediaType.Image && showImageEffectModal && (
         <ImageEffectModal
+          value={value.effect}
           onClose={() => setShowImageEffectModal(false)}
           onChangeImageEffect={onChangeImageEffect}
         />

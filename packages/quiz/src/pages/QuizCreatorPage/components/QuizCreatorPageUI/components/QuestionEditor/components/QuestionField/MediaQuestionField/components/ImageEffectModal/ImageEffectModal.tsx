@@ -1,23 +1,36 @@
 import { QuestionImageRevealEffectType } from '@quiz/common'
 import React, { FC, useState } from 'react'
 
-import { ImageRevealEffectLabels } from '../../models'
-import { classNames } from '../../utils/helpers.ts'
-import Button from '../Button'
-import styles from '../ImageEffectModal/ImageEffectModal.module.scss'
-import Modal from '../Modal'
-import Select from '../Select'
+import {
+  Button,
+  Modal,
+  Select,
+} from '../../../../../../../../../../../components'
+import { ImageRevealEffectLabels } from '../../../../../../../../../../../models'
+import { classNames } from '../../../../../../../../../../../utils/helpers.ts'
 
-const ImageEffectModal: FC<{
+import styles from './ImageEffectModal.module.scss'
+
+export const NONE_KEY = 'none'
+
+export type ImageEffectModalProps = {
   title?: string
+  value?: QuestionImageRevealEffectType
   onClose: () => void
   onChangeImageEffect: (
     value?: QuestionImageRevealEffectType | undefined,
   ) => void
-}> = ({ title, onClose, onChangeImageEffect }) => {
+}
+
+const ImageEffectModal: FC<ImageEffectModalProps> = ({
+  title,
+  value,
+  onClose,
+  onChangeImageEffect,
+}) => {
   const [selectedImageEffect, setSelectedImageEffect] = useState<
     QuestionImageRevealEffectType | undefined
-  >(QuestionImageRevealEffectType.Blur)
+  >(value)
 
   const onApply = () => {
     onChangeImageEffect(selectedImageEffect)
@@ -36,8 +49,8 @@ const ImageEffectModal: FC<{
           kind="secondary"
           values={[
             {
-              key: 'none',
-              value: 'none',
+              key: NONE_KEY,
+              value: NONE_KEY,
               valueLabel: 'None',
             },
             ...Object.values(QuestionImageRevealEffectType).map((type) => ({
@@ -48,12 +61,12 @@ const ImageEffectModal: FC<{
           ]}
           onChange={(value) =>
             setSelectedImageEffect(
-              value !== 'none'
+              value !== NONE_KEY
                 ? (value as QuestionImageRevealEffectType)
                 : undefined,
             )
           }
-          value={selectedImageEffect}
+          value={selectedImageEffect ?? NONE_KEY}
         />
         <div className={classNames(styles.column, styles.actions)}>
           <Button
