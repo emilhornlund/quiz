@@ -11,7 +11,11 @@ import {
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { QuestionImageMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 import { QuestionMultiChoice } from './question-multi-choice'
 import { QuizClassicRequest } from './quiz-classic.request'
 
@@ -188,5 +192,69 @@ describe('QuizRequest', () => {
     expect(question.media).toBeInstanceOf(QuestionImageMedia)
     const media = question.media as QuestionImageMedia
     expect(media.effect).toBe(QuestionImageRevealEffectType.Square3x3)
+  })
+
+  it('should pass validation for audio media', async () => {
+    const data: QuizClassicModeRequestDto = {
+      ...validData,
+      questions: [
+        {
+          type: QuestionType.MultiChoice,
+          question: 'What is the capital of Sweden?',
+          media: {
+            type: MediaType.Audio,
+            url: 'https://example.com/question-audio.mp3',
+          },
+          options: [
+            { value: 'Stockholm', correct: true },
+            { value: 'Copenhagen', correct: false },
+            { value: 'London', correct: false },
+            { value: 'Berlin', correct: false },
+          ],
+          points: 1000,
+          duration: 30,
+        } as QuestionMultiChoice,
+      ],
+    }
+    const response = plainToInstance(QuizClassicRequest, data)
+    const errors = await validate(response, { whitelist: true })
+    expect(errors).toHaveLength(0)
+
+    expect(response.questions[0]).toBeInstanceOf(QuestionMultiChoice)
+    const question = response.questions[0] as QuestionMultiChoice
+    expect(question.media).toBeDefined()
+    expect(question.media).toBeInstanceOf(QuestionAudioMedia)
+  })
+
+  it('should pass validation for video media', async () => {
+    const data: QuizClassicModeRequestDto = {
+      ...validData,
+      questions: [
+        {
+          type: QuestionType.MultiChoice,
+          question: 'What is the capital of Sweden?',
+          media: {
+            type: MediaType.Video,
+            url: 'https://example.com/question-video.mp4',
+          },
+          options: [
+            { value: 'Stockholm', correct: true },
+            { value: 'Copenhagen', correct: false },
+            { value: 'London', correct: false },
+            { value: 'Berlin', correct: false },
+          ],
+          points: 1000,
+          duration: 30,
+        } as QuestionMultiChoice,
+      ],
+    }
+    const response = plainToInstance(QuizClassicRequest, data)
+    const errors = await validate(response, { whitelist: true })
+    expect(errors).toHaveLength(0)
+
+    expect(response.questions[0]).toBeInstanceOf(QuestionMultiChoice)
+    const question = response.questions[0] as QuestionMultiChoice
+    expect(question.media).toBeDefined()
+    expect(question.media).toBeInstanceOf(QuestionVideoMedia)
   })
 })

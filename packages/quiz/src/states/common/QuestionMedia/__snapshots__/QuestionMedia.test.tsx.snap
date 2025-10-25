@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`QuestionMedia > renders ResponsiveImage for image media when type is not Pin (snapshot) 1`] = `
+exports[`QuestionMedia > renders ResponsiveImage for image media when type is not Pin 1`] = `
 <div>
   <div
     class="questionMedia"
@@ -8,6 +8,8 @@ exports[`QuestionMedia > renders ResponsiveImage for image media when type is no
   >
     <img
       alt="cute cat"
+      data-effect-type=""
+      data-has-countdown="false"
       data-src="https://img/a.jpg"
       data-testid="responsive-image"
     />
@@ -15,7 +17,7 @@ exports[`QuestionMedia > renders ResponsiveImage for image media when type is no
 </div>
 `;
 
-exports[`QuestionMedia > renders ResponsivePlayer for audio media (snapshot) 1`] = `
+exports[`QuestionMedia > renders ResponsivePlayer for audio media 1`] = `
 <div>
   <div
     class="questionMedia"
@@ -29,7 +31,7 @@ exports[`QuestionMedia > renders ResponsivePlayer for audio media (snapshot) 1`]
 </div>
 `;
 
-exports[`QuestionMedia > renders ResponsivePlayer for video media (snapshot) 1`] = `
+exports[`QuestionMedia > renders ResponsivePlayer for video media 1`] = `
 <div>
   <div
     class="questionMedia"
