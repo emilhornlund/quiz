@@ -51,6 +51,7 @@ export type QuestionFieldProps = (
   | {
       type: QuestionFieldType.CommonMedia
       value?: QuestionMediaDto
+      duration?: number
       onChange: (value?: QuestionMediaDto) => void
       onValid: (valid: boolean) => void
     }
@@ -275,6 +276,7 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
         <QuestionFieldWrapper layout="full" footer={props.footer}>
           <MediaQuestionField
             value={props.value}
+            duration={props.duration}
             onChange={props.onChange}
             onValid={props.onValid}
           />

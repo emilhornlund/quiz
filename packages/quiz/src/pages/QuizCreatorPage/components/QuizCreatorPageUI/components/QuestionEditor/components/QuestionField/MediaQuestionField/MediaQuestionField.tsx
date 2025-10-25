@@ -5,11 +5,12 @@ import {
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons'
 import {
+  CountdownEvent,
   MediaType,
   QuestionImageRevealEffectType,
   QuestionMediaDto,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import {
   Button,
@@ -23,12 +24,14 @@ import styles from './MediaQuestionField.module.scss'
 
 export interface MediaQuestionFieldProps {
   value?: QuestionMediaDto
+  duration?: number
   onChange: (value?: QuestionMediaDto) => void
   onValid: (valid: boolean) => void
 }
 
 const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
   value,
+  duration,
   onChange,
   onValid,
 }) => {
@@ -50,6 +53,19 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
     })
   }
 
+  useEffect(() => {
+    console.log('duration', duration)
+  }, [duration])
+
+  const countdown = useMemo<CountdownEvent | undefined>(() => {
+    const now = Date.now()
+    return {
+      initiatedTime: new Date(now).toISOString(),
+      expiryTime: new Date(now + (duration ?? 30) * 1000).toISOString(),
+      serverTime: new Date(now).toISOString(),
+    }
+  }, [duration])
+
   return (
     <>
       <div className={styles.mediaQuestionField}>
@@ -60,7 +76,12 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                 <ResponsiveImage
                   imageURL={value.url}
                   {...(value.effect
-                    ? { revealEffect: { type: value.effect } }
+                    ? {
+                        revealEffect: {
+                          type: value.effect,
+                          countdown,
+                        },
+                      }
                     : {})}
                 />
               )}
