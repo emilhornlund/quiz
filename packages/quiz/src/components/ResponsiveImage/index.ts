@@ -1,2 +1,2 @@
-export type { ResponsiveImageProps } from './ResponsiveImage'
+export type { RevealEffect, ResponsiveImageProps } from './ResponsiveImage'
 export { default } from './ResponsiveImage'

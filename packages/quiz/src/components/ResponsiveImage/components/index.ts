@@ -1,2 +1,2 @@
 export type { ImageSquareEffectProps } from './ImageSquareEffect'
-export { ImageSquareEffect } from './ImageSquareEffect'
+export { default as ImageSquareEffect } from './ImageSquareEffect'

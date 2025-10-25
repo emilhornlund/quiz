@@ -38,11 +38,10 @@ describe('useImageBlurEffect (deterministic)', () => {
     vi.useRealTimers()
   })
 
-  it('returns default blur and clipPath when no countdown', () => {
+  it('returns default blur when no countdown', () => {
     const { result } = renderHook(() => useImageBlurEffect())
     expect(result.current).toEqual({
       filter: 'blur(5.00rem)',
-      clipPath: 'inset(2px)',
     })
   })
 
@@ -53,7 +52,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     const { result } = renderHook(() => useImageBlurEffect(countdown))
     expect(result.current).toEqual({
       filter: 'blur(2.50rem)',
-      clipPath: 'inset(2px)',
     })
   })
 
@@ -67,7 +65,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     })
     expect(result.current).toEqual({
       filter: 'blur(1.25rem)',
-      clipPath: 'inset(2px)',
     })
 
     // After another 1s: elapsed >= 4s => blur = 0.00
@@ -76,7 +73,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     })
     expect(result.current).toEqual({
       filter: 'blur(0.00rem)',
-      clipPath: 'inset(2px)',
     })
 
     // Stays at zero even if more time passes
@@ -85,7 +81,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     })
     expect(result.current).toEqual({
       filter: 'blur(0.00rem)',
-      clipPath: 'inset(2px)',
     })
   })
 
@@ -97,7 +92,6 @@ describe('useImageBlurEffect (deterministic)', () => {
 
     expect(result.current).toEqual({
       filter: 'blur(1.25rem)',
-      clipPath: 'inset(2px)',
     })
   })
 

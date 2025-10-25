@@ -50,7 +50,7 @@ vi.mock('../../../../../../../../../components', () => ({
     revealEffect,
   }: {
     imageURL: string
-    revealEffect?: { type: string }
+    revealEffect?: { type: QuestionImageRevealEffectType }
   }) => (
     <div
       data-testid="responsive-image"
@@ -146,7 +146,7 @@ describe('MediaQuestionField', () => {
     expect(screen.getByRole('button', { name: /replace/i })).toBeInTheDocument()
   })
 
-  it('passes revealEffect to ResponsiveImage when value.effect is set', () => {
+  it('passes revealEffect to ResponsiveImage when value.effect is set', async () => {
     const { onChange, onValid } = makeHandlers()
     render(
       <MediaQuestionField
@@ -155,6 +155,7 @@ describe('MediaQuestionField', () => {
           url: 'https://cdn/pic.jpg',
           effect: QuestionImageRevealEffectType.Square3x3,
         }}
+        duration={30}
         onChange={onChange}
         onValid={onValid}
       />,

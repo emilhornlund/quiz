@@ -69,19 +69,10 @@ vi.mock('../index.ts', () => ({
 // Square effect mock to assert it renders and receives box/effect.
 vi.mock('./components', () => ({
   ImageSquareEffect: ({
-    box,
     effect,
   }: {
-    box: { w: number; h: number }
     effect: QuestionImageRevealEffectType
-  }) => (
-    <div
-      data-testid="square-effect"
-      data-w={box.w}
-      data-h={box.h}
-      data-effect={String(effect)}
-    />
-  ),
+  }) => <div data-testid="square-effect" data-effect={String(effect)} />,
 }))
 
 describe('ResponsiveImage', () => {
@@ -254,9 +245,6 @@ describe('ResponsiveImage', () => {
 
     const square = screen.getByTestId('square-effect')
     expect(square).toBeInTheDocument()
-    // From earlier computed box (800x600)
-    expect(square).toHaveAttribute('data-w', '800')
-    expect(square).toHaveAttribute('data-h', '600')
     expect(square).toHaveAttribute(
       'data-effect',
       String(QuestionImageRevealEffectType.Square3x3),
