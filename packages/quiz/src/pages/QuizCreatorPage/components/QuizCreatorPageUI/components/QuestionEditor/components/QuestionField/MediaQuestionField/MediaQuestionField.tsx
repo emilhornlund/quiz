@@ -4,7 +4,11 @@ import {
   faTrash,
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons'
-import { MediaType, QuestionMediaDto } from '@quiz/common'
+import {
+  MediaType,
+  QuestionImageRevealEffectType,
+  QuestionMediaDto,
+} from '@quiz/common'
 import React, { FC, useState } from 'react'
 
 import {
@@ -13,9 +17,7 @@ import {
   ResponsiveImage,
   ResponsivePlayer,
 } from '../../../../../../../../../components'
-import ImageEffectModal, {
-  ImageEffect,
-} from '../../../../../../../../../components/ImageEffectModal/ImageEffectModal.tsx'
+import ImageEffectModal from '../../../../../../../../../components/ImageEffectModal/ImageEffectModal.tsx'
 
 import styles from './MediaQuestionField.module.scss'
 
@@ -38,12 +40,13 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
     onValid(true)
   }
 
-  const onChangeImageEffect = (effect: ImageEffect | undefined) => {
+  const onChangeImageEffect = (
+    effect: QuestionImageRevealEffectType | undefined,
+  ) => {
     if (!value) return
     onChange({
       ...value,
-      effect: effect?.effect,
-      numberOfSquares: effect?.numberOfSquares,
+      ...(value.type === MediaType.Image ? { effect } : {}),
     })
   }
 
@@ -56,8 +59,9 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
               {value.type === MediaType.Image && (
                 <ResponsiveImage
                   imageURL={value.url}
-                  effect={value?.effect}
-                  numberOfSquares={value?.numberOfSquares}
+                  {...(value.effect
+                    ? { revealEffect: { type: value.effect } }
+                    : {})}
                 />
               )}
               {(value.type === MediaType.Video ||
@@ -88,11 +92,11 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                 icon={faRetweet}
                 onClick={() => setShowMediaModal(true)}
               />
-              {!MediaType.Video && !MediaType.Audio && (
+              {value.type === MediaType.Image && (
                 <Button
                   id="add-image-effect-button"
                   type="button"
-                  kind="call-to-action"
+                  kind="primary"
                   size="small"
                   value="Image Effect"
                   icon={faWandMagicSparkles}
@@ -125,7 +129,6 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
       {showImageEffectModal && (
         <ImageEffectModal
           onClose={() => setShowImageEffectModal(false)}
-          onValid={onValid}
           onChangeImageEffect={onChangeImageEffect}
         />
       )}

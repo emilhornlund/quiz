@@ -1,17 +1,30 @@
-import { CountdownEvent } from '@quiz/common'
-import React, { useEffect, useRef, useState } from 'react'
+import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-interface ImageEffectProps {
+export type ImageSquareEffectProps = {
   box: { w: number; h: number }
   countdown?: CountdownEvent
-  numberOfSquares: number
+  effect:
+    | QuestionImageRevealEffectType.Square3x3
+    | QuestionImageRevealEffectType.Square5x5
+    | QuestionImageRevealEffectType.Square8x8
 }
 
-export const ImageSquareEffect: React.FC<ImageEffectProps> = ({
+export const ImageSquareEffect: React.FC<ImageSquareEffectProps> = ({
   box,
   countdown,
-  numberOfSquares,
+  effect,
 }) => {
+  const numberOfSquares = useMemo(() => {
+    switch (effect) {
+      case QuestionImageRevealEffectType.Square3x3:
+        return 9
+      case QuestionImageRevealEffectType.Square5x5:
+        return 25
+      case QuestionImageRevealEffectType.Square8x8:
+        return 64
+    }
+  }, [effect])
   const evenSquares =
     numberOfSquares % 2 === 0 ? numberOfSquares : numberOfSquares + 1
 

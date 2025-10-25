@@ -1,6 +1,7 @@
 import {
   CountdownEvent,
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionMediaEvent,
   QuestionType,
 } from '@quiz/common'
@@ -31,6 +32,15 @@ const QuestionMedia: FC<QuestionMediaProps> = ({
     return null
   }, [type, media])
 
+  const imageRevealEffect = useMemo<
+    QuestionImageRevealEffectType | undefined
+  >(() => {
+    if (type !== QuestionType.Pin && media?.type === MediaType.Image) {
+      return media.effect
+    }
+    return undefined
+  }, [type, media])
+
   const audioOrVideoURL = useMemo(() => {
     if (
       type !== QuestionType.Pin &&
@@ -49,9 +59,9 @@ const QuestionMedia: FC<QuestionMediaProps> = ({
         <ResponsiveImage
           imageURL={imageURL}
           alt={alt}
-          effect={media?.effect}
-          numberOfSquares={media?.numberOfSquares}
-          countdown={countdown}
+          {...(imageRevealEffect
+            ? { revealEffect: { type: imageRevealEffect, countdown } }
+            : {})}
         />
       )}
       {audioOrVideoURL && <ResponsivePlayer url={audioOrVideoURL} />}

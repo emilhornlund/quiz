@@ -1,42 +1,366 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ImageSquareEffect > renders correctly (snapshot) 1`] = `
+exports[`ImageSquareEffect > renders a square 3x3 correctly 1`] = `
 <div>
   <div
     style="position: absolute; top: 0px; left: 0px; width: 200px; height: 100px; display: flex; flex-wrap: wrap; align-content: flex-start;"
   >
     <div
-      style="width: 100px; height: 50px; background: white;"
+      style="width: 40px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: white;"
+      style="width: 40px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: white;"
+      style="width: 40px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: transparent;"
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
     />
   </div>
 </div>
 `;
 
-exports[`ImageSquareEffect > renders with countdown (snapshot) 1`] = `
+exports[`ImageSquareEffect > renders a square 5x5 correctly 1`] = `
 <div>
   <div
     style="position: absolute; top: 0px; left: 0px; width: 200px; height: 100px; display: flex; flex-wrap: wrap; align-content: flex-start;"
   >
     <div
-      style="width: 100px; height: 50px; background: white;"
+      style="width: 15.384615384615385px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: transparent;"
+      style="width: 15.384615384615385px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: transparent;"
+      style="width: 15.384615384615385px; height: 50px; background: white;"
     />
     <div
-      style="width: 100px; height: 50px; background: transparent;"
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 15.384615384615385px; height: 50px; background: transparent;"
+    />
+  </div>
+</div>
+`;
+
+exports[`ImageSquareEffect > renders a square 8x8 correctly 1`] = `
+<div>
+  <div
+    style="position: absolute; top: 0px; left: 0px; width: 200px; height: 100px; display: flex; flex-wrap: wrap; align-content: flex-start;"
+  >
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 6.25px; height: 50px; background: transparent;"
+    />
+  </div>
+</div>
+`;
+
+exports[`ImageSquareEffect > renders with countdown 1`] = `
+<div>
+  <div
+    style="position: absolute; top: 0px; left: 0px; width: 200px; height: 100px; display: flex; flex-wrap: wrap; align-content: flex-start;"
+  >
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: white;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
+    />
+    <div
+      style="width: 40px; height: 50px; background: transparent;"
     />
   </div>
 </div>
