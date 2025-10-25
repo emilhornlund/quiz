@@ -7,7 +7,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ImageSquareEffect, ImageSquareEffectProps } from './ImageSquareEffect'
 
 const defaultProps: ImageSquareEffectProps = {
-  box: { w: 200, h: 100 },
   effect: QuestionImageRevealEffectType.Square3x3,
   countdown: undefined,
 }
@@ -98,9 +97,8 @@ describe('ImageSquareEffect', () => {
     )
     const tiles = tilesOf(container)
     expect(tiles.length).toBe(64)
-    // box.w=200 => 200/8=25px, box.h=100 => 100/8=12.5px
-    expect(tiles[0].style.width).toBe('25px')
-    expect(tiles[0].style.height).toBe('12.5px')
+    expect(tiles[0].style.width).toBe('100%')
+    expect(tiles[0].style.height).toBe('100%')
   })
 
   it('reveals tiles deterministically (same seed => same pattern at 50% progress)', () => {

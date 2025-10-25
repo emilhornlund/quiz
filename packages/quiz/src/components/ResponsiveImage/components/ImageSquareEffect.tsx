@@ -2,7 +2,6 @@ import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 export type ImageSquareEffectProps = {
-  box: { w: number; h: number }
   countdown?: CountdownEvent
   effect:
     | QuestionImageRevealEffectType.Square3x3
@@ -11,7 +10,6 @@ export type ImageSquareEffectProps = {
 }
 
 export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
-  box,
   countdown,
   effect,
 }) => {
@@ -107,20 +105,16 @@ export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
     }
   }, [countdown, totalSquares])
 
-  const tileW = useMemo(() => box.w / n, [box, n])
-  const tileH = useMemo(() => box.h / n, [box, n])
-
   return (
     <div
       style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: box.w,
-        height: box.h,
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignContent: 'flex-start',
+        inset: 0,
+        display: 'grid',
+        gridTemplateColumns: `repeat(${n}, 1fr)`,
+        gridTemplateRows: `repeat(${n}, 1fr)`,
+        width: '100%',
+        height: '100%',
       }}>
       {Array.from({ length: totalSquares }).map((_, index) => {
         const isCovered = rank[index] < coveredCount
@@ -128,8 +122,8 @@ export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
           <div
             key={index}
             style={{
-              width: `${tileW}px`,
-              height: `${tileH}px`,
+              width: '100%',
+              height: '100%',
               background: isCovered ? 'white' : 'transparent',
             }}
           />
