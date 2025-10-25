@@ -5,7 +5,6 @@ import {
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons'
 import {
-  CountdownEvent,
   MediaType,
   QuestionImageRevealEffectType,
   QuestionMediaDto,
@@ -18,6 +17,7 @@ import {
   ResponsiveImage,
   ResponsivePlayer,
 } from '../../../../../../../../../components'
+import { RevealEffect } from '../../../../../../../../../components/ResponsiveImage'
 
 import { ImageEffectModal } from './components'
 import styles from './MediaQuestionField.module.scss'
@@ -53,14 +53,20 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
     })
   }
 
-  const countdown = useMemo<CountdownEvent | undefined>(() => {
+  const revealEffect = useMemo<RevealEffect | undefined>(() => {
+    if (value?.type !== MediaType.Image || !value.effect || !duration) {
+      return undefined
+    }
     const now = Date.now()
     return {
-      initiatedTime: new Date(now).toISOString(),
-      expiryTime: new Date(now + (duration ?? 30) * 1000).toISOString(),
-      serverTime: new Date(now).toISOString(),
+      type: value.effect,
+      countdown: {
+        initiatedTime: new Date(now).toISOString(),
+        expiryTime: new Date(now + duration * 1000).toISOString(),
+        serverTime: new Date(now).toISOString(),
+      },
     }
-  }, [duration])
+  }, [value, duration])
 
   return (
     <>
@@ -71,14 +77,7 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
               {value.type === MediaType.Image && (
                 <ResponsiveImage
                   imageURL={value.url}
-                  {...(value.effect
-                    ? {
-                        revealEffect: {
-                          type: value.effect,
-                          countdown,
-                        },
-                      }
-                    : {})}
+                  {...(value.effect ? { revealEffect } : {})}
                 />
               )}
               {(value.type === MediaType.Video ||

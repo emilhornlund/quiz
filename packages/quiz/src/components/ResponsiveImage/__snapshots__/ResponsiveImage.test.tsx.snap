@@ -138,9 +138,7 @@ exports[`ResponsiveImage > should render with square effect 1`] = `
     >
       <div
         data-effect="SQUARE_3X3"
-        data-h="600"
         data-testid="square-effect"
-        data-w="800"
       />
       <img
         alt="square"

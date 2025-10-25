@@ -1,6 +1,10 @@
 import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 
+import { classNames } from '../../../../utils/helpers.ts'
+
+import styles from './ImageSquareEffect.module.scss'
+
 export type ImageSquareEffectProps = {
   countdown?: CountdownEvent
   effect:
@@ -9,7 +13,7 @@ export type ImageSquareEffectProps = {
     | QuestionImageRevealEffectType.Square8x8
 }
 
-export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
+const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
   countdown,
   effect,
 }) => {
@@ -105,30 +109,53 @@ export const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
     }
   }, [countdown, totalSquares])
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const ro = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width
+      const tile = width / n
+
+      // Blur scales with tile size (clamped for sanity)
+      const blur = Math.max(3, Math.min(18, Math.round(tile / 6)))
+
+      // Overlap grows a hair when tiles get tiny to fully hide seams
+      // ~1px normally, 1.5–2px for very small tiles
+      const overlap = tile < 24 ? -2 : tile < 48 ? -1.5 : -1
+
+      el.style.setProperty('--ise-blur', `${blur}px`)
+      el.style.setProperty('--ise-overlap', `${overlap}px`)
+    })
+
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [n])
+
   return (
     <div
+      ref={containerRef}
+      className={styles.imageSquareEffect}
       style={{
-        position: 'absolute',
-        inset: 0,
-        display: 'grid',
         gridTemplateColumns: `repeat(${n}, 1fr)`,
         gridTemplateRows: `repeat(${n}, 1fr)`,
-        width: '100%',
-        height: '100%',
       }}>
       {Array.from({ length: totalSquares }).map((_, index) => {
         const isCovered = rank[index] < coveredCount
         return (
           <div
             key={index}
-            style={{
-              width: '100%',
-              height: '100%',
-              background: isCovered ? 'white' : 'transparent',
-            }}
+            className={classNames(
+              styles.tile,
+              !isCovered ? styles.revealed : undefined,
+            )}
           />
         )
       })}
     </div>
   )
 }
+
+export default ImageSquareEffect

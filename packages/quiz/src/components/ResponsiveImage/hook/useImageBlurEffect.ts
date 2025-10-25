@@ -60,6 +60,5 @@ export const useImageBlurEffect = (countdown?: CountdownEvent) => {
 
   return {
     filter: `blur(${blur.toFixed(2)}rem)`,
-    clipPath: 'inset(2px)',
   }
 }

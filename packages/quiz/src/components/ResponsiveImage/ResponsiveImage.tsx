@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
 import React, {
   FC,
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -17,15 +18,17 @@ import { ImageSquareEffect } from './components'
 import { useImageBlurEffect } from './hook'
 import styles from './ResponsiveImage.module.scss'
 
-export interface ResponsiveImageProps {
+export type RevealEffect = {
+  type: QuestionImageRevealEffectType
+  countdown?: CountdownEvent
+}
+
+export type ResponsiveImageProps = {
   imageURL?: string
   alt?: string
-  revealEffect?: {
-    type: QuestionImageRevealEffectType
-    countdown?: CountdownEvent
-  }
+  revealEffect?: RevealEffect
   noBorder?: boolean
-  children?: React.ReactNode | React.ReactNode[]
+  children?: ReactNode | ReactNode[]
 }
 
 type Phase = 'idle' | 'loading' | 'ready' | 'error'
