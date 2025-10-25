@@ -1,3 +1,4 @@
+import { ApiExtraModels } from '@nestjs/swagger'
 import { QuestionTrueFalseDto, QuestionType } from '@quiz/common'
 
 import {
@@ -10,11 +11,16 @@ import {
   ApiQuestionTypeProperty,
 } from '../decorators/api'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 
 /**
  * Represents a data transfer object for a true-or-false question.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionTrueFalse implements QuestionTrueFalseDto {
   /**
    * The type of the question, set to `TrueFalse`.
@@ -34,8 +40,12 @@ export class QuestionTrueFalse implements QuestionTrueFalseDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * The correct answer for the question (true or false).
