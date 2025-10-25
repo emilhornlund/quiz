@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import {
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
@@ -28,16 +29,26 @@ export class QuestionMediaDao {
   url: string
 
   /**
-   * Optional effect for the media (e.g., 'blur', 'square').
+   * Optional effect for the media (e.g., 'BLUR', 'SQUARE_3X3').
    */
-  @Prop({ type: String, required: false, enum: ['blur', 'square'] })
-  effect?: 'blur' | 'square'
-
-  /**
-   * Optional number of squares if the effect is 'square'.
-   */
-  @Prop({ type: Number, required: false })
-  numberOfSquares?: number
+  @Prop({
+    type: String,
+    required: false,
+    enum: QuestionImageRevealEffectType,
+    validate: {
+      validator: function (
+        this: QuestionMediaDao,
+        v?: QuestionImageRevealEffectType,
+      ) {
+        // allow undefined
+        if (v == null) return true
+        // only allow when type === Image
+        return this.type === MediaType.Image
+      },
+      message: '`effect` is only allowed when media `type` is Image',
+    },
+  })
+  effect?: QuestionImageRevealEffectType
 }
 
 /**

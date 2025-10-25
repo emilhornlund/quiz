@@ -1,12 +1,15 @@
 import { MediaType } from './media-type.enum'
+import { QuestionImageRevealEffectType } from './question-image-reveal-effect-type.enum'
 import { QuestionPinTolerance } from './question-pin-tolerance.enum'
 import { QuestionRangeAnswerMargin } from './question-range-answer-margin.enum'
 import { QuestionType } from './question-type.enum'
 
 /**
- * Represents media associated with a question, such as an image or video.
+ * Base DTO representing shared properties for question media.
+ *
+ * Applies to all media types (image, audio, video).
  */
-export interface QuestionMediaDto {
+export type QuestionCommonMediaDto = {
   /**
    * The type of media (e.g., image, audio, video).
    */
@@ -16,17 +19,51 @@ export interface QuestionMediaDto {
    * The URL of the media.
    */
   url: string
-
-  /**
-   * Optional effect for the media.
-   */
-  effect?: 'blur' | 'square'
-
-  /**
-   * Optional number of squares if the effect is 'square'.
-   */
-  numberOfSquares?: number
 }
+
+/**
+ * DTO representing image-based question media.
+ */
+export type QuestionImageMediaDto = QuestionCommonMediaDto & {
+  /**
+   * The type of media, always `MediaType.Image`.
+   */
+  type: MediaType.Image
+
+  /**
+   * Optional visual reveal effect applied to the image.
+   */
+  effect?: QuestionImageRevealEffectType
+}
+
+/**
+ * DTO representing audio-based question media.
+ */
+export type QuestionAudioMediaDto = QuestionCommonMediaDto & {
+  /**
+   * The type of media, always `MediaType.Audio`.
+   */
+  type: MediaType.Audio
+}
+
+/**
+ * DTO representing video-based question media.
+ */
+export type QuestionVideoMediaDto = QuestionCommonMediaDto & {
+  /**
+   * The type of media, always `MediaType.Video`.
+   */
+  type: MediaType.Video
+}
+
+/**
+ * Union type representing all supported media types
+ * that can be associated with a question.
+ */
+export type QuestionMediaDto =
+  | QuestionImageMediaDto
+  | QuestionAudioMediaDto
+  | QuestionVideoMediaDto
 
 /**
  * Common properties shared across all question types.

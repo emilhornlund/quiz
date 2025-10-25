@@ -2,6 +2,7 @@ import {
   GameMode,
   LanguageCode,
   MediaType,
+  QuestionImageRevealEffectType,
   QuestionType,
   QuizCategory,
   QuizClassicModeRequestDto,
@@ -10,6 +11,8 @@ import {
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
+import { QuestionImageMedia } from './question-media'
+import { QuestionMultiChoice } from './question-multi-choice'
 import { QuizClassicRequest } from './quiz-classic.request'
 
 describe('QuizRequest', () => {
@@ -152,7 +155,7 @@ describe('QuizRequest', () => {
     expect(errors[0].property).toBe('languageCode')
   })
 
-  it('should pass validation with media effect and numberOfSquares', async () => {
+  it('should pass validation with media effect', async () => {
     const dataWithEffect: QuizClassicModeRequestDto = {
       ...validData,
       questions: [
@@ -162,8 +165,7 @@ describe('QuizRequest', () => {
           media: {
             type: MediaType.Image,
             url: 'https://example.com/question-image.png',
-            effect: 'square',
-            numberOfSquares: 4,
+            effect: QuestionImageRevealEffectType.Square3x3,
           },
           options: [
             { value: 'Stockholm', correct: true },
@@ -173,16 +175,18 @@ describe('QuizRequest', () => {
           ],
           points: 1000,
           duration: 30,
-        },
+        } as QuestionMultiChoice,
       ],
     }
     const response = plainToInstance(QuizClassicRequest, dataWithEffect)
     const errors = await validate(response, { whitelist: true })
     expect(errors).toHaveLength(0)
-    const question = response.questions[0]
-    if ('media' in question && question.media) {
-      expect(question.media.effect).toBe('square')
-      expect(question.media.numberOfSquares).toBe(4)
-    }
+
+    expect(response.questions[0]).toBeInstanceOf(QuestionMultiChoice)
+    const question = response.questions[0] as QuestionMultiChoice
+    expect(question.media).toBeDefined()
+    expect(question.media).toBeInstanceOf(QuestionImageMedia)
+    const media = question.media as QuestionImageMedia
+    expect(media.effect).toBe(QuestionImageRevealEffectType.Square3x3)
   })
 })
