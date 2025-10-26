@@ -5,7 +5,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ResponsiveImage from './ResponsiveImage'
 
-// Image mock: synchronous load/error so we don't need timers.
 class MockImage {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onload: null | ((ev?: any) => any) = null
@@ -14,7 +13,6 @@ class MockImage {
   naturalWidth = 400
   naturalHeight = 300
   set src(val: string) {
-    // Treat "bad" and any "invalid-*" as error to match tests using "invalid-url"
     if (!val || val === 'bad' || val.startsWith('invalid')) {
       this.onerror?.(new Event('error'))
     } else {
@@ -24,10 +22,8 @@ class MockImage {
 }
 vi.stubGlobal('Image', MockImage as unknown as typeof Image)
 
-// Fire onResize only once per test to avoid render loops.
 let didNotifyResize = false
 
-// useResizeObserver: your component passes onResize that expects {width,height}.
 const resizeObserverImpl = vi.fn(
   ({
     onResize,
@@ -41,7 +37,6 @@ const resizeObserverImpl = vi.fn(
   },
 )
 
-// Debounce: return the original fn (immediate pass-through).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const debounceImpl = (fn: (...args: any[]) => void) => fn
 
@@ -52,13 +47,11 @@ vi.mock('usehooks-ts', () => ({
     debounceImpl(fn as (...args: unknown[]) => void),
 }))
 
-// Blur style hook: return a visible style so we can assert.
 vi.mock('./hook', () => ({
   useImageBlurEffect: (countdown?: unknown) =>
     countdown ? { filter: 'blur(8px)' } : { filter: 'blur(0px)' },
 }))
 
-// Lightweight UI mocks
 vi.mock('../index.ts', () => ({
   LoadingSpinner: () => <div data-testid="spinner" />,
   Typography: ({ children }: { children: React.ReactNode }) => (
@@ -66,7 +59,6 @@ vi.mock('../index.ts', () => ({
   ),
 }))
 
-// Square effect mock to assert it renders and receives box/effect.
 vi.mock('./components', () => ({
   ImageSquareEffect: ({
     effect,
@@ -100,7 +92,6 @@ describe('ResponsiveImage', () => {
     const { container } = render(
       <ResponsiveImage imageURL="invalid-url" alt="error" />,
     )
-    // ensure effects (phase transition) have flushed
     await act(async () => {})
     expect(container).toMatchSnapshot()
   })
@@ -154,13 +145,10 @@ describe('ResponsiveImage', () => {
       <ResponsiveImage imageURL="https://cdn/img.jpg" alt="computed" />,
     )
 
-    // allow Image.onload & state updates to flush
     await act(async () => {})
 
-    // wrapper that appears only in ready+box state
     const box = container.querySelector('[class*="box"]')
     expect(box).toBeTruthy()
-    // inline styles
     expect((box as HTMLElement).style.width).toBe('800px')
     expect((box as HTMLElement).style.height).toBe('600px')
 
@@ -170,7 +158,6 @@ describe('ResponsiveImage', () => {
   })
 
   it('shows loading overlay while image is loading (before onload fires)', async () => {
-    // Temporarily override Image to never resolve
     class LoadingImage {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onload: null | ((ev?: any) => any) = null
@@ -190,7 +177,6 @@ describe('ResponsiveImage', () => {
     const { container, unmount } = render(
       <ResponsiveImage imageURL="https://cdn/slow.jpg" alt="loading" />,
     )
-    // ensure effects (phase=loading) are applied
     await act(async () => {})
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument()
@@ -204,11 +190,9 @@ describe('ResponsiveImage', () => {
   it('shows error overlay when image fails to load', async () => {
     const { container } = render(<ResponsiveImage imageURL="bad" alt="err" />)
     await act(async () => {}) // allow onerror phase to apply
-    // error overlay (Typography mocked)
     expect(screen.getByTestId('typography')).toHaveTextContent(
       'Oh no! Unable to load image',
     )
-    // no img rendered
     const img = container.querySelector('img')
     expect(img).toBeNull()
   })
@@ -226,10 +210,8 @@ describe('ResponsiveImage', () => {
     await act(async () => {})
 
     const img = container.querySelector('img') as HTMLImageElement
-    // Blur style returned from mocked hook
     expect(img.getAttribute('style') || '').toMatch(/blur\(8px\)/i)
 
-    // No square effect component for Blur
     expect(screen.queryByTestId('square-effect')).toBeNull()
   })
 
@@ -250,7 +232,6 @@ describe('ResponsiveImage', () => {
       String(QuestionImageRevealEffectType.Square3x3),
     )
 
-    // img rendered normally (no blur style)
     const img = container.querySelector('img') as HTMLImageElement
     expect(img.getAttribute('style') || '').not.toMatch(/blur/i)
   })
@@ -284,7 +265,6 @@ describe('ResponsiveImage', () => {
     const overlayChild = screen.getByTestId('overlay-child')
     expect(overlayChild).toBeInTheDocument()
 
-    // ensure overlay wrapper exists
     const overlay = container.querySelector('[class*="overlay"]')
     expect(overlay).toBeTruthy()
   })
@@ -296,7 +276,6 @@ describe('ResponsiveImage', () => {
     await act(async () => {})
     expect(container.querySelector('img')).toBeTruthy()
 
-    // Drop URL -> should clear displaySrc/phase/intrinsic and render nothing (no spinner, no error)
     rerender(<ResponsiveImage alt="idle" />)
     await act(async () => {})
 
@@ -306,7 +285,6 @@ describe('ResponsiveImage', () => {
   })
 
   it('renders nothing in ready phase if container has no measurable size (box=null)', async () => {
-    // For this test, report no size at all (for all observer calls during this render)
     resizeObserverImpl.mockImplementation(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-explicit-any
       (_args: any) => {
@@ -319,13 +297,10 @@ describe('ResponsiveImage', () => {
     )
     await act(async () => {})
 
-    // phase becomes ready internally, but box=null => no img content
     expect(container.querySelector('img')).toBeNull()
-    // Also not loading or error
     expect(screen.queryByTestId('spinner')).toBeNull()
     expect(screen.queryByTestId('typography')).toBeNull()
 
-    // reset mock for subsequent tests
     resizeObserverImpl.mockReset()
   })
 })

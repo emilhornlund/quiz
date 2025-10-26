@@ -46,8 +46,6 @@ describe('useImageBlurEffect (deterministic)', () => {
   })
 
   it('computes initial blur with aligned server time (no offset)', () => {
-    // Duration = 4s (initiated 2s ago, expires in 2s)
-    // Elapsed = 2s => blur = ((4-2)/4)*5 = 2.5
     const countdown = makeCountdown(BASE)
     const { result } = renderHook(() => useImageBlurEffect(countdown))
     expect(result.current).toEqual({
@@ -59,7 +57,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     const countdown = makeCountdown(BASE)
     const { result } = renderHook(() => useImageBlurEffect(countdown))
 
-    // After 1s: elapsed = 3s of 4s => blur = ((1)/4)*5 = 1.25
     act(() => {
       vi.advanceTimersByTime(1000)
     })
@@ -67,7 +64,6 @@ describe('useImageBlurEffect (deterministic)', () => {
       filter: 'blur(1.25rem)',
     })
 
-    // After another 1s: elapsed >= 4s => blur = 0.00
     act(() => {
       vi.advanceTimersByTime(1000)
     })
@@ -75,7 +71,6 @@ describe('useImageBlurEffect (deterministic)', () => {
       filter: 'blur(0.00rem)',
     })
 
-    // Stays at zero even if more time passes
     act(() => {
       vi.advanceTimersByTime(2000)
     })
@@ -85,8 +80,6 @@ describe('useImageBlurEffect (deterministic)', () => {
   })
 
   it('respects client-to-server time offset when server is ahead', () => {
-    // Server is +1s ahead of client
-    // With the same initiated/expiry, initial elapsed becomes 3s => blur = 1.25
     const countdown = makeCountdown(BASE, { serverOffsetMs: 1000 })
     const { result } = renderHook(() => useImageBlurEffect(countdown))
 
@@ -100,7 +93,6 @@ describe('useImageBlurEffect (deterministic)', () => {
     const clearSpy = vi.spyOn(global, 'clearInterval')
 
     const { unmount } = renderHook(() => useImageBlurEffect(countdown))
-    // Ensure the interval was established
     act(() => {
       vi.advanceTimersByTime(100)
     })
