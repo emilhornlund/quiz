@@ -18,12 +18,10 @@
     &::before {
       content: "";
       position: absolute;
-      inset: var(--ise-overlap, -1px);
-      background: colors.$white-1-50;
-      backdrop-filter: blur(var(--ise-blur, 10px));
-      -webkit-backdrop-filter: blur(var(--ise-blur, 10px));
-      transition: opacity 220ms ease-out, transform 220ms ease-out;
-      will-change: opacity, transform;
+      inset: 0;
+      background: colors.$white;
+      transition: opacity 220ms ease-out, background 220ms ease-in-out;
+      will-change: opacity, background;
       opacity: 1;
       transform: none;
       pointer-events: none;
@@ -37,6 +35,7 @@
   }
 
   .revealed::before {
+    background: transparent;
     opacity: 0;
   }
 }

@@ -1,16 +1,7 @@
 import { QuestionImageRevealEffectType } from '@quiz/common'
 import { act, render } from '@testing-library/react'
 import React from 'react'
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ImageSquareEffect, { ImageSquareEffectProps } from './ImageSquareEffect'
 
@@ -21,19 +12,6 @@ vi.mock('./ImageSquareEffect.module.scss', () => ({
     revealed: 'revealed',
   },
 }))
-
-class RO {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-beforeAll(() => {
-  global.ResizeObserver = RO
-})
-afterAll(() => {
-  // @ts-expect-error cleanup
-  delete global.ResizeObserver
-})
 
 const defaultProps: ImageSquareEffectProps = {
   effect: QuestionImageRevealEffectType.Square3x3,
