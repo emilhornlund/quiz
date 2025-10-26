@@ -93,7 +93,6 @@ const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
       const elapsed = now - initiated
       const progress = Math.min(elapsed / totalDuration, 1)
 
-      // tiles removed = how many should be revealed so far
       const removed = Math.floor(progress * totalSquares)
       setCoveredCount(Math.max(totalSquares - removed, 0))
     }
@@ -109,31 +108,8 @@ const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
     }
   }, [countdown, totalSquares])
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-
-    const ro = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width
-      const tile = width / n
-
-      const blur = Math.max(3, Math.min(18, Math.round(tile / 6)))
-
-      const overlap = tile < 24 ? -2 : tile < 48 ? -1.5 : -1
-
-      el.style.setProperty('--ise-blur', `${blur}px`)
-      el.style.setProperty('--ise-overlap', `${overlap}px`)
-    })
-
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [n])
-
   return (
     <div
-      ref={containerRef}
       className={styles.imageSquareEffect}
       style={{
         gridTemplateColumns: `repeat(${n}, 1fr)`,
