@@ -100,23 +100,25 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     }
   }, [imageURL])
 
-  const box = useMemo(() => {
-    if (phase !== 'ready' || !intrinsic.w || !intrinsic.h) return null
+  const box = useMemo<{ w: number; h: number } | undefined>(() => {
+    if (phase !== 'ready' || !intrinsic.w || !intrinsic.h) return undefined
 
     const cw = containerSize.width ?? 0
     const ch = containerSize.height ?? 0
-    if (cw <= 0 && ch <= 0) return null
+    if (cw <= 0 && ch <= 0) return undefined
 
     const { w: iw, h: ih } = intrinsic
     const rw = cw > 0 ? cw / iw : Number.POSITIVE_INFINITY
     const rh = ch > 0 ? ch / ih : Number.POSITIVE_INFINITY
     const s = Math.min(rw, rh)
 
-    if (!Number.isFinite(s) || s <= 0) return null
+    if (!Number.isFinite(s) || s <= 0) return undefined
     return { w: iw * s, h: ih * s }
   }, [phase, containerSize, intrinsic])
 
-  const blurStyle = useImageBlurEffect(revealEffect?.countdown)
+  const blurStyle = useImageBlurEffect(box, revealEffect?.countdown, {
+    endAt: 0.1,
+  })
 
   return (
     <div ref={ref} className={styles.container}>

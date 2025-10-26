@@ -75,7 +75,7 @@ exports[`ResponsiveImage > should render with blur effect 1`] = `
         alt="blur"
         class="img"
         src="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        style="filter: blur(0px);"
+        style="filter: blur(8px);"
       />
     </div>
   </div>
