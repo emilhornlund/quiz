@@ -1,64 +1,142 @@
 import { CountdownEvent } from '@quiz/common'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-export const useImageBlurEffect = (countdown?: CountdownEvent) => {
-  const [blur, setBlur] = useState(5)
-  const [clientToServerOffset, setClientToServerOffset] = useState(0)
-  const [initiatedTime, setInitiatedTime] = useState(0)
-  const [totalDuration, setTotalDuration] = useState(0)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+type Box = { w: number; h: number }
+
+type BlurUnit =
+  /** Ratio of min(box.w, box.h), e.g. 0.05 → 5% of shortest side */
+  | { mode: 'auto'; ratio?: number }
+  /** Fixed maximum blur in px */
+  | { mode: 'px'; max: number }
+  /** Fixed maximum blur in rem */
+  | { mode: 'rem'; max: number }
+
+type Options = {
+  /** Fraction of the total duration to *not* animate (e.g. 0.1 => stop blur with 10% time left). */
+  endAt?: number
+  /** Choose how to express max blur. Default is auto with 5% of the shortest side. */
+  unit?: BlurUnit
+  /** Easing. Replace with t => t for linear. */
+  ease?: (t: number) => number
+  /** Min change before we commit a re-render (prevents thrash). */
+  epsilon?: number
+  /** rAF tick cap in ms; 0 = every frame. */
+  minFrameMs?: number
+}
+
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+
+export function useImageBlurEffect(
+  box?: Box,
+  countdown?: CountdownEvent,
+  {
+    endAt = 0,
+    unit = { mode: 'auto', ratio: 0.05 },
+    ease = easeOutCubic,
+    epsilon = 0.01,
+    minFrameMs = 0,
+  }: Options = {},
+) {
+  const [blurValue, setBlurValue] = useState(0)
+  const [clientToServerOffset, setOffset] = useState(0)
+  const [initiatedAt, setInitiatedAt] = useState(0)
+  const [totalSec, setTotalSec] = useState(0)
+
+  const rafRef = useRef<number | null>(null)
+  const lastTsRef = useRef(0)
+
+  const { maxBlurNumber, unitSuffix } = useMemo(() => {
+    if (unit.mode === 'auto') {
+      const ratio = unit.ratio ?? 0.05
+      const px = box ? Math.max(Math.min(box.w, box.h) * ratio, 0) : 16
+      return { maxBlurNumber: px, unitSuffix: 'px' }
+    }
+    if (unit.mode === 'px') {
+      return { maxBlurNumber: Math.max(unit.max, 0), unitSuffix: 'px' }
+    }
+    return { maxBlurNumber: Math.max(unit.max, 0), unitSuffix: 'rem' }
+  }, [unit, box?.w, box?.h])
 
   useEffect(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
     }
     if (!countdown) return
 
     const serverTime = new Date(countdown.serverTime).getTime()
-    const tmpInitiatedTime = new Date(countdown.initiatedTime).getTime()
-    const expiryTime = new Date(countdown.expiryTime).getTime()
+    const initiated = new Date(countdown.initiatedTime).getTime()
+    const expiry = new Date(countdown.expiryTime).getTime()
 
     const offset = serverTime - Date.now()
-    setClientToServerOffset(offset)
+    setOffset(offset)
 
-    const duration = Math.max((expiryTime - tmpInitiatedTime) / 1000, 1)
-    setTotalDuration(duration)
-    setInitiatedTime(tmpInitiatedTime)
+    const durationSec = Math.max((expiry - initiated) / 1000, 0.001)
+    setTotalSec(durationSec)
+    setInitiatedAt(initiated)
 
     const now = Date.now() + offset
-    const elapsed = (now - tmpInitiatedTime) / 1000
-    const initialBlur = Math.max(((duration - elapsed) / duration) * 5, 0)
-    setBlur(initialBlur)
-  }, [countdown])
+    const elapsedSec = (now - initiated) / 1000
+    const effectiveSec = durationSec * (1 - Math.max(0, Math.min(endAt, 0.99)))
+    const clamped = Math.max(0, Math.min(elapsedSec / effectiveSec, 1))
+    const progress = ease(clamped)
+    const initial = Math.max((1 - progress) * maxBlurNumber, 0)
+    setBlurValue(initial)
+  }, [countdown, endAt, ease, maxBlurNumber])
 
   useEffect(() => {
-    if (!initiatedTime || !totalDuration || intervalRef.current) return
+    if (!initiatedAt || !totalSec) return
 
-    intervalRef.current = setInterval(() => {
-      const now = Date.now() + clientToServerOffset
-      const elapsed = (now - initiatedTime) / 1000
+    const effectiveSec = totalSec * (1 - Math.max(0, Math.min(endAt, 0.99)))
 
-      if (elapsed >= totalDuration) {
-        setBlur(0)
-        clearInterval(intervalRef.current!)
-        intervalRef.current = null
+    const tick = (ts: number) => {
+      if (minFrameMs > 0 && ts - lastTsRef.current < minFrameMs) {
+        rafRef.current = requestAnimationFrame(tick)
         return
       }
+      lastTsRef.current = ts
 
-      const newBlur = Math.max(
-        ((totalDuration - elapsed) / totalDuration) * 5,
-        0,
-      )
-      setBlur(newBlur)
-    }, 100)
+      const now = Date.now() + clientToServerOffset
+      const elapsedSec = (now - initiatedAt) / 1000
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      let blur = 0
+      if (elapsedSec < effectiveSec) {
+        const clamped = Math.max(0, Math.min(elapsedSec / effectiveSec, 1))
+        const progress = ease(clamped)
+        blur = Math.max((1 - progress) * maxBlurNumber, 0)
+      } else {
+        blur = 0
+      }
+
+      setBlurValue((prev) => (Math.abs(prev - blur) > epsilon ? blur : prev))
+
+      if (elapsedSec < totalSec) {
+        rafRef.current = requestAnimationFrame(tick)
+      } else {
+        rafRef.current = null
+      }
     }
-  }, [clientToServerOffset, initiatedTime, totalDuration])
 
-  return {
-    filter: `blur(${blur.toFixed(2)}rem)`,
-  }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+  }, [
+    clientToServerOffset,
+    initiatedAt,
+    totalSec,
+    endAt,
+    ease,
+    maxBlurNumber,
+    epsilon,
+    minFrameMs,
+  ])
+
+  const filter = useMemo(
+    () => `blur(${blurValue.toFixed(2)}${unitSuffix})`,
+    [blurValue, unitSuffix],
+  )
+
+  return { filter, blur: blurValue }
 }
