@@ -3,7 +3,6 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-// Stub shared components used inside MediaQuestionField
 vi.mock('../../../../../../../../../components', () => ({
   Button: ({
     id,
@@ -64,7 +63,6 @@ vi.mock('../../../../../../../../../components', () => ({
   ),
 }))
 
-// Stub ImageEffectModal from local "./components"
 vi.mock('./components', () => ({
   ImageEffectModal: ({
     value,
@@ -110,7 +108,6 @@ describe('MediaQuestionField', () => {
     const modal = screen.getByTestId('media-modal')
     expect(modal).toBeInTheDocument()
 
-    // choose media triggers onChange + onValid(true)
     fireEvent.click(
       within(modal).getByRole('button', { name: /choose-media/i }),
     )
@@ -120,7 +117,6 @@ describe('MediaQuestionField', () => {
     })
     expect(onValid).toHaveBeenCalledWith(true)
 
-    // close modal
     fireEvent.click(within(modal).getByRole('button', { name: /close-media/i }))
     expect(screen.queryByTestId('media-modal')).not.toBeInTheDocument()
   })

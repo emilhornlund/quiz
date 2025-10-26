@@ -84,7 +84,7 @@ describe('QuestionMedia', () => {
     expect(img).toBeInTheDocument()
     expect(img).toHaveAttribute('data-src', 'https://img/a.jpg')
     expect(img).toHaveAttribute('alt', 'cute cat')
-    // No player
+
     expect(screen.queryByTestId('responsive-player')).toBeNull()
     expect(container).toMatchSnapshot()
   })
@@ -99,7 +99,7 @@ describe('QuestionMedia', () => {
     const player = screen.getByTestId('responsive-player')
     expect(player).toBeInTheDocument()
     expect(player).toHaveAttribute('data-url', 'https://cdn/a.mp3')
-    // No image
+
     expect(screen.queryByTestId('responsive-image')).toBeNull()
     expect(container).toMatchSnapshot()
   })
@@ -114,7 +114,7 @@ describe('QuestionMedia', () => {
     const player = screen.getByTestId('responsive-player')
     expect(player).toBeInTheDocument()
     expect(player).toHaveAttribute('data-url', 'https://cdn/v.mp4')
-    // No image
+
     expect(screen.queryByTestId('responsive-image')).toBeNull()
     expect(container).toMatchSnapshot()
   })
@@ -167,8 +167,11 @@ describe('QuestionMedia', () => {
   })
 
   it('passes revealEffect.type and countdown to ResponsiveImage when provided', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const countdown = { remainingMs: 5000 } as unknown as any
+    const countdown: CountdownEvent = {
+      serverTime: '2025-10-12T12:00:00.000Z',
+      initiatedTime: '2025-10-12T11:59:59.000Z',
+      expiryTime: '2025-10-12T12:00:01.000Z',
+    }
 
     render(
       <QuestionMedia
@@ -201,7 +204,6 @@ describe('QuestionMedia', () => {
     )
 
     const img = screen.getByTestId('responsive-image')
-    // attribute present but empty due to mock implementation
     expect(img.getAttribute('data-effect-type')).toBe('')
     expect(img.getAttribute('data-has-countdown')).toBe('false')
   })

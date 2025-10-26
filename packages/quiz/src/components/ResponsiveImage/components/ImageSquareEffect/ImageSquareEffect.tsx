@@ -119,11 +119,8 @@ const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
       const width = entry.contentRect.width
       const tile = width / n
 
-      // Blur scales with tile size (clamped for sanity)
       const blur = Math.max(3, Math.min(18, Math.round(tile / 6)))
 
-      // Overlap grows a hair when tiles get tiny to fully hide seams
-      // ~1px normally, 1.5–2px for very small tiles
       const overlap = tile < 24 ? -2 : tile < 48 ? -1.5 : -1
 
       el.style.setProperty('--ise-blur', `${blur}px`)
