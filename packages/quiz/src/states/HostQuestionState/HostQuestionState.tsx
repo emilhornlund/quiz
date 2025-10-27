@@ -90,6 +90,7 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
         type={question.type}
         media={media}
         alt={question.question}
+        countdown={countdown}
       />
       <div
         className={classNames(

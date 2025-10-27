@@ -151,4 +151,38 @@ describe('QuizRequest', () => {
     expect(errors).toHaveLength(1)
     expect(errors[0].property).toBe('languageCode')
   })
+
+  it('should pass validation with media effect and numberOfSquares', async () => {
+    const dataWithEffect: QuizClassicModeRequestDto = {
+      ...validData,
+      questions: [
+        {
+          type: QuestionType.MultiChoice,
+          question: 'What is the capital of Sweden?',
+          media: {
+            type: MediaType.Image,
+            url: 'https://example.com/question-image.png',
+            effect: 'square',
+            numberOfSquares: 4,
+          },
+          options: [
+            { value: 'Stockholm', correct: true },
+            { value: 'Copenhagen', correct: false },
+            { value: 'London', correct: false },
+            { value: 'Berlin', correct: false },
+          ],
+          points: 1000,
+          duration: 30,
+        },
+      ],
+    }
+    const response = plainToInstance(QuizClassicRequest, dataWithEffect)
+    const errors = await validate(response, { whitelist: true })
+    expect(errors).toHaveLength(0)
+    const question = response.questions[0]
+    if ('media' in question && question.media) {
+      expect(question.media.effect).toBe('square')
+      expect(question.media.numberOfSquares).toBe(4)
+    }
+  })
 })

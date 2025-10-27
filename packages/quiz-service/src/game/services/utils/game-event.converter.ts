@@ -453,7 +453,12 @@ function buildGameEventQuestion(
   const common = {
     question: question.text,
     media: question.media
-      ? { type: question.media.type, url: question.media.url }
+      ? {
+          type: question.media.type,
+          url: question.media.url,
+          effect: question.media.effect,
+          numberOfSquares: question.media.numberOfSquares,
+        }
       : undefined,
     duration: question.duration,
   }

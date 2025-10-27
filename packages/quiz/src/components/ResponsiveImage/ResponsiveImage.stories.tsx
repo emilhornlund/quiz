@@ -42,6 +42,21 @@ export const Portrait = {
   },
 } satisfies Story
 
+export const imageEffect = {
+  args: {
+    imageURL:
+      'https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg',
+    alt: 'Who painted The Starry Night?',
+    effect: 'blur',
+    numberOfSquares: 4,
+    countdown: {
+      initiatedTime: new Date().toISOString(),
+      expiryTime: new Date(Date.now() + 30 * 1000).toISOString(),
+      serverTime: new Date().toISOString(),
+    },
+  },
+} satisfies Story
+
 export const Error = {
   args: {
     imageURL: 'https://example.com/image.png',

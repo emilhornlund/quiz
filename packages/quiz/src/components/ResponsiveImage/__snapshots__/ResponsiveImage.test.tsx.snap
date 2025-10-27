@@ -20,3 +20,116 @@ exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
   </div>
 </div>
 `;
+
+exports[`ResponsiveImage > should render error state 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ResponsiveImage > should render loading state 1`] = `
+<div>
+  <div
+    class="container"
+  />
+</div>
+`;
+
+exports[`ResponsiveImage > should render with blur effect 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ResponsiveImage > should render with noBorder 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ResponsiveImage > should render with overlay children 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ResponsiveImage > should render with square effect 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="centerOverlay"
+    >
+      <div
+        class="loadingSpinnerContainer"
+        data-testid="loading-spinner"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
