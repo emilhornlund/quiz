@@ -1,0 +1,147 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ImageEffectModal > renders correctly (snapshot) 1`] = `
+<div>
+  <div
+    class="floatingOverlay"
+    style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"
+  >
+    <span
+      data-floating-ui-focus-guard=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; clip: rect(0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+    <div
+      aria-labelledby="_r_2_"
+      class="modalContainer sizeNormal"
+      data-floating-ui-focusable=""
+      id="_r_0_"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div
+        class="header"
+      >
+        <div
+          class="title"
+          id="_r_2_"
+        >
+          Test Image Effect
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindPlain"
+        >
+          <button
+            data-testid="test-close-modal-button-button"
+            id="close-modal-button"
+            name="close-modal-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-xmark"
+              color="gray"
+              data-icon="xmark"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 384 512"
+            >
+              <path
+                d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="content"
+      >
+        <div
+          class="imageMediaModal"
+        >
+          <div
+            class="inputContainer"
+          >
+            <div
+              class="selectInputContainer selectInputKindSecondary"
+            >
+              <select
+                data-testid="test-select-image-effect-select"
+                id="select-image-effect"
+                name="select-image-effect"
+              >
+                <option
+                  value="blur"
+                >
+                  Blur
+                </option>
+                <option
+                  value="square"
+                >
+                  Square
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down selectIcon"
+                color="black"
+                data-icon="chevron-down"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 448 512"
+              >
+                <path
+                  d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="column actions"
+          >
+            <div
+              class="buttonInputContainer buttonInputKindSecondary"
+            >
+              <button
+                data-testid="test-close-button-button"
+                id="close-button"
+                name="close-button"
+                type="button"
+              >
+                <span>
+                  Close
+                </span>
+              </button>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-apply-button-button"
+                id="apply-button"
+                name="apply-button"
+                type="button"
+              >
+                <span>
+                  Apply
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span
+      data-floating-ui-focus-guard=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; clip: rect(0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;
