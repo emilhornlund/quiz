@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "bson": "^6.10.4",
-    "commander": "^14.0.1",
+    "commander": "^14.0.2",
     "uuid": "^13.0.0"
   }
 }
