@@ -1,5 +1,6 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
 import React, {
   FC,
   ReactNode,
@@ -13,11 +14,19 @@ import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
 import { LoadingSpinner, Typography } from '../index.ts'
 
+import { ImageSquareEffect } from './components'
+import { useImageBlurEffect } from './hook'
 import styles from './ResponsiveImage.module.scss'
 
-export interface ResponsiveImageProps {
+export type RevealEffect = {
+  type: QuestionImageRevealEffectType
+  countdown?: CountdownEvent
+}
+
+export type ResponsiveImageProps = {
   imageURL?: string
   alt?: string
+  revealEffect?: RevealEffect
   noBorder?: boolean
   children?: ReactNode | ReactNode[]
 }
@@ -29,6 +38,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   imageURL,
   alt,
   noBorder = false,
+  revealEffect,
   children,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
@@ -90,21 +100,25 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     }
   }, [imageURL])
 
-  const box = useMemo(() => {
-    if (phase !== 'ready' || !intrinsic.w || !intrinsic.h) return null
+  const box = useMemo<{ w: number; h: number } | undefined>(() => {
+    if (phase !== 'ready' || !intrinsic.w || !intrinsic.h) return undefined
 
     const cw = containerSize.width ?? 0
     const ch = containerSize.height ?? 0
-    if (cw <= 0 && ch <= 0) return null
+    if (cw <= 0 && ch <= 0) return undefined
 
     const { w: iw, h: ih } = intrinsic
     const rw = cw > 0 ? cw / iw : Number.POSITIVE_INFINITY
     const rh = ch > 0 ? ch / ih : Number.POSITIVE_INFINITY
     const s = Math.min(rw, rh)
 
-    if (!Number.isFinite(s) || s <= 0) return null
+    if (!Number.isFinite(s) || s <= 0) return undefined
     return { w: iw * s, h: ih * s }
   }, [phase, containerSize, intrinsic])
+
+  const blurStyle = useImageBlurEffect(box, revealEffect?.countdown, {
+    endAt: 0.1,
+  })
 
   return (
     <div ref={ref} className={styles.container}>
@@ -112,7 +126,24 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
         <div
           className={noBorder ? styles.boxNoBorder : styles.box}
           style={{ width: box.w, height: box.h }}>
-          <img src={displaySrc} alt={alt ?? ''} className={styles.img} />
+          {(revealEffect?.type === QuestionImageRevealEffectType.Square3x3 ||
+            revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
+            revealEffect?.type === QuestionImageRevealEffectType.Square8x8) && (
+            <ImageSquareEffect
+              countdown={revealEffect.countdown}
+              effect={revealEffect.type}
+            />
+          )}
+          <img
+            src={displaySrc}
+            alt={alt ?? ''}
+            className={styles.img}
+            style={
+              revealEffect?.type === QuestionImageRevealEffectType.Blur
+                ? blurStyle
+                : undefined
+            }
+          />
           {children && <div className={styles.overlay}>{children}</div>}
         </div>
       )}

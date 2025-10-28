@@ -2,6 +2,7 @@ import { GameEventType } from './game-event-type.enum'
 import { GameMode } from './game-mode.enum'
 import { GameStatus } from './game-status.enum'
 import { MediaType } from './media-type.enum'
+import { QuestionImageRevealEffectType } from './question-image-reveal-effect-type.enum'
 import { QuestionPinTolerance } from './question-pin-tolerance.enum'
 import { QuestionType } from './question-type.enum'
 
@@ -16,10 +17,20 @@ export type PaginationEvent = {
   total: number
 }
 
-export type QuestionMediaEvent = {
-  type: MediaType
-  url: string
-}
+export type QuestionMediaEvent =
+  | {
+      type: MediaType.Image
+      url: string
+      effect?: QuestionImageRevealEffectType
+    }
+  | {
+      type: MediaType.Audio
+      url: string
+    }
+  | {
+      type: MediaType.Video
+      url: string
+    }
 
 export type GameHeartbeatEvent = {
   type: GameEventType.GameHeartbeat

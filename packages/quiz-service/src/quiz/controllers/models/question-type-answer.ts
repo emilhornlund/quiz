@@ -1,3 +1,4 @@
+import { ApiExtraModels } from '@nestjs/swagger'
 import { QuestionType, QuestionTypeAnswerDto } from '@quiz/common'
 
 import {
@@ -10,11 +11,16 @@ import {
   ApiQuestionTypeProperty,
 } from '../decorators/api'
 
-import { QuestionMedia } from './question-media'
+import {
+  QuestionAudioMedia,
+  QuestionImageMedia,
+  QuestionVideoMedia,
+} from './question-media'
 
 /**
  * Represents a data transfer object for a type-answer question.
  */
+@ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
 export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
   /**
    * The type of the question, set to `TypeAnswer`.
@@ -34,8 +40,12 @@ export class QuestionTypeAnswer implements QuestionTypeAnswerDto {
   /**
    * Optional media associated with the question.
    */
-  @ApiQuestionMediaProperty({ type: () => QuestionMedia })
-  media?: QuestionMedia
+  @ApiQuestionMediaProperty({
+    image: () => QuestionImageMedia,
+    audio: () => QuestionAudioMedia,
+    video: () => QuestionVideoMedia,
+  })
+  media?: QuestionImageMedia | QuestionAudioMedia | QuestionVideoMedia
 
   /**
    * The list of acceptable answers for the question.
