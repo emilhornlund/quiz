@@ -13,10 +13,10 @@
     "lint:fix": "yarn lint --fix"
   },
   "devDependencies": {
-    "@types/node": "^24.9.2"
+    "@types/node": "^24.10.0"
   },
   "dependencies": {
-    "bson": "^6.10.4",
+    "bson": "^7.0.0",
     "commander": "^14.0.2",
     "uuid": "^13.0.0"
   }
