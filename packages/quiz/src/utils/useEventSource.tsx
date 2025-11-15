@@ -1,4 +1,4 @@
-import { GameEvent, GameEventType } from '@quiz/common'
+import { GameEvent, GameEventType, HEARTBEAT_INTERVAL } from '@quiz/common'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -44,35 +44,74 @@ export const useEventSource = (
   )
 
   const MAX_RETRIES = 10
-  const eventSourceRef = useRef<EventSource | null>(null)
+
+  const eventSourceRef = useRef<InstanceType<
+    typeof EventSourcePolyfill
+  > | null>(null)
+  const reconnectTimeoutRef = useRef<number | null>(null)
+  const instanceIdRef = useRef(0)
+  const isShuttingDownRef = useRef(false)
+
+  const clearReconnectTimeout = () => {
+    if (reconnectTimeoutRef.current !== null) {
+      clearTimeout(reconnectTimeoutRef.current)
+      reconnectTimeoutRef.current = null
+    }
+  }
+
+  const cleanupEventSource = () => {
+    clearReconnectTimeout()
+
+    const current = eventSourceRef.current
+    if (current) {
+      current.onopen = null
+      current.onmessage = null
+      current.onerror = null
+      current.close()
+    }
+
+    eventSourceRef.current = null
+  }
+
+  const getRetryDelay = (retryCount: number) =>
+    Math.min(1000 * 2 ** retryCount, 30000)
 
   const createEventSource = useCallback(
-    (gameID: string, token: string, retryCount = 0) => {
+    (gameIdValue: string, tokenValue: string, retryCount = 0) => {
       if (retryCount >= MAX_RETRIES) {
         console.error(
           'Max retry attempts reached. Stopping reconnection attempts.',
         )
+        cleanupEventSource()
         setConnectionStatus(ConnectionStatus.RECONNECTING_FAILED)
         return
       }
 
+      const instanceId = ++instanceIdRef.current
+
+      cleanupEventSource()
+
       const eventSource = new EventSourcePolyfill(
-        `${config.quizServiceUrl}/games/${gameID}/events`,
+        `${config.quizServiceUrl}/games/${gameIdValue}/events`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenValue}`,
             'Content-Type': 'application/json',
           },
+          heartbeatTimeout: HEARTBEAT_INTERVAL * 1.5,
         },
       )
 
       eventSourceRef.current = eventSource
 
       eventSource.onopen = () => {
+        if (instanceId !== instanceIdRef.current) return
         setConnectionStatus(ConnectionStatus.CONNECTED)
       }
 
       eventSource.onmessage = (event) => {
+        if (instanceId !== instanceIdRef.current) return
+
         const data = JSON.parse(event.data) as GameEvent
         if (data.type !== GameEventType.GameHeartbeat) {
           setGameEvent(data)
@@ -80,15 +119,29 @@ export const useEventSource = (
       }
 
       eventSource.onerror = () => {
+        if (instanceId !== instanceIdRef.current || isShuttingDownRef.current) {
+          return
+        }
+
+        if (eventSource.readyState === EventSourcePolyfill.CLOSED) {
+          return
+        }
+
         console.error('Connection error, retrying...')
         setConnectionStatus(ConnectionStatus.RECONNECTING)
+
+        eventSource.onopen = null
+        eventSource.onmessage = null
+        eventSource.onerror = null
         eventSource.close()
-        setTimeout(
-          () => {
-            createEventSource(gameID, token, retryCount + 1)
-          },
-          Math.min(1000 * 2 ** retryCount, 30000),
-        )
+
+        const delay = getRetryDelay(retryCount)
+
+        clearReconnectTimeout()
+        reconnectTimeoutRef.current = window.setTimeout(() => {
+          if (isShuttingDownRef.current) return
+          createEventSource(gameIdValue, tokenValue, retryCount + 1)
+        }, delay)
       }
     },
     [],
@@ -96,11 +149,14 @@ export const useEventSource = (
 
   useEffect(() => {
     if (gameID && token) {
+      isShuttingDownRef.current = false
       setConnectionStatus(ConnectionStatus.INITIALIZED)
       createEventSource(gameID, token)
     }
+
     return () => {
-      eventSourceRef.current?.close()
+      isShuttingDownRef.current = true
+      cleanupEventSource()
     }
   }, [createEventSource, gameID, token])
 
