@@ -1,6 +1,6 @@
 import { GameEventType, GameStatus } from '@quiz/common'
 import { setContext } from '@sentry/react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
@@ -53,30 +53,32 @@ const GamePage = () => {
     useGameContext()
 
   const [event, connectionStatus] = useEventSource(gameID, gameToken)
-  const [hasReconnected, setHasReconnected] = useState(false)
+
+  const hasReconnectedRef = useRef<boolean>(false)
 
   useEffect(() => {
-    if (connectionStatus !== ConnectionStatus.INITIALIZED) {
-      switch (connectionStatus) {
-        case 'CONNECTED':
-          if (hasReconnected) {
-            setHasReconnected(false)
-            notifySuccess('Connected')
-          }
-          break
-        case 'RECONNECTING':
-          setHasReconnected(true)
-          notifyWarning('Reconnecting')
-          break
-        case 'RECONNECTING_FAILED':
-          setHasReconnected(true)
-          notifyError('Reconnecting failed')
-          break
-        default:
-          break
-      }
+    switch (connectionStatus) {
+      case ConnectionStatus.CONNECTED:
+        if (hasReconnectedRef.current) {
+          hasReconnectedRef.current = false
+          notifySuccess('Connected')
+        }
+        break
+
+      case ConnectionStatus.RECONNECTING:
+        hasReconnectedRef.current = true
+        notifyWarning('Reconnecting')
+        break
+
+      case ConnectionStatus.RECONNECTING_FAILED:
+        hasReconnectedRef.current = true
+        notifyError('Reconnecting failed')
+        break
+
+      default:
+        break
     }
-  }, [connectionStatus, hasReconnected])
+  }, [connectionStatus])
 
   const shouldBlock = useCallback<BlockerFunction>(() => {
     const isAllowedEventType =

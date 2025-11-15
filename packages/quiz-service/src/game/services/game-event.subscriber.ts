@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRedis } from '@nestjs-modules/ioredis'
-import { GameEventType, GameParticipantType } from '@quiz/common'
+import {
+  GameEventType,
+  GameParticipantType,
+  HEARTBEAT_INTERVAL,
+} from '@quiz/common'
 import { Redis } from 'ioredis'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
@@ -55,7 +59,7 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     this.heartbeatIntervalId = setInterval(() => {
       this.emitEvent({ event: { type: GameEventType.GameHeartbeat } })
-    }, 30000)
+    }, HEARTBEAT_INTERVAL)
   }
 
   /**

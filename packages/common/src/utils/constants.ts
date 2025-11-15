@@ -1,5 +1,7 @@
 import { QuestionPinTolerance } from '../models'
 
+export const HEARTBEAT_INTERVAL = 30000
+
 // Common emoji blocks + components + ZWJ/VS16/keycap:
 // 2600–27BF, 1F300–1F5FF, 1F600–1F64F, 1F680–1F6FF, 1F900–1F9FF, 1FA70–1FAFF,
 // 1F1E6–1F1FF (regional indicators), FE0F (VS16), 200D (ZWJ), 20E3 (keycap)

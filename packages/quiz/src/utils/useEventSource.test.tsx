@@ -9,26 +9,31 @@ vi.mock('@quiz/common', () => ({
     GameHeartbeat: 'GameHeartbeat',
     SomethingElse: 'SomethingElse',
   },
+  HEARTBEAT_INTERVAL: 30000,
 }))
 
 vi.mock('../config.ts', () => ({
   default: { quizServiceUrl: 'http://quiz-service.local' },
 }))
 
-/**
- * IMPORTANT: Self-contained mock for 'event-source-polyfill'
- * Everything it needs lives *inside* this factory so Vitest hoisting is happy.
- * We also export two helper functions so the test can inspect instances.
- */
 vi.mock('event-source-polyfill', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const instances: any[] = []
 
   class MockEventSourcePolyfill {
+    static readonly CLOSED = 2
+    static readonly CONNECTING = 0
+    static readonly OPEN = 1
+
+    readyState = MockEventSourcePolyfill.CONNECTING
+
     onopen: ((ev: Event) => void) | null = null
     onmessage: ((ev: MessageEvent) => void) | null = null
     onerror: ((ev: Event) => void) | null = null
-    close = vi.fn()
+
+    close = vi.fn(() => {
+      this.readyState = MockEventSourcePolyfill.CLOSED
+    })
 
     constructor(
       public url: string,
@@ -41,7 +46,11 @@ vi.mock('event-source-polyfill', () => {
   const _getInstances = () => instances
   const _last = () => instances[instances.length - 1]
 
-  return { EventSourcePolyfill: MockEventSourcePolyfill, _getInstances, _last }
+  return {
+    EventSourcePolyfill: MockEventSourcePolyfill,
+    _getInstances,
+    _last,
+  }
 })
 
 import { useEventSource } from './useEventSource'
@@ -91,6 +100,14 @@ describe('useEventSource', () => {
     })
   })
 
+  it('passes heartbeatTimeout based on HEARTBEAT_INTERVAL', () => {
+    renderHook(() => useEventSource('g1', 't1'))
+
+    expect(last().init).toMatchObject({
+      heartbeatTimeout: 30000 * 1.5,
+    })
+  })
+
   it('ignores heartbeat events', () => {
     const { result } = renderHook(() => useEventSource('g1', 't1'))
     act(() => last().onopen?.(new Event('open')))
@@ -119,16 +136,36 @@ describe('useEventSource', () => {
   })
 
   it('retries with exponential backoff and updates status', () => {
-    renderHook(() => useEventSource('g1', 't1'))
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
     expect(instances().length).toBe(1)
 
     act(() => last().onerror?.(new Event('error')))
+    expect(result.current[1]).toBe(ConnectionStatus.RECONNECTING)
+
     act(() => vi.advanceTimersByTime(1000))
     expect(instances().length).toBe(2)
 
     act(() => last().onerror?.(new Event('error')))
+    expect(result.current[1]).toBe(ConnectionStatus.RECONNECTING)
+
     act(() => vi.advanceTimersByTime(2000))
     expect(instances().length).toBe(3)
+  })
+
+  it('does not attempt reconnect when readyState is CLOSED', () => {
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
+    const current = last()
+
+    ;(current as { readyState: number }).readyState = (
+      ESP as unknown as { EventSourcePolyfill: { CLOSED: number } }
+    ).EventSourcePolyfill.CLOSED
+
+    act(() => current.onerror?.(new Event('error')))
+    act(() => vi.runAllTimers())
+
+    expect(instances().length).toBe(1)
+    expect(result.current[1]).toBe(ConnectionStatus.INITIALIZED)
+    expect(consoleErrorSpy).not.toHaveBeenCalled()
   })
 
   it('stops after MAX_RETRIES and sets RECONNECTING_FAILED', () => {
@@ -154,6 +191,9 @@ describe('useEventSource', () => {
     const current = last()
     unmount()
     expect(current.close).toHaveBeenCalledTimes(1)
+    expect(current.onopen).toBeNull()
+    expect(current.onmessage).toBeNull()
+    expect(current.onerror).toBeNull()
   })
 
   it('recreates the connection when gameID or token change', () => {
@@ -167,6 +207,9 @@ describe('useEventSource', () => {
     rerender({ gid: 'g2', tkn: 't1' })
     expect(instances().length).toBe(2)
     expect(first.close).toHaveBeenCalled()
+    expect(first.onopen).toBeNull()
+    expect(first.onmessage).toBeNull()
+    expect(first.onerror).toBeNull()
 
     rerender({ gid: 'g2', tkn: 't2' })
     expect(instances().length).toBe(3)
