@@ -6,8 +6,8 @@ import {
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
+  shuffleDifferent,
 } from '@quiz/common'
-import { shuffleDifferent } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -66,6 +66,7 @@ import {
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
 } from './question-answer.utils'
+import { calculateQuestionScoreForParticipant } from './scoring'
 import {
   calculateClassicModeRawScore,
   calculatePuzzleScore,
@@ -777,27 +778,18 @@ function buildQuestionResultTaskItem(
 
   const { type } = question
 
-  const rangeData = isRangeQuestion(question)
-    ? {
-        margin: question.margin,
-        min: question.min,
-        max: question.max,
-        step: question.step,
-      }
-    : undefined
-  const tolerance = isPinQuestion(question) ? question.tolerance : undefined
-
-  const correct = isQuestionAnswerCorrect(
+  const lastScore = calculateQuestionScoreForParticipant(
+    mode,
+    presented,
+    question,
     correctAnswers,
     answer,
-    rangeData,
-    tolerance,
   )
 
-  const lastScore =
+  const correct =
     mode === GameMode.Classic
-      ? calculateClassicModeScore(presented, question, correctAnswers, answer)
-      : calculateZeroToOneHundredModeScore(correctAnswers, question, answer)
+      ? lastScore > 0
+      : mode === GameMode.ZeroToOneHundred
 
   const totalScore = previousScore + lastScore
 
