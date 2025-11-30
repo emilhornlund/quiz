@@ -114,6 +114,13 @@ export const QUIZ_PUZZLE_VALUE_REGEX = new RegExp(
   'u',
 )
 
+/* ZeroToOneHundred */
+export const ZERO_TO_ONE_HUNDRED_MIN_ANSWER = 0
+export const ZERO_TO_ONE_HUNDRED_MAX_ANSWER = 100
+export const ZERO_TO_ONE_HUNDRED_BONUS_POINTS = -10
+export const ZERO_TO_ONE_HUNDRED_PENALTY_POINTS = ZERO_TO_ONE_HUNDRED_MAX_ANSWER
+
+/* Quiz Question Points */
 export const QUIZ_ZERO_POINTS = 0
 export const QUIZ_STANDARD_POINTS = 1000
 export const QUIZ_DOUBLE_POINTS = 2000
