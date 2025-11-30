@@ -10,7 +10,7 @@ import { FilterQuery, UpdateQuery } from 'mongoose'
 
 import { BaseRepository } from './base.repository'
 
-interface TestDocument extends Document {
+interface TestDocument extends Document<string> {
   _id: string
   name: string
   age?: number

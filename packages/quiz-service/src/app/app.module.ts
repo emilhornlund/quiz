@@ -140,7 +140,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
             new KeyvRedis({
               url: `redis://${config.get<string>('REDIS_HOST')}:${config.get<number>('REDIS_PORT')}`,
               password: config.get<string>('REDIS_PASSWORD'),
-              db: config.get<number>('REDIS_DB'),
+              database: config.get<number>('REDIS_DB'),
             }),
           ),
         ],

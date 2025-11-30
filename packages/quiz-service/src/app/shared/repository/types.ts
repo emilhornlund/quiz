@@ -3,7 +3,7 @@ import { Document } from 'mongoose'
 /**
  * Base document interface that all domain entities should extend
  */
-export interface BaseDocument extends Document {
+export interface BaseDocument extends Document<string> {
   _id: string
   createdAt: Date
   updatedAt: Date
