@@ -1,21 +1,12 @@
 import {
-  calculateRangeBounds,
   GameMode,
   GameParticipantType,
-  QUESTION_PIN_TOLERANCE_RADIUS,
-  QuestionPinTolerance,
-  QuestionRangeAnswerMargin,
   QuestionType,
+  shuffleDifferent,
 } from '@quiz/common'
-import { shuffleDifferent } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  BaseQuestionDao,
-  QuestionDao,
-  QuestionPinDao,
-  QuestionRangeDao,
-} from '../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -40,37 +31,15 @@ import {
   QuestionResultTaskItem,
   QuestionTask,
   QuestionTaskAnswer,
-  QuestionTaskBaseAnswer,
   QuestionTaskMetadata,
-  QuestionTaskMultiChoiceAnswer,
-  QuestionTaskPinAnswer,
-  QuestionTaskPuzzleAnswer,
-  QuestionTaskRangeAnswer,
-  QuestionTaskTrueFalseAnswer,
-  QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
 } from '../../repositories/models/schemas'
 
 import {
-  isMultiChoiceAnswer,
-  isMultiChoiceCorrectAnswer,
-  isPinAnswer,
-  isPinCorrectAnswer,
-  isPuzzleAnswer,
-  isPuzzleCorrectAnswer,
-  isRangeAnswer,
-  isRangeCorrectAnswer,
-  isTrueFalseAnswer,
-  isTrueFalseCorrectAnswer,
-  isTypeAnswerAnswer,
-  isTypeAnswerCorrectAnswer,
-} from './question-answer.utils'
-import {
-  calculateClassicModeRawScore,
-  calculatePuzzleScore,
-  isPuzzleQuestionAnswerCorrect,
-} from './scoring-strategies.utils'
+  calculateQuestionScoreForParticipant,
+  isQuestionAnswerCorrect,
+} from './scoring'
 import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
 /**
@@ -139,404 +108,6 @@ export function buildQuestionTask(
     answers: [],
     created: new Date(),
   }
-}
-
-/**
- * Parses a `"x,y"` string into a normalized pin position.
- *
- * - Returns `{ x: 0, y: 0 }` if the input is falsy or not in `"x,y"` form.
- * - Does not clamp or validate ranges; callers may enforce 0..1 if required.
- * - If the numeric parts are not parseable, `x`/`y` will be `NaN`.
- *
- * @param value - A string in the form `"x,y"` where both are decimal numbers.
- * @returns An object with `x` and `y` numeric coordinates.
- */
-export function toPinPositionFromString(value?: string): {
-  x: number
-  y: number
-} {
-  if (!value) return { x: 0, y: 0 }
-
-  const split = value.split(',')
-
-  if (split.length !== 2) return { x: 0, y: 0 }
-
-  const x = Number(split[0])
-  const y = Number(split[1])
-  return { x, y }
-}
-
-/**
- * Computes the Euclidean distance between two normalized positions.
- *
- * - Inputs are expected (but not enforced) to be normalized to the image
- *   size (0..1 per axis). The theoretical max distance is √2.
- * - The result is rounded to 2 decimals to align with tolerance checks.
- *
- * @param a - First point `{ x, y }`.
- * @param b - Second point `{ x, y }`.
- * @returns The Euclidean distance rounded to 2 decimals.
- */
-export function calculateDistanceNorm(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-) {
-  const dx = a.x - b.x
-  const dy = a.y - b.y
-  const d = Math.hypot(dx, dy) // normalized (since inputs are 0..1)
-  return Math.round((d + Number.EPSILON) * 100) / 100
-}
-
-/**
- * Determines if a player's answer is correct based on the provided correct answers.
- *
- * Handles all supported question types:
- * - MultiChoice: Matches selected option index against correct indices.
- * - Range: Compares numeric value with margin consideration.
- * - TrueFalse: Matches boolean value.
- * - TypeAnswer: Compares lowercase trimmed string values.
- *
- * @param correctAnswers - An array of correct answers for the current question.
- * @param answer - The player's submitted answer.
- * @param rangeData - description here (optional)
- * @param tolerance - Optional allowed distance preset for Pin questions.
- * @returns `true` if the answer is correct; otherwise `false`.
- */
-export function isQuestionAnswerCorrect(
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  answer?: QuestionTaskAnswer,
-  rangeData?: {
-    margin: QuestionRangeAnswerMargin
-    min: number
-    max: number
-    step: number
-  },
-  tolerance?: QuestionPinTolerance,
-): boolean {
-  if (isMultiChoiceAnswer(answer)) {
-    return correctAnswers
-      .filter(isMultiChoiceCorrectAnswer)
-      .some((correctAnswer) => correctAnswer.index === answer.answer)
-  }
-
-  if (isRangeAnswer(answer) && rangeData) {
-    return correctAnswers.filter(isRangeCorrectAnswer).some(({ value }) => {
-      const { margin, min, max, step } = rangeData
-      if (margin === QuestionRangeAnswerMargin.None) {
-        return value === answer.answer
-      }
-      const { lower, upper } = calculateRangeBounds(
-        margin,
-        value,
-        min,
-        max,
-        step,
-      )
-      return answer.answer >= lower && answer.answer <= upper
-    })
-  }
-
-  if (isTrueFalseAnswer(answer)) {
-    return correctAnswers
-      .filter(isTrueFalseCorrectAnswer)
-      .some(({ value }) => value === answer.answer)
-  }
-
-  if (isTypeAnswerAnswer(answer)) {
-    return correctAnswers
-      .filter(isTypeAnswerCorrectAnswer)
-      .some(
-        ({ value }) =>
-          !!value &&
-          !!answer?.answer &&
-          value.toLowerCase() === answer.answer.trim().toLowerCase(),
-      )
-  }
-
-  if (isPinAnswer(answer)) {
-    return correctAnswers.filter(isPinCorrectAnswer).some(({ value }) => {
-      if (!value || !answer?.answer) return false
-
-      const correctPosition = toPinPositionFromString(value)
-      const answerPosition = toPinPositionFromString(answer.answer)
-
-      const distance = calculateDistanceNorm(correctPosition, answerPosition)
-
-      const radius = QUESTION_PIN_TOLERANCE_RADIUS[tolerance]
-
-      return distance <= radius
-    })
-  }
-
-  if (isPuzzleAnswer(answer)) {
-    return correctAnswers
-      .filter(isPuzzleCorrectAnswer)
-      .some((correct) => isPuzzleQuestionAnswerCorrect(correct, answer))
-  }
-
-  return false
-}
-
-/**
- * Calculates the score for a Range question in Classic mode.
- *
- * Score is a combination of:
- * 1. Speed-based score (20% of total points)
- * 2. Precision-based score (80%), reduced based on distance from the correct answer.
- *
- * @param correctAnswers - List of correct range values to compare against.
- * @param presented - The timestamp when the question was presented.
- * @param question - The range question object with correct value, margin, and points.
- * @param answer - The player's submitted range answer.
- * @returns The total score based on precision and response speed.
- */
-export function calculateClassicModeRangeQuestionScore(
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  presented: Date,
-  question: BaseQuestionDao & QuestionRangeDao,
-  answer: QuestionTaskBaseAnswer & QuestionTaskRangeAnswer,
-): number {
-  const { margin, min, max, step, duration, points } = question
-  const { answer: userAnswer, created: answered } = answer
-
-  // If the answer is not correct based on the question logic, return 0
-  if (
-    !isQuestionAnswerCorrect(correctAnswers, answer, { margin, min, max, step })
-  ) {
-    return 0
-  }
-
-  // Calculate speed-based score (20%)
-  const speedScore =
-    calculateClassicModeRawScore(presented, answered, duration, points) * 0.2
-
-  // Special handling for None margin (exact match required)
-  if (margin === QuestionRangeAnswerMargin.None) {
-    return Math.round(speedScore + points * 0.8) // Full precision score for exact matches
-  }
-
-  const scores = correctAnswers
-    .filter(isRangeCorrectAnswer)
-    .map(({ value }) => {
-      // For other margins, calculate precision-based score (80%)
-      const { lower, upper } = calculateRangeBounds(
-        margin,
-        value,
-        min,
-        max,
-        step,
-      )
-
-      // distance from the correct value
-      const difference = Math.abs(value - userAnswer)
-
-      // use the larger side in case bounds are asymmetric near edges
-      const radius = Math.max(value - lower, upper - value)
-
-      // precision: 1 at the center, 0 at/ beyond the edge
-      const precisionMultiplier =
-        radius > 0
-          ? Math.max(0, 1 - difference / radius)
-          : userAnswer === value
-            ? 1
-            : 0
-
-      const precisionScore = points * precisionMultiplier * 0.8
-
-      // Total score: sum of speed and precision scores
-      return Math.round(speedScore + precisionScore)
-    })
-    .sort((lhs, rhs) => rhs - lhs)
-
-  return scores[0] ?? 0
-}
-
-/**
- * Calculates the score for a Pin question in Classic mode.
- *
- * Score components:
- * 1) Speed (20%): derived from `calculateClassicModeRawScore`.
- * 2) Precision (80%): linearly scaled by distance within the tolerance radius.
- *
- * Rules:
- * - If the Pin answer is outside the tolerance radius, the total score is `0`.
- * - When multiple correct Pin positions are provided, the highest resulting score
- *   (i.e., nearest correct point) is used.
- *
- * @param correctAnswers - List of correct Pin values (as `"x,y"` strings).
- * @param presented - Timestamp when the question was presented.
- * @param question - The Pin question with tolerance and points.
- * @param answer - The player's submitted Pin answer (`"x,y"`).
- * @returns The total score for this answer.
- */
-export function calculateClassicModePinQuestionScore(
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  presented: Date,
-  question: BaseQuestionDao & QuestionPinDao,
-  answer: QuestionTaskBaseAnswer & QuestionTaskPinAnswer,
-): number {
-  const { tolerance, duration, points } = question
-  const { answer: userAnswer, created: answered } = answer
-
-  // If the answer is not correct based on the question logic, return 0
-  if (!isQuestionAnswerCorrect(correctAnswers, answer, undefined, tolerance)) {
-    return 0
-  }
-
-  // Calculate speed-based score (20%)
-  const speedScore =
-    calculateClassicModeRawScore(presented, answered, duration, points) * 0.2
-
-  // For other tolerances, calculate precision-based score (80%)
-  const scores = correctAnswers
-    .filter(isPinCorrectAnswer)
-    .map(({ value: correctValueString }) => {
-      const correctPosition = toPinPositionFromString(correctValueString)
-      const answerPosition = toPinPositionFromString(userAnswer)
-
-      const distance = calculateDistanceNorm(correctPosition, answerPosition)
-
-      const radius = QUESTION_PIN_TOLERANCE_RADIUS[tolerance]
-
-      if (distance > radius) return 0
-
-      const precisionMultiplier = 1 - distance / radius // linear
-      const precisionScore = points * precisionMultiplier * 0.8
-
-      // Total score: sum of speed and precision scores
-      return Math.round(speedScore + precisionScore)
-    })
-    .sort((lhs, rhs) => rhs - lhs)
-
-  // Keep the highest score
-  return scores[0] ?? 0
-}
-
-/**
- * Calculates the score for a player's answer in Classic mode.
- *
- * Dispatches to the type-specific scorer when needed:
- * - Range → `calculateClassicModeRangeQuestionScore`
- * - Pin   → `calculateClassicModePinQuestionScore`
- * - Otherwise: returns max speed-based score if answer is correct; 0 if not.
- *
- * @param correctAnswers - The set of correct answers for the question.
- * @param presented - The time when the question was presented.
- * @param question - The question being scored.
- * @param answer - The player's submitted answer.
- * @returns The computed score for the given answer.
- */
-export function calculateClassicModeScore(
-  presented: Date,
-  question: QuestionDao,
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  answer?: QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-      | QuestionTaskPinAnswer
-      | QuestionTaskPuzzleAnswer
-    ),
-): number {
-  if (isRangeQuestion(question) && isRangeAnswer(answer)) {
-    return calculateClassicModeRangeQuestionScore(
-      correctAnswers,
-      presented,
-      question,
-      answer,
-    )
-  }
-
-  if (isPinQuestion(question) && isPinAnswer(answer)) {
-    return calculateClassicModePinQuestionScore(
-      correctAnswers,
-      presented,
-      question,
-      answer,
-    )
-  }
-
-  if (isPuzzleQuestion(question) && isPuzzleAnswer(answer)) {
-    const scores = correctAnswers
-      .filter(isPuzzleCorrectAnswer)
-      .map((correct) =>
-        calculatePuzzleScore(
-          presented,
-          question.duration,
-          question.points,
-          correct,
-          answer,
-        ),
-      )
-      .sort((lhs, rhs) => rhs - lhs)
-    return scores[0] ?? 0
-  }
-
-  if (!isQuestionAnswerCorrect(correctAnswers, answer, undefined)) {
-    return 0
-  }
-
-  const rawScore = calculateClassicModeRawScore(
-    presented,
-    answer.created,
-    question.duration,
-    question.points,
-  )
-  return Math.round(rawScore)
-}
-
-/**
- * Calculates the score for a Range question in "Zero to One Hundred" mode.
- *
- * - Returns -10 for exact matches.
- * - Returns absolute difference for other answers within [0, 100].
- * - Returns 100 for invalid or out-of-range answers.
- *
- * @param correctAnswers - List of correct numeric values to validate against.
- * @param question - The question being answered.
- * @param answer - The player's submitted answer.
- * @returns A score between -10 and 100 based on proximity or correctness.
- */
-export function calculateZeroToOneHundredModeScore(
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-  question: QuestionDao,
-  answer?: QuestionTaskBaseAnswer &
-    (
-      | QuestionTaskMultiChoiceAnswer
-      | QuestionTaskRangeAnswer
-      | QuestionTaskTrueFalseAnswer
-      | QuestionTaskTypeAnswerAnswer
-      | QuestionTaskPinAnswer
-      | QuestionTaskPuzzleAnswer
-    ),
-): number {
-  // Return max penalty if question or answer is invalid
-  if (!isRangeQuestion(question) || !isRangeAnswer(answer)) {
-    return 100
-  }
-
-  const scores = correctAnswers
-    .filter(isRangeCorrectAnswer)
-    .map(({ value }) => {
-      // Return max penalty if out of range
-      if (answer.answer < 0 || answer.answer > 100) {
-        return 100
-      }
-
-      // Return -10 for exact match
-      if (answer.answer === value) {
-        return -10
-      }
-
-      // Return absolute difference otherwise
-      return Math.abs(answer.answer - value)
-    })
-    .sort((lhs, rhs) => lhs - rhs)
-
-  // Return lowest score or 100 if no scores available
-  return scores[0] ?? 100
 }
 
 /**
@@ -777,29 +348,22 @@ function buildQuestionResultTaskItem(
 
   const { type } = question
 
-  const rangeData = isRangeQuestion(question)
-    ? {
-        margin: question.margin,
-        min: question.min,
-        max: question.max,
-        step: question.step,
-      }
-    : undefined
-  const tolerance = isPinQuestion(question) ? question.tolerance : undefined
-
-  const correct = isQuestionAnswerCorrect(
+  const nextScore = calculateQuestionScoreForParticipant(
+    mode,
+    presented,
+    question,
     correctAnswers,
     answer,
-    rangeData,
-    tolerance,
   )
 
-  const lastScore =
-    mode === GameMode.Classic
-      ? calculateClassicModeScore(presented, question, correctAnswers, answer)
-      : calculateZeroToOneHundredModeScore(correctAnswers, question, answer)
+  const correct = isQuestionAnswerCorrect(
+    mode,
+    question,
+    correctAnswers,
+    answer,
+  )
 
-  const totalScore = previousScore + lastScore
+  const totalScore = previousScore + nextScore
 
   const streak = correct ? currentStreak + 1 : 0
 
@@ -809,7 +373,7 @@ function buildQuestionResultTaskItem(
     nickname,
     answer,
     correct,
-    lastScore,
+    lastScore: nextScore,
     totalScore,
     position: 0,
     streak,
