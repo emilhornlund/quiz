@@ -6,7 +6,7 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 1. Button Hover Transitions
 
-- [ ] Add smooth transitions to all button hover states for a more polished feel.
+- [X] Add smooth transitions to all button hover states for a more polished feel.
 - **Rationale:** Current buttons change color instantly on hover, which feels abrupt. Smooth transitions make interactions feel more responsive and modern.
 - **Implementation Notes:** Files: `packages/quiz/src/styles/inputs.scss`. Snippet: Add `transition: background-color 0.2s ease, outline-color 0.2s ease;` to button hover selectors.
 - **Impact:** Buttons feel more tactile and professional.
