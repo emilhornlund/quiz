@@ -37,6 +37,9 @@
       color: colors.$gray-4;
       overflow: hidden;
       cursor: pointer;
+      transition:
+        transform 0.1s ease,
+        background-color 0.1s ease;
 
       @include helpers.mobile {
         gap: variables.$mobile-narrow-layout-gutter;
@@ -75,6 +78,13 @@
             color: colors.$gray-4;
           }
         }
+
+        &:active {
+          &:not(:disabled) {
+            transform: scale(0.98);
+            background-color: colors.$gray-1;
+          }
+        }
       }
 
       @media (hover: none) and (pointer: coarse) {
@@ -84,6 +94,7 @@
             outline: none;
             background-color: colors.$gray-1;
             color: colors.$gray-4;
+            transform: scale(0.98);
           }
         }
       }

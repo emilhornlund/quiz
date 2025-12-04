@@ -6,7 +6,7 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 1. Button Hover Transitions
 
-- [X] Add smooth transitions to all button hover states for a more polished feel.
+- [x] Add smooth transitions to all button hover states for a more polished feel.
 - **Rationale:** Current buttons change color instantly on hover, which feels abrupt. Smooth transitions make interactions feel more responsive and modern.
 - **Implementation Notes:** Files: `packages/quiz/src/styles/inputs.scss`. Snippet: Add `transition: background-color 0.2s ease, outline-color 0.2s ease;` to button hover selectors.
 - **Impact:** Buttons feel more tactile and professional.
@@ -14,9 +14,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 2. Answer Button Micro-Interactions
 
-- [ ] Add scale and color feedback on answer button press/tap.
+- [x] Add scale and color feedback on answer button press/tap.
 - **Rationale:** Quiz answers are core interactions; adding press feedback makes selections feel more satisfying and confirms user input.
-- **Implementation Notes:** Files: `packages/quiz/src/states/common/QuestionAnswerPicker/components/AnswerPicker/AnswerPicker.module.scss`. Snippet: Add `transition: transform 0.1s ease, background-color 0.1s ease;` and `:active { transform: scale(0.98); background-color: darken($color, 10%); }`.
+- **Implementation Notes:** Files: `packages/quiz/src/states/common/QuestionAnswerPicker/components/AnswerPicker/AnswerPicker.module.scss`. Snippet: Add `transition: transform 0.1s ease, background-color 0.1s ease;` and `:active { transform: scale(0.98); background-color: colors.$gray-1; }`.
 - **Impact:** Playful press effect enhances quiz engagement.
 - **Recommended:** Yes.
 
