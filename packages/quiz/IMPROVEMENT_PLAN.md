@@ -112,9 +112,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 14. Form Field Focus Animations
 
-- [ ] Add subtle border glow and scale on text field focus.
+- [x] Add subtle border glow and scale on text field focus.
 - **Rationale:** Forms are key interactions; focus feedback improves usability.
-- **Implementation Notes:** Files: `packages/quiz/src/styles/inputs.scss`. Snippet: `:focus { outline-color: colors.$blue-3; transform: scale(1.02); transition: transform 0.2s ease, outline-color 0.2s ease; }`.
+- **Implementation Notes:** Files: `packages/quiz/src/styles/inputs.scss`. Added focus styles to `.input-kind-primary` and `.input-kind-secondary` using `:has(> input:focus, > select:focus, > textarea:focus)` for outline-color change and box-shadow glow. Included `prefers-reduced-motion` support and updated transitions to include box-shadow. For primary: outline-color to yellow-2 with yellow glow; for secondary: outline-color to white with white glow. Snippet: `@media (prefers-reduced-motion: no-preference) { &:has(> input:focus, > select:focus, > textarea:focus) { outline-color: colors.$yellow-2; box-shadow: 0 0 0 3px rgba(colors.$yellow-2, 0.4); } }` (primary) and similar for secondary with white.
 - **Impact:** Forms feel more responsive.
 - **Recommended:** Yes.
 

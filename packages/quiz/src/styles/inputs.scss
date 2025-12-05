@@ -126,7 +126,8 @@
   background-color: colors.$control-primary-normal-color;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-normal-color;
@@ -154,13 +155,21 @@
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
     }
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:has(> input:focus, > select:focus, > textarea:focus) {
+      outline-color: colors.$yellow-2;
+      box-shadow: 0 0 0 3px rgba(colors.$yellow-2, 0.4);
+    }
+  }
 }
 
 .input-kind-secondary {
   outline-color: colors.$control-secondary-normal-color;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-secondary-normal-color;
@@ -185,6 +194,13 @@
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
     }
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:has(> input:focus, > select:focus, > textarea:focus) {
+      outline-color: colors.$white;
+      box-shadow: 0 0 0 3px rgba(colors.$white, 0.4);
+    }
+  }
 }
 
 .inout-kind-disabled {
@@ -204,7 +220,8 @@
   outline-color: colors.$control-primary-call-to-action-color;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-call-to-action-color;
@@ -235,7 +252,8 @@
   outline-color: colors.$control-primary-success-color;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-success-color;
@@ -266,7 +284,8 @@
   outline-color: colors.$control-primary-danger-color;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-danger-color;
@@ -298,8 +317,8 @@
   background-color: transparent;
   transition:
     background-color 0.2s ease,
-    outline-color 0.2s ease;
-
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
   input,
   select,
   textarea,
