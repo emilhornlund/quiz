@@ -11,9 +11,7 @@ import { ApiGameQuestionTypeProperty } from '../../decorators/api'
  *
  * Accepts normalized X/Y coordinates (0..1) of the placed pin.
  */
-export class SubmitPinQuestionAnswerRequest
-  implements SubmitPinQuestionAnswerRequestDto
-{
+export class SubmitPinQuestionAnswerRequest implements SubmitPinQuestionAnswerRequestDto {
   /**
    * The type of the question, set to `Pin`.
    */

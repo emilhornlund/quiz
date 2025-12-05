@@ -11,9 +11,7 @@ import { ApiGameQuestionTypeProperty } from '../../decorators/api'
  *
  * Accepts the player’s final ordered list of values.
  */
-export class SubmitPuzzleQuestionAnswerRequest
-  implements SubmitPuzzleQuestionAnswerRequestDto
-{
+export class SubmitPuzzleQuestionAnswerRequest implements SubmitPuzzleQuestionAnswerRequestDto {
   /**
    * The type of the question, set to `Puzzle`.
    */

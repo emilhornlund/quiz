@@ -26,9 +26,7 @@ import {
 /**
  * Represents the request object for updating a local user’s profile.
  */
-export class UpdateLocalUserProfileRequest
-  implements UpdateLocalUserProfileRequestDto
-{
+export class UpdateLocalUserProfileRequest implements UpdateLocalUserProfileRequestDto {
   /**
    * The user’s authentication provider, Local for this request dto.
    */

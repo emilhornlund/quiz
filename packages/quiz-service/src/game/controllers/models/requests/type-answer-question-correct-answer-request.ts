@@ -14,9 +14,7 @@ import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators
  *
  * Includes the `type` identifier and the string `value` that should be accepted as correct.
  */
-export class TypeAnswerQuestionCorrectAnswerRequest
-  implements TypeAnswerQuestionCorrectAnswerDto
-{
+export class TypeAnswerQuestionCorrectAnswerRequest implements TypeAnswerQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `TypeAnswer`.
    */

@@ -150,7 +150,7 @@ const assertMediaType = (
   media: Record<string, any> | undefined,
   fieldName: string,
 ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Record<string, any> | undefined => {
+  Record<string, any> | undefined => {
   if (media) {
     return {
       type: assertType<string>(media.type, 'string', `${fieldName}.type`, {

@@ -11,9 +11,7 @@ import {
 /**
  * DTO for submitting an answer to a true/false question.
  */
-export class SubmitTrueFalseQuestionAnswerRequest
-  implements SubmitTrueFalseQuestionAnswerRequestDto
-{
+export class SubmitTrueFalseQuestionAnswerRequest implements SubmitTrueFalseQuestionAnswerRequestDto {
   @ApiGameQuestionTypeProperty(QuestionType.TrueFalse)
   type: QuestionType.TrueFalse
 

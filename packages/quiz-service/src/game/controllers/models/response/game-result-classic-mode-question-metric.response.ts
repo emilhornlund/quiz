@@ -17,9 +17,7 @@ import {
 /**
  * Represents the aggregated performance metrics for a single question in a classic mode game.
  */
-export class GameResultClassicModeQuestionMetricResponse
-  implements GameResultClassicModeQuestionMetricDto
-{
+export class GameResultClassicModeQuestionMetricResponse implements GameResultClassicModeQuestionMetricDto {
   /**
    * The text of the question.
    */

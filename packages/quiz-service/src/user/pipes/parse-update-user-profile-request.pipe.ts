@@ -15,13 +15,10 @@ import {
 } from '../controllers/models'
 
 @Injectable()
-export class ParseUpdateUserProfileRequestPipe
-  implements
-    PipeTransform<
-      Record<string, unknown>,
-      Promise<UpdateLocalUserProfileRequest | UpdateGoogleUserProfileRequest>
-    >
-{
+export class ParseUpdateUserProfileRequestPipe implements PipeTransform<
+  Record<string, unknown>,
+  Promise<UpdateLocalUserProfileRequest | UpdateGoogleUserProfileRequest>
+> {
   async transform(
     value: Record<string, unknown>,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -17,9 +17,7 @@ import {
 /**
  * Represents the request object for updating a Google user’s profile.
  */
-export class UpdateGoogleUserProfileRequest
-  implements UpdateGoogleUserProfileRequestDto
-{
+export class UpdateGoogleUserProfileRequest implements UpdateGoogleUserProfileRequestDto {
   /**
    * The user’s authentication provider, Google for this request dto.
    */

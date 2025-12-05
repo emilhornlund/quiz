@@ -11,9 +11,7 @@ import {
 /**
  * DTO for submitting an answer to a multi-choice question.
  */
-export class SubmitMultiChoiceQuestionAnswerRequest
-  implements SubmitMultiChoiceQuestionAnswerRequestDto
-{
+export class SubmitMultiChoiceQuestionAnswerRequest implements SubmitMultiChoiceQuestionAnswerRequestDto {
   @ApiGameQuestionTypeProperty(QuestionType.MultiChoice)
   type: QuestionType.MultiChoice
 
