@@ -47,14 +47,22 @@ const HomePage: FC = () => {
 
   return (
     <Page discover profile>
-      <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
-      <Typography variant="title" size="medium">
-        Let’s play
-      </Typography>
-      <Typography variant="text" size="small">
-        {message}
-      </Typography>
-      <form className={styles.joinForm} onSubmit={handleJoinSubmit}>
+      <div className={styles.icon}>
+        <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
+      </div>
+      <div className={styles.title}>
+        <Typography variant="title" size="medium">
+          Let’s play
+        </Typography>
+      </div>
+      <div className={styles.message}>
+        <Typography variant="text" size="small">
+          {message}
+        </Typography>
+      </div>
+      <form
+        className={`${styles.joinForm} ${styles.form}`}
+        onSubmit={handleJoinSubmit}>
         <TextField
           id="game-pin"
           type="text"
@@ -76,13 +84,13 @@ const HomePage: FC = () => {
         />
       </form>
       {isUserAuthenticated ? (
-        <Link to={'/quiz/create'}>
+        <Link to={'/quiz/create'} className={styles.link}>
           <Typography variant="link" size="small">
             Create your own quiz and challenge others!
           </Typography>
         </Link>
       ) : (
-        <Link to={'/auth/login'}>
+        <Link to={'/auth/login'} className={styles.link}>
           <Typography variant="link" size="small">
             Want to create your own quiz? Log in to get started!
           </Typography>

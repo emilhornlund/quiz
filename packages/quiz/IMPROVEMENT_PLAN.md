@@ -128,9 +128,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 16. Typography Fade-In Sequence
 
-- [ ] Animate title and text appearing in sequence.
+- [x] Animate title and text appearing in sequence.
 - **Rationale:** Text-heavy pages like Home/Auth feel static; sequenced fade-in builds hierarchy.
-- **Implementation Notes:** Files: `packages/quiz/src/pages/HomePage/HomePage.module.scss`. Snippet: Title: `animation-delay: 0.2s;`, Message: `animation-delay: 0.4s;`, Form: `animation-delay: 0.6s;`.
+- **Implementation Notes:** Files: `packages/quiz/src/pages/HomePage/HomePage.tsx`, `packages/quiz/src/pages/HomePage/HomePage.module.scss`. Added wrapper divs with classes for icon, title, message, form, link. Added fadeInUp keyframe and animations with delays: icon (0s), title (0.2s), message (0.4s), form (0.6s), link (0.8s). Respects prefers-reduced-motion.
 - **Impact:** Guides user attention.
 - **Recommended:** Yes.
 
