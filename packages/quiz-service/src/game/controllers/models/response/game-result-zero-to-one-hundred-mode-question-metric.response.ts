@@ -17,9 +17,7 @@ import {
 /**
  * Represents the aggregated performance metrics for a single question in a zero to one hundred mode game.
  */
-export class GameResultZeroToOneHundredModeQuestionMetricResponse
-  implements GameResultZeroToOneHundredModeQuestionMetricDto
-{
+export class GameResultZeroToOneHundredModeQuestionMetricResponse implements GameResultZeroToOneHundredModeQuestionMetricDto {
   /**
    * The text of the question.
    */

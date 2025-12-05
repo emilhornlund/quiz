@@ -16,9 +16,7 @@ import { GameResultParticipantResponse } from './game-result-participant.respons
 /**
  * Represents a player's final performance metrics in the game for a classic mode game.
  */
-export class GameResultClassicModePlayerMetricResponse
-  implements GameResultClassicModePlayerMetricDto
-{
+export class GameResultClassicModePlayerMetricResponse implements GameResultClassicModePlayerMetricDto {
   /**
    * The player who participated in the game.
    */

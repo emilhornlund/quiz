@@ -15,13 +15,10 @@ import {
 } from '../controllers/models'
 
 @Injectable()
-export class ParseQuizRequestPipe
-  implements
-    PipeTransform<
-      Record<string, unknown>,
-      Promise<QuizClassicRequest | QuizZeroToOneHundredRequest>
-    >
-{
+export class ParseQuizRequestPipe implements PipeTransform<
+  Record<string, unknown>,
+  Promise<QuizClassicRequest | QuizZeroToOneHundredRequest>
+> {
   async transform(
     value: Record<string, unknown>,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

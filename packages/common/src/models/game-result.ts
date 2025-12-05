@@ -147,8 +147,7 @@ export interface GameResultPlayerMetricDto {
 /**
  * Represents a player's final performance metrics in the game for a classic mode game.
  */
-export interface GameResultClassicModePlayerMetricDto
-  extends GameResultPlayerMetricDto {
+export interface GameResultClassicModePlayerMetricDto extends GameResultPlayerMetricDto {
   /**
    * The total number of questions the player answered correctly.
    */
@@ -163,8 +162,7 @@ export interface GameResultClassicModePlayerMetricDto
 /**
  * Represents a player's final performance metrics in the game for a zero to one hundred mode game.
  */
-export interface GameResultZeroToOneHundredModePlayerMetricDto
-  extends GameResultPlayerMetricDto {
+export interface GameResultZeroToOneHundredModePlayerMetricDto extends GameResultPlayerMetricDto {
   /**
    * The player's average precision for range-based answers (0 = worst, 1 = best).
    */
@@ -199,8 +197,7 @@ export interface GameResultQuestionMetricDto {
 /**
  * Represents the aggregated performance metrics for a single question in a classic mode game.
  */
-export interface GameResultClassicModeQuestionMetricDto
-  extends GameResultQuestionMetricDto {
+export interface GameResultClassicModeQuestionMetricDto extends GameResultQuestionMetricDto {
   /**
    * The number of players who answered the question correctly.
    */
@@ -215,8 +212,7 @@ export interface GameResultClassicModeQuestionMetricDto
 /**
  * Represents the aggregated performance metrics for a single question in a zero to one hundred mode game.
  */
-export interface GameResultZeroToOneHundredModeQuestionMetricDto
-  extends GameResultQuestionMetricDto {
+export interface GameResultZeroToOneHundredModeQuestionMetricDto extends GameResultQuestionMetricDto {
   /**
    * The average precision score across all player answers for this question.
    */

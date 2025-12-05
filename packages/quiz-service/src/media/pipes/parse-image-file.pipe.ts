@@ -32,9 +32,10 @@ import { AuthGuardRequest } from '../../auth/guards'
  * The original file is removed after processing.
  */
 @Injectable({ scope: Scope.REQUEST })
-export class ParseImageFilePipe
-  implements PipeTransform<Express.Multer.File, Promise<string>>
-{
+export class ParseImageFilePipe implements PipeTransform<
+  Express.Multer.File,
+  Promise<string>
+> {
   /**
    * Creates a new instance of ParseImageFilePipe.
    *

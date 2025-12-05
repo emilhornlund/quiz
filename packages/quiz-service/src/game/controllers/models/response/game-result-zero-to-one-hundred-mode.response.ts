@@ -27,9 +27,7 @@ import { GameResultZeroToOneHundredModeQuestionMetricResponse } from './game-res
 /**
  * API response structure representing the final results of a completed game using the zero to one hundred mode.
  */
-export class GameResultZeroToOneHundredModeResponse
-  implements GameResultZeroToOneHundredModeDto
-{
+export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToOneHundredModeDto {
   /**
    * The unique identifier for the game.
    */

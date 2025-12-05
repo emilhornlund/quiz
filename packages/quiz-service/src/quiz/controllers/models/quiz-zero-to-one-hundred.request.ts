@@ -44,9 +44,7 @@ function transformQuestionZeroToOneHundredBasedOnType(question: any) {
  * Represents the request object for creating and updating a zero to one hundred quiz.
  */
 @ApiExtraModels(QuestionZeroToOneHundredRange)
-export class QuizZeroToOneHundredRequest
-  implements QuizZeroToOneHundredModeRequestDto
-{
+export class QuizZeroToOneHundredRequest implements QuizZeroToOneHundredModeRequestDto {
   /**
    * The title of the quiz.
    */

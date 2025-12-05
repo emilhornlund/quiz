@@ -9,9 +9,7 @@ import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators
  *
  * Includes the `type` identifier and the correct numeric `value`.
  */
-export class RangeQuestionCorrectAnswerRequest
-  implements RangeQuestionCorrectAnswerDto
-{
+export class RangeQuestionCorrectAnswerRequest implements RangeQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `Range`.
    */

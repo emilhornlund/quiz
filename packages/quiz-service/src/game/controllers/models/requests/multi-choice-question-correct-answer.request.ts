@@ -13,9 +13,7 @@ import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators
  *
  * Includes the `type` identifier and the correct `index` in the options array.
  */
-export class MultiChoiceQuestionCorrectAnswerRequest
-  implements MultiChoiceQuestionCorrectAnswerDto
-{
+export class MultiChoiceQuestionCorrectAnswerRequest implements MultiChoiceQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `MultiChoice`.
    */

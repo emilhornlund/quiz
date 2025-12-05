@@ -8,9 +8,7 @@ import {
 /**
  * DTO for submitting an answer to a range question.
  */
-export class SubmitRangeQuestionAnswerRequest
-  implements SubmitRangeQuestionAnswerRequestDto
-{
+export class SubmitRangeQuestionAnswerRequest implements SubmitRangeQuestionAnswerRequestDto {
   @ApiGameQuestionTypeProperty(QuestionType.Range)
   type: QuestionType.Range
 

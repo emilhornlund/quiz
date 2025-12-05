@@ -16,9 +16,7 @@ import { GameResultParticipantResponse } from './game-result-participant.respons
 /**
  * Represents a player's final performance metrics in the game for a zero to one hundred mode game.
  */
-export class GameResultZeroToOneHundredModePlayerMetricResponse
-  implements GameResultZeroToOneHundredModePlayerMetricDto
-{
+export class GameResultZeroToOneHundredModePlayerMetricResponse implements GameResultZeroToOneHundredModePlayerMetricDto {
   /**
    * The player who participated in the game.
    */

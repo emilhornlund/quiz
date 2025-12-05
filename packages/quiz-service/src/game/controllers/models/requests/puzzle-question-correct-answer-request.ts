@@ -10,9 +10,7 @@ import {
  *
  * Contains the target ordering of the puzzle’s values.
  */
-export class PuzzleQuestionCorrectAnswerRequest
-  implements PuzzleQuestionCorrectAnswerDto
-{
+export class PuzzleQuestionCorrectAnswerRequest implements PuzzleQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `Puzzle`.
    */

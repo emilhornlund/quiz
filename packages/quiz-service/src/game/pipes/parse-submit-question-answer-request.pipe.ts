@@ -19,20 +19,17 @@ import {
 } from '../controllers/models/requests'
 
 @Injectable()
-export class ParseSubmitQuestionAnswerRequestPipe
-  implements
-    PipeTransform<
-      Record<string, unknown>,
-      Promise<
-        | SubmitMultiChoiceQuestionAnswerRequest
-        | SubmitRangeQuestionAnswerRequest
-        | SubmitTrueFalseQuestionAnswerRequest
-        | SubmitTypeAnswerQuestionAnswerRequest
-        | SubmitPinQuestionAnswerRequest
-        | SubmitPuzzleQuestionAnswerRequest
-      >
-    >
-{
+export class ParseSubmitQuestionAnswerRequestPipe implements PipeTransform<
+  Record<string, unknown>,
+  Promise<
+    | SubmitMultiChoiceQuestionAnswerRequest
+    | SubmitRangeQuestionAnswerRequest
+    | SubmitTrueFalseQuestionAnswerRequest
+    | SubmitTypeAnswerQuestionAnswerRequest
+    | SubmitPinQuestionAnswerRequest
+    | SubmitPuzzleQuestionAnswerRequest
+  >
+> {
   async transform(
     value: Record<string, unknown>,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

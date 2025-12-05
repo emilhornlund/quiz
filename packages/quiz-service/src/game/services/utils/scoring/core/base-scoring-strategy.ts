@@ -21,8 +21,7 @@ import { ScoringStrategy } from './scoring-strategy.interface'
 export abstract class BaseScoringStrategy<
   T extends SupportedGameMode,
   K extends QuestionTypeForMode<T>,
-> implements ScoringStrategy<T, K>
-{
+> implements ScoringStrategy<T, K> {
   public abstract isCorrect(
     correct: CorrectFor<T, K>,
     answer: AnswerFor<T, K> | undefined,

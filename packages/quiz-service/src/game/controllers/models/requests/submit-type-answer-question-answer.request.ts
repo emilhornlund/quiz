@@ -11,9 +11,7 @@ import {
 /**
  * DTO for submitting an answer to a type answer question.
  */
-export class SubmitTypeAnswerQuestionAnswerRequest
-  implements SubmitTypeAnswerQuestionAnswerRequestDto
-{
+export class SubmitTypeAnswerQuestionAnswerRequest implements SubmitTypeAnswerQuestionAnswerRequestDto {
   @ApiGameQuestionTypeProperty(QuestionType.TypeAnswer)
   type: QuestionType.TypeAnswer
 

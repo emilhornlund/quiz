@@ -25,20 +25,17 @@ import {
  * a `ValidationException` if validation fails.
  */
 @Injectable()
-export class ParseCorrectAnswerRequestPipe
-  implements
-    PipeTransform<
-      Record<string, unknown>,
-      Promise<
-        | MultiChoiceQuestionCorrectAnswerRequest
-        | RangeQuestionCorrectAnswerRequest
-        | TrueFalseQuestionCorrectAnswerRequest
-        | TypeAnswerQuestionCorrectAnswerRequest
-        | PinQuestionCorrectAnswerRequest
-        | PuzzleQuestionCorrectAnswerRequest
-      >
-    >
-{
+export class ParseCorrectAnswerRequestPipe implements PipeTransform<
+  Record<string, unknown>,
+  Promise<
+    | MultiChoiceQuestionCorrectAnswerRequest
+    | RangeQuestionCorrectAnswerRequest
+    | TrueFalseQuestionCorrectAnswerRequest
+    | TypeAnswerQuestionCorrectAnswerRequest
+    | PinQuestionCorrectAnswerRequest
+    | PuzzleQuestionCorrectAnswerRequest
+  >
+> {
   /**
    * Parses and validates the incoming request body to match the appropriate correct answer DTO.
    *

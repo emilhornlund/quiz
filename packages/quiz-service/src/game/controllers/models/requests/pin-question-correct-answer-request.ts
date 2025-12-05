@@ -11,9 +11,7 @@ import {
  *
  * Contains the normalized X/Y coordinates (0..1) of the correct location.
  */
-export class PinQuestionCorrectAnswerRequest
-  implements PinQuestionCorrectAnswerDto
-{
+export class PinQuestionCorrectAnswerRequest implements PinQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `Pin`.
    */

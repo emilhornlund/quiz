@@ -9,9 +9,7 @@ import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators
  *
  * Includes the `type` identifier and the boolean `value` representing the correct answer.
  */
-export class TrueFalseQuestionCorrectAnswerRequest
-  implements TrueFalseQuestionCorrectAnswerDto
-{
+export class TrueFalseQuestionCorrectAnswerRequest implements TrueFalseQuestionCorrectAnswerDto {
   /**
    * The type of the question, set to `TrueFalse`.
    */

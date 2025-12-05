@@ -20,9 +20,7 @@ import {
  * Represents a data transfer object for a range-based zero to one hundred question.
  */
 @ApiExtraModels(QuestionImageMedia, QuestionAudioMedia, QuestionVideoMedia)
-export class QuestionZeroToOneHundredRange
-  implements QuestionZeroToOneHundredRangeDto
-{
+export class QuestionZeroToOneHundredRange implements QuestionZeroToOneHundredRangeDto {
   /**
    * The type of the question, set to `Range`.
    */

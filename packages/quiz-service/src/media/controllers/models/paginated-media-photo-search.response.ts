@@ -43,9 +43,7 @@ export class MediaPhotoSearchResponse implements MediaPhotoSearchDto {
 /**
  * description here
  */
-export class PaginatedMediaPhotoSearchResponse
-  implements PaginatedMediaPhotoSearchDto
-{
+export class PaginatedMediaPhotoSearchResponse implements PaginatedMediaPhotoSearchDto {
   /**
    * The list of photos for the current page.
    */
