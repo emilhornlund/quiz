@@ -68,6 +68,7 @@
       background: none;
       cursor: pointer;
       padding: 0;
+      transform-origin: center;
 
       .icon {
         @include helpers.mobile {
@@ -108,6 +109,16 @@
 
         .text {
           @include helpers.fontSize(27px);
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        &:hover {
+          transform: scale(1.05);
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+          transition:
+            transform 0.2s ease,
+            filter 0.2s ease;
         }
       }
     }

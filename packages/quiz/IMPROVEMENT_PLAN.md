@@ -96,9 +96,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 12. Header Logo Hover Effect
 
-- [ ] Add subtle scale and glow on logo hover.
+- [x] Add subtle scale and glow on logo hover.
 - **Rationale:** Logo is clickable; hover feedback makes it feel interactive.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Snippet: `.logo:hover { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); transition: transform 0.2s ease, filter 0.2s ease; }`.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Added `transform-origin: center;` to `.logo` and hover effect with `@media (prefers-reduced-motion: no-preference)`: `&:hover { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); transition: transform 0.2s ease, filter 0.2s ease; }`.
 - **Impact:** Enhances header interactivity.
 - **Recommended:** Yes.
 
