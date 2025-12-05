@@ -80,6 +80,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -88,6 +89,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -96,6 +98,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="2_Leonardo da Vinci"
+                    style="--index: 2;"
                     type="button"
                   >
                     <div />
@@ -104,6 +107,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="3_Claude Monet"
+                    style="--index: 3;"
                     type="button"
                   >
                     <div />
@@ -251,6 +255,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -259,6 +264,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -267,6 +273,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="2_Leonardo da Vinci"
+                    style="--index: 2;"
                     type="button"
                   >
                     <div />
@@ -275,6 +282,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="3_Claude Monet"
+                    style="--index: 3;"
                     type="button"
                   >
                     <div />
@@ -283,6 +291,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="4_Michelangelo"
+                    style="--index: 4;"
                     type="button"
                   >
                     <div />
@@ -291,6 +300,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="5_Rembrandt"
+                    style="--index: 5;"
                     type="button"
                   >
                     <div />
@@ -438,6 +448,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -446,6 +457,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -778,6 +790,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="0_True"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -786,6 +799,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   <button
                     class="item"
                     id="1_False"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />

@@ -23,6 +23,7 @@ exports[`AnswerPicker > renders with answers in interactive mode 1`] = `
       <button
         class="item"
         id="0_Alpha"
+        style="--index: 0;"
         type="button"
       >
         <div />
@@ -31,6 +32,7 @@ exports[`AnswerPicker > renders with answers in interactive mode 1`] = `
       <button
         class="item"
         id="1_Beta"
+        style="--index: 1;"
         type="button"
       >
         <div />
@@ -39,6 +41,7 @@ exports[`AnswerPicker > renders with answers in interactive mode 1`] = `
       <button
         class="item"
         id="2_Gamma"
+        style="--index: 2;"
         type="button"
       >
         <div />
@@ -47,6 +50,7 @@ exports[`AnswerPicker > renders with answers in interactive mode 1`] = `
       <button
         class="item"
         id="3_Delta"
+        style="--index: 3;"
         type="button"
       >
         <div />

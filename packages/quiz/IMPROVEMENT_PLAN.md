@@ -22,9 +22,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 3. Staggered Answer Reveal Animation
 
-- [ ] Animate answer options appearing with a staggered entrance.
+- [x] Animate answer options appearing with a staggered entrance.
 - **Rationale:** Reveals feel more dynamic and engaging, adding to the playful vibe without overwhelming.
-- **Implementation Notes:** Files: `packages/quiz/src/states/common/QuestionAnswerPicker/components/AnswerPicker/AnswerPicker.tsx`, `AnswerPicker.module.scss`. Snippet: Use CSS animations with delays (e.g., `animation: slideIn 0.3s ease-out; animation-delay: calc(var(--index) * 0.1s);`).
+- **Implementation Notes:** Files: `packages/quiz/src/states/common/QuestionAnswerPicker/components/AnswerPicker/AnswerPicker.tsx`, `AnswerPicker.module.scss`. Added `style={{ '--index': optionIndex }}` to buttons, and `animation: slideInUp 0.3s ease-out; animation-delay: calc(var(--index) * 0.1s); animation-fill-mode: both;` with keyframes for slideInUp..
 - **Impact:** Makes question transitions more exciting.
 - **Recommended:** Yes.
 
