@@ -88,9 +88,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 11. Page Content Entrance Animations
 
-- [ ] Add fade-in and slide-up animations for page content on load.
+- [x] Add fade-in and slide-up animations for page content on load.
 - **Rationale:** Pages currently appear instantly; entrance effects make navigation feel smoother and more engaging.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`, `packages/quiz/src/pages/HomePage/HomePage.module.scss` (and similar for other pages). Snippet: Add `animation: fadeInUp 0.5s ease-out;` to `.contentInner`, with keyframes for fadeInUp.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Added `animation: fadeInUp 0.5s ease-out;` to `.contentInner` with `@media (prefers-reduced-motion: no-preference)`, and defined `@keyframes fadeInUp`.
 - **Impact:** Pages feel more dynamic on entry.
 - **Recommended:** Yes.
 
