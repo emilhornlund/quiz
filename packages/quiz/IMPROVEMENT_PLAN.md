@@ -30,7 +30,7 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 4. Progress Bar Easing and Pulse
 
-- [X] Enhance progress bar with better easing and optional pulse near end.
+- [x] Enhance progress bar with better easing and optional pulse near end.
 - **Rationale:** Current linear transition feels mechanical; easing makes it feel more natural.
 - **Implementation Notes:** Files: `packages/quiz/src/components/ProgressBar/ProgressBar.tsx`. Snippet: Change to `transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);` and add pulse keyframe when <10%.
 - **Impact:** Smoother countdown feel.
@@ -38,9 +38,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 5. Result Chip Reveal Animations
 
-- [ ] Animate result chips appearing in sequence.
+- [x] Animate result chips appearing in sequence.
 - **Rationale:** Results reveal is a key moment; staggered animation builds anticipation.
-- **Implementation Notes:** Files: `packages/quiz/src/states/HostResultState/components/QuestionResults/QuestionResults.module.scss`. Snippet: Add `animation: fadeInUp 0.4s ease-out; animation-delay: calc(var(--index) * 0.1s);`.
+- **Implementation Notes:** Files: `packages/quiz/src/states/HostResultState/components/QuestionResults/QuestionResults.tsx`, `QuestionResults.module.scss`. Added index prop to ResultChip, modified getResultChips with startingIndex, added fadeInUp keyframes and animation with calc(var(--index) \* 0.1s) delay. Correct chips reveal first, then incorrect.
 - **Impact:** More dramatic result reveals.
 - **Recommended:** Yes.
 
