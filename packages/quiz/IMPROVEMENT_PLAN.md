@@ -30,7 +30,7 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 4. Progress Bar Easing and Pulse
 
-- [ ] Enhance progress bar with better easing and optional pulse near end.
+- [X] Enhance progress bar with better easing and optional pulse near end.
 - **Rationale:** Current linear transition feels mechanical; easing makes it feel more natural.
 - **Implementation Notes:** Files: `packages/quiz/src/components/ProgressBar/ProgressBar.tsx`. Snippet: Change to `transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);` and add pulse keyframe when <10%.
 - **Impact:** Smoother countdown feel.

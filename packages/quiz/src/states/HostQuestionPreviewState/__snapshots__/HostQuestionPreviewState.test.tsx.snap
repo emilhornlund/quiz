@@ -115,7 +115,8 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>

@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProgressBar > should not render with pulse class when progress is greater than 0.1 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class=""
+      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressBar > should render a ProgressBar with initial progress 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class=""
+      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressBar > should render with 0 progress when countdown has expired 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class="pulse"
+      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressBar > should render with 0 progress when dates are invalid 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class="pulse"
+      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressBar > should render with full progress when countdown just started 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class=""
+      style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressBar > should render with pulse class when progress is less than 0.1 1`] = `
+<div>
+  <div
+    class="progressBar"
+  >
+    <span
+      class="pulse"
+      style="width: 1.6666666666666718%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    />
+  </div>
+</div>
+`;
