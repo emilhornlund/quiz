@@ -76,17 +76,20 @@
       flex: 1;
 
       @include helpers.mobile {
-        padding: variables.$mobile-layout-gutter 0 calc(#{variables.$mobile-layout-gutter} * 4) 0;
+        padding: variables.$mobile-layout-gutter 0
+          calc(#{variables.$mobile-layout-gutter} * 4) 0;
         row-gap: variables.$mobile-narrow-layout-gutter;
       }
 
       @include helpers.tablet {
-        padding: variables.$tablet-layout-gutter 0 calc(#{variables.$tablet-layout-gutter} * 4) 0;
+        padding: variables.$tablet-layout-gutter 0
+          calc(#{variables.$tablet-layout-gutter} * 4) 0;
         row-gap: variables.$tablet-narrow-layout-gutter;
       }
 
       @include helpers.desktop {
-        padding: variables.$desktop-layout-gutter 0 calc(#{variables.$desktop-layout-gutter} * 4) 0;
+        padding: variables.$desktop-layout-gutter 0
+          calc(#{variables.$desktop-layout-gutter} * 4) 0;
         row-gap: variables.$desktop-narrow-layout-gutter;
       }
 
@@ -144,9 +147,12 @@
         border-radius: helpers.pxToRem(12px) 0 0 0;
         background-color: colors.$silver;
 
-        box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
-        -webkit-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
-        -moz-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
+        -webkit-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
+        -moz-box-shadow: helpers.pxToRem(-5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
       }
     }
 
@@ -162,10 +168,55 @@
         border-radius: 0 helpers.pxToRem(12px) 0 0;
         background-color: colors.$bronze;
 
-        box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
-        -webkit-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
-        -moz-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0 colors.$black-1-15 inset;
+        box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
+        -webkit-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
+        -moz-box-shadow: helpers.pxToRem(5px) 0 helpers.pxToRem(5px) 0
+          colors.$black-1-15 inset;
       }
     }
+
+    .nickname {
+      animation: fadeInDown 0.5s ease-out;
+      animation-delay: calc((var(--position-index) + 1) * 0.2s + 0.3s);
+      animation-fill-mode: both;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+
+    .stack {
+      animation: riseUp 0.5s ease-out;
+      animation-delay: calc((var(--position-index) + 1) * 0.2s);
+      animation-fill-mode: both;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+}
+
+@keyframes riseUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

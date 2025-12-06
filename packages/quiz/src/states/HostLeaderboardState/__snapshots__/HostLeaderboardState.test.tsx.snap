@@ -89,6 +89,7 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
           >
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
                 class="position"
@@ -100,9 +101,10 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   ShadowCyborg
@@ -111,6 +113,7 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <span
                 class="score"
@@ -120,6 +123,7 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
                 class="position"
@@ -131,9 +135,10 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   Radar
@@ -142,6 +147,7 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <span
                 class="score"
@@ -299,6 +305,7 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
           >
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
                 class="position"
@@ -310,9 +317,10 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   ShadowCyborg
@@ -321,6 +329,7 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <span
                 class="score"
@@ -330,6 +339,7 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
                 class="position"
@@ -341,9 +351,10 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   Radar
@@ -352,6 +363,7 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <span
                 class="score"
@@ -517,6 +529,7 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
           >
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
                 class="position"
@@ -528,9 +541,10 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   ShadowCyborg
@@ -539,6 +553,7 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <span
                 class="score"
@@ -548,6 +563,7 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
                 class="position"
@@ -559,9 +575,10 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   Radar
@@ -570,6 +587,7 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <span
                 class="score"
@@ -735,6 +753,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
           >
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
                 class="position"
@@ -746,9 +765,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   ShadowCyborg
@@ -757,6 +777,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 0;"
             >
               <span
                 class="score"
@@ -766,6 +787,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
                 class="position"
@@ -777,9 +799,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   Radar
@@ -788,6 +811,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 1;"
             >
               <span
                 class="score"
@@ -797,6 +821,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 2;"
             >
               <div
                 class="position"
@@ -808,9 +833,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 2;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   ShadowWhirlwind
@@ -819,6 +845,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 2;"
             >
               <span
                 class="score"
@@ -828,6 +855,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 3;"
             >
               <div
                 class="position"
@@ -839,9 +867,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 3;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   WhiskerFox
@@ -850,6 +879,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 3;"
             >
               <span
                 class="score"
@@ -859,6 +889,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 4;"
             >
               <div
                 class="position"
@@ -870,9 +901,10 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 4;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   JollyNimbus
@@ -881,6 +913,7 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             </div>
             <div
               class="column podium"
+              style="--row-index: 4;"
             >
               <span
                 class="score"
