@@ -104,9 +104,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 13. Background Gradient Enhancement
 
-- [ ] Add subtle animated gradient shift or particle effect.
+- [x] Add subtle animated gradient shift or particle effect.
 - **Rationale:** Current gradient is static; animation adds life without distraction.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Snippet: Use CSS `background: linear-gradient(180deg, colors.$blue-1 25%, 75%, colors.$blue-2); background-size: 400% 400%; animation: gradientShift 10s ease infinite;`.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Added `background-size: 400% 400%;` to `.main` class and `@keyframes gradientShift` animation with 10s ease infinite loop, wrapped in `@media (prefers-reduced-motion: no-preference)` for accessibility. Keyframes shift background-position from 0% 50% to 100% 50% and back.
 - **Impact:** Background feels more vibrant.
 - **Recommended:** Optional.
 
