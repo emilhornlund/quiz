@@ -54,9 +54,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 7. Leaderboard/Podium Entrance Effects
 
-- [ ] Add subtle slide-in animations for leaderboard entries.
+- [x] Add subtle slide-in animations for leaderboard entries.
 - **Rationale:** Rankings are exciting; entrance effects celebrate achievements.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Leaderboard/Leaderboard.module.scss`, `packages/quiz/src/components/Podium/Podium.module.scss`. Snippet: `animation: slideInFromBottom 0.5s ease-out; animation-delay: calc(var(--position) * 0.2s);`.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Leaderboard/Leaderboard.module.scss`, `packages/quiz/src/components/Leaderboard/Leaderboard.tsx`, `packages/quiz/src/components/Podium/Podium.module.scss`, `packages/quiz/src/components/Podium/Podium.tsx`. Leaderboard uses `animation: slideInFromBottom 0.5s ease-out; animation-delay: calc(var(--row-index) * 0.15s);` on each row column. Podium uses two animations: `riseUp` for the stack (translates from bottom) and `fadeInDown` for the nickname chip (translates from top with delay). Both respect `prefers-reduced-motion`.
 - **Impact:** Makes podium moments more celebratory.
 - **Recommended:** Yes.
 

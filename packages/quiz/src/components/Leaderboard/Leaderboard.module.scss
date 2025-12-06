@@ -9,6 +9,13 @@
   width: 100%;
 
   .column {
+    animation: slideInFromBottom 0.5s ease-out;
+    animation-delay: calc(var(--row-index) * 0.15s);
+    animation-fill-mode: both;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,19 +41,19 @@
       padding: variables.$desktop-narrow-layout-gutter;
     }
 
-    &.podium:nth-child(-n+3) {
+    &.podium:nth-child(-n + 3) {
       background-color: colors.$gold;
     }
 
-    &.podium:nth-child(n+4):nth-child(-n+6) {
+    &.podium:nth-child(n + 4):nth-child(-n + 6) {
       background-color: colors.$silver;
     }
 
-    &.podium:nth-child(n+7):nth-child(-n+9) {
+    &.podium:nth-child(n + 7):nth-child(-n + 9) {
       background-color: colors.$bronze;
     }
 
-    &:nth-child(3n+1) {
+    &:nth-child(3n + 1) {
       @include helpers.mobile {
         border-top-left-radius: variables.$mobile-narrow-layout-gutter;
         border-bottom-left-radius: variables.$mobile-narrow-layout-gutter;
@@ -63,7 +70,7 @@
       }
     }
 
-    &:nth-child(3n+3) {
+    &:nth-child(3n + 3) {
       align-items: flex-end;
       font-weight: bold;
 
@@ -120,7 +127,7 @@
       }
     }
 
-    .row {
+    .nameRow {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -161,5 +168,16 @@
         border-radius: helpers.pxToRem(12px);
       }
     }
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

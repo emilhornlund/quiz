@@ -14,8 +14,19 @@ export interface PodiumProps {
   values: PodiumValue[]
 }
 
-const Stack: FC<PodiumValue> = ({ position, nickname, score }) => (
-  <div className={styles.column}>
+interface StackProps extends PodiumValue {
+  animationIndex: number
+}
+
+const Stack: FC<StackProps> = ({
+  position,
+  nickname,
+  score,
+  animationIndex,
+}) => (
+  <div
+    className={styles.column}
+    style={{ '--position-index': animationIndex } as React.CSSProperties}>
     {[...Array(position - 1).keys()].map((key) => (
       <div key={key} className={styles.spacer} />
     ))}
@@ -35,16 +46,19 @@ const Podium: FC<PodiumProps> = ({ values }) => (
       position={2}
       nickname={values?.[1]?.nickname}
       score={values?.[1]?.score}
+      animationIndex={1}
     />
     <Stack
       position={1}
       nickname={values?.[0]?.nickname}
       score={values?.[0]?.score}
+      animationIndex={2}
     />
     <Stack
       position={3}
       nickname={values?.[2]?.nickname}
       score={values?.[2]?.score}
+      animationIndex={0}
     />
   </div>
 )

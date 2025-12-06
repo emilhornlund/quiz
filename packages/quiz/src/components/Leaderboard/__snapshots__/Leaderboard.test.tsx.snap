@@ -7,6 +7,7 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
   >
     <div
       class="column"
+      style="--row-index: 0;"
     >
       <div
         class="position"
@@ -18,9 +19,10 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     </div>
     <div
       class="column"
+      style="--row-index: 0;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           WhiskerFox
@@ -29,6 +31,7 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     </div>
     <div
       class="column"
+      style="--row-index: 0;"
     >
       <span
         class="score"
@@ -38,6 +41,7 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     </div>
     <div
       class="column"
+      style="--row-index: 1;"
     >
       <div
         class="position"
@@ -49,9 +53,10 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     </div>
     <div
       class="column"
+      style="--row-index: 1;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           JollyNimbus
@@ -60,6 +65,7 @@ exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
     </div>
     <div
       class="column"
+      style="--row-index: 1;"
     >
       <span
         class="score"
@@ -78,6 +84,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
   >
     <div
       class="column podium"
+      style="--row-index: 0;"
     >
       <div
         class="position"
@@ -89,9 +96,10 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 0;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           ShadowCyborg
@@ -100,6 +108,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 0;"
     >
       <span
         class="score"
@@ -109,6 +118,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 1;"
     >
       <div
         class="position"
@@ -120,9 +130,10 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 1;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           Radar
@@ -131,6 +142,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 1;"
     >
       <span
         class="score"
@@ -140,6 +152,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 2;"
     >
       <div
         class="position"
@@ -151,9 +164,10 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 2;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           ShadowWhirlwind
@@ -162,6 +176,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 2;"
     >
       <span
         class="score"
@@ -171,6 +186,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 3;"
     >
       <div
         class="position"
@@ -182,9 +198,10 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 3;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           WhiskerFox
@@ -193,6 +210,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 3;"
     >
       <span
         class="score"
@@ -202,6 +220,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 4;"
     >
       <div
         class="position"
@@ -213,9 +232,10 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 4;"
     >
       <div
-        class="row"
+        class="nameRow"
       >
         <span>
           JollyNimbus
@@ -224,6 +244,7 @@ exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
     </div>
     <div
       class="column podium"
+      style="--row-index: 4;"
     >
       <span
         class="score"
