@@ -7,6 +7,7 @@ exports[`Podium > should render Podium from a full leaderboard 1`] = `
   >
     <div
       class="column"
+      style="--position-index: 1;"
     >
       <div
         class="spacer"
@@ -37,6 +38,7 @@ exports[`Podium > should render Podium from a full leaderboard 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 2;"
     >
       <div
         class="nickname"
@@ -64,6 +66,7 @@ exports[`Podium > should render Podium from a full leaderboard 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 0;"
     >
       <div
         class="spacer"
@@ -106,6 +109,7 @@ exports[`Podium > should render Podium from a leaderboard with 1 player 1`] = `
   >
     <div
       class="column"
+      style="--position-index: 1;"
     >
       <div
         class="spacer"
@@ -128,6 +132,7 @@ exports[`Podium > should render Podium from a leaderboard with 1 player 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 2;"
     >
       <div
         class="nickname"
@@ -155,6 +160,7 @@ exports[`Podium > should render Podium from a leaderboard with 1 player 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 0;"
     >
       <div
         class="spacer"
@@ -189,6 +195,7 @@ exports[`Podium > should render Podium from a leaderboard with 2 players 1`] = `
   >
     <div
       class="column"
+      style="--position-index: 1;"
     >
       <div
         class="spacer"
@@ -219,6 +226,7 @@ exports[`Podium > should render Podium from a leaderboard with 2 players 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 2;"
     >
       <div
         class="nickname"
@@ -246,6 +254,7 @@ exports[`Podium > should render Podium from a leaderboard with 2 players 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 0;"
     >
       <div
         class="spacer"
@@ -280,6 +289,7 @@ exports[`Podium > should render Podium from a leaderboard with 3 players 1`] = `
   >
     <div
       class="column"
+      style="--position-index: 1;"
     >
       <div
         class="spacer"
@@ -310,6 +320,7 @@ exports[`Podium > should render Podium from a leaderboard with 3 players 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 2;"
     >
       <div
         class="nickname"
@@ -337,6 +348,7 @@ exports[`Podium > should render Podium from a leaderboard with 3 players 1`] = `
     </div>
     <div
       class="column"
+      style="--position-index: 0;"
     >
       <div
         class="spacer"

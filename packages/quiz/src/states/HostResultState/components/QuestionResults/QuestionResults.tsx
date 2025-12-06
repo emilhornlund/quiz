@@ -22,6 +22,7 @@ interface ResultChipProps {
   correct: boolean
   loading?: boolean
   onClick?: () => void
+  index?: number
 }
 
 const ResultChip: FC<ResultChipProps> = ({
@@ -30,12 +31,18 @@ const ResultChip: FC<ResultChipProps> = ({
   correct,
   loading,
   onClick,
+  index,
 }) => (
   <div
     className={classNames(
       styles.chip,
       correct ? styles.correct : styles.incorrect,
-    )}>
+    )}
+    style={
+      index !== undefined
+        ? ({ '--index': index } as React.CSSProperties & { '--index': number })
+        : undefined
+    }>
     {value}
     <span>
       <FontAwesomeIcon icon={faUserGroup} /> {count}
@@ -78,11 +85,13 @@ const getResultChips = (
   correct: boolean,
   loading: boolean,
   processCorrectAnswer: (answer: QuestionCorrectAnswerDto) => void,
+  startingIndex: number = 0,
 ) =>
   results.distribution
     .filter((item) => item.correct === correct)
     .sort((lhs, rhs) => rhs.count - lhs.count)
     .map((distribution, index) => {
+      const globalIndex = index + startingIndex
       const { value, count, correct } = distribution
       switch (results.type) {
         case QuestionType.MultiChoice: {
@@ -96,6 +105,7 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
+              index={globalIndex}
               onClick={() =>
                 processCorrectAnswer({
                   type: QuestionType.MultiChoice,
@@ -113,6 +123,7 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
+              index={globalIndex}
             />
           )
         case QuestionType.Range:
@@ -123,6 +134,7 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
+              index={globalIndex}
             />
           )
         case QuestionType.TypeAnswer:
@@ -133,6 +145,7 @@ const getResultChips = (
               count={count}
               correct={correct}
               loading={loading}
+              index={globalIndex}
               onClick={() =>
                 processCorrectAnswer({
                   type: QuestionType.TypeAnswer,
@@ -151,12 +164,19 @@ const QuestionResults: FC<QuestionResultsProps> = ({
   onDeleteCorrectAnswer,
 }) => {
   const correctElements = useMemo(
-    () => getResultChips(results, true, loading, onDeleteCorrectAnswer),
+    () => getResultChips(results, true, loading, onDeleteCorrectAnswer, 0),
     [results, loading, onDeleteCorrectAnswer],
   )
   const incorrectElements = useMemo(
-    () => getResultChips(results, false, loading, onAddCorrectAnswer),
-    [results, loading, onAddCorrectAnswer],
+    () =>
+      getResultChips(
+        results,
+        false,
+        loading,
+        onAddCorrectAnswer,
+        correctElements.length,
+      ),
+    [results, loading, onAddCorrectAnswer, correctElements.length],
   )
   return (
     <div className={styles.questionResults} data-testid="question-results">

@@ -138,6 +138,7 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
                     class="item"
                     disabled=""
                     id="0_True"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -147,6 +148,7 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
                     class="item"
                     disabled=""
                     id="1_False"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -160,7 +162,8 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -372,7 +375,8 @@ exports[`HostQuestionState > does not render media when question type is Pin (ev
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -596,6 +600,7 @@ exports[`HostQuestionState > renders with audio media 1`] = `
                     class="item"
                     disabled=""
                     id="0_True"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -605,6 +610,7 @@ exports[`HostQuestionState > renders with audio media 1`] = `
                     class="item"
                     disabled=""
                     id="1_False"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -618,7 +624,8 @@ exports[`HostQuestionState > renders with audio media 1`] = `
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -842,6 +849,7 @@ exports[`HostQuestionState > renders with video media 1`] = `
                     class="item"
                     disabled=""
                     id="0_True"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -851,6 +859,7 @@ exports[`HostQuestionState > renders with video media 1`] = `
                     class="item"
                     disabled=""
                     id="1_False"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -864,7 +873,8 @@ exports[`HostQuestionState > renders with video media 1`] = `
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -1094,6 +1104,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -1103,6 +1114,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -1112,6 +1124,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="2_Leonardo da Vinci"
+                    style="--index: 2;"
                     type="button"
                   >
                     <div />
@@ -1121,6 +1134,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="3_Claude Monet"
+                    style="--index: 3;"
                     type="button"
                   >
                     <div />
@@ -1134,7 +1148,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -1364,6 +1379,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -1373,6 +1389,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -1382,6 +1399,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="2_Leonardo da Vinci"
+                    style="--index: 2;"
                     type="button"
                   >
                     <div />
@@ -1391,6 +1409,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="3_Claude Monet"
+                    style="--index: 3;"
                     type="button"
                   >
                     <div />
@@ -1400,6 +1419,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="4_Michelangelo"
+                    style="--index: 4;"
                     type="button"
                   >
                     <div />
@@ -1409,6 +1429,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="5_Rembrandt"
+                    style="--index: 5;"
                     type="button"
                   >
                     <div />
@@ -1422,7 +1443,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -1652,6 +1674,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="0_Vincent van Gogh"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -1661,6 +1684,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="1_Pablo Picasso"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -1674,7 +1698,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -1906,7 +1931,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -2115,6 +2141,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="0_True"
+                    style="--index: 0;"
                     type="button"
                   >
                     <div />
@@ -2124,6 +2151,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     class="item"
                     disabled=""
                     id="1_False"
+                    style="--index: 1;"
                     type="button"
                   >
                     <div />
@@ -2137,7 +2165,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
@@ -2369,7 +2398,8 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             class="progressBar"
           >
             <span
-              style="width: 100%; transition: width 0.1s linear;"
+              class=""
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
             />
           </div>
         </div>
