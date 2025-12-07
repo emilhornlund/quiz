@@ -144,9 +144,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 18. Page Divider Animation
 
-- [ ] Add grow-in animation for PageDivider.
+- [x] Add grow-in animation for PageDivider.
 - **Rationale:** Dividers separate sections; animation emphasizes flow.
-- **Implementation Notes:** Files: `packages/quiz/src/components/PageDivider/PageDivider.module.scss`. Snippet: `animation: growWidth 0.5s ease-out 0.8s both;`.
+- **Implementation Notes:** Files: `packages/quiz/src/components/PageDivider/PageDivider.module.scss`. Added `animation: growWidth 0.3s ease-out 0.1s both;` with `@keyframes growWidth` from `transform: scaleX(0)` to `transform: scaleX(1)`, wrapped in `@media (prefers-reduced-motion: no-preference)` for accessibility.
 - **Impact:** Smoother section transitions.
 - **Recommended:** Optional.
 
