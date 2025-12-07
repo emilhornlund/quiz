@@ -23,12 +23,32 @@
 a {
   font-weight: 500;
   color: white;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-a:hover {
-  color: white;
   text-decoration: none;
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:hover::after {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 body {

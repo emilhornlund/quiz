@@ -136,10 +136,10 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 17. Footer/Footer Link Hover Effects
 
-- [ ] Add underline animation on footer links.
+- [x] Add underline animation on footer links.
 - **Rationale:** Links need hover feedback; animated underline is modern.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Snippet: `a::after { content: ''; width: 0; height: 2px; background: white; transition: width 0.3s ease; } a:hover::after { width: 100%; }`.
-- **Impact:** Polishes navigation.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Page/Page.module.scss`. Added animated underline to both footer and header navigation links with `::after` pseudo-element, width transition from 0 to 100%, and accessibility support using `prefers-reduced-motion`. For reduced motion, falls back to standard underline on hover.
+- **Impact:** Polishes navigation with consistent interactive feedback across header and footer links.
 - **Recommended:** Yes.
 
 ### 18. Page Divider Animation

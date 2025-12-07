@@ -394,6 +394,21 @@
         width: variables.$desktop-width;
       }
     }
+
+    a {
+      font-weight: normal;
+      color: colors.$white;
+
+      @include helpers.mobile {
+        @include helpers.fontSize(14px);
+      }
+      @include helpers.tablet {
+        @include helpers.fontSize(16px);
+      }
+      @include helpers.desktop {
+        @include helpers.fontSize(18px);
+      }
+    }
   }
 }
 
