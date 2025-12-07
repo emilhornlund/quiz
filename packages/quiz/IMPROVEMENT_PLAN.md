@@ -46,9 +46,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 6. Loading State Fade-Ins
 
-- [ ] Add fade-in animations for loading spinners and overlays.
+- [x] Add fade-in animations for loading spinners and overlays.
 - **Rationale:** Loading states currently appear instantly; fade-in feels less jarring.
-- **Implementation Notes:** Files: `packages/quiz/src/components/LoadingSpinner/LoadingSpinner.module.scss`, `packages/quiz/src/states/common/QuestionAnswerPicker/QuestionAnswerPicker.module.scss`. Snippet: `animation: fadeIn 0.3s ease;`.
+- **Implementation Notes:** File: `packages/quiz/src/components/LoadingSpinner/LoadingSpinner.module.scss`. Added `animation: fadeIn 0.3s ease;` to `.loadingSpinnerContainer` with `@keyframes fadeIn` from opacity 0 to 1, wrapped in `@media (prefers-reduced-motion: no-preference)` for accessibility.
 - **Impact:** Smoother state transitions.
 - **Recommended:** Optional.
 
