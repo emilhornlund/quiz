@@ -24,6 +24,11 @@ export const Default = {
         <a>GitHub</a>
       </>
     ),
+    footer: (
+      <>
+        <a>Some link</a>
+      </>
+    ),
     profile: true,
     children: <div>Content</div>,
   },

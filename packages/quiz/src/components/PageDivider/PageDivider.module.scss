@@ -9,6 +9,10 @@
   border-style: solid;
   border-color: colors.$white;
 
+  @media (prefers-reduced-motion: no-preference) {
+    animation: growWidth 0.3s ease-out 0.1s both;
+  }
+
   @include helpers.mobile {
     width: 100%;
     margin: variables.$mobile-layout-gutter 0;
@@ -22,5 +26,16 @@
   @include helpers.desktop {
     width: variables.$tablet-width;
     margin: variables.$desktop-layout-gutter 0;
+  }
+}
+
+@keyframes growWidth {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
   }
 }

@@ -24,7 +24,10 @@
     @extend .inout-kind-disabled;
   }
 
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     -moz-appearance: none;
     -o-appearance: none;
     -webkit-appearance: none;
@@ -121,26 +124,53 @@
 .input-kind-primary {
   outline-color: colors.$control-primary-normal-color;
   background-color: colors.$control-primary-normal-color;
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-normal-color;
   }
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     color: colors.$control-text-normal-color;
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: color.mix(colors.$white, colors.$control-primary-normal-color, 30%);
-    outline-color: color.mix(colors.$white, colors.$control-primary-normal-color, 30%);
+    background-color: color.mix(
+      colors.$white,
+      colors.$control-primary-normal-color,
+      30%
+    );
+    outline-color: color.mix(
+      colors.$white,
+      colors.$control-primary-normal-color,
+      30%
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:has(> input:focus, > select:focus, > textarea:focus) {
+      outline-color: colors.$control-primary-focus-color;
+      box-shadow: 0 0 0 3px rgba(colors.$control-primary-focus-color, 0.4);
     }
   }
 }
 
 .input-kind-secondary {
   outline-color: colors.$control-secondary-normal-color;
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-secondary-normal-color;
@@ -150,11 +180,27 @@
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: color.mix(colors.$white, colors.$control-secondary-normal-color, 30%);
-    outline-color: color.mix(colors.$white, colors.$control-secondary-normal-color, 30%);
+    background-color: color.mix(
+      colors.$white,
+      colors.$control-secondary-normal-color,
+      30%
+    );
+    outline-color: color.mix(
+      colors.$white,
+      colors.$control-secondary-normal-color,
+      30%
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:has(> input:focus, > select:focus, > textarea:focus) {
+      outline-color: colors.$control-secondary-focus-color;
+      box-shadow: 0 0 0 3px rgba(colors.$control-secondary-focus-color, 0.4);
     }
   }
 }
@@ -163,7 +209,10 @@
   background-color: colors.$control-primary-disabled-color;
   outline-color: colors.$control-primary-disabled-color;
 
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     color: colors.$control-text-disabled-color;
     cursor: default;
   }
@@ -171,6 +220,10 @@
 
 .input-kind-call-to-action {
   outline-color: colors.$control-primary-call-to-action-color;
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-call-to-action-color;
@@ -180,8 +233,17 @@
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: color.mix(colors.$white, colors.$control-primary-call-to-action-color, 30%);
-    outline-color: color.mix(colors.$white, colors.$control-primary-call-to-action-color, 30%);
+    background-color: color.mix(
+      colors.$white,
+      colors.$control-primary-call-to-action-color,
+      30%
+    );
+    outline-color: color.mix(
+      colors.$white,
+      colors.$control-primary-call-to-action-color,
+      30%
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
@@ -191,6 +253,10 @@
 
 .input-kind-success {
   outline-color: colors.$control-primary-success-color;
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-success-color;
@@ -200,8 +266,17 @@
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: color.mix(colors.$white, colors.$control-primary-success-color, 30%);
-    outline-color: color.mix(colors.$white, colors.$control-primary-success-color, 30%);
+    background-color: color.mix(
+      colors.$white,
+      colors.$control-primary-success-color,
+      30%
+    );
+    outline-color: color.mix(
+      colors.$white,
+      colors.$control-primary-success-color,
+      30%
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
@@ -211,6 +286,10 @@
 
 .input-kind-destructive {
   outline-color: colors.$control-primary-danger-color;
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:has(> button) {
     background-color: colors.$control-primary-danger-color;
@@ -220,8 +299,17 @@
   }
 
   &:has(> button:hover, button:disabled) {
-    background-color: color.mix(colors.$white, colors.$control-primary-danger-color, 30%);
-    outline-color: color.mix(colors.$white, colors.$control-primary-danger-color, 30%);
+    background-color: color.mix(
+      colors.$white,
+      colors.$control-primary-danger-color,
+      30%
+    );
+    outline-color: color.mix(
+      colors.$white,
+      colors.$control-primary-danger-color,
+      30%
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
@@ -232,8 +320,14 @@
 .input-kind-plain {
   outline-color: transparent;
   background-color: transparent;
-
-  input, select, textarea, button {
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
+  input,
+  select,
+  textarea,
+  button {
     background-color: transparent;
     outline-color: transparent;
     color: colors.$white;
@@ -255,7 +349,10 @@
     min-height: variables.$mobile-control-small-height;
     padding: 0 variables.$mobile-control-small-layout-gutter;
 
-    input, select, textarea, button {
+    input,
+    select,
+    textarea,
+    button {
       column-gap: variables.$mobile-control-small-layout-gutter;
 
       @include helpers.fontSize(variables.$mobile-control-small-font-size);
@@ -267,7 +364,10 @@
     min-height: variables.$tablet-control-small-height;
     padding: 0 variables.$tablet-control-small-layout-gutter;
 
-    input, select, textarea, button {
+    input,
+    select,
+    textarea,
+    button {
       column-gap: variables.$tablet-control-small-layout-gutter;
 
       @include helpers.fontSize(variables.$tablet-control-small-font-size);
@@ -279,7 +379,10 @@
     min-height: variables.$desktop-control-small-height;
     padding: 0 variables.$desktop-control-small-layout-gutter;
 
-    input, select, textarea, button {
+    input,
+    select,
+    textarea,
+    button {
       column-gap: variables.$desktop-control-small-layout-gutter;
 
       @include helpers.fontSize(variables.$desktop-control-small-font-size);

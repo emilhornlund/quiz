@@ -10,19 +10,20 @@
   .grid {
     display: grid;
     flex: 1;
+    overflow: hidden;
 
     @include helpers.mobile {
-      gap: variables.$mobile-narrow-layout-gutter;
+      gap: variables.$mobile-medium-layout-gutter;
       grid-template-columns: 1fr;
     }
 
     @include helpers.tablet {
-      gap: variables.$tablet-narrow-layout-gutter;
+      gap: variables.$tablet-medium-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
     @include helpers.desktop {
-      gap: variables.$desktop-narrow-layout-gutter;
+      gap: variables.$desktop-medium-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
@@ -37,26 +38,32 @@
       color: colors.$gray-4;
       overflow: hidden;
       cursor: pointer;
+      transition:
+        transform 0.1s ease,
+        background-color 0.1s ease;
+      animation: slideInUp 0.3s ease-out;
+      animation-delay: calc(var(--index) * 0.1s);
+      animation-fill-mode: backwards;
 
       @include helpers.mobile {
-        gap: variables.$mobile-narrow-layout-gutter;
-        padding: variables.$mobile-narrow-layout-gutter;
+        gap: variables.$mobile-medium-layout-gutter;
+        padding: variables.$mobile-component-layout-gutter;
         border-radius: helpers.pxToRem(8px);
 
         @include helpers.fontSize(12px);
       }
 
       @include helpers.tablet {
-        gap: variables.$tablet-narrow-layout-gutter;
-        padding: variables.$tablet-narrow-layout-gutter;
+        gap: variables.$tablet-medium-layout-gutter;
+        padding: variables.$tablet-component-layout-gutter;
         border-radius: helpers.pxToRem(12px);
 
         @include helpers.fontSize(18px);
       }
 
       @include helpers.desktop {
-        gap: variables.$desktop-narrow-layout-gutter;
-        padding: variables.$desktop-narrow-layout-gutter;
+        gap: variables.$desktop-medium-layout-gutter;
+        padding: variables.$desktop-component-layout-gutter;
         border-radius: helpers.pxToRem(16px);
 
         @include helpers.fontSize(24px);
@@ -75,6 +82,13 @@
             color: colors.$gray-4;
           }
         }
+
+        &:active {
+          &:not(:disabled) {
+            transform: scale(0.98);
+            background-color: colors.$gray-1;
+          }
+        }
       }
 
       @media (hover: none) and (pointer: coarse) {
@@ -84,6 +98,7 @@
             outline: none;
             background-color: colors.$gray-1;
             color: colors.$gray-4;
+            transform: scale(0.98);
           }
         }
       }
@@ -188,5 +203,16 @@
         }
       }
     }
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

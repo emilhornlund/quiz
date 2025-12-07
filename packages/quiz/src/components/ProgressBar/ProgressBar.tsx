@@ -72,9 +72,10 @@ const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
   return (
     <div className={styles.progressBar}>
       <span
+        className={progress < 0.1 ? styles.pulse : ''}
         style={{
           width: `${Math.max(Math.min(1, progress), 0) * 100}%`,
-          transition: 'width 0.1s linear',
+          transition: 'width 0.1s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       />
     </div>

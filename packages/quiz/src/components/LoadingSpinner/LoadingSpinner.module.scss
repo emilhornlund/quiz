@@ -4,19 +4,43 @@
 
 .loadingSpinnerContainer {
   @extend .loading-spinner;
+  animation: fadeIn 0.3s ease;
 
   @include helpers.mobile {
     $--mobile-loading-spinner-size: helpers.pxToRem(80px);
-    @include loading.loading-spinner-dimensions($--mobile-loading-spinner-size, colors.$white, default-mobile);
+    @include loading.loading-spinner-dimensions(
+      $--mobile-loading-spinner-size,
+      colors.$white,
+      default-mobile
+    );
   }
 
   @include helpers.tablet {
     $--tablet-loading-spinner-size: helpers.pxToRem(100px);
-    @include loading.loading-spinner-dimensions($--tablet-loading-spinner-size, colors.$white, default-tablet);
+    @include loading.loading-spinner-dimensions(
+      $--tablet-loading-spinner-size,
+      colors.$white,
+      default-tablet
+    );
   }
 
   @include helpers.desktop {
     $--desktop-loading-spinner-size: helpers.pxToRem(120px);
-    @include loading.loading-spinner-dimensions($--desktop-loading-spinner-size, colors.$white, default-desktop);
+    @include loading.loading-spinner-dimensions(
+      $--desktop-loading-spinner-size,
+      colors.$white,
+      default-desktop
+    );
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   }
 }

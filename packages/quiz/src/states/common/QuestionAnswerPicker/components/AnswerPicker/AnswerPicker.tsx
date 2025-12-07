@@ -22,6 +22,7 @@ const AnswerPicker: FC<AnswerPickerProps> = ({
           type="button"
           className={styles.item}
           disabled={!interactive}
+          style={{ '--index': optionIndex } as React.CSSProperties}
           onClick={() => onClick(optionIndex)}>
           <div />
           {value}

@@ -89,6 +89,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
           >
             <div
               class="column"
+              style="--position-index: 1;"
             >
               <div
                 class="spacer"
@@ -119,6 +120,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 2;"
             >
               <div
                 class="nickname"
@@ -146,6 +148,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 0;"
             >
               <div
                 class="spacer"
@@ -277,6 +280,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
           >
             <div
               class="column"
+              style="--position-index: 1;"
             >
               <div
                 class="spacer"
@@ -307,6 +311,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
             </div>
             <div
               class="column"
+              style="--position-index: 2;"
             >
               <div
                 class="nickname"
@@ -334,6 +339,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
             </div>
             <div
               class="column"
+              style="--position-index: 0;"
             >
               <div
                 class="spacer"
@@ -473,6 +479,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
           >
             <div
               class="column"
+              style="--position-index: 1;"
             >
               <div
                 class="spacer"
@@ -503,6 +510,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 2;"
             >
               <div
                 class="nickname"
@@ -530,6 +538,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 0;"
             >
               <div
                 class="spacer"
@@ -669,6 +678,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           >
             <div
               class="column"
+              style="--position-index: 1;"
             >
               <div
                 class="spacer"
@@ -699,6 +709,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 2;"
             >
               <div
                 class="nickname"
@@ -726,6 +737,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--position-index: 0;"
             >
               <div
                 class="spacer"
@@ -763,6 +775,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           >
             <div
               class="column"
+              style="--row-index: 0;"
             >
               <div
                 class="position"
@@ -774,9 +787,10 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--row-index: 0;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   WhiskerFox
@@ -785,6 +799,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--row-index: 0;"
             >
               <span
                 class="score"
@@ -794,6 +809,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--row-index: 1;"
             >
               <div
                 class="position"
@@ -805,9 +821,10 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--row-index: 1;"
             >
               <div
-                class="row"
+                class="nameRow"
               >
                 <span>
                   JollyNimbus
@@ -816,6 +833,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
             <div
               class="column"
+              style="--row-index: 1;"
             >
               <span
                 class="score"
@@ -928,6 +946,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
           >
             <div
               class="column"
+              style="--position-index: 1;"
             >
               <div
                 class="spacer"
@@ -958,6 +977,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
             </div>
             <div
               class="column"
+              style="--position-index: 2;"
             >
               <div
                 class="nickname"
@@ -985,6 +1005,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
             </div>
             <div
               class="column"
+              style="--position-index: 0;"
             >
               <div
                 class="spacer"
