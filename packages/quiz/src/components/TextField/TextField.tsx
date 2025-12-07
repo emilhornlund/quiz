@@ -41,6 +41,7 @@ export interface TextFieldProps {
   readOnly?: boolean
   showErrorMessage?: boolean
   forceValidate?: boolean
+  autoFocus?: boolean
   onChange?: (value?: string | number) => void
   onValid?: (valid: boolean) => void
   onAdditionalValidation?: (value: string | number) => boolean | string
@@ -66,16 +67,29 @@ const TextField: React.FC<TextFieldProps> = ({
   readOnly,
   showErrorMessage = true,
   forceValidate = false,
+  autoFocus = false,
   onChange,
   onValid,
   onAdditionalValidation,
   onCheck,
 }) => {
   const [internalValue, setInternalValue] = useState<string | number>()
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setInternalValue(value ?? '')
   }, [value])
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current && !disabled && !readOnly) {
+      // Small delay to ensure component is fully mounted
+      const timeoutId = setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [autoFocus, disabled, readOnly])
 
   const [hasFocus, setHasFocus] = useState<boolean>(false)
   const [lostFocus, setLostFocus] = useState<boolean>(false)
@@ -173,6 +187,7 @@ const TextField: React.FC<TextFieldProps> = ({
           showError ? styles.error : undefined,
         )}>
         <input
+          ref={inputRef}
           id={id}
           name={name ?? id}
           type={type}
@@ -184,6 +199,7 @@ const TextField: React.FC<TextFieldProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
+          autoFocus={autoFocus}
           className={styles.textfield}
           onChange={handleChange}
           onFocus={() => setHasFocus(true)}

@@ -3,7 +3,14 @@ import {
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useCallback, useState } from 'react'
+import React, {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button, TextField } from '../../../../../components'
 import NonInteractiveInfoBox from '../../../NonInteractiveInfoBox'
@@ -21,6 +28,7 @@ const AnswerInput: FC<AnswerInputProps> = ({
 }) => {
   const [value, setValue] = useState('')
   const [valid, setValid] = useState<boolean>(true)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleSubmit = useCallback(
     (event: FormEvent) => {
@@ -32,11 +40,32 @@ const AnswerInput: FC<AnswerInputProps> = ({
     [onSubmit, valid, value],
   )
 
+  // Handle Enter key submission for better UX
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && valid && value.trim()) {
+        event.preventDefault()
+        onSubmit(value)
+      }
+    },
+    [onSubmit, valid, value],
+  )
+
+  useEffect(() => {
+    const form = formRef.current
+    if (form && interactive) {
+      form.addEventListener('keydown', handleKeyDown)
+      return () => {
+        form.removeEventListener('keydown', handleKeyDown)
+      }
+    }
+  }, [handleKeyDown, interactive])
+
   return (
     <div className={styles.answerInput}>
       {interactive ? (
         <div className={styles.interactive}>
-          <form onSubmit={handleSubmit}>
+          <form ref={formRef} onSubmit={handleSubmit}>
             <TextField
               id="answer-input"
               type="text"
@@ -48,6 +77,7 @@ const AnswerInput: FC<AnswerInputProps> = ({
               onChange={(newValue) => setValue(newValue as string)}
               onValid={setValid}
               required
+              autoFocus
             />
             <Button
               id="submit-button"
