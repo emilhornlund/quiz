@@ -70,9 +70,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 9. Subtle Shadow on Cards/Buttons
 
-- [ ] Add soft shadows for depth.
+- [x] Add soft shadows for depth.
 - **Rationale:** Flat design is modern, but subtle shadows add polish without heaviness.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Card/Card.module.scss`, button styles in `inputs.scss`. Snippet: `box-shadow: 0 2px 4px rgba(0,0,0,0.1);` on hover.
+- **Implementation Notes:** Files: `packages/quiz/src/components/Card/Card.module.scss`, button styles in `inputs.scss`. Added `box-shadow: 0 2px 4px rgba(0,0,0,0.1);` on hover for card content and all button input kinds (primary, secondary, call-to-action, success, destructive). Included smooth transition for cards and respects accessibility with existing reduced motion support.
 - **Impact:** Elevates components slightly.
 - **Recommended:** Optional.
 

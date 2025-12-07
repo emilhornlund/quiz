@@ -86,12 +86,19 @@
   .content {
     display: flex;
     flex-direction: column;
+    transition: box-shadow 0.2s ease;
 
     a {
       font-style: italic;
       font-weight: bold;
       color: colors.$gray-4;
       cursor: pointer;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover .content {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -190,6 +197,7 @@
 
     &:hover {
       color: colors.$gray-2;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 }

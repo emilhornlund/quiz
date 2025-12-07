@@ -150,6 +150,7 @@
       colors.$control-primary-normal-color,
       30%
     );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
@@ -189,6 +190,7 @@
       colors.$control-secondary-normal-color,
       30%
     );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
@@ -241,6 +243,7 @@
       colors.$control-primary-call-to-action-color,
       30%
     );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-normal-color, 30%);
@@ -273,6 +276,7 @@
       colors.$control-primary-success-color,
       30%
     );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
@@ -305,6 +309,7 @@
       colors.$control-primary-danger-color,
       30%
     );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     button {
       color: color.mix(colors.$white, colors.$control-text-contrast-color, 30%);
