@@ -120,9 +120,9 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 15. Prominent Icon Bounce Animation
 
-- [ ] Add gentle bounce on page load for PageProminentIcon.
+- [x] Add gentle bounce on page load for PageProminentIcon.
 - **Rationale:** Icons draw attention; bounce makes them playful.
-- **Implementation Notes:** Files: `packages/quiz/src/components/Page/PageProminentIcon.tsx` (assuming exists, or add to Page). Snippet: `animation: bounceIn 0.6s ease-out;`.
+- **Implementation Notes:** Files: `packages/quiz/src/components/PageProminentIcon/PageProminentIcon.module.scss`. Added `animation: bounceIn 0.6s ease-out;` to `.main` class with `@media (prefers-reduced-motion: no-preference)` for accessibility. Keyframes scale from 0.3 to 1.05 to 0.9 to 1 with opacity fade-in.
 - **Impact:** Adds whimsy to key pages like Home.
 - **Recommended:** Yes.
 
