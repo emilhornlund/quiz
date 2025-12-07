@@ -62,10 +62,10 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 8. Improved Spacing and Visual Hierarchy
 
-- [ ] Refine padding and margins for better breathing room.
+- [x] Refine padding and margins for better breathing room.
 - **Rationale:** Current spacing is functional but can feel cramped; subtle increases improve readability.
-- **Implementation Notes:** Files: Various `.module.scss` files (e.g., `AnswerPicker.module.scss`, `QuestionResults.module.scss`). Snippet: Increase gaps by 10-20% in responsive breakpoints.
-- **Impact:** More polished, less cluttered appearance.
+- **Implementation Notes:** Files: Various `.module.scss` files (e.g., `AnswerPicker.module.scss`, `QuestionResults.module.scss`). Added 3-tier spacing system (narrow, medium, standard) with 10-20% increases across all breakpoints. Updated variables.scss with new spacing tokens, enhanced AnswerPicker, QuestionResults, form components, Leaderboard, Card, and Modal components. Added spacing utility classes for consistent application.
+- **Impact:** More polished, less cluttered appearance with better visual hierarchy.
 - **Recommended:** Optional.
 
 ### 9. Subtle Shadow on Cards/Buttons
@@ -152,7 +152,7 @@ This document outlines incremental visual improvements to make the quiz frontend
 
 ### 19. Responsive Layout Polish
 
-- [ ] Refine spacing and alignment for better mobile/desktop harmony.
+- [x] Refine spacing and alignment for better mobile/desktop harmony.
 - **Rationale:** Current responsive is functional; tweaks improve visual balance.
 - **Implementation Notes:** Files: Various `.module.scss` files. Snippet: Adjust row-gaps and paddings by 10-15% for tighter cohesion.
 - **Impact:** More cohesive across devices.

@@ -13,17 +13,17 @@
     overflow: hidden;
 
     @include helpers.mobile {
-      gap: variables.$mobile-narrow-layout-gutter;
+      gap: variables.$mobile-medium-layout-gutter;
       grid-template-columns: 1fr;
     }
 
     @include helpers.tablet {
-      gap: variables.$tablet-narrow-layout-gutter;
+      gap: variables.$tablet-medium-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
     @include helpers.desktop {
-      gap: variables.$desktop-narrow-layout-gutter;
+      gap: variables.$desktop-medium-layout-gutter;
       grid-template-columns: 1fr 1fr;
     }
 
@@ -46,24 +46,24 @@
       animation-fill-mode: backwards;
 
       @include helpers.mobile {
-        gap: variables.$mobile-narrow-layout-gutter;
-        padding: variables.$mobile-narrow-layout-gutter;
+        gap: variables.$mobile-medium-layout-gutter;
+        padding: variables.$mobile-component-layout-gutter;
         border-radius: helpers.pxToRem(8px);
 
         @include helpers.fontSize(12px);
       }
 
       @include helpers.tablet {
-        gap: variables.$tablet-narrow-layout-gutter;
-        padding: variables.$tablet-narrow-layout-gutter;
+        gap: variables.$tablet-medium-layout-gutter;
+        padding: variables.$tablet-component-layout-gutter;
         border-radius: helpers.pxToRem(12px);
 
         @include helpers.fontSize(18px);
       }
 
       @include helpers.desktop {
-        gap: variables.$desktop-narrow-layout-gutter;
-        padding: variables.$desktop-narrow-layout-gutter;
+        gap: variables.$desktop-medium-layout-gutter;
+        padding: variables.$desktop-component-layout-gutter;
         border-radius: helpers.pxToRem(16px);
 
         @include helpers.fontSize(24px);

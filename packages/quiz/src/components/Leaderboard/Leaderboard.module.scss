@@ -5,7 +5,7 @@
 .main {
   display: grid;
   grid-template-columns: min-content 1fr min-content;
-  row-gap: 0.5rem;
+  row-gap: var(--medium-layout-gutter, 0.8rem);
   width: 100%;
 
   .column {
@@ -26,19 +26,19 @@
     @include helpers.mobile {
       @include helpers.fontSize(16px);
 
-      padding: variables.$mobile-narrow-layout-gutter;
+      padding: variables.$mobile-component-layout-gutter;
     }
 
     @include helpers.tablet {
       @include helpers.fontSize(22px);
 
-      padding: variables.$tablet-narrow-layout-gutter;
+      padding: variables.$tablet-component-layout-gutter;
     }
 
     @include helpers.desktop {
       @include helpers.fontSize(28px);
 
-      padding: variables.$desktop-narrow-layout-gutter;
+      padding: variables.$desktop-component-layout-gutter;
     }
 
     &.podium:nth-child(-n + 3) {

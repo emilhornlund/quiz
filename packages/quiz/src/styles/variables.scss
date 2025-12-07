@@ -10,6 +10,21 @@ $mobile-narrow-layout-gutter: 0.6rem;
 $tablet-narrow-layout-gutter: 0.8rem;
 $desktop-narrow-layout-gutter: 1rem;
 
+/* Medium spacing tier (between narrow and standard) */
+$mobile-medium-layout-gutter: 0.8rem; // +33% from narrow
+$tablet-medium-layout-gutter: 1rem; // +25% from narrow
+$desktop-medium-layout-gutter: 1.25rem; // +25% from narrow
+
+/* Enhanced form spacing (increase from 0.5× to 0.75× narrow) */
+$mobile-form-layout-gutter: 0.45rem; // +50% from current 0.3rem
+$tablet-form-layout-gutter: 0.6rem; // +50% from current 0.4rem
+$desktop-form-layout-gutter: 0.75rem; // +50% from current 0.5rem
+
+/* Enhanced component spacing for better visual hierarchy */
+$mobile-component-layout-gutter: 0.75rem; // +25% from narrow
+$tablet-component-layout-gutter: 1rem; // +25% from narrow
+$desktop-component-layout-gutter: 1.25rem; // +25% from narrow
+
 $mobile-border-radius: 0.6rem;
 $tablet-border-radius: 0.8rem;
 $desktop-border-radius: 1rem;
@@ -31,19 +46,21 @@ $tablet-link-font-size: 20px;
 $desktop-link-font-size: 24px;
 
 /* Height values for normal sized control components */
-$mobile-control-normal-height: 2.625rem;  //42px
-$tablet-control-normal-height: 2.75rem;   //44px
+$mobile-control-normal-height: 2.625rem; //42px
+$tablet-control-normal-height: 2.75rem; //44px
 $desktop-control-normal-height: 2.875rem; //46px
 
 /* Height values for small sized control components */
-$mobile-control-small-height: 2rem;       //32px
-$tablet-control-small-height: 2.125rem;   //34px
-$desktop-control-small-height: 2.25rem;   //36px
+$mobile-control-small-height: 2rem; //32px
+$tablet-control-small-height: 2.125rem; //34px
+$desktop-control-small-height: 2.25rem; //36px
 
 /* Layout gutters for normal sized control components */
 $mobile-control-normal-layout-gutter: calc($mobile-control-normal-height * 0.2);
 $tablet-control-normal-layout-gutter: calc($tablet-control-normal-height * 0.2);
-$desktop-control-normal-layout-gutter: calc($desktop-control-normal-height * 0.2);
+$desktop-control-normal-layout-gutter: calc(
+  $desktop-control-normal-height * 0.2
+);
 
 /* Layout gutters for small sized control components */
 $mobile-control-small-layout-gutter: calc($mobile-control-small-height * 0.2);
@@ -51,12 +68,14 @@ $tablet-control-small-layout-gutter: calc($tablet-control-small-height * 0.2);
 $desktop-control-small-layout-gutter: calc($desktop-control-small-height * 0.2);
 
 /* Outside border widths for control components */
-$control-outside-border-width: 0.125rem;  //2px
+$control-outside-border-width: 0.125rem; //2px
 
 /* Border radius for normal sized control components */
 $mobile-control-normal-border-radius: calc($mobile-control-normal-height * 0.2);
 $tablet-control-normal-border-radius: calc($tablet-control-normal-height * 0.2);
-$desktop-control-normal-border-radius: calc($desktop-control-normal-height * 0.2);
+$desktop-control-normal-border-radius: calc(
+  $desktop-control-normal-height * 0.2
+);
 
 /* Border radius for small sized control components */
 $mobile-control-small-border-radius: calc($mobile-control-small-height * 0.2);

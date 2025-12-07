@@ -101,8 +101,10 @@
     border-width: helpers.pxToRem(2px);
 
     .content {
-      padding: variables.$mobile-narrow-layout-gutter;
-      border-radius: calc(#{variables.$mobile-control-normal-border-radius} / 2);
+      padding: variables.$mobile-component-layout-gutter;
+      border-radius: calc(
+        #{variables.$mobile-control-normal-border-radius} / 2
+      );
       line-height: helpers.pxToRem(26px);
 
       @include helpers.fontSize(16px);
@@ -115,8 +117,10 @@
     border-width: helpers.pxToRem(2px);
 
     .content {
-      padding: variables.$tablet-narrow-layout-gutter;
-      border-radius: calc(#{variables.$tablet-control-normal-border-radius} / 2);
+      padding: variables.$tablet-component-layout-gutter;
+      border-radius: calc(
+        #{variables.$tablet-control-normal-border-radius} / 2
+      );
       line-height: helpers.pxToRem(28px);
 
       @include helpers.fontSize(18px);
@@ -129,8 +133,10 @@
     border-width: helpers.pxToRem(3px);
 
     .content {
-      padding: variables.$desktop-narrow-layout-gutter;
-      border-radius: calc(#{variables.$desktop-control-normal-border-radius} / 2);
+      padding: variables.$desktop-component-layout-gutter;
+      border-radius: calc(
+        #{variables.$desktop-control-normal-border-radius} / 2
+      );
       line-height: helpers.pxToRem(30px);
 
       @include helpers.fontSize(20px);
