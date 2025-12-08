@@ -4,6 +4,8 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import PlayerResultState from './PlayerResultState'
+
 const h = vi.hoisted(() => ({
   getPositionMessage: vi.fn(
     (pos: number, correct: boolean) =>
@@ -15,11 +17,14 @@ vi.mock('./message.utils.ts', () => ({
   getPositionMessage: h.getPositionMessage,
 }))
 
-import PlayerResultState from './PlayerResultState'
-
 describe('PlayerResultState', () => {
   beforeEach(() => {
     h.getPositionMessage.mockClear()
+    vi.spyOn(Math, 'random').mockReturnValue(0.1)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   it('renders correct result with behind indicator', () => {
@@ -80,5 +85,341 @@ describe('PlayerResultState', () => {
     expect(screen.queryByText(/points behind/i)).toBeNull()
     expect(h.getPositionMessage).toHaveBeenCalledWith(7, false)
     expect(container).toMatchSnapshot()
+  })
+
+  describe('Celebration Logic', () => {
+    it('renders epic celebration for position 1', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'Winner',
+                score: {
+                  correct: true,
+                  last: 1000,
+                  total: 10000,
+                  position: 1,
+                  streak: 2,
+                },
+              },
+              pagination: { current: 5, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have epic celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(70) // epic particles
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders epic celebration for streak 10', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'StreakMaster',
+                score: {
+                  correct: true,
+                  last: 500,
+                  total: 8000,
+                  position: 15,
+                  streak: 10,
+                },
+              },
+              pagination: { current: 8, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have epic celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(70)
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders major celebration for position 3', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'ThirdPlace',
+                score: {
+                  correct: true,
+                  last: 800,
+                  total: 5000,
+                  position: 3,
+                  streak: 1,
+                },
+              },
+              pagination: { current: 6, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have major celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationMajor'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(45) // major particles
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders major celebration for streak 5', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'StreakBuilder',
+                score: {
+                  correct: true,
+                  last: 400,
+                  total: 3000,
+                  position: 12,
+                  streak: 5,
+                },
+              },
+              pagination: { current: 7, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have major celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationMajor'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(45)
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders normal celebration for streak 3', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'StreakStarter',
+                score: {
+                  correct: true,
+                  last: 300,
+                  total: 2000,
+                  position: 8,
+                  streak: 3,
+                },
+              },
+              pagination: { current: 4, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have normal celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationNormal'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(25) // normal particles
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders normal celebration for position 10', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'TopTen',
+                score: {
+                  correct: true,
+                  last: 200,
+                  total: 1500,
+                  position: 10,
+                  streak: 1,
+                },
+              },
+              pagination: { current: 3, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have normal celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationNormal'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(25)
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders no celebration for simple correct answer', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'SimpleCorrect',
+                score: {
+                  correct: true,
+                  last: 100,
+                  total: 800,
+                  position: 15,
+                  streak: 1,
+                },
+              },
+              pagination: { current: 2, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have no celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationNormal'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationMajor'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.confettiContainer'),
+      ).not.toBeInTheDocument()
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders no celebration for incorrect answer', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'WrongAnswer',
+                score: {
+                  correct: false,
+                  last: 0,
+                  total: 700,
+                  position: 20,
+                  streak: 0,
+                },
+              },
+              pagination: { current: 2, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have no celebration
+      expect(screen.getByText('Incorrect')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationNormal'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationMajor'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).not.toBeInTheDocument()
+      expect(
+        container.querySelector('.confettiContainer'),
+      ).not.toBeInTheDocument()
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders epic celebration for position 2', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'SecondPlace',
+                score: {
+                  correct: true,
+                  last: 900,
+                  total: 6000,
+                  position: 2,
+                  streak: 1,
+                },
+              },
+              pagination: { current: 9, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have epic celebration (position 2 always epic)
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(70)
+      expect(container).toMatchSnapshot()
+    })
+
+    it('renders epic celebration for streak 7', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'HighStreak',
+                score: {
+                  correct: true,
+                  last: 600,
+                  total: 4000,
+                  position: 8,
+                  streak: 7,
+                },
+              },
+              pagination: { current: 10, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Should have epic celebration
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(
+        container.querySelector('.badge.celebrationEpic'),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
+      expect(container.querySelectorAll('.confettiParticle')).toHaveLength(70)
+      expect(container).toMatchSnapshot()
+    })
   })
 })

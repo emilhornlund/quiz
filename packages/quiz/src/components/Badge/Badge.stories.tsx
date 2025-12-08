@@ -67,3 +67,30 @@ export const Streak = {
     children: 3,
   },
 } satisfies Story
+
+export const CelebrationNormal = {
+  args: {
+    size: 'large',
+    backgroundColor: 'green',
+    celebration: 'normal',
+    children: <FontAwesomeIcon icon={faCheck} />,
+  },
+} satisfies Story
+
+export const CelebrationMajor = {
+  args: {
+    size: 'large',
+    backgroundColor: 'green',
+    celebration: 'major',
+    children: <FontAwesomeIcon icon={faCheck} />,
+  },
+} satisfies Story
+
+export const CelebrationEpic = {
+  args: {
+    size: 'large',
+    backgroundColor: 'green',
+    celebration: 'epic',
+    children: <FontAwesomeIcon icon={faCheck} />,
+  },
+} satisfies Story

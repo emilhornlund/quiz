@@ -2,6 +2,7 @@ export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
 export type { ButtonProps } from './Button'
 export type { CardProps } from './Card'
 export type { CircularProgressBarProps } from './CircularProgressBar'
+export type { ConfettiProps, ConfettiIntensity } from './Confetti'
 export type { ConfirmDialogProps } from './ConfirmDialog'
 export type { DropzoneProps } from './Dropzone'
 export type { HostGameFooterProps } from './HostGameFooter'
@@ -47,6 +48,7 @@ export {
   CircularProgressBarSize,
   CircularProgressBarKind,
 } from './CircularProgressBar'
+export { default as Confetti } from './Confetti'
 export { default as ConfirmDialog } from './ConfirmDialog'
 export { default as Dropzone } from './Dropzone'
 export { default as HostGameFooter } from './HostGameFooter'
