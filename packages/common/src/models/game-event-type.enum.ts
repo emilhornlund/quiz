@@ -9,7 +9,6 @@ export enum GameEventType {
   GameQuestionPreviewPlayer = 'GAME_QUESTION_PREVIEW_PLAYER',
   GameQuestionHost = 'GAME_QUESTION_HOST',
   GameQuestionPlayer = 'GAME_QUESTION_PLAYER',
-  GameAwaitingResultPlayer = 'GAME_AWAITING_RESULT_PLAYER',
   GameLeaderboardHost = 'GAME_LEADERBOARD_HOST',
   GameLeaderboardPlayer = 'GAME_LEADERBOARD_PLAYER',
   GameResultHost = 'GAME_RESULT_HOST',

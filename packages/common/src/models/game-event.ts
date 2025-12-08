@@ -199,17 +199,6 @@ export type GameQuestionPlayerEvent = {
   pagination: PaginationEvent
 }
 
-export type GameAwaitingResultPlayerEvent = {
-  type: GameEventType.GameAwaitingResultPlayer
-  player: {
-    nickname: string
-    score: {
-      total: number
-    }
-  }
-  pagination: PaginationEvent
-}
-
 export type GameEventQuestionResultsMultiChoice = {
   type: QuestionType.MultiChoice
   distribution: {
@@ -388,7 +377,6 @@ export type GameEvent =
   | GameQuestionPreviewPlayerEvent
   | GameQuestionHostEvent
   | GameQuestionPlayerEvent
-  | GameAwaitingResultPlayerEvent
   | GameResultHostEvent
   | GameResultPlayerEvent
   | GameLeaderboardHostEvent
