@@ -172,6 +172,19 @@ export type GameQuestionHostEvent = {
   pagination: PaginationEvent
 }
 
+/**
+ * Discriminated union describing a player's submitted answer for a question.
+ *
+ * Each variant pairs a `QuestionType` with the corresponding answer value shape.
+ */
+export type GameQuestionPlayerAnswerEvent =
+  | { type: QuestionType.MultiChoice; value: number }
+  | { type: QuestionType.TrueFalse; value: boolean }
+  | { type: QuestionType.Range; value: number }
+  | { type: QuestionType.TypeAnswer; value: string }
+  | { type: QuestionType.Pin; value: string }
+  | { type: QuestionType.Puzzle; value: string[] }
+
 export type GameQuestionPlayerEvent = {
   type: GameEventType.GameQuestionPlayer
   player: {
@@ -181,6 +194,7 @@ export type GameQuestionPlayerEvent = {
     }
   }
   question: GameEventQuestion
+  answer?: GameQuestionPlayerAnswerEvent
   countdown: CountdownEvent
   pagination: PaginationEvent
 }

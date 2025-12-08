@@ -1,6 +1,6 @@
 import {
+  arraysEqual,
   CountdownEvent,
-  GameAwaitingResultPlayerEvent,
   GameBeginHostEvent,
   GameBeginPlayerEvent,
   GameEvent,
@@ -16,6 +16,7 @@ import {
   GamePodiumHostEvent,
   GamePodiumPlayerEvent,
   GameQuestionHostEvent,
+  GameQuestionPlayerAnswerEvent,
   GameQuestionPlayerEvent,
   GameQuestionPreviewHostEvent,
   GameQuestionPreviewPlayerEvent,
@@ -27,7 +28,6 @@ import {
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
-import { arraysEqual } from '@quiz/common'
 
 import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
@@ -44,6 +44,7 @@ import {
   ParticipantBase,
   ParticipantPlayer,
   QuestionResultTaskItem,
+  QuestionTaskAnswer,
   QuestionTaskMetadata,
   TaskType,
 } from '../../repositories/models/schemas'
@@ -78,7 +79,7 @@ import {
 export interface GameEventMetaData {
   currentAnswerSubmissions: number
   totalAnswerSubmissions: number
-  hasPlayerAnswerSubmission: boolean
+  playerAnswerSubmission?: QuestionTaskAnswer
 }
 
 /**
@@ -193,11 +194,12 @@ export function buildPlayerGameEvent(
       case 'pending':
         return buildGameQuestionPreviewPlayerEvent(document, participantPlayer)
       case 'active':
-        return metadata.hasPlayerAnswerSubmission
-          ? buildGameAwaitingResultPlayerEvent(document, participantPlayer)
-          : buildGameQuestionPlayerEvent(document, participantPlayer)
       case 'completed':
-        return buildGameAwaitingResultPlayerEvent(document, participantPlayer)
+        return buildGameQuestionPlayerEvent(
+          document,
+          participantPlayer,
+          metadata.playerAnswerSubmission,
+        )
     }
   }
 
@@ -541,16 +543,78 @@ function buildGameQuestionHostEvent(
 }
 
 /**
- * Builds a question event for a player, including countdown and score details.
+ * Builds a `GameQuestionPlayerAnswerEvent` from a stored player answer.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * Maps the persisted `QuestionTaskAnswer` to the wire-format used in
+ * game events, preserving both the `QuestionType` and the answer value
+ * in the appropriate shape.
  *
- * @returns {GameQuestionPlayerEvent} A question event for the player.
+ * If the player has not submitted an answer, `undefined` is returned.
+ *
+ * @param playerAnswerSubmission - The stored answer for the current player and question, if any.
+ *
+ * @returns The normalized player answer event, or `undefined` if no answer exists.
+ */
+function buildGameQuestionPlayerAnswerEvent(
+  playerAnswerSubmission?: QuestionTaskAnswer,
+): GameQuestionPlayerAnswerEvent | undefined {
+  if (isMultiChoiceAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.MultiChoice,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isTrueFalseAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.TrueFalse,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isRangeAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Range,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isTypeAnswerAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.TypeAnswer,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isPinAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Pin,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isPuzzleAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Puzzle,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+}
+
+/**
+ * Builds a question event for a player, including countdown, score details,
+ * and the player's submitted answer when available.
+ *
+ * @param document - The game document containing the current question task.
+ * @param participantPlayer - The player participant object for whom the event is being built.
+ * @param playerAnswerSubmission - The player's stored answer for the current question, if they have submitted one.
+ *
+ * @returns A question event for the player.
  */
 function buildGameQuestionPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
+  playerAnswerSubmission?: QuestionTaskAnswer,
 ): GameQuestionPlayerEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
   const currentQuestionTask = document.currentTask
@@ -569,33 +633,8 @@ function buildGameQuestionPlayerEvent(
       currentQuestion,
       currentQuestionTask.metadata,
     ),
+    answer: buildGameQuestionPlayerAnswerEvent(playerAnswerSubmission),
     countdown: buildGameQuestionCountdownEvent(document),
-    pagination: buildPaginationEvent(document),
-  }
-}
-
-/**
- * Builds an event indicating the player is awaiting the result of the question.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
- *
- * @returns {GameAwaitingResultPlayerEvent} An event indicating the player is waiting for the question result.
- */
-function buildGameAwaitingResultPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Question } },
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-): GameAwaitingResultPlayerEvent {
-  const { nickname, totalScore: total } = participantPlayer
-
-  return {
-    type: GameEventType.GameAwaitingResultPlayer,
-    player: {
-      nickname,
-      score: {
-        total,
-      },
-    },
     pagination: buildPaginationEvent(document),
   }
 }

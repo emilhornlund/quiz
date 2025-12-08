@@ -248,21 +248,23 @@ export function toBaseQuestionTaskEventMetaDataTuple(
 }
 
 /**
- * Constructs metadata for a player's question event based on their answers.
+ * Builds metadata for a player-specific question event based on existing answers.
  *
  * @param answers - The list of answers submitted for the current question task.
  * @param participant - The participant for whom the metadata is generated.
  *
- * @returns {Partial<GameEventMetaData>} Metadata indicating whether the participant has submitted an answer.
+ * @returns {Partial<GameEventMetaData>} Metadata indicating the participant's submitted answer.
  */
 export function toPlayerQuestionPlayerEventMetaData(
   answers: QuestionTaskAnswer[],
   participant: ParticipantBase & ParticipantPlayer,
 ): Partial<GameEventMetaData> {
+  const playerAnswerSubmission = answers?.find(
+    (answer) => answer.playerId === participant.participantId,
+  )
+
   return {
-    hasPlayerAnswerSubmission: !!answers?.find(
-      (answer) => answer.playerId === participant.participantId,
-    ),
+    playerAnswerSubmission,
   }
 }
 
