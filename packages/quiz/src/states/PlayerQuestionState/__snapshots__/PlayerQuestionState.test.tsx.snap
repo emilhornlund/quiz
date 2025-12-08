@@ -120,9 +120,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -314,9 +314,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -472,9 +472,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -658,9 +658,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -816,9 +816,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -1011,9 +1011,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>

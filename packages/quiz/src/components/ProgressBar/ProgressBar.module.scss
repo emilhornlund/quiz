@@ -7,18 +7,35 @@
   background-color: colors.$white-1-50;
   width: 100%;
 
-  span {
+  .track {
     display: flex;
     flex-direction: column;
     height: 100%;
     background-color: colors.$white;
+    transition: background-color 0.3s ease;
+
+    &.safe {
+      background-color: colors.$white;
+    }
+
+    &.caution {
+      background-color: colors.$yellow-2;
+    }
+
+    &.urgent {
+      background-color: colors.$orange-2;
+    }
+
+    &.critical {
+      background-color: colors.$red-2;
+    }
   }
 
   @mixin timer-dimensions($height) {
     height: helpers.pxToRem($height);
     border-radius: helpers.pxToRem(calc($height / 2));
 
-    span {
+    .track {
       border-radius: helpers.pxToRem(calc($height / 2));
     }
   }
@@ -38,18 +55,30 @@
 
 .pulse {
   @media (prefers-reduced-motion: no-preference) {
-    animation: pulse 0.5s infinite;
+    animation: pulse 0.6s infinite;
   }
 }
 
 @keyframes pulse {
   0% {
     opacity: 1;
+    transform: scaleY(1);
+    box-shadow: 0 0 0 0 rgba(255, 63, 52, 0.4);
+  }
+  25% {
+    transform: scaleY(1.1);
   }
   50% {
     opacity: 0.7;
+    transform: scaleY(0.95);
+    box-shadow: 0 0 0 4px rgba(255, 63, 52, 0.2);
+  }
+  75% {
+    transform: scaleY(1.05);
   }
   100% {
     opacity: 1;
+    transform: scaleY(1);
+    box-shadow: 0 0 0 0 rgba(255, 63, 52, 0.4);
   }
 }

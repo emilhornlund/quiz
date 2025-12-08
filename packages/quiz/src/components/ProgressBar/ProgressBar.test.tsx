@@ -63,20 +63,6 @@ describe('ProgressBar', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('should render with pulse class when progress is less than 0.1', () => {
-    const countdown: CountdownEvent = {
-      initiatedTime: '2023-01-01T00:00:00.000Z',
-      expiryTime: '2023-01-01T00:01:00.000Z',
-      serverTime: '2023-01-01T00:00:59.000Z',
-    }
-
-    const { container } = render(<ProgressBar countdown={countdown} />)
-
-    const progressBar = container.querySelector('span')
-    expect(progressBar).toHaveClass('pulse')
-    expect(container).toMatchSnapshot()
-  })
-
   it('should not render with pulse class when progress is greater than 0.1', () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
@@ -86,7 +72,8 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('span')
+    const progressBar = container.querySelector('.track')
+    expect(progressBar).toHaveClass('safe')
     expect(progressBar).not.toHaveClass('pulse')
     expect(container).toMatchSnapshot()
   })
@@ -102,7 +89,7 @@ describe('ProgressBar', () => {
       <ProgressBar countdown={initialCountdown} />,
     )
 
-    let progressBar = container.querySelector('span')
+    let progressBar = container.querySelector('.track')
     expect(progressBar).toHaveStyle('width: 50%')
 
     const newCountdown: CountdownEvent = {
@@ -113,7 +100,7 @@ describe('ProgressBar', () => {
 
     rerender(<ProgressBar countdown={newCountdown} />)
 
-    progressBar = container.querySelector('span')
+    progressBar = container.querySelector('.track')
     expect(progressBar).toHaveStyle('width: 75%')
   })
 
@@ -126,7 +113,7 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('span')
+    const progressBar = container.querySelector('.track')
     expect(progressBar).toHaveStyle('width: 100%')
   })
 
@@ -179,5 +166,57 @@ describe('ProgressBar', () => {
     rerender(<ProgressBar countdown={newCountdown} />)
 
     expect(clearIntervalSpy).toHaveBeenCalled()
+  })
+
+  it('should render with safe class when progress is 50% or above', () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:30.000Z',
+    }
+
+    const { container } = render(<ProgressBar countdown={countdown} />)
+
+    const progressBar = container.querySelector('.track')
+    expect(progressBar).toHaveClass('safe')
+  })
+
+  it('should render with caution class when progress is between 20-50%', () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:40.000Z',
+    }
+
+    const { container } = render(<ProgressBar countdown={countdown} />)
+
+    const progressBar = container.querySelector('.track')
+    expect(progressBar).toHaveClass('caution')
+  })
+
+  it('should render with urgent class when progress is between 10-20%', () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:50.000Z',
+    }
+
+    const { container } = render(<ProgressBar countdown={countdown} />)
+
+    const progressBar = container.querySelector('.track')
+    expect(progressBar).toHaveClass('urgent')
+  })
+
+  it('should render with critical class when progress is below 10%', () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:59.000Z',
+    }
+
+    const { container } = render(<ProgressBar countdown={countdown} />)
+
+    const progressBar = container.querySelector('.track')
+    expect(progressBar).toHaveClass('pulse', 'critical')
   })
 })

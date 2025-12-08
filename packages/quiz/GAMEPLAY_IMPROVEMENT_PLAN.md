@@ -107,7 +107,7 @@ This document outlines incremental visual and UX improvements for the quiz gamep
 - [x] `packages/quiz/src/components/SortableTable/SortableTable.tsx` - Added drop success animation
 - [x] `packages/quiz/src/components/SortableTable/SortableTable.module.scss` - Enhanced drag feedback and animations
 
-#### 4. Dynamic Progress Bar Visual Feedback
+#### 4. ✅ Dynamic Progress Bar Visual Feedback
 
 **Problem:** Static color regardless of time remaining
 **UX Impact:** No urgency indication, missed opportunity for visual tension
@@ -116,29 +116,31 @@ This document outlines incremental visual and UX improvements for the quiz gamep
 
 **Implementation:**
 
-- [ ] Color transitions: Green → Yellow → Red based on time remaining
-- [ ] Enhanced pulse animation in final 10%
-- [ ] Add subtle glow effect when time is critical
-- [ ] Implement smooth color transitions
-- [ ] Maintain existing server-client time synchronization
+- [x] Color transitions: White → Yellow → Orange → Red based on time remaining
+- [x] Enhanced pulse animation with scaling effects (starts at 10% as originally requested)
+- [x] Added scaling effects to pulse animation for more dynamic feedback
+- [x] Add subtle glow effect when time is critical
+- [x] Implement smooth color transitions
+- [x] Maintain existing server-client time synchronization
+- [x] Improved class naming: safe, caution, urgent, critical (instead of normal, warning, error)
 
-**Files to modify:**
+**Files modified:**
 
-- [ ] `packages/quiz/src/components/ProgressBar/ProgressBar.tsx`
-- [ ] `packages/quiz/src/components/ProgressBar/ProgressBar.module.scss`
+- [x] `packages/quiz/src/components/ProgressBar/ProgressBar.tsx`
+- [x] `packages/quiz/src/components/ProgressBar/ProgressBar.module.scss`
 
 **Color thresholds:**
 
-- 100-50%: Green (colors.$success)
-- 50-20%: Yellow (colors.$warning)
-- 20-10%: Orange (colors.$warning-dark)
-- <10%: Red (colors.$error) + enhanced pulse
+- 100-50%: White (colors.$white) - safe state
+- 50-20%: Yellow (colors.$yellow-2) - caution state
+- 20-10%: Orange (colors.$orange-2) - urgent state
+- <10%: Red (colors.$red-2) - critical state (enhanced pulse with scaling)
 
 **Technical considerations:**
 
-- Must maintain existing 100ms update interval
-- Should work with existing pulse animation
-- Preserve server-client time offset logic
+- [x] Must maintain existing 100ms update interval
+- [x] Should work with existing pulse animation
+- [x] Preserve server-client time offset logic
 
 #### 5. Celebratory Correct Answer Animations
 
@@ -395,7 +397,7 @@ test('should add transition class when state changes', async () => {
 
 ### Phase 2 (Week 2): Visual Polish
 
-- [ ] Dynamic progress bar colors
+- [x] Dynamic progress bar colors
 - [ ] Celebratory animations
 - [ ] Lobby state improvements
 
@@ -413,7 +415,7 @@ test('should add transition class when state changes', async () => {
 ### User Experience
 
 - [x] Reduced time to first interaction (autofocus)
-- [ ] Increased engagement (better feedback)
+- [x] Increased engagement (better feedback)
 - [ ] Improved perceived performance (smooth transitions)
 - [ ] Enhanced satisfaction (celebrations)
 

@@ -5,9 +5,9 @@ exports[`ProgressBar > should not render with pulse class when progress is great
   <div
     class="progressBar"
   >
-    <span
-      class=""
-      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    <div
+      class="track safe"
+      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
     />
   </div>
 </div>
@@ -18,9 +18,9 @@ exports[`ProgressBar > should render a ProgressBar with initial progress 1`] = `
   <div
     class="progressBar"
   >
-    <span
-      class=""
-      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    <div
+      class="track safe"
+      style="width: 50%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
     />
   </div>
 </div>
@@ -31,9 +31,9 @@ exports[`ProgressBar > should render with 0 progress when countdown has expired 
   <div
     class="progressBar"
   >
-    <span
-      class="pulse"
-      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    <div
+      class="track critical pulse"
+      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
     />
   </div>
 </div>
@@ -44,9 +44,9 @@ exports[`ProgressBar > should render with 0 progress when dates are invalid 1`] 
   <div
     class="progressBar"
   >
-    <span
-      class="pulse"
-      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    <div
+      class="track critical pulse"
+      style="width: 0%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
     />
   </div>
 </div>
@@ -57,22 +57,9 @@ exports[`ProgressBar > should render with full progress when countdown just star
   <div
     class="progressBar"
   >
-    <span
-      class=""
-      style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
-    />
-  </div>
-</div>
-`;
-
-exports[`ProgressBar > should render with pulse class when progress is less than 0.1 1`] = `
-<div>
-  <div
-    class="progressBar"
-  >
-    <span
-      class="pulse"
-      style="width: 1.6666666666666718%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+    <div
+      class="track safe"
+      style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
     />
   </div>
 </div>
