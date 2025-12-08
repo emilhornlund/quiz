@@ -12,7 +12,7 @@ exports[`QuestionAnswerPicker > renders MultiChoice and maps selected index to o
         class="grid"
       >
         <button
-          class="item"
+          class="answerButton"
           id="0_Alpha"
           style="--index: 0;"
           type="button"
@@ -21,7 +21,7 @@ exports[`QuestionAnswerPicker > renders MultiChoice and maps selected index to o
           Alpha
         </button>
         <button
-          class="item"
+          class="answerButton"
           id="1_Beta"
           style="--index: 1;"
           type="button"
@@ -30,7 +30,7 @@ exports[`QuestionAnswerPicker > renders MultiChoice and maps selected index to o
           Beta
         </button>
         <button
-          class="item"
+          class="answerButton"
           id="2_Gamma"
           style="--index: 2;"
           type="button"
@@ -370,27 +370,6 @@ exports[`QuestionAnswerPicker > renders TypeAnswer and forwards typed value on s
             </button>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`QuestionAnswerPicker > shows loading spinner and hides content when loading 1`] = `
-<div>
-  <div
-    class="questionAnswerPicker"
-  >
-    <div
-      class="loadingWrapper"
-    >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
       </div>
     </div>
   </div>

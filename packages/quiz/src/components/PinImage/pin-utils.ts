@@ -14,6 +14,8 @@ export function getPinColorColor(color: PinColor): string {
       return colors.red2
     case PinColor.Green:
       return colors.green2
+    case PinColor.Orange:
+      return colors.orange2
     case PinColor.Blue:
     default:
       return colors.blue2

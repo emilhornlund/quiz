@@ -135,7 +135,7 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_True"
                     style="--index: 0;"
@@ -145,7 +145,7 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
                     True
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_False"
                     style="--index: 1;"
@@ -597,7 +597,7 @@ exports[`HostQuestionState > renders with audio media 1`] = `
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_True"
                     style="--index: 0;"
@@ -607,7 +607,7 @@ exports[`HostQuestionState > renders with audio media 1`] = `
                     True
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_False"
                     style="--index: 1;"
@@ -846,7 +846,7 @@ exports[`HostQuestionState > renders with video media 1`] = `
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_True"
                     style="--index: 0;"
@@ -856,7 +856,7 @@ exports[`HostQuestionState > renders with video media 1`] = `
                     True
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_False"
                     style="--index: 1;"
@@ -1101,7 +1101,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
@@ -1111,7 +1111,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_Pablo Picasso"
                     style="--index: 1;"
@@ -1121,7 +1121,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Pablo Picasso
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="2_Leonardo da Vinci"
                     style="--index: 2;"
@@ -1131,7 +1131,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Leonardo da Vinci
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="3_Claude Monet"
                     style="--index: 3;"
@@ -1376,7 +1376,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
@@ -1386,7 +1386,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_Pablo Picasso"
                     style="--index: 1;"
@@ -1396,7 +1396,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Pablo Picasso
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="2_Leonardo da Vinci"
                     style="--index: 2;"
@@ -1406,7 +1406,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Leonardo da Vinci
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="3_Claude Monet"
                     style="--index: 3;"
@@ -1416,7 +1416,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Claude Monet
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="4_Michelangelo"
                     style="--index: 4;"
@@ -1426,7 +1426,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Michelangelo
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="5_Rembrandt"
                     style="--index: 5;"
@@ -1671,7 +1671,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
@@ -1681,7 +1681,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_Pablo Picasso"
                     style="--index: 1;"
@@ -2138,7 +2138,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="0_True"
                     style="--index: 0;"
@@ -2148,7 +2148,7 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
                     True
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     disabled=""
                     id="1_False"
                     style="--index: 1;"

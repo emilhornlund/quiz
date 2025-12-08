@@ -9,6 +9,7 @@ export enum PinColor {
   Green,
   Red,
   Blue,
+  Orange,
 }
 
 export type PinImageValue = {

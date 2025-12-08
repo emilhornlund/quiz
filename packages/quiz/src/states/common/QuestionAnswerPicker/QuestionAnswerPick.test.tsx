@@ -6,23 +6,6 @@ import { describe, expect, it, vi } from 'vitest'
 import QuestionAnswerPicker from './QuestionAnswerPicker'
 
 describe('QuestionAnswerPicker', () => {
-  it('shows loading spinner and hides content when loading', () => {
-    const { container } = render(
-      <QuestionAnswerPicker
-        loading
-        question={{
-          type: QuestionType.MultiChoice,
-          question: 'q',
-          answers: [{ value: 'A' }],
-          duration: 10,
-        }}
-      />,
-    )
-    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument()
-    expect(screen.queryByRole('button')).not.toBeInTheDocument()
-    expect(container).toMatchSnapshot()
-  })
-
   it('renders MultiChoice and maps selected index to onChange payload', () => {
     const onChange = vi.fn()
     const { container } = render(

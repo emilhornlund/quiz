@@ -1,4 +1,5 @@
 import {
+  GameQuestionPlayerAnswerEvent,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
@@ -8,6 +9,7 @@ import React, {
   FormEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -18,17 +20,26 @@ import NonInteractiveInfoBox from '../../../NonInteractiveInfoBox'
 import styles from './AnswerInput.module.scss'
 
 export interface AnswerInputProps {
-  interactive?: boolean
+  submittedAnswer?: GameQuestionPlayerAnswerEvent
+  interactive: boolean
+  loading: boolean
   onSubmit: (value: string) => void
 }
 
 const AnswerInput: FC<AnswerInputProps> = ({
-  interactive = true,
+  submittedAnswer,
+  interactive,
+  loading,
   onSubmit,
 }) => {
   const [value, setValue] = useState('')
   const [valid, setValid] = useState<boolean>(true)
   const formRef = useRef<HTMLFormElement>(null)
+
+  const disabled = useMemo(
+    () => !interactive || loading || !!submittedAnswer,
+    [interactive, loading, submittedAnswer],
+  )
 
   const handleSubmit = useCallback(
     (event: FormEvent) => {
@@ -61,38 +72,41 @@ const AnswerInput: FC<AnswerInputProps> = ({
     }
   }, [handleKeyDown, interactive])
 
+  if (!interactive && !submittedAnswer) {
+    return (
+      <div className={styles.answerInput}>
+        <div style={{ display: 'flex', flex: 1 }} />
+        <NonInteractiveInfoBox info="Type an answer on your screen" />
+      </div>
+    )
+  }
+
   return (
     <div className={styles.answerInput}>
-      {interactive ? (
-        <div className={styles.interactive}>
-          <form ref={formRef} onSubmit={handleSubmit}>
-            <TextField
-              id="answer-input"
-              type="text"
-              placeholder="Answer"
-              value={value}
-              regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
-              minLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH}
-              maxLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH}
-              onChange={(newValue) => setValue(newValue as string)}
-              onValid={setValid}
-              required
-              autoFocus
-            />
-            <Button
-              id="submit-button"
-              type="submit"
-              value="Submit"
-              disabled={!valid}
-            />
-          </form>
-        </div>
-      ) : (
-        <>
-          <div style={{ display: 'flex', flex: 1 }} />
-          <NonInteractiveInfoBox info="Type an answer on your screen" />
-        </>
-      )}
+      <div className={styles.interactive}>
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <TextField
+            id="answer-input"
+            type="text"
+            placeholder="Answer"
+            value={value}
+            regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
+            minLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH}
+            maxLength={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH}
+            onChange={(newValue) => setValue(newValue as string)}
+            onValid={setValid}
+            disabled={disabled}
+            required
+            autoFocus
+          />
+          <Button
+            id="submit-button"
+            type="submit"
+            value="Submit"
+            disabled={disabled || !valid}
+          />
+        </form>
+      </div>
     </div>
   )
 }

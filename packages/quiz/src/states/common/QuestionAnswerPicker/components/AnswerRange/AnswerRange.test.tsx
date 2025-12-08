@@ -42,7 +42,14 @@ vi.mock('../../../../../components', async (orig: any) => {
 describe('AnswerRange', () => {
   it('renders interactive mode with initial midpoint and disabled submit', () => {
     const { container } = render(
-      <AnswerRange min={0} max={100} step={5} interactive onSubmit={vi.fn()} />,
+      <AnswerRange
+        min={0}
+        max={100}
+        step={5}
+        interactive
+        loading={false}
+        onSubmit={vi.fn()}
+      />,
     )
     const slider = screen.getByRole('slider') as HTMLInputElement
     expect(slider.value).toBe('50')
@@ -59,6 +66,7 @@ describe('AnswerRange', () => {
         max={60}
         step={5}
         interactive
+        loading={false}
         onSubmit={onSubmit}
       />,
     )
@@ -77,7 +85,14 @@ describe('AnswerRange', () => {
   it('updates via TextField, toggles validity, and submits new value', () => {
     const onSubmit = vi.fn()
     render(
-      <AnswerRange min={0} max={10} step={1} interactive onSubmit={onSubmit} />,
+      <AnswerRange
+        min={0}
+        max={10}
+        step={1}
+        interactive
+        loading={false}
+        onSubmit={onSubmit}
+      />,
     )
 
     fireEvent.click(screen.getByTestId('tf-valid'))
@@ -95,7 +110,14 @@ describe('AnswerRange', () => {
 
   it('reflects slider attributes from props', () => {
     render(
-      <AnswerRange min={3} max={33} step={3} interactive onSubmit={vi.fn()} />,
+      <AnswerRange
+        min={3}
+        max={33}
+        step={3}
+        interactive
+        loading={false}
+        onSubmit={vi.fn()}
+      />,
     )
     const slider = screen.getByRole('slider') as HTMLInputElement
     expect(slider).toHaveAttribute('min', '3')
@@ -110,6 +132,7 @@ describe('AnswerRange', () => {
         max={15}
         step={1}
         interactive={false}
+        loading={false}
         onSubmit={vi.fn()}
       />,
     )

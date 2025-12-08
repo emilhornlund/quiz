@@ -43,11 +43,13 @@ export type SortableTableProps = {
 type SortableItemProps = {
   id: string
   disabled?: boolean
+  dropAnimation?: string | null
 } & Pick<SortableTableValue, 'value' | 'icon' | 'iconColor'>
 
 const SortableItem: FC<SortableItemProps> = ({
   id,
   disabled,
+  dropAnimation,
   value,
   icon,
   iconColor = colors.gray4,
@@ -66,6 +68,7 @@ const SortableItem: FC<SortableItemProps> = ({
       className={classNames(
         styles.item,
         !disabled ? styles.draggable : undefined,
+        dropAnimation === id ? styles.dropSuccess : undefined,
       )}
       style={style}
       {...attributes}
@@ -96,6 +99,8 @@ const SortableTable: FC<SortableTableProps> = ({
   onChange = () => undefined,
 }) => {
   const [internalValues, setInternalValues] = useState(values)
+  const [dropAnimation, setDropAnimation] = useState<string | null>(null)
+
   useEffect(() => {
     setInternalValues(values)
   }, [values])
@@ -125,6 +130,10 @@ const SortableTable: FC<SortableTableProps> = ({
     const { active, over } = event
 
     if (over && active?.id !== over?.id) {
+      // Trigger drop animation
+      setDropAnimation(active.id as string)
+      setTimeout(() => setDropAnimation(null), 400)
+
       setInternalValues((items) => {
         const oldIndex = items.findIndex(({ id }) => id === active.id)
         const newIndex = items.findIndex(({ id }) => id === over.id)
@@ -144,7 +153,12 @@ const SortableTable: FC<SortableTableProps> = ({
           items={internalValues}
           strategy={verticalListSortingStrategy}>
           {internalValues.map((value) => (
-            <SortableItem {...value} disabled={disabled} key={value.id} />
+            <SortableItem
+              {...value}
+              disabled={disabled}
+              dropAnimation={dropAnimation}
+              key={value.id}
+            />
           ))}
         </SortableContext>
       </DndContext>

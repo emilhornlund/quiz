@@ -53,6 +53,7 @@ describe('AnswerSort', () => {
       <AnswerSort
         values={['Alpha', 'Beta', 'Gamma']}
         interactive
+        loading={false}
         onSubmit={vi.fn()}
       />,
     )
@@ -72,6 +73,7 @@ describe('AnswerSort', () => {
       <AnswerSort
         values={['New York', 'Los Angeles', 'Rome']}
         interactive
+        loading={false}
         onSubmit={vi.fn()}
       />,
     )
@@ -88,6 +90,7 @@ describe('AnswerSort', () => {
       <AnswerSort
         values={['Red', 'Green', 'Blue']}
         interactive
+        loading={false}
         onSubmit={onSubmit}
       />,
     )
@@ -111,6 +114,7 @@ describe('AnswerSort', () => {
       <AnswerSort
         values={['One', 'Two', 'Three']}
         interactive
+        loading={false}
         onSubmit={onSubmit}
       />,
     )
@@ -130,7 +134,12 @@ describe('AnswerSort', () => {
 
   it('disables interaction and hides submit button in non-interactive mode', () => {
     const { container } = render(
-      <AnswerSort values={['A', 'B']} interactive={false} onSubmit={vi.fn()} />,
+      <AnswerSort
+        values={['A', 'B']}
+        interactive={false}
+        loading={false}
+        onSubmit={vi.fn()}
+      />,
     )
     const sortable = screen.getByTestId('sortable')
     expect(sortable).toHaveAttribute('data-disabled', 'true')
@@ -142,7 +151,7 @@ describe('AnswerSort', () => {
 
   it('handles empty list', () => {
     const { container } = render(
-      <AnswerSort values={[]} interactive onSubmit={vi.fn()} />,
+      <AnswerSort values={[]} interactive loading={false} onSubmit={vi.fn()} />,
     )
     const sortable = screen.getByTestId('sortable')
     expect(within(sortable).queryAllByRole('listitem')).toHaveLength(0)
