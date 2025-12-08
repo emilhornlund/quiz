@@ -1,5 +1,7 @@
-import { GameLobbyHostEvent } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GAME_MAX_PLAYERS, GameLobbyHostEvent } from '@quiz/common'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import QRCode from 'react-qr-code'
 
 import {
@@ -18,6 +20,13 @@ export interface HostLobbyStateProps {
   event: GameLobbyHostEvent
 }
 
+interface PlayerAnimationState {
+  [playerId: string]: {
+    animationState: 'entrance' | 'exit' | 'shake' | 'none'
+    staggerDelay: number
+  }
+}
+
 const HostLobbyState: FC<HostLobbyStateProps> = ({
   event: {
     game: { id, pin },
@@ -34,8 +43,61 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
   }>()
   const [isRemovingPlayer, setIsRemovingPlayer] = useState<boolean>(false)
 
+  // Animation state management
+  const [playerAnimations, setPlayerAnimations] =
+    useState<PlayerAnimationState>({})
+  const prevPlayersRef = useRef<string[]>([])
+
   const { gameID } = useGameContext()
   const { completeTask, leaveGame } = useGameContext()
+
+  // Handle player join/leave animations
+  useEffect(() => {
+    const currentPlayerIds = players.map((p) => p.id)
+    const previousPlayerIds = prevPlayersRef.current
+
+    // Find new players (joined)
+    const newPlayers = currentPlayerIds.filter(
+      (id) => !previousPlayerIds.includes(id),
+    )
+
+    // Find removed players (left)
+    const removedPlayers = previousPlayerIds.filter(
+      (id) => !currentPlayerIds.includes(id),
+    )
+
+    // Update animation states
+    const newAnimations: PlayerAnimationState = {}
+
+    // Add entrance animations for new players with stagger
+    newPlayers.forEach((playerId, index) => {
+      newAnimations[playerId] = {
+        animationState: 'entrance',
+        staggerDelay: index * 100, // 100ms stagger
+      }
+    })
+
+    // Add exit animations for removed players
+    removedPlayers.forEach((playerId) => {
+      newAnimations[playerId] = {
+        animationState: 'exit',
+        staggerDelay: 0,
+      }
+    })
+
+    // Keep existing players with no animation
+    currentPlayerIds.forEach((playerId) => {
+      if (!newAnimations[playerId]) {
+        newAnimations[playerId] = {
+          animationState: 'none',
+          staggerDelay: 0,
+        }
+      }
+    })
+
+    setPlayerAnimations(newAnimations)
+    prevPlayersRef.current = currentPlayerIds
+  }, [players])
 
   const handleStartGame = () => {
     setIsStartingGame(true)
@@ -43,11 +105,29 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
   }
 
   const handleRemovePlayer = () => {
-    setPlayerToRemove(undefined)
-    setIsRemovingPlayer(true)
-    if (gameID && playerToRemove) {
-      leaveGame?.(playerToRemove.id).finally(() => setIsRemovingPlayer(false))
-    }
+    if (!playerToRemove) return
+
+    // Add shake animation before removal
+    setPlayerAnimations((prev) => ({
+      ...prev,
+      [playerToRemove.id]: {
+        animationState: 'shake',
+        staggerDelay: 0,
+      },
+    }))
+
+    // Wait for shake animation to complete before actual removal
+    setTimeout(() => {
+      setPlayerToRemove(undefined)
+      setIsRemovingPlayer(true)
+      if (gameID) {
+        leaveGame?.(playerToRemove.id).finally(() => setIsRemovingPlayer(false))
+      }
+    }, 500) // Match shake animation duration
+  }
+
+  const handleRemovePlayerClick = (playerId: string, nickname: string) => {
+    setPlayerToRemove({ id: playerId, nickname })
   }
 
   return (
@@ -81,17 +161,27 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
             <div>Game PIN</div>
             <div>{pin}</div>
           </div>
-          <div className={classNames(styles.box, styles.qr)}>
+          <div
+            className={classNames(styles.box, styles.qr, styles.qrContainer)}>
             <QRCode value={`${config.baseUrl}/auth/game?id=${id}`} />
+            <div className={styles.qrScanLine} />
           </div>
+        </div>
+        <div className={styles.playerCounter}>
+          <FontAwesomeIcon icon={faUserGroup} className={styles.playerIcon} />
+          <span className={styles.playerCount}>
+            {players.length} / {GAME_MAX_PLAYERS}
+          </span>
         </div>
         <div className={styles.content}>
           <div className={styles.players}>
             {players.map(({ id, nickname }) => (
               <NicknameChip
-                key={nickname}
+                key={id}
                 value={nickname}
-                onDelete={() => setPlayerToRemove({ id, nickname })}
+                onDelete={() => handleRemovePlayerClick(id, nickname)}
+                animationState={playerAnimations[id]?.animationState || 'none'}
+                staggerDelay={playerAnimations[id]?.staggerDelay || 0}
               />
             ))}
           </div>

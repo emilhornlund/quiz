@@ -1,5 +1,6 @@
 @use '../../styles/colors';
 @use '../../styles/helpers';
+@use '../../styles/animations';
 
 .main {
   display: flex;
@@ -35,9 +36,34 @@
     @include helpers.fontSize(22px);
   }
 
+  // Enhanced hover transition
   &:hover {
+    @media (prefers-reduced-motion: no-preference) {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
     .delete {
       display: inline-flex;
+    }
+  }
+
+  // Animation states
+  &.entrance {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  }
+
+  &.exit {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: slideOutLeft 0.3s ease-in forwards;
+    }
+  }
+
+  &.shake {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: shake 0.5s ease-in-out;
     }
   }
 
@@ -61,6 +87,7 @@
     padding: 0;
     position: absolute;
     width: 100%;
+    transition: background-color 0.2s ease;
 
     @include helpers.mobile {
       @include helpers.fontSize(20px);
@@ -73,5 +100,54 @@
     @include helpers.desktop {
       @include helpers.fontSize(28px);
     }
+
+    &:hover {
+      @media (prefers-reduced-motion: no-preference) {
+        background-color: colors.$black-1-75;
+      }
+    }
+  }
+}
+
+// Keyframe animations
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
   }
 }

@@ -1,0 +1,95 @@
+@use './helpers';
+@use './variables';
+
+// Shared transition utilities following existing patterns
+
+// Smooth hover transitions
+@mixin hover-transition {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+// Smooth color transitions
+@mixin color-transition {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+// Smooth transform transitions
+@mixin transform-transition {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Fade transition utility
+@mixin fade-transition($duration: 0.3s) {
+  transition: opacity $duration ease;
+}
+
+// Slide transition utility
+@mixin slide-transition($duration: 0.3s, $direction: 'right') {
+  transition: transform $duration cubic-bezier(0.4, 0, 0.2, 1);
+
+  @if $direction == 'right' {
+    transform: translateX(100%);
+  } @else if $direction == 'left' {
+    transform: translateX(-100%);
+  } @else if $direction == 'up' {
+    transform: translateY(-100%);
+  } @else if $direction == 'down' {
+    transform: translateY(100%);
+  }
+}
+
+// Scale transition utility
+@mixin scale-transition($duration: 0.2s) {
+  transition: transform $duration ease;
+}
+
+// Respect reduced motion preferences
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// Hover state with reduced motion support
+@mixin hover-scale($scale: 1.05) {
+  &:hover {
+    @media (prefers-reduced-motion: no-preference) {
+      transform: scale($scale);
+    }
+  }
+}
+
+// Focus state with smooth transitions
+@mixin focus-transition {
+  transition:
+    outline-color 0.2s ease,
+    outline-width 0.2s ease;
+}
+
+// Common transition classes
+.smooth-transition {
+  @include transform-transition;
+}
+
+.hover-transition {
+  @include hover-transition;
+}
+
+.color-transition {
+  @include color-transition;
+}
+
+.fade-transition {
+  @include fade-transition;
+}
+
+.scale-transition {
+  @include scale-transition;
+}

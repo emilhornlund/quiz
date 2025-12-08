@@ -96,7 +96,7 @@ exports[`PlayerLobbyState > confirms leave, calls leaveGame with participant id 
             />
           </div>
           <div
-            class="main"
+            class="main "
           >
             FrostyBear
           </div>
@@ -106,9 +106,17 @@ exports[`PlayerLobbyState > confirms leave, calls leaveGame with participant id 
             You’re in the waiting room
           </div>
           <div
-            class="typography text small"
+            class="messageContainer"
           >
-            Be nice and wait
+            <div
+              class="message visible"
+            >
+              <div
+                class="typography text small"
+              >
+                Be nice and wait
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -213,7 +221,7 @@ exports[`PlayerLobbyState > does nothing when gameID is undefined 1`] = `
             />
           </div>
           <div
-            class="main"
+            class="main "
           >
             FrostyBear
           </div>
@@ -223,9 +231,17 @@ exports[`PlayerLobbyState > does nothing when gameID is undefined 1`] = `
             You’re in the waiting room
           </div>
           <div
-            class="typography text small"
+            class="messageContainer"
           >
-            Be nice and wait
+            <div
+              class="message visible"
+            >
+              <div
+                class="typography text small"
+              >
+                Be nice and wait
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -330,7 +346,7 @@ exports[`PlayerLobbyState > does nothing when participant id is missing 1`] = `
             />
           </div>
           <div
-            class="main"
+            class="main "
           >
             FrostyBear
           </div>
@@ -340,9 +356,17 @@ exports[`PlayerLobbyState > does nothing when participant id is missing 1`] = `
             You’re in the waiting room
           </div>
           <div
-            class="typography text small"
+            class="messageContainer"
           >
-            Be nice and wait
+            <div
+              class="message visible"
+            >
+              <div
+                class="typography text small"
+              >
+                Be nice and wait
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -449,7 +473,7 @@ exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
             />
           </div>
           <div
-            class="main"
+            class="main "
           >
             FrostyBear
           </div>
@@ -459,9 +483,17 @@ exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
             You’re in the waiting room
           </div>
           <div
-            class="typography text small"
+            class="messageContainer"
           >
-            Be nice and wait
+            <div
+              class="message visible"
+            >
+              <div
+                class="typography text small"
+              >
+                Be nice and wait
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -641,7 +673,7 @@ exports[`PlayerLobbyState > renders lobby with nickname, title and message 1`] =
             />
           </div>
           <div
-            class="main"
+            class="main "
           >
             FrostyBear
           </div>
@@ -651,9 +683,17 @@ exports[`PlayerLobbyState > renders lobby with nickname, title and message 1`] =
             You’re in the waiting room
           </div>
           <div
-            class="typography text small"
+            class="messageContainer"
           >
-            Be nice and wait
+            <div
+              class="message visible"
+            >
+              <div
+                class="typography text small"
+              >
+                Be nice and wait
+              </div>
+            </div>
           </div>
         </div>
       </div>

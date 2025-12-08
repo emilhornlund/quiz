@@ -3,7 +3,65 @@
 exports[`should render NicknameChip with default props 1`] = `
 <div>
   <div
-    class="main"
+    class="main "
+  >
+    FrostyBear
+  </div>
+</div>
+`;
+
+exports[`should render NicknameChip with delete button 1`] = `
+<div>
+  <div
+    class="main "
+  >
+    FrostyBear
+    <button
+      class="delete"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-xmark"
+        data-icon="xmark"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 384 512"
+      >
+        <path
+          d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`should render NicknameChip with entrance animation 1`] = `
+<div>
+  <div
+    class="main entrance"
+    style="animation-delay: 100ms;"
+  >
+    FrostyBear
+  </div>
+</div>
+`;
+
+exports[`should render NicknameChip with exit animation 1`] = `
+<div>
+  <div
+    class="main exit"
+  >
+    FrostyBear
+  </div>
+</div>
+`;
+
+exports[`should render NicknameChip with shake animation 1`] = `
+<div>
+  <div
+    class="main shake"
   >
     FrostyBear
   </div>

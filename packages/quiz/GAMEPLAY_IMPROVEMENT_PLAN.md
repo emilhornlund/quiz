@@ -206,25 +206,24 @@ This document outlines incremental visual and UX improvements for the quiz gamep
 
 ### 🎨 **Low Priority (Future Enhancements)**
 
-#### 6. Lobby State Animations
+#### 6. ✅ Lobby State Animations - COMPLETED
 
 **Problem:** Static lobby displays, no visual feedback for player changes
 **UX Impact:** Boring waiting experience, no sense of activity
-
 **Architecture Insight:** Lobby states have real-time player updates via SSE events.
 
 **Implementation:**
 
-- [ ] Player join/leave animations with slide effects
-- [ ] QR code hover effects and scan animation
-- [ ] Dynamic waiting message transitions
-- [ ] Player count change animations
-- [ ] Enhance existing player removal chips
+- [x] Player join/leave animations with slide effects
+- [x] QR code hover effects and scan animation
+- [x] Dynamic waiting message transitions
+- [x] Player count change animations
+- [x] Enhance existing player removal chips
 
 **Files to modify:**
 
-- [ ] `packages/quiz/src/states/HostLobbyState/HostLobbyState.tsx`
-- [ ] `packages/quiz/src/states/PlayerLobbyState/PlayerLobbyState.tsx`
+- [x] `packages/quiz/src/states/HostLobbyState/HostLobbyState.tsx`
+- [x] `packages/quiz/src/states/PlayerLobbyState/PlayerLobbyState.tsx`
 
 #### 7. Enhanced Loading States
 

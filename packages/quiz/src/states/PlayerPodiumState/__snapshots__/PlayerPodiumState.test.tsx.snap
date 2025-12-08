@@ -101,7 +101,7 @@ exports[`PlayerPodiumState > navigates home on End Game click 1`] = `
               2
             </div>
             <div
-              class="main"
+              class="main "
             >
               Bob
             </div>
@@ -224,7 +224,7 @@ exports[`PlayerPodiumState > navigates to game results on Game Results click 1`]
               2
             </div>
             <div
-              class="main"
+              class="main "
             >
               Bob
             </div>
@@ -347,7 +347,7 @@ exports[`PlayerPodiumState > renders name, badge, nickname, score, and message 1
               1
             </div>
             <div
-              class="main"
+              class="main "
             >
               ShadowCyborg
             </div>

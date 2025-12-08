@@ -1,5 +1,5 @@
 import { GameLobbyPlayerEvent } from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import HourglassIcon from '../../assets/images/hourglass-icon.svg'
@@ -12,9 +12,11 @@ import {
 } from '../../components'
 import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
+import { classNames } from '../../utils/helpers.ts'
 import { GamePage } from '../common'
 
-import { getMessage } from './message.utils.ts'
+import { getMessage, getNextMessage } from './message.utils.ts'
+import styles from './PlayerLobbyState.module.scss'
 
 export interface PlayerLobbyStateProps {
   event: GameLobbyPlayerEvent
@@ -46,7 +48,40 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
     }
   }
 
-  const message = useMemo(() => getMessage(), [])
+  const [currentMessage, setCurrentMessage] = useState<string>(() =>
+    getMessage(),
+  )
+  const [messageAnimationState, setMessageAnimationState] = useState<
+    'visible' | 'entering' | 'exiting'
+  >('visible')
+  const messageIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Rotate messages every 8 seconds with smooth transitions
+  useEffect(() => {
+    const rotateMessage = () => {
+      setMessageAnimationState('exiting')
+
+      // Change message after fade out
+      setTimeout(() => {
+        setCurrentMessage((prev) => getNextMessage(prev))
+        setMessageAnimationState('entering')
+
+        // Set to visible after fade in
+        setTimeout(() => {
+          setMessageAnimationState('visible')
+        }, 300)
+      }, 200)
+    }
+
+    // Set up interval for message rotation
+    messageIntervalRef.current = setInterval(rotateMessage, 8000)
+
+    return () => {
+      if (messageIntervalRef.current) {
+        clearInterval(messageIntervalRef.current)
+      }
+    }
+  }, [])
 
   return (
     <>
@@ -63,13 +98,24 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
           />
         }>
         <PageProminentIcon src={HourglassIcon} alt="Hourglass" />
+
         <NicknameChip value={nickname} />
+
         <Typography variant="title" size="medium">
           You’re in the waiting room
         </Typography>
-        <Typography variant="text" size="small">
-          {message}
-        </Typography>
+
+        <div className={styles.messageContainer}>
+          <div
+            className={classNames(
+              styles.message,
+              styles[messageAnimationState],
+            )}>
+            <Typography variant="text" size="small">
+              {currentMessage}
+            </Typography>
+          </div>
+        </div>
       </GamePage>
       <ConfirmDialog
         title="Confirm Leave Game"
