@@ -318,6 +318,7 @@ export type GameLeaderboardHostEvent = {
   }
   leaderboard: {
     position: number
+    previousPosition?: number
     nickname: string
     score: number
     streaks: number
