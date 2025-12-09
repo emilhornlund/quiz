@@ -1,10 +1,18 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import Podium from './Podium'
 
 describe('Podium', () => {
+  beforeEach(() => {
+    vi.spyOn(Math, 'random').mockReturnValue(0.5)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('should render Podium from a full leaderboard', async () => {
     const { container } = render(
       <Podium
@@ -27,15 +35,25 @@ describe('Podium', () => {
   })
 
   it('should render Podium from a leaderboard with 3 players', async () => {
-    const { container } = render(
-      <Podium
-        values={[
-          { position: 1, nickname: 'ShadowCyborg', score: 18456 },
-          { position: 2, nickname: 'Radar', score: 18398 },
-          { position: 3, nickname: 'ShadowWhirlwind', score: 15492 },
-        ]}
-      />,
-    )
+    const mockValues = [
+      { position: 1, nickname: 'ShadowCyborg', score: 18456 },
+      { position: 2, nickname: 'Radar', score: 18398 },
+      { position: 3, nickname: 'ShadowWhirlwind', score: 15492 },
+    ]
+
+    const { container } = render(<Podium values={mockValues} />)
+
+    expect(screen.getByText('ShadowCyborg')).toBeInTheDocument()
+    expect(screen.getByText('Radar')).toBeInTheDocument()
+    expect(screen.getByText('ShadowWhirlwind')).toBeInTheDocument()
+
+    expect(screen.getByText('18456')).toBeInTheDocument()
+    expect(screen.getByText('18398')).toBeInTheDocument()
+    expect(screen.getByText('15492')).toBeInTheDocument()
+
+    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText('3')).toBeInTheDocument()
 
     expect(container).toMatchSnapshot()
   })

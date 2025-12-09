@@ -18,9 +18,19 @@ vi.mock('../../context/game', () => ({
 
 import HostPodiumState from './HostPodiumState'
 
+let mathRandomSpy: ReturnType<typeof vi.spyOn>
+
 describe('HostPodiumState', () => {
   beforeEach(() => {
     h.completeTask.mockClear()
+    h.completeTask.mockResolvedValue({})
+
+    mathRandomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
+  })
+
+  afterEach(() => {
+    mathRandomSpy.mockRestore()
+    vi.clearAllMocks()
   })
 
   it('should render HostPodiumState', async () => {

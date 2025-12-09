@@ -8,7 +8,6 @@
   column-gap: 0;
   border-bottom: helpers.pxToRem(4px) solid colors.$white;
   width: 100%;
-  overflow: hidden;
 
   .column {
     display: flex;
@@ -56,89 +55,172 @@
       position: relative;
       width: 100%;
 
-      &::after {
-        padding-top: 25%;
-        display: block;
-        content: '';
-      }
-
-      div {
+      .crown {
+        $crown-size: helpers.pxToRem(48px);
         position: absolute;
-        bottom: 0;
-        z-index: variables.$podium-z-index;
+        animation: crownBounce 1s ease-out;
+        animation-delay: 1.5s;
+        animation-fill-mode: both;
+        line-height: 1;
+
+        @media (prefers-reduced-motion: reduce) {
+          animation: none;
+        }
+
+        @include helpers.mobile {
+          font-size: $crown-size * 0.75;
+          bottom: calc(100% - ((#{$crown-size} * 0.75) / 6));
+        }
+        @include helpers.tablet {
+          font-size: $crown-size * 0.9;
+          bottom: calc(100% - ((#{$crown-size} * 0.9) / 6));
+        }
+        @include helpers.desktop {
+          font-size: $crown-size;
+          bottom: calc(100% - (#{$crown-size} / 6));
+        }
       }
     }
 
-    .stack {
+    .stackContainer {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
       flex: 1;
+      overflow: hidden;
 
-      @include helpers.mobile {
-        padding: variables.$mobile-layout-gutter 0
-          calc(#{variables.$mobile-layout-gutter} * 4) 0;
-        row-gap: variables.$mobile-narrow-layout-gutter;
-      }
-
-      @include helpers.tablet {
-        padding: variables.$tablet-layout-gutter 0
-          calc(#{variables.$tablet-layout-gutter} * 4) 0;
-        row-gap: variables.$tablet-narrow-layout-gutter;
-      }
-
-      @include helpers.desktop {
-        padding: variables.$desktop-layout-gutter 0
-          calc(#{variables.$desktop-layout-gutter} * 4) 0;
-        row-gap: variables.$desktop-narrow-layout-gutter;
-      }
-
-      .position {
+      .stack {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        aspect-ratio: 1 / 1;
-        border-radius: 50%;
-        background-color: colors.$white-1-50;
-        color: colors.$black-1-50;
-        font-weight: bolder;
+        width: 100%;
+        flex: 1;
 
         @include helpers.mobile {
-          padding: 0.1rem;
-          @include helpers.fontSize(26px);
+          padding: variables.$mobile-layout-gutter 0
+            calc(#{variables.$mobile-layout-gutter} * 4) 0;
+          row-gap: variables.$mobile-narrow-layout-gutter;
         }
 
         @include helpers.tablet {
-          padding: 0.2rem;
-          @include helpers.fontSize(36px);
+          padding: variables.$tablet-layout-gutter 0
+            calc(#{variables.$tablet-layout-gutter} * 4) 0;
+          row-gap: variables.$tablet-narrow-layout-gutter;
         }
 
         @include helpers.desktop {
-          padding: 0.3rem;
-          @include helpers.fontSize(46px);
-        }
-      }
-
-      .score {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-        color: colors.$black-1-50;
-
-        @include helpers.mobile {
-          @include helpers.fontSize(16px);
+          padding: variables.$desktop-layout-gutter 0
+            calc(#{variables.$desktop-layout-gutter} * 4) 0;
+          row-gap: variables.$desktop-narrow-layout-gutter;
         }
 
-        @include helpers.tablet {
-          @include helpers.fontSize(26px);
+        .position {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          aspect-ratio: 1 / 1;
+          border-radius: 50%;
+          background-color: colors.$white-1-50;
+          color: colors.$black-1-50;
+          font-weight: bolder;
+          position: relative;
+
+          @include helpers.mobile {
+            padding: 0.1rem;
+            @include helpers.fontSize(26px);
+          }
+
+          @include helpers.tablet {
+            padding: 0.2rem;
+            @include helpers.fontSize(36px);
+          }
+
+          @include helpers.desktop {
+            padding: 0.3rem;
+            @include helpers.fontSize(46px);
+          }
+
+          &.position-1 {
+            background: linear-gradient(
+              135deg,
+              colors.$gold 0%,
+              colors.$yellow-2 100%
+            );
+            box-shadow: 0 0 20px rgba(255, 199, 39, 0.5);
+            animation: positionGlow 2s ease-in-out infinite alternate;
+          }
+
+          &.position-2 {
+            background: linear-gradient(135deg, colors.$silver 0%, #e8e8e8 100%);
+            box-shadow: 0 0 15px rgba(223, 223, 223, 0.4);
+          }
+
+          &.position-3 {
+            background: linear-gradient(135deg, colors.$bronze 0%, #ff8c42 100%);
+            box-shadow: 0 0 15px rgba(255, 167, 80, 0.4);
+          }
         }
 
-        @include helpers.desktop {
-          @include helpers.fontSize(36px);
+        .score {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-weight: bold;
+          color: colors.$black-1-50;
+
+          @include helpers.mobile {
+            @include helpers.fontSize(16px);
+          }
+
+          @include helpers.tablet {
+            @include helpers.fontSize(26px);
+          }
+
+          @include helpers.desktop {
+            @include helpers.fontSize(36px);
+          }
+        }
+
+        .sparkleContainer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          overflow: hidden;
+
+          $sparkle-size: helpers.pxToRem(4px);
+
+          .sparkle {
+            position: absolute;
+            width: $sparkle-size;
+            height: $sparkle-size;
+            background: colors.$white;
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+            animation-delay: var(--sparkle-delay);
+            left: calc(var(--sparkle-x) - (#{$sparkle-size} / 2));
+            top: calc(var(--sparkle-y) - (#{$sparkle-size} / 2));
+            opacity: 0;
+
+            @media (prefers-reduced-motion: reduce) {
+              animation: none;
+            }
+
+            &:nth-child(2n) {
+              animation-delay: calc(var(--sparkle-delay) + 0.3s);
+              background: colors.$pink-1;
+            }
+
+            &:nth-child(3n) {
+              animation-delay: calc(var(--sparkle-delay) + 0.6s);
+              background: colors.$turquoise-2;
+            }
+          }
         }
       }
     }
@@ -208,6 +290,45 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes positionGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 199, 39, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 199, 39, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 199, 39, 0.3);
+  }
+}
+
+@keyframes crownBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
   }
 }
 
