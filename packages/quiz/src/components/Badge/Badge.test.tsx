@@ -11,7 +11,7 @@ describe('Badge', () => {
     render(<Badge>Test</Badge>)
     const badge = screen.getByText('Test')
     expect(badge).toBeInTheDocument()
-    expect(badge).toHaveClass('small', 'white')
+    expect(badge).toHaveClass('small')
   })
 
   test('renders with custom size and background color', () => {
@@ -22,7 +22,7 @@ describe('Badge', () => {
     )
     const badge = screen.getByRole('img', { hidden: true })
     expect(badge).toBeInTheDocument()
-    expect(badge.closest('div')).toHaveClass('large', 'green')
+    expect(badge.closest('div')).toHaveClass('large')
   })
 
   test('applies celebration animation classes', () => {

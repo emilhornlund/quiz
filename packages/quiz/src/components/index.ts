@@ -1,4 +1,4 @@
-export type { BadgeProps, BadgeSize, BadgeBackgroundColor } from './Badge'
+export type { BadgeProps, BadgeSize, BadgeColor } from './Badge'
 export type { ButtonProps } from './Button'
 export type { CardProps } from './Card'
 export type { CircularProgressBarProps } from './CircularProgressBar'

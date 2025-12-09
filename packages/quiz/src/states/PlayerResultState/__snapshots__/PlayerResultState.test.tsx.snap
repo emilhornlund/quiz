@@ -66,7 +66,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
             Correct
           </div>
           <div
-            class="badge large green celebrationEpic"
+            class="badge large celebrationEpic border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -87,7 +88,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               2
             </div>
@@ -503,7 +505,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
             Correct
           </div>
           <div
-            class="badge large green celebrationEpic"
+            class="badge large celebrationEpic border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -930,7 +933,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
             Correct
           </div>
           <div
-            class="badge large green celebrationEpic"
+            class="badge large celebrationEpic border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -951,7 +955,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               7
             </div>
@@ -1367,7 +1372,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
             Correct
           </div>
           <div
-            class="badge large green celebrationEpic"
+            class="badge large celebrationEpic border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -1388,7 +1394,8 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               10
             </div>
@@ -1804,7 +1811,8 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
             Correct
           </div>
           <div
-            class="badge large green celebrationMajor"
+            class="badge large celebrationMajor border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -2131,7 +2139,8 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
             Correct
           </div>
           <div
-            class="badge large green celebrationMajor"
+            class="badge large celebrationMajor border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -2152,7 +2161,8 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               5
             </div>
@@ -2468,7 +2478,8 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for inco
             Incorrect
           </div>
           <div
-            class="badge large red"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -2611,7 +2622,8 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for simp
             Correct
           </div>
           <div
-            class="badge large green"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -2754,7 +2766,8 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
             Correct
           </div>
           <div
-            class="badge large green celebrationNormal"
+            class="badge large celebrationNormal border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -3001,7 +3014,8 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
             Correct
           </div>
           <div
-            class="badge large green celebrationNormal"
+            class="badge large celebrationNormal border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -3022,7 +3036,8 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               3
             </div>
@@ -3258,7 +3273,8 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
             Correct
           </div>
           <div
-            class="badge large green celebrationEpic"
+            class="badge large celebrationEpic border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -3279,7 +3295,8 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small border"
+              style="color: white;"
             >
               3
             </div>
@@ -3706,7 +3723,8 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
             Incorrect
           </div>
           <div
-            class="badge large red"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"

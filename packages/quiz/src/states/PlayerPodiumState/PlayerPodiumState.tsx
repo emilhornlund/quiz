@@ -10,6 +10,7 @@ import {
   NicknameChip,
   Typography,
 } from '../../components'
+import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
 import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
@@ -68,7 +69,8 @@ const PlayerPodiumState: FC<PlayerPodiumStateProps> = ({
       <div className={styles.content}>
         <Badge
           size="large"
-          backgroundColor={getBadgePositionBackgroundColor(position)}>
+          backgroundColor={getBadgePositionBackgroundColor(position)}
+          textColor={getBadgePositionTextColor(position)}>
           {position}
         </Badge>
         <NicknameChip value={nickname} />

@@ -16,6 +16,7 @@ import {
   Badge,
   getBadgePositionBackgroundColor,
 } from '../../../../../components'
+import { getBadgePositionTextColor } from '../../../../../components/Badge/badge-utils.ts'
 import { GameModeLabels } from '../../../../../models'
 import colors from '../../../../../styles/colors.module.scss'
 import { formatTimeAgo } from '../../../../../utils/date.utils.ts'
@@ -78,6 +79,7 @@ const GameTableItem: FC<GameTableItemProps> = ({ values, onClick }) => {
             </div>
             <Badge
               backgroundColor={getBadgePositionBackgroundColor(values.rank)}
+              textColor={getBadgePositionTextColor(values.rank)}
               size="small">
               {values.rank}
             </Badge>

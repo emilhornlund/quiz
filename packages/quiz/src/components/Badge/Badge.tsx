@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
+import colors from '../../styles/colors.module.scss'
 import { classNames } from '../../utils/helpers.ts'
 
 import styles from './Badge.module.scss'
@@ -11,7 +12,7 @@ const BadgeSizeClassName: { [key in BadgeSize]: string } = {
   large: styles.large,
 }
 
-export type BadgeBackgroundColor =
+export type BadgeColor =
   | 'green'
   | 'red'
   | 'orange'
@@ -19,17 +20,18 @@ export type BadgeBackgroundColor =
   | 'silver'
   | 'bronze'
   | 'white'
+  | 'black'
 
-const BadgeBackgroundColorClassName: { [key in BadgeBackgroundColor]: string } =
-  {
-    green: styles.green,
-    red: styles.red,
-    orange: styles.orange,
-    gold: styles.gold,
-    silver: styles.silver,
-    bronze: styles.bronze,
-    white: styles.white,
-  }
+const BadgeColorClassName: { [key in BadgeColor]: string } = {
+  green: colors.green2,
+  red: colors.red2,
+  orange: colors.orange2,
+  gold: colors.gold,
+  silver: colors.silver,
+  bronze: colors.bronze,
+  white: colors.white,
+  black: colors.black1,
+}
 
 export type BadgeCelebration = 'none' | 'normal' | 'major' | 'epic'
 
@@ -42,7 +44,9 @@ const BadgeCelebrationClassName: { [key in BadgeCelebration]: string } = {
 
 export interface BadgeProps {
   size?: BadgeSize
-  backgroundColor?: BadgeBackgroundColor
+  backgroundColor?: BadgeColor
+  borderColor?: BadgeColor
+  textColor?: BadgeColor
   celebration?: BadgeCelebration
   onAnimationEnd?: () => void
   children?: ReactNode
@@ -51,6 +55,8 @@ export interface BadgeProps {
 const Badge: FC<BadgeProps> = ({
   size = 'small',
   backgroundColor = 'white',
+  borderColor = 'white',
+  textColor = 'white',
   celebration = 'none',
   onAnimationEnd,
   children,
@@ -73,9 +79,14 @@ const Badge: FC<BadgeProps> = ({
       className={classNames(
         styles.badge,
         BadgeSizeClassName[size],
-        BadgeBackgroundColorClassName[backgroundColor],
         isAnimating ? BadgeCelebrationClassName[celebration] : '',
-      )}>
+        borderColor ? styles.border : undefined,
+      )}
+      style={{
+        backgroundColor: BadgeColorClassName[backgroundColor],
+        outlineColor: BadgeColorClassName[borderColor],
+        color: BadgeColorClassName[textColor],
+      }}>
       {children}
     </div>
   )

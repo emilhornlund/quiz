@@ -8,6 +8,7 @@ import {
   PlayerGameFooter,
   StreakBadge,
 } from '../../components'
+import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
 import { GamePage, PointsBehindIndicator } from '../common'
 
 export interface PlayerLeaderboardStateProps {
@@ -36,7 +37,8 @@ const PlayerLeaderboardState: FC<PlayerLeaderboardStateProps> = ({
       }>
       <Badge
         size="large"
-        backgroundColor={getBadgePositionBackgroundColor(position)}>
+        backgroundColor={getBadgePositionBackgroundColor(position)}
+        textColor={getBadgePositionTextColor(position)}>
         {position}
       </Badge>
       <NicknameChip value={nickname} />

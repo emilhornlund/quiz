@@ -57,48 +57,6 @@
     }
   }
 
-  &.green {
-    outline-color: colors.$white;
-    background-color: colors.$green-2;
-    color: colors.$white;
-  }
-
-  &.red {
-    outline-color: colors.$white;
-    background-color: colors.$red-2;
-    color: colors.$white;
-  }
-
-  &.orange {
-    outline-color: colors.$white;
-    background-color: colors.$orange-2;
-    color: colors.$white;
-  }
-
-  &.gold {
-    outline-color: colors.$white;
-    background-color: colors.$gold;
-    color: colors.$white;
-  }
-
-  &.silver {
-    outline-color: colors.$white;
-    background-color: colors.$silver;
-    color: colors.$white;
-  }
-
-  &.bronze {
-    outline-color: colors.$white;
-    background-color: colors.$bronze;
-    color: colors.$white;
-  }
-
-  &.white {
-    outline-color: colors.$white;
-    background-color: colors.$white;
-    color: colors.$black-1-70;
-  }
-
   // Celebration animations
   &.celebrationNormal {
     animation: successBounce 0.8s ease-out;

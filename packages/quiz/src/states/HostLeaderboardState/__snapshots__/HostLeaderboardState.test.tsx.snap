@@ -85,75 +85,59 @@ exports[`HostLeaderboardState > clicks Next and calls completeTask 1`] = `
             Leaderboard
           </div>
           <div
-            class="main"
+            class="leaderboard"
           >
             <div
-              class="column podium"
+              class="row gold topPosition"
               style="--row-index: 0;"
             >
               <div
-                class="position"
+                class="column position"
               >
-                <span>
+                <span
+                  class="badge"
+                >
                   1
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
               <div
-                class="nameRow"
+                class="column nickname"
               >
                 <span>
                   ShadowCyborg
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18456
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  2
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row silver topPosition"
               style="--row-index: 1;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  2
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   Radar
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18398
-              </span>
+              </div>
             </div>
           </div>
         </div>
@@ -301,75 +285,59 @@ exports[`HostLeaderboardState > clicks Next when completeTask is undefined 1`] =
             Leaderboard
           </div>
           <div
-            class="main"
+            class="leaderboard"
           >
             <div
-              class="column podium"
+              class="row gold topPosition"
               style="--row-index: 0;"
             >
               <div
-                class="position"
+                class="column position"
               >
-                <span>
+                <span
+                  class="badge"
+                >
                   1
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
               <div
-                class="nameRow"
+                class="column nickname"
               >
                 <span>
                   ShadowCyborg
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18456
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  2
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row silver topPosition"
               style="--row-index: 1;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  2
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   Radar
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18398
-              </span>
+              </div>
             </div>
           </div>
         </div>
@@ -525,75 +493,59 @@ exports[`HostLeaderboardState > renders subtitle and leaderboard entries 1`] = `
             Leaderboard
           </div>
           <div
-            class="main"
+            class="leaderboard"
           >
             <div
-              class="column podium"
+              class="row gold topPosition"
               style="--row-index: 0;"
             >
               <div
-                class="position"
+                class="column position"
               >
-                <span>
+                <span
+                  class="badge"
+                >
                   1
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
               <div
-                class="nameRow"
+                class="column nickname"
               >
                 <span>
                   ShadowCyborg
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18456
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  2
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row silver topPosition"
               style="--row-index: 1;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  2
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   Radar
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18398
-              </span>
+              </div>
             </div>
           </div>
         </div>
@@ -749,177 +701,137 @@ exports[`HostLeaderboardState > should render HostLeaderboardState 1`] = `
             Leaderboard
           </div>
           <div
-            class="main"
+            class="leaderboard"
           >
             <div
-              class="column podium"
+              class="row gold topPosition"
               style="--row-index: 0;"
             >
               <div
-                class="position"
+                class="column position"
               >
-                <span>
+                <span
+                  class="badge"
+                >
                   1
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
               <div
-                class="nameRow"
+                class="column nickname"
               >
                 <span>
                   ShadowCyborg
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 0;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18456
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  2
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row silver topPosition"
               style="--row-index: 1;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  2
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   Radar
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 1;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 18398
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 2;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  3
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row bronze topPosition"
               style="--row-index: 2;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  3
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   ShadowWhirlwind
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 2;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 15492
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 3;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  4
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row"
               style="--row-index: 3;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  4
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   WhiskerFox
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 3;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 14118
-              </span>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 4;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  5
-                </span>
               </div>
             </div>
             <div
-              class="column podium"
+              class="row"
               style="--row-index: 4;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  5
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   JollyNimbus
                 </span>
               </div>
-            </div>
-            <div
-              class="column podium"
-              style="--row-index: 4;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 13463
-              </span>
+              </div>
             </div>
           </div>
         </div>

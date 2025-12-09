@@ -182,7 +182,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
             </div>
           </div>
           <div
-            class="main"
+            class="leaderboard"
           />
         </div>
       </div>
@@ -373,7 +373,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
             </div>
           </div>
           <div
-            class="main"
+            class="leaderboard"
           />
         </div>
       </div>
@@ -572,7 +572,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
             </div>
           </div>
           <div
-            class="main"
+            class="leaderboard"
           />
         </div>
       </div>
@@ -771,75 +771,59 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
             </div>
           </div>
           <div
-            class="main"
+            class="leaderboard"
           >
             <div
-              class="column"
+              class="row"
               style="--row-index: 0;"
             >
               <div
-                class="position"
+                class="column position"
               >
-                <span>
+                <span
+                  class="badge"
+                >
                   4
                 </span>
               </div>
-            </div>
-            <div
-              class="column"
-              style="--row-index: 0;"
-            >
               <div
-                class="nameRow"
+                class="column nickname"
               >
                 <span>
                   WhiskerFox
                 </span>
               </div>
-            </div>
-            <div
-              class="column"
-              style="--row-index: 0;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 14118
-              </span>
-            </div>
-            <div
-              class="column"
-              style="--row-index: 1;"
-            >
-              <div
-                class="position"
-              >
-                <span>
-                  5
-                </span>
               </div>
             </div>
             <div
-              class="column"
+              class="row"
               style="--row-index: 1;"
             >
               <div
-                class="nameRow"
+                class="column position"
+              >
+                <span
+                  class="badge"
+                >
+                  5
+                </span>
+              </div>
+              <div
+                class="column nickname"
               >
                 <span>
                   JollyNimbus
                 </span>
               </div>
-            </div>
-            <div
-              class="column"
-              style="--row-index: 1;"
-            >
-              <span
-                class="score"
+              <div
+                class="column score"
               >
                 13463
-              </span>
+              </div>
             </div>
           </div>
         </div>
@@ -1039,7 +1023,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
             </div>
           </div>
           <div
-            class="main"
+            class="leaderboard"
           />
         </div>
       </div>

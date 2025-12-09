@@ -24,6 +24,51 @@ This document outlines the implementation of Task 8: Leaderboard & Podium Enhanc
 
 ## Implementation Tasks
 
+**Important Note**: All remaining tasks must include Storybook updates to showcase new functionality:
+
+- Update relevant `.stories.tsx` files to demonstrate new features
+- Add new stories for enhanced animations and celebrations
+- Ensure stories include new props (like `previousPosition`) where applicable
+
+### Task 1: Add Rank Change Support to SSE Event ✅
+
+- [x] Add `previousPosition?: number` to `GameLeaderboardHostEvent` in packages/common/src/models/game-event.ts
+- [x] Build common package to make changes available
+- [x] Add unit tests for updated event type
+- [x] Document new optional prop for future backend implementation
+
+**Implementation Details:**
+
+- Added optional `previousPosition?: number` to leaderboard entries in `GameLeaderboardHostEvent`
+- Created comprehensive unit tests covering scenarios with and without previous positions
+- Built common package successfully with TypeScript compilation
+- All linting rules satisfied with proper import ordering
+- Frontend is now ready for backend implementation of rank change tracking
+
+### Task 2: Enhance Leaderboard Animations with Unit Tests ✅
+
+- [x] Update Leaderboard.module.scss with enhanced reveal animations
+- [x] Add dramatic reveal keyframes with scale and bounce effects
+- [x] Implement count-up animation for scores using CSS
+- [x] Add position-specific reveal delays
+- [x] Update Leaderboard.tsx to support rank change indicators
+- [x] Add comprehensive unit tests for all new animation classes
+- [x] Add tests for rank change detection logic
+- [x] Update Leaderboard.stories.tsx with rank change examples
+- [x] Update HostLeaderboardState.stories.tsx with previousPosition prop
+
+**Implementation Details:**
+
+- Enhanced `slideInFromBottom` to `dramaticReveal` with scale and bounce effects
+- Added `countUp`, `rankChange`, and `positionScale` keyframe animations
+- Created `RankChange` component with up/down arrows and change amounts
+- Added `previousPosition?: number` to LeaderboardProps interface
+- Enhanced top positions (1-3) with special animations and styling
+- Added 19 comprehensive unit tests covering all scenarios
+- Updated Storybook stories to showcase rank changes with various scenarios
+- All linting rules satisfied and tests passing
+- Backward compatible - works with and without `previousPosition` data
+
 ### Task 1: Add Rank Change Support to SSE Event ✅
 
 - [x] Add `previousPosition?: number` to `GameLeaderboardHostEvent` in packages/common/src/models/game-event.ts
@@ -39,15 +84,26 @@ This document outlines the implementation of Task 8: Leaderboard & Podium Enhanc
 - All linting rules satisfied with proper import ordering
 - Frontend is now ready for backend implementation of rank change tracking
 
-### Task 2: Enhance Leaderboard Animations with Unit Tests
+### Task 2: Enhance Leaderboard Animations with Unit Tests ✅
 
-- [ ] Update Leaderboard.module.scss with enhanced reveal animations
-- [ ] Add dramatic reveal keyframes with scale and bounce effects
-- [ ] Implement count-up animation for scores using CSS
-- [ ] Add position-specific reveal delays
-- [ ] Update Leaderboard.tsx to support rank change indicators
-- [ ] Add comprehensive unit tests for all new animation classes
-- [ ] Add tests for rank change detection logic
+- [x] Update Leaderboard.module.scss with enhanced reveal animations
+- [x] Add dramatic reveal keyframes with scale and bounce effects
+- [x] Implement count-up animation for scores using CSS
+- [x] Add position-specific reveal delays
+- [x] Update Leaderboard.tsx to support rank change indicators
+- [x] Add comprehensive unit tests for all new animation classes
+- [x] Add tests for rank change detection logic
+
+**Implementation Details:**
+
+- Enhanced `slideInFromBottom` to `dramaticReveal` with scale and bounce effects
+- Added `countUp`, `rankChange`, and `positionScale` keyframe animations
+- Created `RankChange` component with up/down arrows and change amounts
+- Added `previousPosition?: number` to LeaderboardProps interface
+- Enhanced top positions (1-3) with special animations and styling
+- Added 19 comprehensive unit tests covering all scenarios
+- All linting rules satisfied and tests passing
+- Backward compatible - works with and without `previousPosition` data
 
 ### Task 3: Enhance Podium with Celebration Effects and Unit Tests
 
@@ -59,6 +115,8 @@ This document outlines the implementation of Task 8: Leaderboard & Podium Enhanc
 - [ ] Add celebration sequence timing
 - [ ] Add comprehensive unit tests for celebration triggers
 - [ ] Add tests for animation sequences
+- [ ] Update Podium.stories.tsx to showcase new celebration effects
+- [ ] Update HostPodiumState.stories.tsx to include celebration examples
 
 ### Task 4: Mirror PlayerResultState Celebrations in PlayerPodiumState
 
@@ -67,6 +125,8 @@ This document outlines the implementation of Task 8: Leaderboard & Podium Enhanc
 - [ ] Add Badge celebration animations for top positions
 - [ ] Add unit tests for celebration triggers in PlayerPodiumState
 - [ ] Test celebration levels for different podium positions
+- [ ] Update PlayerPodiumState.stories.tsx to showcase celebration effects
+- [ ] Update PlayerPodiumState.test.tsx to include celebration tests
 
 ### Task 5: Update State Components with Unit Tests
 
@@ -75,6 +135,8 @@ This document outlines the implementation of Task 8: Leaderboard & Podium Enhanc
 - [ ] Ensure proper cleanup and performance
 - [ ] Add integration tests for state component updates
 - [ ] Test SSE timing preservation during animations
+- [ ] Update HostPodiumState.stories.tsx to showcase celebration triggers
+- [ ] Update HostLeaderboardState.stories.tsx to showcase rank changes
 
 ## Technical Implementation Details
 

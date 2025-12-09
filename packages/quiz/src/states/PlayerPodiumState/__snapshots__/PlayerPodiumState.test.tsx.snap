@@ -96,7 +96,8 @@ exports[`PlayerPodiumState > navigates home on End Game click 1`] = `
             class="content"
           >
             <div
-              class="badge large silver"
+              class="badge large border"
+              style="background-color: silver; outline-color: white; color: white;"
             >
               2
             </div>
@@ -219,7 +220,8 @@ exports[`PlayerPodiumState > navigates to game results on Game Results click 1`]
             class="content"
           >
             <div
-              class="badge large silver"
+              class="badge large border"
+              style="background-color: silver; outline-color: white; color: white;"
             >
               2
             </div>
@@ -342,7 +344,8 @@ exports[`PlayerPodiumState > renders name, badge, nickname, score, and message 1
             class="content"
           >
             <div
-              class="badge large gold"
+              class="badge large border"
+              style="background-color: gold; outline-color: white; color: white;"
             >
               1
             </div>

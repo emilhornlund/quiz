@@ -416,7 +416,8 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                     9200
                   </div>
                   <div
-                    class="badge small gold"
+                    class="badge small border"
+                    style="background-color: gold; outline-color: white; color: white;"
                   >
                     1
                   </div>
@@ -502,7 +503,8 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                     8500
                   </div>
                   <div
-                    class="badge small silver"
+                    class="badge small border"
+                    style="background-color: silver; outline-color: white; color: white;"
                   >
                     2
                   </div>
@@ -588,7 +590,8 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
                     4200
                   </div>
                   <div
-                    class="badge small white"
+                    class="badge small border"
+                    style="background-color: white; outline-color: white;"
                   >
                     5
                   </div>
