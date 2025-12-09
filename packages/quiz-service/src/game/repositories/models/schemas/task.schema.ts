@@ -668,6 +668,9 @@ export class LeaderboardTaskItem {
   @Prop({ type: Number, required: true })
   position: number
 
+  @Prop({ type: Number, required: false })
+  previousPosition?: number
+
   @Prop({ type: String, required: true })
   nickname: string
 

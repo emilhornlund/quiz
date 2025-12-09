@@ -1045,8 +1045,9 @@ function buildGameLeaderboardHostEvent(
     },
     leaderboard: document.currentTask.leaderboard
       .slice(0, 5)
-      .map(({ position, nickname, score, streaks }) => ({
+      .map(({ position, previousPosition, nickname, score, streaks }) => ({
         position,
+        previousPosition,
         nickname,
         score,
         streaks,
