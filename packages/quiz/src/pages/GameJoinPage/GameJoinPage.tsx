@@ -50,7 +50,7 @@ const GameJoinPage: FC = () => {
 
   return (
     <Page
-      align="start"
+      align="center"
       header={
         <IconButtonArrowLeft
           id="back-button"
