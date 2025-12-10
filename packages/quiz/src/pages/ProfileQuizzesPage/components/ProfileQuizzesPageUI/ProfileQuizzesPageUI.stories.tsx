@@ -13,7 +13,7 @@ import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
 import ProfileQuizzesPageUI from './ProfileQuizzesPageUI'
 
 const meta = {
-  title: 'Pages/ProfileQuizzesPageUI',
+  title: 'Pages/ProfileQuizzesPage',
   component: ProfileQuizzesPageUI,
   decorators: [withRouter, withMockAuth],
   parameters: {
