@@ -104,3 +104,10 @@ export const ParticipantPlayerSchema =
  */
 export type Participant = ParticipantBase &
   (ParticipantHost | ParticipantPlayer)
+
+/**
+ * Convenience type for player participants.
+ *
+ * Combines the base participant fields with player-specific properties.
+ */
+export type ParticipantPlayerWithBase = ParticipantBase & ParticipantPlayer

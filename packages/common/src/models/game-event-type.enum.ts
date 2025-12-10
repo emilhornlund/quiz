@@ -10,10 +10,12 @@ export enum GameEventType {
   GameQuestionHost = 'GAME_QUESTION_HOST',
   GameQuestionPlayer = 'GAME_QUESTION_PLAYER',
   GameLeaderboardHost = 'GAME_LEADERBOARD_HOST',
+  //TODO: remove unused GameLeaderboardPlayer once frontend is updated
   GameLeaderboardPlayer = 'GAME_LEADERBOARD_PLAYER',
   GameResultHost = 'GAME_RESULT_HOST',
   GameResultPlayer = 'GAME_RESULT_PLAYER',
   GamePodiumHost = 'GAME_PODIUM_HOST',
+  //TODO: remove unused GamePodiumPlayer once frontend is updated
   GamePodiumPlayer = 'GAME_PODIUM_PLAYER',
   GameQuitEvent = 'GAME_QUIT_EVENT',
 }

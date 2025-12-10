@@ -657,6 +657,13 @@ questionResultTaskSchema.discriminator(
 )
 
 /**
+ * Narrowed type representing a QuestionResult task with base task fields.
+ *
+ * Combines the common BaseTask properties with QuestionResultTask-specific fields.
+ */
+export type QuestionResultTaskWithBase = BaseTask & QuestionResultTask
+
+/**
  * LeaderboardTaskItem
  */
 
