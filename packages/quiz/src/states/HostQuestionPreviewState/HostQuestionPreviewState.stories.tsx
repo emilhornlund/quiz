@@ -37,3 +37,51 @@ export const Default = {
     },
   },
 } satisfies Story
+
+export const ZeroToOneHundred = {
+  name: '0-100',
+  args: {
+    event: {
+      type: GameEventType.GameQuestionPreviewHost,
+      game: {
+        mode: GameMode.ZeroToOneHundred,
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.Range,
+        question: "What percentage of the earth's surface is covered by water?",
+      },
+      countdown: {
+        initiatedTime: new Date().toISOString(),
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
+      },
+      pagination: { current: 1, total: 20 },
+    },
+  },
+} satisfies Story
+
+export const Long = {
+  name: 'Long Question Text',
+  args: {
+    event: {
+      type: GameEventType.GameQuestionPreviewHost,
+      game: {
+        mode: GameMode.Classic,
+        pin: '123456',
+      },
+      question: {
+        type: QuestionType.MultiChoice,
+        question:
+          'Which planet in our solar system has the shortest day, completing a full rotation faster than any other?',
+        points: 1000,
+      },
+      countdown: {
+        initiatedTime: new Date().toISOString(),
+        expiryTime: new Date(Date.now() + 60 * 1000).toISOString(),
+        serverTime: new Date().toISOString(),
+      },
+      pagination: { current: 1, total: 20 },
+    },
+  },
+} satisfies Story
