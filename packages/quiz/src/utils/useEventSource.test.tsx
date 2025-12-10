@@ -1,16 +1,8 @@
+import { GameEventType } from '@quiz/common'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// eslint-disable-next-line import/order
-import { ConnectionStatus } from './useEventSource'
-
-vi.mock('@quiz/common', () => ({
-  GameEventType: {
-    GameHeartbeat: 'GameHeartbeat',
-    SomethingElse: 'SomethingElse',
-  },
-  HEARTBEAT_INTERVAL: 30000,
-}))
+import { ConnectionStatus, useEventSource } from './useEventSource'
 
 vi.mock('../config.ts', () => ({
   default: { quizServiceUrl: 'http://quiz-service.local' },
@@ -52,8 +44,6 @@ vi.mock('event-source-polyfill', () => {
     _last,
   }
 })
-
-import { useEventSource } from './useEventSource'
 
 // eslint-disable-next-line import/order
 import * as ESP from 'event-source-polyfill'
@@ -114,7 +104,7 @@ describe('useEventSource', () => {
 
     act(() => {
       last().onmessage?.({
-        data: JSON.stringify({ type: 'GameHeartbeat' }),
+        data: JSON.stringify({ type: GameEventType.GameHeartbeat }),
       } as MessageEvent)
     })
 
