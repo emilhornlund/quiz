@@ -1,5 +1,5 @@
 import { GameEventType } from '@quiz/common'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import type { Location } from 'react-router'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
@@ -223,5 +223,119 @@ describe('GamePage (extended)', () => {
     expect(h.proceedMock).toHaveBeenCalled()
 
     useBlockerSpy.mockRestore()
+  })
+
+  it('shows loading overlay when GAME_LOADING event arrives and hides when non-loading event arrives', async () => {
+    // Start with a non-loading event
+    h.control.event = {
+      type: GameEventType.GameResultPlayer,
+      player: {
+        nickname: 'TestPlayer',
+        score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
+      },
+      pagination: { current: 1, total: 10 },
+    }
+
+    const { rerender } = renderWithRouter()
+
+    // Should show the result state initially
+    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+
+    // Change to loading event
+    h.control.event = { type: GameEventType.GameLoading }
+
+    await act(async () => {
+      rerender(
+        <RouterProvider
+          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+            initialEntries: ['/'],
+          })}
+        />,
+      )
+    })
+
+    // Should show loading overlay
+    await waitFor(() =>
+      expect(screen.getByTestId('loading-overlay')).toBeInTheDocument(),
+    )
+    expect(screen.getByText('Correct')).toBeInTheDocument() // Previous content should still be visible
+
+    // Change back to non-loading event (same as before)
+    h.control.event = {
+      type: GameEventType.GameResultPlayer,
+      player: {
+        nickname: 'TestPlayer',
+        score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
+      },
+      pagination: { current: 1, total: 10 },
+    }
+
+    await act(async () => {
+      rerender(
+        <RouterProvider
+          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+            initialEntries: ['/'],
+          })}
+        />,
+      )
+    })
+
+    // Should hide loading overlay
+    expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
+  })
+
+  it('does not re-render when same non-loading event arrives twice', async () => {
+    const resultEvent = {
+      type: GameEventType.GameResultPlayer,
+      player: {
+        nickname: 'TestPlayer',
+        score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
+      },
+      pagination: { current: 1, total: 10 },
+    }
+
+    h.control.event = resultEvent
+
+    const { rerender } = renderWithRouter()
+
+    // Should show the result state
+    expect(screen.getByText('Correct')).toBeInTheDocument()
+
+    // Change to loading event
+    h.control.event = { type: GameEventType.GameLoading }
+
+    await act(async () => {
+      rerender(
+        <RouterProvider
+          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+            initialEntries: ['/'],
+          })}
+        />,
+      )
+    })
+
+    // Should show loading overlay
+    waitFor(() =>
+      expect(screen.getByTestId('loading-overlay')).toBeInTheDocument(),
+    )
+
+    // Change back to the same non-loading event
+    h.control.event = resultEvent
+
+    await act(async () => {
+      rerender(
+        <RouterProvider
+          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+            initialEntries: ['/'],
+          })}
+        />,
+      )
+    })
+
+    // Should hide loading overlay but not re-render the component (same event)
+    expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 })

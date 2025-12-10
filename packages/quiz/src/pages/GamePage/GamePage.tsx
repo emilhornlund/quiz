@@ -1,6 +1,13 @@
-import { GameEventType, GameStatus } from '@quiz/common'
+import { deepEqual, GameEvent, GameEventType, GameStatus } from '@quiz/common'
 import { setContext } from '@sentry/react'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
@@ -41,7 +48,7 @@ import styles from './GamePage.module.scss'
  *
  * @returns A React component rendering the game state.
  */
-const GamePage = () => {
+const GamePage: FC = () => {
   const navigate = useNavigate()
 
   const { isUserAuthenticated } = useAuthContext()
@@ -51,7 +58,38 @@ const GamePage = () => {
 
   const [event, connectionStatus] = useEventSource(gameID, gameToken)
 
+  const [lastNonLoadingEvent, setLastNonLoadingEvent] = useState<GameEvent>()
+  const [isLoading, setIsLoading] = useState(false)
+
   const hasReconnectedRef = useRef<boolean>(false)
+  const loadingTimeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!event) return
+
+    if (event.type === GameEventType.GameLoading) {
+      // Clear any existing timeout
+      if (loadingTimeoutRef.current !== null) {
+        clearTimeout(loadingTimeoutRef.current)
+      }
+
+      // Add 500ms delay to prevent flashing
+      loadingTimeoutRef.current = window.setTimeout(() => {
+        setIsLoading(true)
+      }, 500)
+    } else {
+      // Clear any existing timeout
+      if (loadingTimeoutRef.current !== null) {
+        clearTimeout(loadingTimeoutRef.current)
+      }
+
+      setIsLoading(false)
+      // Only update if this is a different non-loading event
+      if (!deepEqual(event, lastNonLoadingEvent)) {
+        setLastNonLoadingEvent(event)
+      }
+    }
+  }, [event, lastNonLoadingEvent])
 
   useEffect(() => {
     switch (connectionStatus) {
@@ -118,47 +156,58 @@ const GamePage = () => {
     return () => {
       console.debug('Cleaning up game context for Sentry...')
       setContext('game', null)
+
+      // Cleanup loading timeout
+      if (loadingTimeoutRef.current !== null) {
+        clearTimeout(loadingTimeoutRef.current)
+      }
     }
   }, [])
 
   /**
    * Dynamically determines the appropriate component to render
-   * based on the current game event type.
+   * based on the last non-loading game event type.
    */
   const stateComponent = useMemo(() => {
-    switch (event?.type) {
+    const eventToRender = lastNonLoadingEvent
+
+    switch (eventToRender?.type) {
       case GameEventType.GameLobbyHost:
-        return <HostLobbyState event={event} />
+        return <HostLobbyState event={eventToRender} />
       case GameEventType.GameLobbyPlayer:
-        return <PlayerLobbyState event={event} />
+        return <PlayerLobbyState event={eventToRender} />
       case GameEventType.GameBeginHost:
-        return <HostGameBeginState event={event} />
+        return <HostGameBeginState event={eventToRender} />
       case GameEventType.GameBeginPlayer:
-        return <PlayerGameBeginState event={event} />
+        return <PlayerGameBeginState event={eventToRender} />
       case GameEventType.GameQuestionPreviewHost:
-        return <HostQuestionPreviewState event={event} />
+        return <HostQuestionPreviewState event={eventToRender} />
       case GameEventType.GameQuestionPreviewPlayer:
-        return <PlayerQuestionPreviewState event={event} />
+        return <PlayerQuestionPreviewState event={eventToRender} />
       case GameEventType.GameQuestionHost:
-        return <HostQuestionState event={event} />
+        return <HostQuestionState event={eventToRender} />
       case GameEventType.GameQuestionPlayer:
-        return <PlayerQuestionState event={event} />
+        return <PlayerQuestionState event={eventToRender} />
       case GameEventType.GameLeaderboardHost:
-        return <HostLeaderboardState event={event} />
+        return <HostLeaderboardState event={eventToRender} />
       case GameEventType.GameResultHost:
-        return <HostResultState event={event} />
+        return <HostResultState event={eventToRender} />
       case GameEventType.GameResultPlayer:
-        return <PlayerResultState event={event} />
+        return <PlayerResultState event={eventToRender} />
       case GameEventType.GamePodiumHost:
-        return <HostPodiumState event={event} />
+        return <HostPodiumState event={eventToRender} />
       default:
-        return (
-          <Page hideLogin>
-            <LoadingSpinner />
-          </Page>
-        )
+        // Show LoadingSpinner only if we have no previous event
+        if (!lastNonLoadingEvent) {
+          return (
+            <Page hideLogin>
+              <LoadingSpinner />
+            </Page>
+          )
+        }
+        return null // No content if we have a previous event but no current one
     }
-  }, [event])
+  }, [lastNonLoadingEvent])
 
   const handleLeaveGame = () => {
     if (blocker.state === 'blocked' && participantId && leaveGame) {
@@ -169,9 +218,16 @@ const GamePage = () => {
     }
   }
 
+  const LoadingOverlay: FC = () => (
+    <div className={styles.loadingOverlay} data-testid="loading-overlay">
+      <LoadingSpinner />
+    </div>
+  )
+
   return (
     <>
       {stateComponent}
+      {isLoading && <LoadingOverlay />}
       {blocker.state === 'blocked' && (
         <Modal title="Leave Game" open>
           Leaving now will disconnect you from the game. Are you sure you want
