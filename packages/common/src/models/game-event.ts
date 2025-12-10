@@ -330,42 +330,9 @@ export type GameLeaderboardHostEvent = {
   pagination: PaginationEvent
 }
 
-//TODO: remove unused GameLeaderboardPlayerEvent once frontend is updated
-export type GameLeaderboardPlayerEvent = {
-  type: GameEventType.GameLeaderboardPlayer
-  player: {
-    nickname: string
-    score: {
-      position: number
-      score: number
-      streaks: number
-    }
-    behind?: {
-      points: number
-      nickname: string
-    }
-  }
-  pagination: PaginationEvent
-}
-
 export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
   leaderboard: { position: number; nickname: string; score: number }[]
-}
-
-//TODO: remove unused GamePodiumPlayerEvent once frontend is updated
-export type GamePodiumPlayerEvent = {
-  type: GameEventType.GamePodiumPlayer
-  game: {
-    name: string
-  }
-  player: {
-    nickname: string
-    score: {
-      total: number
-      position: number
-    }
-  }
 }
 
 export type GameQuitEvent = {
@@ -387,7 +354,5 @@ export type GameEvent =
   | GameResultHostEvent
   | GameResultPlayerEvent
   | GameLeaderboardHostEvent
-  | GameLeaderboardPlayerEvent
   | GamePodiumHostEvent
-  | GamePodiumPlayerEvent
   | GameQuitEvent

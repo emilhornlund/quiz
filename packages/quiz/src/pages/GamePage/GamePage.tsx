@@ -16,9 +16,7 @@ import {
   HostQuestionState,
   HostResultState,
   PlayerGameBeginState,
-  PlayerLeaderboardState,
   PlayerLobbyState,
-  PlayerPodiumState,
   PlayerQuestionPreviewState,
   PlayerQuestionState,
   PlayerResultState,
@@ -82,11 +80,9 @@ const GamePage = () => {
   const shouldBlock = useCallback<BlockerFunction>(() => {
     const isAllowedEventType =
       event?.type &&
-      [
-        GameEventType.GamePodiumHost,
-        GameEventType.GamePodiumPlayer,
-        GameEventType.GameQuitEvent,
-      ].includes(event.type)
+      [GameEventType.GamePodiumHost, GameEventType.GameQuitEvent].includes(
+        event.type,
+      )
 
     const hasGameId = !!gameID
 
@@ -153,12 +149,8 @@ const GamePage = () => {
         return <HostResultState event={event} />
       case GameEventType.GameResultPlayer:
         return <PlayerResultState event={event} />
-      case GameEventType.GameLeaderboardPlayer:
-        return <PlayerLeaderboardState event={event} />
       case GameEventType.GamePodiumHost:
         return <HostPodiumState event={event} />
-      case GameEventType.GamePodiumPlayer:
-        return <PlayerPodiumState event={event} />
       default:
         return (
           <Page hideLogin>
