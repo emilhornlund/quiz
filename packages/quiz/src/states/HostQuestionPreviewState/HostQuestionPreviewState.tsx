@@ -38,7 +38,7 @@ const HostQuestionPreviewState: FC<HostQuestionPreviewStateProps> = ({
 
     <QuestionTextPreview text={questionValue} />
 
-    <ProgressBar countdown={countdown} />
+    <ProgressBar countdown={countdown} disableStyling={true} />
   </GamePage>
 )
 

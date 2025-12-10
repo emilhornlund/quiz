@@ -7,9 +7,13 @@ import styles from './ProgressBar.module.scss'
 
 export interface ProgressBarProps {
   countdown: CountdownEvent
+  disableStyling?: boolean
 }
 
-const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
+const ProgressBar: FC<ProgressBarProps> = ({
+  countdown,
+  disableStyling = false,
+}) => {
   const [progress, setProgress] = useState<number>(1)
 
   const [clientToServerOffset, setClientToServerOffset] = useState<number>(0)
@@ -84,8 +88,8 @@ const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
       <div
         className={classNames(
           styles.track,
-          getProgressColorClass(),
-          progress < 0.1 ? styles.pulse : undefined,
+          !disableStyling ? getProgressColorClass() : undefined,
+          !disableStyling && progress < 0.1 ? styles.pulse : undefined,
         )}
         style={{
           width: `${Math.max(Math.min(1, progress), 0) * 100}%`,

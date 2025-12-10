@@ -27,6 +27,27 @@ describe('ProgressBar', () => {
     expect(container).toMatchSnapshot()
   })
 
+  it('should render without styling when disableStyling is true', () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:30.000Z',
+    }
+
+    const { container } = render(
+      <ProgressBar countdown={countdown} disableStyling={true} />,
+    )
+
+    const track = container.querySelector('.track')
+    expect(track).not.toHaveClass(
+      'safe',
+      'caution',
+      'urgent',
+      'critical',
+      'pulse',
+    )
+  })
+
   it('should render with 0 progress when countdown has expired', () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
