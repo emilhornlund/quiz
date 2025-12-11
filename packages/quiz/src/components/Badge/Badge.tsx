@@ -15,6 +15,7 @@ const BadgeSizeClassName: { [key in BadgeSize]: string } = {
 export type BadgeColor =
   | 'green'
   | 'red'
+  | 'blue'
   | 'orange'
   | 'gold'
   | 'silver'
@@ -25,12 +26,13 @@ export type BadgeColor =
 const BadgeColorClassName: { [key in BadgeColor]: string } = {
   green: colors.green2,
   red: colors.red2,
+  blue: colors.blue2,
   orange: colors.orange2,
   gold: colors.gold,
   silver: colors.silver,
   bronze: colors.bronze,
   white: colors.white,
-  black: colors.black1,
+  black: colors.gray4,
 }
 
 export type BadgeCelebration = 'none' | 'normal' | 'major' | 'epic'
@@ -74,11 +76,29 @@ const Badge: FC<BadgeProps> = ({
     }
   }, [celebration, onAnimationEnd])
 
+  // Determine number-specific class for optical adjustments
+  const getNumberClass = () => {
+    if (typeof children === 'number') {
+      const num = children.toString()
+      if (num.length > 1) return styles.multiDigit
+      return styles[`number-${num}`] || ''
+    }
+    if (typeof children === 'string') {
+      const trimmed = children.trim()
+      if (/^\d+$/.test(trimmed)) {
+        if (trimmed.length > 1) return styles.multiDigit
+        return styles[`number-${trimmed}`] || ''
+      }
+    }
+    return ''
+  }
+
   return (
     <div
       className={classNames(
         styles.badge,
         BadgeSizeClassName[size],
+        getNumberClass(),
         isAnimating ? BadgeCelebrationClassName[celebration] : '',
         borderColor ? styles.border : undefined,
       )}

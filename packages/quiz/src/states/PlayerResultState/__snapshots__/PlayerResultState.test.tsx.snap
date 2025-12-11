@@ -94,7 +94,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-1 border"
                 style="background-color: gold; outline-color: white; color: white;"
               >
                 1
@@ -106,7 +106,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small number-2 border"
               style="color: white;"
             >
               2
@@ -551,7 +551,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-2 border"
                 style="background-color: silver; outline-color: white; color: white;"
               >
                 2
@@ -997,7 +997,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-8 border"
                 style="background-color: white; outline-color: white;"
               >
                 8
@@ -1009,7 +1009,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small number-7 border"
               style="color: white;"
             >
               7
@@ -1454,7 +1454,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large multiDigit border"
                 style="background-color: white; outline-color: white;"
               >
                 15
@@ -1466,7 +1466,7 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small multiDigit border"
               style="color: white;"
             >
               10
@@ -1911,7 +1911,7 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-3 border"
                 style="outline-color: white; color: white;"
               >
                 3
@@ -2257,7 +2257,7 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large multiDigit border"
                 style="background-color: white; outline-color: white;"
               >
                 12
@@ -2269,7 +2269,7 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small number-5 border"
               style="color: white;"
             >
               5
@@ -2614,7 +2614,7 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for inco
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large multiDigit border"
                 style="background-color: white; outline-color: white;"
               >
                 20
@@ -2776,7 +2776,7 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for simp
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large multiDigit border"
                 style="background-color: white; outline-color: white;"
               >
                 15
@@ -2938,7 +2938,7 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large multiDigit border"
                 style="background-color: white; outline-color: white;"
               >
                 10
@@ -3204,7 +3204,7 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-8 border"
                 style="background-color: white; outline-color: white;"
               >
                 8
@@ -3216,7 +3216,7 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small number-3 border"
               style="color: white;"
             >
               3
@@ -3481,7 +3481,7 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-1 border"
                 style="background-color: gold; outline-color: white; color: white;"
               >
                 1
@@ -3493,7 +3493,7 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           >
             Streak
             <div
-              class="badge small border"
+              class="badge small number-3 border"
               style="color: white;"
             >
               3
@@ -3949,7 +3949,7 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
               class="positionBatch hidden"
             >
               <div
-                class="badge large border"
+                class="badge large number-7 border"
                 style="background-color: white; outline-color: white;"
               >
                 7

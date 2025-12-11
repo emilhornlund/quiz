@@ -14,6 +14,9 @@
   outline-style: solid;
   font-weight: bold;
   text-align: center;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum'; // Tabular numbers for consistent spacing
 
   @include transitions.color-transition;
   @include transitions.transform-transition;
@@ -30,36 +33,82 @@
 
   &.small {
     @include helpers.mobile {
-      @include badge-size(variables.$mobile-badge-small-size, variables.$mobile-badge-small-border-width);
+      @include badge-size(
+        variables.$mobile-badge-small-size,
+        variables.$mobile-badge-small-border-width
+      );
       @include helpers.fontSize(variables.$mobile-text-font-size);
     }
 
     @include helpers.tablet {
-      @include badge-size(variables.$tablet-badge-small-size, variables.$tablet-badge-small-border-width);
+      @include badge-size(
+        variables.$tablet-badge-small-size,
+        variables.$tablet-badge-small-border-width
+      );
       @include helpers.fontSize(variables.$tablet-text-font-size);
     }
 
     @include helpers.desktop {
-      @include badge-size(variables.$desktop-badge-small-size, variables.$desktop-badge-small-border-width);
+      @include badge-size(
+        variables.$desktop-badge-small-size,
+        variables.$desktop-badge-small-border-width
+      );
       @include helpers.fontSize(variables.$desktop-text-font-size);
     }
   }
 
   &.large {
     @include helpers.mobile {
-      @include badge-size(variables.$mobile-badge-large-size, variables.$mobile-badge-large-border-width);
+      @include badge-size(
+        variables.$mobile-badge-large-size,
+        variables.$mobile-badge-large-border-width
+      );
       @include helpers.fontSize(68px);
     }
 
     @include helpers.tablet {
-      @include badge-size(variables.$tablet-badge-large-size, variables.$tablet-badge-large-border-width);
+      @include badge-size(
+        variables.$tablet-badge-large-size,
+        variables.$tablet-badge-large-border-width
+      );
       @include helpers.fontSize(78px);
     }
 
     @include helpers.desktop {
-      @include badge-size(variables.$desktop-badge-large-size, variables.$desktop-badge-large-border-width);
+      @include badge-size(
+        variables.$desktop-badge-large-size,
+        variables.$desktop-badge-large-border-width
+      );
       @include helpers.fontSize(88px);
     }
+  }
+
+  // Number-specific optical adjustments
+  &.number-1 {
+    letter-spacing: 0.05em;
+    transform: translateX(-1px);
+  }
+
+  &.number-2 {
+    transform: translateX(-0.5px);
+  }
+
+  &.number-3 {
+    transform: translateX(-0.5px);
+  }
+
+  &.number-4 {
+    transform: translateX(-0.5px);
+  }
+
+  &.number-7 {
+    transform: translateX(-0.5px);
+  }
+
+  // Multi-digit adjustments
+  &.multi-digit {
+    letter-spacing: -0.05em;
+    font-size: 0.9em;
   }
 
   // Celebration animations

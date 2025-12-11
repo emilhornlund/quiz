@@ -56,6 +56,7 @@ export const Position10th = {
   args: {
     size: 'large',
     backgroundColor: 'white',
+    textColor: 'black',
     children: 10,
   },
 } satisfies Story
