@@ -40,13 +40,13 @@ import {
   isPinCorrectAnswer,
   isPlayerUnique,
   isPuzzleCorrectAnswer,
-  isQuestionResultTask,
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
   rebuildQuestionResultTask,
   toQuestionTaskAnswer,
 } from './utils'
+import { isQuestionResultTask } from './utils/tasks'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.

@@ -15,14 +15,12 @@ import {
 } from '../../../repositories/models/schemas'
 import { isParticipantPlayer } from '../game-participant.utils'
 import {
-  isLeaderboardTask,
-  isPodiumTask,
-  isQuestionResultTask,
-} from '../task.utils'
-import {
   findLastQuestionResultTask,
   findPreviousQuestionResultForPlayer,
   findQuestionResultForPlayer,
+  isLeaderboardTask,
+  isPodiumTask,
+  isQuestionResultTask,
 } from '../tasks'
 
 import { buildPaginationEventFromQuestionResultTask } from './pagination-event.utils'

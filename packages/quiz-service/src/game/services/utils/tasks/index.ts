@@ -1,3 +1,4 @@
+export * from './task.utils'
 export * from './task-leaderboard.utils'
 export * from './task-podium.utils'
 export * from './task-question-result.utils'

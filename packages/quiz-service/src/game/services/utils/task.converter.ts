@@ -37,10 +37,11 @@ import {
   calculateQuestionScoreForParticipant,
   isQuestionAnswerCorrect,
 } from './scoring'
-import { isQuestionResultTask, isQuestionTask } from './task.utils'
 import {
   compareSortClassicModeQuestionResultTaskItemByScore,
   compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+  isQuestionResultTask,
+  isQuestionTask,
 } from './tasks'
 
 /**

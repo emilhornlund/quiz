@@ -5,7 +5,8 @@ import {
   QuestionResultTaskWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../task.utils'
+
+import { isQuestionResultTask } from './task.utils'
 
 /**
  * Finds the question result entry for a specific player in a QuestionResult task.

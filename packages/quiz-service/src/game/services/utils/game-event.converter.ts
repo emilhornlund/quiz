@@ -67,7 +67,7 @@ import {
   isQuestionResultTask,
   isQuestionTask,
   isQuitTask,
-} from './task.utils'
+} from './tasks'
 
 /**
  * Metadata associated with game events, used to track answer submissions and player-specific information.
