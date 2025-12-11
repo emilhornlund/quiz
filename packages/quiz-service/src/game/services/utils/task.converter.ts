@@ -19,13 +19,10 @@ import { IllegalTaskTypeException } from '../../exceptions'
 import {
   BaseTask,
   GameDocument,
-  LeaderboardTask,
-  LeaderboardTaskItem,
   LobbyTask,
   Participant,
   ParticipantBase,
   ParticipantPlayer,
-  PodiumTask,
   QuestionResultTask,
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
@@ -41,6 +38,10 @@ import {
   isQuestionAnswerCorrect,
 } from './scoring'
 import { isQuestionResultTask, isQuestionTask } from './task.utils'
+import {
+  compareSortClassicModeQuestionResultTaskItemByScore,
+  compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+} from './tasks'
 
 /**
  * Constructs a new lobby task with a unique ID, setting its initial status and creation timestamp.
@@ -377,208 +378,6 @@ function buildQuestionResultTaskItem(
     totalScore,
     position: 0,
     streak,
-  }
-}
-
-/**
- * Compares two scores in Classic mode for sorting in descending order.
- *
- * @param {number} lhs - The left-hand score.
- * @param {number} rhs - The right-hand score.
- *
- * @returns {number} A positive value if `lhs` is less than `rhs`, a negative value if greater, or 0 if they are equal.
- */
-function compareSortClassicModeScores(lhs: number, rhs: number): number {
-  if (lhs < rhs) {
-    return 1
-  }
-  if (lhs > rhs) {
-    return -1
-  }
-  return 0
-}
-
-/**
- * Compares two question result task items by their total scores in Classic mode.
- *
- * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
- * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
- *
- * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
- */
-function compareSortClassicModeQuestionResultTaskItemByScore(
-  lhs: QuestionResultTaskItem,
-  rhs: QuestionResultTaskItem,
-): number {
-  return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
-}
-
-/**
- * Compares two players by their total scores in Classic mode.
- *
- * @param {ParticipantBase & ParticipantPlayer} lhs - The first player participant to compare.
- * @param {ParticipantBase & ParticipantPlayer} rhs - The second player participant to compare.
- *
- * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
- */
-function compareSortClassicModePlayersByScore(
-  lhs: ParticipantBase & ParticipantPlayer,
-  rhs: ParticipantBase & ParticipantPlayer,
-): number {
-  return compareSortClassicModeScores(lhs.totalScore, rhs.totalScore)
-}
-
-/**
- * Compares two question result task items by their total scores in ZeroToOneHundred mode.
- *
- * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
- * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
- *
- * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
- *
- * @remarks
- * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
- */
-function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
-  lhs: QuestionResultTaskItem,
-  rhs: QuestionResultTaskItem,
-): number {
-  return compareSortClassicModeQuestionResultTaskItemByScore(lhs, rhs) * -1 //sort scores from lowest to highest
-}
-
-/**
- * Compares two players by their total scores in ZeroToOneHundred mode.
- *
- * @param {ParticipantBase & ParticipantPlayer} lhs - The first player participant to compare.
- * @param {ParticipantBase & ParticipantPlayer} rhs - The second player participant to compare.
- *
- * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
- *
- * @remarks
- * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
- */
-function compareZeroToOneHundredModePlayersByScore(
-  lhs: ParticipantBase & ParticipantPlayer,
-  rhs: ParticipantBase & ParticipantPlayer,
-): number {
-  return compareSortClassicModePlayersByScore(lhs, rhs) * -1 //sort scores from lowest to highest
-}
-
-/**
- * Builds leaderboard items for the current game document, sorting players by score based on the game mode.
- *
- * @param {GameDocument} gameDocument - The current game document.
- *
- * @returns {LeaderboardTaskItem[]} An array of leaderboard task items.
- */
-function buildLeaderboardItems(
-  gameDocument: GameDocument,
-): LeaderboardTaskItem[] {
-  return gameDocument.participants
-    .filter((participant) => participant.type === GameParticipantType.PLAYER)
-    .sort((a, b) =>
-      gameDocument.mode === GameMode.Classic
-        ? compareSortClassicModePlayersByScore(a, b)
-        : compareZeroToOneHundredModePlayersByScore(a, b),
-    )
-    .map(
-      (
-        { participantId, nickname, totalScore: score, currentStreak: streaks },
-        index,
-      ) => ({
-        playerId: participantId,
-        nickname,
-        position: index + 1,
-        score,
-        streaks,
-      }),
-    )
-}
-
-/**
- * Updates the total score and current streak of each player based on the results from the current question task.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} gameDocument - The game document containing the current question result task and player data.
- *
- * @returns {void} This function does not return a value; it modifies the `gameDocument` in place.
- */
-function applyLastScore(
-  gameDocument: GameDocument & {
-    currentTask: { type: TaskType.QuestionResult }
-  },
-): void {
-  gameDocument.participants
-    .filter((participant) => participant.type === GameParticipantType.PLAYER)
-    .forEach((participant) => {
-      const resultEntry = gameDocument.currentTask.results.find(
-        ({ playerId }) => playerId === participant.participantId,
-      )
-      if (resultEntry) {
-        participant.rank = resultEntry.position
-        participant.totalScore = resultEntry.totalScore
-        participant.currentStreak = resultEntry.streak
-      }
-    })
-}
-
-/**
- * Constructs a new leaderboard task based on the provided game document.
- *
- * @param {GameDocument} gameDocument - The current game document.
- *
- * @throws {IllegalTaskTypeException} If the current task type is not a question result.
- *
- * @returns {BaseTask & LeaderboardTask} A new leaderboard task object.
- */
-export function buildLeaderboardTask(
-  gameDocument: GameDocument,
-): BaseTask & LeaderboardTask {
-  if (!isQuestionResultTask(gameDocument)) {
-    throw new IllegalTaskTypeException(
-      gameDocument.currentTask.type,
-      TaskType.QuestionResult,
-    )
-  }
-
-  applyLastScore(gameDocument)
-
-  return {
-    _id: uuidv4(),
-    type: TaskType.Leaderboard,
-    status: 'pending',
-    questionIndex: gameDocument.nextQuestion - 1,
-    leaderboard: buildLeaderboardItems(gameDocument),
-    created: new Date(),
-  }
-}
-
-/**
- * Constructs a new podium task based on the provided game document.
- *
- * @param {GameDocument} gameDocument - The current game document.
- *
- * @throws {IllegalTaskTypeException} If the current task type is not a question result.
- *
- * @returns {BaseTask & PodiumTask} A new podium task object.
- */
-export function buildPodiumTask(
-  gameDocument: GameDocument,
-): BaseTask & PodiumTask {
-  if (!isQuestionResultTask(gameDocument)) {
-    throw new IllegalTaskTypeException(
-      gameDocument.currentTask.type,
-      TaskType.QuestionResult,
-    )
-  }
-
-  applyLastScore(gameDocument)
-
-  return {
-    _id: uuidv4(),
-    type: TaskType.Podium,
-    status: 'pending',
-    leaderboard: buildLeaderboardItems(gameDocument),
-    created: new Date(),
   }
 }
 

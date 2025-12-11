@@ -1,4 +1,5 @@
 export * from './array.utils'
 export * from './constants'
 export * from './nickname.utils'
+export * from './object.utils'
 export * from './range.utils'

@@ -12,8 +12,6 @@ import {
 } from '../repositories/models/schemas'
 
 import {
-  buildLeaderboardTask,
-  buildPodiumTask,
   buildQuestionResultTask,
   buildQuestionTask,
   buildQuitTask,
@@ -21,6 +19,11 @@ import {
   isParticipantPlayer,
   toQuestionTaskAnswerFromString,
 } from './utils'
+import {
+  buildLeaderboardTask,
+  buildPodiumTask,
+  updateParticipantsAndBuildLeaderboard,
+} from './utils/tasks'
 
 /**
  * Service responsible for determining the appropriate transition delay and callback
@@ -189,10 +192,19 @@ export class GameTaskTransitionService {
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
 
+    const leaderboardTaskItems =
+      updateParticipantsAndBuildLeaderboard(gameDocument)
+
     if (gameDocument.nextQuestion < gameDocument.questions.length) {
-      gameDocument.currentTask = buildLeaderboardTask(gameDocument)
+      gameDocument.currentTask = buildLeaderboardTask(
+        gameDocument,
+        leaderboardTaskItems,
+      )
     } else {
-      gameDocument.currentTask = buildPodiumTask(gameDocument)
+      gameDocument.currentTask = buildPodiumTask(
+        gameDocument,
+        leaderboardTaskItems,
+      )
       if (gameDocument.participants.filter(isParticipantPlayer).length > 0) {
         await this.gameResultRepository.createGameResult(gameDocument)
       }

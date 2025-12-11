@@ -21,6 +21,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       score: { total: totalScore },
     },
     question,
+    answer,
     countdown,
     pagination: { current: currentQuestion, total: totalQuestions },
   },
@@ -58,6 +59,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
       <div className={styles.fullHeight}>
         <QuestionAnswerPicker
           question={question}
+          submittedAnswer={answer}
           loading={isSubmittingQuestionAnswer}
           onChange={handleSubmitQuestionAnswer}
         />

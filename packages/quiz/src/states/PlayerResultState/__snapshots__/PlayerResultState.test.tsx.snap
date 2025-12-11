@@ -1,5 +1,3392 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`PlayerResultState > Celebration Logic > renders epic celebration for position 1 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-1 border"
+                style="background-color: gold; outline-color: white; color: white;"
+              >
+                1
+              </div>
+            </div>
+          </div>
+          <div
+            class="streakBadge"
+          >
+            Streak
+            <div
+              class="badge small number-2 border"
+              style="color: white;"
+            >
+              2
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            1000
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 1 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            5
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            Winner
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            10000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders epic celebration for position 2 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-2 border"
+                style="background-color: silver; outline-color: white; color: white;"
+              >
+                2
+              </div>
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            900
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 2 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            9
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            SecondPlace
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            6000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders epic celebration for streak 7 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-8 border"
+                style="background-color: white; outline-color: white;"
+              >
+                8
+              </div>
+            </div>
+          </div>
+          <div
+            class="streakBadge"
+          >
+            Streak
+            <div
+              class="badge small number-7 border"
+              style="color: white;"
+            >
+              7
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            600
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 8 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            10
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            HighStreak
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            4000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders epic celebration for streak 10 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large multiDigit border"
+                style="background-color: white; outline-color: white;"
+              >
+                15
+              </div>
+            </div>
+          </div>
+          <div
+            class="streakBadge"
+          >
+            Streak
+            <div
+              class="badge small multiDigit border"
+              style="color: white;"
+            >
+              10
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            500
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 15 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            8
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            StreakMaster
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            8000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders major celebration for position 3 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationMajor border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-3 border"
+                style="outline-color: white; color: white;"
+              >
+                3
+              </div>
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            800
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 3 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            6
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            ThirdPlace
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            5000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders major celebration for streak 5 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationMajor border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large multiDigit border"
+                style="background-color: white; outline-color: white;"
+              >
+                12
+              </div>
+            </div>
+          </div>
+          <div
+            class="streakBadge"
+          >
+            Streak
+            <div
+              class="badge small number-5 border"
+              style="color: white;"
+            >
+              5
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            400
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 12 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            7
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            StreakBuilder
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            3000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders no celebration for incorrect answer 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Incorrect
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-xmark"
+                  data-icon="xmark"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 384 512"
+                >
+                  <path
+                    d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large multiDigit border"
+                style="background-color: white; outline-color: white;"
+              >
+                20
+              </div>
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            0
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 20 - incorrect
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            2
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            WrongAnswer
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            700
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders no celebration for simple correct answer 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large multiDigit border"
+                style="background-color: white; outline-color: white;"
+              >
+                15
+              </div>
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            100
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 15 - correct
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            2
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            SimpleCorrect
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            800
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders normal celebration for position 10 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationNormal border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large multiDigit border"
+                style="background-color: white; outline-color: white;"
+              >
+                10
+              </div>
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            200
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 10 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            3
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            TopTen
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            1500
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerResultState > Celebration Logic > renders normal celebration for streak 3 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <div
+          class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+        >
+          <button
+            data-testid="test-fullscreen-button-button"
+            id="fullscreen-button"
+            name="fullscreen-button"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-maximize"
+              data-icon="maximize"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 448 512"
+            >
+              <path
+                d="M168 32L24 32C10.7 32 0 42.7 0 56L0 200c0 9.7 5.8 18.5 14.8 22.2S34.1 223.8 41 217l40-40 79 79-79 79-40-40c-6.9-6.9-17.2-8.9-26.2-5.2S0 302.3 0 312L0 456c0 13.3 10.7 24 24 24l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2S270.3 480 280 480l144 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2S448 209.7 448 200l0-144c0-13.3-10.7-24-24-24L280 32c-9.7 0-18.5 5.8-22.2 14.8S256.2 66.1 263 73l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S177.7 32 168 32z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="contentContainer"
+          >
+            <div
+              class="correctnessBatch"
+            >
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationNormal border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-8 border"
+                style="background-color: white; outline-color: white;"
+              >
+                8
+              </div>
+            </div>
+          </div>
+          <div
+            class="streakBadge"
+          >
+            Streak
+            <div
+              class="badge small number-3 border"
+              style="color: white;"
+            >
+              3
+            </div>
+          </div>
+          <div
+            class="score"
+          >
+            300
+          </div>
+          <div
+            class="typography text small"
+          >
+            Message for 8 - correct
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="footer"
+    >
+      <div
+        class="main"
+      >
+        <div
+          class="questions"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-question"
+            data-icon="circle-question"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm0-336c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>
+            4
+             / 
+            20
+          </span>
+        </div>
+        <div
+          class="nickname"
+        >
+          <span>
+            StreakStarter
+          </span>
+        </div>
+        <div
+          class="score"
+        >
+          <span>
+            2000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`PlayerResultState > renders correct result with behind indicator 1`] = `
 <div>
   <div
@@ -61,33 +3448,53 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large green"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-1 border"
+                style="background-color: gold; outline-color: white; color: white;"
+              >
+                1
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
           >
             Streak
             <div
-              class="badge small orange"
+              class="badge small number-3 border"
+              style="color: white;"
             >
               3
             </div>
@@ -112,6 +3519,290 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
             <strong>
               WhiskerFox
             </strong>
+          </div>
+          <div
+            class="confettiContainer"
+          >
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $green-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $yellow-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $gold; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $pink-2; --particle-size: 4.8px;"
+            />
+            <div
+              class="confettiParticle"
+              style="--random-x: 0.1; --random-delay: 0.1; --random-duration: 0.1; --particle-color: $turquoise-2; --particle-size: 4.8px;"
+            />
           </div>
         </div>
       </div>
@@ -225,26 +3916,45 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Incorrect
-          </div>
-          <div
-            class="badge large red"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-xmark"
-              data-icon="xmark"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 384 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Incorrect
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-xmark"
+                  data-icon="xmark"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 384 512"
+                >
+                  <path
+                    d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large number-7 border"
+                style="background-color: white; outline-color: white;"
+              >
+                7
+              </div>
+            </div>
           </div>
           <div
             class="score"

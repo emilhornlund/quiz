@@ -27,7 +27,12 @@ vi.mock('../../../../../components', async (orig: any) => {
 describe('AnswerPin', () => {
   it('renders interactive mode', () => {
     const { container } = render(
-      <AnswerPin imageURL="/img.png" interactive onSubmit={vi.fn()} />,
+      <AnswerPin
+        imageURL="/img.png"
+        interactive
+        loading={false}
+        onSubmit={vi.fn()}
+      />,
     )
     expect(screen.getByTestId('pin-value')).toHaveTextContent(
       JSON.stringify({ x: 0.5, y: 0.5 }),
@@ -38,7 +43,14 @@ describe('AnswerPin', () => {
 
   it('submits initial position when no movement', () => {
     const onSubmit = vi.fn()
-    render(<AnswerPin imageURL="/img.png" interactive onSubmit={onSubmit} />)
+    render(
+      <AnswerPin
+        imageURL="/img.png"
+        interactive
+        loading={false}
+        onSubmit={onSubmit}
+      />,
+    )
 
     fireEvent.click(screen.getByRole('button', { name: /submit my pin/i }))
 
@@ -48,7 +60,14 @@ describe('AnswerPin', () => {
 
   it('updates position via PinImage and submits new value', () => {
     const onSubmit = vi.fn()
-    render(<AnswerPin imageURL="/img.png" interactive onSubmit={onSubmit} />)
+    render(
+      <AnswerPin
+        imageURL="/img.png"
+        interactive
+        loading={false}
+        onSubmit={onSubmit}
+      />,
+    )
 
     fireEvent.click(screen.getByTestId('move-pin'))
     expect(screen.getByTestId('pin-value')).toHaveTextContent(
@@ -62,7 +81,12 @@ describe('AnswerPin', () => {
 
   it('renders non-interactive mode without submit button', () => {
     const { container } = render(
-      <AnswerPin imageURL="/img.png" interactive={false} onSubmit={vi.fn()} />,
+      <AnswerPin
+        imageURL="/img.png"
+        interactive={false}
+        loading={false}
+        onSubmit={vi.fn()}
+      />,
     )
     expect(
       screen.queryByRole('button', { name: /submit my pin/i }),

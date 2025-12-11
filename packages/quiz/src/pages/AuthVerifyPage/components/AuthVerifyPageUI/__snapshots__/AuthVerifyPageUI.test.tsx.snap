@@ -43,7 +43,8 @@ exports[`AuthVerifyPageUI > renders error state 1`] = `
           class="contentInner"
         >
           <div
-            class="badge large red"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -119,7 +120,8 @@ exports[`AuthVerifyPageUI > renders verified state (logged in) with home link 1`
           class="contentInner"
         >
           <div
-            class="badge large green"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"
@@ -205,7 +207,8 @@ exports[`AuthVerifyPageUI > renders verified state (not logged in) with login li
           class="contentInner"
         >
           <div
-            class="badge large green"
+            class="badge large border"
+            style="outline-color: white; color: white;"
           >
             <svg
               aria-hidden="true"

@@ -1,6 +1,6 @@
 import {
+  arraysEqual,
   CountdownEvent,
-  GameAwaitingResultPlayerEvent,
   GameBeginHostEvent,
   GameBeginPlayerEvent,
   GameEvent,
@@ -8,26 +8,23 @@ import {
   GameEventQuestionResults,
   GameEventType,
   GameLeaderboardHostEvent,
-  GameLeaderboardPlayerEvent,
   GameLoadingEvent,
   GameLobbyHostEvent,
   GameLobbyPlayerEvent,
   GameParticipantType,
   GamePodiumHostEvent,
-  GamePodiumPlayerEvent,
   GameQuestionHostEvent,
+  GameQuestionPlayerAnswerEvent,
   GameQuestionPlayerEvent,
   GameQuestionPreviewHostEvent,
   GameQuestionPreviewPlayerEvent,
   GameQuitEvent,
   GameResultHostEvent,
-  GameResultPlayerEvent,
   GameStatus,
   MediaType,
   PaginationEvent,
   QuestionType,
 } from '@quiz/common'
-import { arraysEqual } from '@quiz/common'
 
 import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
@@ -40,14 +37,14 @@ import {
 } from '../../../quiz/services/utils'
 import {
   GameDocument,
-  LeaderboardTaskItem,
   ParticipantBase,
   ParticipantPlayer,
-  QuestionResultTaskItem,
+  QuestionTaskAnswer,
   QuestionTaskMetadata,
   TaskType,
 } from '../../repositories/models/schemas'
 
+import { buildGameResultPlayerEvent } from './events'
 import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
@@ -78,7 +75,7 @@ import {
 export interface GameEventMetaData {
   currentAnswerSubmissions: number
   totalAnswerSubmissions: number
-  hasPlayerAnswerSubmission: boolean
+  playerAnswerSubmission?: QuestionTaskAnswer
 }
 
 /**
@@ -193,42 +190,25 @@ export function buildPlayerGameEvent(
       case 'pending':
         return buildGameQuestionPreviewPlayerEvent(document, participantPlayer)
       case 'active':
-        return metadata.hasPlayerAnswerSubmission
-          ? buildGameAwaitingResultPlayerEvent(document, participantPlayer)
-          : buildGameQuestionPlayerEvent(document, participantPlayer)
       case 'completed':
-        return buildGameAwaitingResultPlayerEvent(document, participantPlayer)
+        return buildGameQuestionPlayerEvent(
+          document,
+          participantPlayer,
+          metadata.playerAnswerSubmission,
+        )
     }
   }
 
-  if (isQuestionResultTask(document)) {
+  if (
+    isQuestionResultTask(document) ||
+    isLeaderboardTask(document) ||
+    isPodiumTask(document)
+  ) {
     switch (document.currentTask.status) {
       case 'pending':
         return buildGameLoadingEvent()
       case 'active':
         return buildGameResultPlayerEvent(document, participantPlayer)
-      case 'completed':
-        return buildGameLoadingEvent()
-    }
-  }
-
-  if (isLeaderboardTask(document)) {
-    switch (document.currentTask.status) {
-      case 'pending':
-        return buildGameLoadingEvent()
-      case 'active':
-        return buildGameLeaderboardPlayerEvent(document, participantPlayer)
-      case 'completed':
-        return buildGameLoadingEvent()
-    }
-  }
-
-  if (isPodiumTask(document)) {
-    switch (document.currentTask.status) {
-      case 'pending':
-        return buildGameLoadingEvent()
-      case 'active':
-        return buildGamePodiumPlayerEvent(document, participantPlayer)
       case 'completed':
         return buildGameLoadingEvent()
     }
@@ -541,16 +521,78 @@ function buildGameQuestionHostEvent(
 }
 
 /**
- * Builds a question event for a player, including countdown and score details.
+ * Builds a `GameQuestionPlayerAnswerEvent` from a stored player answer.
  *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
+ * Maps the persisted `QuestionTaskAnswer` to the wire-format used in
+ * game events, preserving both the `QuestionType` and the answer value
+ * in the appropriate shape.
  *
- * @returns {GameQuestionPlayerEvent} A question event for the player.
+ * If the player has not submitted an answer, `undefined` is returned.
+ *
+ * @param playerAnswerSubmission - The stored answer for the current player and question, if any.
+ *
+ * @returns The normalized player answer event, or `undefined` if no answer exists.
+ */
+function buildGameQuestionPlayerAnswerEvent(
+  playerAnswerSubmission?: QuestionTaskAnswer,
+): GameQuestionPlayerAnswerEvent | undefined {
+  if (isMultiChoiceAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.MultiChoice,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isTrueFalseAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.TrueFalse,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isRangeAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Range,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isTypeAnswerAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.TypeAnswer,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isPinAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Pin,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+
+  if (isPuzzleAnswer(playerAnswerSubmission)) {
+    return {
+      type: QuestionType.Puzzle,
+      value: playerAnswerSubmission.answer,
+    }
+  }
+}
+
+/**
+ * Builds a question event for a player, including countdown, score details,
+ * and the player's submitted answer when available.
+ *
+ * @param document - The game document containing the current question task.
+ * @param participantPlayer - The player participant object for whom the event is being built.
+ * @param playerAnswerSubmission - The player's stored answer for the current question, if they have submitted one.
+ *
+ * @returns A question event for the player.
  */
 function buildGameQuestionPlayerEvent(
   document: GameDocument & { currentTask: { type: TaskType.Question } },
   participantPlayer: ParticipantBase & ParticipantPlayer,
+  playerAnswerSubmission?: QuestionTaskAnswer,
 ): GameQuestionPlayerEvent {
   const currentQuestion = document.questions[document.currentTask.questionIndex]
   const currentQuestionTask = document.currentTask
@@ -569,33 +611,8 @@ function buildGameQuestionPlayerEvent(
       currentQuestion,
       currentQuestionTask.metadata,
     ),
+    answer: buildGameQuestionPlayerAnswerEvent(playerAnswerSubmission),
     countdown: buildGameQuestionCountdownEvent(document),
-    pagination: buildPaginationEvent(document),
-  }
-}
-
-/**
- * Builds an event indicating the player is awaiting the result of the question.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Question } }} document - The game document containing the current question task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
- *
- * @returns {GameAwaitingResultPlayerEvent} An event indicating the player is waiting for the question result.
- */
-function buildGameAwaitingResultPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Question } },
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-): GameAwaitingResultPlayerEvent {
-  const { nickname, totalScore: total } = participantPlayer
-
-  return {
-    type: GameEventType.GameAwaitingResultPlayer,
-    player: {
-      nickname,
-      score: {
-        total,
-      },
-    },
     pagination: buildPaginationEvent(document),
   }
 }
@@ -920,78 +937,6 @@ function buildGameResultHostEvent(
 }
 
 /**
- * Builds a question result event for the player.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.QuestionResult } }} document - The game document containing the current question result task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
- */
-function buildGameResultPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-): GameResultPlayerEvent {
-  const { participantId, nickname } = participantPlayer
-
-  const resultsEntryIndex = document.currentTask.results.findIndex(
-    ({ playerId }) => playerId === participantId,
-  )
-
-  const resultsEntry = document.currentTask.results?.[resultsEntryIndex]
-  if (!resultsEntry) {
-    // TODO: throw exception here instead
-    return {
-      type: GameEventType.GameResultPlayer,
-      player: {
-        nickname,
-        score: {
-          correct: false,
-          last: 0,
-          total: participantPlayer.totalScore,
-          position: document.participants.filter(
-            ({ type }) => type === GameParticipantType.PLAYER,
-          ).length,
-          streak: 0,
-        },
-      },
-      pagination: buildPaginationEvent(document),
-    }
-  }
-
-  const previousResultsEntry: QuestionResultTaskItem | undefined =
-    resultsEntryIndex > 0
-      ? document.currentTask.results?.[resultsEntryIndex - 1]
-      : undefined
-
-  const {
-    correct,
-    lastScore: last,
-    totalScore: total,
-    position,
-    streak,
-  } = resultsEntry
-
-  return {
-    type: GameEventType.GameResultPlayer,
-    player: {
-      nickname,
-      score: {
-        correct,
-        last,
-        total,
-        position,
-        streak,
-      },
-      behind: previousResultsEntry
-        ? {
-            points: previousResultsEntry.totalScore - total,
-            nickname: previousResultsEntry.nickname,
-          }
-        : undefined,
-    },
-    pagination: buildPaginationEvent(document),
-  }
-}
-
-/**
  * Builds a leaderboard event for the host.
  *
  * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
@@ -1006,60 +951,13 @@ function buildGameLeaderboardHostEvent(
     },
     leaderboard: document.currentTask.leaderboard
       .slice(0, 5)
-      .map(({ position, nickname, score, streaks }) => ({
+      .map(({ position, previousPosition, nickname, score, streaks }) => ({
         position,
+        previousPosition,
         nickname,
         score,
         streaks,
       })),
-    pagination: buildPaginationEvent(document),
-  }
-}
-
-/**
- * Builds a leaderboard event for the player.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Leaderboard } }} document - The game document containing the current leaderboard task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
- */
-function buildGameLeaderboardPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Leaderboard } },
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-): GameLeaderboardPlayerEvent {
-  const { participantId, nickname } = participantPlayer
-
-  const leaderboardIndex = document.currentTask.leaderboard.findIndex(
-    ({ playerId }) => playerId === participantId,
-  )
-
-  const leaderboardEntry = document.currentTask.leaderboard?.[leaderboardIndex]
-  if (!leaderboardEntry) {
-    throw new Error(`Player not found in leaderboard: ${participantId}`)
-  }
-
-  const { position, score, streaks } = leaderboardEntry
-
-  const previousLeaderboardEntry: LeaderboardTaskItem | undefined =
-    leaderboardIndex > 0
-      ? document.currentTask.leaderboard?.[leaderboardIndex - 1]
-      : undefined
-
-  return {
-    type: GameEventType.GameLeaderboardPlayer,
-    player: {
-      nickname,
-      score: {
-        position,
-        score,
-        streaks,
-      },
-      behind: previousLeaderboardEntry
-        ? {
-            points: previousLeaderboardEntry.score - score,
-            nickname: previousLeaderboardEntry.nickname,
-          }
-        : undefined,
-    },
     pagination: buildPaginationEvent(document),
   }
 }
@@ -1081,41 +979,6 @@ function buildGamePodiumHostEvent(
         nickname,
         score,
       })),
-  }
-}
-
-/**
- * Builds a podium event for the player.
- *
- * @param {GameDocument & { currentTask: { type: TaskType.Podium } }} document - The game document containing the current podium task.
- * @param {ParticipantBase & ParticipantPlayer} participantPlayer - The player participant object for whom the event is being built.
- */
-function buildGamePodiumPlayerEvent(
-  document: GameDocument & { currentTask: { type: TaskType.Podium } },
-  participantPlayer: ParticipantBase & ParticipantPlayer,
-): GamePodiumPlayerEvent {
-  const { participantId, nickname } = participantPlayer
-
-  const leaderboardEntry = document.currentTask.leaderboard.find(
-    ({ playerId }) => playerId === participantId,
-  )
-  if (!leaderboardEntry) {
-    throw new Error(`Player not found in leaderboard: ${participantId}`)
-  }
-  const { score: total, position } = leaderboardEntry
-
-  return {
-    type: GameEventType.GamePodiumPlayer,
-    game: {
-      name: document.name,
-    },
-    player: {
-      nickname,
-      score: {
-        total,
-        position,
-      },
-    },
   }
 }
 

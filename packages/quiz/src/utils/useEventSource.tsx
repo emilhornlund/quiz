@@ -1,4 +1,9 @@
-import { GameEvent, GameEventType, HEARTBEAT_INTERVAL } from '@quiz/common'
+import {
+  deepEqual,
+  GameEvent,
+  GameEventType,
+  HEARTBEAT_INTERVAL,
+} from '@quiz/common'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -51,6 +56,7 @@ export const useEventSource = (
   const reconnectTimeoutRef = useRef<number | null>(null)
   const instanceIdRef = useRef(0)
   const isShuttingDownRef = useRef(false)
+  const lastEventRef = useRef<GameEvent | undefined>(undefined)
 
   const clearReconnectTimeout = () => {
     if (reconnectTimeoutRef.current !== null) {
@@ -90,6 +96,7 @@ export const useEventSource = (
       const instanceId = ++instanceIdRef.current
 
       cleanupEventSource()
+      lastEventRef.current = undefined
 
       const eventSource = new EventSourcePolyfill(
         `${config.quizServiceUrl}/games/${gameIdValue}/events`,
@@ -114,7 +121,11 @@ export const useEventSource = (
 
         const data = JSON.parse(event.data) as GameEvent
         if (data.type !== GameEventType.GameHeartbeat) {
-          setGameEvent(data)
+          // Only update state if the event has actually changed
+          if (!deepEqual(data, lastEventRef.current)) {
+            lastEventRef.current = data
+            setGameEvent(data)
+          }
         }
       }
 

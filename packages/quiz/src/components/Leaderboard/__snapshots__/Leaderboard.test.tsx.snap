@@ -1,256 +1,248 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Leaderboard > should render Leaderboard excluding the podium 1`] = `
+exports[`Leaderboard Component > Basic Rendering > should render Leaderboard excluding podium 1`] = `
 <div>
   <div
-    class="main"
+    class="leaderboard"
   >
     <div
-      class="column"
+      class="row"
       style="--row-index: 0;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           4
         </span>
       </div>
-    </div>
-    <div
-      class="column"
-      style="--row-index: 0;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          WhiskerFox
+          Player4
         </span>
+      </div>
+      <span
+        class="column streaks"
+      />
+      <div
+        class="column score"
+      >
+        40
       </div>
     </div>
     <div
-      class="column"
-      style="--row-index: 0;"
-    >
-      <span
-        class="score"
-      >
-        14118
-      </span>
-    </div>
-    <div
-      class="column"
+      class="row"
       style="--row-index: 1;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           5
         </span>
       </div>
-    </div>
-    <div
-      class="column"
-      style="--row-index: 1;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          JollyNimbus
+          Player5
         </span>
       </div>
-    </div>
-    <div
-      class="column"
-      style="--row-index: 1;"
-    >
-      <span
-        class="score"
+      <div
+        class="column score"
       >
-        13463
-      </span>
+        20
+      </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`Leaderboard > should render Leaderboard including the podium 1`] = `
+exports[`Leaderboard Component > Basic Rendering > should render Leaderboard including podium 1`] = `
 <div>
   <div
-    class="main"
+    class="leaderboard"
   >
     <div
-      class="column podium"
+      class="row gold topPosition"
       style="--row-index: 0;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           1
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 0;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          ShadowCyborg
+          Player1
         </span>
+      </div>
+      <span
+        class="column streaks"
+      >
+        <div
+          class="streakBadge"
+        >
+          <div
+            class="badge small number-5 border"
+            style="background-color: white; outline-color: white;"
+          >
+            5
+          </div>
+        </div>
+      </span>
+      <div
+        class="column score"
+      >
+        100
       </div>
     </div>
     <div
-      class="column podium"
-      style="--row-index: 0;"
-    >
-      <span
-        class="score"
-      >
-        18456
-      </span>
-    </div>
-    <div
-      class="column podium"
+      class="row silver topPosition"
       style="--row-index: 1;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           2
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 1;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          Radar
+          Player2
         </span>
+      </div>
+      <span
+        class="column streaks"
+      >
+        <div
+          class="streakBadge"
+        >
+          <div
+            class="badge small number-3 border"
+            style="color: white;"
+          >
+            3
+          </div>
+        </div>
+      </span>
+      <div
+        class="column score"
+      >
+        80
       </div>
     </div>
     <div
-      class="column podium"
-      style="--row-index: 1;"
-    >
-      <span
-        class="score"
-      >
-        18398
-      </span>
-    </div>
-    <div
-      class="column podium"
+      class="row bronze topPosition"
       style="--row-index: 2;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           3
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 2;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          ShadowWhirlwind
+          Player3
         </span>
+      </div>
+      <span
+        class="column streaks"
+      >
+        <div
+          class="streakBadge"
+        >
+          <div
+            class="badge small number-2 border"
+            style="background-color: white; outline-color: white;"
+          >
+            2
+          </div>
+        </div>
+      </span>
+      <div
+        class="column score"
+      >
+        60
       </div>
     </div>
     <div
-      class="column podium"
-      style="--row-index: 2;"
-    >
-      <span
-        class="score"
-      >
-        15492
-      </span>
-    </div>
-    <div
-      class="column podium"
+      class="row"
       style="--row-index: 3;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           4
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 3;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          WhiskerFox
+          Player4
         </span>
+      </div>
+      <span
+        class="column streaks"
+      />
+      <div
+        class="column score"
+      >
+        40
       </div>
     </div>
     <div
-      class="column podium"
-      style="--row-index: 3;"
-    >
-      <span
-        class="score"
-      >
-        14118
-      </span>
-    </div>
-    <div
-      class="column podium"
+      class="row"
       style="--row-index: 4;"
     >
       <div
-        class="position"
+        class="column position"
       >
-        <span>
+        <span
+          class="badge"
+        >
           5
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 4;"
-    >
       <div
-        class="nameRow"
+        class="column nickname"
       >
         <span>
-          JollyNimbus
+          Player5
         </span>
       </div>
-    </div>
-    <div
-      class="column podium"
-      style="--row-index: 4;"
-    >
-      <span
-        class="score"
+      <div
+        class="column score"
       >
-        13463
-      </span>
+        20
+      </div>
     </div>
   </div>
 </div>

@@ -40,7 +40,7 @@ const PlayerQuestionPreviewState: FC<PlayerQuestionPreviewStateProps> = ({
 
     <QuestionTextPreview text={questionValue} />
 
-    <ProgressBar countdown={countdown} />
+    <ProgressBar countdown={countdown} disableStyling={true} />
   </GamePage>
 )
 

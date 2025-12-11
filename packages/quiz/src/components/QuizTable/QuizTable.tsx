@@ -13,8 +13,8 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import React, { FC, MouseEvent, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Picture from '../../assets/images/picture.svg'
 import {
@@ -22,7 +22,7 @@ import {
   LanguageLabels,
   QuizCategoryLabels,
   QuizVisibilityLabels,
-} from '../../models/labels.ts'
+} from '../../models'
 import { IconButtonArrowLeft, IconButtonArrowRight } from '../Button'
 
 import styles from './QuizTable.module.scss'
@@ -60,6 +60,8 @@ const QuizTable: FC<QuizTableProps> = ({
   isPublic = false,
   onPagination,
 }) => {
+  const navigate = useNavigate()
+
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(pagination.total / pagination.limit)),
     [pagination],
@@ -69,55 +71,63 @@ const QuizTable: FC<QuizTableProps> = ({
     [pagination],
   )
 
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    const id = event.currentTarget.id
+    if (id) {
+      navigate(`/quiz/details/${id}`)
+    }
+  }
+
   return (
     <>
       <div className={styles.quizTable}>
         <div className={styles.rows}>
           {items.map((item) => (
-            <Link key={item.id} to={`/quiz/details/${item.id}`}>
-              <div className={styles.row}>
-                <img
-                  src={item.imageCoverURL ?? Picture}
-                  className={item.imageCoverURL ? undefined : styles.svg}
-                  alt="image"
-                />
-                <div className={styles.content}>
-                  <div className={styles.title}>{item.title}</div>
-                  {item.description && (
-                    <div
-                      title={item.description}
-                      className={styles.description}>
-                      {item.description}
-                    </div>
-                  )}
-                  <div className={styles.details}>
-                    <span>
-                      <FontAwesomeIcon icon={faGamepad} />
-                      {GameModeLabels[item.mode]}
-                    </span>
-                    <span>
-                      <FontAwesomeIcon icon={faIcons} />
-                      {QuizCategoryLabels[item.category]}
-                    </span>
-                    {!isPublic && (
-                      <span>
-                        <FontAwesomeIcon icon={faEye} />
-                        {QuizVisibilityLabels[item.visibility]}
-                      </span>
-                    )}
-                    <span>
-                      <FontAwesomeIcon icon={faLanguage} />
-                      {LanguageLabels[item.languageCode]}
-                    </span>
-                    <span>
-                      <FontAwesomeIcon icon={faCircleQuestion} />
-                      {item.numberOfQuestions}{' '}
-                      {item.numberOfQuestions === 1 ? 'Question' : 'Questions'}
-                    </span>
+            <button
+              key={item.id}
+              id={item.id}
+              onClick={handleClick}
+              className={styles.row}>
+              <img
+                src={item.imageCoverURL ?? Picture}
+                className={item.imageCoverURL ? undefined : styles.svg}
+                alt="image"
+              />
+              <div className={styles.content}>
+                <div className={styles.title}>{item.title}</div>
+                {item.description && (
+                  <div title={item.description} className={styles.description}>
+                    {item.description}
                   </div>
+                )}
+                <div className={styles.details}>
+                  <span>
+                    <FontAwesomeIcon icon={faGamepad} />
+                    {GameModeLabels[item.mode]}
+                  </span>
+                  <span>
+                    <FontAwesomeIcon icon={faIcons} />
+                    {QuizCategoryLabels[item.category]}
+                  </span>
+                  {!isPublic && (
+                    <span>
+                      <FontAwesomeIcon icon={faEye} />
+                      {QuizVisibilityLabels[item.visibility]}
+                    </span>
+                  )}
+                  <span>
+                    <FontAwesomeIcon icon={faLanguage} />
+                    {LanguageLabels[item.languageCode]}
+                  </span>
+                  <span>
+                    <FontAwesomeIcon icon={faCircleQuestion} />
+                    {item.numberOfQuestions}{' '}
+                    {item.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+                  </span>
                 </div>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
         {totalPages > 1 && (

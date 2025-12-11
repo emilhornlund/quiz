@@ -1,0 +1,97 @@
+import React, { FC, useEffect, useState } from 'react'
+
+import styles from './Confetti.module.scss'
+
+export type ConfettiIntensity = 'normal' | 'major' | 'epic'
+
+export interface ConfettiProps {
+  trigger: boolean
+  intensity: ConfettiIntensity
+  onAnimationEnd?: () => void
+}
+
+interface ConfettiParticle {
+  id: number
+  color: string
+  x: number
+  delay: number
+  duration: number
+  size: number
+}
+
+const Confetti: FC<ConfettiProps> = ({
+  trigger,
+  intensity,
+  onAnimationEnd,
+}) => {
+  const [particles, setParticles] = useState<ConfettiParticle[]>([])
+
+  const particleCounts = {
+    normal: 25,
+    major: 45,
+    epic: 70,
+  }
+
+  const colorPalettes = {
+    normal: ['$green-2', '$yellow-2'],
+    major: ['$green-2', '$yellow-2', '$gold'],
+    epic: ['$green-2', '$yellow-2', '$gold', '$pink-2', '$turquoise-2'],
+  }
+
+  const generateParticles = (
+    intensity: ConfettiIntensity,
+  ): ConfettiParticle[] => {
+    const count = particleCounts[intensity]
+    const colors = colorPalettes[intensity]
+
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      color: colors[i % colors.length],
+      x: Math.random(),
+      delay: Math.random(),
+      duration: Math.random(),
+      size: Math.random() * 8 + 4, // 4-12px
+    }))
+  }
+
+  useEffect(() => {
+    if (trigger) {
+      const newParticles = generateParticles(intensity)
+      setParticles(newParticles)
+
+      // Auto-cleanup after animation completes (2.5s + buffer)
+      const timer = setTimeout(() => {
+        setParticles([])
+        onAnimationEnd?.()
+      }, 2800)
+
+      return () => clearTimeout(timer)
+    }
+  }, [trigger, intensity, onAnimationEnd])
+
+  if (!trigger || particles.length === 0) {
+    return null
+  }
+
+  return (
+    <div className={styles.confettiContainer}>
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className={styles.confettiParticle}
+          style={
+            {
+              '--random-x': particle.x,
+              '--random-delay': particle.delay,
+              '--random-duration': particle.duration,
+              '--particle-color': particle.color,
+              '--particle-size': `${particle.size}px`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
+  )
+}
+
+export default Confetti

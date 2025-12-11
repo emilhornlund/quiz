@@ -172,6 +172,19 @@ export type GameQuestionHostEvent = {
   pagination: PaginationEvent
 }
 
+/**
+ * Discriminated union describing a player's submitted answer for a question.
+ *
+ * Each variant pairs a `QuestionType` with the corresponding answer value shape.
+ */
+export type GameQuestionPlayerAnswerEvent =
+  | { type: QuestionType.MultiChoice; value: number }
+  | { type: QuestionType.TrueFalse; value: boolean }
+  | { type: QuestionType.Range; value: number }
+  | { type: QuestionType.TypeAnswer; value: string }
+  | { type: QuestionType.Pin; value: string }
+  | { type: QuestionType.Puzzle; value: string[] }
+
 export type GameQuestionPlayerEvent = {
   type: GameEventType.GameQuestionPlayer
   player: {
@@ -181,18 +194,8 @@ export type GameQuestionPlayerEvent = {
     }
   }
   question: GameEventQuestion
+  answer?: GameQuestionPlayerAnswerEvent
   countdown: CountdownEvent
-  pagination: PaginationEvent
-}
-
-export type GameAwaitingResultPlayerEvent = {
-  type: GameEventType.GameAwaitingResultPlayer
-  player: {
-    nickname: string
-    score: {
-      total: number
-    }
-  }
   pagination: PaginationEvent
 }
 
@@ -289,21 +292,25 @@ export type GameResultHostEvent = {
   pagination: PaginationEvent
 }
 
+export type GameResultPlayerEventScore = {
+  correct: boolean
+  last: number
+  total: number
+  position: number
+  streak: number
+}
+
+export type GameResultPlayerEventBehind = {
+  points: number
+  nickname: string
+}
+
 export type GameResultPlayerEvent = {
   type: GameEventType.GameResultPlayer
   player: {
     nickname: string
-    score: {
-      correct: boolean
-      last: number
-      total: number
-      position: number
-      streak: number
-    }
-    behind?: {
-      points: number
-      nickname: string
-    }
+    score: GameResultPlayerEventScore
+    behind?: GameResultPlayerEventBehind
   }
   pagination: PaginationEvent
 }
@@ -315,6 +322,7 @@ export type GameLeaderboardHostEvent = {
   }
   leaderboard: {
     position: number
+    previousPosition?: number
     nickname: string
     score: number
     streaks: number
@@ -322,40 +330,9 @@ export type GameLeaderboardHostEvent = {
   pagination: PaginationEvent
 }
 
-export type GameLeaderboardPlayerEvent = {
-  type: GameEventType.GameLeaderboardPlayer
-  player: {
-    nickname: string
-    score: {
-      position: number
-      score: number
-      streaks: number
-    }
-    behind?: {
-      points: number
-      nickname: string
-    }
-  }
-  pagination: PaginationEvent
-}
-
 export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
   leaderboard: { position: number; nickname: string; score: number }[]
-}
-
-export type GamePodiumPlayerEvent = {
-  type: GameEventType.GamePodiumPlayer
-  game: {
-    name: string
-  }
-  player: {
-    nickname: string
-    score: {
-      total: number
-      position: number
-    }
-  }
 }
 
 export type GameQuitEvent = {
@@ -374,11 +351,8 @@ export type GameEvent =
   | GameQuestionPreviewPlayerEvent
   | GameQuestionHostEvent
   | GameQuestionPlayerEvent
-  | GameAwaitingResultPlayerEvent
   | GameResultHostEvent
   | GameResultPlayerEvent
   | GameLeaderboardHostEvent
-  | GameLeaderboardPlayerEvent
   | GamePodiumHostEvent
-  | GamePodiumPlayerEvent
   | GameQuitEvent

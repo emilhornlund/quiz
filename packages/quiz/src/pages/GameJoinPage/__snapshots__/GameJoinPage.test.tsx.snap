@@ -55,7 +55,7 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -272,7 +272,7 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -490,7 +490,7 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -707,7 +707,7 @@ exports[`GameJoinPage > ignores rapid double-submit (only calls joinGame once) 1
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -924,7 +924,7 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -1141,7 +1141,7 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -1359,7 +1359,7 @@ exports[`GameJoinPage > prefills nickname from user default but keeps Join disab
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -1577,7 +1577,7 @@ exports[`GameJoinPage > renders title and message 1`] = `
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -1795,7 +1795,7 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -2013,7 +2013,7 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"
@@ -2230,7 +2230,7 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
       </div>
     </div>
     <div
-      class="content startAlign"
+      class="content centerAlign"
     >
       <div
         class="contentWrapper fullWidth"

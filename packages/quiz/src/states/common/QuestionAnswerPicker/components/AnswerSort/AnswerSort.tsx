@@ -1,5 +1,6 @@
 import { faRocket } from '@fortawesome/free-solid-svg-icons'
-import React, { FC, useState } from 'react'
+import { GameQuestionPlayerAnswerEvent } from '@quiz/common'
+import React, { FC, useMemo, useState } from 'react'
 
 import {
   Button,
@@ -11,17 +12,30 @@ import styles from './AnswerSort.module.scss'
 
 export type AnswerSortProps = {
   values: string[]
+  submittedAnswer?: GameQuestionPlayerAnswerEvent
   interactive: boolean
+  loading: boolean
   onSubmit: (values: string[]) => void
 }
 
-const AnswerSort: FC<AnswerSortProps> = ({ values, interactive, onSubmit }) => {
+const AnswerSort: FC<AnswerSortProps> = ({
+  values,
+  submittedAnswer,
+  interactive,
+  loading,
+  onSubmit,
+}) => {
   const [internalValues, setInternalValues] = useState<SortableTableValue[]>(
     () =>
       values.map((value, index) => ({
         id: `${value.replace(' ', '-')}_${index}`,
         value,
       })),
+  )
+
+  const disabled = useMemo(
+    () => !interactive || loading || !!submittedAnswer,
+    [interactive, loading, submittedAnswer],
   )
 
   const handleSubmit = () =>
@@ -32,18 +46,19 @@ const AnswerSort: FC<AnswerSortProps> = ({ values, interactive, onSubmit }) => {
       <div className={styles.table}>
         <SortableTable
           values={internalValues}
-          disabled={!interactive}
+          disabled={disabled}
           onChange={setInternalValues}
         />
       </div>
 
-      {interactive && (
+      {(interactive || !!submittedAnswer) && (
         <div className={styles.buttonWrapper}>
           <Button
             id="submit-button"
             type="button"
             kind="call-to-action"
             icon={faRocket}
+            disabled={disabled}
             onClick={handleSubmit}>
             Submit My Answer
           </Button>

@@ -1,13 +1,19 @@
 import { CountdownEvent } from '@quiz/common'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
+import { classNames } from '../../utils/helpers.ts'
+
 import styles from './ProgressBar.module.scss'
 
 export interface ProgressBarProps {
   countdown: CountdownEvent
+  disableStyling?: boolean
 }
 
-const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
+const ProgressBar: FC<ProgressBarProps> = ({
+  countdown,
+  disableStyling = false,
+}) => {
   const [progress, setProgress] = useState<number>(1)
 
   const [clientToServerOffset, setClientToServerOffset] = useState<number>(0)
@@ -69,13 +75,26 @@ const ProgressBar: FC<ProgressBarProps> = ({ countdown }) => {
     }
   }, [clientToServerOffset, initiatedTime, totalDuration])
 
+  const getProgressColorClass = () => {
+    const percentage = progress * 100
+    if (percentage >= 50) return styles.safe
+    if (percentage >= 20) return styles.caution
+    if (percentage >= 10) return styles.urgent
+    return styles.critical
+  }
+
   return (
     <div className={styles.progressBar}>
-      <span
-        className={progress < 0.1 ? styles.pulse : ''}
+      <div
+        className={classNames(
+          styles.track,
+          !disableStyling ? getProgressColorClass() : undefined,
+          !disableStyling && progress < 0.1 ? styles.pulse : undefined,
+        )}
         style={{
           width: `${Math.max(Math.min(1, progress), 0) * 100}%`,
-          transition: 'width 0.1s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition:
+            'width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease',
         }}
       />
     </div>

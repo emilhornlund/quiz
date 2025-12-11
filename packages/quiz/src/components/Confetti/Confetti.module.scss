@@ -1,0 +1,80 @@
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+.confettiContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: variables.$confetti-z-index;
+  overflow: hidden;
+}
+
+.confettiParticle {
+  position: absolute;
+  top: -20px;
+  left: calc(var(--random-x) * 100%);
+  width: var(--particle-size);
+  height: var(--particle-size);
+  background-color: var(--particle-color);
+  animation: confettiFall 2.5s ease-in-out;
+  animation-delay: calc(var(--random-delay) * 0.5s);
+  animation-duration: calc(2s + var(--random-duration) * 1s);
+  animation-fill-mode: forwards;
+
+  // Different shapes for variety
+  &:nth-child(3n) {
+    border-radius: 50%;
+  }
+
+  &:nth-child(3n + 1) {
+    border-radius: 0;
+  }
+
+  &:nth-child(3n + 2) {
+    border-radius: 50% 0;
+    transform: rotate(45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    display: none;
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+// Color mappings for CSS custom properties
+.confettiParticle {
+  &[style*='--particle-color: $green-2'] {
+    background-color: colors.$green-2;
+  }
+
+  &[style*='--particle-color: $yellow-2'] {
+    background-color: colors.$yellow-2;
+  }
+
+  &[style*='--particle-color: $gold'] {
+    background-color: colors.$gold;
+  }
+
+  &[style*='--particle-color: $pink-2'] {
+    background-color: colors.$pink-2;
+  }
+
+  &[style*='--particle-color: $turquoise-2'] {
+    background-color: colors.$turquoise-2;
+  }
+}

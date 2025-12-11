@@ -370,6 +370,7 @@ export function createMockLeaderboardTaskItem(
   return {
     playerId: MOCK_DEFAULT_PLAYER_ID,
     position: 1,
+    previousPosition: 1,
     nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     score: 1337,
     streaks: 3,

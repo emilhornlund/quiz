@@ -1,6 +1,83 @@
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
+@use '../../styles/animations';
+
+.contentContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  transition: min-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @include helpers.mobile {
+    min-height: helpers.pxToRem(variables.$mobile-badge-large-size + variables.$mobile-subtitle-font-size) + variables.$mobile-medium-layout-gutter;
+  }
+
+  @include helpers.tablet {
+    min-height: helpers.pxToRem(variables.$tablet-badge-large-size + variables.$tablet-subtitle-font-size) + variables.$tablet-medium-layout-gutter;
+  }
+
+  @include helpers.desktop {
+    min-height: helpers.pxToRem(variables.$desktop-badge-large-size + variables.$desktop-subtitle-font-size) + variables.$desktop-medium-layout-gutter;
+  }
+
+  &.shrink {
+    @include helpers.mobile {
+      min-height: helpers.pxToRem(variables.$mobile-badge-large-size);
+    }
+
+    @include helpers.tablet {
+      min-height: helpers.pxToRem(variables.$tablet-badge-large-size);
+    }
+
+    @include helpers.desktop {
+      min-height: helpers.pxToRem(variables.$desktop-badge-large-size);
+    }
+  }
+}
+
+.correctnessBatch,
+.positionBatch {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.4s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.correctnessBatch {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+
+  &.slideOutLeft {
+    transform: scale(0.5) translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.positionBatch {
+  transform: scale(0.5) translateY(100%);
+  opacity: 0;
+
+  &.hidden {
+    transform: scale(0.5) translateY(100%);
+    opacity: 0;
+  }
+
+  &.slideInRight {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
 
 .score {
   display: flex;

@@ -20,7 +20,7 @@ import ResponsiveImage, { ResponsiveImageProps } from '../ResponsiveImage'
 import { clamp01 } from './pin-utils.ts'
 import Pin from './Pin.tsx'
 import styles from './PinImage.module.scss'
-import { PinImagePosition, PinImageValue } from './types.ts'
+import { PinColor, PinImagePosition, PinImageValue } from './types.ts'
 
 const toPinImagePosition = (
   value?: PinImageValue,
@@ -260,7 +260,7 @@ const PinImage: FC<PinImageProps> = ({
             x={interactivePinPosition.x}
             y={interactivePinPosition.y}
             toleranceDiameterPx={getToleranceDiameterPx(value?.tolerance)}
-            color={value?.color}
+            color={disabled ? PinColor.Orange : value?.color}
             disabled={disabled}
           />
         )}

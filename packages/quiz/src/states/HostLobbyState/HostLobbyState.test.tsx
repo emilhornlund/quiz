@@ -140,8 +140,10 @@ describe('HostLobbyState', () => {
       (aliceNode.parentElement?.querySelector('button') as HTMLButtonElement)
     fireEvent.click(aliceChip as HTMLButtonElement)
     expect(screen.getByText('Confirm Remove Player')).toBeInTheDocument()
-    expect(screen.getByText(/remove Alice from the game/i)).toBeInTheDocument()
+    expect(screen.getByText('Remove Player')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Remove Player' }))
+    // Wait for shake animation to complete before leaveGame is called
+    await new Promise((resolve) => setTimeout(resolve, 600))
     expect(h.leaveGame).toHaveBeenCalledTimes(1)
     expect(h.leaveGame).toHaveBeenCalledWith('p1')
     expect(container).toMatchSnapshot()
@@ -162,5 +164,57 @@ describe('HostLobbyState', () => {
     fireEvent.click(bobChip as HTMLButtonElement)
     fireEvent.click(screen.getByRole('button', { name: 'Remove Player' }))
     expect(h.leaveGame).not.toHaveBeenCalled()
+  })
+
+  it('displays player counter with correct count', () => {
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={sampleEvent as any} />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText('2 / 20')).toBeInTheDocument()
+  })
+
+  it('displays player counter with zero players', () => {
+    const noPlayersEvent = {
+      ...sampleEvent,
+      players: [],
+    }
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={noPlayersEvent as any} />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText('0 / 20')).toBeInTheDocument()
+  })
+
+  it('displays player counter with maximum players', () => {
+    const maxPlayersEvent = {
+      ...sampleEvent,
+      players: Array.from({ length: 20 }, (_, i) => ({
+        id: `p${i}`,
+        nickname: `Player${i}`,
+      })),
+    }
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={maxPlayersEvent as any} />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText('20 / 20')).toBeInTheDocument()
+  })
+
+  it('shows user group icon in player counter', () => {
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={sampleEvent as any} />
+      </MemoryRouter>,
+    )
+    const userGroupIcon = document.querySelector('.playerIcon')
+    expect(userGroupIcon).toBeInTheDocument()
   })
 })

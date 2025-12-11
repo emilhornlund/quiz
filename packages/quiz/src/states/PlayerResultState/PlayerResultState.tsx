@@ -1,18 +1,44 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameResultPlayerEvent } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import {
   Badge,
+  Confetti,
+  getBadgePositionBackgroundColor,
   PlayerGameFooter,
   StreakBadge,
   Typography,
 } from '../../components'
+import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
+import { classNames } from '../../utils/helpers.ts'
 import { GamePage, PointsBehindIndicator } from '../common'
 
 import { getPositionMessage } from './message.utils.ts'
 import styles from './PlayerResultState.module.scss'
+
+type CelebrationLevel = 'none' | 'normal' | 'major' | 'epic'
+
+const getCelebrationLevel = (
+  correct: boolean,
+  streak: number,
+  position: number,
+): CelebrationLevel => {
+  if (!correct) return 'none'
+
+  // Epic celebrations (major milestones)
+  if (streak >= 10 || position === 1) return 'epic'
+  if (streak >= 7 || position === 2) return 'epic'
+
+  // Major celebrations (good achievements)
+  if (streak >= 5 || position === 3) return 'major'
+
+  // Normal celebrations (building momentum)
+  if (streak >= 3 || position <= 10) return 'normal'
+
+  return 'none' // No celebration for simple correct answers
+}
 
 export interface PlayerResultStateProps {
   event: GameResultPlayerEvent
@@ -28,9 +54,23 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {
+  const [showPosition, setShowPosition] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPosition(true)
+    }, 8000)
+    return () => clearTimeout(timer)
+  }, [])
+
   const message = useMemo(
     () => getPositionMessage(position, correct),
     [position, correct],
+  )
+
+  const celebrationLevel = useMemo(
+    () => getCelebrationLevel(correct, streak, position),
+    [correct, streak, position],
   )
 
   return (
@@ -43,18 +83,55 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
           totalScore={totalScore}
         />
       }>
-      <Typography variant="subtitle">
-        {correct ? 'Correct' : 'Incorrect'}
-      </Typography>
-      <Badge size="large" backgroundColor={correct ? 'green' : 'red'}>
-        <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
-      </Badge>
+      <div
+        className={classNames(
+          styles.contentContainer,
+          showPosition ? styles.shrink : undefined,
+        )}>
+        <div
+          className={classNames(
+            styles.correctnessBatch,
+            showPosition ? styles.slideOutLeft : undefined,
+          )}>
+          <Typography variant="subtitle">
+            {correct ? 'Correct' : 'Incorrect'}
+          </Typography>
+
+          <Badge
+            size="large"
+            backgroundColor={correct ? 'green' : 'red'}
+            celebration={correct ? celebrationLevel : 'none'}>
+            <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
+          </Badge>
+        </div>
+
+        <div
+          className={classNames(
+            styles.positionBatch,
+            showPosition ? styles.slideInRight : styles.hidden,
+          )}>
+          <Badge
+            size="large"
+            backgroundColor={getBadgePositionBackgroundColor(position)}
+            textColor={getBadgePositionTextColor(position)}>
+            {position}
+          </Badge>
+        </div>
+      </div>
+
       <StreakBadge streak={streak}>Streak</StreakBadge>
+
       <div className={styles.score}>{lastScore}</div>
+
       <Typography variant="text" size="small">
         {message}
       </Typography>
+
       {behind && <PointsBehindIndicator {...behind} />}
+
+      {celebrationLevel !== 'none' && (
+        <Confetti trigger={true} intensity={celebrationLevel} />
+      )}
     </GamePage>
   )
 }

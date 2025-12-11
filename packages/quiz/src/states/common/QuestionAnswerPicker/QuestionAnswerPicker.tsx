@@ -1,11 +1,10 @@
 import {
   GameEventQuestion,
+  GameQuestionPlayerAnswerEvent,
   QuestionType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
 import React, { FC } from 'react'
-
-import { LoadingSpinner } from '../../../components'
 
 import {
   AnswerInput,
@@ -18,6 +17,7 @@ import styles from './QuestionAnswerPicker.module.scss'
 
 export interface QuestionAnswerPickerProps {
   question: GameEventQuestion
+  submittedAnswer?: GameQuestionPlayerAnswerEvent
   interactive?: boolean
   loading?: boolean
   onChange?: (request: SubmitQuestionAnswerRequestDto) => void
@@ -25,21 +25,18 @@ export interface QuestionAnswerPickerProps {
 
 const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
   question,
+  submittedAnswer,
   interactive = true,
   loading = false,
   onChange,
 }) => (
   <div className={styles.questionAnswerPicker}>
-    {loading && (
-      <div className={styles.loadingWrapper}>
-        <LoadingSpinner />
-      </div>
-    )}
-
-    {!loading && question.type === QuestionType.MultiChoice && (
+    {question.type === QuestionType.MultiChoice && (
       <AnswerPicker
         answers={question.answers.map(({ value }) => value)}
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onClick={(optionIndex) =>
           onChange?.({
             type: QuestionType.MultiChoice,
@@ -48,10 +45,12 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
         }
       />
     )}
-    {!loading && question.type === QuestionType.TrueFalse && (
+    {question.type === QuestionType.TrueFalse && (
       <AnswerPicker
         answers={['True', 'False']}
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onClick={(index) =>
           onChange?.({
             type: QuestionType.TrueFalse,
@@ -60,27 +59,33 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
         }
       />
     )}
-    {!loading && question.type === QuestionType.Range && (
+    {question.type === QuestionType.Range && (
       <AnswerRange
         min={question.min}
         max={question.max}
         step={question.step}
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onSubmit={(value) => onChange?.({ type: QuestionType.Range, value })}
       />
     )}
-    {!loading && question.type === QuestionType.TypeAnswer && (
+    {question.type === QuestionType.TypeAnswer && (
       <AnswerInput
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onSubmit={(value) =>
           onChange?.({ type: QuestionType.TypeAnswer, value })
         }
       />
     )}
-    {!loading && question.type === QuestionType.Pin && (
+    {question.type === QuestionType.Pin && (
       <AnswerPin
         imageURL={question.imageURL}
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onSubmit={({ x: positionX, y: positionY }) =>
           onChange?.({
             type: QuestionType.Pin,
@@ -90,10 +95,12 @@ const QuestionAnswerPicker: FC<QuestionAnswerPickerProps> = ({
         }
       />
     )}
-    {!loading && question.type === QuestionType.Puzzle && (
+    {question.type === QuestionType.Puzzle && (
       <AnswerSort
         values={question.values}
-        interactive={interactive}
+        submittedAnswer={submittedAnswer}
+        interactive={interactive && !submittedAnswer}
+        loading={loading}
         onSubmit={(values) => onChange?.({ type: QuestionType.Puzzle, values })}
       />
     )}

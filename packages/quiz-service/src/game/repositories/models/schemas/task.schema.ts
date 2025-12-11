@@ -657,6 +657,13 @@ questionResultTaskSchema.discriminator(
 )
 
 /**
+ * Narrowed type representing a QuestionResult task with base task fields.
+ *
+ * Combines the common BaseTask properties with QuestionResultTask-specific fields.
+ */
+export type QuestionResultTaskWithBase = BaseTask & QuestionResultTask
+
+/**
  * LeaderboardTaskItem
  */
 
@@ -667,6 +674,9 @@ export class LeaderboardTaskItem {
 
   @Prop({ type: Number, required: true })
   position: number
+
+  @Prop({ type: Number, required: false })
+  previousPosition?: number
 
   @Prop({ type: String, required: true })
   nickname: string

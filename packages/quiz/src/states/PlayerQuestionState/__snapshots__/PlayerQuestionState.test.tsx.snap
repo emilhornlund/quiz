@@ -78,7 +78,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
                     type="button"
@@ -87,7 +87,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="1_Pablo Picasso"
                     style="--index: 1;"
                     type="button"
@@ -96,7 +96,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Pablo Picasso
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="2_Leonardo da Vinci"
                     style="--index: 2;"
                     type="button"
@@ -105,7 +105,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Leonardo da Vinci
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="3_Claude Monet"
                     style="--index: 3;"
                     type="button"
@@ -120,9 +120,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -254,7 +254,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
                     type="button"
@@ -263,7 +263,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="1_Pablo Picasso"
                     style="--index: 1;"
                     type="button"
@@ -272,7 +272,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Pablo Picasso
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="2_Leonardo da Vinci"
                     style="--index: 2;"
                     type="button"
@@ -281,7 +281,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Leonardo da Vinci
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="3_Claude Monet"
                     style="--index: 3;"
                     type="button"
@@ -290,7 +290,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Claude Monet
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="4_Michelangelo"
                     style="--index: 4;"
                     type="button"
@@ -299,7 +299,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Michelangelo
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="5_Rembrandt"
                     style="--index: 5;"
                     type="button"
@@ -314,9 +314,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -448,7 +448,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     id="0_Vincent van Gogh"
                     style="--index: 0;"
                     type="button"
@@ -457,7 +457,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     Vincent van Gogh
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="1_Pablo Picasso"
                     style="--index: 1;"
                     type="button"
@@ -472,9 +472,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -658,9 +658,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -792,7 +792,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                   class="grid"
                 >
                   <button
-                    class="item"
+                    class="answerButton"
                     id="0_True"
                     style="--index: 0;"
                     type="button"
@@ -801,7 +801,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                     True
                   </button>
                   <button
-                    class="item"
+                    class="answerButton"
                     id="1_False"
                     style="--index: 1;"
                     type="button"
@@ -816,9 +816,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>
@@ -954,7 +954,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                       class="inputContainer"
                     >
                       <div
-                        class="textFieldInputContainer textFieldInputKindPrimary"
+                        class="textFieldInputContainer textFieldInputKindPrimary error"
                       >
                         <input
                           class="textfield"
@@ -967,6 +967,25 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                           type="text"
                           value=""
                         />
+                      </div>
+                      <div
+                        class="errorContainer"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="svg-inline--fa fa-triangle-exclamation"
+                          data-icon="triangle-exclamation"
+                          data-prefix="fas"
+                          role="img"
+                          viewBox="0 0 512 512"
+                        >
+                          <path
+                            d="M256 0c14.7 0 28.2 8.1 35.2 21l216 400c6.7 12.4 6.4 27.4-.8 39.5S486.1 480 472 480L40 480c-14.1 0-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9 20.5-21 35.2-21zm0 352a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.5 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                         
+                        This field is required
                       </div>
                     </div>
                     <div
@@ -992,9 +1011,9 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
           <div
             class="progressBar"
           >
-            <span
-              class=""
-              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);"
+            <div
+              class="track safe"
+              style="width: 100%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>

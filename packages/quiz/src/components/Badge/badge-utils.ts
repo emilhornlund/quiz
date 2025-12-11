@@ -1,8 +1,6 @@
-import { BadgeBackgroundColor } from './Badge.tsx'
+import { BadgeColor } from './Badge.tsx'
 
-export function getBadgePositionBackgroundColor(
-  position: number,
-): BadgeBackgroundColor {
+export function getBadgePositionBackgroundColor(position: number): BadgeColor {
   switch (Math.max(position, 1)) {
     case 1:
       return 'gold'
@@ -12,5 +10,16 @@ export function getBadgePositionBackgroundColor(
       return 'bronze'
     default:
       return 'white'
+  }
+}
+
+export function getBadgePositionTextColor(position: number): BadgeColor {
+  switch (Math.max(position, 1)) {
+    case 1:
+    case 2:
+    case 3:
+      return 'white'
+    default:
+      return 'black'
   }
 }
