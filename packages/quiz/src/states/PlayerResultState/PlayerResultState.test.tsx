@@ -1,8 +1,8 @@
 import { GameEventType } from '@quiz/common'
 import { render, screen } from '@testing-library/react'
-import React from 'react'
+import React, { act } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import PlayerResultState from './PlayerResultState'
 
@@ -420,6 +420,66 @@ describe('PlayerResultState', () => {
       expect(container.querySelector('.confettiContainer')).toBeInTheDocument()
       expect(container.querySelectorAll('.confettiParticle')).toHaveLength(70)
       expect(container).toMatchSnapshot()
+    })
+  })
+
+  describe('Animation Behavior', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('shows correctness badge initially and position badge after 8 seconds', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              player: {
+                nickname: 'TestPlayer',
+                score: {
+                  correct: true,
+                  last: 100,
+                  total: 1000,
+                  position: 5,
+                  streak: 2,
+                },
+              },
+              pagination: { current: 1, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      // Initially should show correctness badge
+      expect(screen.getByText('Correct')).toBeInTheDocument()
+      expect(container.querySelector('.correctnessBatch')).toBeInTheDocument()
+      expect(container.querySelector('.positionBatch')).toBeInTheDocument()
+
+      // Position batch should be hidden initially
+      expect(container.querySelector('.positionBatch')).toHaveClass('hidden')
+      expect(container.querySelector('.correctnessBatch')).not.toHaveClass(
+        'slideOutLeft',
+      )
+
+      // Fast-forward 8 seconds
+      act(() => {
+        vi.advanceTimersByTime(8000)
+      })
+
+      // Now should show position badge and hide correctness badge
+      expect(container.querySelector('.positionBatch')).toHaveClass(
+        'slideInRight',
+      )
+      expect(container.querySelector('.positionBatch')).not.toHaveClass(
+        'hidden',
+      )
+      expect(container.querySelector('.correctnessBatch')).toHaveClass(
+        'slideOutLeft',
+      )
     })
   })
 })

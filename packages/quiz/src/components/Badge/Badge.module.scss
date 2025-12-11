@@ -1,6 +1,7 @@
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
+@use '../../styles/transitions';
 
 .badge {
   display: flex;
@@ -14,8 +15,12 @@
   font-weight: bold;
   text-align: center;
 
+  @include transitions.color-transition;
+  @include transitions.transform-transition;
+  @include transitions.reduced-motion;
+
   @mixin badge-size($size, $border-size) {
-    margin: helpers.pxToRem($border-size);
+    margin: helpers.pxToRem($border-size) * 2;
     border-width: helpers.pxToRem($border-size);
     outline-width: helpers.pxToRem($border-size);
     outline-offset: helpers.pxToRem($border-size);
@@ -25,34 +30,34 @@
 
   &.small {
     @include helpers.mobile {
-      @include badge-size(20px, 1px);
+      @include badge-size(variables.$mobile-badge-small-size, variables.$mobile-badge-small-border-width);
       @include helpers.fontSize(variables.$mobile-text-font-size);
     }
 
     @include helpers.tablet {
-      @include badge-size(30px, 2px);
+      @include badge-size(variables.$tablet-badge-small-size, variables.$tablet-badge-small-border-width);
       @include helpers.fontSize(variables.$tablet-text-font-size);
     }
 
     @include helpers.desktop {
-      @include badge-size(40px, 3px);
+      @include badge-size(variables.$desktop-badge-small-size, variables.$desktop-badge-small-border-width);
       @include helpers.fontSize(variables.$desktop-text-font-size);
     }
   }
 
   &.large {
     @include helpers.mobile {
-      @include badge-size(100px, 2px);
+      @include badge-size(variables.$mobile-badge-large-size, variables.$mobile-badge-large-border-width);
       @include helpers.fontSize(68px);
     }
 
     @include helpers.tablet {
-      @include badge-size(120px, 3px);
+      @include badge-size(variables.$tablet-badge-large-size, variables.$tablet-badge-large-border-width);
       @include helpers.fontSize(78px);
     }
 
     @include helpers.desktop {
-      @include badge-size(140px, 4px);
+      @include badge-size(variables.$desktop-badge-large-size, variables.$desktop-badge-large-border-width);
       @include helpers.fontSize(88px);
     }
   }

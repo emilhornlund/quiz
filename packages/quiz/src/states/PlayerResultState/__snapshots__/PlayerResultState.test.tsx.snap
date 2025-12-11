@@ -61,27 +61,45 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationEpic border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: gold; outline-color: white; color: white;"
+              >
+                1
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -500,27 +518,45 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationEpic border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: silver; outline-color: white; color: white;"
+              >
+                2
+              </div>
+            </div>
           </div>
           <div
             class="score"
@@ -928,27 +964,45 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationEpic border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                8
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -1367,27 +1421,45 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationEpic border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                15
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -1806,27 +1878,45 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationMajor border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationMajor border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                3
+              </div>
+            </div>
           </div>
           <div
             class="score"
@@ -2134,27 +2224,45 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationMajor border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationMajor border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                12
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -2473,27 +2581,45 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for inco
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Incorrect
-          </div>
-          <div
-            class="badge large border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-xmark"
-              data-icon="xmark"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 384 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Incorrect
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-xmark"
+                  data-icon="xmark"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 384 512"
+                >
+                  <path
+                    d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                20
+              </div>
+            </div>
           </div>
           <div
             class="score"
@@ -2617,27 +2743,45 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for simp
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                15
+              </div>
+            </div>
           </div>
           <div
             class="score"
@@ -2761,27 +2905,45 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationNormal border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationNormal border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                10
+              </div>
+            </div>
           </div>
           <div
             class="score"
@@ -3009,27 +3171,45 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationNormal border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationNormal border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                8
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -3268,27 +3448,45 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Correct
-          </div>
-          <div
-            class="badge large celebrationEpic border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-check"
-              data-icon="check"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 448 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Correct
+              </div>
+              <div
+                class="badge large celebrationEpic border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-check"
+                  data-icon="check"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: gold; outline-color: white; color: white;"
+              >
+                1
+              </div>
+            </div>
           </div>
           <div
             class="streakBadge"
@@ -3718,27 +3916,45 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
           class="contentInner"
         >
           <div
-            class="typography subtitle full"
+            class="contentContainer"
           >
-            Incorrect
-          </div>
-          <div
-            class="badge large border"
-            style="outline-color: white; color: white;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-xmark"
-              data-icon="xmark"
-              data-prefix="fas"
-              role="img"
-              viewBox="0 0 384 512"
+            <div
+              class="correctnessBatch"
             >
-              <path
-                d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
-                fill="currentColor"
-              />
-            </svg>
+              <div
+                class="typography subtitle full"
+              >
+                Incorrect
+              </div>
+              <div
+                class="badge large border"
+                style="outline-color: white; color: white;"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-xmark"
+                  data-icon="xmark"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 384 512"
+                >
+                  <path
+                    d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="positionBatch hidden"
+            >
+              <div
+                class="badge large border"
+                style="background-color: white; outline-color: white;"
+              >
+                7
+              </div>
+            </div>
           </div>
           <div
             class="score"

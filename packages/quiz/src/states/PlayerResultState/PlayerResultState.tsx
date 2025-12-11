@@ -1,15 +1,18 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameResultPlayerEvent } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import {
   Badge,
   Confetti,
+  getBadgePositionBackgroundColor,
   PlayerGameFooter,
   StreakBadge,
   Typography,
 } from '../../components'
+import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
+import { classNames } from '../../utils/helpers.ts'
 import { GamePage, PointsBehindIndicator } from '../common'
 
 import { getPositionMessage } from './message.utils.ts'
@@ -51,6 +54,15 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
     pagination: { current: currentQuestion, total: totalQuestions },
   },
 }) => {
+  const [showPosition, setShowPosition] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPosition(true)
+    }, 8000)
+    return () => clearTimeout(timer)
+  }, [])
+
   const message = useMemo(
     () => getPositionMessage(position, correct),
     [position, correct],
@@ -71,16 +83,41 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
           totalScore={totalScore}
         />
       }>
-      <Typography variant="subtitle">
-        {correct ? 'Correct' : 'Incorrect'}
-      </Typography>
+      <div
+        className={classNames(
+          styles.contentContainer,
+          showPosition ? styles.shrink : undefined,
+        )}>
+        <div
+          className={classNames(
+            styles.correctnessBatch,
+            showPosition ? styles.slideOutLeft : undefined,
+          )}>
+          <Typography variant="subtitle">
+            {correct ? 'Correct' : 'Incorrect'}
+          </Typography>
 
-      <Badge
-        size="large"
-        backgroundColor={correct ? 'green' : 'red'}
-        celebration={correct ? celebrationLevel : 'none'}>
-        <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
-      </Badge>
+          <Badge
+            size="large"
+            backgroundColor={correct ? 'green' : 'red'}
+            celebration={correct ? celebrationLevel : 'none'}>
+            <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
+          </Badge>
+        </div>
+
+        <div
+          className={classNames(
+            styles.positionBatch,
+            showPosition ? styles.slideInRight : styles.hidden,
+          )}>
+          <Badge
+            size="large"
+            backgroundColor={getBadgePositionBackgroundColor(position)}
+            textColor={getBadgePositionTextColor(position)}>
+            {position}
+          </Badge>
+        </div>
+      </div>
 
       <StreakBadge streak={streak}>Streak</StreakBadge>
 
