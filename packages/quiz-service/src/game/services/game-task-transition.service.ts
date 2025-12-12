@@ -13,7 +13,6 @@ import {
 
 import {
   buildQuestionResultTask,
-  buildQuestionTask,
   buildQuitTask,
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
@@ -22,6 +21,7 @@ import {
 import {
   buildLeaderboardTask,
   buildPodiumTask,
+  buildQuestionTask,
   updateParticipantsAndBuildLeaderboard,
 } from './utils/tasks'
 

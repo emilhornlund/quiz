@@ -1,9 +1,4 @@
-import {
-  GameMode,
-  GameParticipantType,
-  QuestionType,
-  shuffleDifferent,
-} from '@quiz/common'
+import { GameMode, GameParticipantType, QuestionType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { QuestionDao } from '../../../quiz/repositories/models/schemas'
@@ -25,9 +20,7 @@ import {
   QuestionResultTask,
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
-  QuestionTask,
   QuestionTaskAnswer,
-  QuestionTaskMetadata,
   QuitTask,
   TaskType,
 } from '../../repositories/models/schemas'
@@ -42,60 +35,6 @@ import {
   isQuestionResultTask,
   isQuestionTask,
 } from './tasks'
-
-/**
- * Constructs new a metadata object for a new question task based on the provided question.
- *
- * @param question - The next question.
- *
- * @returns A new question metadata object.
- */
-export function buildQuestionTaskMetadata(
-  question: QuestionDao,
-): QuestionTaskMetadata {
-  if (isMultiChoiceQuestion(question)) {
-    return { type: QuestionType.MultiChoice }
-  }
-  if (isRangeQuestion(question)) {
-    return { type: QuestionType.Range }
-  }
-  if (isTrueFalseQuestion(question)) {
-    return { type: QuestionType.TrueFalse }
-  }
-  if (isTypeAnswerQuestion(question)) {
-    return { type: QuestionType.TypeAnswer }
-  }
-  if (isPinQuestion(question)) {
-    return { type: QuestionType.Pin }
-  }
-  if (isPuzzleQuestion(question)) {
-    const randomizedValues = shuffleDifferent(question.values)
-    return { type: QuestionType.Puzzle, randomizedValues }
-  }
-}
-
-/**
- * Constructs a new question task based on the provided game document.
- *
- * @param {GameDocument} gameDocument - The current game document.
- *
- * @returns {BaseTask & QuestionTask} A new question task object.
- */
-export function buildQuestionTask(
-  gameDocument: GameDocument,
-): BaseTask & QuestionTask {
-  return {
-    _id: uuidv4(),
-    type: TaskType.Question,
-    status: 'pending',
-    metadata: buildQuestionTaskMetadata(
-      gameDocument.questions[gameDocument.nextQuestion],
-    ),
-    questionIndex: gameDocument.nextQuestion,
-    answers: [],
-    created: new Date(),
-  }
-}
 
 /**
  * Builds the initial set of “correct answer” payloads for a question,

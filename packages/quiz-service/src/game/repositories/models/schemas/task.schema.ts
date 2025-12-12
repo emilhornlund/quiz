@@ -348,6 +348,8 @@ export class QuestionTask {
 
 export const QuestionTaskSchema = SchemaFactory.createForClass(QuestionTask)
 
+export type QuestionTaskWithBase = BaseTask & QuestionTask
+
 const questionTaskMetadataSchema =
   QuestionTaskSchema.path<MongooseSchema.Types.Array>('metadata')
 questionTaskMetadataSchema.discriminator(
