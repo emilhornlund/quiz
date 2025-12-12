@@ -21,7 +21,6 @@ import {
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
   QuestionTaskAnswer,
-  QuitTask,
   TaskType,
 } from '../../repositories/models/schemas'
 
@@ -303,19 +302,5 @@ function buildQuestionResultTaskItem(
     totalScore,
     position: 0,
     streak,
-  }
-}
-
-/**
- * Constructs a new quit task, setting its initial status and creation timestamp.
- *
- * @returns {BaseTask & QuitTask} A new quit task object.
- */
-export function buildQuitTask(): BaseTask & QuitTask {
-  return {
-    _id: uuidv4(),
-    type: TaskType.Quit,
-    status: 'completed',
-    created: new Date(),
   }
 }

@@ -742,3 +742,5 @@ export class QuitTask {
 }
 
 export const QuitTaskSchema = SchemaFactory.createForClass(QuitTask)
+
+export type QuitTaskWithBase = BaseTask & QuitTask
