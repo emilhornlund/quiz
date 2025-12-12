@@ -50,7 +50,7 @@ import {
   TaskType,
 } from '../repositories/models/schemas'
 import { GameService } from '../services'
-import { buildLobbyTask } from '../services/utils'
+import { buildLobbyTask } from '../services/utils/tasks'
 
 describe('GameController (e2e)', () => {
   let app: INestApplication

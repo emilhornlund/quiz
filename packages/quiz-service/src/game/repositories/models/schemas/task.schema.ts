@@ -60,6 +60,13 @@ export class LobbyTask {
 export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
 
 /**
+ * Narrowed type representing a Lobby task with base task fields.
+ *
+ * Combines the common BaseTask properties with LobbyTask-specific fields.
+ */
+export type LobbyTaskWithBase = BaseTask & LobbyTask
+
+/**
  * QuestionTaskBaseMetadata
  */
 @Schema({ _id: false, discriminatorKey: 'type' })

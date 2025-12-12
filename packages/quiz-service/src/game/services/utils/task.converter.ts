@@ -19,7 +19,6 @@ import { IllegalTaskTypeException } from '../../exceptions'
 import {
   BaseTask,
   GameDocument,
-  LobbyTask,
   Participant,
   ParticipantBase,
   ParticipantPlayer,
@@ -43,20 +42,6 @@ import {
   isQuestionResultTask,
   isQuestionTask,
 } from './tasks'
-
-/**
- * Constructs a new lobby task with a unique ID, setting its initial status and creation timestamp.
- *
- * @returns {BaseTask & LobbyTask} A new lobby task object.
- */
-export function buildLobbyTask(): BaseTask & LobbyTask {
-  return {
-    _id: uuidv4(),
-    type: TaskType.Lobby,
-    status: 'pending',
-    created: new Date(),
-  }
-}
 
 /**
  * Constructs new a metadata object for a new question task based on the provided question.

@@ -38,7 +38,7 @@ import {
   QuitTask,
   TaskType,
 } from '../../src/game/repositories/models/schemas'
-import { buildLobbyTask } from '../../src/game/services/utils'
+import { buildLobbyTask } from '../../src/game/services/utils/tasks'
 import {
   BaseQuestionDao,
   QuestionDao,

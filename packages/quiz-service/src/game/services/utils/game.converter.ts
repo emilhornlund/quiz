@@ -5,7 +5,7 @@ import { Quiz } from '../../../quiz/repositories/models/schemas'
 import { User } from '../../../user/repositories'
 import { Game } from '../../repositories/models/schemas'
 
-import { buildLobbyTask } from './task.converter'
+import { buildLobbyTask } from './tasks'
 
 /**
  * Builds a complete game document from the provided partial game model and other details.
