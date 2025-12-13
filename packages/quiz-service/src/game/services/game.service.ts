@@ -33,20 +33,19 @@ import { TaskType } from '../repositories/models/schemas'
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import {
-  buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
   isMultiChoiceCorrectAnswer,
   isNicknameUnique,
   isPinCorrectAnswer,
   isPlayerUnique,
   isPuzzleCorrectAnswer,
-  isQuestionResultTask,
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
-  rebuildQuestionResultTask,
   toQuestionTaskAnswer,
 } from './utils'
+import { buildGameQuitEvent } from './utils/events'
+import { isQuestionResultTask, rebuildQuestionResultTask } from './utils/tasks'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.

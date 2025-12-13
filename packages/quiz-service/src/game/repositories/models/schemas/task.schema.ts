@@ -60,6 +60,13 @@ export class LobbyTask {
 export const LobbyTaskSchema = SchemaFactory.createForClass(LobbyTask)
 
 /**
+ * Narrowed type representing a Lobby task with base task fields.
+ *
+ * Combines the common BaseTask properties with LobbyTask-specific fields.
+ */
+export type LobbyTaskWithBase = BaseTask & LobbyTask
+
+/**
  * QuestionTaskBaseMetadata
  */
 @Schema({ _id: false, discriminatorKey: 'type' })
@@ -341,6 +348,13 @@ export class QuestionTask {
 
 export const QuestionTaskSchema = SchemaFactory.createForClass(QuestionTask)
 
+/**
+ * Narrowed type representing a Question task with base task fields.
+ *
+ * Combines the common BaseTask properties with QuestionTask-specific fields.
+ */
+export type QuestionTaskWithBase = BaseTask & QuestionTask
+
 const questionTaskMetadataSchema =
   QuestionTaskSchema.path<MongooseSchema.Types.Array>('metadata')
 questionTaskMetadataSchema.discriminator(
@@ -519,6 +533,16 @@ export const QuestionResultTaskCorrectMultiChoiceAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectMultiChoiceAnswer)
 
 /**
+ * Narrowed type representing a MultiChoice correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * MultiChoice-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectMultiChoiceAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer &
+    QuestionResultTaskCorrectMultiChoiceAnswer
+
+/**
  * QuestionResultTaskCorrectRangeAnswer
  */
 
@@ -530,6 +554,15 @@ export class QuestionResultTaskCorrectRangeAnswer {
 
 export const QuestionResultTaskCorrectRangeAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectRangeAnswer)
+
+/**
+ * Narrowed type representing a Range correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * Range-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectRangeAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectRangeAnswer
 
 /**
  * QuestionResultTaskCorrectTrueFalseAnswer
@@ -545,6 +578,15 @@ export const QuestionResultTaskCorrectTrueFalseAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectTrueFalseAnswer)
 
 /**
+ * Narrowed type representing a True/False correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * True/False-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectTrueFalseAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectTrueFalseAnswer
+
+/**
  * QuestionResultTaskCorrectTypeAnswer
  */
 
@@ -556,6 +598,15 @@ export class QuestionResultTaskCorrectTypeAnswer {
 
 export const QuestionResultTaskCorrectTypeAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectTypeAnswer)
+
+/**
+ * Narrowed type representing a TypeAnswer correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * TypeAnswer-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectTypeAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectTypeAnswer
 
 /**
  * QuestionResultTaskCorrectPinAnswer
@@ -575,6 +626,15 @@ export const QuestionResultTaskCorrectPinAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectPinAnswer)
 
 /**
+ * Narrowed type representing a Pin correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * Pin-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectPinAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPinAnswer
+
+/**
  * QuestionResultTaskCorrectPuzzleAnswer
  *
  * The target ordering for a puzzle question.
@@ -590,6 +650,15 @@ export class QuestionResultTaskCorrectPuzzleAnswer {
 
 export const QuestionResultTaskCorrectPuzzleAnswerSchema =
   SchemaFactory.createForClass(QuestionResultTaskCorrectPuzzleAnswer)
+
+/**
+ * Narrowed type representing a Puzzle correct answer with base correct answer fields.
+ *
+ * Combines the common QuestionResultTaskBaseCorrectAnswer properties with
+ * Puzzle-specific correct answer fields.
+ */
+export type QuestionResultTaskCorrectPuzzleAnswerWithBase =
+  QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPuzzleAnswer
 
 /**
  * Represents a question result task correct answer with its specific discriminator type.
@@ -733,3 +802,10 @@ export class QuitTask {
 }
 
 export const QuitTaskSchema = SchemaFactory.createForClass(QuitTask)
+
+/**
+ * Narrowed type representing a Quit task with base task fields.
+ *
+ * Combines the common BaseTask properties with QuitTask-specific fields.
+ */
+export type QuitTaskWithBase = BaseTask & QuitTask

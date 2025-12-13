@@ -8,7 +8,8 @@ import {
   PodiumTask,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../task.utils'
+
+import { isQuestionResultTask } from './task.utils'
 
 /**
  * Constructs a new podium task based on the provided game document.
