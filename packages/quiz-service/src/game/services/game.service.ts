@@ -33,7 +33,6 @@ import { TaskType } from '../repositories/models/schemas'
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import {
-  buildGameQuitEvent,
   getRedisPlayerParticipantAnswerKey,
   isMultiChoiceCorrectAnswer,
   isNicknameUnique,
@@ -45,6 +44,7 @@ import {
   isTypeAnswerCorrectAnswer,
   toQuestionTaskAnswer,
 } from './utils'
+import { buildGameQuitEvent } from './utils/events'
 import { isQuestionResultTask, rebuildQuestionResultTask } from './utils/tasks'
 
 /**

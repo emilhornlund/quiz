@@ -1,11 +1,22 @@
 import {
+  GameEventQuestionResults,
   GameEventType,
+  GameResultHostEvent,
   GameResultPlayerEvent,
   GameResultPlayerEventBehind,
   GameResultPlayerEventScore,
+  MediaType,
   PaginationEvent,
 } from '@quiz/common'
 
+import {
+  isMultiChoiceQuestion,
+  isPinQuestion,
+  isPuzzleQuestion,
+  isRangeQuestion,
+  isTrueFalseQuestion,
+  isTypeAnswerQuestion,
+} from '../../../../quiz/services/utils'
 import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   GameDocument,
@@ -23,7 +34,120 @@ import {
   isQuestionResultTask,
 } from '../tasks'
 
-import { buildPaginationEventFromQuestionResultTask } from './pagination-event.utils'
+import {
+  createMultiChoiceQuestionResultDistribution,
+  createPinQuestionResultDistribution,
+  createPuzzleQuestionResultDistribution,
+  createRangeQuestionResultDistribution,
+  createTrueFalseQuestionResultDistribution,
+  createTypeAnswerQuestionResultDistribution,
+} from './distribution.utils'
+import {
+  buildPaginationEventFromGameDocument,
+  buildPaginationEventFromQuestionResultTask,
+} from './pagination-event.utils'
+import {
+  validateAndGetQuestion,
+  validateGameDocument,
+} from './validation.utils'
+
+/**
+ * Builds a question result event for the host.
+ *
+ * @param game - The game document containing the current question result task.
+ */
+export function buildGameResultHostEvent(
+  game: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
+): GameResultHostEvent {
+  validateGameDocument(game)
+  const currentQuestion = validateAndGetQuestion(game)
+  const { type, text: question, media, info } = currentQuestion
+
+  return {
+    type: GameEventType.GameResultHost,
+    game: {
+      pin: game.pin,
+    },
+    question: {
+      type,
+      question,
+      media: media
+        ? {
+            type: media.type,
+            url: media.url,
+            ...(media.type === MediaType.Image ? { effect: media.effect } : {}),
+          }
+        : undefined,
+      info,
+    },
+    results: buildGameEventQuestionResults(game),
+    pagination: buildPaginationEventFromGameDocument(game),
+  }
+}
+
+/**
+ * Constructs the question results event based on the current question type and aggregates the answer distribution.
+ *
+ * @param game - The game document containing the current question result task.
+ *
+ * @returns An object representing the results of the question, including the answer distribution.
+ *
+ * @throws {Error} Throws an error if the question type is not recognized.
+ */
+function buildGameEventQuestionResults(
+  game: GameDocument & { currentTask: { type: TaskType.QuestionResult } },
+): GameEventQuestionResults {
+  validateGameDocument(game)
+  const question = validateAndGetQuestion(game)
+
+  if (isMultiChoiceQuestion(question)) {
+    return createMultiChoiceQuestionResultDistribution(
+      question,
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  if (isRangeQuestion(question)) {
+    return createRangeQuestionResultDistribution(
+      question,
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  if (isTrueFalseQuestion(question)) {
+    return createTrueFalseQuestionResultDistribution(
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  if (isTypeAnswerQuestion(question)) {
+    return createTypeAnswerQuestionResultDistribution(
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  if (isPinQuestion(question)) {
+    return createPinQuestionResultDistribution(
+      question,
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  if (isPuzzleQuestion(question)) {
+    return createPuzzleQuestionResultDistribution(
+      question,
+      game.currentTask.results,
+      game.currentTask.correctAnswers,
+    )
+  }
+
+  throw new Error('Question type is undefined or invalid.')
+}
 
 /**
  * Builds a `GameResultPlayerEvent` for the given player based on the current game task.
