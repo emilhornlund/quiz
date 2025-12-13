@@ -12,7 +12,6 @@ import {
 } from '../repositories/models/schemas'
 
 import {
-  buildQuestionResultTask,
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
   toQuestionTaskAnswerFromString,
@@ -20,6 +19,7 @@ import {
 import {
   buildLeaderboardTask,
   buildPodiumTask,
+  buildQuestionResultTask,
   buildQuestionTask,
   buildQuitTask,
   updateParticipantsAndBuildLeaderboard,

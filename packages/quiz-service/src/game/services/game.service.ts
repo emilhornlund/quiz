@@ -43,10 +43,9 @@ import {
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
-  rebuildQuestionResultTask,
   toQuestionTaskAnswer,
 } from './utils'
-import { isQuestionResultTask } from './utils/tasks'
+import { isQuestionResultTask, rebuildQuestionResultTask } from './utils/tasks'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.

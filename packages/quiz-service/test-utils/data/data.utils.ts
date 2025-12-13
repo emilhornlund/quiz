@@ -24,8 +24,12 @@ import {
   PlayerMetric,
   PodiumTask,
   QuestionResultTask,
-  QuestionResultTaskBaseCorrectAnswer,
-  QuestionResultTaskCorrectPinAnswer,
+  QuestionResultTaskCorrectMultiChoiceAnswerWithBase,
+  QuestionResultTaskCorrectPinAnswerWithBase,
+  QuestionResultTaskCorrectPuzzleAnswerWithBase,
+  QuestionResultTaskCorrectRangeAnswerWithBase,
+  QuestionResultTaskCorrectTrueFalseAnswerWithBase,
+  QuestionResultTaskCorrectTypeAnswerWithBase,
   QuestionResultTaskItem,
   QuestionTask,
   QuestionTaskBaseAnswer,
@@ -292,6 +296,16 @@ export function createMockQuestionTaskMultiChoiceAnswer(
   }
 }
 
+export function createMockQuestionResultTaskCorrectMultiChoice(
+  answer?: Partial<QuestionResultTaskCorrectMultiChoiceAnswerWithBase>,
+): QuestionResultTaskCorrectMultiChoiceAnswerWithBase {
+  return {
+    type: QuestionType.MultiChoice,
+    index: 0,
+    ...(answer ?? {}),
+  }
+}
+
 export function createMockQuestionTaskRangeAnswer(
   answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskRangeAnswer>,
 ): QuestionTaskBaseAnswer & QuestionTaskRangeAnswer {
@@ -300,6 +314,16 @@ export function createMockQuestionTaskRangeAnswer(
     playerId: MOCK_DEFAULT_PLAYER_ID,
     answer: 0,
     created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskCorrectRange(
+  answer?: Partial<QuestionResultTaskCorrectRangeAnswerWithBase>,
+): QuestionResultTaskCorrectRangeAnswerWithBase {
+  return {
+    type: QuestionType.Range,
+    value: 50,
     ...(answer ?? {}),
   }
 }
@@ -316,6 +340,16 @@ export function createMockQuestionTaskTrueFalseAnswer(
   }
 }
 
+export function createMockQuestionResultTaskCorrectTrueFalse(
+  answer?: Partial<QuestionResultTaskCorrectTrueFalseAnswerWithBase>,
+): QuestionResultTaskCorrectTrueFalseAnswerWithBase {
+  return {
+    type: QuestionType.TrueFalse,
+    value: false,
+    ...(answer ?? {}),
+  }
+}
+
 export function createMockQuestionTaskTypeAnswer(
   answer?: Partial<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer>,
 ): QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer {
@@ -324,6 +358,16 @@ export function createMockQuestionTaskTypeAnswer(
     playerId: MOCK_DEFAULT_PLAYER_ID,
     answer: MOCK_TYPE_ANSWER_OPTION_VALUE,
     created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskCorrectTypeAnswer(
+  answer?: Partial<QuestionResultTaskCorrectTypeAnswerWithBase>,
+): QuestionResultTaskCorrectTypeAnswerWithBase {
+  return {
+    type: QuestionType.TypeAnswer,
+    value: MOCK_TYPE_ANSWER_OPTION_VALUE,
     ...(answer ?? {}),
   }
 }
@@ -341,10 +385,8 @@ export function createMockQuestionTaskPinAnswer(
 }
 
 export function createMockQuestionResultTaskCorrectPinAnswer(
-  answer?: Partial<
-    QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPinAnswer
-  >,
-): QuestionResultTaskBaseCorrectAnswer & QuestionResultTaskCorrectPinAnswer {
+  answer?: Partial<QuestionResultTaskCorrectPinAnswerWithBase>,
+): QuestionResultTaskCorrectPinAnswerWithBase {
   return {
     type: QuestionType.Pin,
     value: '0.5,0.5',
@@ -360,6 +402,16 @@ export function createMockQuestionTaskPuzzleAnswer(
     playerId: MOCK_DEFAULT_PLAYER_ID,
     answer: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
     created: offsetSeconds(0),
+    ...(answer ?? {}),
+  }
+}
+
+export function createMockQuestionResultTaskCorrectPuzzleAnswer(
+  answer?: Partial<QuestionResultTaskCorrectPuzzleAnswerWithBase>,
+): QuestionResultTaskCorrectPuzzleAnswerWithBase {
+  return {
+    type: QuestionType.Puzzle,
+    value: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
     ...(answer ?? {}),
   }
 }
