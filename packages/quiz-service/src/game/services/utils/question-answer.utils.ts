@@ -26,7 +26,7 @@ import {
   QuestionTaskTypeAnswerAnswer,
 } from '../../repositories/models/schemas'
 
-import { GameEventMetaData } from './game-event.converter'
+import { GameEventMetaData } from './events'
 
 type Answer = QuestionTaskBaseAnswer &
   (
@@ -228,7 +228,7 @@ export function toQuestionTaskAnswerFromString(
  * @param metaData - Partial metadata containing current and total submissions.
  * @param participants - The list of game participants, used to calculate submission-related metadata.
  *
- * @returns {[QuestionTaskAnswer[], Partial<GameEventMetaData>]} A tuple containing deserialized answers and metadata.
+ * @returns A tuple containing deserialized answers and metadata.
  */
 export function toBaseQuestionTaskEventMetaDataTuple(
   serializedAnswers: string[],
