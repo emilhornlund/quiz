@@ -9,7 +9,8 @@ import {
   LeaderboardTaskItem,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../task.utils'
+
+import { isQuestionResultTask } from './task.utils'
 
 /**
  * Updates all player participants with their latest result data and generates

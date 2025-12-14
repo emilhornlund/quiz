@@ -164,6 +164,9 @@ export const QuestionMultiChoiceDaoSchema = SchemaFactory.createForClass(
   QuestionMultiChoiceDao,
 )
 
+export type QuestionMultiChoiceWithBase = BaseQuestionDao &
+  QuestionMultiChoiceDao
+
 /**
  * Mongoose schema for the range question.
  */
@@ -215,6 +218,8 @@ export class QuestionRangeDao {
 export const QuestionRangeDaoSchema =
   SchemaFactory.createForClass(QuestionRangeDao)
 
+export type QuestionRangeWithBase = BaseQuestionDao & QuestionRangeDao
+
 /**
  * Mongoose schema for the true false question.
  */
@@ -237,6 +242,8 @@ export class QuestionTrueFalseDao {
  */
 export const QuestionTrueFalseDaoSchema =
   SchemaFactory.createForClass(QuestionTrueFalseDao)
+
+export type QuestionTrueFalseWithBase = BaseQuestionDao & QuestionTrueFalseDao
 
 /**
  * Mongoose schema for the type answer question.
@@ -261,6 +268,8 @@ export class QuestionTypeAnswerDao {
 export const QuestionTypeAnswerDaoSchema = SchemaFactory.createForClass(
   QuestionTypeAnswerDao,
 )
+
+export type QuestionTypeAnswerWithBase = BaseQuestionDao & QuestionTypeAnswerDao
 
 /**
  * Mongoose schema for the pin question.
@@ -307,6 +316,8 @@ export class QuestionPinDao {
  */
 export const QuestionPinDaoSchema = SchemaFactory.createForClass(QuestionPinDao)
 
+export type QuestionPinWithBase = BaseQuestionDao & QuestionPinDao
+
 /**
  * Mongoose schema for the puzzle question.
  * Holds the list of values that must be ordered by the player.
@@ -330,6 +341,8 @@ export class QuestionPuzzleDao {
  */
 export const QuestionPuzzleDaoSchema =
   SchemaFactory.createForClass(QuestionPuzzleDao)
+
+export type QuestionPuzzleWithBase = BaseQuestionDao & QuestionPuzzleDao
 
 /**
  * Represents a question document with its specific discriminator type.

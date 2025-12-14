@@ -321,7 +321,6 @@ describe('ClassicPinScoringStrategy', () => {
 
   describe('toPinPositionFromString', () => {
     const callToPinPosition = (value?: string) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (strategy as any).toPinPositionFromString(value)
 
     it('returns {0,0} when value is undefined or empty', () => {
@@ -377,9 +376,7 @@ describe('ClassicPinScoringStrategy', () => {
     const callDistance = (
       a: { x: number; y: number },
       b: { x: number; y: number },
-    ) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (strategy as any).calculateDistanceNorm(a, b)
+    ) => (strategy as any).calculateDistanceNorm(a, b)
 
     it('returns 0 when points are identical', () => {
       const p = { x: 0.5, y: 0.5 }

@@ -67,7 +67,6 @@ describe('JoinGameRequest', () => {
     })
 
     it('should fail validation if nickname is not a string', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(joinGameRequest as any).nickname = 12345
 
       const errors = await validate(joinGameRequest)

@@ -355,9 +355,7 @@ describe('ClassicPuzzleScoringStrategy', () => {
     const callToCorrectPuzzlePositions = (
       correct: ClassicCorrect<QuestionType.Puzzle>,
       answer?: ClassicAnswer<QuestionType.Puzzle>,
-    ) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (strategy as any).countCorrectPuzzlePositions(correct, answer)
+    ) => (strategy as any).countCorrectPuzzlePositions(correct, answer)
 
     const buildCorrect = (
       value: unknown[] | undefined,
@@ -449,9 +447,7 @@ describe('ClassicPuzzleScoringStrategy', () => {
     const callToHasAnyCorrectPuzzlePosition = (
       correct: ClassicCorrect<QuestionType.Puzzle>,
       answer?: ClassicAnswer<QuestionType.Puzzle>,
-    ) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (strategy as any).hasAnyCorrectPuzzlePosition(correct, answer)
+    ) => (strategy as any).hasAnyCorrectPuzzlePosition(correct, answer)
 
     const buildCorrect = (
       value: unknown[] | undefined,

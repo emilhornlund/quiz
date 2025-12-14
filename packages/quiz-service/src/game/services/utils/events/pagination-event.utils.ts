@@ -11,15 +11,15 @@ import {
  * Assumes the current task stores a zero-based `questionIndex` and converts it
  * to a one-based index for the pagination event.
  *
- * @param gameDocument - Game document whose current task exposes `questionIndex`.
+ * @param game - Game document whose current task exposes `questionIndex`.
  * @returns Pagination metadata with current question (1-based) and total questions.
  */
 export function buildPaginationEventFromGameDocument(
-  gameDocument: GameDocument & { currentTask: { questionIndex: number } },
+  game: GameDocument & { currentTask: { questionIndex: number } },
 ): PaginationEvent {
   return buildPaginationEvent(
-    gameDocument.currentTask.questionIndex + 1,
-    gameDocument.questions.length,
+    game.currentTask.questionIndex + 1,
+    game.questions.length,
   )
 }
 
@@ -29,18 +29,15 @@ export function buildPaginationEventFromGameDocument(
  * Uses the task's zero-based `questionIndex` and converts it to a one-based
  * index for the pagination event.
  *
- * @param gameDocument - Game document containing all questions.
- * @param questionResultTask - Question result task with the current `questionIndex`.
+ * @param game - Game document containing all questions.
+ * @param task - Question result task with the current `questionIndex`.
  * @returns Pagination metadata with current question (1-based) and total questions.
  */
 export function buildPaginationEventFromQuestionResultTask(
-  gameDocument: GameDocument,
-  questionResultTask: QuestionResultTaskWithBase,
+  game: GameDocument,
+  task: QuestionResultTaskWithBase,
 ): PaginationEvent {
-  return buildPaginationEvent(
-    questionResultTask.questionIndex + 1,
-    gameDocument.questions.length,
-  )
+  return buildPaginationEvent(task.questionIndex + 1, game.questions.length)
 }
 
 /**
