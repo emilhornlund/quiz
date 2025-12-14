@@ -3,7 +3,7 @@ import { QuestionType, SubmitPinQuestionAnswerRequestDto } from '@quiz/common'
 import {
   ApiQuestionPinPositionXProperty,
   ApiQuestionPinPositionYProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../modules/quiz/controllers/decorators/api'
 import { ApiGameQuestionTypeProperty } from '../../decorators/api'
 
 /**

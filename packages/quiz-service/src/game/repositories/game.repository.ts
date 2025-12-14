@@ -5,8 +5,8 @@ import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { BaseRepository } from '../../app/shared/repository'
+import { Quiz } from '../../modules/quiz/repositories/models/schemas'
 import { User } from '../../modules/user/repositories'
-import { Quiz } from '../../quiz/repositories/models/schemas'
 import {
   ActiveGameNotFoundByGamePINException,
   ActiveGameNotFoundByIDException,

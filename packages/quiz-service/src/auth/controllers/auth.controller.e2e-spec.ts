@@ -50,7 +50,7 @@ import {
   GameResult,
   GameResultModel,
 } from '../../game/repositories/models/schemas'
-import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
+import { Quiz, QuizModel } from '../../modules/quiz/repositories/models/schemas'
 import { User, UserModel } from '../../modules/user/repositories'
 import { AuthService } from '../services'
 import {

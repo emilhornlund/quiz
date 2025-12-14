@@ -10,7 +10,7 @@ import {
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
-} from '../../../../quiz/repositories/models/schemas'
+} from '../../../../modules/quiz/repositories/models/schemas'
 import {
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,

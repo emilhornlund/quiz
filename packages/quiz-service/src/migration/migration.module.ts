@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common'
 
 import { GameModule } from '../game'
+import { QuizModule } from '../modules/quiz'
 import { UserModule } from '../modules/user'
-import { QuizModule } from '../quiz'
 
 import { UserMigrationController } from './controllers'
 import { MigrationService } from './services'

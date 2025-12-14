@@ -8,7 +8,7 @@ import {
 import {
   ApiGameModeProperty,
   ApiQuizImageCoverProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../modules/quiz/controllers/decorators/api'
 import {
   ApiGameCreatedProperty,
   ApiGameIdProperty,

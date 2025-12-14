@@ -3,8 +3,8 @@ import { forwardRef, Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { QuizModule } from '../modules/quiz'
 import { UserModule } from '../modules/user'
-import { QuizModule } from '../quiz'
 
 import {
   GameController,

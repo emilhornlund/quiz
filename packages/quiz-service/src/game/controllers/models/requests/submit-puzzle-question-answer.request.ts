@@ -3,7 +3,7 @@ import {
   SubmitPuzzleQuestionAnswerRequestDto,
 } from '@quiz/common'
 
-import { ApiQuestionPuzzleValuesProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuestionPuzzleValuesProperty } from '../../../../modules/quiz/controllers/decorators/api'
 import { ApiGameQuestionTypeProperty } from '../../decorators/api'
 
 /**

@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer'
 import { Max, Min, ValidateNested } from 'class-validator'
 
-import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../modules/quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,

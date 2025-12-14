@@ -16,7 +16,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../../../modules/quiz/services/utils'
 import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   GameDocument,

@@ -11,7 +11,7 @@ import {
   QuestionType,
 } from '@quiz/common'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../../modules/quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -19,7 +19,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../../../modules/quiz/services/utils'
 import {
   GameDocument,
   ParticipantPlayerWithBase,

@@ -8,7 +8,7 @@ import { IsNumber } from 'class-validator'
 import {
   ApiQuestionProperty,
   ApiQuestionTypeProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../modules/quiz/controllers/decorators/api'
 import {
   ApiGameResultQuestionMetricAverageResponseTimeProperty,
   ApiGameResultQuestionMetricUnansweredProperty,

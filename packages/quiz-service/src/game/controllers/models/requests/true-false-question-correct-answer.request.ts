@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { QuestionType, TrueFalseQuestionCorrectAnswerDto } from '@quiz/common'
 import { IsBoolean } from 'class-validator'
 
-import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuestionTypeProperty } from '../../../../modules/quiz/controllers/decorators/api'
 
 /**
  * Request model for submitting a correct answer to a True/False question.

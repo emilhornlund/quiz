@@ -23,7 +23,7 @@ import {
 import { RootFilterQuery } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { User } from '../../modules/user/repositories'
+import { User } from '../../user/repositories'
 import { QuizRepository } from '../repositories'
 import {
   BaseQuestionDao,

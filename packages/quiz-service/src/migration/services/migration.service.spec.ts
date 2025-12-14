@@ -3,7 +3,7 @@ import { AuthProvider } from '@quiz/common'
 
 import { computeMigrationToken } from '../../../test-utils/utils'
 import { GameRepository, GameResultRepository } from '../../game/repositories'
-import { QuizRepository } from '../../quiz/repositories'
+import { QuizRepository } from '../../modules/quiz/repositories'
 import { UserNotFoundByMigrationTokenException } from '../../modules/user/exceptions'
 import { NoneUser, User, UserRepository } from '../../modules/user/repositories'
 

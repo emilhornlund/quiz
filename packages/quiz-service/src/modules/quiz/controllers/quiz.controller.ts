@@ -29,8 +29,8 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
-import { User } from '../../modules/user/repositories'
+} from '../../../auth/controllers/decorators'
+import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 

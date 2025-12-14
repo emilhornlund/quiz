@@ -1,6 +1,6 @@
 import { GameMode, QuestionType } from '@quiz/common'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../../modules/quiz/repositories/models/schemas'
 import {
   isClassicMultiChoiceQuestion,
   isClassicPinQuestion,
@@ -9,7 +9,7 @@ import {
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
   isZeroToOneHundredRangeQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../../../modules/quiz/services/utils'
 import { UnsupportedGameModeException } from '../../../exceptions'
 import {
   QuestionResultTaskCorrectAnswer,

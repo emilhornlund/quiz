@@ -1,8 +1,24 @@
-import { Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
+import { MongooseModule } from '@nestjs/mongoose'
 
-// TODO: Implement QuizModule
+import { ProfileQuizController, QuizController } from './controllers'
+import { QuizRepository } from './repositories'
+import { Quiz, QuizSchema } from './repositories/models/schemas'
+import { QuizService } from './services'
+
 @Module({
-  providers: [],
-  exports: [],
+  imports: [
+    EventEmitterModule,
+    MongooseModule.forFeature([
+      {
+        name: Quiz.name,
+        schema: QuizSchema,
+      },
+    ]),
+  ],
+  controllers: [QuizController, ProfileQuizController],
+  providers: [Logger, QuizService, QuizRepository],
+  exports: [QuizService, QuizRepository],
 })
 export class QuizModule {}

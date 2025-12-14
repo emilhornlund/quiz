@@ -32,7 +32,7 @@ import {
   closeTestApp,
   createTestApp,
 } from '../../../test-utils/utils'
-import { QuizService } from '../../quiz/services'
+import { QuizService } from '../../modules/quiz/services'
 import { User, UserModel } from '../../modules/user/repositories'
 import {
   BaseTask,

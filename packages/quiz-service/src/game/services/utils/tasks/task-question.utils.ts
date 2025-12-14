@@ -1,7 +1,7 @@
 import { QuestionType, shuffleDifferent } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../../modules/quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -9,7 +9,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../../../modules/quiz/services/utils'
 import {
   GameDocument,
   QuestionTaskMetadata,

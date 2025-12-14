@@ -3,7 +3,7 @@ import { PuzzleQuestionCorrectAnswerDto, QuestionType } from '@quiz/common'
 import {
   ApiQuestionPuzzleValuesProperty,
   ApiQuestionTypeProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../modules/quiz/controllers/decorators/api'
 
 /**
  * Request model for submitting the correct answer of a Puzzle question.

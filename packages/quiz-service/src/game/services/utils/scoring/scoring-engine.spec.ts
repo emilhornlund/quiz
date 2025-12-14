@@ -1,6 +1,6 @@
 import { GameMode, QuestionType } from '@quiz/common'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../../modules/quiz/repositories/models/schemas'
 import {
   QuestionResultTaskCorrectAnswer,
   QuestionTaskAnswer,

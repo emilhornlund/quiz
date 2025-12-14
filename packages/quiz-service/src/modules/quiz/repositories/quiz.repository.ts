@@ -6,7 +6,7 @@ import {
   BaseRepository,
   buildSortObject,
   SortOptions,
-} from '../../app/shared/repository'
+} from '../../../app/shared/repository'
 import { QuizNotFoundException } from '../exceptions'
 
 import { Quiz, QuizModel } from './models/schemas'

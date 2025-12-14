@@ -8,10 +8,10 @@ import {
   buildMockSecondaryUser,
   createMockClassicQuizRequestDto,
   createMockZeroToOneHundredQuizRequestDto,
-} from '../../../test-utils/data'
-import { createDefaultUserAndAuthenticate } from '../../../test-utils/utils'
-import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { User, UserModel } from '../../modules/user/repositories'
+} from '../../../../test-utils/data'
+import { createDefaultUserAndAuthenticate } from '../../../../test-utils/utils'
+import { closeTestApp, createTestApp } from '../../../../test-utils/utils'
+import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
 const originalData = createMockClassicQuizRequestDto()

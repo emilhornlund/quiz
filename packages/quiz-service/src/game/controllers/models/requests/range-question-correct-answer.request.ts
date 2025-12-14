@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { QuestionType, RangeQuestionCorrectAnswerDto } from '@quiz/common'
 import { IsNumber, Max, Min } from 'class-validator'
 
-import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuestionTypeProperty } from '../../../../modules/quiz/controllers/decorators/api'
 
 /**
  * Request model for submitting a correct answer to a Range question.

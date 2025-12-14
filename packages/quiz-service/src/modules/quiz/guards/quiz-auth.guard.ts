@@ -9,7 +9,7 @@ import {
 import { Reflector } from '@nestjs/core'
 import { QuizVisibility, TokenDto } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../auth/guards'
+import { AuthGuardRequest } from '../../../auth/guards'
 import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
 import { QuizRepository } from '../repositories'
 

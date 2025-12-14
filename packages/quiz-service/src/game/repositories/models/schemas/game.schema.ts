@@ -17,7 +17,7 @@ import {
   QuestionTrueFalseDaoSchema,
   QuestionTypeAnswerDaoSchema,
   Quiz,
-} from '../../../../quiz/repositories/models/schemas'
+} from '../../../../modules/quiz/repositories/models/schemas'
 
 import {
   Participant,
