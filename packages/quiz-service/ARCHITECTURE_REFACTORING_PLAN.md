@@ -77,7 +77,7 @@ packages/quiz-service/src/
    - Integrate into CI/CD pipeline
 
 2. **Create Architecture Tests**
-   - Create test file: `packages/quiz-service/test/architecture.spec.ts`
+   - Create test file: `packages/quiz-service/src/architecture.spec.ts`
    - Add tests to verify module boundaries
    - Add tests to prevent circular dependencies
    - Add tests to verify dependency direction rules

@@ -3,7 +3,7 @@ import { execSync } from 'child_process'
 
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { AppModule } from '../app'
+import { AppModule } from './app'
 
 describe('Architecture Tests', () => {
   let app: TestingModule
@@ -21,7 +21,7 @@ describe('Architecture Tests', () => {
   describe('Circular Dependencies', () => {
     it('should have no circular dependencies', () => {
       try {
-        execSync('./scripts/check_circular_deps.sh 12', { stdio: 'pipe' })
+        execSync('./scripts/check_circular_deps.sh 13', { stdio: 'pipe' })
       } catch (error: any) {
         fail(`Circular dependency check failed: ${error.message}`)
       }
