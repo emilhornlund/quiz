@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { BaseRepository } from '../../app/shared/repository'
+import { BaseRepository } from '../../../app/shared/repository'
 import {
   EmailNotUniqueException,
   UserNotFoundByMigrationTokenException,

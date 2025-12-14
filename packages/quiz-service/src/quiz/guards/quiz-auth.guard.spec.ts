@@ -7,7 +7,7 @@ import {
 import { Test, TestingModule } from '@nestjs/testing'
 import { QuizVisibility } from '@quiz/common'
 
-import { User } from '../../user/repositories'
+import { User } from '../../modules/user/repositories'
 import { QuizRepository } from '../repositories'
 import { Quiz } from '../repositories/models/schemas'
 

@@ -51,7 +51,7 @@ import {
   GameResultModel,
 } from '../../game/repositories/models/schemas'
 import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
-import { User, UserModel } from '../../user/repositories'
+import { User, UserModel } from '../../modules/user/repositories'
 import { AuthService } from '../services'
 import {
   DEFAULT_GAME_AUTHORITIES,

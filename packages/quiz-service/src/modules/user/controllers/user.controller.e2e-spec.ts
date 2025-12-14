@@ -10,8 +10,8 @@ import {
   MOCK_PRIMARY_USER_EMAIL,
   MOCK_PRIMARY_USER_FAMILY_NAME,
   MOCK_PRIMARY_USER_GIVEN_NAME,
-} from '../../../test-utils/data'
-import { closeTestApp, createTestApp } from '../../../test-utils/utils'
+} from '../../../../test-utils/data'
+import { closeTestApp, createTestApp } from '../../../../test-utils/utils'
 import { User, UserModel, UserRepository } from '../repositories'
 
 describe('UserController (e2e)', () => {

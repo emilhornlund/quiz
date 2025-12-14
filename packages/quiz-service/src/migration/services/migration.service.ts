@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common'
 
 import { GameRepository, GameResultRepository } from '../../game/repositories'
+import { User, UserRepository } from '../../modules/user/repositories'
 import { QuizRepository } from '../../quiz/repositories'
-import { User, UserRepository } from '../../user/repositories'
 
 /**
  * Service for migrating data from legacy (anonymous) users into real accounts,

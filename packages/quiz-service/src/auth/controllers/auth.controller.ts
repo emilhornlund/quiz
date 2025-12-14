@@ -22,7 +22,7 @@ import {
 } from '@nestjs/swagger'
 import { Authority, TokenScope } from '@quiz/common'
 
-import { UserService } from '../../user/services'
+import { UserService } from '../../modules/user/services'
 import { AuthService } from '../services'
 
 import { IpAddress, PrincipalId, Public, UserAgent } from './decorators'

@@ -12,13 +12,13 @@ import {
   MOCK_PRIMARY_USER_GIVEN_NAME,
   MOCK_SECONDARY_PASSWORD,
   MOCK_SECONDARY_USER_EMAIL,
-} from '../../../test-utils/data'
+} from '../../../../test-utils/data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils'
-import { AuthService } from '../../auth/services'
+} from '../../../../test-utils/utils'
+import { AuthService } from '../../../auth/services'
 import { LocalUser, UserRepository } from '../repositories'
 
 describe('UserAuthController (e2e)', () => {

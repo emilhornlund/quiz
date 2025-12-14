@@ -27,7 +27,7 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
+} from '../../../auth/controllers/decorators'
 import { ParseUpdateUserProfileRequestPipe } from '../pipes'
 import { User } from '../repositories'
 import { UserService } from '../services'

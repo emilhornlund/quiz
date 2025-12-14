@@ -1,8 +1,50 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
+import { MongooseModule } from '@nestjs/mongoose'
+import { AuthProvider } from '@quiz/common'
 
-// TODO: Implement UserModule
+import { AuthModule } from '../../auth'
+import { MigrationModule } from '../../migration'
+import { EmailModule } from '../email'
+
+import {
+  UserAuthController,
+  UserController,
+  UserProfileController,
+} from './controllers'
+import {
+  GoogleUserSchema,
+  LocalUserSchema,
+  NoneUserSchema,
+  User,
+  UserRepository,
+  UserSchema,
+} from './repositories'
+import { UserEventHandler, UserService } from './services'
+
+/**
+ * Module for managing user-related operations.
+ */
 @Module({
-  providers: [],
-  exports: [],
+  imports: [
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
+        discriminators: [
+          { name: AuthProvider.None, schema: NoneUserSchema },
+          { name: AuthProvider.Local, schema: LocalUserSchema },
+          { name: AuthProvider.Google, schema: GoogleUserSchema },
+        ],
+      },
+    ]),
+    EventEmitterModule,
+    forwardRef(() => AuthModule),
+    EmailModule,
+    forwardRef(() => MigrationModule),
+  ],
+  controllers: [UserController, UserProfileController, UserAuthController],
+  providers: [UserService, UserRepository, UserEventHandler],
+  exports: [UserService, UserRepository],
 })
 export class UserModule {}

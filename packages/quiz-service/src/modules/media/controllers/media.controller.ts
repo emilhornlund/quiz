@@ -31,7 +31,7 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../../auth/controllers/decorators'
-import { User } from '../../../user/repositories'
+import { User } from '../../../modules/user/repositories'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 

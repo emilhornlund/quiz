@@ -8,7 +8,7 @@ import {
   DEFAULT_GAME_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
 } from '../../src/auth/services/utils'
-import { User, UserModel } from '../../src/user/repositories'
+import { User, UserModel } from '../../src/modules/user/repositories'
 import { buildMockPrimaryUser } from '../data'
 
 export async function createDefaultUserAndAuthenticate(

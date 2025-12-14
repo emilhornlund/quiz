@@ -1,7 +1,11 @@
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GoogleUser, LocalUser, NoneUser } from '../../src/user/repositories'
+import {
+  GoogleUser,
+  LocalUser,
+  NoneUser,
+} from '../../src/modules/user/repositories'
 import { computeMigrationToken } from '../utils'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'

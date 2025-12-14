@@ -26,7 +26,7 @@ import {
   Public,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
+} from '../../../auth/controllers/decorators'
 import { UserService } from '../services'
 
 import { AuthPasswordForgotRequest, AuthPasswordResetRequest } from './models'

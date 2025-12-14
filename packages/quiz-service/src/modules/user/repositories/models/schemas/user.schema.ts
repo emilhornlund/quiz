@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 import { Model, now } from 'mongoose'
 
-import { SkipValidation } from '../../../../app/decorators'
+import { SkipValidation } from '../../../../../app/decorators'
 
 interface IUser {
   /**

@@ -11,7 +11,7 @@ import {
 } from '../../../test-utils/data'
 import { createDefaultUserAndAuthenticate } from '../../../test-utils/utils'
 import { closeTestApp, createTestApp } from '../../../test-utils/utils'
-import { User, UserModel } from '../../user/repositories'
+import { User, UserModel } from '../../modules/user/repositories'
 import { QuizService } from '../services'
 
 const originalData = createMockClassicQuizRequestDto()

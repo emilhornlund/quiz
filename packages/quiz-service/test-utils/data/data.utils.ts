@@ -54,7 +54,7 @@ import {
   QuestionTypeAnswerDao,
   Quiz,
 } from '../../src/quiz/repositories/models/schemas'
-import { User } from '../../src/user/repositories'
+import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
 

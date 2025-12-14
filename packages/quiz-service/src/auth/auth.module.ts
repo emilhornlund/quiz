@@ -12,7 +12,7 @@ import * as jwt from 'jsonwebtoken'
 import { EnvironmentVariables } from '../app/config'
 import { GameModule } from '../game'
 import { MigrationModule } from '../migration'
-import { UserModule } from '../user'
+import { UserModule } from '../modules/user'
 
 import { AuthController } from './controllers'
 import { AuthGuard } from './guards'

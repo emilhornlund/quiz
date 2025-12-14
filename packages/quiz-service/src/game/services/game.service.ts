@@ -20,8 +20,8 @@ import {
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import { User } from '../../modules/user/repositories'
 import { QuizRepository } from '../../quiz/repositories'
-import { User } from '../../user/repositories'
 import {
   NicknameNotUniqueException,
   PlayerNotFoundException,

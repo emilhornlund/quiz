@@ -12,12 +12,12 @@ import {
   MOCK_SECONDARY_USER_EMAIL,
   MOCK_SECONDARY_USER_FAMILY_NAME,
   MOCK_SECONDARY_USER_GIVEN_NAME,
-} from '../../../test-utils/data'
+} from '../../../../test-utils/data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils'
+} from '../../../../test-utils/utils'
 import { LocalUser } from '../repositories'
 
 describe('UserProfileController (e2e)', () => {

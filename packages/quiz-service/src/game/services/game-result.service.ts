@@ -10,7 +10,7 @@ import {
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
 
-import { UserRepository } from '../../user/repositories'
+import { UserRepository } from '../../modules/user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
 import { PlayerMetric, QuestionMetric } from '../repositories/models/schemas'

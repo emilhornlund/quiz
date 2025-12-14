@@ -4,8 +4,8 @@ import { AuthProvider } from '@quiz/common'
 import { computeMigrationToken } from '../../../test-utils/utils'
 import { GameRepository, GameResultRepository } from '../../game/repositories'
 import { QuizRepository } from '../../quiz/repositories'
-import { UserNotFoundByMigrationTokenException } from '../../user/exceptions'
-import { NoneUser, User, UserRepository } from '../../user/repositories'
+import { UserNotFoundByMigrationTokenException } from '../../modules/user/exceptions'
+import { NoneUser, User, UserRepository } from '../../modules/user/repositories'
 
 import { MigrationService } from './migration.service'
 

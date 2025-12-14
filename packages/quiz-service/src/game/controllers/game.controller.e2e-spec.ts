@@ -33,7 +33,7 @@ import {
   createTestApp,
 } from '../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
-import { User, UserModel } from '../../user/repositories'
+import { User, UserModel } from '../../modules/user/repositories'
 import {
   BaseTask,
   Game,

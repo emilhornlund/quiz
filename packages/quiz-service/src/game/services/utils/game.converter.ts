@@ -1,8 +1,8 @@
 import { GameParticipantType, GameStatus } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import { User } from '../../../modules/user/repositories'
 import { Quiz } from '../../../quiz/repositories/models/schemas'
-import { User } from '../../../user/repositories'
 import { Game } from '../../repositories/models/schemas'
 
 import { buildLobbyTask } from './tasks'

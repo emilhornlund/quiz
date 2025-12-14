@@ -11,7 +11,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../test-utils/utils'
-import { LocalUser, User, UserModel } from '../../user/repositories'
+import { LocalUser, User, UserModel } from '../../modules/user/repositories'
 
 describe('UserMigrationController (e2e)', () => {
   let app: INestApplication
