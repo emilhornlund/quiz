@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { MailerService } from '@nestjs-modules/mailer'
 import { ISendMailOptions } from '@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface'
 
-import { EnvironmentVariables } from '../../app/config'
+import { EnvironmentVariables } from '../../../app/config'
 
 /**
  * Service responsible for sending emails.

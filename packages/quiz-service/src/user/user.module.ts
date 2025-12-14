@@ -4,8 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 
 import { AuthModule } from '../auth'
-import { EmailModule } from '../email'
 import { MigrationModule } from '../migration'
+import { EmailModule } from '../modules/email'
 
 import {
   UserAuthController,
