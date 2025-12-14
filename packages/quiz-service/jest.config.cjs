@@ -10,7 +10,13 @@ module.exports = {
   moduleNameMapper: {
     '^@quiz/common(.*)$': '<rootDir>/../../common/src$1',
   },
-  collectCoverageFrom: ['**/*.{ts,js}', '!**/*.(e2e-)?spec.{ts,js}'],
+  collectCoverageFrom: [
+    '**/*.{ts,js}',
+    '!**/*.module.ts',
+    '!**/*.(e2e-)?spec.{ts,js}',
+    '!**/main.ts',
+    '!**/instrument.ts',
+  ],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   transformIgnorePatterns: ['/node_modules/(?!(@quiz/common|uuid)/)'],
