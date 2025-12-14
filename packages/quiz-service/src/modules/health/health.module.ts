@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common'
+import { MongooseHealthIndicator, TerminusModule } from '@nestjs/terminus'
 
-// TODO: Implement HealthModule
+import { HealthController } from './controllers'
+import { RedisHealthIndicator } from './indicators'
+
 @Module({
-  providers: [],
-  exports: [],
+  imports: [TerminusModule],
+  controllers: [HealthController],
+  providers: [MongooseHealthIndicator, RedisHealthIndicator],
 })
 export class HealthModule {}
