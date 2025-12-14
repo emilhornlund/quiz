@@ -39,7 +39,6 @@ describe('AuthGuard', () => {
       getHandler: () => fakeHandler,
       getClass: () => fakeClass,
       switchToHttp: () => ({ getRequest: () => req }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
   }
 
@@ -140,13 +139,11 @@ describe('AuthGuard', () => {
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fakeUser = { _id: 'user-id', email: 'x' } as any
     ;(userRepository.findUserByIdOrThrow as jest.Mock).mockResolvedValue(
       fakeUser,
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const req: any = { headers: { authorization: 'Bearer ok' } }
     const ok = await guard.canActivate(makeContext(req))
     expect(ok).toBe(true)
@@ -197,7 +194,6 @@ describe('AuthGuard', () => {
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const req: any = { headers: { authorization: 'Bearer ok' } }
     const ok = await guard.canActivate(makeContext(req))
     expect(ok).toBe(true)

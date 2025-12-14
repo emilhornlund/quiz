@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { BadRequestException } from '@nestjs/common'
 
 import { ParseGamePINPipe } from './parse-game-pin.pipe'

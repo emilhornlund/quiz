@@ -70,7 +70,6 @@ describe('Cacheable', () => {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const broken = new BrokenService() as any
 
     await expect(broken.doSomething()).rejects.toThrow(

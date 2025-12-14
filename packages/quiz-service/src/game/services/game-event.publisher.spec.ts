@@ -1,4 +1,3 @@
-// packages/quiz-service/src/game/services/game-event.publisher.spec.ts
 import { GameParticipantType } from '@quiz/common'
 import type { Redis } from 'ioredis'
 
@@ -37,7 +36,6 @@ describe('GameEventPublisher', () => {
     redis = {
       lrange: jest.fn().mockResolvedValue([]),
       publish: jest.fn().mockResolvedValue(1),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     // Reset util mocks
@@ -55,7 +53,6 @@ describe('GameEventPublisher', () => {
 
     service = new GameEventPublisher(redis as unknown as Redis)
     // Override internal logger for assertions (same trick as previous tests)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(service as any).logger = logger
   })
 
@@ -63,7 +60,6 @@ describe('GameEventPublisher', () => {
     jest.clearAllMocks()
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const buildGameDoc = (overrides: Partial<any> = {}) => ({
     _id: 'game-1',
     currentTask: { type: TaskType.Lobby },
@@ -178,7 +174,6 @@ describe('GameEventPublisher', () => {
       nickname: 'Alice',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await service.publishParticipantEvent(participant as any, undefined)
 
     expect(redis.publish).not.toHaveBeenCalled()
@@ -191,10 +186,9 @@ describe('GameEventPublisher', () => {
       type: GameParticipantType.PLAYER,
       nickname: 'Alice',
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const event = { some: 'event' } as any
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await service.publishParticipantEvent(participant as any, event)
 
     expect(redis.publish).toHaveBeenCalledTimes(1)
@@ -212,10 +206,9 @@ describe('GameEventPublisher', () => {
       type: GameParticipantType.PLAYER,
       nickname: 'Alice',
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const event = { x: 1 } as any
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await service.publishParticipantEvent(participant as any, event)
 
     expect(logger.error).toHaveBeenCalledWith(

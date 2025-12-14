@@ -14,23 +14,16 @@ describe('AuthService', () => {
     logger = { error: jest.fn() }
 
     service = new AuthService(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* userService    */ {} as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* gameRepository */ {} as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* tokenRepository */ {} as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* jwtService     */ {} as any,
       /* eventEmitter   */ eventEmitter,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* configService  */ {} as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       /* configService  */ {} as any,
     )
 
     // Override the internal logger so we can spy on .error()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(service as any).logger = logger
   })
 
@@ -38,7 +31,6 @@ describe('AuthService', () => {
     it('should emit a UserLoginEvent with correct payload', async () => {
       const emitSpy = jest.spyOn(eventEmitter, 'emit')
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (service as any).emitUserLoginEvent('user-123')
 
       expect(emitSpy).toHaveBeenCalledWith(
@@ -56,7 +48,6 @@ describe('AuthService', () => {
         throw new Error('boom happened')
       })
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (service as any).emitUserLoginEvent('user-456')
 
       expect(logger.error).toHaveBeenCalledWith(

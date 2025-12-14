@@ -28,17 +28,14 @@ describe('MigrationService', () => {
   beforeEach(() => {
     gameRepo = {
       updateGameParticipant: jest.fn().mockResolvedValue(undefined),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     gameResultRepo = {
       updateGameResultParticipant: jest.fn().mockResolvedValue(undefined),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     quizRepo = {
       updateQuizOwner: jest.fn().mockResolvedValue(undefined),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     userRepo = {
@@ -48,16 +45,12 @@ describe('MigrationService', () => {
       createUser: jest.fn(),
       findUserByIdOrThrow: jest.fn(),
       deleteUserById: jest.fn(),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     svc = new MigrationService(gameRepo, gameResultRepo, quizRepo, userRepo)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jest.spyOn((svc as any).logger, 'log').mockImplementation()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jest.spyOn((svc as any).logger, 'warn').mockImplementation()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jest.spyOn((svc as any).logger, 'error').mockImplementation()
   })
 
@@ -150,7 +143,7 @@ describe('MigrationService', () => {
         undefined,
       ),
     ).rejects.toBeInstanceOf(BadRequestException)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     expect((svc as any).logger.warn).toHaveBeenCalled()
   })
 
@@ -165,7 +158,7 @@ describe('MigrationService', () => {
     await expect(
       svc.migrateLegacyPlayerUser<User>(MIGRATION_TOKEN, undefined, undefined),
     ).rejects.toBeInstanceOf(BadRequestException)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     expect((svc as any).logger.error).toHaveBeenCalled()
   })
 })

@@ -32,7 +32,6 @@ import {
 describe('GameEventSubscriber', () => {
   let redis: jest.Mocked<Redis>
   let redisSubscriber: jest.Mocked<Redis>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let gameRepository: any
   let eventEmitter: EventEmitter2
   let service: GameEventSubscriber
@@ -47,19 +46,15 @@ describe('GameEventSubscriber', () => {
     redisSubscriber = {
       subscribe: jest.fn((_, cb) => {
         // simulate successful subscribe
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cb?.(null as any, 1)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return Promise.resolve(1) as any
       }),
       on: jest.fn(),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     redis = {
       duplicate: jest.fn(() => redisSubscriber as unknown as Redis),
       lrange: jest.fn().mockResolvedValue([]),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
 
     // Minimal gameRepository mock
@@ -89,7 +84,6 @@ describe('GameEventSubscriber', () => {
     )
 
     // Override the internal logger so we can spy on .error()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(service as any).logger = logger
   })
 
@@ -99,7 +93,6 @@ describe('GameEventSubscriber', () => {
     jest.clearAllMocks()
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const buildGameDoc = (overrides: Partial<any> = {}) => ({
     _id: 'game-1',
     currentTask: { type: TaskType.Lobby },
@@ -204,7 +197,6 @@ describe('GameEventSubscriber', () => {
     sub.unsubscribe()
 
     // We should have 3 emissions total (initial + MATCH + BROADCAST)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(received.map((e) => JSON.parse(e.data as any))).toEqual([
       { initial: 'player' },
       { type: 'MATCH' },
@@ -213,7 +205,6 @@ describe('GameEventSubscriber', () => {
 
     // Active players should be cleaned up
     // (accessing private for test purposes)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const activePlayers: Set<string> = (service as any).activePlayers
     expect(activePlayers.has('p1')).toBe(false)
 
@@ -237,7 +228,6 @@ describe('GameEventSubscriber', () => {
     const out = firstValueFrom(stream$.pipe(take(1)))
 
     const first = await out
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(JSON.parse(first.data as any)).toEqual({ initial: 'host' })
     expect(buildHostGameEvent).toHaveBeenCalledWith(
       doc,
@@ -262,7 +252,6 @@ describe('GameEventSubscriber', () => {
     eventEmitter.emit('event', { event: { type: 'B' } }) // broadcast
 
     const results = await resultsPromise
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(results.map((e) => JSON.parse(e.data as any))).toEqual([
       { type: 'A' },
       { type: 'B' },
