@@ -19,10 +19,10 @@ import {
 import * as bcrypt from 'bcryptjs'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { MigrationService } from '../../../migration/services'
 import { AuthService } from '../../authentication/services'
 import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
+import { MigrationService } from '../../migration/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
 import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'

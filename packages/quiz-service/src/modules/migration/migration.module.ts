@@ -1,8 +1,23 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 
-// TODO: Implement MigrationModule
+import { GameModule } from '../../game'
+import { QuizModule } from '../quiz'
+import { UserModule } from '../user'
+
+import { UserMigrationController } from './controllers'
+import { MigrationService } from './services'
+
+/**
+ * Module for managing user-related operations.
+ */
 @Module({
-  providers: [],
-  exports: [],
+  imports: [
+    forwardRef(() => GameModule),
+    forwardRef(() => QuizModule),
+    forwardRef(() => UserModule),
+  ],
+  controllers: [UserMigrationController],
+  providers: [MigrationService],
+  exports: [MigrationService],
 })
 export class MigrationModule {}

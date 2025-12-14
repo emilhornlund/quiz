@@ -16,10 +16,10 @@ import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { GameModule } from '../game'
-import { MigrationModule } from '../migration'
 import { AuthenticationModule } from '../modules/authentication'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
+import { MigrationModule } from '../modules/migration'
 import { QuizModule } from '../modules/quiz'
 import { UserModule } from '../modules/user'
 

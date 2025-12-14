@@ -22,7 +22,7 @@ import {
   PrincipalId,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../modules/authentication/controllers/decorators'
+} from '../../authentication/controllers/decorators'
 import { MigrationService } from '../services'
 
 import { UserMigrationRequest } from './models'

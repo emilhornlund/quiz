@@ -5,13 +5,13 @@ import supertest from 'supertest'
 import {
   buildMockNoneMigratedPlayerUser,
   MOCK_SECONDARY_USER_EMAIL,
-} from '../../../test-utils/data'
+} from '../../../../test-utils/data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils'
-import { LocalUser, User, UserModel } from '../../modules/user/repositories'
+} from '../../../../test-utils/utils'
+import { LocalUser, User, UserModel } from '../../user/repositories'
 
 describe('UserMigrationController (e2e)', () => {
   let app: INestApplication
