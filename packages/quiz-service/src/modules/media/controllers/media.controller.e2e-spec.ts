@@ -9,7 +9,7 @@ import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils'
+} from '../../../../test-utils/utils'
 
 describe('MediaController (e2e)', () => {
   let app: INestApplication
@@ -73,7 +73,7 @@ describe('MediaController (e2e)', () => {
           .set({ Authorization: `Bearer ${accessToken}` })
           .attach(
             'file',
-            join(__dirname, `../../../test-utils/assets/photo.${extension}`),
+            join(__dirname, `../../../../test-utils/assets/photo.${extension}`),
           )
           .expect(201)
           .expect((res) => {
@@ -83,7 +83,7 @@ describe('MediaController (e2e)', () => {
             return rm(
               join(
                 __dirname,
-                '../../../',
+                '../../../../',
                 process.env.UPLOAD_DIRECTORY,
                 `/${dirname(res.body.filename)}`,
               ),
@@ -99,7 +99,10 @@ describe('MediaController (e2e)', () => {
       return supertest(app.getHttpServer())
         .post('/api/media/uploads/photos')
         .set({ Authorization: `Bearer ${accessToken}` })
-        .attach('file', join(__dirname, '../../../test-utils/assets/empty.txt'))
+        .attach(
+          'file',
+          join(__dirname, '../../../../test-utils/assets/empty.txt'),
+        )
         .expect(422)
         .expect((res) => {
           expect(res.body).toEqual({
@@ -133,10 +136,13 @@ describe('MediaController (e2e)', () => {
 
       const photoId = uuidv4()
 
-      const srcFile = join(__dirname, `../../../test-utils/assets/photo.webp`)
+      const srcFile = join(
+        __dirname,
+        `../../../../test-utils/assets/photo.webp`,
+      )
       const dstFile = join(
         __dirname,
-        '../../../',
+        '../../../../',
         process.env.UPLOAD_DIRECTORY,
         `/${userId}/${photoId}.webp`,
       )

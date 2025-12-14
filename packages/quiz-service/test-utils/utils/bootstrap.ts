@@ -9,7 +9,7 @@ import { AppModule } from '../../src/app'
 import { configureApp } from '../../src/app/utils'
 import { GoogleAuthService } from '../../src/auth/services'
 import { GoogleProfileDto } from '../../src/auth/services/models'
-import { PexelsMediaSearchService } from '../../src/media/services'
+import { PexelsMediaSearchService } from '../../src/modules/media/services'
 import { MOCK_PRIMARY_GOOGLE_USER_ID, MOCK_PRIMARY_USER_EMAIL } from '../data'
 import {
   MOCK_GOOGLE_ACCESS_TOKEN_VALID,

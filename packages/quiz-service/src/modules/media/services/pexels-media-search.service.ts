@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { PaginatedMediaPhotoSearchDto } from '@quiz/common'
 import { firstValueFrom } from 'rxjs'
 
-import { EnvironmentVariables } from '../../app/config'
+import { EnvironmentVariables } from '../../../app/config'
 
 import { PexelsPaginatedPhotoResponse } from './models'
 

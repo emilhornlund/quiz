@@ -30,8 +30,8 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
-import { User } from '../../user/repositories'
+} from '../../../auth/controllers/decorators'
+import { User } from '../../../user/repositories'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 

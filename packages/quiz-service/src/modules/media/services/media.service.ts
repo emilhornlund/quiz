@@ -6,8 +6,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PaginatedMediaPhotoSearchDto } from '@quiz/common'
 
-import { Cacheable } from '../../app/cache'
-import { EnvironmentVariables } from '../../app/config'
+import { Cacheable } from '../../../app/cache'
+import { EnvironmentVariables } from '../../../app/config'
 import { UploadedPhotoNotFoundException } from '../exceptions'
 
 import { PexelsMediaSearchService } from './pexels-media-search.service'

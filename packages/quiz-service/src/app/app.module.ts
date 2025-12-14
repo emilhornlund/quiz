@@ -17,9 +17,9 @@ import { MurLockModule } from 'murlock'
 
 import { AuthModule } from '../auth'
 import { GameModule } from '../game'
-import { MediaModule } from '../media'
 import { MigrationModule } from '../migration'
 import { HealthModule } from '../modules/health'
+import { MediaModule } from '../modules/media'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 
