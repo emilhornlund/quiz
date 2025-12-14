@@ -34,24 +34,24 @@ import {
   MOCK_PRIMARY_USER_EMAIL,
   MOCK_SECONDARY_PASSWORD,
   MOCK_WEAK_PASSWORD,
-} from '../../../test-utils/data'
+} from '../../../../test-utils/data'
 import {
   MOCK_GOOGLE_VALID_CODE,
   MOCK_GOOGLE_VALID_CODE_VERIFIER,
-} from '../../../test-utils/data/google-auth.data'
+} from '../../../../test-utils/data/google-auth.data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
-} from '../../../test-utils/utils'
+} from '../../../../test-utils/utils'
 import {
   Game,
   GameModel,
   GameResult,
   GameResultModel,
-} from '../../game/repositories/models/schemas'
-import { Quiz, QuizModel } from '../../modules/quiz/repositories/models/schemas'
-import { User, UserModel } from '../../modules/user/repositories'
+} from '../../../game/repositories/models/schemas'
+import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
+import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'
 import {
   DEFAULT_GAME_AUTHORITIES,

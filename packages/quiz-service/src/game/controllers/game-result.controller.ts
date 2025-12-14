@@ -16,7 +16,7 @@ import {
   PrincipalId,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
+} from '../../modules/authentication/controllers/decorators'
 import { GameResultService } from '../services'
 
 import { ApiGameIdParam } from './decorators/api'

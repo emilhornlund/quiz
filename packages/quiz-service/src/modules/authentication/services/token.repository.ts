@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { BaseRepository } from '../../app/shared/repository'
+import { BaseRepository } from '../../../app/shared/repository'
 import { TokenNotFoundException } from '../exceptions'
 
 import { Token, TokenModel } from './models/schemas'

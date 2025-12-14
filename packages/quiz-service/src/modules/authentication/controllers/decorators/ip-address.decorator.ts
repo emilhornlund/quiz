@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 import * as requestIp from '@supercharge/request-ip'
 
-import { ValidationException } from '../../../app/exceptions'
+import { ValidationException } from '../../../../app/exceptions'
 
 /**
  * Decorator for extracting and validating the client's IP address.

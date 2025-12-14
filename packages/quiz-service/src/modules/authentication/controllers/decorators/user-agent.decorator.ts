@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 
-import { ValidationException } from '../../../app/exceptions'
+import { ValidationException } from '../../../../app/exceptions'
 
 /**
  * Decorator for extracting and validating the client's User-Agent header.

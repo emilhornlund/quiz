@@ -18,7 +18,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../../test-utils/utils'
-import { AuthService } from '../../../auth/services'
+import { AuthService } from '../../authentication/services'
 import { LocalUser, UserRepository } from '../repositories'
 
 describe('UserAuthController (e2e)', () => {

@@ -19,9 +19,9 @@ import {
 import * as bcrypt from 'bcryptjs'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthService } from '../../../auth/services'
-import { GoogleProfileDto } from '../../../auth/services/models'
 import { MigrationService } from '../../../migration/services'
+import { AuthService } from '../../authentication/services'
+import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'

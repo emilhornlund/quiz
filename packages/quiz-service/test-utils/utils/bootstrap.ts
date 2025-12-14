@@ -7,8 +7,8 @@ import { Connection } from 'mongoose'
 
 import { AppModule } from '../../src/app'
 import { configureApp } from '../../src/app/utils'
-import { GoogleAuthService } from '../../src/auth/services'
-import { GoogleProfileDto } from '../../src/auth/services/models'
+import { GoogleAuthService } from '../../src/modules/authentication/services'
+import { GoogleProfileDto } from '../../src/modules/authentication/services/models'
 import { PexelsMediaSearchService } from '../../src/modules/media/services'
 import { MOCK_PRIMARY_GOOGLE_USER_ID, MOCK_PRIMARY_USER_EMAIL } from '../data'
 import {

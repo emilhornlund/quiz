@@ -12,7 +12,7 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../../auth/controllers/decorators'
+} from '../../authentication/controllers/decorators'
 import { User } from '../../user/repositories'
 import { QuizService } from '../services'
 

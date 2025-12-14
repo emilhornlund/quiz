@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
 
-import { Public } from '../../../auth/controllers/decorators'
+import { Public } from '../../authentication/controllers/decorators'
 import { UserService } from '../services'
 
 import { CreateUserRequest, CreateUserResponse } from './models'

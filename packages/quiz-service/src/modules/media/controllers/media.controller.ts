@@ -26,12 +26,12 @@ import {
 import { Throttle } from '@nestjs/throttler'
 import { Authority, TokenScope } from '@quiz/common'
 
+import { User } from '../../../modules/user/repositories'
 import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../../auth/controllers/decorators'
-import { User } from '../../../modules/user/repositories'
+} from '../../authentication/controllers/decorators'
 import { ParseImageFilePipe } from '../pipes'
 import { MediaService } from '../services'
 

@@ -22,11 +22,11 @@ import {
 import ms from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameRepository } from '../../game/repositories'
-import { GameDocument } from '../../game/repositories/models/schemas'
-import { MigrationService } from '../../migration/services'
-import { LocalUser } from '../../modules/user/repositories'
-import { UserService } from '../../modules/user/services'
+import { GameRepository } from '../../../game/repositories'
+import { GameDocument } from '../../../game/repositories/models/schemas'
+import { MigrationService } from '../../../migration/services'
+import { LocalUser } from '../../user/repositories'
+import { UserService } from '../../user/services'
 
 import { GoogleAuthService } from './google-auth.service'
 import { UserLoginEvent } from './models'
@@ -409,7 +409,7 @@ export class AuthService {
       },
     )
 
-    await this.tokenRepository.create({
+    await this.tokenRepository.createToken({
       _id: jwtId,
       pairId,
       type: isRefreshToken ? TokenType.Refresh : TokenType.Access,

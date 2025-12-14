@@ -3,7 +3,7 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { firstValueFrom } from 'rxjs'
 
-import { EnvironmentVariables } from '../../app/config'
+import { EnvironmentVariables } from '../../../app/config'
 
 import { GoogleExchangeDto, GoogleProfileDto } from './models'
 

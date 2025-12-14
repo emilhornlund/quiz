@@ -3,8 +3,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 
-import { AuthModule } from '../../auth'
 import { MigrationModule } from '../../migration'
+import { AuthenticationModule } from '../authentication'
 import { EmailModule } from '../email'
 
 import {
@@ -39,7 +39,7 @@ import { UserEventHandler, UserService } from './services'
       },
     ]),
     EventEmitterModule,
-    forwardRef(() => AuthModule),
+    forwardRef(() => AuthenticationModule),
     EmailModule,
     forwardRef(() => MigrationModule),
   ],

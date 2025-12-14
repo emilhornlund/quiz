@@ -10,7 +10,7 @@ import { Authority, GameTokenDto, TokenDto, TokenScope } from '@quiz/common'
 import * as Sentry from '@sentry/nestjs'
 import { Request } from 'express'
 
-import { User, UserRepository } from '../../modules/user/repositories'
+import { User, UserRepository } from '../../user/repositories'
 import { IS_PUBLIC_KEY } from '../controllers/decorators'
 import {
   REQUIRED_AUTHORITIES_KEY,

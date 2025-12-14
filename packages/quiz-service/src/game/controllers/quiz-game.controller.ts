@@ -14,7 +14,7 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../auth/controllers/decorators'
+} from '../../modules/authentication/controllers/decorators'
 import { ApiQuizIdParam } from '../../modules/quiz/controllers/decorators/api'
 import { AuthorizedQuiz } from '../../modules/quiz/controllers/decorators/auth'
 import { RouteQuizIdParam } from '../../modules/quiz/controllers/decorators/params'

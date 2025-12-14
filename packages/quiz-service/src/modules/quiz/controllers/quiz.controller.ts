@@ -29,7 +29,7 @@ import {
   Principal,
   RequiredAuthorities,
   RequiresScopes,
-} from '../../../auth/controllers/decorators'
+} from '../../authentication/controllers/decorators'
 import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'

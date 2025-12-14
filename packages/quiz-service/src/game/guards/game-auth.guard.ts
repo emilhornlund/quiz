@@ -14,7 +14,7 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../auth/guards'
+import { AuthGuardRequest } from '../../modules/authentication/guards'
 import { GAME_PARTICIPANT_TYPE } from '../controllers/decorators/auth'
 import { GameRepository } from '../repositories'
 

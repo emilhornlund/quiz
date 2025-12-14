@@ -23,7 +23,7 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthGuardRequest } from '../../../auth/guards'
+import { AuthGuardRequest } from '../../authentication/guards'
 
 /**
  * Pipe that validates, processes, and converts uploaded image files.

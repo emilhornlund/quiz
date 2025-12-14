@@ -15,9 +15,9 @@ import Joi from 'joi'
 import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
-import { AuthModule } from '../auth'
 import { GameModule } from '../game'
 import { MigrationModule } from '../migration'
+import { AuthenticationModule } from '../modules/authentication'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
 import { QuizModule } from '../modules/quiz'
@@ -182,7 +182,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
             }),
           }),
         ]),
-    AuthModule,
+    AuthenticationModule,
     GameModule,
     HealthModule,
     MediaModule,

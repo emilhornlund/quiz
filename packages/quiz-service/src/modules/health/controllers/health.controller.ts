@@ -7,7 +7,7 @@ import {
   MongooseHealthIndicator,
 } from '@nestjs/terminus'
 
-import { Public } from '../../../auth/controllers/decorators'
+import { Public } from '../../authentication/controllers/decorators'
 import { RedisHealthIndicator } from '../indicators'
 
 @Public()
