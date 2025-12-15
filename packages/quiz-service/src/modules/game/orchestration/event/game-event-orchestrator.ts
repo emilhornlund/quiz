@@ -15,27 +15,7 @@ import {
   ParticipantPlayer,
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
-} from '../repositories/models/schemas'
-import { buildGameLeaderboardHostEvent } from '../services/utils/events/game-leaderboard-event.utils'
-import { buildGameLoadingEvent } from '../services/utils/events/game-loading-event.utils'
-import {
-  buildGameBeginHostEvent,
-  buildGameBeginPlayerEvent,
-  buildGameLobbyHostEvent,
-  buildGameLobbyPlayerEvent,
-} from '../services/utils/events/game-lobby-event.utils'
-import { buildGamePodiumHostEvent } from '../services/utils/events/game-podium-event.utils'
-import {
-  buildGameQuestionHostEvent,
-  buildGameQuestionPlayerEvent,
-  buildGameQuestionPreviewHostEvent,
-  buildGameQuestionPreviewPlayerEvent,
-} from '../services/utils/events/game-question-event.utils'
-import { buildGameQuitEvent } from '../services/utils/events/game-quit-event.utils'
-import {
-  buildGameResultHostEvent,
-  buildGameResultPlayerEvent,
-} from '../services/utils/events/game-result-event.utils'
+} from '../../repositories/models/schemas'
 import {
   isLeaderboardTask,
   isLobbyTask,
@@ -43,10 +23,30 @@ import {
   isQuestionResultTask,
   isQuestionTask,
   isQuitTask,
-} from '../services/utils/tasks'
+} from '../task-type-guards'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
 import { GameEventOrchestrator as IGameEventOrchestrator } from './game-event-orchestrator.interface'
+import { buildGameLeaderboardHostEvent } from './utils/game-leaderboard-event.utils'
+import { buildGameLoadingEvent } from './utils/game-loading-event.utils'
+import {
+  buildGameBeginHostEvent,
+  buildGameBeginPlayerEvent,
+  buildGameLobbyHostEvent,
+  buildGameLobbyPlayerEvent,
+} from './utils/game-lobby-event.utils'
+import { buildGamePodiumHostEvent } from './utils/game-podium-event.utils'
+import {
+  buildGameQuestionHostEvent,
+  buildGameQuestionPlayerEvent,
+  buildGameQuestionPreviewHostEvent,
+  buildGameQuestionPreviewPlayerEvent,
+} from './utils/game-question-event.utils'
+import { buildGameQuitEvent } from './utils/game-quit-event.utils'
+import {
+  buildGameResultHostEvent,
+  buildGameResultPlayerEvent,
+} from './utils/game-result-event.utils'
 
 @Injectable()
 export class GameEventOrchestrator implements IGameEventOrchestrator {

@@ -21,14 +21,6 @@ import {
   isTypeAnswerQuestion,
 } from '../../../../quiz/services/utils'
 import {
-  isMultiChoiceAnswer,
-  isPinAnswer,
-  isPuzzleAnswer,
-  isRangeAnswer,
-  isTrueFalseAnswer,
-  isTypeAnswerAnswer,
-} from '../../../orchestration/question-answer-type-guards'
-import {
   GameDocument,
   ParticipantPlayerWithBase,
   QuestionTaskAnswer,
@@ -37,6 +29,14 @@ import {
   QuestionTaskPuzzleMetadata,
   TaskType,
 } from '../../../repositories/models/schemas'
+import {
+  isMultiChoiceAnswer,
+  isPinAnswer,
+  isPuzzleAnswer,
+  isRangeAnswer,
+  isTrueFalseAnswer,
+  isTypeAnswerAnswer,
+} from '../../question-answer-type-guards'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 import {

@@ -9,7 +9,9 @@ import {
   QuestionResultTaskWithBase,
   QuestionTaskWithBase,
   QuitTaskWithBase,
-} from '../repositories/models/schemas'
+} from '../../repositories/models/schemas'
+
+import { GameTaskOrchestrator as IGameTaskOrchestrator } from './game-task-orchestrator.interface'
 import {
   buildLeaderboardTask,
   buildLobbyTask,
@@ -18,9 +20,7 @@ import {
   buildQuestionTask,
   buildQuitTask,
   updateParticipantsAndBuildLeaderboard,
-} from '../services/utils/tasks'
-
-import { GameTaskOrchestrator as IGameTaskOrchestrator } from './game-task-orchestrator.interface'
+} from './utils'
 
 @Injectable()
 export class GameTaskOrchestrator implements IGameTaskOrchestrator {

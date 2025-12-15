@@ -12,8 +12,8 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
+import { buildQuitTask } from '../orchestration/task/utils'
 import { buildGameModel } from '../services/utils'
-import { buildQuitTask } from '../services/utils/tasks'
 
 import { Game, GameDocument, TaskType } from './models/schemas'
 

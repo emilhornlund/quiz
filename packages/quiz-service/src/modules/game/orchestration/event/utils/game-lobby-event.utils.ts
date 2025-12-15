@@ -11,7 +11,7 @@ import {
   ParticipantPlayerWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isParticipantPlayer } from '../game-participant.utils'
+import { isParticipantPlayer } from '../../../services/utils'
 
 /**
  * Builds a lobby event for the host, including game and player details.

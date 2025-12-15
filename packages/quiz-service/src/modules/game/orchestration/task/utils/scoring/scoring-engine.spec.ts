@@ -1,10 +1,10 @@
 import { GameMode, QuestionType } from '@quiz/common'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../../../quiz/repositories/models/schemas'
 import {
   QuestionResultTaskCorrectAnswer,
   QuestionTaskAnswer,
-} from '../../../repositories/models/schemas'
+} from '../../../../repositories/models/schemas'
 
 import { ClassicMultiChoiceScoringStrategy } from './classic/classic-multichoice-strategy'
 import {

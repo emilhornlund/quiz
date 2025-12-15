@@ -4,8 +4,8 @@ import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration'
-import { GameTaskOrchestrator } from '../orchestration'
+import { GameEventOrchestrator } from '../orchestration/event'
+import { GameTaskOrchestrator } from '../orchestration/task'
 import { GameResultRepository } from '../repositories'
 import {
   GameDocument,

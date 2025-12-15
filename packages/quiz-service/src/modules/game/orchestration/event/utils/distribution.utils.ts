@@ -12,6 +12,10 @@ import {
   QuestionRangeWithBase,
 } from '../../../../quiz/repositories/models/schemas'
 import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskItem,
+} from '../../../repositories/models/schemas'
+import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
   isPinAnswer,
@@ -24,11 +28,7 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../../orchestration/question-answer-type-guards'
-import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-} from '../../../repositories/models/schemas'
+} from '../../question-answer-type-guards'
 
 /**
  * Creates the answer distribution for a MultiChoice question result event.

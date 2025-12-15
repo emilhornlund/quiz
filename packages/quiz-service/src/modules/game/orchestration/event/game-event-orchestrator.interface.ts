@@ -10,7 +10,7 @@ import {
   ParticipantBase,
   ParticipantPlayer,
   QuestionTaskAnswer,
-} from '../repositories/models/schemas'
+} from '../../repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
 

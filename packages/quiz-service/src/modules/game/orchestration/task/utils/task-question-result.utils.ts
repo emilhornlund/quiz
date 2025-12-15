@@ -22,17 +22,17 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isParticipantPlayer } from '../game-participant.utils'
+import { isParticipantPlayer } from '../../../services/utils/game-participant.utils'
+import { isQuestionResultTask, isQuestionTask } from '../../task-type-guards'
+
 import {
   calculateQuestionScoreForParticipant,
   isQuestionAnswerCorrect,
-} from '../scoring'
-
+} from './scoring'
 import {
   compareSortClassicModeQuestionResultTaskItemByScore,
   compareZeroToOneHundredModeQuestionResultTaskItemByScore,
 } from './task-sorting.utils'
-import { isQuestionResultTask, isQuestionTask } from './task.utils'
 
 /**
  * Finds the question result entry for a specific player in a QuestionResult task.

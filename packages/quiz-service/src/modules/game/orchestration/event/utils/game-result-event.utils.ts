@@ -24,15 +24,17 @@ import {
   QuestionResultTaskWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isParticipantPlayer } from '../game-participant.utils'
+import { isParticipantPlayer } from '../../../services/utils'
 import {
   findLastQuestionResultTask,
   findPreviousQuestionResultForPlayer,
   findQuestionResultForPlayer,
+} from '../../task/utils'
+import {
   isLeaderboardTask,
   isPodiumTask,
   isQuestionResultTask,
-} from '../tasks'
+} from '../../task-type-guards'
 
 import {
   createMultiChoiceQuestionResultDistribution,

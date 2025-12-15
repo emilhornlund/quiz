@@ -27,7 +27,7 @@ import {
   PlayerNotFoundException,
   PlayerNotUniqueException,
 } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration'
+import { GameEventOrchestrator } from '../orchestration/event'
 import {
   isMultiChoiceCorrectAnswer,
   isPinCorrectAnswer,
@@ -36,6 +36,8 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
 } from '../orchestration/question-answer-type-guards'
+import { rebuildQuestionResultTask } from '../orchestration/task/utils'
+import { isQuestionResultTask } from '../orchestration/task-type-guards'
 import { GameRepository } from '../repositories'
 import { TaskType } from '../repositories/models/schemas'
 
@@ -46,7 +48,6 @@ import {
   isNicknameUnique,
   isPlayerUnique,
 } from './utils'
-import { isQuestionResultTask, rebuildQuestionResultTask } from './utils/tasks'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.

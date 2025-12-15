@@ -8,8 +8,7 @@ import {
   LeaderboardTaskWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
-
-import { isQuestionResultTask } from './task.utils'
+import { isQuestionResultTask } from '../../task-type-guards'
 
 /**
  * Updates all player participants with their latest result data and generates

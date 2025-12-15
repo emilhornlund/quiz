@@ -17,7 +17,7 @@ import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
 import { PlayerNotFoundException } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration'
+import { GameEventOrchestrator } from '../orchestration/event'
 import { GameRepository } from '../repositories'
 import { TaskType } from '../repositories/models/schemas'
 

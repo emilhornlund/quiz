@@ -12,6 +12,7 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
+import { buildLobbyTask } from '../../src/modules/game/orchestration/task/utils'
 import {
   BaseTask,
   Game,
@@ -42,7 +43,6 @@ import {
   QuitTask,
   TaskType,
 } from '../../src/modules/game/repositories/models/schemas'
-import { buildLobbyTask } from '../../src/modules/game/services/utils/tasks'
 import {
   BaseQuestionDao,
   QuestionDao,

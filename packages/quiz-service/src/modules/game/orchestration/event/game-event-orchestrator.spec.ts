@@ -11,8 +11,8 @@ import {
   createMockQuestionTaskDocument,
   createMockQuestionTaskMultiChoiceAnswer,
   createMockQuitTaskDocument,
-} from '../../../../test-utils/data'
-import { buildLobbyTask } from '../services/utils/tasks'
+} from '../../../../../test-utils/data'
+import { buildLobbyTask } from '../task/utils'
 
 import { GameEventOrchestrator } from './game-event-orchestrator'
 

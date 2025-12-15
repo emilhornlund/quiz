@@ -34,6 +34,7 @@ import {
 } from '../../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
 import { User, UserModel } from '../../user/repositories'
+import { buildLobbyTask } from '../orchestration/task/utils'
 import {
   BaseTask,
   Game,
@@ -50,7 +51,6 @@ import {
   TaskType,
 } from '../repositories/models/schemas'
 import { GameService } from '../services'
-import { buildLobbyTask } from '../services/utils/tasks'
 
 describe('GameController (e2e)', () => {
   let app: INestApplication

@@ -7,7 +7,7 @@ import {
   QuestionResultTaskWithBase,
   QuestionTaskWithBase,
   QuitTaskWithBase,
-} from '../repositories/models/schemas'
+} from '../../repositories/models/schemas'
 
 export interface GameTaskOrchestrator {
   /**

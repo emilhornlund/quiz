@@ -3,7 +3,7 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEvent, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
-import { GameEventOrchestrator } from '../orchestration'
+import { GameEventOrchestrator } from '../orchestration/event'
 import {
   GameDocument,
   Participant,
