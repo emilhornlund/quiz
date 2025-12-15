@@ -23,11 +23,10 @@ import { AuthService } from '../../authentication/services'
 import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
 import { MigrationService } from '../../migration/services'
+import { isLocalUser } from '../../shared/user'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
 import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'
-
-import { isLocalUser } from './utils'
 
 /**
  * Service responsible for creating and retrieving user accounts.

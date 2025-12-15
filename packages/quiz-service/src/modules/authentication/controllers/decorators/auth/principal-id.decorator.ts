@@ -5,12 +5,16 @@ import {
 } from '@nestjs/common'
 import { TokenDto } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../../guards'
+import { AuthGuardRequest } from '../../../../shared/auth'
+import { User } from '../../../../user/repositories'
 
 /**
  * Parameter decorator that injects the authenticated user's unique identifier.
  *
  * Retrieves `principalId` (the `sub` claim) from the request, as set by AuthGuard.
+ *
+ * The request is typed as `AuthGuardRequest<TokenDto, User>` to reflect both the JWT payload
+ * and the resolved principal attached by the guard.
  *
  * @example
  * ```ts
@@ -27,7 +31,9 @@ import { AuthGuardRequest } from '../../../guards'
  */
 export const PrincipalId = createParamDecorator(
   (_unused: unknown, ctx: ExecutionContext): string => {
-    const req = ctx.switchToHttp().getRequest<AuthGuardRequest<TokenDto>>()
+    const req = ctx
+      .switchToHttp()
+      .getRequest<AuthGuardRequest<TokenDto, User>>()
     if (!req.payload.sub) {
       throw new UnauthorizedException('Missing principalId on request')
     }

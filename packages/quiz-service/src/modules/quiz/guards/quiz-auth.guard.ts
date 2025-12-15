@@ -9,8 +9,11 @@ import {
 import { Reflector } from '@nestjs/core'
 import { QuizVisibility, TokenDto } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../authentication/guards'
-import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../controllers/decorators/auth'
+import {
+  AuthGuardRequest,
+  AUTHORIZED_QUIZ_ALLOW_PUBLIC,
+} from '../../shared/auth'
+import { User } from '../../user/repositories'
 import { QuizRepository } from '../repositories'
 
 /**
@@ -46,7 +49,7 @@ export class QuizAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context
       .switchToHttp()
-      .getRequest<AuthGuardRequest<TokenDto>>()
+      .getRequest<AuthGuardRequest<TokenDto, User>>()
 
     if (!request.user?._id) {
       throw new UnauthorizedException()

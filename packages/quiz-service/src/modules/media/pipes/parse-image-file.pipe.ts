@@ -23,7 +23,8 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthGuardRequest } from '../../authentication/guards'
+import { AuthGuardRequest } from '../../shared/auth'
+import { User } from '../../user/repositories'
 
 /**
  * Pipe that validates, processes, and converts uploaded image files.
@@ -44,7 +45,7 @@ export class ParseImageFilePipe implements PipeTransform<
    * @param logger - Optional logger for error tracking.
    */
   constructor(
-    @Inject(REQUEST) private readonly request: AuthGuardRequest<TokenDto>,
+    @Inject(REQUEST) private readonly request: AuthGuardRequest<TokenDto, User>,
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly logger: Logger = new Logger(ParseImageFilePipe.name),
   ) {}

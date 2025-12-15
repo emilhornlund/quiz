@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common'
 import { TokenDto } from '@quiz/common'
 
+import { AuthGuardRequest } from '../../../../shared/auth'
 import { User } from '../../../../user/repositories'
-import { AuthGuardRequest } from '../../../guards'
 
 /**
  * Parameter decorator that injects the currently authenticated user (principal)
@@ -15,6 +15,9 @@ import { AuthGuardRequest } from '../../../guards'
  * If the request has been successfully authenticated by AuthGuard and the
  * user record was attached to `request.user`, this decorator returns it.
  * Otherwise it throws an UnauthorizedException.
+ *
+ * The request is typed as `AuthGuardRequest<TokenDto, User>` to reflect both the JWT payload
+ * and the resolved principal attached by the guard.
  *
  * @example
  * ```typescript
@@ -30,8 +33,10 @@ import { AuthGuardRequest } from '../../../guards'
  * ```
  */
 export const Principal = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext): User => {
-    const request = ctx.switchToHttp().getRequest<AuthGuardRequest<TokenDto>>()
+  (_data: unknown, ctx: ExecutionContext): User => {
+    const request = ctx
+      .switchToHttp()
+      .getRequest<AuthGuardRequest<TokenDto, User>>()
     if (!request.user) {
       throw new UnauthorizedException('Unauthorized')
     }

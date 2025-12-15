@@ -3,64 +3,12 @@ import { AuthProvider } from '@quiz/common'
 import { Model, now } from 'mongoose'
 
 import { SkipValidation } from '../../../../../app/decorators'
-
-interface IUser {
-  /**
-   * The user’s unique identifier.
-   */
-
-  _id: string
-
-  /**
-   * The user’s authentication provider.
-   */
-  authProvider: AuthProvider
-
-  /**
-   * The user’s unique email address.
-   */
-  email: string
-
-  /**
-   * The user’s unverified email address (optional).
-   */
-  unverifiedEmail?: string
-
-  /**
-   * The user’s given name (optional).
-   */
-  givenName?: string
-
-  /**
-   * The user’s family name (optional).
-   */
-  familyName?: string
-
-  /**
-   * The user’s default nickname used for when participating in games (optional).
-   */
-  defaultNickname: string
-
-  /**
-   * Date and time of the user's last successful login.
-   */
-  lastLoggedInAt?: Date
-
-  /**
-   * Array of migration tokens associated with the user, used during client‐player data migrations.
-   */
-  migrationTokens?: string[]
-
-  /**
-   * Timestamp when the user was created (ISO-8601 string).
-   */
-  createdAt: Date
-
-  /**
-   * Timestamp when the user was last updated (ISO-8601 string).
-   */
-  updatedAt: Date
-}
+import type {
+  SharedGoogleUser,
+  SharedLocalUser,
+  SharedNoneUser,
+  SharedUserBase,
+} from '../../../../shared/user'
 
 /**
  * Mongoose schema for the User collection.
@@ -72,7 +20,7 @@ interface IUser {
   discriminatorKey: 'authProvider',
   timestamps: true,
 })
-export class User implements IUser {
+export class User implements SharedUserBase {
   /**
    * The unique identifier of the user.
    * Acts as the primary key in the database.
@@ -161,7 +109,7 @@ export const UserSchema = SchemaFactory.createForClass(User)
  * Only applies when `provider === AuthProvider.LOCAL`.
  */
 @Schema({ _id: false })
-export class LocalUser implements IUser {
+export class LocalUser implements SharedLocalUser {
   /**
    * The user’s unique identifier.
    */
@@ -230,7 +178,7 @@ export class LocalUser implements IUser {
 export const LocalUserSchema = SchemaFactory.createForClass(LocalUser)
 
 @Schema({ _id: false })
-export class GoogleUser implements IUser {
+export class GoogleUser implements SharedGoogleUser {
   /**
    * The user’s unique identifier.
    */
@@ -302,7 +250,7 @@ export const GoogleUserSchema = SchemaFactory.createForClass(GoogleUser)
  * Schema for a user with no external auth provider (anonymous/legacy player).
  */
 @Schema({ _id: false })
-export class NoneUser implements IUser {
+export class NoneUser implements SharedNoneUser {
   /**
    * The user’s unique identifier.
    */

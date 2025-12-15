@@ -14,8 +14,8 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../authentication/guards'
-import { GAME_PARTICIPANT_TYPE } from '../controllers/decorators/auth'
+import { AuthGuardRequest, GAME_PARTICIPANT_TYPE } from '../../shared/auth'
+import { User } from '../../user/repositories'
 import { GameRepository } from '../repositories'
 
 /**
@@ -49,7 +49,7 @@ export class GameAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context
       .switchToHttp()
-      .getRequest<AuthGuardRequest<GameTokenDto>>()
+      .getRequest<AuthGuardRequest<GameTokenDto, User>>()
 
     const requiredParticipantType =
       this.reflector.getAllAndOverride<GameParticipantType>(
@@ -94,7 +94,7 @@ export class GameAuthGuard implements CanActivate {
    */
   private async verifyGameScopeOrThrow(
     gameID: string,
-    request: AuthGuardRequest<GameTokenDto>,
+    request: AuthGuardRequest<GameTokenDto, User>,
     requiredParticipantType?: GameParticipantType,
   ): Promise<void> {
     if (gameID !== request.payload.gameId) {
@@ -122,7 +122,7 @@ export class GameAuthGuard implements CanActivate {
    */
   private async verifyUserScopeOrThrow(
     gameID: string,
-    request: AuthGuardRequest<TokenDto>,
+    request: AuthGuardRequest<TokenDto, User>,
     requiredParticipantType?: GameParticipantType,
   ): Promise<void> {
     const game = await this.gameRepository.findGameByIDOrThrow(gameID, false)

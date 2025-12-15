@@ -4,12 +4,12 @@ import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import { BaseRepository } from '../../../app/shared/repository'
+import { isGoogleUser } from '../../shared/user'
 import {
   EmailNotUniqueException,
   UserNotFoundByMigrationTokenException,
   UserNotFoundException,
 } from '../exceptions'
-import { isGoogleUser } from '../services/utils'
 
 import { GoogleUser, LocalUser, User, UserModel } from './models'
 

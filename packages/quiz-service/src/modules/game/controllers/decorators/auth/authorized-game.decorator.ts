@@ -1,9 +1,8 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
 import { GameParticipantType } from '@quiz/common'
 
+import { GAME_PARTICIPANT_TYPE } from '../../../../shared/auth'
 import { GameAuthGuard } from '../../../guards'
-
-export const GAME_PARTICIPANT_TYPE = 'gameParticipantType'
 
 /**
  * Decorator for authorizing game-related requests.

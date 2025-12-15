@@ -10,31 +10,14 @@ import { Authority, GameTokenDto, TokenDto, TokenScope } from '@quiz/common'
 import * as Sentry from '@sentry/nestjs'
 import { Request } from 'express'
 
-import { User, UserRepository } from '../../user/repositories'
-import { IS_PUBLIC_KEY } from '../controllers/decorators'
 import {
+  AuthGuardRequest,
+  IS_PUBLIC_KEY,
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
-} from '../controllers/decorators'
+} from '../../shared/auth'
+import { User, UserRepository } from '../../user/repositories'
 import { AuthService } from '../services'
-
-/**
- * Extended Express Request that includes authentication state
- * set by the AuthGuard.
- */
-export interface AuthGuardRequest<T extends TokenDto> extends Request {
-  /**
-   * The authenticated user record, populated when `scope` is `User` or `Game`.
-   * Fetched via `UserRepository.findUserByIdOrThrow(sub)`.
-   */
-  user?: User
-
-  /**
-   * The full JWT payload, including standard claims (`sub`, `scope`, `authorities`)
-   * and any custom claims.
-   */
-  payload: T
-}
 
 /**
  * Guard that enforces JWT‐based authentication and authorization.
@@ -97,7 +80,7 @@ export class AuthGuard implements CanActivate {
 
     const request = context
       .switchToHttp()
-      .getRequest<AuthGuardRequest<TokenDto>>()
+      .getRequest<AuthGuardRequest<TokenDto, User>>()
     const payload = await this.verifyTokenOrThrow(request)
     request.payload = payload
     const { sub, scope, authorities } = payload

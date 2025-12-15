@@ -13,15 +13,16 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { UserRepository } from '../../user/repositories'
 import {
+  AuthGuardRequest,
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
-} from '../controllers/decorators'
+} from '../../shared/auth'
+import { User, UserRepository } from '../../user/repositories'
 import { AuthService } from '../services'
 import { DEFAULT_USER_AUTHORITIES } from '../services/utils'
 
-import { AuthGuard, AuthGuardRequest } from './auth.guard'
+import { AuthGuard } from './auth.guard'
 
 describe('AuthGuard', () => {
   let guard: AuthGuard
@@ -33,7 +34,7 @@ describe('AuthGuard', () => {
   const fakeClass = class {}
 
   function makeContext(
-    req: Partial<AuthGuardRequest<TokenDto>>,
+    req: Partial<AuthGuardRequest<TokenDto, User>>,
   ): ExecutionContext {
     return {
       getHandler: () => fakeHandler,
