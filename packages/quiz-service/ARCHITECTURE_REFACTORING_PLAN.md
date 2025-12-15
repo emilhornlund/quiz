@@ -1,1363 +1,605 @@
-# Quiz-Service Architecture Refactoring - Implementation Plan
+# Circular Dependency Elimination Plan
 
-## Executive Summary
+## Overview
 
-This document outlines a comprehensive refactoring plan to resolve circular dependencies and improve maintainability in the NestJS quiz-service application. The current application has 12 circular dependencies primarily caused by a monolithic GameModule that handles too many responsibilities.
+This document provides a comprehensive refactoring plan to eliminate the 12 circular dependencies currently present in the quiz-service codebase. The plan establishes a clear module hierarchy and introduces orchestration patterns to prevent future regressions.
 
-**Current State:**
+## Current State
 
-- 12 circular dependencies
-- GameModule contains 185 files (44% of codebase)
-- Excessive use of `forwardRef()` indicating architectural problems
-- Scattered authentication logic across modules
+The codebase currently has 12 circular dependencies as identified by madge:
 
-**Target State:**
+1. Authentication decorators → guards coupling
+2. User repository → service utils coupling
+3. Game utils complex web (4 related cycles)
+4. Auth service → User service coupling
+5. Module-level dependencies (3 related cycles)
 
-- 0 circular dependencies
-- Modular architecture with clear separation of concerns
-- Centralized authentication and shared infrastructure
-- Domain-driven module organization
+## A) Dependency Hierarchy Proposal
 
-## Project Context
+### Layer Structure (Bottom → Top)
 
-### Current Architecture Issues
+#### 1. Core/Shared Layer (`modules/shared/`)
 
-1. **GameModule God Object**: Handles game lifecycle, scoring, events, tasks, results, and authentication
-2. **Circular Dependencies**: AuthModule ↔ GameModule ↔ UserModule ↔ MigrationModule
-3. **Scattered Authentication**: Each module has its own auth decorators/guards
-4. **Migration Module Dependencies**: Needs access to Game, Quiz, and User repositories
-5. **Complex Internal Dependencies**: Utility files importing each other in loops
+- **Purpose:** Common utilities, constants, interfaces
+- **Contents:** Base classes, abstract types, pure functions
+- **Dependencies:** None (no dependencies on other modules)
+- **Modules:** `shared/auth/`, `shared/user/`, `shared/game/`
 
-### Target Architecture
+#### 2. Domain Layer (`modules/{domain}/`)
+
+- **Purpose:** Pure domain logic and data access
+- **Contents:** Repositories, models, domain services
+- **Dependencies:** Core/Shared layer only
+- **Modules:** `user/`, `game/`, `quiz/`, `authentication/`
+
+#### 3. Cross-Cutting Layer (`modules/cross-cutting/`)
+
+- **Purpose:** Shared concerns and orchestration
+- **Contents:** Guards, decorators, middleware, event handlers
+- **Dependencies:** Domain layer, Core/Shared layer
+- **Modules:** `cross-cutting/user-auth-orchestrator/`
+
+#### 4. Application Layer (`modules/app/`)
+
+- **Purpose:** Application coordination and entry points
+- **Contents:** Controllers, orchestration modules, DI setup
+- **Dependencies:** All layers below
+- **Modules:** `app/orchestration/`
+
+### Allowed Dependencies Rules
 
 ```
-packages/quiz-service/src/
-├── app/                          # Core application setup
-│   ├── config/
-│   ├── controllers/
-│   ├── decorators/
-│   ├── exceptions/
-│   ├── filters/
-│   ├── shared/                   # Base repository, common interfaces
-│   ├── utils/
-│   └── app.module.ts
-├── modules/                      # All feature modules
-│   ├── shared/                   # Infrastructure & shared utilities
-│   ├── authentication/           # Centralized auth
-│   ├── domain-events/            # Cross-module communication
-│   ├── user/                     # Domain module
-│   ├── quiz/                     # Domain module
-│   ├── game-core/                # Essential game logic only
-│   ├── game-scoring/             # Extracted from game
-│   ├── game-events/              # Extracted from game
-│   ├── game-tasks/               # Extracted from game
-│   ├── game-results/             # Extracted from game
-│   ├── migration/                # Refactored
-│   ├── media/                    # Existing module
-│   ├── email/                    # Existing module
-│   └── health/                   # Infrastructure
-├── main.ts
-└── instrument.ts
+✓ Domain → Core/Shared
+✓ Cross-Cutting → Domain, Core/Shared
+✓ Application → Cross-Cutting, Domain, Core/Shared
+✗ Domain ↔ Domain (use orchestrator)
+✗ Cross-Cutting ↔ Cross-Cutting
 ```
 
-## Implementation Phases
+## B) Cycle-by-Cycle Diagnosis and Fix Strategy
 
-### Phase 0: Preparation (No Breaking Changes)
+### Cycles 1, 8, 9: Decorator → Guard Coupling
 
-#### Step 0.1: Create Migration Scripts
+**Current Cycle Path:**
 
-**Objective:** Establish monitoring and testing infrastructure
+```
+decorators/index.ts → decorators/auth/index.ts → jwt-payload.decorator.ts → guards/index.ts → auth.guard.ts
+```
 
-**Tasks:**
+**Root Cause:** Decorators import guards for type definitions (`AuthGuardRequest<T>`), creating circular dependencies through barrel exports.
 
-1. **Enhance Circular Dependency Script**
-   - Location: `packages/quiz-service/scripts/check_circular_deps.sh`
-   - Update to set error limit to 0 for final state
-   - Add detailed output showing dependency chains
-   - Integrate into CI/CD pipeline
+**Fix Strategy:** Extract shared interfaces to `modules/shared/auth/`
 
-2. **Create Architecture Tests**
-   - Create test file: `packages/quiz-service/src/architecture.spec.ts`
-   - Add tests to verify module boundaries
-   - Add tests to prevent circular dependencies
-   - Add tests to verify dependency direction rules
+- Create `auth-guard.interface.ts` with `AuthGuardRequest<T>` type
+- Move decorator constants to `modules/shared/auth/decorator-constants.ts`
+- Guards depend on shared interfaces, decorators depend only on constants
 
-3. **Establish Baseline Metrics**
-   - Run circular dependency check: `./scripts/check_circular_deps.sh 12`
-   - Document current dependency chains
-   - Create performance benchmarks
-   - Document test coverage baseline
+**Desired After State:** Decorators and guards are independent, both depend on shared interfaces.
 
-**Acceptance Criteria:**
+### Cycle 2: Repository → Service Utils Coupling
 
-- Circular dependency script integrated in CI/CD
-- Architecture tests passing
-- Baseline metrics documented
-- All existing tests passing
+**Current Cycle Path:**
 
-**Status:** COMPLETED
+```
+repositories/index.ts → user.repository.ts → services/utils/index.ts → user.utils.ts
+```
 
-#### Step 0.2: Create New Directory Structure
+**Root Cause:** Repository imports service utilities for type guards (`isGoogleUser`, `isLocalUser`).
 
-**Objective:** Prepare target directory structure without moving files
+**Fix Strategy:** Extract type guards to `modules/shared/user/type-guards.ts`
 
-**Tasks:**
+- Move `isGoogleUser`, `isLocalUser`, etc. to shared location
+- Repository and services both import from shared
 
-1. **Create Modules Directory**
+**Desired After State:** Repository and services are independent, both depend on shared type guards.
 
-   ```bash
-   mkdir -p packages/quiz-service/src/modules
-   ```
+### Cycles 3, 4, 5, 6: Game Utils Complex Web
 
-2. **Create Module Sub-directories**
+**Current Cycle Paths:**
 
-   ```bash
-   # Create all target module directories
-   mkdir -p packages/quiz-service/src/modules/{shared,authentication,domain-events,user,quiz,game-core,game-scoring,game-events,game-tasks,game-results,migration,media,email,health}
-   ```
+```
+question-answer.utils.ts → events/index.ts → distribution.utils.ts
+game-event.utils.ts → game-question-event.utils.ts → question-answer.utils.ts → events/index.ts
+game-question-event.utils.ts → question-answer.utils.ts → events/index.ts
+question-answer.utils.ts → events/index.ts → game-result-event.utils.ts → tasks/index.ts → task-question-result.utils.ts → scoring/index.ts → scoring-engine.ts
+```
 
-3. **Add .gitkeep Files**
+**Root Cause:** Game utility modules have circular dependencies through event distribution and scoring workflows.
 
-   ```bash
-   # Add .gitkeep to maintain empty directories in git
-   touch packages/quiz-service/src/modules/.gitkeep
-   touch packages/quiz-service/src/modules/*/.gitkeep
-   ```
+**Fix Strategy:** Create `modules/game/orchestration/` with:
 
-4. **Create Module Structure Templates**
-   - Create basic module file structure for each new module
-   - Add placeholder files with TODO comments
-   - Create index.ts files for proper exports
+- `GameEventOrchestrator` - coordinates event building and distribution
+- `GameScoringOrchestrator` - coordinates scoring workflows
+- Extract pure utilities to `modules/shared/game/`
 
-**Acceptance Criteria:**
+**Desired After State:** Utils are pure functions, orchestrators handle coordination.
 
-- All target directories created
-- .gitkeep files added
-- Basic structure templates in place
-- No existing functionality affected
+### Cycle 7: Auth Service → User Service Coupling
 
-**Status:** COMPLETED
+**Current Cycle Path:**
 
-### Phase 1: Move Existing Modules (Low Risk)
+```
+services/index.ts → auth.service.ts → user/services/index.ts → user.service.ts
+```
 
-#### Step 1.1: Move Health Module
+**Root Cause:** Auth service directly imports User service for user-related operations.
 
-**Objective:** Relocate health module to new structure
+**Fix Strategy:** Create `modules/cross-cutting/user-auth-orchestrator/`
 
-**Tasks:**
+- Move user-related auth logic to orchestrator
+- Auth service depends on orchestrator interface
+- User service remains independent
 
-1. **Move Health Module Files**
+**Desired After State:** Auth and User services are independent, orchestrator mediates.
 
-   ```bash
-   mv packages/quiz-service/src/health/* packages/quiz-service/src/modules/health/
-   rmdir packages/quiz-service/src/health
-   ```
+### Cycles 10, 11, 12: Module-Level Dependencies
 
-2. **Update Import Paths**
-   - Search for imports from `src/health`
-   - Replace with `src/modules/health`
-   - Update in `app.module.ts`
+**Current Cycle Paths:**
 
-3. **Update Health Module**
-   - Ensure `health.module.ts` exports are correct
-   - Verify all imports within health module are relative
+```
+authentication/index.ts → authentication.module.ts → game/index.ts → game.module.ts → user/index.ts → user.module.ts
+game/index.ts → game.module.ts → user/index.ts → user.module.ts → migration/index.ts → migration.module.ts
+user/index.ts → user.module.ts → migration/index.ts → migration.module.ts
+```
 
-4. **Test Health Functionality**
-   - Run health-related tests
-   - Verify health endpoints work
-   - Check CI/CD health checks
+**Root Cause:** Module imports create cycles through `forwardRef()` usage.
 
-**Files to Modify:**
+**Fix Strategy:** Create `modules/app/orchestration/` with:
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/health`
+- `UserGameMigrationOrchestrator` - handles cross-module workflows
+- Remove direct module dependencies
+- Use dependency injection at service level
 
-**Acceptance Criteria:**
+**Desired After State:** Modules are independent, orchestrator handles cross-module coordination.
 
-- Health module successfully moved
-- All import paths updated
-- Health functionality working
-- All tests passing
+## C) New Modules to Introduce
 
-**Status:** COMPLETED
+### 1. `modules/shared/auth/`
 
-#### Step 1.2: Move Email Module
+**Location:** `packages/quiz-service/src/modules/shared/auth`
 
-**Objective:** Relocate email module to new structure
+**Responsibility:** Shared authentication types and constants
 
-**Tasks:**
+**Exports:**
 
-1. **Move Email Module Files**
+- `AuthGuardRequest<T>` interface
+- Decorator constants (`IS_PUBLIC_KEY`, `REQUIRED_AUTHORITIES_KEY`, `REQUIRED_SCOPES_KEY`)
+- Auth-related interfaces
 
-   ```bash
-   mv packages/quiz-service/src/email/* packages/quiz-service/src/modules/email/
-   rmdir packages/quiz-service/src/email
-   ```
+**Must NOT import:** Any domain modules
 
-2. **Update Import Paths**
-   - Search for imports from `src/email`
-   - Replace with `src/modules/email`
-   - Update in `app.module.ts`
+### 2. `modules/shared/user/`
 
-3. **Update Email Module**
-   - Verify email service configuration
-   - Check email templates and static files
+**Location:** `packages/quiz-service/src/modules/shared/user`
 
-4. **Test Email Functionality**
-   - Run email-related tests
-   - Verify email sending works
-   - Check email service integration
+**Responsibility:** User type guards and shared utilities
 
-**Files to Modify:**
+**Exports:**
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/email`
+- `isGoogleUser`, `isLocalUser`, `isNoneUser` type guards
+- User type utilities
+- User-related constants
 
-**Acceptance Criteria:**
+**Must NOT import:** User service or repository
 
-- Email module successfully moved
-- All import paths updated
-- Email functionality working
-- All tests passing
+### 3. `modules/shared/game/`
 
-**Status:** COMPLETED
+**Location:** `packages/quiz-service/src/modules/shared/game`
 
-#### Step 1.3: Move Media Module
+**Responsibility:** Pure game utilities and constants
 
-**Objective:** Relocate media module to new structure
+**Exports:**
 
-**Tasks:**
+- Game constants
+- Pure utility functions (non-coordinating)
+- Game-related type guards
 
-1. **Move Media Module Files**
+**Must NOT import:** Game services or repositories
 
-   ```bash
-   mv packages/quiz-service/src/media/* packages/quiz-service/src/modules/media/
-   rmdir packages/quiz-service/src/media
-   ```
+### 4. `modules/game/orchestration/`
 
-2. **Update Import Paths**
-   - Search for imports from `src/media`
-   - Replace with `src/modules/media`
-   - Update in `app.module.ts`
+**Location:** `packages/quiz-service/src/modules/game/orchestration`
 
-3. **Update Media Module**
-   - Verify media service configuration
-   - Check file upload paths and permissions
+**Responsibility:** Game event and scoring orchestration
 
-4. **Test Media Functionality**
-   - Run media-related tests
-   - Verify file upload works
-   - Check media search functionality
+**Exports:**
 
-**Files to Modify:**
+- `GameEventOrchestrator` - coordinates event building and distribution
+- `GameScoringOrchestrator` - coordinates scoring workflows
+- Orchestration interfaces
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/media`
+**Must NOT import:** Other orchestrators
 
-**Acceptance Criteria:**
+### 5. `modules/cross-cutting/user-auth-orchestrator/`
 
-- Media module successfully moved
-- All import paths updated
-- Media functionality working
-- All tests passing
+**Location:** `packages/quiz-service/src/modules/cross-cutting/user-auth-orchestrator`
 
-**Status:** COMPLETED
+**Responsibility:** User-authentication coordination
 
-#### Step 1.4: Move User Module
+**Exports:**
 
-**Objective:** Relocate user module to new structure
+- `UserAuthOrchestrator` interface and implementation
+- User-auth coordination utilities
 
-**Tasks:**
+**Must NOT import:** Direct service dependencies
 
-1. **Move User Module Files**
+### 6. `modules/app/orchestration/`
 
-   ```bash
-   mv packages/quiz-service/src/user/* packages/quiz-service/src/modules/user/
-   rmdir packages/quiz-service/src/user
-   ```
+**Location:** `packages/quiz-service/src/modules/app/orchestration`
 
-2. **Update Import Paths**
-   - Search for imports from `src/user`
-   - Replace with `src/modules/user`
-   - Update in `app.module.ts`
+**Responsibility:** Cross-module workflow orchestration
 
-3. **Update User Module**
-   - Verify user service configuration
-   - Check user-related repositories and models
+**Exports:**
 
-4. **Test User Functionality**
-   - Run user-related tests
-   - Verify user CRUD operations
-   - Check user authentication integration
+- `UserGameMigrationOrchestrator`
+- Cross-module coordination interfaces
 
-**Files to Modify:**
+**Must NOT import:** Direct module dependencies
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/user`
+## D) Implementation Sequence
 
-**Acceptance Criteria:**
+| Step | Cycles Eliminated | Expected Count After | Validation Commands                                                                                                                         |
+|------|-------------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| 1    | 1, 2, 8, 9        | 8                    | `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test`                                           |
+| 2    | 3, 4, 5, 6        | 4                    | `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test`                                           |
+| 3    | 7                 | 3                    | `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test`                                           |
+| 4    | 10, 11, 12        | 0                    | `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test`                                           |
+| 5    | N/A               | 0                    | `yarn workspace @quiz/quiz-service test && yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service lint` |
 
-- User module successfully moved
-- All import paths updated
-- User functionality working
-- All tests passing
+### Step 1: Create Shared Infrastructure
 
-**Status:** COMPLETED
+**Scope:** Create `modules/shared/` structure
 
-#### Step 1.5: Move Quiz Module
+**Actions:**
 
-**Objective:** Relocate quiz module to new structure
+1. Create `modules/shared/auth/` with interfaces and constants
+2. Create `modules/shared/user/` with type guards
+3. Create `modules/shared/game/` with pure utilities
+4. Update imports in dependent files
+5. Remove old barrel exports that cause cycles
 
-**Tasks:**
+**Files Affected:**
 
-1. **Move Quiz Module Files**
+- `modules/authentication/controllers/decorators/auth/jwt-payload.decorator.ts`
+- `modules/authentication/guards/auth.guard.ts`
+- `modules/user/repositories/user.repository.ts`
+- `modules/user/services/utils/user.utils.ts`
+- All related index.ts files
 
-   ```bash
-   mv packages/quiz-service/src/quiz/* packages/quiz-service/src/modules/quiz/
-   rmdir packages/quiz-service/src/quiz
-   ```
+**Validation:**
 
-2. **Update Import Paths**
-   - Search for imports from `src/quiz`
-   - Replace with `src/modules/quiz`
-   - Update in `app.module.ts`
+```bash
+yarn workspace @quiz/quiz-service check-circular-deps  # Expect 8 cycles remaining
+yarn workspace @quiz/quiz-service test                 # Ensure all tests pass
+yarn workspace @quiz/quiz-service lint                 # Ensure code quality
+yarn workspace @quiz/quiz-service build                # Build to ensure no compilation errors
+```
 
-3. **Update Quiz Module**
-   - Verify quiz service configuration
-   - Check quiz-related repositories and models
+**Expected Impact:** Eliminates cycles 1, 2, 8, 9
 
-4. **Test Quiz Functionality**
-   - Run quiz-related tests
-   - Verify quiz CRUD operations
-   - Check quiz game integration
+#### Definition of Done
 
-**Files to Modify:**
+- Cycles eliminated: 1, 2, 8, 9
+- Expected cycle count after step: 8
+- `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test` passes
+- Shared extractions completed:
+  - `modules/shared/auth/` contains `AuthGuardRequest<T>` (or equivalent) and decorator constants
+  - `modules/shared/user/` contains user type guards (`isGoogleUser`, `isLocalUser`, `isNoneUser` or equivalent)
+- Affected files no longer import across the previous boundaries:
+  - Decorators do not import guards (directly or via barrels)
+  - User repository does not import service utils (directly or via barrels)
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/quiz`
+#### Rollback
 
-**Acceptance Criteria:**
+- `git revert <commit>` for the Step 1 change set
+- Roll back if any of the following occur:
+  - `yarn workspace @quiz/quiz-service test` fails
+  - `yarn workspace @quiz/quiz-service check-circular-deps` reports more than 8 cycles
+  - `yarn workspace @quiz/quiz-service build` fails (if run in CI for this repo)
 
-- Quiz module successfully moved
-- All import paths updated
-- Quiz functionality working
-- All tests passing
+### Step 2: Extract Game Orchestration
 
-**Status:** COMPLETED
+**Scope:** Game utils and event handling
 
-#### Step 1.6: Move Auth Module
+**Actions:**
 
-**Objective:** Relocate and rename auth module to authentication
+1. Create `modules/game/orchestration/` module
+2. Move coordination logic to `GameEventOrchestrator` and `GameScoringOrchestrator`
+3. Refactor utils to pure functions in `modules/shared/game/`
+4. Update service imports to use orchestrators
+5. Remove circular imports between game utils
 
-**Tasks:**
+**Files Affected:**
 
-1. **Move Auth Module Files**
+- `modules/game/services/utils/question-answer.utils.ts`
+- `modules/game/services/utils/events/*`
+- `modules/game/services/utils/tasks/*`
+- `modules/game/services/utils/scoring/*`
+- Game service files
 
-   ```bash
-   mv packages/quiz-service/src/auth/* packages/quiz-service/src/modules/authentication/
-   rmdir packages/quiz-service/src/auth
-   ```
+**Validation:**
 
-2. **Rename Auth Module**
-   - Rename `auth.module.ts` to `authentication.module.ts`
-   - Update class name from `AuthModule` to `AuthenticationModule`
-   - Update all exports and imports
+```bash
+yarn workspace @quiz/quiz-service check-circular-deps  # Expect 4 cycles remaining
+yarn workspace @quiz/quiz-service test                 # Ensure all tests pass
+yarn workspace @quiz/quiz-service lint                 # Ensure code quality
+yarn workspace @quiz/quiz-service build                # Build to ensure no compilation errors
+```
 
-3. **Update Import Paths**
-   - Search for imports from `src/auth`
-   - Replace with `src/modules/authentication`
-   - Update in `app.module.ts`
+**Expected Impact:** Eliminates cycles 3, 4, 5, 6
 
-4. **Test Authentication Functionality**
-   - Run authentication-related tests
-   - Verify login/logout works
-   - Check JWT token handling
+#### Definition of Done
 
-**Files to Modify:**
+- Cycles eliminated: 3, 4, 5, 6
+- Expected cycle count after step: 4
+- `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test` passes
+- After constraints for Step 2:
+  - `modules/game/services/utils/**` contains no imports from `modules/game/orchestration/**` and does not instantiate or coordinate scoring/event workflows (only pure helpers/types)
+  - orchestration exists under `modules/game/orchestration/**` and coordinates event/scoring workflows
+  - cycle paths 3-6 can no longer occur (no imports from question-answer utils into events barrels causing loops)
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/auth`
-- `packages/quiz-service/src/modules/authentication/authentication.module.ts`
+#### Rollback
 
-**Acceptance Criteria:**
+- `git revert <commit>` for the Step 2 change set
+- Roll back if any of the following occur:
+  - `yarn workspace @quiz/quiz-service test` fails
+  - `yarn workspace @quiz/quiz-service check-circular-deps` reports more than 4 cycles
+  - `yarn workspace @quiz/quiz-service build` fails
 
-- Auth module moved and renamed to authentication
-- All import paths updated
-- Authentication functionality working
-- All tests passing
+### Step 3: Create User-Auth Orchestrator
 
-**Status:** COMPLETED
+**Scope:** Auth and User service coupling
 
-#### Step 1.7: Move Migration Module
+**Actions:**
 
-**Objective:** Relocate migration module to new structure
+1. Create `modules/cross-cutting/user-auth-orchestrator/`
+2. Move user-related auth logic to orchestrator
+3. Update Auth service to use orchestrator interface
+4. Remove direct Auth → User service dependency
+5. Update module imports
 
-**Tasks:**
+**Files Affected:**
 
-1. **Move Migration Module Files**
+- `modules/authentication/services/auth.service.ts`
+- `modules/user/services/user.service.ts`
+- `modules/authentication/authentication.module.ts`
+- New orchestrator files
 
-   ```bash
-   mv packages/quiz-service/src/migration/* packages/quiz-service/src/modules/migration/
-   rmdir packages/quiz-service/src/migration
-   ```
+**Validation:**
 
-2. **Update Import Paths**
-   - Search for imports from `src/migration`
-   - Replace with `src/modules/migration`
-   - Update in `app.module.ts`
+```bash
+yarn workspace @quiz/quiz-service check-circular-deps  # Expect 3 cycles remaining
+yarn workspace @quiz/quiz-service test                 # Ensure all tests pass
+yarn workspace @quiz/quiz-service lint                 # Ensure code quality
+yarn workspace @quiz/quiz-service build                # Build to ensure no compilation errors
+```
 
-3. **Update Migration Module**
-   - Verify migration service configuration
-   - Check migration-related controllers and services
+**Expected Impact:** Eliminates cycle 7
 
-4. **Test Migration Functionality**
-   - Run migration-related tests
-   - Verify user migration works
-   - Check data integrity after migration
+#### Definition of Done
 
-**Files to Modify:**
+- Cycles eliminated: 7
+- Expected cycle count after step: 3
+- `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test` passes
+- Auth no longer imports User service (directly or via barrel index)
+- New orchestrator exists at `modules/cross-cutting/user-auth-orchestrator/` and is the only allowed integration point between auth and user services
+- `AuthService` depends on an orchestrator interface/token (provided by `user-auth-orchestrator`) and has no imports from `modules/user/services/**`
 
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from `src/migration`
+#### Rollback
 
-**Acceptance Criteria:**
+- `git revert <commit>` for the Step 3 change set
+- Roll back if any of the following occur:
+  - `yarn workspace @quiz/quiz-service test` fails
+  - `yarn workspace @quiz/quiz-service check-circular-deps` reports more than 3 cycles
+  - `yarn workspace @quiz/quiz-service build` fails
 
-- Migration module successfully moved
-- All import paths updated
-- Migration functionality working
-- All tests passing
+### Step 4: Create App-Level Orchestration
 
-**Phase 1 Completion Criteria:**
+**Scope:** Module-level dependencies
 
-- All modules moved to `modules/` directory
-- No functional changes
-- All import paths updated
-- All tests passing
-- Circular dependency count unchanged (12)
+**Actions:**
 
-**Status:** COMPLETED
+1. Create `modules/app/orchestration/` module
+2. Create `UserGameMigrationOrchestrator` for cross-module workflows
+3. Remove `forwardRef()` from module definitions
+4. Update module imports to use orchestrators
+5. Refactor cross-module service dependencies
 
-### Phase 2: Extract Game Scoring (Medium Risk)
+**Files Affected:**
 
-#### Step 2.1: Create Game Scoring Module Structure
+- `modules/authentication/authentication.module.ts`
+- `modules/game/game.module.ts`
+- `modules/user/user.module.ts`
+- `modules/migration/migration.module.ts`
+- All module index.ts files
 
-**Objective:** Set up game-scoring module without affecting existing functionality
+**Validation:**
 
-**Tasks:**
+```bash
+yarn workspace @quiz/quiz-service check-circular-deps  # Expect 0 cycles remaining
+yarn workspace @quiz/quiz-service test                 # Ensure all tests pass
+yarn workspace @quiz/quiz-service lint                 # Ensure code quality
+yarn workspace @quiz/quiz-service build                # Build to ensure no compilation errors
+```
 
-1. **Create Game Scoring Directory Structure**
+**Expected Impact:** Eliminates cycles 10, 11, 12
 
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/game-scoring/{strategies,scoring-engine,interfaces,utils}
-   ```
+#### Definition of Done
 
-2. **Copy Scoring Files from Game Module**
+- Cycles eliminated: 10, 11, 12
+- Expected cycle count after step: 0
+- `yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service test` passes
+- No `forwardRef()` remains in module definitions under `modules/authentication/**`, `modules/game/**`, `modules/user/**`, `modules/migration/**`
+- Orchestration module exists at `modules/app/orchestration/` and is the only allowed place for cross-module coordination between game/user/migration/authentication
+- Module-level circular import chain shown in cycles 10–12 can no longer occur (no module barrels pulling in each other)
 
-   ```bash
-   # Copy scoring strategies
-   cp -r packages/quiz-service/src/modules/game/services/utils/scoring/* packages/quiz-service/src/modules/game-scoring/
+#### Rollback
 
-   # Organize into proper structure
-   mv packages/quiz-service/src/modules/game-scoring/classic packages/quiz-service/src/modules/game-scoring/strategies/
-   mv packages/quiz-service/src/modules/game-scoring/zero-to-one-hundred packages/quiz-service/src/modules/game-scoring/strategies/
-   mv packages/quiz-service/src/modules/game-scoring/core packages/quiz-service/src/modules/game-scoring/scoring-engine/
-   ```
+- `git revert <commit>` for the Step 4 change set
+- Roll back if any of the following occur:
+  - `yarn workspace @quiz/quiz-service test` fails
+  - `yarn workspace @quiz/quiz-service check-circular-deps` reports more than 0 cycles
+  - `yarn workspace @quiz/quiz-service build` fails
 
-3. **Create Game Scoring Module File**
-   - Create `packages/quiz-service/src/modules/game-scoring/game-scoring.module.ts`
-   - Define module with proper providers and exports
-   - Don't import anywhere yet
+### Step 5: Barrel File Cleanup
 
-4. **Create Index Files**
-   - Create `index.ts` files for proper exports
-   - Ensure all scoring strategies are exported
-   - Create proper barrel exports
+**Scope:** All index.ts files
 
-**Files to Create:**
+**Actions:**
 
-- `packages/quiz-service/src/modules/game-scoring/game-scoring.module.ts`
-- `packages/quiz-service/src/modules/game-scoring/index.ts`
-- Various `index.ts` files in subdirectories
+1. Review and remove unnecessary barrel exports
+2. Split public API vs internal exports
+3. Update direct imports where needed
+4. Establish barrel file policy compliance
 
-**Acceptance Criteria:**
+**Files Affected:**
 
-- Game scoring module structure created
-- All scoring files copied successfully
-- Module file created but not imported
-- No existing functionality affected
+- All `index.ts` files in the codebase
+- Files that use barrel imports
 
-#### Step 2.2: Create Scoring Module Exports
+**Validation:**
 
-**Objective:** Define proper interfaces and exports for scoring module
+```bash
+yarn workspace @quiz/quiz-service test                 # Ensure all tests pass
+yarn workspace @quiz/quiz-service check-circular-deps  # Confirm 0 cycles
+yarn workspace @quiz/quiz-service lint                 # Ensure code quality
+yarn workspace @quiz/quiz-service build                # Build to ensure no compilation errors
+```
 
-**Tasks:**
+**Expected Impact:** Prevents future barrel-induced cycles
 
-1. **Create Scoring Interfaces**
-   - Create `packages/quiz-service/src/modules/game-scoring/interfaces/scoring.interface.ts`
-   - Define interfaces for scoring strategies
-   - Define interfaces for scoring engine
+#### Definition of Done
 
-2. **Update Scoring Strategies**
-   - Ensure all strategies implement proper interfaces
-   - Update exports in strategy files
-   - Add proper TypeScript types
+- Expected cycle count after step: 0
+- `yarn workspace @quiz/quiz-service test && yarn workspace @quiz/quiz-service check-circular-deps && yarn workspace @quiz/quiz-service lint && yarn workspace @quiz/quiz-service build` passes
+- Public API barrels exist only at module root `index.ts`
+- No internal barrels re-export mixed concerns (services + guards + decorators)
+- Deep barrels like `controllers/decorators/auth/index.ts` are no longer imported anywhere in the codebase
+- Internal imports within a module use direct file imports, not barrels
 
-3. **Create Scoring Engine Exports**
-   - Update scoring-engine exports
-   - Ensure proper dependency injection
-   - Add proper TypeScript types
+#### Rollback
 
-4. **Create Module Exports**
-   - Update `game-scoring.module.ts` with proper providers
-   - Export all scoring strategies
-   - Export scoring engine and interfaces
+- Git revert of this step's commit
+- Rollback conditions: lint failures, test failures, or new circular dependencies introduced
 
-5. **Add Unit Tests**
-   - Create test files for scoring module
-   - Test all scoring strategies
-   - Test scoring engine functionality
+## E) Barrel File Policy
 
-**Files to Modify:**
+### Allowed Barrel Files
 
-- `packages/quiz-service/src/modules/game-scoring/game-scoring.module.ts`
-- All scoring strategy files
-- Scoring engine files
+#### Public API Barrels
 
-**Acceptance Criteria:**
+- **Location:** Module root `index.ts`
+- **Purpose:** Export only public interfaces and services
+- **Example:**
 
-- All scoring interfaces defined
-- Module exports properly configured
-- Unit tests passing
-- No existing functionality affected
+```typescript
+// modules/user/index.ts
+export { UserService, UserRepository } from './services'
+export { User, UserModel } from './repositories/models'
+export type { UserDocument } from './repositories/models/schemas'
+```
 
-#### Step 2.3: Update Game Module to Use Scoring Module
+#### Feature Grouping Barrels
 
-**Objective:** Replace internal scoring with extracted scoring module
+- **Location:** Within shared modules for related utilities
+- **Purpose:** Group related pure functions and types
+- **Example:**
 
-**Tasks:**
+```typescript
+// modules/shared/user/index.ts
+export { isGoogleUser, isLocalUser } from './type-guards'
+export type { UserGuard } from './types'
+```
 
-1. **Import Game Scoring Module**
-   - Add `GameScoringModule` to imports in `game.module.ts`
-   - Remove `forwardRef()` if no longer needed
-   - Update module dependencies
+### Forbidden Barrel Patterns
 
-2. **Update Scoring Imports in Game Module**
-   - Search for imports from `services/utils/scoring`
-   - Replace with imports from `../game-scoring`
-   - Update all scoring-related service injections
+#### Mixed Barrels
 
-3. **Remove Scoring Files from Game Module**
+- **Problem:** Don't export services, repositories, and utilities from same index
+- **Example of what to avoid:**
 
-   ```bash
-   rm -rf packages/quiz-service/src/modules/game/services/utils/scoring
-   ```
+```typescript
+// ❌ BAD: Mixed barrel
+export * from './authentication.module' // Module
+export * from './services/auth.service' // Service
+export * from './guards/auth.guard' // Guard
+export * from './controllers/decorators' // Decorators
+```
 
-4. **Update Game Service Dependencies**
-   - Update `game.service.ts` to use scoring module exports
-   - Update any other services using scoring
-   - Ensure proper dependency injection
+#### Deep Barrels
 
-5. **Test Scoring Integration**
-   - Run game-related tests
-   - Verify scoring still works
-   - Check scoring strategy selection
+- **Problem:** Avoid excessive nesting like `controllers/decorators/auth/index.ts`
+- **Solution:** Use direct imports or flatten structure
 
-**Files to Modify:**
+#### Circular Barrels
 
-- `packages/quiz-service/src/modules/game/game.module.ts`
-- `packages/quiz-service/src/modules/game/services/game.service.ts`
-- Any other files using scoring utilities
+- **Problem:** Never export modules that import each other
+- **Solution:** Use shared modules or orchestrators
 
-**Acceptance Criteria:**
+### Direct Import Guidelines
 
-- Game module imports scoring module
-- Scoring files removed from game module
-- Scoring functionality working
-- Circular dependency count reduced (target: ~10)
-- All tests passing
+1. **Use direct imports for internal module dependencies**
+2. **Reserve barrel imports for external module usage**
+3. **Prefer explicit imports over `export *` for internal code**
+4. **Import specific files when importing within the same module**
 
-### Phase 3: Create Shared Module (Low Risk)
+### Recommended Import Patterns
 
-#### Step 3.1: Extract Common Utilities
+```typescript
+// ✅ GOOD: External module usage
+import { UserService, UserRepository } from '../user'
 
-**Objective:** Create shared module for common utilities and infrastructure
+// ✅ GOOD: Internal module usage
+import { AuthService } from './auth.service'
+import { TokenRepository } from './token.repository'
 
-**Tasks:**
+// ✅ GOOD: Shared utilities
+import { isGoogleUser } from '../../shared/user'
 
-1. **Create Shared Module Structure**
+// ❌ AVOID: Internal barrel imports
+import * as AuthServices from './services'
+```
 
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/shared/{repository,interfaces,utils,constants,decorators}
-   ```
+## Success Criteria
 
-2. **Move App Shared Components**
+### Technical Criteria
 
-   ```bash
-   # Move base repository
-   mv packages/quiz-service/src/app/shared/* packages/quiz-service/src/modules/shared/repository/
-   ```
+- [ ] `yarn workspace @quiz/quiz-service check-circular-deps` returns 0 circular dependencies
+- [ ] All existing tests pass without modification
+- [ ] No `forwardRef()` usage in module definitions
+- [ ] Clear dependency hierarchy enforced
 
-3. **Extract Common Utilities**
-   - Search for duplicate utilities across modules
-   - Move common utilities to shared module
-   - Create proper interfaces for shared components
+### Architectural Criteria
 
-4. **Create Shared Module File**
-   - Create `packages/quiz-service/src/modules/shared/shared.module.ts`
-   - Define module with proper providers and exports
-   - Make it a global module if needed
+- [ ] Shared modules contain no domain logic
+- [ ] Domain modules depend only on shared modules
+- [ ] Cross-cutting concerns properly isolated
+- [ ] Orchestrators handle all cross-module coordination
 
-5. **Create Index Files**
-   - Create `index.ts` files for proper exports
-   - Ensure all shared components are exported
-   - Create proper barrel exports
+### Maintainability Criteria
 
-**Files to Create:**
+- [ ] Barrel file policy documented and enforced
+- [ ] Import patterns consistent across codebase
+- [ ] Module boundaries clearly defined
+- [ ] Future dependency cycles prevented by design
 
-- `packages/quiz-service/src/modules/shared/shared.module.ts`
-- `packages/quiz-service/src/modules/shared/index.ts`
-- Various `index.ts` files in subdirectories
+## Validation Commands
 
-**Acceptance Criteria:**
+```bash
+# Check circular dependencies
+yarn workspace @quiz/quiz-service check-circular-deps
 
-- Shared module structure created
-- Common utilities extracted
-- Module file created with proper exports
-- No existing functionality affected
+# Run all tests
+yarn workspace @quiz/quiz-service test
 
-#### Step 3.2: Update Modules to Use Shared
+# Check code quality
+yarn workspace @quiz/quiz-service lint
 
-**Objective:** Gradually replace duplicate utilities with shared module
+# Build to ensure no compilation errors
+yarn workspace @quiz/quiz-service build
 
-**Tasks:**
+# Run with coverage to ensure no regressions
+yarn test:coverage
+```
 
-1. **Update Authentication Module**
-   - Import SharedModule in authentication.module.ts
-   - Replace duplicate utilities with shared imports
-   - Test authentication functionality
-
-2. **Update User Module**
-   - Import SharedModule in user.module.ts
-   - Replace duplicate utilities with shared imports
-   - Test user functionality
-
-3. **Update Quiz Module**
-   - Import SharedModule in quiz.module.ts
-   - Replace duplicate utilities with shared imports
-   - Test quiz functionality
-
-4. **Update Game Module**
-   - Import SharedModule in game.module.ts
-   - Replace duplicate utilities with shared imports
-   - Test game functionality
-
-5. **Update Remaining Modules**
-   - Update migration, media, email, health modules
-   - Replace duplicate utilities
-   - Test each module independently
-
-**Files to Modify:**
-
-- All module files in `packages/quiz-service/src/modules/`
-- Any files using duplicate utilities
-
-**Acceptance Criteria:**
-
-- All modules using shared utilities
-- Duplicate code eliminated
-- All functionality working
-- Code reduced and more maintainable
-
-### Phase 4: Extract Game Events (Medium Risk)
-
-#### Step 4.1: Create Game Events Module
-
-**Objective:** Extract event handling from game module
-
-**Tasks:**
-
-1. **Create Game Events Module Structure**
-
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/game-events/{publishers,subscribers,handlers,utils,interfaces}
-   ```
-
-2. **Copy Event Files from Game Module**
-
-   ```bash
-   # Copy event publishers and subscribers
-   cp packages/quiz-service/src/modules/game/services/game-event.publisher.ts packages/quiz-service/src/modules/game-events/publishers/
-   cp packages/quiz-service/src/modules/game/services/game-event.subscriber.ts packages/quiz-service/src/modules/game-events/subscribers/
-
-   # Copy event utils
-   cp -r packages/quiz-service/src/modules/game/services/utils/events/* packages/quiz-service/src/modules/game-events/utils/
-   ```
-
-3. **Create Game Events Module File**
-   - Create `packages/quiz-service/src/modules/game-events/game-events.module.ts`
-   - Define module with proper providers and exports
-   - Include EventEmitterModule dependency
-
-4. **Create Index Files**
-   - Create `index.ts` files for proper exports
-   - Ensure all event components are exported
-   - Create proper barrel exports
-
-**Files to Create:**
-
-- `packages/quiz-service/src/modules/game-events/game-events.module.ts`
-- `packages/quiz-service/src/modules/game-events/index.ts`
-- Various `index.ts` files in subdirectories
-
-**Acceptance Criteria:**
-
-- Game events module structure created
-- All event files copied successfully
-- Module file created with proper exports
-- No existing functionality affected
-
-#### Step 4.2: Update Game Module
-
-**Objective:** Replace internal event handling with extracted events module
-
-**Tasks:**
-
-1. **Import Game Events Module**
-   - Add `GameEventsModule` to imports in `game.module.ts`
-   - Remove EventEmitterModule if now handled by GameEventsModule
-   - Update module dependencies
-
-2. **Update Event Imports in Game Module**
-   - Search for imports from `services/game-event.publisher`
-   - Replace with imports from `../game-events`
-   - Update all event-related service injections
-
-3. **Remove Event Files from Game Module**
-
-   ```bash
-   rm packages/quiz-service/src/modules/game/services/game-event.publisher.ts
-   rm packages/quiz-service/src/modules/game/services/game-event.subscriber.ts
-   rm -rf packages/quiz-service/src/modules/game/services/utils/events
-   ```
-
-4. **Update Game Service Dependencies**
-   - Update `game.service.ts` to use events module exports
-   - Update any other services using events
-   - Ensure proper dependency injection
-
-5. **Test Event Integration**
-   - Run game-related tests
-   - Verify event publishing still works
-   - Check event subscription functionality
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/modules/game/game.module.ts`
-- `packages/quiz-service/src/modules/game/services/game.service.ts`
-- Any other files using event utilities
-
-**Acceptance Criteria:**
-
-- Game module imports events module
-- Event files removed from game module
-- Event functionality working
-- Circular dependency count reduced (target: ~7)
-- All tests passing
-
-### Phase 5: Extract Game Tasks (Medium Risk)
-
-#### Step 5.1: Create Game Tasks Module
-
-**Objective:** Extract task management from game module
-
-**Tasks:**
-
-1. **Create Game Tasks Module Structure**
-
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/game-tasks/{schedulers,transition-services,utils,interfaces}
-   ```
-
-2. **Copy Task Files from Game Module**
-
-   ```bash
-   # Copy task services
-   cp packages/quiz-service/src/modules/game/services/game-task-transition*.ts packages/quiz-service/src/modules/game-tasks/transition-services/
-
-   # Copy task utils
-   cp -r packages/quiz-service/src/modules/game/services/utils/tasks/* packages/quiz-service/src/modules/game-tasks/utils/
-   ```
-
-3. **Create Game Tasks Module File**
-   - Create `packages/quiz-service/src/modules/game-tasks/game-tasks.module.ts`
-   - Define module with proper providers and exports
-   - Include BullModule dependency for task queues
-
-4. **Create Index Files**
-   - Create `index.ts` files for proper exports
-   - Ensure all task components are exported
-   - Create proper barrel exports
-
-**Files to Create:**
-
-- `packages/quiz-service/src/modules/game-tasks/game-tasks.module.ts`
-- `packages/quiz-service/src/modules/game-tasks/index.ts`
-- Various `index.ts` files in subdirectories
-
-**Acceptance Criteria:**
-
-- Game tasks module structure created
-- All task files copied successfully
-- Module file created with proper exports
-- No existing functionality affected
-
-#### Step 5.2: Update Game Module
-
-**Objective:** Replace internal task management with extracted tasks module
-
-**Tasks:**
-
-1. **Import Game Tasks Module**
-   - Add `GameTasksModule` to imports in `game.module.ts`
-   - Remove BullModule if now handled by GameTasksModule
-   - Update module dependencies
-
-2. **Update Task Imports in Game Module**
-   - Search for imports from task services
-   - Replace with imports from `../game-tasks`
-   - Update all task-related service injections
-
-3. **Remove Task Files from Game Module**
-
-   ```bash
-   rm packages/quiz-service/src/modules/game/services/game-task-transition*.ts
-   rm -rf packages/quiz-service/src/modules/game/services/utils/tasks
-   ```
-
-4. **Update Game Service Dependencies**
-   - Update `game.service.ts` to use tasks module exports
-   - Update any other services using task utilities
-   - Ensure proper dependency injection
-
-5. **Test Task Integration**
-   - Run game-related tests
-   - Verify task transitions still work
-   - Check task scheduling functionality
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/modules/game/game.module.ts`
-- `packages/quiz-service/src/modules/game/services/game.service.ts`
-- Any other files using task utilities
-
-**Acceptance Criteria:**
-
-- Game module imports tasks module
-- Task files removed from game module
-- Task functionality working
-- Circular dependency count reduced (target: ~5)
-- All tests passing
-
-### Phase 6: Extract Game Results (Medium Risk)
-
-#### Step 6.1: Create Game Results Module
-
-**Objective:** Extract result processing from game module
-
-**Tasks:**
-
-1. **Create Game Results Module Structure**
-
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/game-results/{processors,converters,repositories,utils,interfaces}
-   ```
-
-2. **Copy Result Files from Game Module**
-
-   ```bash
-   # Copy result services
-   cp packages/quiz-service/src/modules/game/services/game-result.service.ts packages/quiz-service/src/modules/game-results/processors/
-
-   # Copy result repositories
-   cp packages/quiz-service/src/modules/game/repositories/game-result.repository.ts packages/quiz-service/src/modules/game-results/repositories/
-
-   # Copy result utils
-   cp packages/quiz-service/src/modules/game/services/utils/game-result.converter.ts packages/quiz-service/src/modules/game-results/converters/
-   ```
-
-3. **Create Game Results Module File**
-   - Create `packages/quiz-service/src/modules/game-results/game-results.module.ts`
-   - Define module with proper providers and exports
-   - Include MongooseModule for result schemas
-
-4. **Create Index Files**
-   - Create `index.ts` files for proper exports
-   - Ensure all result components are exported
-   - Create proper barrel exports
-
-**Files to Create:**
-
-- `packages/quiz-service/src/modules/game-results/game-results.module.ts`
-- `packages/quiz-service/src/modules/game-results/index.ts`
-- Various `index.ts` files in subdirectories
-
-**Acceptance Criteria:**
-
-- Game results module structure created
-- All result files copied successfully
-- Module file created with proper exports
-- No existing functionality affected
-
-#### Step 6.2: Update Game Module
-
-**Objective:** Replace internal result processing with extracted results module
-
-**Tasks:**
-
-1. **Import Game Results Module**
-   - Add `GameResultsModule` to imports in `game.module.ts`
-   - Remove result-related MongooseModule definitions
-   - Update module dependencies
-
-2. **Update Result Imports in Game Module**
-   - Search for imports from result services and repositories
-   - Replace with imports from `../game-results`
-   - Update all result-related service injections
-
-3. **Remove Result Files from Game Module**
-
-   ```bash
-   rm packages/quiz-service/src/modules/game/services/game-result.service.ts
-   rm packages/quiz-service/src/modules/game/repositories/game-result.repository.ts
-   rm packages/quiz-service/src/modules/game/services/utils/game-result.converter.ts
-   ```
-
-4. **Update Game Service Dependencies**
-   - Update `game.service.ts` to use results module exports
-   - Update any other services using result utilities
-   - Ensure proper dependency injection
-
-5. **Test Result Integration**
-   - Run game-related tests
-   - Verify result processing still works
-   - Check result calculation functionality
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/modules/game/game.module.ts`
-- `packages/quiz-service/src/modules/game/services/game.service.ts`
-- Any other files using result utilities
-
-**Acceptance Criteria:**
-
-- Game module imports results module
-- Result files removed from game module
-- Result functionality working
-- Circular dependency count reduced (target: ~3)
-- All tests passing
-
-### Phase 7: Create Domain Events (High Risk)
-
-#### Step 7.1: Create Domain Events Infrastructure
-
-**Objective:** Implement domain event pattern for cross-module communication
-
-**Tasks:**
-
-1. **Create Domain Events Module Structure**
-
-   ```bash
-   mkdir -p packages/quiz-service/src/modules/domain-events/{events,handlers,publishers,interfaces,decorators}
-   ```
-
-2. **Create Domain Event Interfaces**
-   - Create `packages/quiz-service/src/modules/domain-events/interfaces/domain-event.interface.ts`
-   - Create `packages/quiz-service/src/modules/domain-events/interfaces/event-handler.interface.ts`
-   - Define base event and handler interfaces
-
-3. **Create Event Bus**
-   - Create `packages/quiz-service/src/modules/domain-events/publishers/event-bus.ts`
-   - Implement event publishing and subscription
-   - Add event filtering and routing
-
-4. **Create Event Decorators**
-   - Create `packages/quiz-service/src/modules/domain-events/decorators/event-handler.decorator.ts`
-   - Create `packages/quiz-service/src/modules/domain-events/decorators/publish-event.decorator.ts`
-
-5. **Create Domain Events Module**
-   - Create `packages/quiz-service/src/modules/domain-events/domain-events.module.ts`
-   - Set up event bus as a provider
-   - Configure event discovery and registration
-
-**Files to Create:**
-
-- `packages/quiz-service/src/modules/domain-events/domain-events.module.ts`
-- `packages/quiz-service/src/modules/domain-events/index.ts`
-- Various interface and implementation files
-
-**Acceptance Criteria:**
-
-- Domain events infrastructure created
-- Event bus implemented
-- Decorators for event handling created
-- Module file created with proper exports
-- No existing functionality affected
-
-#### Step 7.2: Replace One Circular Dependency
-
-**Objective:** Replace first circular dependency with domain events
-
-**Tasks:**
-
-1. **Identify Target Circular Dependency**
-   - Choose AuthModule ↔ UserModule circular dependency
-   - Analyze current communication patterns
-   - Identify events to be published
-
-2. **Create Domain Events**
-   - Create user-related events (e.g., UserCreatedEvent, UserUpdatedEvent)
-   - Create auth-related events (e.g., UserLoggedInEvent, UserLoggedOutEvent)
-   - Define event payloads and metadata
-
-3. **Implement Event Handlers**
-   - Create event handlers in AuthModule for user events
-   - Create event handlers in UserModule for auth events
-   - Replace direct service calls with event publishing
-
-4. **Update Module Dependencies**
-   - Remove direct imports between AuthModule and UserModule
-   - Import DomainEventsModule in both modules
-   - Remove `forwardRef()` calls if no longer needed
-
-5. **Test Event-Driven Communication**
-   - Run tests for auth and user functionality
-   - Verify events are published and handled correctly
-   - Check that no circular dependencies remain
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/modules/authentication/authentication.module.ts`
-- `packages/quiz-service/src/modules/user/user.module.ts`
-- Auth and User service files
-
-**Acceptance Criteria:**
-
-- Auth ↔ User circular dependency eliminated
-- Event-driven communication working
-- All auth and user functionality working
-- Circular dependency count reduced
-
-#### Step 7.3: Replace Remaining Circular Dependencies
-
-**Objective:** Eliminate all remaining circular dependencies using domain events
-
-**Tasks:**
-
-1. **Replace GameModule ↔ UserModule Dependency**
-   - Create user events for game-related updates
-   - Create game events for user-related updates
-   - Implement event handlers in both modules
-   - Remove direct module dependencies
-
-2. **Replace MigrationModule Dependencies**
-   - Create events for data changes that trigger migration
-   - Implement event handlers in MigrationModule
-   - Remove direct imports from MigrationModule
-   - Test migration functionality
-
-3. **Replace GameModule ↔ QuizModule Dependency**
-   - Create quiz events for game-related updates
-   - Create game events for quiz-related updates
-   - Implement event handlers in both modules
-   - Remove direct module dependencies
-
-4. **Remove All forwardRef() Calls**
-   - Search for remaining `forwardRef()` usage
-   - Replace with domain events where appropriate
-   - Update module imports and exports
-
-5. **Final Testing**
-   - Run full test suite
-   - Verify all functionality works
-   - Check circular dependency count (should be 0)
-
-**Files to Modify:**
-
-- All module files with circular dependencies
-- Service files with direct cross-module calls
-- Any remaining files using `forwardRef()`
-
-**Acceptance Criteria:**
-
-- All circular dependencies eliminated
-- No `forwardRef()` calls remaining
-- All functionality working
-- Circular dependency count = 0
-
-### Phase 8: Final Cleanup (Low Risk)
-
-#### Step 8.1: Rename Game Module
-
-**Objective:** Rename game module to game-core to reflect its focused responsibilities
-
-**Tasks:**
-
-1. **Rename Game Module Directory**
-
-   ```bash
-   mv packages/quiz-service/src/modules/game packages/quiz-service/src/modules/game-core
-   ```
-
-2. **Rename Module File**
-
-   ```bash
-   mv packages/quiz-service/src/modules/game-core/game.module.ts packages/quiz-service/src/modules/game-core/game-core.module.ts
-   ```
-
-3. **Update Module Class Name**
-   - Rename `GameModule` to `GameCoreModule`
-   - Update all exports and imports
-   - Update module decorators
-
-4. **Update All Import Paths**
-   - Search for imports from `modules/game`
-   - Replace with `modules/game-core`
-   - Update in `app.module.ts` and all other modules
-
-5. **Test Game Core Functionality**
-   - Run game-related tests
-   - Verify core game functionality works
-   - Check integration with extracted modules
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/modules/game-core/game-core.module.ts`
-- `packages/quiz-service/src/app.module.ts`
-- Any files importing from game module
-
-**Acceptance Criteria:**
-
-- Game module renamed to game-core
-- All import paths updated
-- Game core functionality working
-- All tests passing
-
-#### Step 8.2: Update AppModule
-
-**Objective:** Clean up and optimize the root application module
-
-**Tasks:**
-
-1. **Clean Up Module Imports**
-   - Remove unused imports
-   - Organize imports alphabetically
-   - Add proper import grouping
-
-2. **Optimize Module Loading Order**
-   - Ensure shared modules load first
-   - Order domain modules appropriately
-   - Verify no dependency issues
-
-3. **Update Module Exports**
-   - Remove unnecessary exports
-   - Ensure proper module boundaries
-   - Add global providers if needed
-
-4. **Add Module Documentation**
-   - Add JSDoc comments for AppModule
-   - Document module dependencies
-   - Add architectural notes
-
-5. **Final Integration Testing**
-   - Run full application
-   - Test all endpoints
-   - Verify module interactions
-
-**Files to Modify:**
-
-- `packages/quiz-service/src/app/app.module.ts`
-
-**Acceptance Criteria:**
-
-- AppModule clean and optimized
-- Proper module loading order
-- All functionality working
-- Documentation added
-
-#### Step 8.3: Documentation
-
-**Objective:** Create comprehensive documentation for the new architecture
-
-**Tasks:**
-
-1. **Update README**
-   - Document new module structure
-   - Add architecture overview
-   - Include dependency guidelines
-
-2. **Create Module Documentation**
-   - Create README files for each module
-   - Document module responsibilities
-   - Include usage examples
-
-3. **Create Architecture Decision Records (ADRs)**
-   - Document decision to extract game modules
-   - Record domain events implementation
-   - Document circular dependency resolution
-
-4. **Update Development Guidelines**
-   - Add module creation guidelines
-   - Include dependency rules
-   - Add testing requirements
-
-5. **Create Migration Guide**
-   - Document the refactoring process
-   - Include lessons learned
-   - Provide best practices for future changes
-
-**Files to Create:**
-
-- `packages/quiz-service/README.md`
-- `packages/quiz-service/docs/architecture.md`
-- `packages/quiz-service/docs/adr/`
-- Module-specific README files
-
-**Acceptance Criteria:**
-
-- Comprehensive documentation created
-- Architecture decisions documented
-- Development guidelines updated
-- Migration guide completed
-
-## Success Metrics
-
-### Quantitative Metrics
-
-- **Circular Dependencies**: 12 → 0
-- **Game Module Size**: 185 files → ~30 files
-- **Number of Modules**: 7 → 14
-- **Code Duplication**: Reduce by 30%
-- **Test Coverage**: Maintain >90%
-
-### Qualitative Metrics
-
-- **Module Cohesion**: High (single responsibility)
-- **Module Coupling**: Low (minimal dependencies)
-- **Code Maintainability**: Improved
-- **Developer Experience**: Better
-- **System Scalability**: Enhanced
-
-## Risk Management
-
-### High-Risk Activities
-
-1. **Domain Events Implementation** (Phase 7)
-2. **Circular Dependency Resolution** (Phase 7)
-3. **Game Module Extraction** (Phases 2-6)
-
-### Mitigation Strategies
-
-1. **Incremental Approach**: Small, testable changes
-2. **Comprehensive Testing**: Unit, integration, and E2E tests
-3. **Rollback Planning**: Git commits for each step
-4. **Monitoring**: Circular dependency checks in CI/CD
-
-### Rollback Procedures
-
-1. **Git Revert**: Each step is a separate commit
-2. **Feature Flags**: Enable/disable new modules
-3. **Database Migrations**: Rollback scripts if needed
-4. **Configuration**: Environment-based module loading
-
-## Testing Strategy
-
-### Unit Testing
-
-- Test each module independently
-- Mock external dependencies
-- Verify module boundaries
-- Test domain events
-
-### Integration Testing
-
-- Test module interactions
-- Verify event-driven communication
-- Test database operations
-- Check API endpoints
-
-### End-to-End Testing
-
-- Test complete user flows
-- Verify game functionality
-- Check authentication flows
-- Test migration processes
-
-### Architecture Testing
-
-- Verify no circular dependencies
-- Check module boundaries
-- Test dependency direction
-- Verify architectural rules
-
-## Implementation Timeline
-
-### Estimated Duration
-
-- **Phase 0**: 1-2 days
-- **Phase 1**: 3-5 days
-- **Phase 2**: 2-3 days
-- **Phase 3**: 2-3 days
-- **Phase 4**: 2-3 days
-- **Phase 5**: 2-3 days
-- **Phase 6**: 2-3 days
-- **Phase 7**: 5-7 days
-- **Phase 8**: 2-3 days
-
-**Total Estimated Time**: 21-32 days
-
-### Milestones
-
-1. **Week 1**: Phases 0-1 (Structure setup and module moves)
-2. **Week 2**: Phases 2-4 (Game module extractions)
-3. **Week 3**: Phases 5-6 (Remaining extractions)
-4. **Week 4**: Phases 7-8 (Domain events and cleanup)
-
-## Prerequisites
-
-### Tools and Dependencies
-
-- **Node.js** and **npm/yarn**
-- **NestJS CLI**
-- **TypeScript**
-- **Jest** (testing)
-- **Madge** (circular dependency detection)
-- **Git** (version control)
-
-### Knowledge Requirements
-
-- **NestJS** framework expertise
-- **TypeScript** proficiency
-- **Domain-Driven Design** principles
-- **Event-Driven Architecture** patterns
-- **Circular Dependency** resolution techniques
-
-### Environment Setup
-
-- **Development environment** configured
-- **CI/CD pipeline** ready
-- **Testing infrastructure** in place
-- **Monitoring tools** configured
-
-## Conclusion
-
-This comprehensive refactoring plan will transform the quiz-service application from a monolithic architecture with circular dependencies to a clean, modular, and maintainable system. The incremental approach ensures minimal risk while delivering significant improvements in code quality, maintainability, and scalability.
-
-The successful completion of this plan will result in:
-
-- Zero circular dependencies
-- Clear module boundaries
-- Improved code organization
-- Enhanced developer experience
-- Better system scalability
-
-Each phase is designed to be independently testable and reversible, ensuring that the refactoring can be completed safely without disrupting the existing functionality.
+This plan provides a systematic approach to eliminating all circular dependencies while establishing a maintainable architecture that prevents future regressions.
