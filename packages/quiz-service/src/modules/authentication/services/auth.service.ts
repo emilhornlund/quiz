@@ -22,8 +22,8 @@ import {
 import ms from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameRepository } from '../../../game/repositories'
-import { GameDocument } from '../../../game/repositories/models/schemas'
+import { GameRepository } from '../../game/repositories'
+import { GameDocument } from '../../game/repositories/models/schemas'
 import { MigrationService } from '../../migration/services'
 import { LocalUser } from '../../user/repositories'
 import { UserService } from '../../user/services'

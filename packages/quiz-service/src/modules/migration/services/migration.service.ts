@@ -6,10 +6,7 @@ import {
   Logger,
 } from '@nestjs/common'
 
-import {
-  GameRepository,
-  GameResultRepository,
-} from '../../../game/repositories'
+import { GameRepository, GameResultRepository } from '../../game/repositories'
 import { QuizRepository } from '../../quiz/repositories'
 import { User, UserRepository } from '../../user/repositories'
 

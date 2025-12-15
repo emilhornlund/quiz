@@ -10,7 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import * as jwt from 'jsonwebtoken'
 
 import { EnvironmentVariables } from '../../app/config'
-import { GameModule } from '../../game'
+import { GameModule } from '../game'
 import { MigrationModule } from '../migration'
 import { UserModule } from '../user'
 

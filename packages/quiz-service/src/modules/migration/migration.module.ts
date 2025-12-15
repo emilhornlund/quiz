@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common'
 
-import { GameModule } from '../../game'
+import { GameModule } from '../game'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 

@@ -2,10 +2,7 @@ import { BadRequestException } from '@nestjs/common'
 import { AuthProvider } from '@quiz/common'
 
 import { computeMigrationToken } from '../../../../test-utils/utils'
-import {
-  GameRepository,
-  GameResultRepository,
-} from '../../../game/repositories'
+import { GameRepository, GameResultRepository } from '../../game/repositories'
 import { QuizRepository } from '../../quiz/repositories'
 import { UserNotFoundByMigrationTokenException } from '../../user/exceptions'
 import { NoneUser, User, UserRepository } from '../../user/repositories'
