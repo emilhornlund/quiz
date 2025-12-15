@@ -7,7 +7,7 @@ import {
   DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME,
   DEFAULT_GAME_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
-} from '../../src/modules/authentication/services/utils'
+} from '../../src/modules/shared/token'
 import { User, UserModel } from '../../src/modules/user/repositories'
 import { buildMockPrimaryUser } from '../data'
 

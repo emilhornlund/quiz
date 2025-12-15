@@ -2,8 +2,6 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
-  forwardRef,
-  Inject,
   Injectable,
   Logger,
 } from '@nestjs/common'
@@ -19,11 +17,11 @@ import {
 import * as bcrypt from 'bcryptjs'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthService } from '../../authentication/services'
 import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
 import { MigrationService } from '../../migration/services'
 import { isLocalUser } from '../../shared/user'
+import { TokenService } from '../../token/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
 import { GoogleUser, LocalUser, User, UserRepository } from '../repositories'
@@ -39,16 +37,15 @@ export class UserService {
   /**
    * Initializes the UserService.
    *
-   * @param userRepository     Repository for user data access.
-   * @param authService        Service for authentication operations.
-   * @param emailService       Service for sending emails (verification, welcome, etc.).
-   * @param migrationService   Service responsible for migrating legacy user data.
-   * @param configService      Service for reading application configuration.
+   * @param userRepository - Repository for user data access.
+   * @param tokenService - Service used to issue user-scoped tokens for email verification and password reset flows.
+   * @param emailService - Service for sending emails (verification, welcome, etc.).
+   * @param migrationService - Service responsible for migrating legacy user data.
+   * @param configService - Service for reading application configuration.
    */
   constructor(
     private readonly userRepository: UserRepository,
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
     private readonly emailService: EmailService,
     private readonly migrationService: MigrationService,
     private readonly configService: ConfigService<EnvironmentVariables>,
@@ -578,7 +575,7 @@ export class UserService {
     this.logger.debug(
       `Generating verification link for user '${userId}' and unverified email '${unverifiedEmail}'.`,
     )
-    const verificationToken = await this.authService.signVerifyEmailToken(
+    const verificationToken = await this.tokenService.signVerifyEmailToken(
       userId,
       unverifiedEmail,
     )
@@ -598,7 +595,7 @@ export class UserService {
     this.logger.debug(`Generating password reset link for user '${userId}'.`)
 
     const passwordResetToken =
-      await this.authService.signPasswordResetToken(userId)
+      await this.tokenService.signPasswordResetToken(userId)
 
     return `${this.configService.get('KLURIGO_URL')}/auth/password/reset?token=${passwordResetToken}`
   }

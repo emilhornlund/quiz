@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { JwtService } from '@nestjs/jwt'
 import {
   AuthGameRequestDto,
   AuthLoginRequestDto,
@@ -17,29 +16,24 @@ import {
   GameTokenDto,
   TokenDto,
   TokenScope,
-  TokenType,
 } from '@quiz/common'
-import ms from 'ms'
 import { v4 as uuidv4 } from 'uuid'
 
 import { GameRepository } from '../../game/repositories'
 import { GameDocument } from '../../game/repositories/models/schemas'
 import { MigrationService } from '../../migration/services'
+import { TokenService } from '../../token/services'
 import { LocalUser } from '../../user/repositories'
 import { UserService } from '../../user/services'
 
 import { GoogleAuthService } from './google-auth.service'
 import { UserLoginEvent } from './models'
-import { TokenRepository } from './token.repository'
-import {
-  getTokenAuthorities,
-  getTokenExpiresIn,
-  USER_LOGIN_EVENT_KEY,
-} from './utils'
+import { USER_LOGIN_EVENT_KEY } from './utils'
 
 /**
- * Service responsible for authenticating users and managing JWT token
- * issuance (login, legacy auth, and refresh).
+ * Service responsible for authenticating users and managing authentication workflows.
+ *
+ * This service delegates JWT signing, verification, and token persistence concerns to TokenService.
  */
 @Injectable()
 export class AuthService {
@@ -51,10 +45,9 @@ export class AuthService {
    *
    * @param userService - Service for user credential verification.
    * @param gameRepository - Repository for accessing game data.
-   * @param tokenRepository - Repository for persisting and retrieving token metadata.
-   * @param jwtService - Service for generating and verifying JWT tokens.
+   * @param tokenService - Service for signing, verifying, and revoking JWTs, and validating token persistence.
    * @param eventEmitter - EventEmitter2 instance for emitting authentication-related events.
-   * @param googleAuthService - Service responsible for handling Google OAuth flows
+   * @param googleAuthService - Service responsible for handling Google OAuth flows.
    * @param migrationService - Service responsible for migrating data from legacy anonymous users into existing accounts.
    */
   constructor(
@@ -62,8 +55,7 @@ export class AuthService {
     private readonly userService: UserService,
     @Inject(forwardRef(() => GameRepository))
     private readonly gameRepository: GameRepository,
-    private readonly tokenRepository: TokenRepository,
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
     private readonly eventEmitter: EventEmitter2,
     private readonly googleAuthService: GoogleAuthService,
     private readonly migrationService: MigrationService,
@@ -105,7 +97,7 @@ export class AuthService {
       }
     }
 
-    const tokenPair = await this.signTokenPair(
+    const tokenPair = await this.tokenService.signTokenPair(
       userId,
       TokenScope.User,
       ipAddress,
@@ -146,7 +138,7 @@ export class AuthService {
       migrationToken,
     )
 
-    const tokenPair = await this.signTokenPair(
+    const tokenPair = await this.tokenService.signTokenPair(
       userId,
       TokenScope.User,
       ipAddress,
@@ -211,7 +203,7 @@ export class AuthService {
       `Authenticating game '${gameId}' and participant '${participantId}:${participantType}'.`,
     )
 
-    return this.signTokenPair(
+    return this.tokenService.signTokenPair(
       participantId,
       TokenScope.Game,
       ipAddress,
@@ -240,7 +232,7 @@ export class AuthService {
     let payload: TokenDto
 
     try {
-      payload = await this.jwtService.verifyAsync<TokenDto>(
+      payload = await this.tokenService.verifyToken(
         authRefreshRequestDto.refreshToken,
       )
     } catch (error) {
@@ -250,7 +242,7 @@ export class AuthService {
     }
 
     try {
-      await this.tokenRepository.findTokenByIdOrThrow(payload.jti)
+      await this.tokenService.tokenExistsOrThrow(payload.jti)
     } catch (error) {
       const { message, stack } = error as Error
       this.logger.debug(
@@ -275,7 +267,7 @@ export class AuthService {
     }
 
     this.logger.debug(`Refreshing token with userId '${payload.sub}'.`)
-    const tokenPair = await this.signTokenPair(
+    const tokenPair = await this.tokenService.signTokenPair(
       payload.sub,
       payload.scope,
       ipAddress,
@@ -288,189 +280,6 @@ export class AuthService {
     }
 
     return tokenPair
-  }
-
-  /**
-   * Revokes the specified JWT token.
-   *
-   * @param token - The JWT string that should be invalidated.
-   * @returns A promise that resolves when the token has been revoked.
-   */
-  public async revoke(token: string): Promise<void> {
-    try {
-      const { jti } = this.jwtService.decode<TokenDto>(token)
-
-      const document = await this.tokenRepository.findTokenById(jti)
-      if (document) {
-        await this.tokenRepository.deleteTokensByPairId(document.pairId)
-      }
-    } catch (error) {
-      const { message, stack } = error as Error
-      this.logger.debug(`Failed to revoke token: '${message}'.`, stack)
-    }
-  }
-
-  /**
-   * Generates a new access token (15m) and refresh token (30d) for the given user.
-   *
-   * @param subject - The subject (user ID) for whom to sign the tokens.
-   * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
-   * @param ipAddress - The client's IP address to record in the token metadata.
-   * @param userAgent - The client's User-Agent string to record in the token metadata.
-   * @param additionalClaims - Extra payload (e.g. gameId, participantType).
-   * @returns Promise resolving to AuthResponseDto with both tokens.
-   * @private
-   */
-  private async signTokenPair(
-    subject: string,
-    scope: TokenScope,
-    ipAddress: string,
-    userAgent: string,
-    additionalClaims?: Record<string, unknown>,
-  ): Promise<AuthResponseDto> {
-    const pairId = uuidv4()
-
-    const accessToken = await this.signToken(
-      pairId,
-      subject,
-      scope,
-      false,
-      ipAddress,
-      userAgent,
-      additionalClaims,
-    )
-
-    const refreshToken = await this.signToken(
-      pairId,
-      subject,
-      scope,
-      true,
-      ipAddress,
-      userAgent,
-      additionalClaims,
-    )
-    return { accessToken, refreshToken }
-  }
-
-  /**
-   * Verifies a JWT token and returns the decoded payload.
-   *
-   * @param {string} token - The JWT token to be verified.
-   *
-   * @returns {Promise<TokenDto>} A Promise that resolves to the decoded payload as a `TokenDto`.
-   *
-   * @throws {UnauthorizedException} If the token is invalid or verification fails.
-   */
-  public async verifyToken(token: string): Promise<TokenDto> {
-    try {
-      return await this.jwtService.verifyAsync<TokenDto>(token)
-    } catch {
-      throw new UnauthorizedException()
-    }
-  }
-
-  /**
-   * Signs a JWT for the specified scope and token type.
-   *
-   * @param pairId - Unique identifier linking an access token and its refresh token.
-   * @param subject - The JWT “sub” claim, typically a user ID or game participant ID.
-   * @param scope - The broad area of the API this token grants access to (e.g. Game, User).
-   * @param isRefreshToken - If true, issues a refresh token (long-lived); otherwise an access token (short-lived).
-   * @param ipAddress  - The client's IP address to record in the token metadata.
-   * @param userAgent  - The client's User-Agent string to record in the token metadata.
-   * @param additionalClaims - Extra JWT payload.
-   * @returns A promise resolving to the signed JWT string.
-   * @private
-   */
-  private async signToken(
-    pairId: string,
-    subject: string,
-    scope: TokenScope,
-    isRefreshToken: boolean,
-    ipAddress: string,
-    userAgent: string,
-    additionalClaims?: Record<string, unknown>,
-  ): Promise<string> {
-    const authorities = getTokenAuthorities(scope, isRefreshToken)
-    const expiresIn = getTokenExpiresIn(isRefreshToken)
-
-    const jwtId = uuidv4()
-
-    const token = await this.jwtService.signAsync(
-      {
-        scope,
-        authorities,
-        ...(additionalClaims || {}),
-      },
-      {
-        jwtid: jwtId,
-        subject,
-        expiresIn,
-      },
-    )
-
-    await this.tokenRepository.createToken({
-      _id: jwtId,
-      pairId,
-      type: isRefreshToken ? TokenType.Refresh : TokenType.Access,
-      scope,
-      principalId: subject,
-      ipAddress,
-      userAgent,
-      createdAt: new Date(),
-      expiresAt: new Date(Date.now() + ms(expiresIn)),
-    })
-
-    return token
-  }
-
-  /**
-   * Signs a JWT token for email verification.
-   *
-   * Generates a token with the `VERIFY_EMAIL` authority that expires in 72 hours.
-   *
-   * @param userId – The user ID (JWT `sub` claim) for whom the token is issued.
-   * @param email  – The email address to include in the token payload.
-   * @returns A promise that resolves to the signed verification token string.
-   */
-  public async signVerifyEmailToken(
-    userId: string,
-    email: string,
-  ): Promise<string> {
-    return this.jwtService.signAsync(
-      {
-        scope: TokenScope.User,
-        authorities: [Authority.VerifyEmail],
-        email,
-      },
-      {
-        jwtid: uuidv4(),
-        subject: userId,
-        expiresIn: '72h',
-      },
-    )
-  }
-
-  /**
-   * Signs a JWT token for password reset.
-   *
-   * Generates a token with the `RESET_PASSWORD` authority that expires in 1 hour.
-   *
-   * @param userId – The user ID (JWT `sub` claim) for whom the token is issued.
-   * @returns A promise that resolves to the signed password reset token string.
-   */
-  public async signPasswordResetToken(userId: string): Promise<string> {
-    return this.jwtService.signAsync(
-      {
-        scope: TokenScope.User,
-        authorities: [Authority.ResetPassword],
-      },
-      {
-        jwtid: uuidv4(),
-        subject: userId,
-        expiresIn: '1h',
-      },
-    )
   }
 
   /**

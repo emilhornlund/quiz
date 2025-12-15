@@ -51,13 +51,14 @@ import {
   GameResultModel,
 } from '../../game/repositories/models/schemas'
 import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
-import { User, UserModel } from '../../user/repositories'
-import { AuthService } from '../services'
 import {
   DEFAULT_GAME_AUTHORITIES,
   DEFAULT_REFRESH_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
-} from '../services/utils'
+} from '../../shared/token'
+import { TokenService } from '../../token/services'
+import { User, UserModel } from '../../user/repositories'
+import { AuthService } from '../services'
 
 const MOCK_IP_ADDRESS = '0.0.0.0'
 const MOCK_USER_AGENT = 'mock-user-agent'
@@ -66,6 +67,7 @@ describe('AuthController (e2e)', () => {
   let app: INestApplication
   let jwtService: JwtService
   let authService: AuthService
+  let tokenService: TokenService
   let userModel: UserModel
   let gameModel: GameModel
   let gameResultModel: GameResultModel
@@ -75,6 +77,7 @@ describe('AuthController (e2e)', () => {
     app = await createTestApp()
     jwtService = app.get(JwtService)
     authService = app.get<AuthService>(AuthService)
+    tokenService = app.get<TokenService>(TokenService)
     userModel = app.get<UserModel>(getModelToken(User.name))
     gameModel = app.get<GameModel>(getModelToken(Game.name))
     gameResultModel = app.get<GameResultModel>(getModelToken(GameResult.name))
@@ -796,7 +799,7 @@ describe('AuthController (e2e)', () => {
         userId,
       )
 
-      await authService.revoke(refreshToken)
+      await tokenService.revoke(refreshToken)
 
       return supertest(app.getHttpServer())
         .post('/api/auth/refresh')

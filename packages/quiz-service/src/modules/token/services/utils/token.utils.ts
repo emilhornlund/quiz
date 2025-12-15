@@ -7,7 +7,7 @@ import {
   DEFAULT_REFRESH_AUTHORITIES,
   DEFAULT_REFRESH_TOKEN_EXPIRATION_TIME,
   DEFAULT_USER_AUTHORITIES,
-} from './token.constants'
+} from '../../../shared/token'
 
 /**
  * Returns the list of Authority that should be embedded in a token

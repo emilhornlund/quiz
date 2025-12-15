@@ -21,6 +21,7 @@ import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
 import { MigrationModule } from '../modules/migration'
 import { QuizModule } from '../modules/quiz'
+import { TokenModule } from '../modules/token'
 import { UserModule } from '../modules/user'
 
 import { EnvironmentVariables } from './config'
@@ -188,6 +189,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     MediaModule,
     MigrationModule,
     QuizModule,
+    TokenModule,
     UserModule,
   ],
   controllers: [AppController],

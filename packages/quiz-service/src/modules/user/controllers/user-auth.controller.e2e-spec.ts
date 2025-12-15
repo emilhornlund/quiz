@@ -18,19 +18,19 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../../test-utils/utils'
-import { AuthService } from '../../authentication/services'
+import { TokenService } from '../../token/services'
 import { LocalUser, UserRepository } from '../repositories'
 
 describe('UserAuthController (e2e)', () => {
   let app: INestApplication
   let userRepository: UserRepository
-  let authService: AuthService
+  let tokenService: TokenService
   let jwtService: JwtService
 
   beforeEach(async () => {
     app = await createTestApp()
     userRepository = app.get<UserRepository>(UserRepository)
-    authService = app.get<AuthService>(AuthService)
+    tokenService = app.get<TokenService>(TokenService)
     jwtService = app.get(JwtService)
   })
 
@@ -49,7 +49,7 @@ describe('UserAuthController (e2e)', () => {
         defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
       })
 
-      const accessToken = await authService.signVerifyEmailToken(userId, email)
+      const accessToken = await tokenService.signVerifyEmailToken(userId, email)
 
       return supertest(app.getHttpServer())
         .post('/api/auth/email/verify')
@@ -71,7 +71,7 @@ describe('UserAuthController (e2e)', () => {
         defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
       })
 
-      const accessToken = await authService.signVerifyEmailToken(
+      const accessToken = await tokenService.signVerifyEmailToken(
         userId,
         MOCK_SECONDARY_USER_EMAIL,
       )
@@ -269,7 +269,7 @@ describe('UserAuthController (e2e)', () => {
         defaultNickname: MOCK_PRIMARY_USER_DEFAULT_NICKNAME,
       })
 
-      const accessToken = await authService.signPasswordResetToken(userId)
+      const accessToken = await tokenService.signPasswordResetToken(userId)
 
       return supertest(app.getHttpServer())
         .patch('/api/auth/password/reset')

@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger'
 import { Authority, TokenScope } from '@quiz/common'
 
+import { TokenService } from '../../token/services'
 import { UserService } from '../../user/services'
 import { AuthService } from '../services'
 
@@ -45,11 +46,13 @@ export class AuthController {
   /**
    * Initializes the AuthController.
    *
-   * @param authService - The service handling authentication logic.
-   * @param userService - description here
+   * @param authService - Service handling authentication flows such as login, refresh, and game authentication.
+   * @param tokenService - Service responsible for token verification and token revocation.
+   * @param userService - Service providing user profile and account operations used by auth endpoints.
    */
   constructor(
     private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
     private readonly userService: UserService,
   ) {}
 
@@ -262,7 +265,7 @@ export class AuthController {
   public async revoke(
     @Body() authRevokeRequest: AuthRevokeRequest,
   ): Promise<void> {
-    return this.authService.revoke(authRevokeRequest.token)
+    return this.tokenService.revoke(authRevokeRequest.token)
   }
 
   /**
@@ -328,7 +331,7 @@ export class AuthController {
     const accessToken = type === 'Bearer' ? token : undefined
 
     try {
-      const payload = await this.authService.verifyToken(accessToken)
+      const payload = await this.tokenService.verifyToken(accessToken)
       if (
         payload.scope === TokenScope.User &&
         payload.authorities.includes(Authority.Game)

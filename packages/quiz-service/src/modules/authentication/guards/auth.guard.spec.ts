@@ -18,16 +18,16 @@ import {
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
 } from '../../shared/auth'
+import { DEFAULT_USER_AUTHORITIES } from '../../shared/token'
+import { TokenService } from '../../token/services'
 import { User, UserRepository } from '../../user/repositories'
-import { AuthService } from '../services'
-import { DEFAULT_USER_AUTHORITIES } from '../services/utils'
 
 import { AuthGuard } from './auth.guard'
 
 describe('AuthGuard', () => {
   let guard: AuthGuard
   let reflector: Reflector
-  let authService: Partial<AuthService>
+  let tokenService: Partial<TokenService>
   let userRepository: Partial<UserRepository>
 
   const fakeHandler = () => {}
@@ -45,14 +45,14 @@ describe('AuthGuard', () => {
 
   beforeEach(async () => {
     reflector = new Reflector()
-    authService = { verifyToken: jest.fn() }
+    tokenService = { verifyToken: jest.fn() }
     userRepository = { findUserByIdOrThrow: jest.fn() }
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthGuard,
         { provide: Reflector, useValue: reflector },
-        { provide: AuthService, useValue: authService },
+        { provide: TokenService, useValue: tokenService },
         { provide: UserRepository, useValue: userRepository },
       ],
     }).compile()
@@ -64,7 +64,7 @@ describe('AuthGuard', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true)
     const ok = await guard.canActivate(makeContext({}))
     expect(ok).toBe(true)
-    expect(authService.verifyToken).not.toHaveBeenCalled()
+    expect(tokenService.verifyToken).not.toHaveBeenCalled()
   })
 
   it('should throw if missing Authorization header', async () => {
@@ -76,7 +76,7 @@ describe('AuthGuard', () => {
 
   it('should throw if token invalid', async () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
-    ;(authService.verifyToken as jest.Mock).mockRejectedValue(new Error())
+    ;(tokenService.verifyToken as jest.Mock).mockRejectedValue(new Error())
 
     const req = { headers: { authorization: 'Bearer bad' } }
     await expect(guard.canActivate(makeContext(req))).rejects.toThrow(
@@ -86,7 +86,7 @@ describe('AuthGuard', () => {
 
   it('should throw when scope not allowed', async () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue({
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue({
       sub: 'x',
       scope: TokenScope.Game,
       authorities: [],
@@ -106,7 +106,7 @@ describe('AuthGuard', () => {
 
   it('should throw when authorities missing', async () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false)
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue({
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue({
       sub: 'x',
       scope: TokenScope.User,
       authorities: [],
@@ -136,7 +136,7 @@ describe('AuthGuard', () => {
       exp: Date.now() / 1000 + 60,
     }
 
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue(token)
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 
@@ -164,7 +164,7 @@ describe('AuthGuard', () => {
       exp: Date.now() / 1000 + 60,
     }
 
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue(token)
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
     ;(userRepository.findUserByIdOrThrow as jest.Mock).mockRejectedValue(
@@ -191,7 +191,7 @@ describe('AuthGuard', () => {
       participantType: GameParticipantType.HOST,
     }
 
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue(token)
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 
@@ -213,7 +213,7 @@ describe('AuthGuard', () => {
       exp: Date.now() / 1000 + 60,
     }
 
-    ;(authService.verifyToken as jest.Mock).mockResolvedValue(token)
+    ;(tokenService.verifyToken as jest.Mock).mockResolvedValue(token)
 
     jest.spyOn(reflector, 'getAllAndMerge').mockReturnValue([])
 

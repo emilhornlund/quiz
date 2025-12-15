@@ -16,8 +16,8 @@ import {
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
 } from '../../shared/auth'
+import { TokenService } from '../../token/services'
 import { User, UserRepository } from '../../user/repositories'
-import { AuthService } from '../services'
 
 /**
  * Guard that enforces JWT‐based authentication and authorization.
@@ -40,16 +40,15 @@ import { AuthService } from '../services'
 @Injectable()
 export class AuthGuard implements CanActivate {
   /**
-   * Creates a new instance of the AuthGuard.
+   * Initializes the AuthGuard.
    *
-   * @param reflector - Used to retrieve metadata such as the `IS_PUBLIC_KEY`
-   *                    to determine if the route is public.
-   * @param authService - Service for validating and decoding game tokens.
+   * @param reflector - Used to retrieve metadata such as the `IS_PUBLIC_KEY` to determine if the route is public.
+   * @param tokenService - Service for verifying and decoding JWTs used for API authentication.
    * @param userRepository - Repository for accessing user data.
    */
   constructor(
     private readonly reflector: Reflector,
-    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -186,7 +185,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      return await this.authService.verifyToken(token)
+      return await this.tokenService.verifyToken(token)
     } catch {
       throw new UnauthorizedException('Invalid or expired token')
     }
