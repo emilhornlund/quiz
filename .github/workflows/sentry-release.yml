@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Download ${{ matrix.project }} artifacts for Sentry
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ env.SENTRY_ARTIFACT_NAME }}
           path: ${{ env.SENTRY_SOURCEMAPS_PATH }}
