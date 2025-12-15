@@ -14,6 +14,7 @@ import {
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
   createMockLeaderboardTaskItem,
+  createMockLobbyTaskDocument,
   createMockMultiChoiceQuestionDocument,
   createMockPodiumTaskDocument,
   createMockQuestionResultTaskDocument,
@@ -34,7 +35,6 @@ import {
 } from '../../../../test-utils/utils'
 import { QuizService } from '../../quiz/services'
 import { User, UserModel } from '../../user/repositories'
-import { buildLobbyTask } from '../orchestration/task/utils'
 import {
   BaseTask,
   Game,
@@ -1108,7 +1108,9 @@ describe('GameController (e2e)', () => {
       )
 
       await gameModel
-        .findByIdAndUpdate(gameId, { currentTask: buildLobbyTask() })
+        .findByIdAndUpdate(gameId, {
+          currentTask: createMockLobbyTaskDocument(),
+        })
         .exec()
 
       const accessToken = await authenticateGame(

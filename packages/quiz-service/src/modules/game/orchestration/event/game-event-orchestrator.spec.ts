@@ -5,6 +5,7 @@ import {
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
   createMockLeaderboardTaskDocument,
+  createMockLobbyTaskDocument,
   createMockMultiChoiceQuestionDocument,
   createMockPodiumTaskDocument,
   createMockQuestionResultTaskDocument,
@@ -12,7 +13,6 @@ import {
   createMockQuestionTaskMultiChoiceAnswer,
   createMockQuitTaskDocument,
 } from '../../../../../test-utils/data'
-import { buildLobbyTask } from '../task/utils'
 
 import { GameEventOrchestrator } from './game-event-orchestrator'
 
@@ -27,7 +27,7 @@ describe('GameEventOrchestrator', () => {
     describe('Lobby Task', () => {
       it('should return loading event when lobby task status is pending', () => {
         const game = createMockGameDocument({
-          currentTask: buildLobbyTask(),
+          currentTask: createMockLobbyTaskDocument(),
         })
 
         const result = gameEventOrchestrator.buildHostGameEvent(game as never)
@@ -38,7 +38,7 @@ describe('GameEventOrchestrator', () => {
       it('should return lobby host event when lobby task status is active', () => {
         const player = createMockGamePlayerParticipantDocument()
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
           participants: [player],
         })
 
@@ -58,7 +58,10 @@ describe('GameEventOrchestrator', () => {
 
       it('should return begin host event when lobby task status is completed', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'completed' },
+          currentTask: {
+            ...createMockLobbyTaskDocument(),
+            status: 'completed',
+          },
         })
 
         const result = gameEventOrchestrator.buildHostGameEvent(game as never)
@@ -70,7 +73,7 @@ describe('GameEventOrchestrator', () => {
         const player = createMockGamePlayerParticipantDocument()
         const host = createMockGameHostParticipantDocument()
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
           participants: [player, host],
         })
 
@@ -327,7 +330,7 @@ describe('GameEventOrchestrator', () => {
 
       it('should handle empty participants array in lobby host event', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
           participants: [],
         })
 
@@ -394,7 +397,7 @@ describe('GameEventOrchestrator', () => {
 
       it('should handle empty participants array in lobby host event', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
           participants: [],
         })
 
@@ -425,7 +428,7 @@ describe('GameEventOrchestrator', () => {
     describe('Lobby Task', () => {
       it('should return loading event when lobby task status is pending', () => {
         const game = createMockGameDocument({
-          currentTask: buildLobbyTask(),
+          currentTask: createMockLobbyTaskDocument(),
         })
 
         const result = gameEventOrchestrator.buildPlayerGameEvent(
@@ -438,7 +441,7 @@ describe('GameEventOrchestrator', () => {
 
       it('should return lobby player event when lobby task status is active', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
         })
 
         const result = gameEventOrchestrator.buildPlayerGameEvent(
@@ -454,7 +457,10 @@ describe('GameEventOrchestrator', () => {
 
       it('should return begin player event when lobby task status is completed', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'completed' },
+          currentTask: {
+            ...createMockLobbyTaskDocument(),
+            status: 'completed',
+          },
         })
 
         const result = gameEventOrchestrator.buildPlayerGameEvent(
@@ -749,7 +755,7 @@ describe('GameEventOrchestrator', () => {
 
       it('should handle player with minimal required properties', () => {
         const game = createMockGameDocument({
-          currentTask: { ...buildLobbyTask(), status: 'active' },
+          currentTask: { ...createMockLobbyTaskDocument(), status: 'active' },
         })
         const minimalPlayer = {
           participantId: 'minimal-player-id',

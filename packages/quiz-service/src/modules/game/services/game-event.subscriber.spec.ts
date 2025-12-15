@@ -5,7 +5,7 @@ import type { Redis } from 'ioredis'
 import { firstValueFrom, take, toArray } from 'rxjs'
 
 import { PlayerNotFoundException } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration/task'
+import { GameEventOrchestrator } from '../orchestration/event'
 import { TaskType } from '../repositories/models/schemas'
 
 // eslint-disable-next-line import/order

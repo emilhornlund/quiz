@@ -4,8 +4,8 @@ import {
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
+  createMockLobbyTaskDocument,
 } from '../../../../../../test-utils/data'
-import { buildLobbyTask } from '../../task/utils'
 
 import {
   buildGameBeginHostEvent,
@@ -30,7 +30,7 @@ describe('Game Lobby Event Utils', () => {
         _id: 'game-123',
         pin: '123456',
         participants: [player1, player2, host],
-        currentTask: buildLobbyTask(),
+        currentTask: createMockLobbyTaskDocument(),
       })
 
       const result = buildGameLobbyHostEvent(game as never)
@@ -51,7 +51,7 @@ describe('Game Lobby Event Utils', () => {
         _id: 'game-456',
         pin: '654321',
         participants: [host],
-        currentTask: buildLobbyTask(),
+        currentTask: createMockLobbyTaskDocument(),
       })
 
       const result = buildGameLobbyHostEvent(game as never)
@@ -74,7 +74,7 @@ describe('Game Lobby Event Utils', () => {
         _id: 'game-many',
         pin: '999999',
         participants: players,
-        currentTask: buildLobbyTask(),
+        currentTask: createMockLobbyTaskDocument(),
       })
 
       const result = buildGameLobbyHostEvent(game as never)

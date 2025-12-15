@@ -19,6 +19,7 @@ import {
   buildQuestionResultTask,
   buildQuestionTask,
   buildQuitTask,
+  rebuildQuestionResultTask,
   updateParticipantsAndBuildLeaderboard,
 } from './utils'
 
@@ -60,6 +61,24 @@ export class GameTaskOrchestrator implements IGameTaskOrchestrator {
     gameDocument: GameDocument,
   ): QuestionResultTaskWithBase {
     return buildQuestionResultTask(gameDocument)
+  }
+
+  /**
+   * Recomputes the `results` of an existing `QuestionResultTask` using data from the preceding `Question` task.
+   *
+   * This function is useful when needing to restore or recalculate results from a previously created result task.
+   * It uses the preserved correct answers and answers from the previous task to regenerate the final result items.
+   *
+   * @param gameDocument - The game document where the current task is of type `QuestionResult`
+   *                       and the previous task is of type `Question`.
+   * @returns A `QuestionResultTask` with newly rebuilt results while preserving task metadata.
+   *
+   * @throws {IllegalTaskTypeException} If the current task is not a `QuestionResult` or the previous task is not a `Question`.
+   */
+  public rebuildQuestionResultTask(
+    gameDocument: GameDocument,
+  ): QuestionResultTaskWithBase {
+    return rebuildQuestionResultTask(gameDocument)
   }
 
   /**

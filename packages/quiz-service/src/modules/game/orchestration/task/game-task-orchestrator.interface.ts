@@ -36,6 +36,17 @@ export interface GameTaskOrchestrator {
   ): QuestionResultTaskWithBase
 
   /**
+   * Recomputes the `results` of an existing `QuestionResultTask` using data from the preceding `Question` task.
+   *
+   * @param gameDocument - The game document where the current task is of type `QuestionResult`
+   *                       and the previous task is of type `Question`.
+   * @returns A `QuestionResultTask` with newly rebuilt results while preserving task metadata.
+   */
+  rebuildQuestionResultTask(
+    gameDocument: GameDocument,
+  ): QuestionResultTaskWithBase
+
+  /**
    * Updates participants with the latest result state and produces leaderboard entries.
    *
    * @param gameDocument - The current game state containing a `QuestionResult` task.

@@ -36,7 +36,7 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
 } from '../orchestration/question-answer-type-guards'
-import { rebuildQuestionResultTask } from '../orchestration/task/utils'
+import { GameTaskOrchestrator } from '../orchestration/task'
 import { isQuestionResultTask } from '../orchestration/task-type-guards'
 import { GameRepository } from '../repositories'
 import { TaskType } from '../repositories/models/schemas'
@@ -68,6 +68,7 @@ export class GameService {
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
    * @param gameEventOrchestrator - Orchestrator for building game events.
+   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
@@ -76,6 +77,7 @@ export class GameService {
     private gameEventPublisher: GameEventPublisher,
     private quizRepository: QuizRepository,
     private readonly gameEventOrchestrator: GameEventOrchestrator,
+    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {}
 
   /**
@@ -448,7 +450,8 @@ export class GameService {
           : []),
       ]
 
-      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
+      const updatedQuestionResultTask =
+        this.gameTaskOrchestrator.rebuildQuestionResultTask(gameDocument)
 
       const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,
@@ -535,7 +538,8 @@ export class GameService {
           )
         })
 
-      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
+      const updatedQuestionResultTask =
+        this.gameTaskOrchestrator.rebuildQuestionResultTask(gameDocument)
 
       const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,

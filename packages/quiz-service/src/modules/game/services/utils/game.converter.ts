@@ -3,8 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { Quiz } from '../../../quiz/repositories/models/schemas'
 import { User } from '../../../user/repositories'
-import { buildLobbyTask } from '../../orchestration/task/utils'
-import { Game } from '../../repositories/models/schemas'
+import { Game, LobbyTaskWithBase } from '../../repositories/models/schemas'
 
 /**
  * Builds a complete game document from the provided partial game model and other details.
@@ -12,10 +11,16 @@ import { Game } from '../../repositories/models/schemas'
  * @param quiz - The quiz document.
  * @param gamePIN - The unique 6-digit game PIN of the game to create.
  * @param user - The user object representing the host creating the game.
+ * @param lobbyTask - The initial Lobby task to use as `currentTask` for the newly created game.
  *
  * @returns A fully constructed Game document.
  */
-export function buildGameModel(quiz: Quiz, gamePIN: string, user: User): Game {
+export function buildGameModel(
+  quiz: Quiz,
+  gamePIN: string,
+  user: User,
+  lobbyTask: LobbyTaskWithBase,
+): Game {
   const now = Date.now()
 
   return {
@@ -35,7 +40,7 @@ export function buildGameModel(quiz: Quiz, gamePIN: string, user: User): Game {
         updated: new Date(now),
       },
     ],
-    currentTask: buildLobbyTask(),
+    currentTask: lobbyTask,
     previousTasks: [],
     updated: new Date(now),
     created: new Date(now),

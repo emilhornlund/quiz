@@ -12,7 +12,7 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
-import { buildQuitTask } from '../orchestration/task/utils'
+import { GameTaskOrchestrator } from '../orchestration/task'
 import { buildGameModel } from '../services/utils'
 
 import { Game, GameDocument, TaskType } from './models/schemas'
@@ -28,9 +28,12 @@ export class GameRepository extends BaseRepository<Game> {
    * Constructs the GameRepository.
    *
    * @param {Model<Game>} gameModel - The Mongoose model representing the Game schema.
+   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
-    @InjectModel(Game.name) protected readonly gameModel: Model<Game>,
+    @InjectModel(Game.name)
+    protected readonly gameModel: Model<Game>,
+    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {
     super(gameModel, 'Game')
   }
@@ -221,7 +224,12 @@ export class GameRepository extends BaseRepository<Game> {
   public async createGame(quiz: Quiz, user: User): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    const game = buildGameModel(quiz, gamePIN, user)
+    const game = buildGameModel(
+      quiz,
+      gamePIN,
+      user,
+      this.gameTaskOrchestrator.buildLobbyTask(),
+    )
 
     return this.create(game) as Promise<GameDocument>
   }
@@ -241,7 +249,7 @@ export class GameRepository extends BaseRepository<Game> {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const quitTask = buildQuitTask()
+    const quitTask = this.gameTaskOrchestrator.buildQuitTask()
 
     return this.updateMany(filter, [
       {
@@ -271,7 +279,7 @@ export class GameRepository extends BaseRepository<Game> {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const quitTask = buildQuitTask()
+    const quitTask = this.gameTaskOrchestrator.buildQuitTask()
 
     return this.updateMany(filter, [
       {

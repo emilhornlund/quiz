@@ -22,7 +22,7 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../../repositories/models/schemas'
-import { isParticipantPlayer } from '../../../services/utils/game-participant.utils'
+import { isParticipantPlayer } from '../../../services/utils'
 import { isQuestionResultTask, isQuestionTask } from '../../task-type-guards'
 
 import {

@@ -12,13 +12,13 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { buildLobbyTask } from '../../src/modules/game/orchestration/task/utils'
 import {
   BaseTask,
   Game,
   GameResult,
   LeaderboardTask,
   LeaderboardTaskItem,
+  LobbyTaskWithBase,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
@@ -69,7 +69,7 @@ export function createMockGameDocument(game?: Partial<Game>): Game {
     questions: [],
     nextQuestion: 0,
     participants: [],
-    currentTask: buildLobbyTask(),
+    currentTask: createMockLobbyTaskDocument(),
     previousTasks: [],
     updated: offsetSeconds(0),
     created: offsetSeconds(0),
@@ -248,6 +248,24 @@ export function createMockQuestionTaskDocument(
     answers: [],
     presented: offsetSeconds(0),
     created: offsetSeconds(0),
+    ...(task ?? {}),
+  }
+}
+
+/**
+ * Creates a mock Lobby task document for tests.
+ *
+ * @param task - Optional overrides applied on top of the default Lobby task shape.
+ * @returns A LobbyTask document with default values and any provided overrides applied.
+ */
+export function createMockLobbyTaskDocument(
+  task?: Partial<LobbyTaskWithBase>,
+): LobbyTaskWithBase {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Lobby,
+    status: 'pending',
+    created: new Date(),
     ...(task ?? {}),
   }
 }
