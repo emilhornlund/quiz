@@ -26,11 +26,6 @@ import {
 } from '../../../repositories/models/schemas'
 import { isParticipantPlayer } from '../../../services/utils'
 import {
-  findLastQuestionResultTask,
-  findPreviousQuestionResultForPlayer,
-  findQuestionResultForPlayer,
-} from '../../task/utils'
-import {
   isLeaderboardTask,
   isPodiumTask,
   isQuestionResultTask,
@@ -48,6 +43,11 @@ import {
   buildPaginationEventFromGameDocument,
   buildPaginationEventFromQuestionResultTask,
 } from './pagination-event.utils'
+import {
+  findLastQuestionResultTask,
+  findPreviousQuestionResultForPlayer,
+  findQuestionResultForPlayer,
+} from './question-result.utils'
 import {
   validateAndGetQuestion,
   validateGameDocument,
