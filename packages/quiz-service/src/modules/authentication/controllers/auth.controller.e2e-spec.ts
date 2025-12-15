@@ -45,17 +45,17 @@ import {
   createTestApp,
 } from '../../../../test-utils/utils'
 import {
+  DEFAULT_GAME_AUTHORITIES,
+  DEFAULT_REFRESH_AUTHORITIES,
+  DEFAULT_USER_AUTHORITIES,
+} from '../../../app/shared/token'
+import {
   Game,
   GameModel,
   GameResult,
   GameResultModel,
 } from '../../game/repositories/models/schemas'
 import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
-import {
-  DEFAULT_GAME_AUTHORITIES,
-  DEFAULT_REFRESH_AUTHORITIES,
-  DEFAULT_USER_AUTHORITIES,
-} from '../../shared/token'
 import { TokenService } from '../../token/services'
 import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'

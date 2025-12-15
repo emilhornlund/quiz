@@ -17,10 +17,10 @@ import {
 import * as bcrypt from 'bcryptjs'
 
 import { EnvironmentVariables } from '../../../app/config'
+import { isLocalUser } from '../../../app/shared/user'
 import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
 import { MigrationService } from '../../migration/services'
-import { isLocalUser } from '../../shared/user'
 import { TokenService } from '../../token/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'

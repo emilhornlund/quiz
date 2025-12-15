@@ -2,4 +2,4 @@ export {
   isLocalUser,
   isGoogleUser,
   isNoneMigratedUser,
-} from '../../../shared/user'
+} from '../../../../app/shared/user'

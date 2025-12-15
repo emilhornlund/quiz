@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common'
 
-import { IS_PUBLIC_KEY } from '../../../../shared/auth'
+import { IS_PUBLIC_KEY } from '../../../../../app/shared/auth'
 
 /**
  * Decorator that marks a route or controller as public, opt-out of

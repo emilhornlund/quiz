@@ -14,7 +14,10 @@ import {
   TokenScope,
 } from '@quiz/common'
 
-import { AuthGuardRequest, GAME_PARTICIPANT_TYPE } from '../../shared/auth'
+import {
+  AuthGuardRequest,
+  GAME_PARTICIPANT_TYPE,
+} from '../../../app/shared/auth'
 import { User } from '../../user/repositories'
 import { GameRepository } from '../repositories'
 

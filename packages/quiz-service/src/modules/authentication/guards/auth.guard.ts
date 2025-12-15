@@ -15,7 +15,7 @@ import {
   IS_PUBLIC_KEY,
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
-} from '../../shared/auth'
+} from '../../../app/shared/auth'
 import { TokenService } from '../../token/services'
 import { User, UserRepository } from '../../user/repositories'
 

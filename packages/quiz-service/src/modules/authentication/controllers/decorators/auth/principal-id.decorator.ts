@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { TokenDto } from '@quiz/common'
 
-import { AuthGuardRequest } from '../../../../shared/auth'
+import { AuthGuardRequest } from '../../../../../app/shared/auth'
 import { User } from '../../../../user/repositories'
 
 /**

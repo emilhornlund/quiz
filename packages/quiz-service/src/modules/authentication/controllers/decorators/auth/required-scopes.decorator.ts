@@ -1,7 +1,7 @@
 import { SetMetadata } from '@nestjs/common'
 import { TokenScope } from '@quiz/common'
 
-import { REQUIRED_SCOPES_KEY } from '../../../../shared/auth'
+import { REQUIRED_SCOPES_KEY } from '../../../../../app/shared/auth'
 
 /**
  * Decorator that specifies which broad token scopes a request must carry

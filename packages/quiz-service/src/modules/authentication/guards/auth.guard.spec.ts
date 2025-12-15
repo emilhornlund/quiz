@@ -17,8 +17,8 @@ import {
   AuthGuardRequest,
   REQUIRED_AUTHORITIES_KEY,
   REQUIRED_SCOPES_KEY,
-} from '../../shared/auth'
-import { DEFAULT_USER_AUTHORITIES } from '../../shared/token'
+} from '../../../app/shared/auth'
+import { DEFAULT_USER_AUTHORITIES } from '../../../app/shared/token'
 import { TokenService } from '../../token/services'
 import { User, UserRepository } from '../../user/repositories'
 

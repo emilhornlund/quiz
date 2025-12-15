@@ -1,7 +1,7 @@
 import { SetMetadata } from '@nestjs/common'
 import { Authority } from '@quiz/common'
 
-import { REQUIRED_AUTHORITIES_KEY } from '../../../../shared/auth'
+import { REQUIRED_AUTHORITIES_KEY } from '../../../../../app/shared/auth'
 
 /**
  * Decorator that specifies which authorities (permissions) a request must have

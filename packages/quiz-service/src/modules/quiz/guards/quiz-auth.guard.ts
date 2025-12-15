@@ -12,7 +12,7 @@ import { QuizVisibility, TokenDto } from '@quiz/common'
 import {
   AuthGuardRequest,
   AUTHORIZED_QUIZ_ALLOW_PUBLIC,
-} from '../../shared/auth'
+} from '../../../app/shared/auth'
 import { User } from '../../user/repositories'
 import { QuizRepository } from '../repositories'
 

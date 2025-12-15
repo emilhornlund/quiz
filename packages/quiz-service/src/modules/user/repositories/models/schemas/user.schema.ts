@@ -8,7 +8,7 @@ import type {
   SharedLocalUser,
   SharedNoneUser,
   SharedUserBase,
-} from '../../../../shared/user'
+} from '../../../../../app/shared/user'
 
 /**
  * Mongoose schema for the User collection.

@@ -23,7 +23,7 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthGuardRequest } from '../../shared/auth'
+import { AuthGuardRequest } from '../../../app/shared/auth'
 import { User } from '../../user/repositories'
 
 /**
