@@ -3,10 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { IllegalTaskTypeException } from '../../../exceptions'
 import {
-  BaseTask,
   GameDocument,
-  LeaderboardTask,
   LeaderboardTaskItem,
+  LeaderboardTaskWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
 
@@ -84,7 +83,7 @@ export function updateParticipantsAndBuildLeaderboard(
 export function buildLeaderboardTask(
   gameDocument: GameDocument,
   leaderboard: LeaderboardTaskItem[],
-): BaseTask & LeaderboardTask {
+): LeaderboardTaskWithBase {
   if (!isQuestionResultTask(gameDocument)) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,

@@ -13,6 +13,7 @@ import {
 } from './controllers'
 import { GameResultController } from './controllers/game-result.controller'
 import { GameListener } from './handlers'
+import { GameEventOrchestrator, GameTaskOrchestrator } from './orchestration'
 import { GameRepository, GameResultRepository } from './repositories'
 import { Game, GameSchema } from './repositories/models/schemas'
 import { GameResult, GameResultSchema } from './repositories/models/schemas'
@@ -66,6 +67,8 @@ import {
     GameResultService,
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
+    GameEventOrchestrator,
+    GameTaskOrchestrator,
   ],
   exports: [GameRepository, GameResultRepository],
 })

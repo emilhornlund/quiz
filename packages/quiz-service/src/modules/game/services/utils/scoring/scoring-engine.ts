@@ -12,10 +12,6 @@ import {
 } from '../../../../quiz/services/utils'
 import { UnsupportedGameModeException } from '../../../exceptions'
 import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionTaskAnswer,
-} from '../../../repositories/models/schemas'
-import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
   isPinAnswer,
@@ -28,7 +24,11 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../question-answer.utils'
+} from '../../../orchestration/question-answer-type-guards'
+import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionTaskAnswer,
+} from '../../../repositories/models/schemas'
 
 import { ClassicMultiChoiceScoringStrategy } from './classic/classic-multichoice-strategy'
 import { ClassicPinScoringStrategy } from './classic/classic-pin-strategy'
@@ -244,7 +244,7 @@ function buildAnswer<
   K extends QuestionTypeForMode<T>,
 >(
   mode: T,
-  type: K,
+  _type: K,
   question: QuestionDao,
   rawAnswer: QuestionTaskAnswer,
 ): AnswerFor<T, K> | undefined {

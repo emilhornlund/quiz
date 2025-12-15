@@ -21,21 +21,22 @@ import {
   isTypeAnswerQuestion,
 } from '../../../../quiz/services/utils'
 import {
-  GameDocument,
-  ParticipantPlayerWithBase,
-  QuestionTaskAnswer,
-  QuestionTaskMetadata,
-  TaskType,
-} from '../../../repositories/models/schemas'
-import {
   isMultiChoiceAnswer,
   isPinAnswer,
   isPuzzleAnswer,
   isRangeAnswer,
   isTrueFalseAnswer,
   isTypeAnswerAnswer,
-} from '../question-answer.utils'
-import { isPuzzleMetadata } from '../question-task-metadata.utils'
+} from '../../../orchestration/question-answer-type-guards'
+import {
+  GameDocument,
+  ParticipantPlayerWithBase,
+  QuestionTaskAnswer,
+  QuestionTaskBaseMetadata,
+  QuestionTaskMetadata,
+  QuestionTaskPuzzleMetadata,
+  TaskType,
+} from '../../../repositories/models/schemas'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 import {
@@ -324,4 +325,17 @@ function buildGameQuestionPlayerAnswerEvent(
       value: answer.answer,
     }
   }
+}
+
+/**
+ * Checks if the given metadata is of type `Puzzle`.
+ *
+ * @param metadata - The metadata data object of the current question task.
+ *
+ * @returns Returns `true` if the metadata is of type `Puzzle`, otherwise `false`.
+ */
+function isPuzzleMetadata(
+  metadata?: QuestionTaskMetadata,
+): metadata is QuestionTaskBaseMetadata & QuestionTaskPuzzleMetadata {
+  return metadata?.type === QuestionType.Puzzle
 }

@@ -12,10 +12,6 @@ import {
   QuestionRangeWithBase,
 } from '../../../../quiz/repositories/models/schemas'
 import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-} from '../../../repositories/models/schemas'
-import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
   isPinAnswer,
@@ -28,7 +24,11 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../question-answer.utils'
+} from '../../../orchestration/question-answer-type-guards'
+import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskItem,
+} from '../../../repositories/models/schemas'
 
 /**
  * Creates the answer distribution for a MultiChoice question result event.
@@ -47,11 +47,6 @@ import {
  *
  * @returns A `GameEventQuestionResults` payload containing the MultiChoice distribution.
  */
-export function createMultiChoiceQuestionResultDistribution(
-  question: QuestionMultiChoiceWithBase,
-  results: QuestionResultTaskItem[],
-  correctAnswers: QuestionResultTaskCorrectAnswer[],
-): GameEventQuestionResults
 export function createMultiChoiceQuestionResultDistribution(
   question: QuestionMultiChoiceWithBase,
   results: QuestionResultTaskItem[],

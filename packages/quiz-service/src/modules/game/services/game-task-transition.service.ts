@@ -4,6 +4,8 @@ import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
 import { IllegalTaskTypeException } from '../exceptions'
+import { GameEventOrchestrator } from '../orchestration'
+import { GameTaskOrchestrator } from '../orchestration'
 import { GameResultRepository } from '../repositories'
 import {
   GameDocument,
@@ -14,16 +16,7 @@ import {
 import {
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
-  toQuestionTaskAnswerFromString,
 } from './utils'
-import {
-  buildLeaderboardTask,
-  buildPodiumTask,
-  buildQuestionResultTask,
-  buildQuestionTask,
-  buildQuitTask,
-  updateParticipantsAndBuildLeaderboard,
-} from './utils/tasks'
 
 /**
  * Service responsible for determining the appropriate transition delay and callback
@@ -40,13 +33,17 @@ export class GameTaskTransitionService {
   /**
    * Constructs an instance of GameTaskTransitionService.
    *
-   * @param {Redis} redis - The Redis instance used for managing data synchronization and event handling.
+   * @param redis - The Redis instance used for answer synchronization and task coordination.
    * @param gameResultRepository - Repository for accessing and modifying game result data.
+   * @param gameEventOrchestrator - Orchestrator for answer deserialization and event-related metadata helpers.
+   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
     @InjectRedis()
     private readonly redis: Redis,
     private readonly gameResultRepository: GameResultRepository,
+    private readonly gameEventOrchestrator: GameEventOrchestrator,
+    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {}
 
   /**
@@ -111,7 +108,8 @@ export class GameTaskTransitionService {
       )
     }
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = buildQuestionTask(gameDocument)
+    gameDocument.currentTask =
+      this.gameTaskOrchestrator.buildQuestionTask(gameDocument)
     gameDocument.nextQuestion = gameDocument.nextQuestion + 1
   }
 
@@ -161,13 +159,14 @@ export class GameTaskTransitionService {
         0,
         -1,
       )
-    ).map(toQuestionTaskAnswerFromString)
+    ).map(this.gameEventOrchestrator.toQuestionTaskAnswerFromString)
 
     await this.redis.del(getRedisPlayerParticipantAnswerKey(gameDocument._id))
 
     gameDocument.currentTask.answers = answers
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = buildQuestionResultTask(gameDocument)
+    gameDocument.currentTask =
+      this.gameTaskOrchestrator.buildQuestionResultTask(gameDocument)
   }
 
   /**
@@ -193,15 +192,17 @@ export class GameTaskTransitionService {
     gameDocument.previousTasks.push(gameDocument.currentTask)
 
     const leaderboardTaskItems =
-      updateParticipantsAndBuildLeaderboard(gameDocument)
+      this.gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard(
+        gameDocument,
+      )
 
     if (gameDocument.nextQuestion < gameDocument.questions.length) {
-      gameDocument.currentTask = buildLeaderboardTask(
+      gameDocument.currentTask = this.gameTaskOrchestrator.buildLeaderboardTask(
         gameDocument,
         leaderboardTaskItems,
       )
     } else {
-      gameDocument.currentTask = buildPodiumTask(
+      gameDocument.currentTask = this.gameTaskOrchestrator.buildPodiumTask(
         gameDocument,
         leaderboardTaskItems,
       )
@@ -232,7 +233,8 @@ export class GameTaskTransitionService {
     }
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = buildQuestionTask(gameDocument)
+    gameDocument.currentTask =
+      this.gameTaskOrchestrator.buildQuestionTask(gameDocument)
     gameDocument.nextQuestion = gameDocument.nextQuestion + 1
   }
 
@@ -255,7 +257,7 @@ export class GameTaskTransitionService {
     }
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = buildQuitTask()
+    gameDocument.currentTask = this.gameTaskOrchestrator.buildQuitTask()
     gameDocument.status =
       gameDocument.participants.filter(isParticipantPlayer).length > 0
         ? GameStatus.Completed

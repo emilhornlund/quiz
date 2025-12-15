@@ -3,6 +3,7 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEvent, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import { GameEventOrchestrator } from '../orchestration'
 import {
   GameDocument,
   Participant,
@@ -10,13 +11,7 @@ import {
 } from '../repositories/models/schemas'
 
 import { DistributedEvent } from './models/event'
-import {
-  buildHostGameEvent,
-  buildPlayerGameEvent,
-  getRedisPlayerParticipantAnswerKey,
-  toBaseQuestionTaskEventMetaDataTuple,
-  toPlayerQuestionPlayerEventMetaData,
-} from './utils'
+import { getRedisPlayerParticipantAnswerKey } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 
@@ -32,8 +27,12 @@ export class GameEventPublisher {
    * Constructs an instance of GameEventPublisher.
    *
    * @param {Redis} redis - Redis instance for Pub/Sub operations.
+   * @param gameEventOrchestrator - Orchestrator for building game events.
    */
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  constructor(
+    @InjectRedis() private readonly redis: Redis,
+    private gameEventOrchestrator: GameEventOrchestrator,
+  ) {}
 
   /**
    * Publishes game events to relevant players for a given game document.
@@ -43,15 +42,16 @@ export class GameEventPublisher {
    * @returns {Promise<void>} A promise that resolves once the events are published.
    */
   public async publish(document: GameDocument): Promise<void> {
-    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
-      await this.redis.lrange(
-        getRedisPlayerParticipantAnswerKey(document._id),
-        0,
-        -1,
-      ),
-      {},
-      document.participants,
-    )
+    const [answers, metaData] =
+      this.gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple(
+        await this.redis.lrange(
+          getRedisPlayerParticipantAnswerKey(document._id),
+          0,
+          -1,
+        ),
+        {},
+        document.participants,
+      )
 
     await Promise.all(
       document.participants.map((participant) => {
@@ -59,13 +59,23 @@ export class GameEventPublisher {
           this.publishParticipantEvent(
             participant,
             participant.type === GameParticipantType.HOST
-              ? buildHostGameEvent(document, metaData)
-              : buildPlayerGameEvent(document, participant, {
-                  ...metaData,
-                  ...(document.currentTask.type === TaskType.Question
-                    ? toPlayerQuestionPlayerEventMetaData(answers, participant)
-                    : {}),
-                }),
+              ? this.gameEventOrchestrator.buildHostGameEvent(
+                  document,
+                  metaData,
+                )
+              : this.gameEventOrchestrator.buildPlayerGameEvent(
+                  document,
+                  participant,
+                  {
+                    ...metaData,
+                    ...(document.currentTask.type === TaskType.Question
+                      ? this.gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData(
+                          answers,
+                          participant,
+                        )
+                      : {}),
+                  },
+                ),
           )
         } catch (error) {
           const { message, stack } = error as Error

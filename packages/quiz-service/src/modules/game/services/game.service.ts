@@ -27,6 +27,15 @@ import {
   PlayerNotFoundException,
   PlayerNotUniqueException,
 } from '../exceptions'
+import { GameEventOrchestrator } from '../orchestration'
+import {
+  isMultiChoiceCorrectAnswer,
+  isPinCorrectAnswer,
+  isPuzzleCorrectAnswer,
+  isRangeCorrectAnswer,
+  isTrueFalseCorrectAnswer,
+  isTypeAnswerCorrectAnswer,
+} from '../orchestration/question-answer-type-guards'
 import { GameRepository } from '../repositories'
 import { TaskType } from '../repositories/models/schemas'
 
@@ -34,17 +43,9 @@ import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import {
   getRedisPlayerParticipantAnswerKey,
-  isMultiChoiceCorrectAnswer,
   isNicknameUnique,
-  isPinCorrectAnswer,
   isPlayerUnique,
-  isPuzzleCorrectAnswer,
-  isRangeCorrectAnswer,
-  isTrueFalseCorrectAnswer,
-  isTypeAnswerCorrectAnswer,
-  toQuestionTaskAnswer,
 } from './utils'
-import { buildGameQuitEvent } from './utils/events'
 import { isQuestionResultTask, rebuildQuestionResultTask } from './utils/tasks'
 
 /**
@@ -65,6 +66,7 @@ export class GameService {
    * @param gameTaskTransitionScheduler - Scheduler for handling game task transitions.
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
+   * @param gameEventOrchestrator - Orchestrator for building game events.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
@@ -72,6 +74,7 @@ export class GameService {
     private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private gameEventPublisher: GameEventPublisher,
     private quizRepository: QuizRepository,
+    private readonly gameEventOrchestrator: GameEventOrchestrator,
   ) {}
 
   /**
@@ -253,7 +256,7 @@ export class GameService {
     if (currentParticipant.type === GameParticipantType.HOST) {
       await this.gameEventPublisher.publishParticipantEvent(
         participantToRemove,
-        buildGameQuitEvent(savedGameDocument.status),
+        this.gameEventOrchestrator.buildGameQuitEvent(savedGameDocument.status),
       )
     }
   }
@@ -291,7 +294,10 @@ export class GameService {
     playerId: string,
     submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
   ): Promise<void> {
-    const answer = toQuestionTaskAnswer(playerId, submitQuestionAnswerRequest)
+    const answer = this.gameEventOrchestrator.toQuestionTaskAnswer(
+      playerId,
+      submitQuestionAnswerRequest,
+    )
 
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 

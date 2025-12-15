@@ -779,6 +779,13 @@ export const LeaderboardTaskSchema =
   SchemaFactory.createForClass(LeaderboardTask)
 
 /**
+ * Narrowed type representing a Leaderboard task with base task fields.
+ *
+ * Combines the common BaseTask properties with LeaderboardTask-specific fields.
+ */
+export type LeaderboardTaskWithBase = BaseTask & LeaderboardTask
+
+/**
  * PodiumTask
  */
 
@@ -791,6 +798,13 @@ export class PodiumTask {
 }
 
 export const PodiumTaskSchema = SchemaFactory.createForClass(PodiumTask)
+
+/**
+ * Narrowed type representing a Podium task with base task fields.
+ *
+ * Combines the common BaseTask properties with PodiumTask-specific fields.
+ */
+export type PodiumTaskWithBase = BaseTask & PodiumTask
 
 /**
  * QuitTask

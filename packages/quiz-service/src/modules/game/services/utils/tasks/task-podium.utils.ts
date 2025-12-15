@@ -2,10 +2,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { IllegalTaskTypeException } from '../../../exceptions'
 import {
-  BaseTask,
   GameDocument,
   LeaderboardTaskItem,
-  PodiumTask,
+  PodiumTaskWithBase,
   TaskType,
 } from '../../../repositories/models/schemas'
 
@@ -24,7 +23,7 @@ import { isQuestionResultTask } from './task.utils'
 export function buildPodiumTask(
   gameDocument: GameDocument,
   leaderboard: LeaderboardTaskItem[],
-): BaseTask & PodiumTask {
+): PodiumTaskWithBase {
   if (!isQuestionResultTask(gameDocument)) {
     throw new IllegalTaskTypeException(
       gameDocument.currentTask.type,
