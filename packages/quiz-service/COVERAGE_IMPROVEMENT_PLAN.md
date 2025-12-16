@@ -509,13 +509,13 @@ user.utils.ts | 0 | 100 | 0 | 0 | 1-4
 
 #### Step 2.1: Game Task Orchestrator
 
-- [ ] **modules/game-core/orchestration/task/game-task-orchestrator.ts** (61.53% stmts, 54.54% lines)
-  - [ ] Test `buildQuestionTask()` with valid/invalid game documents
-  - [ ] Test `buildQuestionResultTask()` with various game states
-  - [ ] Test `rebuildQuestionResultTask()` edge cases
-  - [ ] Test `updateParticipantsAndBuildLeaderboard()` scoring logic
-  - [ ] Test `buildLeaderboardTask()` and `buildPodiumTask()` with different inputs
-  - [ ] Test error scenarios: illegal task types, missing data
+- [x] **modules/game-core/orchestration/task/game-task-orchestrator.ts** (61.53% stmts, 54.54% lines)
+  - [x] Test `buildQuestionTask()` with valid/invalid game documents
+  - [x] Test `buildQuestionResultTask()` with various game states
+  - [x] Test `rebuildQuestionResultTask()` edge cases
+  - [x] Test `updateParticipantsAndBuildLeaderboard()` scoring logic
+  - [x] Test `buildLeaderboardTask()` and `buildPodiumTask()` with different inputs
+  - [x] Test error scenarios: illegal task types, missing data
 
 #### Step 2.2: Game Task Transition Service
 
