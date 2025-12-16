@@ -14,6 +14,7 @@ module.exports = {
     '**/*.{ts,js}',
     '!**/*.module.ts',
     '!**/*.(e2e-)?spec.{ts,js}',
+    '!**/index.ts',
     '!**/main.ts',
     '!**/instrument.ts',
   ],
