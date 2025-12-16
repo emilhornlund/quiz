@@ -13,7 +13,7 @@ import {
   GameNotFoundException,
 } from '../exceptions'
 import { GameTaskOrchestrator } from '../orchestration/task'
-import { buildGameModel } from '../services/utils'
+import { buildGameModel } from '../utils'
 
 import { Game, GameDocument, TaskType } from './models/schemas'
 

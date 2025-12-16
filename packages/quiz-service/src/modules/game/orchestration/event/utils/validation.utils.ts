@@ -1,4 +1,4 @@
-import { GameDocument } from '../../../repositories/models/schemas'
+import { GameDocument } from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Validates that the question index is within bounds and returns the question.

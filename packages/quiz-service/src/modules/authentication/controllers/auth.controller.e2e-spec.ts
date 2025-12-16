@@ -32,8 +32,8 @@ import {
   DEFAULT_REFRESH_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
 } from '../../../app/shared/token'
-import { Game, GameModel } from '../../game/repositories/models/schemas'
 import { GameAuthenticationService } from '../../game-authentication/services'
+import { Game, GameModel } from '../../game-core/repositories/models/schemas'
 import { TokenService } from '../../token/services'
 import { User, UserModel } from '../../user/repositories'
 import { AuthService } from '../services'

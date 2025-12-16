@@ -1,6 +1,9 @@
 import { GameEventType, GameLeaderboardHostEvent } from '@quiz/common'
 
-import { GameDocument, TaskType } from '../../../repositories/models/schemas'
+import {
+  GameDocument,
+  TaskType,
+} from '../../../../game-core/repositories/models/schemas'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 

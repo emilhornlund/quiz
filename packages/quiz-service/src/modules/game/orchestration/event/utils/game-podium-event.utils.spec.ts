@@ -9,7 +9,7 @@ import {
   createMockLeaderboardTaskItem,
   createMockPodiumTaskDocument,
 } from '../../../../../../test-utils/data'
-import { LeaderboardTaskItem } from '../../../repositories/models/schemas'
+import { LeaderboardTaskItem } from '../../../../game-core/repositories/models/schemas'
 
 import { buildGamePodiumHostEvent } from './game-podium-event.utils'
 

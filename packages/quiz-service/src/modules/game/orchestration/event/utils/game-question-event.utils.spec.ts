@@ -23,7 +23,7 @@ import {
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
 } from '../../../../../../test-utils/data'
-import { QuestionTaskMetadata } from '../../../repositories/models/schemas'
+import { QuestionTaskMetadata } from '../../../../game-core/repositories/models/schemas'
 
 import {
   buildGameQuestionHostEvent,

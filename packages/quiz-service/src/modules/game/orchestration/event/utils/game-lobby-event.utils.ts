@@ -10,7 +10,7 @@ import {
   GameDocument,
   ParticipantPlayerWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../../../game-core/repositories/models/schemas'
 import { isParticipantPlayer } from '../../../services/utils'
 
 /**

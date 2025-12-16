@@ -1,6 +1,6 @@
 import { GameParticipantType } from '@quiz/common'
 
-import { GameDocument } from '../../repositories/models/schemas'
+import { GameDocument } from '../../../game-core/repositories/models/schemas'
 
 /**
  * Checks whether a participant is unique in the list of game participants.

@@ -2,8 +2,11 @@ import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
 import { Job, Queue } from 'bullmq'
 
-import { GameRepository } from '../repositories'
-import { GameDocument, TaskType } from '../repositories/models/schemas'
+import { GameRepository } from '../../game-core/repositories'
+import {
+  GameDocument,
+  TaskType,
+} from '../../game-core/repositories/models/schemas'
 
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionService } from './game-task-transition.service'

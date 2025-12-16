@@ -2,9 +2,8 @@ import { GameParticipantType } from '@quiz/common'
 
 import {
   Participant,
-  ParticipantBase,
-  ParticipantPlayer,
-} from '../../repositories/models/schemas'
+  ParticipantPlayerWithBase,
+} from '../../../game-core/repositories/models/schemas'
 
 /**
  * Checks if the given participant is of type `PLAYER`.
@@ -15,9 +14,8 @@ import {
  */
 export function isParticipantPlayer(
   participant?: Participant,
-): participant is ParticipantBase &
-  ParticipantPlayer & {
-    type: GameParticipantType.PLAYER
-  } {
+): participant is ParticipantPlayerWithBase & {
+  type: GameParticipantType.PLAYER
+} {
   return participant?.type === GameParticipantType.PLAYER
 }

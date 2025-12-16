@@ -1,6 +1,7 @@
 import { Logger, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { GameCoreModule } from '../game-core'
 import { UserModule } from '../user'
 
 import { GameResultController } from './controllers'
@@ -14,6 +15,7 @@ import { GameResultService } from './services'
  */
 @Module({
   imports: [
+    GameCoreModule,
     MongooseModule.forFeature([
       {
         name: GameResult.name,

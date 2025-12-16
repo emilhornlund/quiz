@@ -16,10 +16,10 @@ import { Redis } from 'ioredis'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
+import { GameRepository } from '../../game-core/repositories'
+import { TaskType } from '../../game-core/repositories/models/schemas'
 import { PlayerNotFoundException } from '../exceptions'
 import { GameEventOrchestrator } from '../orchestration/event'
-import { GameRepository } from '../repositories'
-import { TaskType } from '../repositories/models/schemas'
 
 import { DistributedEvent } from './models/event'
 import { getRedisPlayerParticipantAnswerKey } from './utils'

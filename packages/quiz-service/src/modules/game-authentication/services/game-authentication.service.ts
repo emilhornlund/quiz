@@ -7,8 +7,8 @@ import {
 } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameRepository } from '../../game/repositories'
-import { GameDocument } from '../../game/repositories/models/schemas'
+import { GameRepository } from '../../game-core/repositories'
+import { GameDocument } from '../../game-core/repositories/models/schemas'
 import { TokenService } from '../../token/services'
 
 /**

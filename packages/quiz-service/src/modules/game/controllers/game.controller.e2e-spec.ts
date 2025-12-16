@@ -33,14 +33,11 @@ import {
   closeTestApp,
   createTestApp,
 } from '../../../../test-utils/utils'
-import { QuizService } from '../../quiz/services'
-import { User, UserModel } from '../../user/repositories'
 import {
-  BaseTask,
   Game,
   GameModel,
-  QuestionResultTask,
   QuestionResultTaskItem,
+  QuestionResultTaskWithBase,
   QuestionTaskBaseAnswer,
   QuestionTaskMultiChoiceAnswer,
   QuestionTaskPinAnswer,
@@ -49,7 +46,9 @@ import {
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
   TaskType,
-} from '../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
+import { QuizService } from '../../quiz/services'
+import { User, UserModel } from '../../user/repositories'
 import { GameService } from '../services'
 
 describe('GameController (e2e)', () => {
@@ -1224,7 +1223,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.MultiChoice, index: 0 },
@@ -1346,7 +1345,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.Range, value: 50 },
@@ -1468,7 +1467,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.TrueFalse, value: false },
@@ -1598,7 +1597,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         {
@@ -1889,7 +1888,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2004,7 +2003,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2120,7 +2119,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2243,7 +2242,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as BaseTask & QuestionResultTask
+      ).currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 

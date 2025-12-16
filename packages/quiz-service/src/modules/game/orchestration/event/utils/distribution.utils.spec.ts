@@ -4,16 +4,16 @@ import {
   QuestionType,
 } from '@quiz/common'
 
+import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskItem,
+} from '../../../../game-core/repositories/models/schemas'
 import type {
   QuestionMultiChoiceWithBase,
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
 } from '../../../../quiz/repositories/models/schemas'
-import type {
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-} from '../../../repositories/models/schemas'
 
 import {
   createMultiChoiceQuestionResultDistribution,

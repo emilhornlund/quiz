@@ -3,12 +3,12 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameEvent, GameParticipantType } from '@quiz/common'
 import { Redis } from 'ioredis'
 
-import { GameEventOrchestrator } from '../orchestration/event'
 import {
   GameDocument,
   Participant,
   TaskType,
-} from '../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
+import { GameEventOrchestrator } from '../orchestration/event'
 
 import { DistributedEvent } from './models/event'
 import { getRedisPlayerParticipantAnswerKey } from './utils'

@@ -1,4 +1,4 @@
-import { QuestionTaskAnswer } from '../../repositories/models/schemas'
+import { QuestionTaskAnswer } from '../../../game-core/repositories/models/schemas'
 
 /**
  * Metadata associated with game utils, used to track answer submissions and player-specific information.

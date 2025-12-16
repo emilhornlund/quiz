@@ -9,21 +9,20 @@ import {
 } from '@quiz/common'
 
 import {
-  GameDocument,
-  Participant,
-  ParticipantBase,
-  ParticipantPlayer,
-  QuestionTaskAnswer,
-  QuestionTaskBaseAnswer,
-} from '../../repositories/models/schemas'
-import {
   isLeaderboardTask,
   isLobbyTask,
   isPodiumTask,
   isQuestionResultTask,
   isQuestionTask,
   isQuitTask,
-} from '../task-type-guards'
+} from '../../../game-core/orchestration/task-type-guards'
+import {
+  GameDocument,
+  Participant,
+  ParticipantPlayerWithBase,
+  QuestionTaskAnswer,
+  QuestionTaskBaseAnswer,
+} from '../../../game-core/repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
 import { GameEventOrchestrator as IGameEventOrchestrator } from './game-event-orchestrator.interface'
@@ -143,7 +142,7 @@ export class GameEventOrchestrator implements IGameEventOrchestrator {
    */
   public buildPlayerGameEvent(
     game: GameDocument,
-    player: ParticipantBase & ParticipantPlayer,
+    player: ParticipantPlayerWithBase,
     metadata: Partial<GameEventMetaData> = {},
   ): GameEvent {
     if (isLobbyTask(game)) {
@@ -353,7 +352,7 @@ export class GameEventOrchestrator implements IGameEventOrchestrator {
    */
   public toPlayerQuestionPlayerEventMetaData(
     answers: QuestionTaskAnswer[],
-    participant: ParticipantBase & ParticipantPlayer,
+    participant: ParticipantPlayerWithBase,
   ): Partial<GameEventMetaData> {
     const playerAnswerSubmission = answers?.find(
       (answer) => answer.playerId === participant.participantId,

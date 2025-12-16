@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 
 import { GameModule } from '../game'
+import { GameCoreModule } from '../game-core'
 import { TokenModule } from '../token'
 
 import { GameAuthenticationController } from './controllers'
@@ -15,7 +16,13 @@ import { GameAuthenticationService } from './services'
  * (hosts or players) into active games using game identifiers or PINs.
  */
 @Module({
-  imports: [GameModule, TokenModule, EventEmitterModule, HttpModule],
+  imports: [
+    EventEmitterModule,
+    GameCoreModule,
+    GameModule,
+    HttpModule,
+    TokenModule,
+  ],
   controllers: [GameAuthenticationController],
   providers: [GameAuthenticationService],
   exports: [GameAuthenticationService],

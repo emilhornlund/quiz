@@ -7,10 +7,9 @@ import {
 import {
   GameDocument,
   Participant,
-  ParticipantBase,
-  ParticipantPlayer,
+  ParticipantPlayerWithBase,
   QuestionTaskAnswer,
-} from '../../repositories/models/schemas'
+} from '../../../game-core/repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
 
@@ -37,7 +36,7 @@ export interface GameEventOrchestrator {
    */
   buildPlayerGameEvent(
     game: GameDocument,
-    player: ParticipantBase & ParticipantPlayer,
+    player: ParticipantPlayerWithBase,
     metadata?: Partial<GameEventMetaData>,
   ): GameEvent
 
@@ -86,7 +85,7 @@ export interface GameEventOrchestrator {
    */
   toPlayerQuestionPlayerEventMetaData(
     answers: QuestionTaskAnswer[],
-    participant: ParticipantBase & ParticipantPlayer,
+    participant: ParticipantPlayerWithBase,
   ): Partial<GameEventMetaData>
 
   /**

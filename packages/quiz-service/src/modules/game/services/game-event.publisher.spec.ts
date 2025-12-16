@@ -1,8 +1,11 @@
 import { GameParticipantType } from '@quiz/common'
 import type { Redis } from 'ioredis'
 
+import {
+  GameDocument,
+  TaskType,
+} from '../../game-core/repositories/models/schemas'
 import { GameEventOrchestrator } from '../orchestration/event'
-import { GameDocument, TaskType } from '../repositories/models/schemas'
 
 // eslint-disable-next-line import/order
 import { GameEventPublisher } from './game-event.publisher'

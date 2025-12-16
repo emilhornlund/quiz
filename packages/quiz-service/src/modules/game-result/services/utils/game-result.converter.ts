@@ -1,7 +1,7 @@
 import { GameMode, GameParticipantType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { IllegalTaskTypeException } from '../../../game/exceptions'
+import { IllegalTaskTypeException } from '../../../game-core/exceptions'
 import {
   BaseTask,
   GameDocument,
@@ -10,7 +10,7 @@ import {
   QuestionResultTaskWithBase,
   QuestionTaskWithBase,
   TaskType,
-} from '../../../game/repositories/models/schemas'
+} from '../../../game-core/repositories/models/schemas'
 import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
   GameResult,

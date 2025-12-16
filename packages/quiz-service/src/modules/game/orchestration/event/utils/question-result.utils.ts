@@ -1,11 +1,11 @@
+import { isQuestionResultTask } from '../../../../game-core/orchestration/task-type-guards'
 import {
   GameDocument,
   ParticipantPlayerWithBase,
   QuestionResultTaskItem,
   QuestionResultTaskWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../../task-type-guards'
+} from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Finds the question result entry for a specific player in a QuestionResult task.

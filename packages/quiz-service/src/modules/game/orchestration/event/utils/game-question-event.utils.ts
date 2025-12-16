@@ -11,6 +11,23 @@ import {
   QuestionType,
 } from '@quiz/common'
 
+import {
+  isMultiChoiceAnswer,
+  isPinAnswer,
+  isPuzzleAnswer,
+  isRangeAnswer,
+  isTrueFalseAnswer,
+  isTypeAnswerAnswer,
+} from '../../../../game-core/orchestration/question-answer-type-guards'
+import {
+  GameDocument,
+  ParticipantPlayerWithBase,
+  QuestionTaskAnswer,
+  QuestionTaskBaseMetadata,
+  QuestionTaskMetadata,
+  QuestionTaskPuzzleMetadata,
+  TaskType,
+} from '../../../../game-core/repositories/models/schemas'
 import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
@@ -20,23 +37,6 @@ import {
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
 } from '../../../../quiz/services/utils'
-import {
-  GameDocument,
-  ParticipantPlayerWithBase,
-  QuestionTaskAnswer,
-  QuestionTaskBaseMetadata,
-  QuestionTaskMetadata,
-  QuestionTaskPuzzleMetadata,
-  TaskType,
-} from '../../../repositories/models/schemas'
-import {
-  isMultiChoiceAnswer,
-  isPinAnswer,
-  isPuzzleAnswer,
-  isRangeAnswer,
-  isTrueFalseAnswer,
-  isTypeAnswerAnswer,
-} from '../../question-answer-type-guards'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 import {

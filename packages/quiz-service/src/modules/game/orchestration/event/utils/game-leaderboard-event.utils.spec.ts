@@ -10,7 +10,7 @@ import {
   createMockLeaderboardTaskItem,
   createMockMultiChoiceQuestionDocument,
 } from '../../../../../../test-utils/data'
-import { LeaderboardTaskItem } from '../../../repositories/models/schemas'
+import { LeaderboardTaskItem } from '../../../../game-core/repositories/models/schemas'
 
 import { buildGameLeaderboardHostEvent } from './game-leaderboard-event.utils'
 

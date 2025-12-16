@@ -3,15 +3,15 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
-import { GameResultService } from '../../game-result/services'
-import { IllegalTaskTypeException } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration/event'
-import { GameTaskOrchestrator } from '../orchestration/task'
+import { IllegalTaskTypeException } from '../../game-core/exceptions'
+import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
 import {
   GameDocument,
   QuestionTaskAnswer,
   TaskType,
-} from '../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
+import { GameResultService } from '../../game-result/services'
+import { GameEventOrchestrator } from '../orchestration/event'
 
 import {
   getRedisPlayerParticipantAnswerKey,

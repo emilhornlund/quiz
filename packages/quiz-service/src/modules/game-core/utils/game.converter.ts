@@ -1,9 +1,9 @@
 import { GameParticipantType, GameStatus } from '@quiz/common'
+import { User } from '@sentry/nestjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Quiz } from '../../../quiz/repositories/models/schemas'
-import { User } from '../../../user/repositories'
-import { Game, LobbyTaskWithBase } from '../../repositories/models/schemas'
+import { Quiz } from '../../quiz/repositories/models/schemas'
+import { Game, LobbyTaskWithBase } from '../repositories/models/schemas'
 
 /**
  * Builds a complete game document from the provided partial game model and other details.

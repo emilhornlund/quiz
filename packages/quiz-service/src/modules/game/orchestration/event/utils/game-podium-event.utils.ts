@@ -1,6 +1,9 @@
 import { GameEventType, GamePodiumHostEvent } from '@quiz/common'
 
-import { GameDocument, TaskType } from '../../../repositories/models/schemas'
+import {
+  GameDocument,
+  TaskType,
+} from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Builds a podium event for the host.

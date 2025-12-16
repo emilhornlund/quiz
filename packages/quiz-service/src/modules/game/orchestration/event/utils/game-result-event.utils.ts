@@ -9,6 +9,18 @@ import {
   PaginationEvent,
 } from '@quiz/common'
 
+import { IllegalTaskTypeException } from '../../../../game-core/exceptions'
+import {
+  isLeaderboardTask,
+  isPodiumTask,
+  isQuestionResultTask,
+} from '../../../../game-core/orchestration/task-type-guards'
+import {
+  GameDocument,
+  ParticipantPlayerWithBase,
+  QuestionResultTaskWithBase,
+  TaskType,
+} from '../../../../game-core/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -17,19 +29,7 @@ import {
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
 } from '../../../../quiz/services/utils'
-import { IllegalTaskTypeException } from '../../../exceptions'
-import {
-  GameDocument,
-  ParticipantPlayerWithBase,
-  QuestionResultTaskWithBase,
-  TaskType,
-} from '../../../repositories/models/schemas'
 import { isParticipantPlayer } from '../../../services/utils'
-import {
-  isLeaderboardTask,
-  isPodiumTask,
-  isQuestionResultTask,
-} from '../../task-type-guards'
 
 import {
   createMultiChoiceQuestionResultDistribution,

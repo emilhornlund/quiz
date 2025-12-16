@@ -40,7 +40,7 @@ import {
   QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
-} from '../../src/modules/game/repositories/models/schemas'
+} from '../../src/modules/game-core/repositories/models/schemas'
 import {
   GameResult,
   PlayerMetric,

@@ -20,6 +20,18 @@ import {
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import {
+  isMultiChoiceCorrectAnswer,
+  isPinCorrectAnswer,
+  isPuzzleCorrectAnswer,
+  isRangeCorrectAnswer,
+  isTrueFalseCorrectAnswer,
+  isTypeAnswerCorrectAnswer,
+} from '../../game-core/orchestration/question-answer-type-guards'
+import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
+import { isQuestionResultTask } from '../../game-core/orchestration/task-type-guards'
+import { GameRepository } from '../../game-core/repositories'
+import { TaskType } from '../../game-core/repositories/models/schemas'
 import { QuizRepository } from '../../quiz/repositories'
 import { User } from '../../user/repositories'
 import {
@@ -28,18 +40,6 @@ import {
   PlayerNotUniqueException,
 } from '../exceptions'
 import { GameEventOrchestrator } from '../orchestration/event'
-import {
-  isMultiChoiceCorrectAnswer,
-  isPinCorrectAnswer,
-  isPuzzleCorrectAnswer,
-  isRangeCorrectAnswer,
-  isTrueFalseCorrectAnswer,
-  isTypeAnswerCorrectAnswer,
-} from '../orchestration/question-answer-type-guards'
-import { GameTaskOrchestrator } from '../orchestration/task'
-import { isQuestionResultTask } from '../orchestration/task-type-guards'
-import { GameRepository } from '../repositories'
-import { TaskType } from '../repositories/models/schemas'
 
 import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'

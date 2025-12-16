@@ -1,7 +1,7 @@
 import {
   GameDocument,
   LeaderboardTaskItem,
-} from '../../../repositories/models/schemas'
+} from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Builds a leaderboard array from the game's current task, limited to top 5 players.

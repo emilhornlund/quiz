@@ -10,7 +10,7 @@ import {
 import {
   GameDocument,
   TaskType,
-} from '../../../game/repositories/models/schemas'
+} from '../../../game-core/repositories/models/schemas'
 
 import { buildGameResultModel } from './game-result.converter'
 

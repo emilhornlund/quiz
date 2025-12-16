@@ -4,9 +4,9 @@ import { GameEventType, GameParticipantType } from '@quiz/common'
 import type { Redis } from 'ioredis'
 import { firstValueFrom, take, toArray } from 'rxjs'
 
+import { TaskType } from '../../game-core/repositories/models/schemas'
 import { PlayerNotFoundException } from '../exceptions'
 import { GameEventOrchestrator } from '../orchestration/event'
-import { TaskType } from '../repositories/models/schemas'
 
 // eslint-disable-next-line import/order
 import { GameEventSubscriber } from './game-event.subscriber'

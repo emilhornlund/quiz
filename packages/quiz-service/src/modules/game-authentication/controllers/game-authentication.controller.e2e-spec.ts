@@ -19,7 +19,7 @@ import {
   DEFAULT_GAME_AUTHORITIES,
   DEFAULT_REFRESH_AUTHORITIES,
 } from '../../../app/shared/token'
-import { Game, GameModel } from '../../game/repositories/models/schemas'
+import { Game, GameModel } from '../../game-core/repositories/models/schemas'
 
 const MOCK_USER_AGENT = 'mock-user-agent'
 

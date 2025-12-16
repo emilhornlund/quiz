@@ -6,16 +6,6 @@ import {
 } from '@quiz/common'
 
 import {
-  QuestionMultiChoiceWithBase,
-  QuestionPinWithBase,
-  QuestionPuzzleWithBase,
-  QuestionRangeWithBase,
-} from '../../../../quiz/repositories/models/schemas'
-import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-} from '../../../repositories/models/schemas'
-import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
   isPinAnswer,
@@ -28,7 +18,17 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../question-answer-type-guards'
+} from '../../../../game-core/orchestration/question-answer-type-guards'
+import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskItem,
+} from '../../../../game-core/repositories/models/schemas'
+import {
+  QuestionMultiChoiceWithBase,
+  QuestionPinWithBase,
+  QuestionPuzzleWithBase,
+  QuestionRangeWithBase,
+} from '../../../../quiz/repositories/models/schemas'
 
 /**
  * Creates the answer distribution for a MultiChoice question result event.

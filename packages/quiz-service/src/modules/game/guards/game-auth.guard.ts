@@ -18,8 +18,8 @@ import {
   AuthGuardRequest,
   GAME_PARTICIPANT_TYPE,
 } from '../../../app/shared/auth'
+import { GameRepository } from '../../game-core/repositories'
 import { User } from '../../user/repositories'
-import { GameRepository } from '../repositories'
 
 /**
  * Guard to authorize access to game-related operations based on the participant type.

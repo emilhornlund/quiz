@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { QuestionType } from '@quiz/common'
 import { HydratedDocument, Model } from 'mongoose'
 
-import { Game } from '../../../../game/repositories/models/schemas'
+import { Game } from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Represents a player's final performance metrics in the game.
