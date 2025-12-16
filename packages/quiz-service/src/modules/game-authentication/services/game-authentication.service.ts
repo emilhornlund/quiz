@@ -1,0 +1,100 @@
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import {
+  AuthGameRequestDto,
+  AuthResponseDto,
+  GameParticipantType,
+  TokenScope,
+} from '@quiz/common'
+import { v4 as uuidv4 } from 'uuid'
+
+import { GameRepository } from '../../game/repositories'
+import { GameDocument } from '../../game/repositories/models/schemas'
+import { TokenService } from '../../token/services'
+
+/**
+ * Service responsible for authenticating participants into games.
+ *
+ * Determines participant identity and role (host or player),
+ * validates game existence, and issues game-scoped JWT token pairs.
+ */
+@Injectable()
+export class GameAuthenticationService {
+  // Logger instance for recording service operations.
+  private readonly logger: Logger = new Logger(GameAuthenticationService.name)
+
+  /**
+   * Creates a new GameAuthenticationService.
+   *
+   * @param gameRepository - Repository used to resolve active games by ID or PIN.
+   * @param tokenService - Service used to issue signed JWT token pairs.
+   */
+  constructor(
+    private readonly gameRepository: GameRepository,
+    private readonly tokenService: TokenService,
+  ) {}
+
+  /**
+   * Authenticate into a game by its UUID or 6-digit PIN.
+   *
+   * @param authGameRequest – DTO containing **either**
+   *   - `gameId` (UUID) to identify the game by its unique ID, **or**
+   *   - `gamePIN` (6-digit string) to identify the game by its PIN.
+   * @param ipAddress - The client's IP address, used for logging and token metadata.
+   * @param userAgent - The client's User-Agent string, used for logging and token metadata.
+   * @param userId - Optional user ID to reuse (from a valid Game‐scoped user token).
+   *                 If omitted, an anonymous participant ID is generated.
+   * @returns Access + refresh tokens scoped to that game.
+   */
+  public async authenticateGame(
+    authGameRequest: AuthGameRequestDto,
+    ipAddress: string,
+    userAgent: string,
+    userId?: string,
+  ): Promise<AuthResponseDto> {
+    let game: GameDocument
+    try {
+      game = await (authGameRequest.gameId
+        ? this.gameRepository.findGameByIDOrThrow(authGameRequest.gameId)
+        : this.gameRepository.findGameByPINOrThrow(authGameRequest.gamePIN))
+    } catch (error) {
+      const { message, stack } = error as Error
+      this.logger.warn(
+        `Failed to authenticate since an active game was not found: '${message}'.`,
+        stack,
+      )
+      throw new UnauthorizedException()
+    }
+
+    const gameId = game._id
+
+    const participantId = userId || uuidv4()
+
+    const existingParticipant = game.participants.find(
+      (participant) => participant.participantId === participantId,
+    )
+
+    let participantType: GameParticipantType
+    if (existingParticipant) {
+      participantType = existingParticipant.type
+    } else if (game.participants.length === 0) {
+      participantType = GameParticipantType.HOST
+    } else {
+      participantType = GameParticipantType.PLAYER
+    }
+
+    this.logger.debug(
+      `Authenticating game '${gameId}' and participant '${participantId}:${participantType}'.`,
+    )
+
+    return this.tokenService.signTokenPair(
+      participantId,
+      TokenScope.Game,
+      ipAddress,
+      userAgent,
+      {
+        gameId,
+        participantType,
+      },
+    )
+  }
+}

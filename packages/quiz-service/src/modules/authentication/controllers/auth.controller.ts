@@ -1,12 +1,10 @@
 import {
   Body,
   Controller,
-  Headers,
   HttpCode,
   HttpStatus,
   Patch,
   Post,
-  UnauthorizedException,
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
@@ -18,7 +16,6 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Authority, TokenScope } from '@quiz/common'
 
 import { TokenService } from '../../token/services'
 import { UserService } from '../../user/services'
@@ -26,7 +23,6 @@ import { AuthService } from '../services'
 
 import { IpAddress, PrincipalId, Public, UserAgent } from './decorators'
 import {
-  AuthGameRequest,
   AuthGoogleExchangeRequest,
   AuthLoginRequest,
   AuthPasswordChangeRequest,
@@ -125,55 +121,6 @@ export class AuthController {
       request.codeVerifier,
       ipAddress,
       userAgent,
-    )
-  }
-
-  /**
-   * Authenticate a client for participation in a specific game by supplying
-   * either the game’s UUID or its 6-digit PIN.
-   *
-   * @param authGameRequest – The request DTO containing **either**
-   *   - `gameId` (UUID) to look up the game by its internal ID, **or**
-   *   - `gamePIN` (6-digit string) to look up the game by its PIN.
-   * @param authorization - Optional Bearer token of an authenticated user.
-   * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
-   * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @returns A pair of access + refresh tokens scoped to the specified game.
-   */
-  @Public()
-  @Post('/game')
-  @ApiOperation({
-    summary: 'Game authentication',
-    description:
-      'Issue access and refresh tokens for participating in a game by providing either its UUID or 6-digit PIN.',
-  })
-  @ApiBody({
-    description:
-      'Payload containing either `gameId` (UUID) or `gamePIN` (6-digit string) to identify the game.',
-    type: AuthGameRequest,
-  })
-  @ApiOkResponse({
-    type: AuthResponse,
-    description: 'Game access and refresh tokens.',
-  })
-  @ApiBadRequestResponse({ description: 'Invalid game PIN format.' })
-  @ApiUnauthorizedResponse({
-    description: 'No active game found with that ID or PIN.',
-  })
-  @HttpCode(HttpStatus.OK)
-  public async authenticateGame(
-    @Body() authGameRequest: AuthGameRequest,
-    @IpAddress() ipAddress: string,
-    @UserAgent() userAgent: string,
-    @Headers('Authorization') authorization?: string,
-  ): Promise<AuthResponse> {
-    const optionalUserId =
-      await this.extractUserIdFromAuthorizationHeader(authorization)
-    return this.authService.authenticateGame(
-      authGameRequest,
-      ipAddress,
-      userAgent,
-      optionalUserId,
     )
   }
 
@@ -282,36 +229,5 @@ export class AuthController {
       authPasswordChangeRequest.oldPassword,
       authPasswordChangeRequest.newPassword,
     )
-  }
-
-  /**
-   * If present, parses and validates a Bearer user‐token from the Authorization header.
-   * Returns the user ID only if it has `TokenScope.User` and includes `Authority.Game`.
-   *
-   * @param authorization - The raw Authorization header (e.g. "Bearer eyJ...")
-   * @returns The user ID to reuse as the game participant, or `undefined`.
-   * @throws UnauthorizedException when the token is invalid or expired.
-   * @private
-   */
-  private async extractUserIdFromAuthorizationHeader(
-    authorization?: string,
-  ): Promise<string | undefined> {
-    if (!authorization) {
-      return undefined
-    }
-    const [type, token] = authorization.split(' ') ?? []
-    const accessToken = type === 'Bearer' ? token : undefined
-
-    try {
-      const payload = await this.tokenService.verifyToken(accessToken)
-      if (
-        payload.scope === TokenScope.User &&
-        payload.authorities.includes(Authority.Game)
-      ) {
-        return payload.sub
-      }
-    } catch {
-      throw new UnauthorizedException('Invalid or expired token')
-    }
   }
 }

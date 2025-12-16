@@ -3,7 +3,6 @@ import { forwardRef, Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 
-import { GameModule } from '../game'
 import { TokenModule } from '../token'
 import { UserModule } from '../user'
 
@@ -16,7 +15,6 @@ import { AuthService, GoogleAuthService } from './services'
     TokenModule,
     EventEmitterModule,
     HttpModule,
-    forwardRef(() => GameModule),
     forwardRef(() => UserModule),
   ],
   controllers: [AuthController],

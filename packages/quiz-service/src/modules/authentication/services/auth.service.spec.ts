@@ -15,7 +15,6 @@ describe('AuthService', () => {
 
     service = new AuthService(
       /* userService    */ {} as any,
-      /* gameRepository */ {} as any,
       /* tokenService   */ {} as any,
       /* eventEmitter   */ eventEmitter,
       /* googleAuthService  */ {} as any,
