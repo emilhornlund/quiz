@@ -6,7 +6,6 @@ import UsersIcon from '../../assets/images/users-icon.svg'
 import {
   IconButtonArrowLeft,
   IconButtonArrowRight,
-  LegacyInfoCard,
   NicknameTextField,
   Page,
   PageProminentIcon,
@@ -62,7 +61,6 @@ const GameJoinPage: FC = () => {
         />
       }
       hideLogin>
-      <LegacyInfoCard />
       <PageProminentIcon src={UsersIcon} alt="Users" />
       <Typography variant="title" size="medium">
         {title}
