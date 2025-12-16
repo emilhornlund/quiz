@@ -539,11 +539,11 @@ user.utils.ts | 0 | 100 | 0 | 0 | 1-4
 
 #### Step 3.1: Authentication Guards
 
-- [ ] **modules/game/guards/game-auth.guard.ts** (70% stmts, 67.85% lines)
-  - [ ] Test valid game participant authorization
-  - [ ] Test invalid participant scenarios
-  - [ ] Test missing game document cases
-  - [ ] Test player vs host permission checks
+- [X] **modules/game/guards/game-auth.guard.ts** (70% stmts, 67.85% lines)
+  - [X] Test valid game participant authorization
+  - [X] Test invalid participant scenarios
+  - [X] Test missing game document cases
+  - [X] Test player vs host permission checks
 
 #### Step 3.2: Input Validation Pipes
 
