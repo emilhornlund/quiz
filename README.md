@@ -166,15 +166,14 @@ All build, test, release, and deployment steps are now handled automatically by 
 
 ## License
 
-Copyright © 2025 Emil Hörnlund
+This project is source-available and licensed for non-commercial use only.
 
-This source code is provided for educational and personal use only.
-Commercial use, redistribution, or sublicensing is prohibited without
-explicit written permission from the copyright holder.
+You are free to read, learn from, and modify the code for personal or
+educational purposes. Commercial use, including offering the software
+as a hosted or SaaS service, is not permitted without explicit written
+permission from the author.
 
-You are permitted to read, learn from, and modify the code for non‑commercial purposes,
-provided that this notice is retained in all copies or substantial portions of the software.
+If you are interested in using this project commercially, please
+contact the author to discuss licensing options.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+[See the LICENSE file for full terms.](./LICENSE)
