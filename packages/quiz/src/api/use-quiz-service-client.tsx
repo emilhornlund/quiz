@@ -25,14 +25,11 @@ import {
   TokenType,
   UpdateGoogleUserProfileRequestDto,
   UpdateLocalUserProfileRequestDto,
-  UserMigrationRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
 import { useCallback } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 
 import { useAuthContext } from '../context/auth'
-import { useMigrationContext } from '../context/migration'
 import { useUserContext } from '../context/user'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
 
@@ -71,13 +68,6 @@ export const useQuizServiceClient = () => {
   const { user, game, setTokenPair } = useAuthContext()
 
   const { fetchCurrentUser, clearCurrentUser } = useUserContext()
-
-  const { completeMigration } = useMigrationContext()
-
-  const [migrationToken] = useLocalStorage<string | undefined>(
-    'migrationToken',
-    undefined,
-  )
 
   /**
    * Retrieves the token string for the specified scope and token type
@@ -247,17 +237,11 @@ export const useQuizServiceClient = () => {
    * @returns A promise that resolves to the login response with access and refresh tokens.
    */
   const login = (request: AuthLoginRequestDto): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>(
-      `/auth/login${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
-      {
-        email: request.email,
-        password: request.password,
-      },
-    ).then(async (res) => {
+    apiPost<AuthResponseDto>('/auth/login', {
+      email: request.email,
+      password: request.password,
+    }).then(async (res) => {
       setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (migrationToken) {
-        completeMigration()
-      }
       await fetchCurrentUser(res.accessToken)
       return res
     })
@@ -272,17 +256,13 @@ export const useQuizServiceClient = () => {
   const googleExchangeCode = (
     request: AuthGoogleExchangeRequestDto,
   ): Promise<AuthResponseDto> =>
-    apiPost<AuthResponseDto>(
-      `/auth/google/exchange${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
-      request,
-    ).then(async (res) => {
-      setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
-      if (migrationToken) {
-        completeMigration()
-      }
-      await fetchCurrentUser(res.accessToken)
-      return res
-    })
+    apiPost<AuthResponseDto>('/auth/google/exchange', request).then(
+      async (res) => {
+        setTokenPair(TokenScope.User, res.accessToken, res.refreshToken)
+        await fetchCurrentUser(res.accessToken)
+        return res
+      },
+    )
 
   /**
    * Sends a game authentication request to the API and stores the returned authentication tokens.
@@ -427,35 +407,15 @@ export const useQuizServiceClient = () => {
   const register = (
     request: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> =>
-    apiPost<CreateUserResponseDto>(
-      `/users${parseQueryParams({ ...(migrationToken ? { migrationToken } : {}) })}`,
-      {
-        email: request.email,
-        password: request.password,
-        givenName: request.givenName,
-        familyName: request.familyName,
-        defaultNickname: request.defaultNickname,
-      },
-    ).then((response) => {
-      if (migrationToken) {
-        completeMigration()
-      }
+    apiPost<CreateUserResponseDto>('/users', {
+      email: request.email,
+      password: request.password,
+      givenName: request.givenName,
+      familyName: request.familyName,
+      defaultNickname: request.defaultNickname,
+    }).then((response) => {
       notifySuccess('Welcome aboard! Your account is ready to roll')
       return response
-    })
-
-  /**
-   * Migrates a legacy anonymous player profile to the current user account.
-   *
-   * Sends the migration token to the backend, linking the old profile data
-   * with the authenticated user.
-   *
-   * @param request - The migration request containing the 43-character token.
-   * @returns A promise that resolves when the migration is successful.
-   */
-  const migrateUser = (request: UserMigrationRequestDto): Promise<void> =>
-    apiPost<void>('/migration/user', request).then(() => {
-      notifySuccess('Your past self has officially joined the party!')
     })
 
   /**
@@ -807,7 +767,6 @@ export const useQuizServiceClient = () => {
     sendPasswordResetEmail,
     resetPassword,
     register,
-    migrateUser,
     getUserProfile,
     updateUserProfile,
     updateUserPassword,
