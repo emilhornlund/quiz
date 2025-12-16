@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import {
   AuthLoginRequestDto,
@@ -42,7 +36,6 @@ export class AuthService {
    * @param googleAuthService - Service responsible for handling Google OAuth flows.
    */
   constructor(
-    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly eventEmitter: EventEmitter2,

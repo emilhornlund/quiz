@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bullmq'
-import { forwardRef, Logger, Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
@@ -41,7 +41,7 @@ import {
         schema: GameSchema,
       },
     ]),
-    forwardRef(() => UserModule),
+    UserModule,
     QuizModule,
     GameResultModule,
   ],
