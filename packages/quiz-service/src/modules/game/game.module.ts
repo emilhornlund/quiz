@@ -3,6 +3,7 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 
 import { GameCoreModule } from '../game-core'
+import { GameEventModule } from '../game-event/game-event.module'
 import { GameResultModule } from '../game-result/game-result.module'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
@@ -13,10 +14,7 @@ import {
   QuizGameController,
 } from './controllers'
 import { GameListener } from './handlers'
-import { GameEventOrchestrator } from './orchestration/event'
 import {
-  GameEventPublisher,
-  GameEventSubscriber,
   GameExpirySchedulerService,
   GameService,
   GameTaskTransitionScheduler,
@@ -33,6 +31,7 @@ import {
     BullModule.registerQueue({ name: TASK_QUEUE_NAME }),
     EventEmitterModule,
     GameCoreModule,
+    GameEventModule,
     GameResultModule,
     QuizModule,
     UserModule,
@@ -41,13 +40,10 @@ import {
   providers: [
     Logger,
     GameService,
-    GameEventPublisher,
-    GameEventSubscriber,
     GameExpirySchedulerService,
     GameListener,
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
-    GameEventOrchestrator,
   ],
   exports: [],
 })

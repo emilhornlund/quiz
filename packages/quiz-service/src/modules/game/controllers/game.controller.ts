@@ -31,11 +31,12 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
+import { GameEventSubscriber } from '../../game-event/services'
 import {
   ParseCorrectAnswerRequestPipe,
   ParseSubmitQuestionAnswerRequestPipe,
 } from '../pipes'
-import { GameEventSubscriber, GameService } from '../services'
+import { GameService } from '../services'
 
 import { ApiGameIdParam, ApiPlayerIDParam } from './decorators/api'
 import { AuthorizedGame } from './decorators/auth'

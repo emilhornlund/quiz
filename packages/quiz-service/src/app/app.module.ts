@@ -19,6 +19,7 @@ import { AuthenticationModule } from '../modules/authentication'
 import { GameModule } from '../modules/game'
 import { GameAuthenticationModule } from '../modules/game-authentication'
 import { GameCoreModule } from '../modules/game-core'
+import { GameEventModule } from '../modules/game-event/game-event.module'
 import { GameResultModule } from '../modules/game-result/game-result.module'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
@@ -187,6 +188,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         ]),
     AuthenticationModule,
     GameCoreModule,
+    GameEventModule,
     GameModule,
     GameAuthenticationModule,
     GameResultModule,

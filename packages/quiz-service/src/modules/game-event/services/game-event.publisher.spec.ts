@@ -7,15 +7,15 @@ import {
 } from '../../game-core/repositories/models/schemas'
 import { GameEventOrchestrator } from '../orchestration/event'
 
-// eslint-disable-next-line import/order
 import { GameEventPublisher } from './game-event.publisher'
 
 // ---- Mocks ----
-jest.mock('./utils', () => ({
+jest.mock('../../game-core/utils', () => ({
   getRedisPlayerParticipantAnswerKey: jest.fn(() => 'ans:key'),
 }))
 
-import { getRedisPlayerParticipantAnswerKey } from './utils'
+// eslint-disable-next-line import/order
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 
 describe('GameEventPublisher', () => {
   let redis: jest.Mocked<Redis>

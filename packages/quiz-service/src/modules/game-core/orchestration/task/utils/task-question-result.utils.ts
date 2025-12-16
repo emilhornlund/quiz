@@ -1,7 +1,6 @@
 import { GameMode, isDefined, QuestionType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { isParticipantPlayer } from '../../../../game/services/utils'
 import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
@@ -23,6 +22,7 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../../repositories/models/schemas'
+import { isParticipantPlayer } from '../../../utils'
 import { isQuestionResultTask, isQuestionTask } from '../../task-type-guards'
 
 import {

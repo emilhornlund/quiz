@@ -7,8 +7,8 @@ import {
   GameDocument,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
+import { GameEventPublisher } from '../../game-event/services'
 
-import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionService } from './game-task-transition.service'
 
 export const TASK_QUEUE_NAME = 'task'

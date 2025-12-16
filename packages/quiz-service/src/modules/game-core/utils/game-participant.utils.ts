@@ -3,7 +3,7 @@ import { GameParticipantType } from '@quiz/common'
 import {
   Participant,
   ParticipantPlayerWithBase,
-} from '../../../game-core/repositories/models/schemas'
+} from '../repositories/models/schemas'
 
 /**
  * Checks if the given participant is of type `PLAYER`.

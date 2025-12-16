@@ -10,13 +10,12 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { GameResultService } from '../../game-result/services'
-import { GameEventOrchestrator } from '../orchestration/event'
-
 import {
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
-} from './utils'
+} from '../../game-core/utils'
+import { GameEventOrchestrator } from '../../game-event/orchestration/event'
+import { GameResultService } from '../../game-result/services'
 
 /**
  * Service responsible for determining the appropriate transition delay and callback

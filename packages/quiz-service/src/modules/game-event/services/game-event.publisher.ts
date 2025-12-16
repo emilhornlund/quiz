@@ -8,10 +8,10 @@ import {
   Participant,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import { GameEventOrchestrator } from '../orchestration/event'
 
 import { DistributedEvent } from './models/event'
-import { getRedisPlayerParticipantAnswerKey } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 

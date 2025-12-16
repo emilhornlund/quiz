@@ -20,6 +20,7 @@ import {
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import { PlayerNotFoundException } from '../../game-core/exceptions'
 import {
   isMultiChoiceCorrectAnswer,
   isPinCorrectAnswer,
@@ -32,22 +33,18 @@ import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
 import { isQuestionResultTask } from '../../game-core/orchestration/task-type-guards'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
+import { GameEventOrchestrator } from '../../game-event/orchestration/event'
+import { GameEventPublisher } from '../../game-event/services'
 import { QuizRepository } from '../../quiz/repositories'
 import { User } from '../../user/repositories'
 import {
   NicknameNotUniqueException,
-  PlayerNotFoundException,
   PlayerNotUniqueException,
 } from '../exceptions'
-import { GameEventOrchestrator } from '../orchestration/event'
 
-import { GameEventPublisher } from './game-event.publisher'
 import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
-import {
-  getRedisPlayerParticipantAnswerKey,
-  isNicknameUnique,
-  isPlayerUnique,
-} from './utils'
+import { isNicknameUnique, isPlayerUnique } from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.

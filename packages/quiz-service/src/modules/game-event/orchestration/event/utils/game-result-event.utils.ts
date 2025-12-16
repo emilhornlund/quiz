@@ -21,6 +21,7 @@ import {
   QuestionResultTaskWithBase,
   TaskType,
 } from '../../../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../../../game-core/utils'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -29,7 +30,6 @@ import {
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
 } from '../../../../quiz/services/utils'
-import { isParticipantPlayer } from '../../../services/utils'
 
 import {
   createMultiChoiceQuestionResultDistribution,

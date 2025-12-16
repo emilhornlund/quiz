@@ -4,19 +4,19 @@ import { GameEventType, GameParticipantType } from '@quiz/common'
 import type { Redis } from 'ioredis'
 import { firstValueFrom, take, toArray } from 'rxjs'
 
+import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { TaskType } from '../../game-core/repositories/models/schemas'
-import { PlayerNotFoundException } from '../exceptions'
 import { GameEventOrchestrator } from '../orchestration/event'
 
-// eslint-disable-next-line import/order
 import { GameEventSubscriber } from './game-event.subscriber'
 
 // ---- Mocks ----
-jest.mock('./utils', () => ({
+jest.mock('../../game-core/utils', () => ({
   getRedisPlayerParticipantAnswerKey: jest.fn(() => 'ans:key'),
 }))
 
-import { getRedisPlayerParticipantAnswerKey } from './utils'
+// eslint-disable-next-line import/order
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 
 describe('GameEventSubscriber', () => {
   let redis: jest.Mocked<Redis>

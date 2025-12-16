@@ -16,13 +16,13 @@ import { Redis } from 'ioredis'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
+import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
-import { PlayerNotFoundException } from '../exceptions'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import { GameEventOrchestrator } from '../orchestration/event'
 
 import { DistributedEvent } from './models/event'
-import { getRedisPlayerParticipantAnswerKey } from './utils'
 
 const REDIS_PUBSUB_CHANNEL = 'events'
 const LOCAL_EVENT_EMITTER_CHANNEL = 'event'
