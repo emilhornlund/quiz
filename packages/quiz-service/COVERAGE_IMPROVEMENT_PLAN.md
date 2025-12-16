@@ -580,9 +580,9 @@ user.utils.ts | 0 | 100 | 0 | 0 | 1-4
 
 #### Step 5.3: Authentication Service Edge Cases
 
-- [ ] **modules/authentication/services/auth.service.ts** (96.15% stmts, 96% lines)
-  - [ ] Test password change edge cases (lines 153-156)
-  - [ ] Test token refresh scenarios
+- [X] **modules/authentication/services/auth.service.ts** (96.15% stmts, 96% lines)
+  - [X] Test password change edge cases (lines 153-156)
+  - [X] Test token refresh scenarios
 
 #### Step 5.4: Game Service Edge Cases
 
