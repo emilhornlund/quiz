@@ -19,7 +19,6 @@ async function bootstrap() {
     .addTag('game', 'Operations for creating and managing quiz games.')
     .addTag('health', 'Operations determining service health.')
     .addTag('media', 'Operations for uploading and retrieving media assets.')
-    .addTag('migration', 'Operations for managing user migrations.')
     .addTag('profile', 'Operations for managing current user profiles.')
     .addTag('quiz', 'Operations for creating and managing quiz content.')
     .addTag('user', 'Operations for creating and managing users.')

@@ -7,8 +7,8 @@ import {
   DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME,
   DEFAULT_GAME_AUTHORITIES,
   DEFAULT_USER_AUTHORITIES,
-} from '../../src/auth/services/utils'
-import { User, UserModel } from '../../src/user/repositories'
+} from '../../src/app/shared/token'
+import { User, UserModel } from '../../src/modules/user/repositories'
 import { buildMockPrimaryUser } from '../data'
 
 export async function createDefaultUserAndAuthenticate(

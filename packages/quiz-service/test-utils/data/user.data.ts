@@ -1,8 +1,7 @@
 import { AuthProvider } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GoogleUser, LocalUser, NoneUser } from '../../src/user/repositories'
-import { computeMigrationToken } from '../utils'
+import { GoogleUser, LocalUser } from '../../src/modules/user/repositories'
 
 export const MOCK_PRIMARY_USER_EMAIL = 'user@example.com'
 export const MOCK_PRIMARY_USER_GIVEN_NAME = 'John'
@@ -110,23 +109,6 @@ export function buildMockQuaternaryUser(user?: Partial<LocalUser>): LocalUser {
     givenName: MOCK_QUATERNARY_USER_GIVEN_NAME,
     familyName: MOCK_QUATERNARY_USER_FAMILY_NAME,
     defaultNickname: MOCK_QUATERNARY_USER_DEFAULT_NICKNAME,
-    createdAt: now,
-    updatedAt: now,
-    ...(user ?? {}),
-  }
-}
-
-export function buildMockNoneMigratedPlayerUser(
-  user?: Partial<NoneUser>,
-): NoneUser {
-  const userId = user?._id ?? uuidv4()
-  const now = new Date()
-  return {
-    _id: userId,
-    authProvider: AuthProvider.None,
-    email: 'n/a@na.na',
-    defaultNickname: '',
-    migrationTokens: [computeMigrationToken(uuidv4(), userId)],
     createdAt: now,
     updatedAt: now,
     ...(user ?? {}),

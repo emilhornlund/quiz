@@ -1,7 +1,0 @@
-export * from './auth.response'
-export * from './auth-game.request'
-export * from './auth-google-exchange.request'
-export * from './auth-login.request'
-export * from './auth-password-change.request'
-export * from './auth-refresh.request'
-export * from './auth-revoke.request'

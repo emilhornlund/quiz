@@ -15,13 +15,12 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   BaseTask,
   Game,
-  GameResult,
   LeaderboardTask,
   LeaderboardTaskItem,
+  LobbyTaskWithBase,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
-  PlayerMetric,
   PodiumTask,
   QuestionResultTask,
   QuestionResultTaskCorrectMultiChoiceAnswerWithBase,
@@ -41,8 +40,11 @@ import {
   QuestionTaskTypeAnswerAnswer,
   QuitTask,
   TaskType,
-} from '../../src/game/repositories/models/schemas'
-import { buildLobbyTask } from '../../src/game/services/utils/tasks'
+} from '../../src/modules/game-core/repositories/models/schemas'
+import {
+  GameResult,
+  PlayerMetric,
+} from '../../src/modules/game-result/repositories/models/schemas'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -53,8 +55,8 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-} from '../../src/quiz/repositories/models/schemas'
-import { User } from '../../src/user/repositories'
+} from '../../src/modules/quiz/repositories/models/schemas'
+import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
 
@@ -69,7 +71,7 @@ export function createMockGameDocument(game?: Partial<Game>): Game {
     questions: [],
     nextQuestion: 0,
     participants: [],
-    currentTask: buildLobbyTask(),
+    currentTask: createMockLobbyTaskDocument(),
     previousTasks: [],
     updated: offsetSeconds(0),
     created: offsetSeconds(0),
@@ -248,6 +250,24 @@ export function createMockQuestionTaskDocument(
     answers: [],
     presented: offsetSeconds(0),
     created: offsetSeconds(0),
+    ...(task ?? {}),
+  }
+}
+
+/**
+ * Creates a mock Lobby task document for tests.
+ *
+ * @param task - Optional overrides applied on top of the default Lobby task shape.
+ * @returns A LobbyTask document with default values and any provided overrides applied.
+ */
+export function createMockLobbyTaskDocument(
+  task?: Partial<LobbyTaskWithBase>,
+): LobbyTaskWithBase {
+  return {
+    _id: uuidv4(),
+    type: TaskType.Lobby,
+    status: 'pending',
+    created: new Date(),
     ...(task ?? {}),
   }
 }

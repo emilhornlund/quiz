@@ -1,83 +1,216 @@
 # AGENTS.md
 
-## Build/Lint/Test Commands
+This document defines **how AI agents and contributors are expected to work in the `quiz` monorepo**. Follow these instructions strictly to avoid breaking workspace assumptions, CI pipelines, or architectural constraints.
 
-### Root Commands
+---
 
-- `yarn build` - Build all packages
-- `yarn lint` - Lint all packages
-- `yarn lint:fix` - Auto-fix linting issues across all packages
-- `yarn test` - Run tests for all packages concurrently
-- `yarn test:coverage` - Run tests with coverage for all packages
+## Repository Overview
+
+* **Monorepo**: Yarn workspaces
+* **Packages**:
+
+    * `@quiz/common` – shared domain models, enums, utilities
+    * `@quiz/quiz` – frontend (React + Vite + SCSS modules)
+    * `@quiz/quiz-service` – backend (NestJS)
+
+All packages are built, linted, and tested **via the root workspace** unless explicitly stated otherwise.
+
+---
+
+## Build, Lint, and Test Commands
+
+### Root-Level Commands (Preferred)
+
+Use these whenever possible.
+
+* `yarn clean` – Clean all package build artifacts
+* `yarn build` – Build all packages
+* `yarn lint` – Lint all packages
+* `yarn lint:fix` – Auto-fix lint issues
+* `yarn test` – Run all tests concurrently (common + backend + frontend)
+* `yarn test:coverage` – Run all tests with coverage
+
+---
+
+### Development Commands
+
+* `yarn dev` – Run frontend, backend, and Storybook concurrently
+* `yarn serve` – Serve built frontend and backend concurrently
+
+---
 
 ### Package-Specific Commands
 
-#### Frontend (@quiz/quiz - Vitest)
+Use these **only when scoping is required**.
 
-- `yarn workspace @quiz/quiz test` - Run all frontend tests
-- `yarn workspace @quiz/quiz test:watch` - Run tests in watch mode
-- `yarn workspace @quiz/quiz test:update` - Update snapshots
-- `yarn workspace @quiz/quiz test:coverage` - Run tests with coverage
-- `yarn workspace @quiz/quiz vitest run path/to/file.test.ts` - Run single test file
+#### Common
 
-#### Backend (@quiz/quiz-service - Jest)
+* `yarn workspace @quiz/common build`
+* `yarn workspace @quiz/common test`
+* `yarn workspace @quiz/common test:coverage`
 
-- `yarn workspace @quiz/quiz-service test` - Run all backend tests
-- `yarn workspace @quiz/quiz-service test:coverage` - Run tests with coverage
-- `yarn workspace @quiz/quiz-service jest path/to/file.spec.ts` - Run single test file
+#### Frontend (`@quiz/quiz`)
 
-#### Common (@quiz/common - Jest)
+* `yarn workspace @quiz/quiz dev`
+* `yarn workspace @quiz/quiz build`
+* `yarn workspace @quiz/quiz test`
+* `yarn workspace @quiz/quiz test:watch`
+* `yarn workspace @quiz/quiz test:coverage`
+* `yarn workspace @quiz/quiz storybook`
 
-- `yarn workspace @quiz/common test` - Run all common tests
-- `yarn workspace @quiz/common test:coverage` - Run tests with coverage
-- `yarn workspace @quiz/common jest path/to/file.spec.ts` - Run single test file
+#### Backend (`@quiz/quiz-service`)
+
+* `yarn workspace @quiz/quiz-service dev`
+* `yarn workspace @quiz/quiz-service build`
+* `yarn workspace @quiz/quiz-service test`
+* `yarn workspace @quiz/quiz-service test:coverage`
+* `yarn workspace @quiz/quiz-service check-circular-deps`
+
+---
+
+### Running a Single Test File
+
+* **Frontend**:
+
+    * `yarn workspace @quiz/quiz vitest run path/to/file.test.ts`
+* **Backend**:
+
+    * `yarn workspace @quiz/quiz-service jest path/to/file.spec.ts`
+* **Common**:
+
+    * `yarn workspace @quiz/common jest path/to/file.spec.ts`
+
+---
 
 ## Code Style Guidelines
 
 ### Formatting
 
-- Use Prettier with config: bracketSameLine=true, bracketSpacing=true, printWidth=80, semi=false, singleQuote=true, tabWidth=2, trailingComma=all
-- No semicolons, single quotes, 2-space indentation
+* Prettier enforced via ESLint
+* No semicolons
+* Single quotes
+* 2-space indentation
+* Trailing commas where valid
+* `printWidth: 80`
+* `bracketSpacing: true`
+* Frontend only: `bracketSameLine: true`
+
+Do not reformat files unnecessarily.
+
+---
 
 ### Imports
 
-- Group imports: builtin → external → internal → parent → sibling → index → unknown
-- Add newlines between import groups
-- Alphabetize imports within groups (case-insensitive ascending)
-- Use `sort-imports` rule with ignoreCase=true, ignoreDeclarationSort=true
+* Order strictly as follows:
 
-### TypeScript
+    1. Built-in
+    2. External dependencies
+    3. Internal workspace packages
+    4. Parent imports
+    5. Sibling imports
+    6. Index imports
+    7. Unknown / side-effect imports
 
-- Strict typing enabled
-- Backend allows `any` types (@typescript-eslint/no-explicit-any: off)
-- Backend doesn't require explicit function return types (@typescript-eslint/explicit-function-return-type: off)
-- Frontend requires explicit return types for React components
+* One empty line between groups
+
+* Alphabetize within groups (case-insensitive)
+
+---
+
+### TypeScript Rules
+
+* `strict` mode enabled everywhere
+
+#### Common
+
+* No `any`
+* Strong typing required
+* No framework-specific dependencies
+
+#### Backend (`quiz-service`)
+
+* `any` allowed only when justified
+* Explicit return types optional
+* Prefer DTOs + validation decorators
+* Avoid circular dependencies and `forwardRef` unless unavoidable
+
+#### Frontend (`quiz`)
+
+* React components **must** have explicit return types
+* Prefer immutable patterns
+* Avoid unnecessary memoization
+
+---
 
 ### Naming Conventions
 
-- Components: PascalCase (e.g., `Button`, `AuthLoginPage`)
-- Files: kebab-case (e.g., `auth-login-page.tsx`, `email.service.ts`)
-- Variables/Functions: camelCase
-- Classes: PascalCase
-- Enums: PascalCase with .enum.ts extension
-- Constants: UPPER_SNAKE_CASE
+* Components: `PascalCase`
+* Files: `kebab-case.ts`
+* Functions / variables: `camelCase`
+* Classes: `PascalCase`
+* Enums: `PascalCase.enum.ts`
+* Constants: `UPPER_SNAKE_CASE`
 
-### Error Handling
+Naming must reflect **domain intent**, not implementation details.
 
-- Backend: Use NestJS Logger for logging, try-catch blocks with proper error messages
-- Frontend: React Error Boundaries and proper error states
-- Log errors with context (message, stack trace)
+---
 
-### Comments
+## Architecture Guidelines
 
-- Use JSDoc comments for classes, methods, and complex logic
-- Prefer self-documenting code over comments
-- Backend services include detailed JSDoc for all public methods
+### Frontend (`@quiz/quiz`)
 
-### Architecture Patterns
+* React functional components only
+* Hooks + Context API
+* SCSS modules only (no global CSS)
+* Animations must use existing helpers and patterns
+* No direct backend assumptions
 
-- Frontend: React functional components with hooks, Context API for state management
-- Backend: NestJS with dependency injection, modules, controllers, services
-- Shared: Common package for shared types and utilities
-- Testing: Vitest for frontend, Jest for backend/common, comprehensive test coverage</content>
-  <parameter name="filePath">/home/emilhornlund/projects/quiz/AGENTS.md
+---
+
+### Backend (`@quiz/quiz-service`)
+
+* NestJS modules with strict responsibility boundaries
+* Controllers must be thin
+* Business logic belongs in services
+* Persistence isolated to repositories
+* Prefer event-driven patterns over direct cross-module calls
+
+Circular dependencies are treated as architectural defects.
+
+---
+
+### Common (`@quiz/common`)
+
+* Pure TypeScript only
+* No runtime dependencies on frontend or backend
+* Used as a shared contract
+
+---
+
+## Testing Guidelines
+
+* Do not rewrite existing tests unless explicitly requested
+* Prefer extending coverage over replacing tests
+* Avoid unnecessary mocks
+* No commented-out tests
+
+### Frontend
+
+* Vitest + Testing Library
+* No mocking of SCSS unless required
+* Avoid mocking React state unless unavoidable
+
+### Backend / Common
+
+* Jest
+* Favor real implementations over mocks where possible
+
+---
+
+## Git and CI Expectations
+
+* Each logical change should be a separate commit
+* Commits should be small, focused, and reversible
+* CI assumes root-level scripts
+
+Breaking any of the rules above may result in rejected changes or failing CI.

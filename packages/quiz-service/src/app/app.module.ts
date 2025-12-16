@@ -15,13 +15,17 @@ import Joi from 'joi'
 import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
-import { AuthModule } from '../auth'
-import { GameModule } from '../game'
-import { HealthModule } from '../health'
-import { MediaModule } from '../media'
-import { MigrationModule } from '../migration'
-import { QuizModule } from '../quiz'
-import { UserModule } from '../user'
+import { AuthenticationModule } from '../modules/authentication'
+import { GameModule } from '../modules/game'
+import { GameAuthenticationModule } from '../modules/game-authentication'
+import { GameCoreModule } from '../modules/game-core'
+import { GameEventModule } from '../modules/game-event/game-event.module'
+import { GameResultModule } from '../modules/game-result/game-result.module'
+import { HealthModule } from '../modules/health'
+import { MediaModule } from '../modules/media'
+import { QuizModule } from '../modules/quiz'
+import { TokenModule } from '../modules/token'
+import { UserModule } from '../modules/user'
 
 import { EnvironmentVariables } from './config'
 import { AppController } from './controllers'
@@ -182,12 +186,16 @@ const isTestEnv = process.env.NODE_ENV === 'test'
             }),
           }),
         ]),
-    AuthModule,
+    AuthenticationModule,
+    GameCoreModule,
+    GameEventModule,
     GameModule,
+    GameAuthenticationModule,
+    GameResultModule,
     HealthModule,
     MediaModule,
-    MigrationModule,
     QuizModule,
+    TokenModule,
     UserModule,
   ],
   controllers: [AppController],
