@@ -25,7 +25,6 @@ import {
 } from '../../../game-core/repositories/models/schemas'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
-import { GameEventOrchestrator as IGameEventOrchestrator } from './game-event-orchestrator.interface'
 import { buildGameLeaderboardHostEvent } from './utils/game-leaderboard-event.utils'
 import { buildGameLoadingEvent } from './utils/game-loading-event.utils'
 import {
@@ -48,7 +47,7 @@ import {
 } from './utils/game-result-event.utils'
 
 @Injectable()
-export class GameEventOrchestrator implements IGameEventOrchestrator {
+export class GameEventOrchestrator {
   /**
    * Constructs an event for the host based on the current state of the game document.
    *
