@@ -557,12 +557,12 @@ user.utils.ts | 0 | 100 | 0 | 0 | 1-4
 
 #### Step 4.1: Health Monitoring
 
-- [ ] **modules/health/controllers/health.controller.ts** (80% stmts, 76.92% lines)
-  - [ ] Test health endpoint responses
-  - [ ] Test overall system health aggregation
-- [ ] **modules/health/indicators/redis-health.indicator.ts** (69.23% stmts, 63.63% lines)
-  - [ ] Test Redis connection status checks
-  - [ ] Test Redis error scenarios
+- [X] **modules/health/controllers/health.controller.ts** (80% stmts, 76.92% lines)
+  - [X] Test health endpoint responses
+  - [X] Test overall system health aggregation
+- [X] **modules/health/indicators/redis-health.indicator.ts** (69.23% stmts, 63.63% lines)
+  - [X] Test Redis connection status checks
+  - [X] Test Redis error scenarios
 
 ### Phase 5: Medium Priority Improvements
 
