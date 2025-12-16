@@ -547,11 +547,11 @@ user.utils.ts | 0 | 100 | 0 | 0 | 1-4
 
 #### Step 3.2: Input Validation Pipes
 
-- [ ] **modules/game/pipes/parse-submit-question-answer-request.pipe.ts** (53.84% stmts, 50% lines)
-  - [ ] Test valid answer submissions for all question types
-  - [ ] Test invalid answer formats
-  - [ ] Test missing required fields
-  - [ ] Test type conversion edge cases
+- [X] **modules/game/pipes/parse-submit-question-answer-request.pipe.ts** (53.84% stmts, 50% lines)
+  - [X] Test valid answer submissions for all question types
+  - [X] Test invalid answer formats
+  - [X] Test missing required fields
+  - [X] Test type conversion edge cases
 
 ### Phase 4: Infrastructure and Health
 
