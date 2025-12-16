@@ -21,9 +21,10 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../../test-utils/utils'
+import { Game, TaskType } from '../../game/repositories/models/schemas'
 import { Quiz } from '../../quiz/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
-import { Game, GameResult, TaskType } from '../repositories/models/schemas'
+import { GameResult } from '../repositories/models/schemas'
 
 describe('GameResultController (e2e)', () => {
   let app: INestApplication
@@ -653,7 +654,7 @@ describe('GameResultController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Game not found by id '${gameID}'`,
+            message: `Game results not found by game id '${gameID}'`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -661,12 +662,16 @@ describe('GameResultController (e2e)', () => {
     })
 
     it('should return a 403 forbidden error when player is not a participant of an existing game', async () => {
-      const { accessToken } = await createDefaultUserAndAuthenticate(app)
-
       const anotherHostUser = await userModel.create(buildMockTertiaryUser())
+
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
 
       const game = await gameModel.create(
         buildMockClassicModeGame(anotherHostUser, playerUser),
+      )
+
+      await gameResultModel.create(
+        buildMockClassicModeGameResult(game, anotherHostUser, playerUser),
       )
 
       return supertest(app.getHttpServer())

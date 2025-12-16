@@ -43,6 +43,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Check Circular Dependencies
+        run: yarn workspace @quiz/quiz-service check-circular-deps
+
       - name: Test & Coverage
         run: yarn test:coverage
 

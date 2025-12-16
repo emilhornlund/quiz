@@ -20,7 +20,6 @@ import { EnvironmentVariables } from '../../../app/config'
 import { isLocalUser } from '../../../app/shared/user'
 import { GoogleProfileDto } from '../../authentication/services/models'
 import { EmailService } from '../../email/services'
-import { MigrationService } from '../../migration/services'
 import { TokenService } from '../../token/services'
 import { UpdateLocalUserProfileRequest } from '../controllers/models'
 import { BadCredentialsException } from '../exceptions'
@@ -40,14 +39,12 @@ export class UserService {
    * @param userRepository - Repository for user data access.
    * @param tokenService - Service used to issue user-scoped tokens for email verification and password reset flows.
    * @param emailService - Service for sending emails (verification, welcome, etc.).
-   * @param migrationService - Service responsible for migrating legacy user data.
    * @param configService - Service for reading application configuration.
    */
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenService: TokenService,
     private readonly emailService: EmailService,
-    private readonly migrationService: MigrationService,
     private readonly configService: ConfigService<EnvironmentVariables>,
   ) {}
 
@@ -92,12 +89,10 @@ export class UserService {
    * Creates and persists a new local-auth user.
    *
    * @param requestDto       Data for the new user (email, password, optional names).
-   * @param migrationToken   Optional migration token identifying the legacy anonymous user.
    * @returns A Promise resolving to the created user’s details.
    */
   public async createUser(
     requestDto: CreateUserRequestDto,
-    migrationToken?: string,
   ): Promise<CreateUserResponseDto> {
     const { email, password, givenName, familyName, defaultNickname } =
       requestDto
@@ -122,26 +117,8 @@ export class UserService {
       defaultNickname,
     }
 
-    let createdUser: LocalUser
-    if (migrationToken) {
-      try {
-        createdUser =
-          await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
-            migrationToken,
-            null,
-            { ...details, authProvider: AuthProvider.Local },
-          )
-      } catch (error) {
-        const { message, stack } = error as Error
-        this.logger.debug(
-          `Failed to migrate legacy user while creating local user: '${message}'.`,
-          stack,
-        )
-        createdUser = await this.userRepository.createLocalUser(details)
-      }
-    } else {
-      createdUser = await this.userRepository.createLocalUser(details)
-    }
+    const createdUser: LocalUser =
+      await this.userRepository.createLocalUser(details)
 
     this.logger.log(`Created a new user with email: '${email}'.`)
 
@@ -162,13 +139,11 @@ export class UserService {
   /**
    * Finds an existing Google user or creates a new one from OAuth profile.
    *
-   * @param profile          The GoogleProfileDto containing info from Google.
-   * @param migrationToken   Optional migration token identifying the legacy anonymous user.
+   * @param profile - The GoogleProfileDto containing info from Google.
    * @returns A Promise resolving to the existing or newly created GoogleUser.
    */
   public async verifyOrCreateGoogleUser(
     profile: GoogleProfileDto,
-    migrationToken?: string,
   ): Promise<GoogleUser> {
     const existingUser =
       await this.userRepository.findAndUpdateGoogleUserByGoogleId(profile.id, {
@@ -190,21 +165,6 @@ export class UserService {
     }
 
     if (existingUser) {
-      if (migrationToken) {
-        try {
-          return await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-            migrationToken,
-            existingUser._id,
-          )
-        } catch (error) {
-          const { message, stack } = error as Error
-          this.logger.debug(
-            `Failed to migrate legacy user while authenticating google user: '${message}'.`,
-            stack,
-          )
-          return existingUser
-        }
-      }
       return existingUser
     }
 
@@ -220,29 +180,8 @@ export class UserService {
       defaultNickname: generateNickname(),
     }
 
-    let createdUser: GoogleUser
-    if (migrationToken) {
-      try {
-        createdUser =
-          await this.migrationService.migrateLegacyPlayerUser<GoogleUser>(
-            migrationToken,
-            null,
-            {
-              ...details,
-              authProvider: AuthProvider.Google,
-            },
-          )
-      } catch (error) {
-        const { message, stack } = error as Error
-        this.logger.debug(
-          `Failed to migrate legacy user while creating google user: '${message}'.`,
-          stack,
-        )
-        createdUser = await this.userRepository.createGoogleUser(details)
-      }
-    } else {
-      createdUser = await this.userRepository.createGoogleUser(details)
-    }
+    const createdUser: GoogleUser =
+      await this.userRepository.createGoogleUser(details)
 
     await this.emailService.sendWelcomeEmail(createdUser.email)
 

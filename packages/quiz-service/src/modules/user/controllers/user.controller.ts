@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Query,
-} from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -13,7 +6,6 @@ import {
   ApiConflictResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
@@ -41,7 +33,6 @@ export class UserController {
    * Creates a new user account.
    *
    * @param createUserRequest DTO containing email, password, and optional names.
-   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
    * @returns The newly created user’s details.
    */
   @Public()
@@ -55,13 +46,6 @@ export class UserController {
     summary: 'Create new user',
     description:
       'Registers a new user with email, password, and optional names.',
-  })
-  @ApiQuery({
-    name: 'migrationToken',
-    description:
-      'Optional migration token identifying the legacy anonymous user.',
-    type: String,
-    required: false,
   })
   @ApiBody({
     description: 'Payload for creating a new user.',
@@ -80,9 +64,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   public async createUser(
     @Body() createUserRequest: CreateUserRequest,
-    @Query('migrationToken')
-    migrationToken?: string,
   ): Promise<CreateUserResponse> {
-    return this.userService.createUser(createUserRequest, migrationToken)
+    return this.userService.createUser(createUserRequest)
   }
 }

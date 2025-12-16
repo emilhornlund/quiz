@@ -5,11 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { BaseRepository } from '../../../app/shared/repository'
 import { isGoogleUser } from '../../../app/shared/user'
-import {
-  EmailNotUniqueException,
-  UserNotFoundByMigrationTokenException,
-  UserNotFoundException,
-} from '../exceptions'
+import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
 
 import { GoogleUser, LocalUser, User, UserModel } from './models'
 
@@ -196,45 +192,5 @@ export class UserRepository extends BaseRepository<User> {
     }
 
     return null
-  }
-
-  /**
-   * Deletes a user by their unique identifier.
-   *
-   * @param userId  The unique identifier of the user to delete.
-   * @returns A Promise that resolves once the user has been removed.
-   */
-  public async deleteUserById(userId: string): Promise<void> {
-    await this.delete(userId)
-  }
-
-  /**
-   * Removes a migration token from its owning user and returns the updated user.
-   *
-   * @param migrationToken - The migration token to remove.
-   * @throws UserNotFoundByMigrationTokenException if no user contains that token.
-   * @returns The updated User document with the token removed.
-   */
-  public async removeMigrationTokenForUserOrThrow<T extends User>(
-    migrationToken: string,
-  ): Promise<T> {
-    const user = await this.userModel
-      .findOne({ migrationTokens: { $eq: migrationToken } })
-      .exec()
-
-    if (!user) {
-      throw new UserNotFoundByMigrationTokenException()
-    }
-
-    if (user.migrationTokens?.length > 0) {
-      user.migrationTokens = user.migrationTokens.filter(
-        (value) => value !== migrationToken,
-      )
-    } else {
-      user.migrationTokens = undefined
-    }
-
-    const updatedUser = await user.save()
-    return updatedUser as T
   }
 }

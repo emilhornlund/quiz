@@ -3,7 +3,7 @@ import { GameResultParticipantDto } from '@quiz/common'
 import {
   ApiGameParticipantIdProperty,
   ApiPlayerNicknameProperty,
-} from '../../decorators/api'
+} from '../../../../game/controllers/decorators/api'
 
 /**
  * Response model representing a participant (either host or player) in a game result.

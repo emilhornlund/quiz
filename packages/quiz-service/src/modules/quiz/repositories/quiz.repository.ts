@@ -135,30 +135,4 @@ export class QuizRepository extends BaseRepository<Quiz> {
       throw new QuizNotFoundException(quizId)
     }
   }
-
-  /**
-   * Updates the owner field on all quizzes from one user to another.
-   *
-   * @param fromUserId  The ID of the current quiz owner.
-   * @param toUserId    The ID of the new quiz owner.
-   * @returns A Promise that resolves once all matching quizzes have been updated.
-   */
-  public async updateQuizOwner(
-    fromUserId: string,
-    toUserId: string,
-  ): Promise<void> {
-    try {
-      await this.updateMany(
-        { owner: fromUserId },
-        { $set: { owner: toUserId } },
-      )
-    } catch (error) {
-      const { message, stack } = error as Error
-      this.logger.warn(
-        `Unable update quiz owner from '${fromUserId} to '${toUserId}': ${message}`,
-        stack,
-      )
-      throw error
-    }
-  }
 }

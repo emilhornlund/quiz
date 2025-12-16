@@ -3,10 +3,10 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
+import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 import { GameEventOrchestrator } from '../orchestration/event'
 import { GameTaskOrchestrator } from '../orchestration/task'
-import { GameResultRepository } from '../repositories'
 import {
   GameDocument,
   QuestionTaskAnswer,
@@ -34,14 +34,14 @@ export class GameTaskTransitionService {
    * Constructs an instance of GameTaskTransitionService.
    *
    * @param redis - The Redis instance used for answer synchronization and task coordination.
-   * @param gameResultRepository - Repository for accessing and modifying game result data.
+   * @param gameResultService - Service responsible for creating and retrieving persisted game results.
    * @param gameEventOrchestrator - Orchestrator for answer deserialization and event-related metadata helpers.
    * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
     @InjectRedis()
     private readonly redis: Redis,
-    private readonly gameResultRepository: GameResultRepository,
+    private readonly gameResultService: GameResultService,
     private readonly gameEventOrchestrator: GameEventOrchestrator,
     private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {}
@@ -207,7 +207,7 @@ export class GameTaskTransitionService {
         leaderboardTaskItems,
       )
       if (gameDocument.participants.filter(isParticipantPlayer).length > 0) {
-        await this.gameResultRepository.createGameResult(gameDocument)
+        await this.gameResultService.createGameResult(gameDocument)
       }
     }
   }

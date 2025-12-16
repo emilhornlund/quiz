@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Patch,
   Post,
-  Query,
   UnauthorizedException,
 } from '@nestjs/common'
 import {
@@ -16,7 +15,6 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
@@ -63,7 +61,6 @@ export class AuthController {
    * @param authLoginRequest - Request containing the user's email and password.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
    * @returns Promise resolving to an AuthResponse with both tokens.
    */
   @Public()
@@ -72,13 +69,6 @@ export class AuthController {
     summary: 'Authenticate with email and password',
     description:
       'Verifies user credentials and issues a new access token and refresh token.',
-  })
-  @ApiQuery({
-    name: 'migrationToken',
-    description:
-      'Optional migration token identifying the legacy anonymous user.',
-    type: String,
-    required: false,
   })
   @ApiBody({
     description: 'Payload containing the user’s email and password.',
@@ -96,15 +86,8 @@ export class AuthController {
     @Body() authLoginRequest: AuthLoginRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-    @Query('migrationToken')
-    migrationToken?: string,
   ): Promise<AuthResponse> {
-    return this.authService.login(
-      authLoginRequest,
-      ipAddress,
-      userAgent,
-      migrationToken,
-    )
+    return this.authService.login(authLoginRequest, ipAddress, userAgent)
   }
 
   /**
@@ -114,18 +97,10 @@ export class AuthController {
    * @param request   - Request containing the Google OAuth `code` and `codeVerifier`.
    * @param ipAddress - The client's IP address, extracted via the `@IpAddress()` decorator.
    * @param userAgent - The client's User-Agent header, extracted via the `@UserAgent()` decorator.
-   * @param migrationToken - Optional player ID from the old system to migrate player data.
    * @returns Promise resolving to an AuthResponse with both tokens.
    */
   @Public()
   @Post('/google/exchange')
-  @ApiQuery({
-    name: 'migrationToken',
-    description:
-      'Optional migration token identifying the legacy anonymous user.',
-    type: String,
-    required: false,
-  })
   @ApiBody({
     description:
       'Request payload with Google OAuth authorization code and PKCE code verifier.',
@@ -144,15 +119,12 @@ export class AuthController {
     @Body() request: AuthGoogleExchangeRequest,
     @IpAddress() ipAddress: string,
     @UserAgent() userAgent: string,
-    @Query('migrationToken')
-    migrationToken?: string,
   ): Promise<AuthResponse> {
     return this.authService.loginGoogle(
       request.code,
       request.codeVerifier,
       ipAddress,
       userAgent,
-      migrationToken,
     )
   }
 

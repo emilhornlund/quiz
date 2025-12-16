@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 import {
   GameMode,
   GameResultClassicModePlayerMetricDto,
@@ -10,10 +10,17 @@ import {
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
 
+import { GameDocument } from '../../game/repositories/models/schemas'
 import { UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
-import { PlayerMetric, QuestionMetric } from '../repositories/models/schemas'
+import {
+  GameResult,
+  PlayerMetric,
+  QuestionMetric,
+} from '../repositories/models/schemas'
+
+import { buildGameResultModel } from './utils/game-result.converter'
 
 /**
  * Service for retrieving and formatting quiz game results.
@@ -54,6 +61,13 @@ export class GameResultService {
 
     if (!gameResultDocument) {
       throw new GameResultsNotFoundException(gameID)
+    }
+
+    if (
+      gameResultDocument.hostParticipantId !== participantId &&
+      !gameResultDocument.players.some((p) => p.participantId === participantId)
+    ) {
+      throw new ForbiddenException()
     }
 
     const {
@@ -104,6 +118,17 @@ export class GameResultService {
       duration: (completed.getTime() - created.getTime()) / 1000,
       created,
     }
+  }
+
+  /**
+   * Creates and persists a game result for the provided game document.
+   *
+   * @param game - The completed game document used to build the persisted result model.
+   * @returns The persisted game result document.
+   */
+  public async createGameResult(game: GameDocument): Promise<GameResult> {
+    const gameResult = buildGameResultModel(game)
+    return this.gameResultRepository.createGameResult(gameResult)
   }
 
   /**

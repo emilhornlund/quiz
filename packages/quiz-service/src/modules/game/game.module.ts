@@ -3,6 +3,7 @@ import { forwardRef, Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { GameResultModule } from '../game-result/game-result.module'
 import { QuizModule } from '../quiz'
 import { UserModule } from '../user'
 
@@ -11,18 +12,15 @@ import {
   ProfileGameController,
   QuizGameController,
 } from './controllers'
-import { GameResultController } from './controllers/game-result.controller'
 import { GameListener } from './handlers'
 import { GameEventOrchestrator } from './orchestration/event'
 import { GameTaskOrchestrator } from './orchestration/task'
-import { GameRepository, GameResultRepository } from './repositories'
+import { GameRepository } from './repositories'
 import { Game, GameSchema } from './repositories/models/schemas'
-import { GameResult, GameResultSchema } from './repositories/models/schemas'
 import {
   GameEventPublisher,
   GameEventSubscriber,
   GameExpirySchedulerService,
-  GameResultService,
   GameService,
   GameTaskTransitionScheduler,
   GameTaskTransitionService,
@@ -42,20 +40,12 @@ import {
         name: Game.name,
         schema: GameSchema,
       },
-      {
-        name: GameResult.name,
-        schema: GameResultSchema,
-      },
     ]),
     forwardRef(() => UserModule),
     QuizModule,
+    GameResultModule,
   ],
-  controllers: [
-    GameController,
-    GameResultController,
-    QuizGameController,
-    ProfileGameController,
-  ],
+  controllers: [GameController, QuizGameController, ProfileGameController],
   providers: [
     Logger,
     GameRepository,
@@ -64,13 +54,11 @@ import {
     GameEventSubscriber,
     GameExpirySchedulerService,
     GameListener,
-    GameResultRepository,
-    GameResultService,
     GameTaskTransitionService,
     GameTaskTransitionScheduler,
     GameEventOrchestrator,
     GameTaskOrchestrator,
   ],
-  exports: [GameRepository, GameResultRepository],
+  exports: [GameRepository],
 })
 export class GameModule {}

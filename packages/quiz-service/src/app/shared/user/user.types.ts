@@ -16,7 +16,6 @@ export interface SharedUserBase {
   familyName?: string
   defaultNickname: string
   lastLoggedInAt?: Date
-  migrationTokens?: string[]
   createdAt: Date
   updatedAt: Date
 }

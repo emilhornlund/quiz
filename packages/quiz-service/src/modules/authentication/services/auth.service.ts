@@ -21,9 +21,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { GameRepository } from '../../game/repositories'
 import { GameDocument } from '../../game/repositories/models/schemas'
-import { MigrationService } from '../../migration/services'
 import { TokenService } from '../../token/services'
-import { LocalUser } from '../../user/repositories'
 import { UserService } from '../../user/services'
 
 import { GoogleAuthService } from './google-auth.service'
@@ -48,7 +46,6 @@ export class AuthService {
    * @param tokenService - Service for signing, verifying, and revoking JWTs, and validating token persistence.
    * @param eventEmitter - EventEmitter2 instance for emitting authentication-related events.
    * @param googleAuthService - Service responsible for handling Google OAuth flows.
-   * @param migrationService - Service responsible for migrating data from legacy anonymous users into existing accounts.
    */
   constructor(
     @Inject(forwardRef(() => UserService))
@@ -58,7 +55,6 @@ export class AuthService {
     private readonly tokenService: TokenService,
     private readonly eventEmitter: EventEmitter2,
     private readonly googleAuthService: GoogleAuthService,
-    private readonly migrationService: MigrationService,
   ) {}
 
   /**
@@ -67,35 +63,20 @@ export class AuthService {
    * @param authLoginRequestDto - DTO containing the user's email and password.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
-   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
+   *
    * @returns Promise resolving to an AuthResponseDto with access & refresh tokens.
+   *
    * @throws BadCredentialsException if credentials are invalid.
    */
   public async login(
     authLoginRequestDto: AuthLoginRequestDto,
     ipAddress: string,
     userAgent: string,
-    migrationToken?: string,
   ): Promise<AuthResponseDto> {
     const { _id: userId } = await this.userService.verifyUserCredentialsOrThrow(
       authLoginRequestDto.email,
       authLoginRequestDto.password,
     )
-
-    if (migrationToken) {
-      try {
-        await this.migrationService.migrateLegacyPlayerUser<LocalUser>(
-          migrationToken,
-          userId,
-        )
-      } catch (error) {
-        const { message, stack } = error as Error
-        this.logger.debug(
-          `Failed to migrate legacy user '${userId}' while authenticate local user: '${message}'.`,
-          stack,
-        )
-      }
-    }
 
     const tokenPair = await this.tokenService.signTokenPair(
       userId,
@@ -116,7 +97,6 @@ export class AuthService {
    * @param codeVerifier - The PKCE code verifier originally used to generate the code challenge.
    * @param ipAddress - The client's IP address, used for logging and token metadata.
    * @param userAgent - The client's User-Agent string, used for logging and token metadata.
-   * @param migrationToken - Optional migration token identifying the legacy anonymous user.
    * @returns A promise resolving to an AuthResponseDto containing the issued tokens.
    */
   public async loginGoogle(
@@ -124,7 +104,6 @@ export class AuthService {
     codeVerifier: string,
     ipAddress: string,
     userAgent: string,
-    migrationToken?: string,
   ): Promise<AuthResponseDto> {
     const accessToken = await this.googleAuthService.exchangeCodeForAccessToken(
       code,
@@ -133,10 +112,8 @@ export class AuthService {
 
     const profile = await this.googleAuthService.fetchGoogleProfile(accessToken)
 
-    const { _id: userId } = await this.userService.verifyOrCreateGoogleUser(
-      profile,
-      migrationToken,
-    )
+    const { _id: userId } =
+      await this.userService.verifyOrCreateGoogleUser(profile)
 
     const tokenPair = await this.tokenService.signTokenPair(
       userId,

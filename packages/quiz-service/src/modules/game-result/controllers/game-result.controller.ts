@@ -17,15 +17,14 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
+import { ApiGameIdParam } from '../../game/controllers/decorators/api'
+import { RouteGameIdParam } from '../../game/controllers/decorators/params'
 import { GameResultService } from '../services'
 
-import { ApiGameIdParam } from './decorators/api'
-import { AuthorizedGame } from './decorators/auth'
-import { RouteGameIdParam } from './decorators/params'
 import {
   GameResultClassicModeResponse,
   GameResultZeroToOneHundredModeResponse,
-} from './models/response'
+} from './models/responses'
 
 /**
  * Controller responsible for exposing endpoints related to game results.
@@ -70,7 +69,6 @@ export class GameResultController {
    * @returns The game result object for the requested game and mode.
    */
   @Get()
-  @AuthorizedGame()
   @ApiOperation({
     summary: 'Get final results of a completed quiz game',
     description:

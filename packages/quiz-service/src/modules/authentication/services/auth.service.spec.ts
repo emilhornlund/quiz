@@ -18,8 +18,7 @@ describe('AuthService', () => {
       /* gameRepository */ {} as any,
       /* tokenService   */ {} as any,
       /* eventEmitter   */ eventEmitter,
-      /* configService  */ {} as any,
-      /* configService  */ {} as any,
+      /* googleAuthService  */ {} as any,
     )
 
     // Override the internal logger so we can spy on .error()

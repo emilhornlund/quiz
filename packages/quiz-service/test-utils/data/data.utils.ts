@@ -15,14 +15,12 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   BaseTask,
   Game,
-  GameResult,
   LeaderboardTask,
   LeaderboardTaskItem,
   LobbyTaskWithBase,
   ParticipantBase,
   ParticipantHost,
   ParticipantPlayer,
-  PlayerMetric,
   PodiumTask,
   QuestionResultTask,
   QuestionResultTaskCorrectMultiChoiceAnswerWithBase,
@@ -43,6 +41,10 @@ import {
   QuitTask,
   TaskType,
 } from '../../src/modules/game/repositories/models/schemas'
+import {
+  GameResult,
+  PlayerMetric,
+} from '../../src/modules/game-result/repositories/models/schemas'
 import {
   BaseQuestionDao,
   QuestionDao,

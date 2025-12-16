@@ -17,9 +17,9 @@ import { MurLockModule } from 'murlock'
 
 import { AuthenticationModule } from '../modules/authentication'
 import { GameModule } from '../modules/game'
+import { GameResultModule } from '../modules/game-result/game-result.module'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
-import { MigrationModule } from '../modules/migration'
 import { QuizModule } from '../modules/quiz'
 import { TokenModule } from '../modules/token'
 import { UserModule } from '../modules/user'
@@ -185,9 +185,9 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         ]),
     AuthenticationModule,
     GameModule,
+    GameResultModule,
     HealthModule,
     MediaModule,
-    MigrationModule,
     QuizModule,
     TokenModule,
     UserModule,

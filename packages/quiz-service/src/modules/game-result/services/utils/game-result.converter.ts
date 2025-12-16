@@ -1,20 +1,21 @@
 import { GameMode, GameParticipantType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionDao } from '../../../quiz/repositories/models/schemas'
-import { IllegalTaskTypeException } from '../../exceptions'
+import { IllegalTaskTypeException } from '../../../game/exceptions'
 import {
   BaseTask,
   GameDocument,
-  GameResult,
   LeaderboardTaskItem,
-  ParticipantBase,
-  ParticipantPlayer,
+  ParticipantPlayerWithBase,
+  QuestionResultTaskWithBase,
+  QuestionTaskWithBase,
+  TaskType,
+} from '../../../game/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz/repositories/models/schemas'
+import {
+  GameResult,
   PlayerMetric,
   QuestionMetric,
-  QuestionResultTask,
-  QuestionTask,
-  TaskType,
 } from '../../repositories/models/schemas'
 
 /**
@@ -40,17 +41,16 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     (p) => p.type === GameParticipantType.HOST,
   )?.participantId
 
-  const playerParticipants: (ParticipantBase & ParticipantPlayer)[] =
-    participants
-      .filter(({ type }) => type === GameParticipantType.PLAYER)
-      .map((player) => player as ParticipantBase & ParticipantPlayer)
+  const playerParticipants: ParticipantPlayerWithBase[] = participants
+    .filter(({ type }) => type === GameParticipantType.PLAYER)
+    .map((player) => player as ParticipantPlayerWithBase)
 
-  const questionTasks = getTasksOfType<BaseTask & QuestionTask>(
+  const questionTasks = getTasksOfType<QuestionTaskWithBase>(
     previousTasks,
     TaskType.Question,
   )
 
-  const questionResultTasks = getTasksOfType<BaseTask & QuestionResultTask>(
+  const questionResultTasks = getTasksOfType<QuestionResultTaskWithBase>(
     previousTasks,
     TaskType.QuestionResult,
   )
@@ -100,10 +100,10 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
 function buildPlayerMetrics(
   mode: GameMode,
   questions: QuestionDao[],
-  questionTasks: (BaseTask & QuestionTask)[],
+  questionTasks: QuestionTaskWithBase[],
   leaderboard: LeaderboardTaskItem[],
-  questionResultTasks: (BaseTask & QuestionResultTask)[],
-  playerParticipants: (ParticipantBase & ParticipantPlayer)[],
+  questionResultTasks: QuestionResultTaskWithBase[],
+  playerParticipants: ParticipantPlayerWithBase[],
 ): PlayerMetric[] {
   return playerParticipants
     .map((participantPlayer) => {
@@ -182,9 +182,9 @@ function buildPlayerMetrics(
 function buildQuestionMetrics(
   mode: GameMode,
   questions: QuestionDao[],
-  questionResultTasks: (BaseTask & QuestionResultTask)[],
-  questionTasks: (BaseTask & QuestionTask)[],
-  playerParticipants: (ParticipantBase & ParticipantPlayer)[],
+  questionResultTasks: QuestionResultTaskWithBase[],
+  questionTasks: QuestionTaskWithBase[],
+  playerParticipants: ParticipantPlayerWithBase[],
 ): QuestionMetric[] {
   return questionResultTasks
     .map(({ results, questionIndex }) => {
@@ -246,8 +246,8 @@ function buildQuestionMetrics(
  * @returns The average response time in milliseconds.
  */
 function calculateAverageResponseTimeByPlayer(
-  playerParticipant: ParticipantBase & ParticipantPlayer,
-  questionTasks: (BaseTask & QuestionTask)[],
+  playerParticipant: ParticipantPlayerWithBase,
+  questionTasks: QuestionTaskWithBase[],
   questions: QuestionDao[],
 ): number {
   const totalResponseTime = questionTasks
@@ -280,9 +280,9 @@ function calculateAverageResponseTimeByPlayer(
  * @returns The average response time in milliseconds for the given question.
  */
 function calculateAverageResponseTimeByQuestion(
-  questionTask: BaseTask & QuestionTask,
+  questionTask: QuestionTaskWithBase,
   questions: QuestionDao[],
-  playerParticipants: (ParticipantBase & ParticipantPlayer)[],
+  playerParticipants: ParticipantPlayerWithBase[],
 ): number {
   const { presented, answers, questionIndex } = questionTask
 

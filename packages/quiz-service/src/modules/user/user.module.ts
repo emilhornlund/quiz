@@ -1,10 +1,9 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AuthProvider } from '@quiz/common'
 
 import { EmailModule } from '../email'
-import { MigrationModule } from '../migration'
 import { TokenModule } from '../token'
 
 import {
@@ -40,7 +39,6 @@ import { UserEventHandler, UserService } from './services'
     ]),
     EventEmitterModule,
     EmailModule,
-    forwardRef(() => MigrationModule),
     TokenModule,
   ],
   controllers: [UserController, UserProfileController, UserAuthController],

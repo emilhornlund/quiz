@@ -3,31 +3,33 @@ import {
   GAME_MAX_PLAYERS,
   GAME_MIN_PLAYERS,
   GameMode,
-  GameResultZeroToOneHundredModeDto,
+  GameResultClassicModeDto,
   QUIZ_QUESTION_MAX,
   QUIZ_QUESTION_MIN,
 } from '@quiz/common'
 import { Type } from 'class-transformer'
 import { Max, Min, ValidateNested } from 'class-validator'
 
-import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
+} from '../../../../game/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
+import {
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
   ApiGameResultNumberOfPlayersProperty,
   ApiGameResultNumberOfQuestionsProperty,
 } from '../../decorators/api'
 
+import { GameResultClassicModePlayerMetricResponse } from './game-result-classic-mode-player-metric.response'
+import { GameResultClassicModeQuestionMetricResponse } from './game-result-classic-mode-question-metric.response'
 import { GameResultParticipantResponse } from './game-result-participant.response'
-import { GameResultZeroToOneHundredModePlayerMetricResponse } from './game-result-zero-to-one-hundred-mode-player-metric-response'
-import { GameResultZeroToOneHundredModeQuestionMetricResponse } from './game-result-zero-to-one-hundred-mode-question-metric.response'
 
 /**
- * API response structure representing the final results of a completed game using the zero to one hundred mode.
+ * API response structure representing the final results of a completed game using the classic mode.
  */
-export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToOneHundredModeDto {
+export class GameResultClassicModeResponse implements GameResultClassicModeDto {
   /**
    * The unique identifier for the game.
    */
@@ -37,10 +39,10 @@ export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToO
   id: string
 
   /**
-   * The zero to one hundred game mode of the quiz.
+   * The classic game mode of the quiz.
    */
-  @ApiGameModeProperty(GameMode.ZeroToOneHundred)
-  mode: GameMode.ZeroToOneHundred
+  @ApiGameModeProperty(GameMode.Classic)
+  mode: GameMode.Classic
 
   /**
    * The name or title of the quiz.
@@ -74,36 +76,36 @@ export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToO
   numberOfQuestions: number
 
   /**
-   * A list of players and their final performance metrics for a zero to one hundred mode game.
+   * A list of players and their final performance metrics for a classic mode game.
    */
   @ApiProperty({
     title: 'Player Metrics',
     description:
-      'A list of players and their final performance metrics for a zero to one hundred mode game.',
+      'A list of players and their final performance metrics for a classic mode game.',
     required: true,
-    type: [GameResultZeroToOneHundredModePlayerMetricResponse],
+    type: [GameResultClassicModePlayerMetricResponse],
   })
   @Min(GAME_MIN_PLAYERS)
   @Max(GAME_MAX_PLAYERS)
-  @Type(() => GameResultZeroToOneHundredModePlayerMetricResponse)
+  @Type(() => GameResultClassicModePlayerMetricResponse)
   @ValidateNested({ each: true })
-  playerMetrics: GameResultZeroToOneHundredModePlayerMetricResponse[]
+  playerMetrics: GameResultClassicModePlayerMetricResponse[]
 
   /**
-   * A list of questions and their aggregated response metrics for a zero to one hundred mode game.
+   * A list of questions and their aggregated response metrics for a classic mode game.
    */
   @ApiProperty({
     title: 'Question Metrics',
     description:
-      'A list of questions and their aggregated response metrics for a zero to one hundred mode game.',
+      'A list of questions and their aggregated response metrics for a classic mode game.',
     required: true,
-    type: [GameResultZeroToOneHundredModeQuestionMetricResponse],
+    type: [GameResultClassicModeQuestionMetricResponse],
   })
   @Min(QUIZ_QUESTION_MIN)
   @Max(QUIZ_QUESTION_MAX)
-  @Type(() => GameResultZeroToOneHundredModeQuestionMetricResponse)
+  @Type(() => GameResultClassicModeQuestionMetricResponse)
   @ValidateNested({ each: true })
-  questionMetrics: GameResultZeroToOneHundredModeQuestionMetricResponse[]
+  questionMetrics: GameResultClassicModeQuestionMetricResponse[]
 
   /**
    * The duration in seconds the game session was active.
