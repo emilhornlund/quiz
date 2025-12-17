@@ -18,6 +18,7 @@ import { MurLockModule } from 'murlock'
 import { AuthenticationModule } from '../modules/authentication'
 import { GameModule } from '../modules/game'
 import { GameAuthenticationModule } from '../modules/game-authentication'
+import { GameCleanupModule } from '../modules/game-cleanup/game-cleanup.module'
 import { GameCoreModule } from '../modules/game-core'
 import { GameEventModule } from '../modules/game-event/game-event.module'
 import { GameResultModule } from '../modules/game-result/game-result.module'
@@ -188,6 +189,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           }),
         ]),
     AuthenticationModule,
+    GameCleanupModule,
     GameCoreModule,
     GameEventModule,
     GameModule,
