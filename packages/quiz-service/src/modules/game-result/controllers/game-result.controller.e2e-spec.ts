@@ -654,7 +654,7 @@ describe('GameResultController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Game results not found by game id '${gameID}'`,
+            message: `Game not found by id '${gameID}'`,
             status: 404,
             timestamp: expect.anything(),
           })

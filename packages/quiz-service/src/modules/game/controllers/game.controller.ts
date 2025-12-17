@@ -31,6 +31,7 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
+import { AuthorizedGame } from '../../game-core/decorators/auth'
 import { GameEventSubscriber } from '../../game-event/services'
 import {
   ParseCorrectAnswerRequestPipe,
@@ -39,7 +40,6 @@ import {
 import { GameService } from '../services'
 
 import { ApiGameIdParam, ApiPlayerIDParam } from './decorators/api'
-import { AuthorizedGame } from './decorators/auth'
 import { RouteGameIdParam, RoutePlayerIdParam } from './decorators/params'
 import {
   JoinGameRequest,
