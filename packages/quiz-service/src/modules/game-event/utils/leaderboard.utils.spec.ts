@@ -1,4 +1,4 @@
-import { LeaderboardTaskItem } from '../../../../game-core/repositories/models/schemas'
+import { LeaderboardTaskItem } from '../../game-core/repositories/models/schemas'
 
 import {
   buildLeaderboardFromGame,

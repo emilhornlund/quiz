@@ -5,7 +5,7 @@ import {
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
   createMockLobbyTaskDocument,
-} from '../../../../../../test-utils/data'
+} from '../../../../test-utils/data'
 
 import {
   buildGameBeginHostEvent,

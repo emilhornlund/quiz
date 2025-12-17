@@ -22,8 +22,8 @@ import {
   createMockRangeQuestionDocument,
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
-} from '../../../../../../test-utils/data'
-import { QuestionTaskMetadata } from '../../../../game-core/repositories/models/schemas'
+} from '../../../../test-utils/data'
+import { QuestionTaskMetadata } from '../../game-core/repositories/models/schemas'
 
 import {
   buildGameQuestionHostEvent,

@@ -7,13 +7,13 @@ import {
 import {
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 import type {
   QuestionMultiChoiceWithBase,
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
-} from '../../../../quiz/repositories/models/schemas'
+} from '../../quiz/repositories/models/schemas'
 
 import {
   createMultiChoiceQuestionResultDistribution,

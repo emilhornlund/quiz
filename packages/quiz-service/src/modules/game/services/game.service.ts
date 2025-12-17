@@ -24,8 +24,11 @@ import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../../game-event/orchestration/event'
 import { GameEventPublisher } from '../../game-event/services'
+import {
+  buildGameQuitEvent,
+  toQuestionTaskAnswer,
+} from '../../game-event/utils'
 import { GameTaskTransitionScheduler } from '../../game-task/services'
 import { rebuildQuestionResultTask } from '../../game-task/utils'
 import {
@@ -64,7 +67,6 @@ export class GameService {
    * @param gameTaskTransitionScheduler - Scheduler responsible for task transitions and time-based progression.
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
-   * @param gameEventOrchestrator - Orchestrator for building game events.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
@@ -72,7 +74,6 @@ export class GameService {
     private readonly gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private readonly gameEventPublisher: GameEventPublisher,
     private readonly quizRepository: QuizRepository,
-    private readonly gameEventOrchestrator: GameEventOrchestrator,
   ) {}
 
   /**
@@ -254,7 +255,7 @@ export class GameService {
     if (currentParticipant.type === GameParticipantType.HOST) {
       await this.gameEventPublisher.publishParticipantEvent(
         participantToRemove,
-        this.gameEventOrchestrator.buildGameQuitEvent(savedGameDocument.status),
+        buildGameQuitEvent(savedGameDocument.status),
       )
     }
   }
@@ -292,10 +293,7 @@ export class GameService {
     playerId: string,
     submitQuestionAnswerRequest: SubmitQuestionAnswerRequestDto,
   ): Promise<void> {
-    const answer = this.gameEventOrchestrator.toQuestionTaskAnswer(
-      playerId,
-      submitQuestionAnswerRequest,
-    )
+    const answer = toQuestionTaskAnswer(playerId, submitQuestionAnswerRequest)
 
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameID)
 

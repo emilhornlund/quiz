@@ -12,7 +12,7 @@ import {
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
 } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../../game-event/orchestration/event'
+import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 import {
@@ -41,13 +41,11 @@ export class GameTaskTransitionService {
    *
    * @param redis - The Redis instance used for answer synchronization and task coordination.
    * @param gameResultService - Service responsible for creating and retrieving persisted game results.
-   * @param gameEventOrchestrator - Orchestrator for answer deserialization and event-related metadata helpers.
    */
   constructor(
     @InjectRedis()
     private readonly redis: Redis,
     private readonly gameResultService: GameResultService,
-    private readonly gameEventOrchestrator: GameEventOrchestrator,
   ) {}
 
   /**
@@ -162,7 +160,7 @@ export class GameTaskTransitionService {
         0,
         -1,
       )
-    ).map(this.gameEventOrchestrator.toQuestionTaskAnswerFromString)
+    ).map(toQuestionTaskAnswerFromString)
 
     await this.redis.del(getRedisPlayerParticipantAnswerKey(gameDocument._id))
 

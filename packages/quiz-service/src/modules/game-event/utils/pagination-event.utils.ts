@@ -3,7 +3,7 @@ import { PaginationEvent } from '@quiz/common'
 import {
   GameDocument,
   QuestionResultTaskWithBase,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 /**
  * Builds a pagination event from the current task's question index.

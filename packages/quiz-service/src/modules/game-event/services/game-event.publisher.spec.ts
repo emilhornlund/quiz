@@ -5,8 +5,8 @@ import {
   GameDocument,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { GameEventOrchestrator } from '../orchestration/event'
 
+// eslint-disable-next-line import/order
 import { GameEventPublisher } from './game-event.publisher'
 
 // ---- Mocks ----
@@ -17,9 +17,22 @@ jest.mock('../../game-core/utils', () => ({
 // eslint-disable-next-line import/order
 import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 
+jest.mock('../utils', () => ({
+  buildHostGameEvent: jest.fn(),
+  buildPlayerGameEvent: jest.fn(),
+  toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
+  toPlayerQuestionPlayerEventMetaData: jest.fn(),
+}))
+
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from '../utils'
+
 describe('GameEventPublisher', () => {
   let redis: jest.Mocked<Redis>
-  let gameEventOrchestrator: jest.Mocked<GameEventOrchestrator>
   let service: GameEventPublisher
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
 
@@ -31,30 +44,20 @@ describe('GameEventPublisher', () => {
       publish: jest.fn().mockResolvedValue(1),
     } as any
 
-    gameEventOrchestrator = {
-      buildHostGameEvent: jest.fn(),
-      buildPlayerGameEvent: jest.fn(),
-      toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
-      toPlayerQuestionPlayerEventMetaData: jest.fn(),
-    } as any
-
     // Reset util mocks
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockReset()
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReset()
+    ;(buildHostGameEvent as jest.Mock).mockReset()
+    ;(buildPlayerGameEvent as jest.Mock).mockReset()
     ;(getRedisPlayerParticipantAnswerKey as jest.Mock)
       .mockReset()
       .mockReturnValue('ans:key')
-    ;(gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
+    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
       .mockReset()
       .mockReturnValue([[], { meta: true }])
-    ;(gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData as jest.Mock)
+    ;(toPlayerQuestionPlayerEventMetaData as jest.Mock)
       .mockReset()
       .mockReturnValue({ pmeta: true })
 
-    service = new GameEventPublisher(
-      redis as unknown as Redis,
-      gameEventOrchestrator,
-    )
+    service = new GameEventPublisher(redis as unknown as Redis)
     // Override internal logger for assertions (same trick as previous tests)
     ;(service as any).logger = logger
   })
@@ -83,10 +86,10 @@ describe('GameEventPublisher', () => {
 
   test('publish sends events for host and player with base metadata (non-question)', async () => {
     const doc = buildGameDoc()
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockReturnValue({
+    ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       hostInit: true,
     })
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReturnValue({
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
       playerInit: true,
     })
 
@@ -94,20 +97,20 @@ describe('GameEventPublisher', () => {
 
     // Collected answers & metadata
     expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
-    expect(
-      gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple,
-    ).toHaveBeenCalledWith([], {}, doc.participants)
+    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalledWith(
+      [],
+      {},
+      doc.participants,
+    )
     // No question-specific metadata for Lobby
-    expect(
-      gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData,
-    ).not.toHaveBeenCalled()
+    expect(toPlayerQuestionPlayerEventMetaData).not.toHaveBeenCalled()
 
     // Builders used correctly
-    expect(gameEventOrchestrator.buildHostGameEvent).toHaveBeenCalledWith(
+    expect(buildHostGameEvent).toHaveBeenCalledWith(
       doc,
       expect.objectContaining({ meta: true }),
     )
-    expect(gameEventOrchestrator.buildPlayerGameEvent).toHaveBeenCalledWith(
+    expect(buildPlayerGameEvent).toHaveBeenCalledWith(
       doc,
       doc.participants[0],
       expect.objectContaining({ meta: true }),
@@ -134,26 +137,27 @@ describe('GameEventPublisher', () => {
 
   test('publish (Question task) merges player question metadata', async () => {
     const doc = buildGameDoc({ currentTask: { type: TaskType.Question } })
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockReturnValue({
+    ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       hostQ: true,
     })
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReturnValue({
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
       playerQ: true,
     })
 
     await service.publish(doc as GameDocument)
 
     // Question-specific metadata should be computed for players
-    expect(
-      gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData,
-    ).toHaveBeenCalledWith([], doc.participants[0])
-    expect(gameEventOrchestrator.buildPlayerGameEvent).toHaveBeenCalledWith(
+    expect(toPlayerQuestionPlayerEventMetaData).toHaveBeenCalledWith(
+      [],
+      doc.participants[0],
+    )
+    expect(buildPlayerGameEvent).toHaveBeenCalledWith(
       doc,
       doc.participants[0],
       expect.objectContaining({ meta: true, pmeta: true }),
     )
     // Host path should not receive pmeta
-    expect(gameEventOrchestrator.buildHostGameEvent).toHaveBeenCalledWith(
+    expect(buildHostGameEvent).toHaveBeenCalledWith(
       doc,
       expect.objectContaining({ meta: true }),
     )
@@ -162,12 +166,10 @@ describe('GameEventPublisher', () => {
   test('publish continues when a builder throws, logging warn', async () => {
     const doc = buildGameDoc()
     // Fail for host, succeed for player
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockImplementation(
-      () => {
-        throw new Error('boom host')
-      },
-    )
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReturnValue({
+    ;(buildHostGameEvent as jest.Mock).mockImplementation(() => {
+      throw new Error('boom host')
+    })
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
       ok: true,
     })
 

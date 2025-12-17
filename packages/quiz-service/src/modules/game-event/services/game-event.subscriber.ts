@@ -20,7 +20,12 @@ import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../orchestration/event'
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from '../utils'
 
 import { DistributedEvent } from './models/event'
 
@@ -44,13 +49,11 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    * @param redis - Redis instance for Pub/Sub operations.
    * @param gameRepository - Repository for accessing game data.
    * @param eventEmitter - EventEmitter for broadcasting events locally.
-   * @param gameEventOrchestrator - Orchestrator for building game events.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
-    private gameRepository: GameRepository,
-    private eventEmitter: EventEmitter2,
-    private readonly gameEventOrchestrator: GameEventOrchestrator,
+    private readonly gameRepository: GameRepository,
+    private readonly eventEmitter: EventEmitter2,
   ) {
     this.redisSubscriber = redis.duplicate()
 
@@ -141,16 +144,15 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
       LOCAL_EVENT_EMITTER_CHANNEL,
     ) as Observable<DistributedEvent>
 
-    const [answers, metaData] =
-      this.gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple(
-        await this.redis.lrange(
-          getRedisPlayerParticipantAnswerKey(document._id),
-          0,
-          -1,
-        ),
-        {},
-        document.participants,
-      )
+    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
+      await this.redis.lrange(
+        getRedisPlayerParticipantAnswerKey(document._id),
+        0,
+        -1,
+      ),
+      {},
+      document.participants,
+    )
 
     let initialEvent: DistributedEvent | undefined
 
@@ -159,20 +161,13 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
         playerId: participantId,
         event:
           participant.type === GameParticipantType.PLAYER
-            ? this.gameEventOrchestrator.buildPlayerGameEvent(
-                document,
-                participant,
-                {
-                  ...metaData,
-                  ...(document.currentTask.type === TaskType.Question
-                    ? this.gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData(
-                        answers,
-                        participant,
-                      )
-                    : {}),
-                },
-              )
-            : this.gameEventOrchestrator.buildHostGameEvent(document, metaData),
+            ? buildPlayerGameEvent(document, participant, {
+                ...metaData,
+                ...(document.currentTask.type === TaskType.Question
+                  ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                  : {}),
+              })
+            : buildHostGameEvent(document, metaData),
       }
     } catch (error) {
       const { message, stack } = error as Error

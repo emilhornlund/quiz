@@ -9,7 +9,12 @@ import {
   TaskType,
 } from '../../game-core/repositories/models/schemas'
 import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../orchestration/event'
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from '../utils'
 
 import { DistributedEvent } from './models/event'
 
@@ -26,13 +31,9 @@ export class GameEventPublisher {
   /**
    * Constructs an instance of GameEventPublisher.
    *
-   * @param {Redis} redis - Redis instance for Pub/Sub operations.
-   * @param gameEventOrchestrator - Orchestrator for building game events.
+   * @param redis - Redis instance for Pub/Sub operations.
    */
-  constructor(
-    @InjectRedis() private readonly redis: Redis,
-    private gameEventOrchestrator: GameEventOrchestrator,
-  ) {}
+  constructor(@InjectRedis() private readonly redis: Redis) {}
 
   /**
    * Publishes game events to relevant players for a given game document.
@@ -42,16 +43,15 @@ export class GameEventPublisher {
    * @returns {Promise<void>} A promise that resolves once the events are published.
    */
   public async publish(document: GameDocument): Promise<void> {
-    const [answers, metaData] =
-      this.gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple(
-        await this.redis.lrange(
-          getRedisPlayerParticipantAnswerKey(document._id),
-          0,
-          -1,
-        ),
-        {},
-        document.participants,
-      )
+    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
+      await this.redis.lrange(
+        getRedisPlayerParticipantAnswerKey(document._id),
+        0,
+        -1,
+      ),
+      {},
+      document.participants,
+    )
 
     await Promise.all(
       document.participants.map((participant) => {
@@ -59,23 +59,13 @@ export class GameEventPublisher {
           this.publishParticipantEvent(
             participant,
             participant.type === GameParticipantType.HOST
-              ? this.gameEventOrchestrator.buildHostGameEvent(
-                  document,
-                  metaData,
-                )
-              : this.gameEventOrchestrator.buildPlayerGameEvent(
-                  document,
-                  participant,
-                  {
-                    ...metaData,
-                    ...(document.currentTask.type === TaskType.Question
-                      ? this.gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData(
-                          answers,
-                          participant,
-                        )
-                      : {}),
-                  },
-                ),
+              ? buildHostGameEvent(document, metaData)
+              : buildPlayerGameEvent(document, participant, {
+                  ...metaData,
+                  ...(document.currentTask.type === TaskType.Question
+                    ? toPlayerQuestionPlayerEventMetaData(answers, participant)
+                    : {}),
+                }),
           )
         } catch (error) {
           const { message, stack } = error as Error

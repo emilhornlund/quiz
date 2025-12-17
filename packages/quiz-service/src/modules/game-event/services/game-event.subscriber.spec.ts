@@ -6,8 +6,8 @@ import { firstValueFrom, take, toArray } from 'rxjs'
 
 import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { TaskType } from '../../game-core/repositories/models/schemas'
-import { GameEventOrchestrator } from '../orchestration/event'
 
+// eslint-disable-next-line import/order
 import { GameEventSubscriber } from './game-event.subscriber'
 
 // ---- Mocks ----
@@ -18,12 +18,25 @@ jest.mock('../../game-core/utils', () => ({
 // eslint-disable-next-line import/order
 import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 
+jest.mock('../utils', () => ({
+  buildHostGameEvent: jest.fn(),
+  buildPlayerGameEvent: jest.fn(),
+  toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
+  toPlayerQuestionPlayerEventMetaData: jest.fn(),
+}))
+
+import {
+  buildHostGameEvent,
+  buildPlayerGameEvent,
+  toBaseQuestionTaskEventMetaDataTuple,
+  toPlayerQuestionPlayerEventMetaData,
+} from '../utils'
+
 describe('GameEventSubscriber', () => {
   let redis: jest.Mocked<Redis>
   let redisSubscriber: jest.Mocked<Redis>
   let gameRepository: any
   let eventEmitter: EventEmitter2
-  let gameEventOrchestrator: jest.Mocked<GameEventOrchestrator>
   let service: GameEventSubscriber
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
 
@@ -54,23 +67,16 @@ describe('GameEventSubscriber', () => {
 
     eventEmitter = new EventEmitter2()
 
-    gameEventOrchestrator = {
-      buildHostGameEvent: jest.fn(),
-      buildPlayerGameEvent: jest.fn(),
-      toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
-      toPlayerQuestionPlayerEventMetaData: jest.fn(),
-    } as any
-
     // Reset util mocks per test
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockReset()
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReset()
+    ;(buildHostGameEvent as jest.Mock).mockReset()
+    ;(buildPlayerGameEvent as jest.Mock).mockReset()
     ;(getRedisPlayerParticipantAnswerKey as jest.Mock)
       .mockReset()
       .mockReturnValue('ans:key')
-    ;(gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
+    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
       .mockReset()
       .mockReturnValue([[], { meta: true }])
-    ;(gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData as jest.Mock)
+    ;(toPlayerQuestionPlayerEventMetaData as jest.Mock)
       .mockReset()
       .mockReturnValue({ pmeta: true })
 
@@ -78,7 +84,6 @@ describe('GameEventSubscriber', () => {
       redis as unknown as Redis,
       gameRepository,
       eventEmitter,
-      gameEventOrchestrator as unknown as GameEventOrchestrator,
     )
 
     // Override the internal logger so we can spy on .error()
@@ -172,7 +177,7 @@ describe('GameEventSubscriber', () => {
       currentTask: { type: TaskType.Question }, // so player metadata is merged
     })
     gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
-    ;(gameEventOrchestrator.buildPlayerGameEvent as jest.Mock).mockReturnValue({
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
       initial: 'player',
     })
 
@@ -210,13 +215,9 @@ describe('GameEventSubscriber', () => {
 
     // Ensure metadata builders were used
     expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
-    expect(
-      gameEventOrchestrator.toBaseQuestionTaskEventMetaDataTuple,
-    ).toHaveBeenCalled()
-    expect(
-      gameEventOrchestrator.toPlayerQuestionPlayerEventMetaData,
-    ).toHaveBeenCalled()
-    expect(gameEventOrchestrator.buildPlayerGameEvent).toHaveBeenCalledWith(
+    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalled()
+    expect(toPlayerQuestionPlayerEventMetaData).toHaveBeenCalled()
+    expect(buildPlayerGameEvent).toHaveBeenCalledWith(
       doc,
       doc.participants[0], // p1
       expect.objectContaining({ meta: true, pmeta: true }),
@@ -226,7 +227,7 @@ describe('GameEventSubscriber', () => {
   test('subscribe (HOST) uses buildHostGameEvent and still filters by playerId', async () => {
     const doc = buildGameDoc()
     gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockReturnValue({
+    ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       initial: 'host',
     })
 
@@ -235,21 +236,19 @@ describe('GameEventSubscriber', () => {
 
     const first = await out
     expect(JSON.parse(first.data as any)).toEqual({ initial: 'host' })
-    expect(gameEventOrchestrator.buildHostGameEvent).toHaveBeenCalledWith(
+    expect(buildHostGameEvent).toHaveBeenCalledWith(
       doc,
       expect.objectContaining({ meta: true }),
     )
-    expect(gameEventOrchestrator.buildPlayerGameEvent).not.toHaveBeenCalled()
+    expect(buildPlayerGameEvent).not.toHaveBeenCalled()
   })
 
   test('subscribe tolerates build* error and still relays future events', async () => {
     const doc = buildGameDoc()
     gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
-    ;(gameEventOrchestrator.buildHostGameEvent as jest.Mock).mockImplementation(
-      () => {
-        throw new Error('boom in builder')
-      },
-    )
+    ;(buildHostGameEvent as jest.Mock).mockImplementation(() => {
+      throw new Error('boom in builder')
+    })
 
     const stream$ = await service.subscribe('game-1', 'host')
 

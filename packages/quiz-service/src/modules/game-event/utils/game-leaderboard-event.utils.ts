@@ -3,7 +3,7 @@ import { GameEventType, GameLeaderboardHostEvent } from '@quiz/common'
 import {
   GameDocument,
   TaskType,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 
