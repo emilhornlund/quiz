@@ -5,6 +5,7 @@ import { Model, RootFilterQuery } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { BaseRepository } from '../../../app/shared/repository'
+import { buildLobbyTask, buildQuitTask } from '../../game-task/utils'
 import { Quiz } from '../../quiz/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import {
@@ -12,7 +13,6 @@ import {
   ActiveGameNotFoundByIDException,
   GameNotFoundException,
 } from '../exceptions'
-import { GameTaskOrchestrator } from '../orchestration/task'
 import { buildGameModel } from '../utils'
 
 import { Game, GameDocument, TaskType } from './models/schemas'
@@ -27,13 +27,11 @@ export class GameRepository extends BaseRepository<Game> {
   /**
    * Constructs the GameRepository.
    *
-   * @param {Model<Game>} gameModel - The Mongoose model representing the Game schema.
-   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
+   * @param gameModel - The Mongoose model representing the Game schema.
    */
   constructor(
     @InjectModel(Game.name)
     protected readonly gameModel: Model<Game>,
-    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {
     super(gameModel, 'Game')
   }
@@ -224,12 +222,7 @@ export class GameRepository extends BaseRepository<Game> {
   public async createGame(quiz: Quiz, user: User): Promise<GameDocument> {
     const gamePIN = await this.generateUniqueGamePIN()
 
-    const game = buildGameModel(
-      quiz,
-      gamePIN,
-      user,
-      this.gameTaskOrchestrator.buildLobbyTask(),
-    )
+    const game = buildGameModel(quiz, gamePIN, user, buildLobbyTask())
 
     return this.create(game) as Promise<GameDocument>
   }
@@ -249,7 +242,7 @@ export class GameRepository extends BaseRepository<Game> {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const quitTask = this.gameTaskOrchestrator.buildQuitTask()
+    const quitTask = buildQuitTask()
 
     return this.updateMany(filter, [
       {
@@ -279,7 +272,7 @@ export class GameRepository extends BaseRepository<Game> {
       updated: { $lt: new Date(Date.now() - 60 * 60 * 1000) },
     }
 
-    const quitTask = this.gameTaskOrchestrator.buildQuitTask()
+    const quitTask = buildQuitTask()
 
     return this.updateMany(filter, [
       {

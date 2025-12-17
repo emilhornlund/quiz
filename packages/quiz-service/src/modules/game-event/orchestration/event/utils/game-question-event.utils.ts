@@ -12,14 +12,6 @@ import {
 } from '@quiz/common'
 
 import {
-  isMultiChoiceAnswer,
-  isPinAnswer,
-  isPuzzleAnswer,
-  isRangeAnswer,
-  isTrueFalseAnswer,
-  isTypeAnswerAnswer,
-} from '../../../../game-core/orchestration/question-answer-type-guards'
-import {
   GameDocument,
   ParticipantPlayerWithBase,
   QuestionTaskAnswer,
@@ -28,6 +20,14 @@ import {
   QuestionTaskPuzzleMetadata,
   TaskType,
 } from '../../../../game-core/repositories/models/schemas'
+import {
+  isMultiChoiceAnswer,
+  isPinAnswer,
+  isPuzzleAnswer,
+  isRangeAnswer,
+  isTrueFalseAnswer,
+  isTypeAnswerAnswer,
+} from '../../../../game-task/utils/question-answer-type-guards'
 import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,

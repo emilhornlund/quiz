@@ -6,6 +6,10 @@ import {
 } from '@quiz/common'
 
 import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionResultTaskItem,
+} from '../../../../game-core/repositories/models/schemas'
+import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
   isPinAnswer,
@@ -18,11 +22,7 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../../../game-core/orchestration/question-answer-type-guards'
-import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionResultTaskItem,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../../../game-task/utils/question-answer-type-guards'
 import {
   QuestionMultiChoiceWithBase,
   QuestionPinWithBase,

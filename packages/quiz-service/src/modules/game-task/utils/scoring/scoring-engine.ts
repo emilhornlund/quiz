@@ -1,6 +1,10 @@
 import { GameMode, QuestionType } from '@quiz/common'
 
-import { QuestionDao } from '../../../../../quiz/repositories/models/schemas'
+import {
+  QuestionResultTaskCorrectAnswer,
+  QuestionTaskAnswer,
+} from '../../../game-core/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz/repositories/models/schemas'
 import {
   isClassicMultiChoiceQuestion,
   isClassicPinQuestion,
@@ -9,12 +13,8 @@ import {
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
   isZeroToOneHundredRangeQuestion,
-} from '../../../../../quiz/services/utils'
-import { UnsupportedGameModeException } from '../../../../exceptions'
-import {
-  QuestionResultTaskCorrectAnswer,
-  QuestionTaskAnswer,
-} from '../../../../repositories/models/schemas'
+} from '../../../quiz/services/utils'
+import { UnsupportedGameModeException } from '../../exceptions'
 import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
@@ -28,7 +28,7 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../../question-answer-type-guards'
+} from '../question-answer-type-guards'
 
 import { ClassicMultiChoiceScoringStrategy } from './classic/classic-multichoice-strategy'
 import { ClassicPinScoringStrategy } from './classic/classic-pin-strategy'

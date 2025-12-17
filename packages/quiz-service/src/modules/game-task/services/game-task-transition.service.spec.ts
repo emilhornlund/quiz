@@ -13,19 +13,36 @@ import {
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
 } from '../../../../test-utils/data'
-import { IllegalTaskTypeException } from '../../game-core/exceptions'
-import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
 import {
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
 } from '../../game-core/utils'
 import { GameEventOrchestrator } from '../../game-event/orchestration/event'
 import { GameResultService } from '../../game-result/services'
+import { IllegalTaskTypeException } from '../exceptions'
 
 import { GameTaskTransitionService } from './game-task-transition.service'
 
 jest.mock('../../game-core/utils')
 jest.mock('../../game-event/orchestration/event/game-event-orchestrator')
+jest.mock('../utils', () => ({
+  buildQuestionTask: jest.fn(),
+  buildQuestionResultTask: jest.fn(),
+  buildLeaderboardTask: jest.fn(),
+  buildPodiumTask: jest.fn(),
+  buildQuitTask: jest.fn(),
+  updateParticipantsAndBuildLeaderboard: jest.fn(),
+}))
+
+// eslint-disable-next-line import/order
+import {
+  buildLeaderboardTask,
+  buildPodiumTask,
+  buildQuestionResultTask,
+  buildQuestionTask,
+  buildQuitTask,
+  updateParticipantsAndBuildLeaderboard,
+} from '../utils'
 
 const mockGetRedisPlayerParticipantAnswerKey =
   getRedisPlayerParticipantAnswerKey as jest.MockedFunction<
@@ -40,7 +57,6 @@ describe('GameTaskTransitionService', () => {
   let redis: jest.Mocked<Redis>
   let gameResultService: jest.Mocked<GameResultService>
   let gameEventOrchestrator: jest.Mocked<GameEventOrchestrator>
-  let gameTaskOrchestrator: jest.Mocked<GameTaskOrchestrator>
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
 
   beforeEach(() => {
@@ -59,20 +75,10 @@ describe('GameTaskTransitionService', () => {
       toQuestionTaskAnswerFromString: jest.fn(),
     } as unknown as jest.Mocked<GameEventOrchestrator>
 
-    gameTaskOrchestrator = {
-      buildQuestionTask: jest.fn(),
-      buildQuestionResultTask: jest.fn(),
-      buildLeaderboardTask: jest.fn(),
-      buildPodiumTask: jest.fn(),
-      buildQuitTask: jest.fn(),
-      updateParticipantsAndBuildLeaderboard: jest.fn(),
-    } as unknown as jest.Mocked<GameTaskOrchestrator>
-
     service = new GameTaskTransitionService(
       redis,
       gameResultService,
       gameEventOrchestrator,
-      gameTaskOrchestrator,
     )
     ;(service as any).logger = logger
 
@@ -109,7 +115,9 @@ describe('GameTaskTransitionService', () => {
         status: 'pending',
         questionIndex: 0,
       })
-      gameTaskOrchestrator.buildQuestionTask.mockReturnValue(nextTask as never)
+      ;(buildQuestionTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(nextTask as never)
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
@@ -119,9 +127,7 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.previousTasks).toContain(lobbyTask)
       expect(gameDoc.currentTask).toBe(nextTask)
       expect(gameDoc.nextQuestion).toBe(1)
-      expect(gameTaskOrchestrator.buildQuestionTask).toHaveBeenCalledWith(
-        gameDoc as never,
-      )
+      expect(buildQuestionTask).toHaveBeenCalledWith(gameDoc as never)
     })
 
     it('question pending sets presented timestamp', async () => {
@@ -184,9 +190,9 @@ describe('GameTaskTransitionService', () => {
       const nextTask = createMockQuestionResultTaskDocument({
         status: 'pending',
       })
-      gameTaskOrchestrator.buildQuestionResultTask.mockReturnValue(
-        nextTask as never,
-      )
+      ;(buildQuestionResultTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(nextTask as never)
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
@@ -202,9 +208,7 @@ describe('GameTaskTransitionService', () => {
       expect((task as any).answers).toEqual(parsedAnswers)
       expect(gameDoc.previousTasks).toContain(task)
       expect(gameDoc.currentTask).toBe(nextTask)
-      expect(gameTaskOrchestrator.buildQuestionResultTask).toHaveBeenCalledWith(
-        gameDoc as never,
-      )
+      expect(buildQuestionResultTask).toHaveBeenCalledWith(gameDoc as never)
     })
 
     it('question result completed builds leaderboard when there are questions remaining', async () => {
@@ -221,16 +225,16 @@ describe('GameTaskTransitionService', () => {
       const leaderboardItems = [
         { participantId: 'p1', score: 10, rank: 1 },
       ] as any[]
-      gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard.mockReturnValue(
-        leaderboardItems as never,
-      )
+      ;(updateParticipantsAndBuildLeaderboard as jest.Mock)
+        .mockReset()
+        .mockReturnValue(leaderboardItems as never)
 
       const leaderboardTask = createMockLeaderboardTaskDocument({
         status: 'pending',
       })
-      gameTaskOrchestrator.buildLeaderboardTask.mockReturnValue(
-        leaderboardTask as never,
-      )
+      ;(buildLeaderboardTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(leaderboardTask as never)
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
@@ -238,14 +242,14 @@ describe('GameTaskTransitionService', () => {
       await callback!(gameDoc as never)
 
       expect(gameDoc.previousTasks).toContain(task)
-      expect(
-        gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard,
-      ).toHaveBeenCalledWith(gameDoc as never)
-      expect(gameTaskOrchestrator.buildLeaderboardTask).toHaveBeenCalledWith(
+      expect(updateParticipantsAndBuildLeaderboard).toHaveBeenCalledWith(
+        gameDoc as never,
+      )
+      expect(buildLeaderboardTask).toHaveBeenCalledWith(
         gameDoc as never,
         leaderboardItems as never,
       )
-      expect(gameTaskOrchestrator.buildPodiumTask).not.toHaveBeenCalled()
+      expect(buildPodiumTask).not.toHaveBeenCalled()
       expect(gameResultService.createGameResult).not.toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(leaderboardTask)
     })
@@ -265,12 +269,14 @@ describe('GameTaskTransitionService', () => {
       const leaderboardItems = [
         { participantId: 'p1', score: 10, rank: 1 },
       ] as any[]
-      gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard.mockReturnValue(
-        leaderboardItems as never,
-      )
+      ;(updateParticipantsAndBuildLeaderboard as jest.Mock)
+        .mockReset()
+        .mockReturnValue(leaderboardItems as never)
 
       const podiumTask = createMockPodiumTaskDocument({ status: 'pending' })
-      gameTaskOrchestrator.buildPodiumTask.mockReturnValue(podiumTask as never)
+      ;(buildPodiumTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(podiumTask as never)
 
       mockIsParticipantPlayer.mockImplementation((p: any) => p !== host)
 
@@ -280,11 +286,11 @@ describe('GameTaskTransitionService', () => {
       await callback!(gameDoc as never)
 
       expect(gameDoc.previousTasks).toContain(task)
-      expect(gameTaskOrchestrator.buildPodiumTask).toHaveBeenCalledWith(
+      expect(buildPodiumTask).toHaveBeenCalledWith(
         gameDoc as never,
         leaderboardItems as never,
       )
-      expect(gameTaskOrchestrator.buildLeaderboardTask).not.toHaveBeenCalled()
+      expect(buildLeaderboardTask).not.toHaveBeenCalled()
       expect(gameResultService.createGameResult).toHaveBeenCalledWith(
         gameDoc as never,
       )
@@ -305,12 +311,14 @@ describe('GameTaskTransitionService', () => {
       const leaderboardItems = [
         { participantId: 'p1', score: 10, rank: 1 },
       ] as any[]
-      gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard.mockReturnValue(
-        leaderboardItems as never,
-      )
+      ;(updateParticipantsAndBuildLeaderboard as jest.Mock)
+        .mockReset()
+        .mockReturnValue(leaderboardItems as never)
 
       const podiumTask = createMockPodiumTaskDocument({ status: 'pending' })
-      gameTaskOrchestrator.buildPodiumTask.mockReturnValue(podiumTask as never)
+      ;(buildPodiumTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(podiumTask as never)
 
       mockIsParticipantPlayer.mockReturnValue(false)
 
@@ -336,7 +344,9 @@ describe('GameTaskTransitionService', () => {
         status: 'pending',
         questionIndex: 1,
       })
-      gameTaskOrchestrator.buildQuestionTask.mockReturnValue(nextTask as never)
+      ;(buildQuestionTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(nextTask as never)
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
@@ -346,9 +356,7 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.previousTasks).toContain(leaderboard)
       expect(gameDoc.currentTask).toBe(nextTask)
       expect(gameDoc.nextQuestion).toBe(2)
-      expect(gameTaskOrchestrator.buildQuestionTask).toHaveBeenCalledWith(
-        gameDoc as never,
-      )
+      expect(buildQuestionTask).toHaveBeenCalledWith(gameDoc as never)
     })
 
     it('podium completed transitions to quit and sets status Completed when players exist', async () => {
@@ -362,7 +370,9 @@ describe('GameTaskTransitionService', () => {
       })
 
       const quitTask = createMockQuitTaskDocument()
-      gameTaskOrchestrator.buildQuitTask.mockReturnValue(quitTask)
+      ;(buildQuitTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(quitTask as never)
 
       mockIsParticipantPlayer.mockImplementation((p: any) => p !== host)
 
@@ -372,7 +382,7 @@ describe('GameTaskTransitionService', () => {
       await callback!(gameDoc as never)
 
       expect(gameDoc.previousTasks).toContain(podium)
-      expect(gameTaskOrchestrator.buildQuitTask).toHaveBeenCalled()
+      expect(buildQuitTask).toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(quitTask)
       expect(gameDoc.status).toBe(GameStatus.Completed)
     })
@@ -387,7 +397,9 @@ describe('GameTaskTransitionService', () => {
       })
 
       const quitTask = createMockQuitTaskDocument()
-      gameTaskOrchestrator.buildQuitTask.mockReturnValue(quitTask)
+      ;(buildQuitTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(quitTask as never)
 
       mockIsParticipantPlayer.mockReturnValue(false)
 
@@ -397,7 +409,7 @@ describe('GameTaskTransitionService', () => {
       await callback!(gameDoc as never)
 
       expect(gameDoc.previousTasks).toContain(podium)
-      expect(gameTaskOrchestrator.buildQuitTask).toHaveBeenCalled()
+      expect(buildQuitTask).toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(quitTask)
       expect(gameDoc.status).toBe(GameStatus.Expired)
     })
@@ -639,9 +651,7 @@ describe('GameTaskTransitionService', () => {
       )
 
       expect(redis.del).not.toHaveBeenCalled()
-      expect(
-        gameTaskOrchestrator.buildQuestionResultTask,
-      ).not.toHaveBeenCalled()
+      expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
 
@@ -670,9 +680,7 @@ describe('GameTaskTransitionService', () => {
         'Redis delete failed',
       )
 
-      expect(
-        gameTaskOrchestrator.buildQuestionResultTask,
-      ).not.toHaveBeenCalled()
+      expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
 
@@ -702,9 +710,7 @@ describe('GameTaskTransitionService', () => {
       await expect(callback!(gameDoc as never)).rejects.toThrow('Invalid JSON')
 
       expect(redis.del).not.toHaveBeenCalled()
-      expect(
-        gameTaskOrchestrator.buildQuestionResultTask,
-      ).not.toHaveBeenCalled()
+      expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
 
@@ -723,12 +729,14 @@ describe('GameTaskTransitionService', () => {
       const leaderboardItems = [
         { participantId: 'p1', score: 10, rank: 1 },
       ] as any[]
-      gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard.mockReturnValue(
-        leaderboardItems as never,
-      )
+      ;(updateParticipantsAndBuildLeaderboard as jest.Mock)
+        .mockReset()
+        .mockReturnValue(leaderboardItems as never)
 
       const podiumTask = createMockPodiumTaskDocument({ status: 'pending' })
-      gameTaskOrchestrator.buildPodiumTask.mockReturnValue(podiumTask as never)
+      ;(buildPodiumTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(podiumTask as never)
 
       mockIsParticipantPlayer.mockImplementation((p: any) => p !== host)
 

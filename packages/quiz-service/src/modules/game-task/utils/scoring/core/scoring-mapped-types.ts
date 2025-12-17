@@ -20,7 +20,7 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-} from '../../../../../repositories/models/schemas'
+} from '../../../../game-core/repositories/models/schemas'
 
 /**
  * Helper type that combines the common correct/answer fields with

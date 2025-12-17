@@ -1,14 +1,15 @@
 import { GameParticipantType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   GameDocument,
   LeaderboardTaskItem,
   LeaderboardTaskWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../../task-type-guards'
+} from '../../game-core/repositories/models/schemas'
+import { IllegalTaskTypeException } from '../exceptions'
+
+import { isQuestionResultTask } from './task-type-guards'
 
 /**
  * Updates all player participants with their latest result data and generates
