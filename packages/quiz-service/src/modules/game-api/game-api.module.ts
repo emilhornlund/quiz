@@ -34,4 +34,4 @@ import { GameService } from './services'
   providers: [Logger, GameService, GameListener],
   exports: [],
 })
-export class GameModule {}
+export class GameApiModule {}

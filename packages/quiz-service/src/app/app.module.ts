@@ -16,7 +16,7 @@ import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { AuthenticationModule } from '../modules/authentication'
-import { GameModule } from '../modules/game'
+import { GameApiModule } from '../modules/game-api'
 import { GameAuthenticationModule } from '../modules/game-authentication'
 import { GameCleanupModule } from '../modules/game-cleanup/game-cleanup.module'
 import { GameCoreModule } from '../modules/game-core'
@@ -189,11 +189,11 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           }),
         ]),
     AuthenticationModule,
+    GameApiModule,
+    GameAuthenticationModule,
     GameCleanupModule,
     GameCoreModule,
     GameEventModule,
-    GameModule,
-    GameAuthenticationModule,
     GameResultModule,
     GameTaskModule,
     HealthModule,
