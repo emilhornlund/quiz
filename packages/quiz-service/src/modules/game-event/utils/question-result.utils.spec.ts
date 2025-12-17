@@ -8,8 +8,8 @@ import {
   createMockQuestionResultTaskDocument,
   createMockQuestionResultTaskItemDocument,
   createMockQuestionTaskDocument,
-} from '../../../../../../test-utils/data'
-import { TaskType } from '../../../../game-core/repositories/models/schemas'
+} from '../../../../test-utils/data'
+import { TaskType } from '../../game-core/repositories/models/schemas'
 
 import {
   findLastQuestionResultTask,

@@ -36,12 +36,9 @@ import {
   MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE_ALTERNATIVE,
-} from '../../../../../../test-utils/data'
-import {
-  Game,
-  TaskType,
-} from '../../../../game-core/repositories/models/schemas'
-import { IllegalTaskTypeException } from '../../../../game-task/exceptions'
+} from '../../../../test-utils/data'
+import { Game, TaskType } from '../../game-core/repositories/models/schemas'
+import { IllegalTaskTypeException } from '../../game-task/exceptions'
 
 import {
   buildGameResultHostEvent,

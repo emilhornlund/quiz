@@ -2,7 +2,7 @@ import {
   createMockGameDocument,
   createMockMultiChoiceQuestionDocument,
   createMockQuestionResultTaskDocument,
-} from '../../../../../../test-utils/data'
+} from '../../../../test-utils/data'
 
 import {
   buildPaginationEvent,

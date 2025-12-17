@@ -8,8 +8,8 @@ import {
   createMockGameDocument,
   createMockLeaderboardTaskItem,
   createMockPodiumTaskDocument,
-} from '../../../../../../test-utils/data'
-import { LeaderboardTaskItem } from '../../../../game-core/repositories/models/schemas'
+} from '../../../../test-utils/data'
+import { LeaderboardTaskItem } from '../../game-core/repositories/models/schemas'
 
 import { buildGamePodiumHostEvent } from './game-podium-event.utils'
 

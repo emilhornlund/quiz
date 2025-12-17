@@ -3,7 +3,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 
 import { GameCoreModule } from '../game-core'
 
-import { GameEventOrchestrator } from './orchestration/event'
 import { GameEventPublisher, GameEventSubscriber } from './services'
 
 /**
@@ -13,12 +12,7 @@ import { GameEventPublisher, GameEventSubscriber } from './services'
 @Module({
   imports: [EventEmitterModule, GameCoreModule],
   controllers: [],
-  providers: [
-    Logger,
-    GameEventPublisher,
-    GameEventSubscriber,
-    GameEventOrchestrator,
-  ],
-  exports: [GameEventPublisher, GameEventSubscriber, GameEventOrchestrator],
+  providers: [Logger, GameEventPublisher, GameEventSubscriber],
+  exports: [GameEventPublisher, GameEventSubscriber],
 })
 export class GameEventModule {}

@@ -10,8 +10,8 @@ import {
   GameDocument,
   ParticipantPlayerWithBase,
   TaskType,
-} from '../../../../game-core/repositories/models/schemas'
-import { isParticipantPlayer } from '../../../../game-core/utils'
+} from '../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../game-core/utils'
 
 /**
  * Builds a lobby event for the host, including game and player details.

@@ -14,14 +14,14 @@ import {
   ParticipantPlayerWithBase,
   QuestionResultTaskWithBase,
   TaskType,
-} from '../../../../game-core/repositories/models/schemas'
-import { isParticipantPlayer } from '../../../../game-core/utils'
-import { IllegalTaskTypeException } from '../../../../game-task/exceptions'
+} from '../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../game-core/utils'
+import { IllegalTaskTypeException } from '../../game-task/exceptions'
 import {
   isLeaderboardTask,
   isPodiumTask,
   isQuestionResultTask,
-} from '../../../../game-task/utils/task-type-guards'
+} from '../../game-task/utils/task-type-guards'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -29,7 +29,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../quiz/services/utils'
 
 import {
   createMultiChoiceQuestionResultDistribution,

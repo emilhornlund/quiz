@@ -8,7 +8,7 @@ import {
 import {
   QuestionResultTaskCorrectAnswer,
   QuestionResultTaskItem,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 import {
   isMultiChoiceAnswer,
   isMultiChoiceCorrectAnswer,
@@ -22,13 +22,13 @@ import {
   isTrueFalseCorrectAnswer,
   isTypeAnswerAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../../../game-task/utils/question-answer-type-guards'
+} from '../../game-task/utils/question-answer-type-guards'
 import {
   QuestionMultiChoiceWithBase,
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
-} from '../../../../quiz/repositories/models/schemas'
+} from '../../quiz/repositories/models/schemas'
 
 /**
  * Creates the answer distribution for a MultiChoice question result event.

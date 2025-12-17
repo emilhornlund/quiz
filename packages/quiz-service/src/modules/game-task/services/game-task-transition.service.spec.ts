@@ -17,14 +17,20 @@ import {
   getRedisPlayerParticipantAnswerKey,
   isParticipantPlayer,
 } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../../game-event/orchestration/event'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 
 import { GameTaskTransitionService } from './game-task-transition.service'
 
 jest.mock('../../game-core/utils')
-jest.mock('../../game-event/orchestration/event/game-event-orchestrator')
+
+jest.mock('../../game-event/utils', () => ({
+  toQuestionTaskAnswerFromString: jest.fn(),
+}))
+
+// eslint-disable-next-line import/order
+import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
+
 jest.mock('../utils', () => ({
   buildQuestionTask: jest.fn(),
   buildQuestionResultTask: jest.fn(),
@@ -56,7 +62,6 @@ describe('GameTaskTransitionService', () => {
   let service: GameTaskTransitionService
   let redis: jest.Mocked<Redis>
   let gameResultService: jest.Mocked<GameResultService>
-  let gameEventOrchestrator: jest.Mocked<GameEventOrchestrator>
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
 
   beforeEach(() => {
@@ -71,15 +76,7 @@ describe('GameTaskTransitionService', () => {
       createGameResult: jest.fn().mockResolvedValue({} as never),
     } as unknown as jest.Mocked<GameResultService>
 
-    gameEventOrchestrator = {
-      toQuestionTaskAnswerFromString: jest.fn(),
-    } as unknown as jest.Mocked<GameEventOrchestrator>
-
-    service = new GameTaskTransitionService(
-      redis,
-      gameResultService,
-      gameEventOrchestrator,
-    )
+    service = new GameTaskTransitionService(redis, gameResultService)
     ;(service as any).logger = logger
 
     mockGetRedisPlayerParticipantAnswerKey.mockReset()
@@ -183,7 +180,8 @@ describe('GameTaskTransitionService', () => {
         { participantId: 'p1' },
         { participantId: 'p2' },
       ] as any[]
-      ;(gameEventOrchestrator.toQuestionTaskAnswerFromString as jest.Mock)
+      ;(toQuestionTaskAnswerFromString as jest.Mock)
+        .mockReset()
         .mockReturnValueOnce(parsedAnswers[0])
         .mockReturnValueOnce(parsedAnswers[1])
 
@@ -200,9 +198,7 @@ describe('GameTaskTransitionService', () => {
       await callback!(gameDoc as never)
 
       expect(redis.lrange).toHaveBeenCalledWith('redis:key:game-1', 0, -1)
-      expect(
-        gameEventOrchestrator.toQuestionTaskAnswerFromString,
-      ).toHaveBeenCalledTimes(2)
+      expect(toQuestionTaskAnswerFromString).toHaveBeenCalledTimes(2)
       expect(redis.del).toHaveBeenCalledWith('redis:key:game-1')
 
       expect((task as any).answers).toEqual(parsedAnswers)
@@ -668,9 +664,11 @@ describe('GameTaskTransitionService', () => {
 
       mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
       redis.lrange.mockResolvedValue(['answer-1'])
-      ;(
-        gameEventOrchestrator.toQuestionTaskAnswerFromString as jest.Mock
-      ).mockReturnValue({ participantId: 'p1' } as any)
+      ;(toQuestionTaskAnswerFromString as jest.Mock)
+        .mockReset()
+        .mockReturnValue({
+          participantId: 'p1',
+        } as any)
       redis.del.mockRejectedValue(new Error('Redis delete failed'))
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
@@ -697,12 +695,11 @@ describe('GameTaskTransitionService', () => {
 
       mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
       redis.lrange.mockResolvedValue(['malformed'])
-
-      gameEventOrchestrator.toQuestionTaskAnswerFromString.mockImplementation(
-        () => {
+      ;(toQuestionTaskAnswerFromString as jest.Mock)
+        .mockReset()
+        .mockImplementation(() => {
           throw new Error('Invalid JSON')
-        },
-      )
+        })
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()

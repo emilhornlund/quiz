@@ -19,7 +19,7 @@ import {
   QuestionTaskMetadata,
   QuestionTaskPuzzleMetadata,
   TaskType,
-} from '../../../../game-core/repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 import {
   isMultiChoiceAnswer,
   isPinAnswer,
@@ -27,8 +27,8 @@ import {
   isRangeAnswer,
   isTrueFalseAnswer,
   isTypeAnswerAnswer,
-} from '../../../../game-task/utils/question-answer-type-guards'
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+} from '../../game-task/utils/question-answer-type-guards'
+import { QuestionDao } from '../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -36,7 +36,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
+} from '../../quiz/services/utils'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 import {
