@@ -13,7 +13,7 @@ import { Max, Min, ValidateNested } from 'class-validator'
 import {
   ApiGameIdProperty,
   ApiGameNameProperty,
-} from '../../../../game/controllers/decorators/api'
+} from '../../../../game-api/controllers/decorators/api'
 import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
 import {
   ApiGameResultCreatedProperty,

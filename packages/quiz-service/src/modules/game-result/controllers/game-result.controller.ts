@@ -17,8 +17,8 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
-import { ApiGameIdParam } from '../../game/controllers/decorators/api'
-import { RouteGameIdParam } from '../../game/controllers/decorators/params'
+import { ApiGameIdParam } from '../../game-api/controllers/decorators/api'
+import { RouteGameIdParam } from '../../game-api/controllers/decorators/params'
 import { AuthorizedGame } from '../../game-core/decorators/auth'
 import { GameResultService } from '../services'
 
