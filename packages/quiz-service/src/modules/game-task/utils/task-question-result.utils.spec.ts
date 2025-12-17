@@ -31,8 +31,8 @@ import {
   MOCK_TYPE_ANSWER_INCORRECT_OPTION_VALUE,
   MOCK_TYPE_ANSWER_OPTION_VALUE,
   offsetSeconds,
-} from '../../../../../../test-utils/data'
-import { IllegalTaskTypeException } from '../../../exceptions'
+} from '../../../../test-utils/data'
+import { IllegalTaskTypeException } from '../exceptions'
 
 import {
   buildQuestionResultTask,

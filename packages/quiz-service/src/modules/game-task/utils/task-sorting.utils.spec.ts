@@ -1,7 +1,7 @@
 import { QuestionType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionResultTaskItem } from '../../../repositories/models/schemas'
+import { QuestionResultTaskItem } from '../../game-core/repositories/models/schemas'
 
 import {
   compareSortClassicModeQuestionResultTaskItemByScore,

@@ -8,12 +8,12 @@ import {
   createMockRangeQuestionDocument,
   createMockTrueFalseQuestionDocument,
   createMockTypeAnswerQuestionDocument,
-} from '../../../../../../test-utils/data'
+} from '../../../../test-utils/data'
 import {
   QuestionTaskBaseMetadata,
   QuestionTaskPuzzleMetadata,
   TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 import { buildQuestionTask } from './task-question.utils'
 

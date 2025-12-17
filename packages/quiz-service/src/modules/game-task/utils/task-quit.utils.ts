@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   QuitTaskWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 /**
  * Constructs a new quit task, setting its initial status and creation timestamp.

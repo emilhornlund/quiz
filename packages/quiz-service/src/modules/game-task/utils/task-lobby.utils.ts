@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   LobbyTaskWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 /**
  * Constructs a new lobby task with a unique ID, setting its initial status and creation timestamp.

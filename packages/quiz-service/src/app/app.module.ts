@@ -21,6 +21,7 @@ import { GameAuthenticationModule } from '../modules/game-authentication'
 import { GameCoreModule } from '../modules/game-core'
 import { GameEventModule } from '../modules/game-event/game-event.module'
 import { GameResultModule } from '../modules/game-result/game-result.module'
+import { GameTaskModule } from '../modules/game-task'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
 import { QuizModule } from '../modules/quiz'
@@ -192,6 +193,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     GameModule,
     GameAuthenticationModule,
     GameResultModule,
+    GameTaskModule,
     HealthModule,
     MediaModule,
     QuizModule,

@@ -16,7 +16,7 @@ import {
   QuestionTaskRangeAnswer,
   QuestionTaskTrueFalseAnswer,
   QuestionTaskTypeAnswerAnswer,
-} from '../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
 
 type Answer = QuestionTaskBaseAnswer &
   (

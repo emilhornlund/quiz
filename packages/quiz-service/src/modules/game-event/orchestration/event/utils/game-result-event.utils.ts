@@ -9,12 +9,6 @@ import {
   PaginationEvent,
 } from '@quiz/common'
 
-import { IllegalTaskTypeException } from '../../../../game-core/exceptions'
-import {
-  isLeaderboardTask,
-  isPodiumTask,
-  isQuestionResultTask,
-} from '../../../../game-core/orchestration/task-type-guards'
 import {
   GameDocument,
   ParticipantPlayerWithBase,
@@ -22,6 +16,12 @@ import {
   TaskType,
 } from '../../../../game-core/repositories/models/schemas'
 import { isParticipantPlayer } from '../../../../game-core/utils'
+import { IllegalTaskTypeException } from '../../../../game-task/exceptions'
+import {
+  isLeaderboardTask,
+  isPodiumTask,
+  isQuestionResultTask,
+} from '../../../../game-task/utils/task-type-guards'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,

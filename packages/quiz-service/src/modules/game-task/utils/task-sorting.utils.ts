@@ -1,4 +1,4 @@
-import { QuestionResultTaskItem } from '../../../repositories/models/schemas'
+import { QuestionResultTaskItem } from '../../game-core/repositories/models/schemas'
 
 /**
  * Compares two numbers for sorting in descending order.

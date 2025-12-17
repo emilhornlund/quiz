@@ -1,4 +1,7 @@
-import { GameDocument, TaskType } from '../repositories/models/schemas'
+import {
+  GameDocument,
+  TaskType,
+} from '../../game-core/repositories/models/schemas'
 
 /**
  * Checks if the current task of the game document is a lobby task.

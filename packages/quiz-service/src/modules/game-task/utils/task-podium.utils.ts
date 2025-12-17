@@ -1,13 +1,14 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   GameDocument,
   LeaderboardTaskItem,
   PodiumTaskWithBase,
   TaskType,
-} from '../../../repositories/models/schemas'
-import { isQuestionResultTask } from '../../task-type-guards'
+} from '../../game-core/repositories/models/schemas'
+import { IllegalTaskTypeException } from '../exceptions'
+
+import { isQuestionResultTask } from './task-type-guards'
 
 /**
  * Constructs a new podium task based on the provided game document.

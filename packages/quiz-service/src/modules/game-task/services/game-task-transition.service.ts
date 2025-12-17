@@ -3,8 +3,6 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import { GameStatus } from '@quiz/common'
 import { Redis } from 'ioredis'
 
-import { IllegalTaskTypeException } from '../../game-core/exceptions'
-import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
 import {
   GameDocument,
   QuestionTaskAnswer,
@@ -16,6 +14,15 @@ import {
 } from '../../game-core/utils'
 import { GameEventOrchestrator } from '../../game-event/orchestration/event'
 import { GameResultService } from '../../game-result/services'
+import { IllegalTaskTypeException } from '../exceptions'
+import {
+  buildLeaderboardTask,
+  buildPodiumTask,
+  buildQuestionResultTask,
+  buildQuestionTask,
+  buildQuitTask,
+  updateParticipantsAndBuildLeaderboard,
+} from '../utils'
 
 /**
  * Service responsible for determining the appropriate transition delay and callback
@@ -30,19 +37,17 @@ export class GameTaskTransitionService {
   private static MAX_CHARACTER_DURATION = 15000 // Maximum fallback duration in milliseconds
 
   /**
-   * Constructs an instance of GameTaskTransitionService.
+   * Constructs the GameTaskTransitionService.
    *
    * @param redis - The Redis instance used for answer synchronization and task coordination.
    * @param gameResultService - Service responsible for creating and retrieving persisted game results.
    * @param gameEventOrchestrator - Orchestrator for answer deserialization and event-related metadata helpers.
-   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
     @InjectRedis()
     private readonly redis: Redis,
     private readonly gameResultService: GameResultService,
     private readonly gameEventOrchestrator: GameEventOrchestrator,
-    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {}
 
   /**
@@ -107,8 +112,7 @@ export class GameTaskTransitionService {
       )
     }
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask =
-      this.gameTaskOrchestrator.buildQuestionTask(gameDocument)
+    gameDocument.currentTask = buildQuestionTask(gameDocument)
     gameDocument.nextQuestion = gameDocument.nextQuestion + 1
   }
 
@@ -164,8 +168,7 @@ export class GameTaskTransitionService {
 
     gameDocument.currentTask.answers = answers
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask =
-      this.gameTaskOrchestrator.buildQuestionResultTask(gameDocument)
+    gameDocument.currentTask = buildQuestionResultTask(gameDocument)
   }
 
   /**
@@ -191,17 +194,15 @@ export class GameTaskTransitionService {
     gameDocument.previousTasks.push(gameDocument.currentTask)
 
     const leaderboardTaskItems =
-      this.gameTaskOrchestrator.updateParticipantsAndBuildLeaderboard(
-        gameDocument,
-      )
+      updateParticipantsAndBuildLeaderboard(gameDocument)
 
     if (gameDocument.nextQuestion < gameDocument.questions.length) {
-      gameDocument.currentTask = this.gameTaskOrchestrator.buildLeaderboardTask(
+      gameDocument.currentTask = buildLeaderboardTask(
         gameDocument,
         leaderboardTaskItems,
       )
     } else {
-      gameDocument.currentTask = this.gameTaskOrchestrator.buildPodiumTask(
+      gameDocument.currentTask = buildPodiumTask(
         gameDocument,
         leaderboardTaskItems,
       )
@@ -232,8 +233,7 @@ export class GameTaskTransitionService {
     }
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask =
-      this.gameTaskOrchestrator.buildQuestionTask(gameDocument)
+    gameDocument.currentTask = buildQuestionTask(gameDocument)
     gameDocument.nextQuestion = gameDocument.nextQuestion + 1
   }
 
@@ -256,7 +256,7 @@ export class GameTaskTransitionService {
     }
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
-    gameDocument.currentTask = this.gameTaskOrchestrator.buildQuitTask()
+    gameDocument.currentTask = buildQuitTask()
     gameDocument.status =
       gameDocument.participants.filter(isParticipantPlayer).length > 0
         ? GameStatus.Completed

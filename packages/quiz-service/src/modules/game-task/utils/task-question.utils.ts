@@ -1,7 +1,13 @@
 import { QuestionType, shuffleDifferent } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
+import {
+  GameDocument,
+  QuestionTaskMetadata,
+  QuestionTaskWithBase,
+  TaskType,
+} from '../../game-core/repositories/models/schemas'
+import { QuestionDao } from '../../quiz/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -9,13 +15,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
-import {
-  GameDocument,
-  QuestionTaskMetadata,
-  QuestionTaskWithBase,
-  TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../quiz/services/utils'
 
 /**
  * Constructs a new question task based on the provided game document.

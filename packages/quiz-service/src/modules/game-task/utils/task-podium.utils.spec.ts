@@ -1,7 +1,6 @@
 import { GameMode, QuestionType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   BaseTask,
   GameDocument,
@@ -9,7 +8,8 @@ import {
   LobbyTask,
   QuestionResultTask,
   TaskType,
-} from '../../../repositories/models/schemas'
+} from '../../game-core/repositories/models/schemas'
+import { IllegalTaskTypeException } from '../exceptions'
 
 import { buildPodiumTask } from './task-podium.utils'
 

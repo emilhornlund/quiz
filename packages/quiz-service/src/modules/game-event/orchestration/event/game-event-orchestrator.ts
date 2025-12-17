@@ -9,20 +9,20 @@ import {
 } from '@quiz/common'
 
 import {
-  isLeaderboardTask,
-  isLobbyTask,
-  isPodiumTask,
-  isQuestionResultTask,
-  isQuestionTask,
-  isQuitTask,
-} from '../../../game-core/orchestration/task-type-guards'
-import {
   GameDocument,
   Participant,
   ParticipantPlayerWithBase,
   QuestionTaskAnswer,
   QuestionTaskBaseAnswer,
 } from '../../../game-core/repositories/models/schemas'
+import {
+  isLeaderboardTask,
+  isLobbyTask,
+  isPodiumTask,
+  isQuestionResultTask,
+  isQuestionTask,
+  isQuitTask,
+} from '../../../game-task/utils/task-type-guards'
 
 import { GameEventMetaData } from './game-event-metadata.interface'
 import { buildGameLeaderboardHostEvent } from './utils/game-leaderboard-event.utils'

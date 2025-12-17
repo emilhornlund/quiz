@@ -21,6 +21,13 @@ import {
 import { Redis } from 'ioredis'
 
 import { PlayerNotFoundException } from '../../game-core/exceptions'
+import { GameRepository } from '../../game-core/repositories'
+import { TaskType } from '../../game-core/repositories/models/schemas'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
+import { GameEventOrchestrator } from '../../game-event/orchestration/event'
+import { GameEventPublisher } from '../../game-event/services'
+import { GameTaskTransitionScheduler } from '../../game-task/services'
+import { rebuildQuestionResultTask } from '../../game-task/utils'
 import {
   isMultiChoiceCorrectAnswer,
   isPinCorrectAnswer,
@@ -28,14 +35,8 @@ import {
   isRangeCorrectAnswer,
   isTrueFalseCorrectAnswer,
   isTypeAnswerCorrectAnswer,
-} from '../../game-core/orchestration/question-answer-type-guards'
-import { GameTaskOrchestrator } from '../../game-core/orchestration/task'
-import { isQuestionResultTask } from '../../game-core/orchestration/task-type-guards'
-import { GameRepository } from '../../game-core/repositories'
-import { TaskType } from '../../game-core/repositories/models/schemas'
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-import { GameEventOrchestrator } from '../../game-event/orchestration/event'
-import { GameEventPublisher } from '../../game-event/services'
+} from '../../game-task/utils/question-answer-type-guards'
+import { isQuestionResultTask } from '../../game-task/utils/task-type-guards'
 import { QuizRepository } from '../../quiz/repositories'
 import { User } from '../../user/repositories'
 import {
@@ -43,7 +44,6 @@ import {
   PlayerNotUniqueException,
 } from '../exceptions'
 
-import { GameTaskTransitionScheduler } from './game-task-transition-scheduler'
 import { isNicknameUnique, isPlayerUnique } from './utils'
 
 /**
@@ -59,22 +59,20 @@ export class GameService {
   /**
    * Creates an instance of GameService.
    *
-   * @param redis - The Redis instance used for managing data synchronization and storing answers.
-   * @param gameRepository - Repository for accessing and modifying game data.
-   * @param gameTaskTransitionScheduler - Scheduler for handling game task transitions.
+   * @param redis - The Redis instance used for answer synchronization and task coordination.
+   * @param gameRepository - Repository responsible for reading and persisting game documents.
+   * @param gameTaskTransitionScheduler - Scheduler responsible for task transitions and time-based progression.
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
    * @param gameEventOrchestrator - Orchestrator for building game events.
-   * @param gameTaskOrchestrator - Orchestrator for building and transitioning game tasks (question, result, leaderboard, podium, quit).
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
-    private gameRepository: GameRepository,
-    private gameTaskTransitionScheduler: GameTaskTransitionScheduler,
-    private gameEventPublisher: GameEventPublisher,
-    private quizRepository: QuizRepository,
+    private readonly gameRepository: GameRepository,
+    private readonly gameTaskTransitionScheduler: GameTaskTransitionScheduler,
+    private readonly gameEventPublisher: GameEventPublisher,
+    private readonly quizRepository: QuizRepository,
     private readonly gameEventOrchestrator: GameEventOrchestrator,
-    private readonly gameTaskOrchestrator: GameTaskOrchestrator,
   ) {}
 
   /**
@@ -447,8 +445,7 @@ export class GameService {
           : []),
       ]
 
-      const updatedQuestionResultTask =
-        this.gameTaskOrchestrator.rebuildQuestionResultTask(gameDocument)
+      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
 
       const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,
@@ -535,8 +532,7 @@ export class GameService {
           )
         })
 
-      const updatedQuestionResultTask =
-        this.gameTaskOrchestrator.rebuildQuestionResultTask(gameDocument)
+      const updatedQuestionResultTask = rebuildQuestionResultTask(gameDocument)
 
       const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,

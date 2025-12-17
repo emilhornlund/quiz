@@ -1,7 +1,6 @@
 import { Logger, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { GameTaskOrchestrator } from './orchestration/task'
 import { GameRepository } from './repositories'
 import { Game, GameSchema } from './repositories/models/schemas'
 
@@ -17,7 +16,7 @@ import { Game, GameSchema } from './repositories/models/schemas'
       },
     ]),
   ],
-  providers: [Logger, GameRepository, GameTaskOrchestrator],
-  exports: [GameRepository, GameTaskOrchestrator],
+  providers: [Logger, GameRepository],
+  exports: [GameRepository],
 })
 export class GameCoreModule {}

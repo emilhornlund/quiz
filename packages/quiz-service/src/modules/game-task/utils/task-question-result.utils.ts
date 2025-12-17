@@ -1,16 +1,6 @@
 import { GameMode, isDefined, QuestionType } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QuestionDao } from '../../../../quiz/repositories/models/schemas'
-import {
-  isMultiChoiceQuestion,
-  isPinQuestion,
-  isPuzzleQuestion,
-  isRangeQuestion,
-  isTrueFalseQuestion,
-  isTypeAnswerQuestion,
-} from '../../../../quiz/services/utils'
-import { IllegalTaskTypeException } from '../../../exceptions'
 import {
   GameDocument,
   Participant,
@@ -21,9 +11,18 @@ import {
   QuestionResultTaskWithBase,
   QuestionTaskAnswer,
   TaskType,
-} from '../../../repositories/models/schemas'
-import { isParticipantPlayer } from '../../../utils'
-import { isQuestionResultTask, isQuestionTask } from '../../task-type-guards'
+} from '../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../game-core/utils'
+import { QuestionDao } from '../../quiz/repositories/models/schemas'
+import {
+  isMultiChoiceQuestion,
+  isPinQuestion,
+  isPuzzleQuestion,
+  isRangeQuestion,
+  isTrueFalseQuestion,
+  isTypeAnswerQuestion,
+} from '../../quiz/services/utils'
+import { IllegalTaskTypeException } from '../exceptions'
 
 import {
   calculateQuestionScoreForParticipant,
@@ -33,6 +32,7 @@ import {
   compareSortClassicModeQuestionResultTaskItemByScore,
   compareZeroToOneHundredModeQuestionResultTaskItemByScore,
 } from './task-sorting.utils'
+import { isQuestionResultTask, isQuestionTask } from './task-type-guards'
 
 /**
  * Constructs a new `QuestionResultTask` based on the current active question task.

@@ -1,4 +1,4 @@
-import { TaskType } from '../../../repositories/models/schemas'
+import { TaskType } from '../../game-core/repositories/models/schemas'
 
 import { buildLobbyTask } from './task-lobby.utils'
 
