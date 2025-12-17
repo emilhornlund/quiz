@@ -19,6 +19,7 @@ import {
 } from '../../authentication/controllers/decorators'
 import { ApiGameIdParam } from '../../game/controllers/decorators/api'
 import { RouteGameIdParam } from '../../game/controllers/decorators/params'
+import { AuthorizedGame } from '../../game-core/decorators/auth'
 import { GameResultService } from '../services'
 
 import {
@@ -95,6 +96,7 @@ export class GameResultController {
   @ApiNotFoundResponse({
     description: 'No game found with the specified unique identifier.',
   })
+  @AuthorizedGame()
   @HttpCode(HttpStatus.OK)
   public async getGameResults(
     @RouteGameIdParam() gameID: string,

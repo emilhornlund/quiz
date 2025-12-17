@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import {
   GameMode,
   GameResultClassicModePlayerMetricDto,
@@ -61,13 +61,6 @@ export class GameResultService {
 
     if (!gameResultDocument) {
       throw new GameResultsNotFoundException(gameID)
-    }
-
-    if (
-      gameResultDocument.hostParticipantId !== participantId &&
-      !gameResultDocument.players.some((p) => p.participantId === participantId)
-    ) {
-      throw new ForbiddenException()
     }
 
     const {
