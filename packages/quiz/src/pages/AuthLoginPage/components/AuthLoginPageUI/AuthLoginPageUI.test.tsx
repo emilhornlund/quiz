@@ -40,7 +40,7 @@ describe('AuthLoginPageUI', () => {
     ).toHaveAttribute('href', '/auth/register')
 
     // Join button should be disabled initially (no valid fields yet)
-    const joinBtn = container.querySelector('#join') as HTMLButtonElement
+    const joinBtn = container.querySelector('#login') as HTMLButtonElement
     expect(joinBtn).toBeDisabled()
 
     expect(container).toMatchSnapshot()
@@ -61,7 +61,7 @@ describe('AuthLoginPageUI', () => {
     const email = screen.getByPlaceholderText('Email') as HTMLInputElement
     const password = screen.getByPlaceholderText('Password') as HTMLInputElement
     const form = email.closest('form') as HTMLFormElement
-    const joinBtn = container.querySelector('#join') as HTMLButtonElement
+    const joinBtn = container.querySelector('#login') as HTMLButtonElement
 
     // Start disabled
     expect(joinBtn).toBeDisabled()
@@ -101,7 +101,7 @@ describe('AuthLoginPageUI', () => {
 
     const email = screen.getByPlaceholderText('Email') as HTMLInputElement
     const password = screen.getByPlaceholderText('Password') as HTMLInputElement
-    const joinBtn = container.querySelector('#join') as HTMLButtonElement
+    const joinBtn = container.querySelector('#login') as HTMLButtonElement
 
     expect(email).toBeDisabled()
     expect(password).toBeDisabled()
@@ -144,7 +144,7 @@ describe('AuthLoginPageUI', () => {
 
     const email = screen.getByPlaceholderText('Email') as HTMLInputElement
     const password = screen.getByPlaceholderText('Password') as HTMLInputElement
-    const joinBtn = container.querySelector('#join') as HTMLButtonElement
+    const joinBtn = container.querySelector('#login') as HTMLButtonElement
 
     // Invalid email and weak password
     fireEvent.change(email, { target: { value: 'not-an-email' } })

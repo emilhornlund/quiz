@@ -128,7 +128,7 @@ const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({
           </Typography>
         </Link>
         <IconButtonArrowRight
-          id="join"
+          id="login"
           type="submit"
           kind="call-to-action"
           value="Let's go!"

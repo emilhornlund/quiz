@@ -8,12 +8,15 @@
     "clean": "rimraf dist",
     "build": "yarn clean && nest build",
     "dev": "nest start --watch",
+    "dev:e2e": "NODE_ENV=test yarn dev",
     "serve": "node dist/main",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "jest",
     "test:coverage": "yarn test --coverage",
-    "check-circular-deps": "yarn madge --circular src/main.ts"
+    "check-circular-deps": "yarn madge --circular src/main.ts",
+    "e2e:setup": "tsx scripts/e2e/setup.ts",
+    "e2e:teardown": "tsx scripts/e2e/teardown.ts"
   },
   "dependencies": {
     "@keyv/redis": "^5.1.4",
@@ -77,6 +80,7 @@
     "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.21.0"
   }
 }
