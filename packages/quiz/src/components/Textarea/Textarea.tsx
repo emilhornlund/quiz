@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
-import { isCallbackValid, isValidString } from '../../utils/validation.ts'
+import { isCallbackValid, isValidString } from '../../utils/validation'
 
 import styles from './Textarea.module.scss'
 

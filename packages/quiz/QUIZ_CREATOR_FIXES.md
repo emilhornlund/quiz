@@ -54,7 +54,7 @@ const handleSaveQuiz = () => {
 }
 ```
 
-### - [ ] 2. Fix Inconsistent Validation Initialization
+### - [X] 2. Fix Inconsistent Validation Initialization
 
 **Problem**: Different fields start with different validation states.
 

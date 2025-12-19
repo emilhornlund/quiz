@@ -18,7 +18,7 @@ import {
   isCallbackValid,
   isValidNumber,
   isValidString,
-} from '../../utils/validation.ts'
+} from '../../utils/validation'
 
 import styles from './TextField.module.scss'
 
