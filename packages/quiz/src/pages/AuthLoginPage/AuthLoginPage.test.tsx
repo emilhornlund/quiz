@@ -68,7 +68,7 @@ describe('AuthLoginPage', () => {
       </MemoryRouter>,
     )
 
-    const submit = container.querySelector('#join') as HTMLButtonElement
+    const submit = container.querySelector('#login') as HTMLButtonElement
     expect(submit).toBeDisabled()
   })
 
@@ -94,7 +94,7 @@ describe('AuthLoginPage', () => {
       target: { value: 'PPss11!!' },
     })
 
-    const submit = container.querySelector('#join') as HTMLButtonElement
+    const submit = container.querySelector('#login') as HTMLButtonElement
     expect(submit).not.toBeDisabled()
 
     fireEvent.click(submit)

@@ -107,9 +107,9 @@ exports[`AuthLoginPageUI > enables submit when email and password are valid, the
               class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
-                data-testid="test-join-button"
-                id="join"
-                name="join"
+                data-testid="test-login-button"
+                id="login"
+                name="login"
                 type="submit"
               >
                 <span>
@@ -289,10 +289,10 @@ exports[`AuthLoginPageUI > fires Google button handler 1`] = `
               class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
-                data-testid="test-join-button"
+                data-testid="test-login-button"
                 disabled=""
-                id="join"
-                name="join"
+                id="login"
+                name="login"
                 type="submit"
               >
                 <span>
@@ -472,10 +472,10 @@ exports[`AuthLoginPageUI > keeps submit disabled when fields are invalid 1`] = `
               class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
-                data-testid="test-join-button"
+                data-testid="test-login-button"
                 disabled=""
-                id="join"
-                name="join"
+                id="login"
+                name="login"
                 type="submit"
               >
                 <span>
@@ -655,10 +655,10 @@ exports[`AuthLoginPageUI > renders base UI with title, message and links 1`] = `
               class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
-                data-testid="test-join-button"
+                data-testid="test-login-button"
                 disabled=""
-                id="join"
-                name="join"
+                id="login"
+                name="login"
                 type="submit"
               >
                 <span>
@@ -840,10 +840,10 @@ exports[`AuthLoginPageUI > respects loading state: disables inputs and button, s
               class="buttonInputContainer buttonInputKindCallToAction"
             >
               <button
-                data-testid="test-join-button"
+                data-testid="test-login-button"
                 disabled=""
-                id="join"
-                name="join"
+                id="login"
+                name="login"
                 type="submit"
               >
                 <div

@@ -2,6 +2,11 @@
 name: Build
 on:
   workflow_call:
+    inputs:
+      run_e2e:
+        description: 'Run Playwright e2e tests'
+        required: true
+        type: boolean
 
 permissions:
   contents: read
@@ -48,6 +53,16 @@ jobs:
 
       - name: Test & Coverage
         run: yarn test:coverage
+
+      - name: Install Playwright browsers
+        if: ${{ inputs.run_e2e }}
+        run: yarn workspace @quiz/quiz playwright install --with-deps
+
+      - name: E2E Tests
+        if: ${{ inputs.run_e2e }}
+        env:
+          CI: 'true'
+        run: yarn workspace @quiz/quiz test:e2e
 
       - name: Docker compose down
         if: always()

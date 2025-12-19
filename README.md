@@ -152,6 +152,42 @@ The default `docker-compose.yml` provides sensible development‑only images wit
 
 ---
 
+## End-to-End Tests (Playwright)
+
+The frontend application includes end-to-end tests written with **Playwright**. These tests run against the real frontend and backend, using a dedicated test database and Redis instance that is automatically reset and seeded before execution.
+
+### Prerequisites
+
+Playwright requires browser binaries to be installed once on your machine.
+
+```sh
+yarn workspace @quiz/quiz playwright install
+```
+
+On Linux (for example in CI), system dependencies may also be required:
+
+```sh
+yarn workspace @quiz/quiz playwright install --with-deps
+```
+
+### Run locally
+
+```sh
+yarn workspace @quiz/quiz test:e2e
+```
+
+This will:
+- Start the frontend (Vite dev server)
+- Start the backend in test mode
+- Reset and seed MongoDB and Redis
+- Run Playwright tests across Chromium, Firefox, and WebKit
+
+### CI behavior
+
+End-to-end tests are **disabled by default** in CI and are only executed for selected workflows (for example on `main` and production deploys).
+
+---
+
 ## CI/CD & Deployment
 
 All build, test, release, and deployment steps are now handled automatically by **GitHub Actions**. On every push and pull request the pipeline validates the codebase, and on merges to `main` it:

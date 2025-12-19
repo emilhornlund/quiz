@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       setupFiles: 'src/setupTests.ts',
+      exclude: ['e2e-tests/**', 'node_modules/**'],
       css: {
         modules: { classNameStrategy: 'non-scoped' },
       },

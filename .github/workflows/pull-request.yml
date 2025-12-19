@@ -11,3 +11,5 @@ jobs:
       contents: read
       pull-requests: write
     uses: ./.github/workflows/build.yml
+    with:
+      run_e2e: true

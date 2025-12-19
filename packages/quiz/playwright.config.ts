@@ -1,0 +1,58 @@
+import { defineConfig, devices } from '@playwright/test'
+import { loadEnv } from 'vite'
+
+const env = loadEnv('development', process.cwd(), '')
+const SERVER_PORT = env.SERVER_PORT || '3000'
+const QUIZ_SERVICE_PROXY = env.QUIZ_SERVICE_PROXY || 'http://localhost:8080/api'
+
+const apiUrl = new URL(QUIZ_SERVICE_PROXY)
+apiUrl.pathname = '/health'
+
+export default defineConfig({
+  testDir: './e2e-tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  globalSetup: require.resolve('./playwright.global-setup.ts'),
+  globalTeardown: require.resolve('./playwright.global-teardown.ts'),
+  use: {
+    baseURL: `http://localhost:${SERVER_PORT}`,
+    trace: 'on-first-retry',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
+  webServer: [
+    {
+      // Vite dev server (front-end)
+      command: 'yarn dev',
+      url: `http://localhost:${SERVER_PORT}`,
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      timeout: 30_000,
+    },
+    {
+      // API dev server (back-end)
+      command: 'yarn workspace @quiz/quiz-service dev:e2e',
+      url: apiUrl.toString(),
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      timeout: 30_000,
+    },
+  ],
+})
