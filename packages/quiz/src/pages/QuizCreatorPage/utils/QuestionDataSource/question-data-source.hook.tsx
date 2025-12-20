@@ -18,31 +18,177 @@ import {
   QuestionValueChangeFunction,
   QuestionValueValidChangeFunction,
 } from './question-data-source.types.ts'
-import { createQuestionValidationModel } from './question-data-source.utils.ts'
+import {
+  createQuestionValidationModel,
+  recomputeQuestionValidation,
+} from './question-data-source.utils.ts'
 
+/**
+ * Return contract for `useQuestionDataSource`.
+ *
+ * Provides a small state machine for authoring questions in the quiz creator UI:
+ * - Owns the question list.
+ * - Tracks a selected question index.
+ * - Supports CRUD operations and type replacement.
+ * - Maintains per-field validation booleans on each question.
+ */
 type QuestionDataSourceReturnType = {
+  /**
+   * Current list of question models.
+   *
+   * Each item contains:
+   * - `mode` (Classic / ZeroToOneHundred)
+   * - `data` (question payload for the chosen type)
+   * - `validation` (per-field validity map)
+   */
   questions: QuestionData[]
+
+  /**
+   * Replaces the full question list.
+   *
+   * Behavior:
+   * - Recomputes validation for each question.
+   * - Resets selection to index 0 when the array is non-empty; otherwise sets selection to -1.
+   */
   setQuestions: (questions: QuestionData[]) => void
+
+  /**
+   * Aggregated validity across all questions.
+   *
+   * `true` when no question contains a `false` value in its `validation` map.
+   */
   allQuestionsValid: boolean
+
+  /**
+   * The currently selected question, if the selection index is valid.
+   */
   selectedQuestion?: QuestionData
+
+  /**
+   * The current selected question index.
+   *
+   * Notes:
+   * - `-1` indicates "no selection".
+   */
   selectedQuestionIndex: number
+
+  /**
+   * Selects a question by index.
+   *
+   * Throws:
+   * - `Error` when the index is out of bounds.
+   */
   selectQuestion: (index: number) => void
+
+  /**
+   * Appends a new question for the given game mode + question type and selects it.
+   *
+   * The new question uses default values from `createQuestionValidationModel`.
+   */
   addQuestion: (mode: GameMode, type: QuestionType) => void
+
+  /**
+   * Updates a field on the currently selected question `data` and recomputes validation.
+   *
+   * Throws:
+   * - `Error` if no valid selection exists.
+   */
   setQuestionValue: QuestionValueChangeFunction
+
+  /**
+   * Updates a single validity flag on the currently selected question without recomputing.
+   *
+   * Intended for inputs that validate locally and want to push the result into the model.
+   *
+   * Throws:
+   * - `Error` if no valid selection exists.
+   */
   setQuestionValueValid: QuestionValueValidChangeFunction
+
+  /**
+   * Swaps the currently selected question with the question at `index`.
+   *
+   * Use-case:
+   * - "Drop" a question onto another slot in the UI to reorder.
+   *
+   * Throws:
+   * - `Error` when the index is out of bounds.
+   */
   dropQuestion: (index: number) => void
+
+  /**
+   * Duplicates the question at `index` by inserting a copy immediately after it.
+   *
+   * Note:
+   * - This currently inserts the same object reference (shallow). If you later mutate nested
+   *   structures in-place, you may want a deep clone instead.
+   *
+   * Throws:
+   * - `Error` when the index is out of bounds.
+   */
   duplicateQuestion: (index: number) => void
+
+  /**
+   * Deletes the question at `index` and updates selection.
+   *
+   * Selection behavior:
+   * - If questions remain, selects `min(index, lastIndex)`.
+   * - If no questions remain, sets selection to `-1`.
+   *
+   * Throws:
+   * - `Error` when the index is out of bounds.
+   */
   deleteQuestion: (index: number) => void
+
+  /**
+   * Replaces the currently selected question with a new question of the provided `type`,
+   * preserving shared fields where possible (question text, points, duration, info, media).
+   *
+   * Supported transitions:
+   * - Classic: MultiChoice, TrueFalse, Range, TypeAnswer, Pin, Puzzle
+   * - ZeroToOneHundred: Range
+   *
+   * Throws:
+   * - `Error` if no valid selection exists.
+   */
   replaceQuestion: (type: QuestionType) => void
+
+  /**
+   * Resets the question list for a given game mode.
+   *
+   * Behavior:
+   * - If `questions` is provided: uses it and recomputes validation.
+   * - Otherwise: initializes with a single default question appropriate for the mode:
+   *   - Classic -> MultiChoice
+   *   - ZeroToOneHundred -> Range
+   *
+   * Selection behavior:
+   * - Selects index 0 when non-empty; otherwise -1.
+   */
   resetQuestions: (gameMode: GameMode, questions?: QuestionData[]) => void
 }
 
+/**
+ * React hook for managing the quiz creator "question authoring" model.
+ *
+ * Responsibilities:
+ * - Stores a list of `QuestionData` entries and a selected index.
+ * - Enforces index validity for selection-dependent operations.
+ * - Centralizes the validation lifecycle by recomputing validation on data updates.
+ *
+ * Invariants:
+ * - `selectedIndex` is either `-1` (no selection) or a valid index into `questions`.
+ * - `questions[i].validation` contains per-field validity flags; `false` represents invalid.
+ */
 export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
   const [model, setModel] = useState<{
     questions: QuestionData[]
     selectedIndex: number
   }>({ questions: [], selectedIndex: -1 })
 
+  /**
+   * Checks whether an index is within the bounds of the current question list.
+   */
   const isValidIndex = useCallback(
     (index: number): boolean => index >= 0 && index < model.questions.length,
     [model.questions],
@@ -51,7 +197,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
   const questions = useMemo<QuestionData[]>(() => model.questions, [model])
 
   const setQuestions = useCallback((questions: QuestionData[]) => {
-    setModel({ questions, selectedIndex: 0 })
+    setModel({
+      questions: questions.map(recomputeQuestionValidation),
+      selectedIndex: questions.length ? 0 : -1,
+    })
   }, [])
 
   const allQuestionsValid = useMemo(
@@ -109,19 +258,15 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
 
         const currentQuestion = questions[selectedIndex]
 
-        const updatedQuestions = [...questions]
-        updatedQuestions[selectedIndex] = {
+        const updatedQuestion = recomputeQuestionValidation({
           ...currentQuestion,
           data: { ...currentQuestion.data, [key]: value },
-          validation: {
-            ...currentQuestion.validation,
-          },
-        } as QuestionData
+        } as QuestionData)
 
-        return {
-          ...prevModel,
-          questions: updatedQuestions,
-        }
+        const updatedQuestions = [...questions]
+        updatedQuestions[selectedIndex] = updatedQuestion
+
+        return { ...prevModel, questions: updatedQuestions }
       })
     },
     [isValidIndex],
@@ -207,19 +352,31 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
     [isValidIndex],
   )
 
-  const duplicateQuestion = useCallback(
-    (index: number): void => {
-      if (!isValidIndex(index)) {
-        throw new Error('Invalid question index')
-      }
+  const deepClone = <T,>(value: T): T => {
+    if (typeof structuredClone === 'function') {
+      return structuredClone(value)
+    }
 
+    return JSON.parse(JSON.stringify(value)) as T
+  }
+
+  const duplicateQuestion = useCallback(
+    (index: number) => {
       setModel((prevModel) => {
-        const newQuestions = [...prevModel.questions]
-        newQuestions.splice(index + 1, 0, prevModel.questions[index])
+        if (!isValidIndex(index)) {
+          throw new Error('Invalid question index')
+        }
+
+        const questions = prevModel.questions
+        const original = questions[index]
+        const duplicated = deepClone(original)
+
+        const updatedQuestions = [...questions]
+        updatedQuestions.splice(index + 1, 0, duplicated)
 
         return {
           ...prevModel,
-          questions: newQuestions,
+          questions: updatedQuestions,
           selectedIndex: index,
         }
       })
@@ -249,8 +406,6 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
     [isValidIndex],
   )
 
-  // TODO: replaceQuestion() => use when change type
-
   const replaceQuestion = useCallback(
     (type: QuestionType) => {
       setModel((prevModel) => {
@@ -266,7 +421,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
 
         if (currentQuestion.mode === GameMode.Classic) {
           if (type === QuestionType.MultiChoice) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -277,10 +432,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
           if (type === QuestionType.TrueFalse) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -290,10 +445,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
           if (type === QuestionType.Range) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -307,10 +462,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
           if (type === QuestionType.TypeAnswer) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -321,10 +476,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
           if (type === QuestionType.Pin) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -337,10 +492,10 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
           if (type === QuestionType.Puzzle) {
-            updatedQuestions[selectedIndex] = {
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
               mode: GameMode.Classic,
               data: {
                 type,
@@ -350,12 +505,12 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
         } else if (currentQuestion.mode === GameMode.ZeroToOneHundred) {
           if (type === QuestionType.Range) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
+            updatedQuestions[selectedIndex] = recomputeQuestionValidation({
+              mode: GameMode.ZeroToOneHundred,
               data: {
                 type,
                 question: currentQuestion.data.question,
@@ -365,7 +520,7 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
                 info: currentQuestion.data.info,
               },
               validation: {},
-            }
+            })
           }
         }
 
@@ -380,24 +535,26 @@ export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
 
   const resetQuestions = useCallback(
     (gameMode: GameMode, questions?: QuestionData[]): void => {
+      const initialQuestions =
+        questions ||
+        (gameMode === GameMode.Classic
+          ? [
+              createQuestionValidationModel(
+                GameMode.Classic,
+                QuestionType.MultiChoice,
+              ),
+            ]
+          : [
+              createQuestionValidationModel(
+                GameMode.ZeroToOneHundred,
+                QuestionType.Range,
+              ),
+            ])
+
       setModel((prevModel) => ({
         ...prevModel,
-        questions:
-          questions ||
-          (gameMode === GameMode.Classic
-            ? [
-                createQuestionValidationModel(
-                  GameMode.Classic,
-                  QuestionType.MultiChoice,
-                ),
-              ]
-            : [
-                createQuestionValidationModel(
-                  GameMode.ZeroToOneHundred,
-                  QuestionType.Range,
-                ),
-              ]),
-        selectedIndex: 0,
+        questions: initialQuestions.map(recomputeQuestionValidation),
+        selectedIndex: initialQuestions.length ? 0 : -1,
       }))
     },
     [],

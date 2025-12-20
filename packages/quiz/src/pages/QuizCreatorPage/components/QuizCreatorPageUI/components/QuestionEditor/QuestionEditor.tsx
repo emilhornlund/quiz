@@ -13,7 +13,7 @@ import {
   isClassicRangeQuestion,
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
-  isZeroToOneHundredRangeDto,
+  isZeroToOneHundredRangeQuestion,
 } from '../../../../utils/QuestionDataSource/question-data-source.utils.ts'
 
 import {
@@ -103,7 +103,7 @@ const QuestionEditor: FC<QuestionEditorProps> = ({
         />
       )}
 
-      {isZeroToOneHundredRangeDto(question) && (
+      {isZeroToOneHundredRangeQuestion(question) && (
         <ZeroToOneHundredRangeQuestionForm
           data={question.data}
           onChange={onQuestionValueChange}

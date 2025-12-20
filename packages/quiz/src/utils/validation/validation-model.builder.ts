@@ -14,13 +14,26 @@ import {
  * - `null`
  * - `undefined`
  * - strings containing only whitespace
+ * - empty arrays
+ *
+ * Notes:
+ * - `0` and `false` are not considered empty.
+ * - Plain objects are not treated as empty by default.
  */
 function isEmpty(value: unknown): boolean {
-  return (
-    value === null ||
-    value === undefined ||
-    (typeof value === 'string' && value.trim().length === 0)
-  )
+  if (value === null || value === undefined) {
+    return true
+  }
+
+  if (typeof value === 'string') {
+    return value.trim().length === 0
+  }
+
+  if (Array.isArray(value)) {
+    return value.length === 0
+  }
+
+  return false
 }
 
 /**

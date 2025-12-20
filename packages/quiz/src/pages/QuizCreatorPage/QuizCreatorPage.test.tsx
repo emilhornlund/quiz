@@ -212,7 +212,7 @@ vi.mock('./utils/QuestionDataSource/question-data-source.utils.ts', () => ({
     q.mode === GameMode.Classic && q.data.type === QuestionType.Pin,
   isClassicPuzzleQuestion: (q: QuestionData) =>
     q.mode === GameMode.Classic && q.data.type === QuestionType.Puzzle,
-  isZeroToOneHundredRangeDto: (q: QuestionData) =>
+  isZeroToOneHundredRangeQuestion: (q: QuestionData) =>
     q.mode === GameMode.ZeroToOneHundred && q.data.type === QuestionType.Range,
 }))
 

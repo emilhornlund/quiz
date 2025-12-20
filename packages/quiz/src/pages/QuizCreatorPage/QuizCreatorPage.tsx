@@ -31,7 +31,7 @@ import {
   isClassicRangeQuestion,
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
-  isZeroToOneHundredRangeDto,
+  isZeroToOneHundredRangeQuestion,
 } from './utils/QuestionDataSource/question-data-source.utils.ts'
 import { useQuizSettingsDataSource } from './utils/QuizSettingsDataSource'
 
@@ -200,7 +200,7 @@ const QuizCreatorPage: FC = () => {
         : {
             mode: GameMode.ZeroToOneHundred,
             questions: questions
-              .filter(isZeroToOneHundredRangeDto)
+              .filter(isZeroToOneHundredRangeQuestion)
               .map(({ data }) => data),
           }
 
