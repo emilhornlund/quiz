@@ -29,6 +29,7 @@ export interface SelectProps {
   required?: boolean | string
   disabled?: boolean
   forceValidate?: boolean
+  customErrorMessage?: string
   onChange?: (value: string) => void
   onValid?: (valid: boolean) => void
   onAdditionalValidation?: (value: string) => boolean | string
@@ -44,6 +45,7 @@ const Select: FC<SelectProps> = ({
   required,
   disabled = false,
   forceValidate = false,
+  customErrorMessage,
   onChange,
   onValid,
   onAdditionalValidation,
@@ -58,6 +60,10 @@ const Select: FC<SelectProps> = ({
   const [lostFocus, setLostFocus] = useState<boolean>(false)
 
   const [valid, errorMessage] = useMemo<[boolean, string | undefined]>(() => {
+    if (customErrorMessage?.trim()?.length) {
+      return [false, customErrorMessage]
+    }
+
     let tmpValid = true
     let tmpErrorMessage: string | undefined
 
@@ -77,7 +83,13 @@ const Select: FC<SelectProps> = ({
     }
 
     return [tmpValid, tmpErrorMessage]
-  }, [internalValue, disabled, required, onAdditionalValidation])
+  }, [
+    internalValue,
+    disabled,
+    required,
+    onAdditionalValidation,
+    customErrorMessage,
+  ])
 
   const prevValid = useRef<boolean | undefined>(undefined)
 
@@ -93,8 +105,10 @@ const Select: FC<SelectProps> = ({
   }, [handleValidChange])
 
   const showError = useMemo(
-    () => !valid && (lostFocus || hasFocus || forceValidate),
-    [valid, lostFocus, hasFocus, forceValidate],
+    () =>
+      (!valid || customErrorMessage) &&
+      (lostFocus || hasFocus || forceValidate),
+    [valid, customErrorMessage, lostFocus, hasFocus, forceValidate],
   )
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {

@@ -39,6 +39,7 @@ export interface TextFieldProps {
   required?: boolean | string
   disabled?: boolean
   readOnly?: boolean
+  customErrorMessage?: string
   showErrorMessage?: boolean
   forceValidate?: boolean
   autoFocus?: boolean
@@ -65,6 +66,7 @@ const TextField: React.FC<TextFieldProps> = ({
   required,
   disabled,
   readOnly,
+  customErrorMessage,
   showErrorMessage = true,
   forceValidate = false,
   autoFocus = false,
@@ -95,6 +97,10 @@ const TextField: React.FC<TextFieldProps> = ({
   const [lostFocus, setLostFocus] = useState<boolean>(false)
 
   const [valid, errorMessage] = useMemo<[boolean, string | undefined]>(() => {
+    if (customErrorMessage?.trim()?.length) {
+      return [false, customErrorMessage]
+    }
+
     let tmpValid = true
     let tmpErrorMessage: string | undefined
 
@@ -138,6 +144,7 @@ const TextField: React.FC<TextFieldProps> = ({
     maxLength,
     regex,
     onAdditionalValidation,
+    customErrorMessage,
   ])
 
   const prevValid = useRef<boolean | undefined>(undefined)
@@ -154,8 +161,10 @@ const TextField: React.FC<TextFieldProps> = ({
   }, [handleValidChange])
 
   const showError = useMemo(
-    () => !valid && (lostFocus || hasFocus || forceValidate),
-    [valid, lostFocus, hasFocus, forceValidate],
+    () =>
+      (!valid || customErrorMessage) &&
+      (lostFocus || hasFocus || forceValidate),
+    [valid, customErrorMessage, lostFocus, hasFocus, forceValidate],
   )
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
