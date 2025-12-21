@@ -260,6 +260,28 @@ export type QuestionDto =
   | QuestionZeroToOneHundredRangeDto
 
 /**
+ * Represents any classic mode question type supported in the system.
+ *
+ * Used where a single type is needed for Classic-mode question validation,
+ * parsing, and discriminated rule selection.
+ */
+export type ClassicQuestionDto =
+  | QuestionMultiChoiceDto
+  | QuestionRangeDto
+  | QuestionTrueFalseDto
+  | QuestionTypeAnswerDto
+  | QuestionPinDto
+  | QuestionPuzzleDto
+
+/**
+ * Represents any zero to one hundred mode question type supported in the system.
+ *
+ * Used where a single type is needed for ZeroToOneHundred-mode question validation,
+ * parsing, and discriminated rule selection.
+ */
+export type ZeroToOneHundredQuestionDto = QuestionZeroToOneHundredRangeDto
+
+/**
  * Represents the correct answer for a quiz question.
  */
 export type QuestionCorrectAnswerDto = {
