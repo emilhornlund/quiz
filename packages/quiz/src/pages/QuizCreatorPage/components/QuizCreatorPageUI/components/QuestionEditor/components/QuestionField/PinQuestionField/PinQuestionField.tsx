@@ -21,9 +21,7 @@ export type PinQuestionFieldProps = {
   position?: { x?: number; y?: number }
   tolerance?: QuestionPinTolerance
   onImageUrlChange: (value?: string) => void
-  onImageUrlValid: (valid: boolean) => void
   onPositionChange: (value?: { x: number; y: number }) => void
-  onPositionValid: (valid: boolean) => void
 }
 
 const PinQuestionField: FC<PinQuestionFieldProps> = ({
@@ -31,9 +29,7 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
   position,
   tolerance,
   onImageUrlChange,
-  onImageUrlValid,
   onPositionChange,
-  onPositionValid,
 }) => {
   const [showMediaModal, setShowMediaModal] = useState(false)
   const [showConfirmDeleteImage, setShowConfirmDeleteImage] = useState(false)
@@ -50,8 +46,7 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
             imageURL={imageURL}
             value={{ x: position?.x ?? 0.5, y: position?.y ?? 0.5, tolerance }}
             alt={imageURL}
-            onChange={onPositionChange}
-            onValid={onPositionValid}>
+            onChange={onPositionChange}>
             <div className={styles.overlay}>
               <div className={styles.actions}>
                 <Button
@@ -94,7 +89,6 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
           type={MediaType.Image}
           url={imageURL}
           onChange={(newValue) => onImageUrlChange(newValue?.url)}
-          onValid={onImageUrlValid}
           onClose={() => setShowMediaModal(false)}
           imageOnly
         />
@@ -108,7 +102,6 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
         closeTitle="No"
         onConfirm={() => {
           onImageUrlChange(undefined)
-          onImageUrlValid(false)
           setShowConfirmDeleteImage(false)
         }}
         onClose={() => setShowConfirmDeleteImage(false)}

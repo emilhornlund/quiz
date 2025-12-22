@@ -3,6 +3,10 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { ValidationResult } from '../../../../../../../../../validation'
+
+import MediaQuestionField from './MediaQuestionField'
+
 vi.mock('../../../../../../../../../components', () => ({
   Button: ({
     id,
@@ -21,22 +25,27 @@ vi.mock('../../../../../../../../../components', () => ({
   MediaModal: ({
     type,
     url,
+    customErrorMessages,
     onChange,
-    onValid,
     onClose,
   }: {
     type?: string
     url?: string
+    customErrorMessages?: Record<string, string | undefined>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange: (v: any) => void
-    onValid: (v: boolean) => void
     onClose: () => void
+    disableValidation?: boolean
   }) => (
-    <div data-testid="media-modal" data-type={type ?? ''} data-url={url ?? ''}>
+    <div
+      data-testid="media-modal"
+      data-type={type ?? ''}
+      data-url={url ?? ''}
+      data-err-type={customErrorMessages?.type ?? ''}
+      data-err-url={customErrorMessages?.url ?? ''}>
       <button
         onClick={() => {
           onChange({ type: MediaType.Image, url: 'https://cdn/new.jpg' })
-          onValid(true)
         }}>
         choose-media
       </button>
@@ -49,12 +58,22 @@ vi.mock('../../../../../../../../../components', () => ({
     revealEffect,
   }: {
     imageURL: string
-    revealEffect?: { type: QuestionImageRevealEffectType }
+    revealEffect?: {
+      type: QuestionImageRevealEffectType
+      countdown: {
+        initiatedTime: string
+        expiryTime: string
+        serverTime: string
+      }
+    }
   }) => (
     <div
       data-testid="responsive-image"
       data-url={imageURL}
       data-effect={revealEffect?.type ?? ''}
+      data-initiated={revealEffect?.countdown?.initiatedTime ?? ''}
+      data-expiry={revealEffect?.countdown?.expiryTime ?? ''}
+      data-server={revealEffect?.countdown?.serverTime ?? ''}
     />
   ),
 
@@ -69,9 +88,10 @@ vi.mock('./components', () => ({
     onClose,
     onChangeImageEffect,
   }: {
-    value?: string
+    value?: QuestionImageRevealEffectType
+    validation: unknown
     onClose: () => void
-    onChangeImageEffect: (e: string | undefined) => void
+    onChangeImageEffect: (e: QuestionImageRevealEffectType | undefined) => void
   }) => (
     <div data-testid="image-effect-modal" data-value={value ?? ''}>
       <button
@@ -86,48 +106,76 @@ vi.mock('./components', () => ({
   ),
 }))
 
-import MediaQuestionField from './MediaQuestionField'
+type AnyValidation = ValidationResult<Record<string, unknown>>
+
+function makeValidation(
+  errors: Array<{ path: string; message: string }> = [],
+): AnyValidation {
+  // Your ValidationError requires `code`. We don’t care about it in these tests,
+  // so provide a dummy value via casting.
+  return {
+    valid: errors.length === 0,
+    errors: errors.map((e) => ({
+      path: e.path,
+      message: e.message,
+      code: 'test', // satisfies ValidationError compile-time requirement
+    })),
+  } as unknown as AnyValidation
+}
 
 describe('MediaQuestionField', () => {
-  const makeHandlers = () => ({
-    onChange: vi.fn(),
-    onValid: vi.fn(),
-  })
-
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it('renders "Add media" when no value and opens MediaModal on click', () => {
-    const { onChange, onValid } = makeHandlers()
-    render(<MediaQuestionField onChange={onChange} onValid={onValid} />)
+    const onChange = vi.fn()
 
-    const addBtn = screen.getByRole('button', { name: /add media/i })
-    fireEvent.click(addBtn)
-
-    const modal = screen.getByTestId('media-modal')
-    expect(modal).toBeInTheDocument()
-
-    fireEvent.click(
-      within(modal).getByRole('button', { name: /choose-media/i }),
+    render(
+      <MediaQuestionField onChange={onChange} validation={makeValidation()} />,
     )
+
+    fireEvent.click(screen.getByRole('button', { name: /add media/i }))
+    expect(screen.getByTestId('media-modal')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /choose-media/i }))
     expect(onChange).toHaveBeenCalledWith({
       type: MediaType.Image,
       url: 'https://cdn/new.jpg',
     })
-    expect(onValid).toHaveBeenCalledWith(true)
 
-    fireEvent.click(within(modal).getByRole('button', { name: /close-media/i }))
+    fireEvent.click(screen.getByRole('button', { name: /close-media/i }))
     expect(screen.queryByTestId('media-modal')).not.toBeInTheDocument()
   })
 
-  it('renders image preview (without effect) and shows Image Effect action', () => {
-    const { onChange, onValid } = makeHandlers()
+  it('passes validation errors to MediaModal as customErrorMessages', () => {
+    const onChange = vi.fn()
+
+    render(
+      <MediaQuestionField
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'media.type', message: 'Type error' },
+          { path: 'media.url', message: 'URL error' },
+        ])}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /add media/i }))
+
+    const modal = screen.getByTestId('media-modal')
+    expect(modal).toHaveAttribute('data-err-type', 'Type error')
+    expect(modal).toHaveAttribute('data-err-url', 'URL error')
+  })
+
+  it('renders image preview (without revealEffect) and shows Image Effect action', () => {
+    const onChange = vi.fn()
+
     render(
       <MediaQuestionField
         value={{ type: MediaType.Image, url: 'https://cdn/pic.jpg' }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
@@ -142,8 +190,11 @@ describe('MediaQuestionField', () => {
     expect(screen.getByRole('button', { name: /replace/i })).toBeInTheDocument()
   })
 
-  it('passes revealEffect to ResponsiveImage when value.effect is set', async () => {
-    const { onChange, onValid } = makeHandlers()
+  it('passes revealEffect to ResponsiveImage when value.effect is set and duration is provided', () => {
+    const onChange = vi.fn()
+    const now = 1_700_000_000_000
+    vi.spyOn(Date, 'now').mockReturnValue(now)
+
     render(
       <MediaQuestionField
         value={{
@@ -153,45 +204,57 @@ describe('MediaQuestionField', () => {
         }}
         duration={30}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
     const img = screen.getByTestId('responsive-image')
-    expect(img).toHaveAttribute('data-url', 'https://cdn/pic.jpg')
     expect(img).toHaveAttribute(
       'data-effect',
       QuestionImageRevealEffectType.Square3x3,
     )
+    expect(img).toHaveAttribute('data-initiated', new Date(now).toISOString())
+    expect(img).toHaveAttribute('data-server', new Date(now).toISOString())
+    expect(img).toHaveAttribute(
+      'data-expiry',
+      new Date(now + 30_000).toISOString(),
+    )
+
+    vi.restoreAllMocks()
   })
 
-  it('delete clears media and marks valid', () => {
-    const { onChange, onValid } = makeHandlers()
+  it('delete clears media', () => {
+    const onChange = vi.fn()
+
     render(
       <MediaQuestionField
         value={{ type: MediaType.Image, url: 'https://cdn/pic.jpg' }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
     fireEvent.click(screen.getByRole('button', { name: /delete/i }))
     expect(onChange).toHaveBeenCalledWith(undefined)
-    expect(onValid).toHaveBeenCalledWith(true)
   })
 
   it('replace opens MediaModal and selecting media triggers onChange', () => {
-    const { onChange, onValid } = makeHandlers()
+    const onChange = vi.fn()
+
     render(
       <MediaQuestionField
         value={{ type: MediaType.Video, url: 'https://vid/url.mp4' }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
     fireEvent.click(screen.getByRole('button', { name: /replace/i }))
+
     const modal = screen.getByTestId('media-modal')
+    expect(modal).toHaveAttribute('data-type', MediaType.Video)
+    expect(modal).toHaveAttribute('data-url', 'https://vid/url.mp4')
+
     fireEvent.click(
       within(modal).getByRole('button', { name: /choose-media/i }),
     )
@@ -199,25 +262,22 @@ describe('MediaQuestionField', () => {
       type: MediaType.Image,
       url: 'https://cdn/new.jpg',
     })
-    expect(onValid).toHaveBeenCalledWith(true)
   })
 
   it('clicking "Image Effect" opens ImageEffectModal and updates effect via callbacks', () => {
-    const { onChange, onValid } = makeHandlers()
-    const base = {
-      type: MediaType.Image,
-      url: 'https://cdn/pic.jpg',
-    } as const
+    const onChange = vi.fn()
+    const base = { type: MediaType.Image, url: 'https://cdn/pic.jpg' } as const
 
     render(
       <MediaQuestionField
         value={{ ...base }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
     fireEvent.click(screen.getByRole('button', { name: /image effect/i }))
+
     const effectModal = screen.getByTestId('image-effect-modal')
     expect(effectModal).toBeInTheDocument()
 
@@ -241,12 +301,13 @@ describe('MediaQuestionField', () => {
   })
 
   it('does not show "Image Effect" action for video and renders player', () => {
-    const { onChange, onValid } = makeHandlers()
+    const onChange = vi.fn()
+
     render(
       <MediaQuestionField
         value={{ type: MediaType.Video, url: 'https://cdn/video.mp4' }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 
@@ -258,12 +319,13 @@ describe('MediaQuestionField', () => {
   })
 
   it('does not show "Image Effect" action for audio and renders player', () => {
-    const { onChange, onValid } = makeHandlers()
+    const onChange = vi.fn()
+
     render(
       <MediaQuestionField
         value={{ type: MediaType.Audio, url: 'https://cdn/audio.mp3' }}
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
       />,
     )
 

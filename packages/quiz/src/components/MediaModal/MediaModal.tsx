@@ -1,7 +1,7 @@
 import { MediaType, QuestionMediaDto, URL_REGEX } from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 
-import { MediaTypeLabels } from '../../models/labels.ts'
+import { MediaTypeLabels } from '../../models'
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'
 import Modal from '../Modal'
@@ -20,8 +20,12 @@ export interface MediaModalProps {
   imageOnly?: boolean
   type?: MediaType
   url?: string
+  customErrorMessages?: {
+    type?: string
+    url?: string
+  }
   onChange: (value?: QuestionMediaDto) => void
-  onValid: (valid: boolean) => void
+  onValid?: (valid: boolean) => void
   onClose: () => void
 }
 
@@ -30,6 +34,7 @@ const MediaModal: FC<MediaModalProps> = ({
   imageOnly = false,
   type = MediaType.Image,
   url,
+  customErrorMessages,
   onChange,
   onValid,
   onClose,
@@ -53,9 +58,9 @@ const MediaModal: FC<MediaModalProps> = ({
   }
 
   const onApply = () => {
-    if (internalType && internalURL) {
+    if (internalValid && internalType && internalURL) {
       onChange({ type: internalType, url: internalURL })
-      onValid(true)
+      onValid?.(true)
       onClose()
     }
   }
@@ -78,6 +83,7 @@ const MediaModal: FC<MediaModalProps> = ({
                 value: type,
                 valueLabel: MediaTypeLabels[type],
               }))}
+              customErrorMessage={customErrorMessages?.type}
               onChange={(value) => handleChangeType(value as MediaType)}
               onValid={(valid) =>
                 setInternalValid({ ...internalValid, type: valid })
@@ -95,6 +101,7 @@ const MediaModal: FC<MediaModalProps> = ({
               placeholder="URL"
               value={internalURL}
               regex={{ value: URL_REGEX, message: 'Is not a valid URL' }}
+              customErrorMessage={customErrorMessages?.url}
               onChange={(value) => setInternalURL(value as string)}
               onValid={(valid) =>
                 setInternalValid({ ...internalValid, url: valid })

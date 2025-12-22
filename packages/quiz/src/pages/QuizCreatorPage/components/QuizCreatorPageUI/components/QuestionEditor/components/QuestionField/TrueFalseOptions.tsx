@@ -1,19 +1,21 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
+import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'
 
 export interface TrueFalseOptionsProps {
   value?: boolean
+  validation: QuizQuestionValidationResult
   onChange: (value?: boolean) => void
-  onValid: (valid: boolean) => void
 }
 
 const TrueFalseOptions: FC<TrueFalseOptionsProps> = ({
   value,
+  validation,
   onChange,
-  onValid,
 }) => {
   const [options, setOptions] = useState<
     { id: 'true' | 'false'; value: string; correct: boolean }[]
@@ -54,37 +56,6 @@ const TrueFalseOptions: FC<TrueFalseOptionsProps> = ({
     return true
   }, [options])
 
-  const [validById, setValidById] = useState<Record<string, boolean>>({})
-
-  const handleValidChange = useCallback((id: string, valid: boolean) => {
-    setValidById((prev) =>
-      prev[id] === valid ? prev : { ...prev, [id]: valid },
-    )
-  }, [])
-
-  const wasAllValid = useRef<boolean | undefined>(undefined)
-  useEffect(() => {
-    const isAllValid = options.every((o) => !!validById[o.id])
-    if (wasAllValid.current !== isAllValid) {
-      wasAllValid.current = isAllValid
-      onValid(isAllValid)
-    }
-  }, [options, validById, onValid])
-
-  // optional housekeeping if you ever change options shape dynamically:
-  useEffect(() => {
-    const allowed = new Set(options.map((o) => o.id))
-    setValidById((prev) => {
-      let changed = false
-      const next: Record<string, boolean> = {}
-      for (const k of Object.keys(prev)) {
-        if (allowed.has(k as 'true' | 'false')) next[k] = prev[k]
-        else changed = true
-      }
-      return changed ? next : prev
-    })
-  }, [options])
-
   return (
     <div className={styles.optionsContainer}>
       {options.map((option, index) => (
@@ -95,8 +66,11 @@ const TrueFalseOptions: FC<TrueFalseOptionsProps> = ({
               type="text"
               value={option.value}
               checked={option.correct}
+              customErrorMessage={getValidationErrorMessage(
+                validation,
+                'correct',
+              )}
               onCheck={(checked) => handleChange(index, checked)}
-              onValid={(ok) => handleValidChange(option.id, ok)}
               onAdditionalValidation={() => handleAdditionalValidation()}
               forceValidate
               readOnly

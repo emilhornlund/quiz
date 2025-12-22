@@ -18,6 +18,8 @@ import {
   ResponsivePlayer,
 } from '../../../../../../../../../components'
 import { RevealEffect } from '../../../../../../../../../components/ResponsiveImage'
+import { QuizQuestionValidationResult } from '../../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../../validation-rules'
 
 import { ImageEffectModal } from './components'
 import styles from './MediaQuestionField.module.scss'
@@ -25,22 +27,21 @@ import styles from './MediaQuestionField.module.scss'
 export interface MediaQuestionFieldProps {
   value?: QuestionMediaDto
   duration?: number
+  validation: QuizQuestionValidationResult
   onChange: (value?: QuestionMediaDto) => void
-  onValid: (valid: boolean) => void
 }
 
 const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
   value,
   duration,
+  validation,
   onChange,
-  onValid,
 }) => {
   const [showMediaModal, setShowMediaModal] = useState(false)
   const [showImageEffectModal, setShowImageEffectModal] = useState(false)
 
   const handleDelete = () => {
     onChange(undefined)
-    onValid(true)
   }
 
   const onChangeImageEffect = (
@@ -137,14 +138,18 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
         <MediaModal
           type={value?.type}
           url={value?.url}
+          customErrorMessages={{
+            type: getValidationErrorMessage(validation, 'media.type'),
+            url: getValidationErrorMessage(validation, 'media.url'),
+          }}
           onChange={onChange}
-          onValid={onValid}
           onClose={() => setShowMediaModal(false)}
         />
       )}
       {value?.type === MediaType.Image && showImageEffectModal && (
         <ImageEffectModal
           value={value.effect}
+          validation={validation}
           onClose={() => setShowImageEffectModal(false)}
           onChangeImageEffect={onChangeImageEffect}
         />

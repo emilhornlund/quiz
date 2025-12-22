@@ -1,25 +1,23 @@
-import {
-  QUIZ_PUZZLE_VALUE_REGEX,
-  QUIZ_PUZZLE_VALUES_MAX,
-  QUIZ_PUZZLE_VALUES_MIN,
-} from '@quiz/common'
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { QUIZ_PUZZLE_VALUES_MAX, QUIZ_PUZZLE_VALUES_MIN } from '@quiz/common'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
+import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'
 
 export interface PuzzleValuesProps {
   value?: string[]
+  validation: QuizQuestionValidationResult
   onChange: (values?: string[]) => void
-  onValid: (valid: boolean) => void
 }
 
 const PuzzleValues: FC<PuzzleValuesProps> = ({
   value: initialValues,
+  validation,
   onChange,
-  onValid,
 }) => {
   const [values, setValues] = useState<string[]>(() =>
     Array.from(
@@ -80,15 +78,6 @@ const PuzzleValues: FC<PuzzleValuesProps> = ({
     [validValues],
   )
 
-  const wasAllValid = useRef<boolean | undefined>(undefined)
-  useEffect(() => {
-    const allValid = validValues.every(Boolean)
-    if (wasAllValid.current !== allValid) {
-      wasAllValid.current = allValid
-      onValid(allValid)
-    }
-  }, [validValues, onValid])
-
   return (
     <div className={classNames(styles.optionsContainer, styles.fullWidth)}>
       {values.map((value, index) => (
@@ -99,7 +88,10 @@ const PuzzleValues: FC<PuzzleValuesProps> = ({
               type="text"
               placeholder={`Value ${index + 1}`}
               value={value}
-              regex={QUIZ_PUZZLE_VALUE_REGEX}
+              customErrorMessage={
+                getValidationErrorMessage(validation, `values[${index}]`) ||
+                getValidationErrorMessage(validation, 'values')
+              }
               onChange={(newValue) => handleChange(index, newValue as string)}
               onValid={(newValid) => handleValidChange(index, newValid)}
               required={isRequired(index)}

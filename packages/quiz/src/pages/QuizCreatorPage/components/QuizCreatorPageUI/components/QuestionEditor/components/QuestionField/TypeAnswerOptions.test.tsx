@@ -1,66 +1,29 @@
 import {
   QUIZ_TYPE_ANSWER_OPTIONS_MAX,
   QUIZ_TYPE_ANSWER_OPTIONS_MIN,
-  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
 } from '@quiz/common'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+import { ValidationResult } from '../../../../../../../../validation'
 
 import TypeAnswerOptions from './TypeAnswerOptions'
 
-vi.mock('../../../../../../../../components', () => {
+type AnyValidation = ValidationResult<Record<string, unknown>>
+
+function makeValidation(
+  errors: Array<{ path: string; message: string }> = [],
+): AnyValidation {
   return {
-    TextField: (props: {
-      id: string
-      value: string
-      placeholder?: string
-      regex?: RegExp
-      required?: boolean
-      forceValidate?: boolean
-      onChange?: (v: string) => void
-      onValid?: (ok: boolean) => void
-      type?: string
-    }) => {
-      const { id, value, placeholder, regex, required, onChange, onValid } =
-        props
-
-      const runValidation = (val: string) => {
-        if (!onValid) return
-        const hasValue = val.length > 0
-        let ok = true
-        if (required) {
-          ok = ok && hasValue
-          if (hasValue && regex) ok = ok && regex.test(val)
-        } else {
-          if (hasValue && regex) ok = ok && regex.test(val)
-        }
-        onValid(ok)
-      }
-
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const next = e.target.value
-        onChange?.(next)
-        runValidation(next)
-      }
-
-      React.useEffect(() => {
-        runValidation(value)
-      }, [value, required, regex])
-
-      return (
-        <input
-          data-testid={`input-${id}`}
-          id={id}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-        />
-      )
-    },
-  }
-})
+    valid: errors.length === 0,
+    errors: errors.map((e) => ({
+      path: e.path,
+      message: e.message,
+    })),
+  } as unknown as AnyValidation
+}
 
 function lastCallArg<T>(
   mock: { calls: unknown[][] },
@@ -68,179 +31,150 @@ function lastCallArg<T>(
 ): T | undefined {
   const calls = mock.calls
   if (!calls.length) return undefined
-
   return calls[calls.length - 1][argIndex] as T
 }
 
+function optionInput(index: number): HTMLElement {
+  return screen.getByPlaceholderText(`Option ${index + 1}`)
+}
+
 describe('TypeAnswerOptions', () => {
-  const user = userEvent.setup()
-  let mathSpy: ReturnType<typeof vi.spyOn>
-
-  beforeEach(() => {
-    mathSpy = vi.spyOn(Math, 'random').mockReturnValue(0.123456)
-  })
-
-  afterEach(() => {
-    mathSpy.mockRestore()
-    vi.clearAllMocks()
-  })
-
-  it('renders and matches snapshot', () => {
+  it('renders QUIZ_TYPE_ANSWER_OPTIONS_MAX option fields', () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { container } = render(
-      <TypeAnswerOptions onChange={onChange} onValid={onValid} />,
-    )
-    expect(container).toMatchSnapshot()
-  })
-
-  it('initializes max inputs with correct placeholders', () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<TypeAnswerOptions onChange={onChange} onValid={onValid} />)
-    const inputs = Array.from(
-      { length: QUIZ_TYPE_ANSWER_OPTIONS_MAX },
-      (_, i) => screen.getByPlaceholderText(`Option ${i + 1}`),
-    )
-    expect(inputs.length).toBe(QUIZ_TYPE_ANSWER_OPTIONS_MAX)
-  })
-
-  it('updates values and emits trimmed slice honoring minimum', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<TypeAnswerOptions onChange={onChange} onValid={onValid} />)
-
-    const first = screen.getByPlaceholderText('Option 1')
-    const second = screen.getByPlaceholderText('Option 2')
-
-    await user.clear(first)
-    await user.type(first, 'Alpha')
-    await user.clear(second)
-    await user.type(second, 'Beta')
-
-    const emitted = lastCallArg<string[]>(onChange.mock)
-    expect(emitted).toBeDefined()
-    expect(emitted!.length).toBeGreaterThanOrEqual(QUIZ_TYPE_ANSWER_OPTIONS_MIN)
-    expect(emitted![0]).toBe('Alpha')
-    expect(emitted![1]).toBe('Beta')
-  })
-
-  it('trims to last non-empty index while enforcing minimum', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<TypeAnswerOptions onChange={onChange} onValid={onValid} />)
-
-    const third = screen.getByPlaceholderText('Option 3')
-    await user.type(third, 'Gamma')
-
-    let emitted = lastCallArg<string[]>(onChange.mock)
-    expect(emitted).toBeDefined()
-    expect(emitted!.length).toBeGreaterThanOrEqual(3)
-
-    await user.clear(third)
-    emitted = lastCallArg<string[]>(onChange.mock)
-    expect(emitted).toBeDefined()
-    expect(emitted!.length).toBe(QUIZ_TYPE_ANSWER_OPTIONS_MIN)
-  })
-
-  it('calls onValid(true) when all required fields are valid per regex', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<TypeAnswerOptions onChange={onChange} onValid={onValid} />)
-
-    const candidates = [
-      'Alpha',
-      'Beta',
-      'Gamma',
-      'Delta',
-      'Epsilon',
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'abc',
-      'xyz',
-      'q1',
-      'p2',
-      'r3',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '_',
-      '-',
-      'X1',
-      'Y2',
-    ]
-    const valid: string[] = []
-    for (const c of candidates) {
-      if (QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX.test(c)) valid.push(c)
-      if (valid.length >= QUIZ_TYPE_ANSWER_OPTIONS_MIN) break
-    }
-    if (valid.length < QUIZ_TYPE_ANSWER_OPTIONS_MIN) {
-      throw new Error('Not enough regex-valid candidates for the test')
-    }
-
-    for (let i = 0; i < QUIZ_TYPE_ANSWER_OPTIONS_MIN; i++) {
-      const input = screen.getByPlaceholderText(`Option ${i + 1}`)
-      await user.clear(input)
-      await user.type(input, valid[i])
-    }
-
-    await waitFor(() => {
-      const v = lastCallArg<boolean>(onValid.mock)
-      expect(v).toBe(true)
-    })
-  })
-
-  it('optional empty fields do not block validity once minimum required are valid', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<TypeAnswerOptions onChange={onChange} onValid={onValid} />)
-
-    const first = screen.getByPlaceholderText('Option 1')
-    const second = screen.getByPlaceholderText('Option 2')
-
-    const v1 = QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX.test('Alpha')
-      ? 'Alpha'
-      : 'A'
-    const v2 = QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX.test('Beta') ? 'Beta' : 'B'
-
-    await user.clear(first)
-    await user.type(first, v1)
-    await user.clear(second)
-    await user.type(second, v2)
-
-    const fourth = screen.getByPlaceholderText('Option 4')
-    await user.clear(fourth)
-
-    await waitFor(() => {
-      const v = lastCallArg<boolean>(onValid.mock)
-      expect(v).toBe(true)
-    })
-  })
-
-  it('reflects external values on rerender without remounting inputs (snapshots)', () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { rerender, container } = render(
+    render(
       <TypeAnswerOptions
         onChange={onChange}
-        onValid={onValid}
-        values={['One']}
+        validation={makeValidation()}
+        values={[]}
       />,
     )
-    expect(container).toMatchSnapshot()
+
+    const inputs = Array.from(
+      { length: QUIZ_TYPE_ANSWER_OPTIONS_MAX },
+      (_, i) => optionInput(i),
+    )
+
+    expect(inputs).toHaveLength(QUIZ_TYPE_ANSWER_OPTIONS_MAX)
+  })
+
+  it('initializes inputs from values and updates when values changes', () => {
+    const onChange = vi.fn()
+
+    const { rerender } = render(
+      <TypeAnswerOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={['One', 'Two']}
+      />,
+    )
+
+    expect(optionInput(0)).toHaveValue('One')
+    expect(optionInput(1)).toHaveValue('Two')
+    expect(optionInput(2)).toHaveValue('')
+    expect(optionInput(3)).toHaveValue('')
 
     rerender(
       <TypeAnswerOptions
         onChange={onChange}
-        onValid={onValid}
-        values={['One', 'Two', 'Three']}
+        validation={makeValidation()}
+        values={['A', 'B', 'C', 'D']}
       />,
     )
-    expect(container).toMatchSnapshot()
+
+    expect(optionInput(0)).toHaveValue('A')
+    expect(optionInput(1)).toHaveValue('B')
+    expect(optionInput(2)).toHaveValue('C')
+    expect(optionInput(3)).toHaveValue('D')
+  })
+
+  it('emits trimmed slice enforcing QUIZ_TYPE_ANSWER_OPTIONS_MIN', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <TypeAnswerOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[]}
+      />,
+    )
+
+    await user.type(optionInput(0), 'Alpha')
+
+    const emitted1 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted1).toBeDefined()
+    expect(emitted1!.length).toBeGreaterThanOrEqual(
+      QUIZ_TYPE_ANSWER_OPTIONS_MIN,
+    )
+    expect(emitted1![0]).toBe('Alpha')
+
+    await user.clear(optionInput(0))
+
+    const emitted2 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted2).toBeDefined()
+    expect(emitted2!.length).toBe(QUIZ_TYPE_ANSWER_OPTIONS_MIN)
+  })
+
+  it('trims to last non-empty while enforcing minimum (fill option 4 => length 4, clear => min)', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <TypeAnswerOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[]}
+      />,
+    )
+
+    await user.type(optionInput(3), 'Delta')
+
+    const emitted1 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted1).toBeDefined()
+    expect(emitted1!.length).toBe(4)
+    expect(emitted1![3]).toBe('Delta')
+
+    await user.clear(optionInput(3))
+
+    const emitted2 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted2).toBeDefined()
+    expect(emitted2!.length).toBe(QUIZ_TYPE_ANSWER_OPTIONS_MIN)
+  })
+
+  it('shows options error message for every input when path is "options"', () => {
+    const onChange = vi.fn()
+
+    render(
+      <TypeAnswerOptions
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'options', message: 'Options error' },
+        ])}
+        values={[]}
+      />,
+    )
+
+    const all = screen.getAllByText('Options error')
+    expect(all).toHaveLength(QUIZ_TYPE_ANSWER_OPTIONS_MAX)
+  })
+
+  it('prefers options[index] error over options (index-specific overrides global)', () => {
+    const onChange = vi.fn()
+
+    render(
+      <TypeAnswerOptions
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'options', message: 'Options error' },
+          { path: 'options[2]', message: 'Option 3 is invalid' },
+        ])}
+        values={[]}
+      />,
+    )
+
+    expect(screen.getByText('Option 3 is invalid')).toBeInTheDocument()
+
+    const global = screen.getAllByText('Options error')
+    expect(global).toHaveLength(QUIZ_TYPE_ANSWER_OPTIONS_MAX - 1)
   })
 })

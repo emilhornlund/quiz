@@ -1,66 +1,26 @@
-import {
-  QUIZ_PUZZLE_VALUE_REGEX,
-  QUIZ_PUZZLE_VALUES_MAX,
-  QUIZ_PUZZLE_VALUES_MIN,
-} from '@quiz/common'
-import { render, screen, waitFor } from '@testing-library/react'
+import { QUIZ_PUZZLE_VALUES_MAX, QUIZ_PUZZLE_VALUES_MIN } from '@quiz/common'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+import { ValidationResult } from '../../../../../../../../validation'
 
 import PuzzleValues from './PuzzleValues'
 
-vi.mock('../../../../../../../../components', () => {
+type AnyValidation = ValidationResult<Record<string, unknown>>
+
+function makeValidation(
+  errors: Array<{ path: string; message: string }> = [],
+): AnyValidation {
   return {
-    TextField: (props: {
-      id: string
-      value: string
-      placeholder?: string
-      regex?: RegExp
-      required?: boolean
-      forceValidate?: boolean
-      onChange?: (v: string) => void
-      onValid?: (ok: boolean) => void
-      type?: string
-    }) => {
-      const { id, value, placeholder, regex, required, onChange, onValid } =
-        props
-
-      const runValidation = (val: string) => {
-        if (!onValid) return
-        const hasValue = val.length > 0
-        let ok = true
-        if (required) {
-          ok = ok && hasValue
-          if (hasValue && regex) ok = ok && regex.test(val)
-        } else {
-          if (hasValue && regex) ok = ok && regex.test(val)
-        }
-        onValid(ok)
-      }
-
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const next = e.target.value
-        onChange?.(next)
-        runValidation(next)
-      }
-
-      React.useEffect(() => {
-        runValidation(value)
-      }, [value, required, regex])
-
-      return (
-        <input
-          data-testid={`input-${id}`}
-          id={id}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-        />
-      )
-    },
-  }
-})
+    valid: errors.length === 0,
+    errors: errors.map((e) => ({
+      path: e.path,
+      message: e.message,
+    })),
+  } as unknown as AnyValidation
+}
 
 function lastCallArg<T>(
   mock: { calls: unknown[][] },
@@ -68,54 +28,75 @@ function lastCallArg<T>(
 ): T | undefined {
   const calls = mock.calls
   if (!calls.length) return undefined
-
   return calls[calls.length - 1][argIndex] as T
 }
 
+function valueInput(index: number): HTMLElement {
+  return screen.getByPlaceholderText(`Value ${index + 1}`)
+}
+
 describe('PuzzleValues', () => {
-  const user = userEvent.setup()
-  let mathSpy: ReturnType<typeof vi.spyOn>
-
-  beforeEach(() => {
-    mathSpy = vi.spyOn(Math, 'random').mockReturnValue(0.123456)
-  })
-
-  afterEach(() => {
-    mathSpy.mockRestore()
-    vi.clearAllMocks()
-  })
-
-  it('renders and matches snapshot', () => {
+  it('renders QUIZ_PUZZLE_VALUES_MAX inputs with correct placeholders', () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { container } = render(
-      <PuzzleValues onChange={onChange} onValid={onValid} />,
+
+    render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation()}
+        value={[]}
+      />,
     )
-    expect(container).toMatchSnapshot()
-  })
 
-  it('initializes up to max inputs and respects placeholders', () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<PuzzleValues onChange={onChange} onValid={onValid} />)
     const inputs = Array.from({ length: QUIZ_PUZZLE_VALUES_MAX }, (_, i) =>
-      screen.getByPlaceholderText(`Value ${i + 1}`),
+      valueInput(i),
     )
-    expect(inputs.length).toBe(QUIZ_PUZZLE_VALUES_MAX)
+    expect(inputs).toHaveLength(QUIZ_PUZZLE_VALUES_MAX)
   })
 
-  it('updates values and emits trimmed slice honoring minimum', async () => {
+  it('initializes from value prop and updates when value changes', () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<PuzzleValues onChange={onChange} onValid={onValid} />)
 
-    const first = screen.getByPlaceholderText('Value 1')
-    const second = screen.getByPlaceholderText('Value 2')
+    const { rerender } = render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation()}
+        value={['A', 'B']}
+      />,
+    )
 
-    await user.clear(first)
-    await user.type(first, 'Alpha')
-    await user.clear(second)
-    await user.type(second, 'Beta')
+    expect(valueInput(0)).toHaveValue('A')
+    expect(valueInput(1)).toHaveValue('B')
+    expect(valueInput(2)).toHaveValue('')
+    expect(valueInput(3)).toHaveValue('')
+
+    rerender(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation()}
+        value={['AA', 'BB', 'CC', 'DD']}
+      />,
+    )
+
+    expect(valueInput(0)).toHaveValue('AA')
+    expect(valueInput(1)).toHaveValue('BB')
+    expect(valueInput(2)).toHaveValue('CC')
+    expect(valueInput(3)).toHaveValue('DD')
+  })
+
+  it('emits trimmed slice honoring QUIZ_PUZZLE_VALUES_MIN when editing early fields', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation()}
+        value={[]}
+      />,
+    )
+
+    await user.type(valueInput(0), 'Alpha')
+    await user.type(valueInput(1), 'Beta')
 
     const emitted = lastCallArg<string[]>(onChange.mock)
     expect(emitted).toBeDefined()
@@ -124,99 +105,92 @@ describe('PuzzleValues', () => {
     expect(emitted![1]).toBe('Beta')
   })
 
-  it('trims to last non-empty index while enforcing minimum', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<PuzzleValues onChange={onChange} onValid={onValid} />)
-
-    const third = screen.getByPlaceholderText('Value 3')
-    await user.type(third, 'Gamma')
-
-    let emitted = lastCallArg<string[]>(onChange.mock)
-    expect(emitted).toBeDefined()
-    expect(emitted!.length).toBeGreaterThanOrEqual(QUIZ_PUZZLE_VALUES_MIN)
-    expect(emitted!.length).toBeGreaterThanOrEqual(3)
-
-    await user.clear(third)
-    emitted = lastCallArg<string[]>(onChange.mock)
-    expect(emitted).toBeDefined()
-    expect(emitted!.length).toBe(QUIZ_PUZZLE_VALUES_MIN)
-  })
-
-  it('calls onValid(true) when all required fields are valid per regex', async () => {
-    const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<PuzzleValues onChange={onChange} onValid={onValid} />)
+  it('trims to last non-empty index while enforcing minimum (fill index 4 => length >= 5, clear => min)', async () => {
     const user = userEvent.setup()
-
-    // Generate samples that pass your project’s regex
-    const candidates = [
-      'Alpha',
-      'Beta',
-      'Gamma',
-      'Delta',
-      'Epsilon',
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'abc',
-      'xyz',
-      'q1',
-      'p2',
-      'r3',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '_',
-      '-',
-      'X1',
-      'Y2',
-    ]
-    const validSamples: string[] = []
-    for (const c of candidates) {
-      if (QUIZ_PUZZLE_VALUE_REGEX.test(c)) validSamples.push(c)
-      if (validSamples.length >= QUIZ_PUZZLE_VALUES_MIN) break
-    }
-    if (validSamples.length < QUIZ_PUZZLE_VALUES_MIN) {
-      throw new Error(
-        'Test could not find enough candidate strings that match QUIZ_PUZZLE_VALUE_REGEX',
-      )
-    }
-
-    // Fill exactly the required number of fields with valid values
-    for (let i = 0; i < QUIZ_PUZZLE_VALUES_MIN; i++) {
-      const input = screen.getByPlaceholderText(`Value ${i + 1}`)
-      await user.clear(input)
-      await user.type(input, validSamples[i])
-    }
-
-    await waitFor(() => {
-      const v = onValid.mock.calls.length
-        ? onValid.mock.calls[onValid.mock.calls.length - 1][0]
-        : undefined
-      expect(v).toBe(true)
-    })
-  })
-
-  it('updates from external prop changes without remounting inputs (snapshot)', async () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { rerender, container } = render(
-      <PuzzleValues onChange={onChange} onValid={onValid} value={['A', 'B']} />,
-    )
-    expect(container).toMatchSnapshot()
 
-    rerender(
+    render(
       <PuzzleValues
         onChange={onChange}
-        onValid={onValid}
-        value={['AA', 'BB', 'CC']}
+        validation={makeValidation()}
+        value={[]}
       />,
     )
-    expect(container).toMatchSnapshot()
+
+    // Value 5 (index 4) is filled => cutoff should become at least 5
+    await user.type(valueInput(4), 'Echo')
+
+    const emitted1 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted1).toBeDefined()
+    expect(emitted1!.length).toBeGreaterThanOrEqual(5)
+    expect(emitted1![4]).toBe('Echo')
+
+    // Clear it => should fall back to QUIZ_PUZZLE_VALUES_MIN
+    await user.clear(valueInput(4))
+
+    const emitted2 = lastCallArg<string[]>(onChange.mock)
+    expect(emitted2).toBeDefined()
+    expect(emitted2!.length).toBe(QUIZ_PUZZLE_VALUES_MIN)
+  })
+
+  it('keeps minimum slice even when all values are empty', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation()}
+        value={[]}
+      />,
+    )
+
+    // Trigger a change (type then clear) to ensure onChange is called
+    await user.type(valueInput(0), 'X')
+    await user.clear(valueInput(0))
+
+    const emitted = lastCallArg<string[]>(onChange.mock)
+    expect(emitted).toBeDefined()
+    expect(emitted!.length).toBe(QUIZ_PUZZLE_VALUES_MIN)
+    expect(emitted![0]).toBe('')
+  })
+
+  it('shows values[index] validation error only for that field, ignoring global values error for that index', () => {
+    const onChange = vi.fn()
+
+    render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'values', message: 'Global values error' },
+          { path: 'values[2]', message: 'Value 3 is invalid' },
+        ])}
+        value={[]}
+      />,
+    )
+
+    // index-specific should appear
+    expect(screen.getByText('Value 3 is invalid')).toBeInTheDocument()
+
+    // global error should still appear for the other fields (max - 1 times)
+    const global = screen.getAllByText('Global values error')
+    expect(global).toHaveLength(QUIZ_PUZZLE_VALUES_MAX - 1)
+  })
+
+  it('shows global values validation error for every field when only "values" error is present', () => {
+    const onChange = vi.fn()
+
+    render(
+      <PuzzleValues
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'values', message: 'Values error' },
+        ])}
+        value={[]}
+      />,
+    )
+
+    const all = screen.getAllByText('Values error')
+    expect(all).toHaveLength(QUIZ_PUZZLE_VALUES_MAX)
   })
 })

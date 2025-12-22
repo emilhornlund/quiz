@@ -2,14 +2,23 @@ import { LanguageCode, QuizCategory, QuizVisibility } from '@quiz/common'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { useQuizSettingsDataSource } from './quiz-settings-data-source.hook.tsx'
-import type { QuizSettingsData } from './quiz-settings-data-source.types.ts'
+import { useQuizSettingsDataSource } from './quiz-settings-data-source.hook'
+import { QuizSettingsModel } from './quiz-settings-data-source.types.ts'
+
+const makeValidSettings = (): QuizSettingsModel => ({
+  title: 'My Quiz',
+  description: undefined,
+  imageCoverURL: undefined,
+  category: QuizCategory.Other,
+  visibility: QuizVisibility.Public,
+  languageCode: LanguageCode.English,
+})
 
 describe('useQuizSettingsDataSource', () => {
-  it('returns the expected initial values and valid=false', () => {
+  it('should expose initial settings with expected defaults', () => {
     const { result } = renderHook(() => useQuizSettingsDataSource())
 
-    expect(result.current.values).toEqual({
+    expect(result.current.settings).toEqual({
       title: undefined,
       description: undefined,
       imageCoverURL: undefined,
@@ -17,85 +26,147 @@ describe('useQuizSettingsDataSource', () => {
       visibility: QuizVisibility.Public,
       languageCode: LanguageCode.English,
     })
-
-    expect(result.current.valid).toBe(false)
   })
 
-  it('updates values via onValueChange without recomputing validity', () => {
+  it('should expose initial validation for the initial settings', () => {
     const { result } = renderHook(() => useQuizSettingsDataSource())
 
-    expect(result.current.valid).toBe(false)
-
-    act(() => {
-      result.current.onValueChange('title', 'My quiz')
-    })
-
-    expect(result.current.values.title).toBe('My quiz')
-
-    // onValueChange does not recompute validation, so overall valid should not change.
-    expect(result.current.valid).toBe(false)
+    expect(typeof result.current.settingsValidation.valid).toBe('boolean')
+    expect(Array.isArray(result.current.settingsValidation.errors)).toBe(true)
+    expect(typeof result.current.allSettingsValid).toBe('boolean')
+    expect(result.current.allSettingsValid).toBe(
+      result.current.settingsValidation.valid,
+    )
   })
 
-  it('recomputes validity when setValues is called', () => {
+  it('should update a single field via updateSettingsField', () => {
     const { result } = renderHook(() => useQuizSettingsDataSource())
 
-    const newValues: QuizSettingsData = {
-      title: 'NewTitle',
-      description: undefined,
-      imageCoverURL: undefined,
-      category: QuizCategory.Other,
-      visibility: QuizVisibility.Public,
-      languageCode: LanguageCode.English,
-    }
-
     act(() => {
-      result.current.setValues(newValues)
+      result.current.updateSettingsField('title', 'My Quiz')
     })
 
-    expect(result.current.values).toEqual(newValues)
-    expect(result.current.valid).toBe(true)
+    expect(result.current.settings.title).toBe('My Quiz')
+    expect(result.current.settings.category).toBe(QuizCategory.Other)
+    expect(result.current.settings.visibility).toBe(QuizVisibility.Public)
+    expect(result.current.settings.languageCode).toBe(LanguageCode.English)
   })
 
-  it('allows field-level validators to flip overall validity via onValidChange', () => {
+  it('should allow clearing a field by setting it to undefined', () => {
     const { result } = renderHook(() => useQuizSettingsDataSource())
 
-    expect(result.current.valid).toBe(false)
+    act(() => {
+      result.current.updateSettingsField('title', 'My Quiz')
+    })
+    expect(result.current.settings.title).toBe('My Quiz')
 
     act(() => {
-      result.current.onValidChange('title', true)
+      result.current.updateSettingsField('title', undefined)
     })
-
-    expect(result.current.valid).toBe(true)
-
-    act(() => {
-      result.current.onValidChange('title', false)
-    })
-
-    expect(result.current.valid).toBe(false)
+    expect(result.current.settings.title).toBeUndefined()
   })
 
-  it('setValues can make the model valid, and onValidChange can later override it', () => {
+  it('should make settings valid when populated with a minimal valid payload (based on rules)', () => {
     const { result } = renderHook(() => useQuizSettingsDataSource())
 
-    const newValues: QuizSettingsData = {
-      title: 'NewTitle',
-      description: undefined,
-      imageCoverURL: undefined,
-      category: QuizCategory.Other,
-      visibility: QuizVisibility.Public,
-      languageCode: LanguageCode.English,
-    }
-
     act(() => {
-      result.current.setValues(newValues)
+      result.current.setSettings(makeValidSettings())
     })
 
-    expect(result.current.valid).toBe(true)
+    expect(result.current.settingsValidation.valid).toBe(true)
+    expect(result.current.allSettingsValid).toBe(true)
+    expect(result.current.settingsValidation.errors).toHaveLength(0)
+  })
+
+  it('should become invalid if a required field is cleared after being valid', () => {
+    const { result } = renderHook(() => useQuizSettingsDataSource())
 
     act(() => {
-      result.current.onValidChange('title', false)
+      result.current.setSettings(makeValidSettings())
+    })
+    expect(result.current.settingsValidation.valid).toBe(true)
+
+    act(() => {
+      result.current.updateSettingsField('title', undefined)
     })
 
-    expect(result.current.valid).toBe(false)
+    expect(result.current.settingsValidation.valid).toBe(false)
+    expect(result.current.allSettingsValid).toBe(false)
+    expect(result.current.settingsValidation.errors).toEqual(
+      expect.arrayContaining([expect.objectContaining({ path: 'title' })]),
+    )
+  })
+
+  it('should validate optional description without affecting validity when other fields are valid', () => {
+    const { result } = renderHook(() => useQuizSettingsDataSource())
+
+    act(() => {
+      result.current.setSettings(makeValidSettings())
+    })
+    expect(result.current.settingsValidation.valid).toBe(true)
+
+    act(() => {
+      result.current.updateSettingsField('description', 'A short description')
+    })
+
+    expect(result.current.settings.description).toBe('A short description')
+    expect(result.current.settingsValidation.valid).toBe(true)
+  })
+
+  it('should validate optional imageCoverURL format when provided', () => {
+    const { result } = renderHook(() => useQuizSettingsDataSource())
+
+    act(() => {
+      result.current.setSettings(makeValidSettings())
+    })
+    expect(result.current.settingsValidation.valid).toBe(true)
+
+    act(() => {
+      result.current.updateSettingsField(
+        'imageCoverURL',
+        'https://example.com/cover.png',
+      )
+    })
+
+    expect(result.current.settings.imageCoverURL).toBe(
+      'https://example.com/cover.png',
+    )
+    expect(result.current.settingsValidation.valid).toBe(true)
+    expect(result.current.settingsValidation.errors).toHaveLength(0)
+  })
+
+  it('should fail validation when imageCoverURL is provided with an invalid URL', () => {
+    const { result } = renderHook(() => useQuizSettingsDataSource())
+
+    act(() => {
+      result.current.setSettings(makeValidSettings())
+    })
+    expect(result.current.settingsValidation.valid).toBe(true)
+
+    act(() => {
+      result.current.updateSettingsField('imageCoverURL', 'not-a-url')
+    })
+
+    expect(result.current.settingsValidation.valid).toBe(false)
+    expect(result.current.settingsValidation.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: 'imageCoverURL' }),
+      ]),
+    )
+  })
+
+  it('should recompute validation when settings changes across renders', () => {
+    const { result } = renderHook(() => useQuizSettingsDataSource())
+
+    const firstValidation = result.current.settingsValidation
+
+    act(() => {
+      result.current.updateSettingsField('title', 'My Quiz')
+    })
+
+    const secondValidation = result.current.settingsValidation
+
+    expect(secondValidation).not.toBe(firstValidation)
+    expect(result.current.settings.title).toBe('My Quiz')
   })
 })

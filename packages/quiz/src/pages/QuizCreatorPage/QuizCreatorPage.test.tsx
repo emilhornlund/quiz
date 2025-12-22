@@ -3,51 +3,20 @@ import {
   LanguageCode,
   QuestionType,
   QuizCategory,
-  QuizRequestDto,
+  type QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
-import { act } from '@testing-library/react'
-import { render, waitFor } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import QuizCreatorPage from './QuizCreatorPage'
 
-type QuizId = string | undefined
-
-type QuizSettings = {
-  title?: string
-  description?: string
-  imageCoverURL?: string
-  visibility?: QuizVisibility
-  category?: QuizCategory
-  languageCode?: LanguageCode
-}
-
-type ClassicQuestionData = {
-  type:
-    | QuestionType.MultiChoice
-    | QuestionType.Range
-    | QuestionType.TrueFalse
-    | QuestionType.TypeAnswer
-    | QuestionType.Pin
-    | QuestionType.Puzzle
-  id: string
-}
-type ZeroToOneHundredQuestionData = { type: QuestionType.Range; id: string }
-type UnsupportedQuestionData = { type: 'Unsupported'; id: string }
-
-type QuestionData =
-  | {
-      mode: GameMode.Classic
-      data: ClassicQuestionData | UnsupportedQuestionData
-      validation: Record<string, unknown>
-    }
-  | {
-      mode: GameMode.ZeroToOneHundred
-      data: ZeroToOneHundredQuestionData | UnsupportedQuestionData
-      validation: Record<string, unknown>
-    }
+/**
+ * ---------------------------------------------------------------------------
+ * Mocks
+ * ---------------------------------------------------------------------------
+ */
 
 type QuizSummary = {
   mode: GameMode
@@ -65,31 +34,45 @@ type UseQueryResult<T> = {
   isError: boolean
 }
 
+type QuizSettings = {
+  title?: string
+  description?: string
+  imageCoverURL?: string
+  visibility?: QuizVisibility
+  category?: QuizCategory
+  languageCode?: LanguageCode
+}
+
 type QuizCreatorPageUIProps = {
   gameMode?: GameMode
   onSelectGameMode: (mode: GameMode) => void
   quizSettings: QuizSettings
+  quizSettingsValidation: Record<string, boolean | undefined>
   allQuizSettingsValid: boolean
-  onQuizSettingsValueChange: (next: unknown) => void
-  onQuizSettingsValidChange: (next: boolean) => void
-  questions: QuestionData[]
+  onQuizSettingsValueChange: <K extends keyof QuizSettings>(
+    key: K,
+    value?: QuizSettings[K],
+  ) => void
+  questions: unknown[]
+  questionValidations: Record<string, unknown>[]
   allQuestionsValid: boolean
   selectedQuestion: unknown
   selectedQuestionIndex: number
-  onSetQuestions: (next: QuestionData[]) => void
+  onSetQuestions: (next: unknown[]) => void
   onSelectedQuestionIndex: (index: number) => void
   onAddQuestion: () => void
-  onQuestionValueChange: (index: number, value: unknown) => void
-  onQuestionValueValidChange: (index: number, valid: boolean) => void
-  onDropQuestionIndex: (index: number) => void
+  onQuestionValueChange: (key: string, value?: unknown) => void
+  onDropQuestionIndex: () => void
   onDuplicateQuestionIndex: (index: number) => void
   onDeleteQuestionIndex: (index: number) => void
-  onReplaceQuestion: (index: number, next: QuestionData) => void
+  onReplaceQuestion: (index: number) => void
   isSavingQuiz: boolean
   onSaveQuiz: () => void
 }
 
 let latestUIProps: QuizCreatorPageUIProps | undefined
+
+let mockQuizId: string | undefined
 
 const navigateMock = vi.fn<(path: string) => void>()
 const notifyErrorMock = vi.fn<(msg: string) => void>()
@@ -100,36 +83,56 @@ const createQuizMock = vi.fn<(request: QuizRequestDto) => Promise<void>>(() =>
 const updateQuizMock = vi.fn<
   (quizId: string, request: QuizRequestDto) => Promise<void>
 >(() => Promise.resolve())
+const getQuizMock = vi.fn<(quizId: string) => Promise<QuizSummary>>()
+const getQuizQuestionsMock = vi.fn<(quizId: string) => Promise<unknown[]>>()
 
-const addQuestionMock = vi.fn<(mode: GameMode, type: QuestionType) => void>()
-const resetQuestionsMock = vi.fn<(mode: GameMode) => void>()
-
-const setQuestionsMock = vi.fn<(next: QuestionData[]) => void>()
+const setGameModeMock = vi.fn<(mode: GameMode) => void>()
+const setQuestionsMock = vi.fn<(qs: unknown[]) => void>()
 const selectQuestionMock = vi.fn<(index: number) => void>()
-const setQuestionValueMock = vi.fn<(index: number, value: unknown) => void>()
-const setQuestionValueValidMock =
-  vi.fn<(index: number, valid: boolean) => void>()
-const dropQuestionMock = vi.fn<(index: number) => void>()
+const addQuestionMock = vi.fn<(type: QuestionType) => void>()
+const updateSelectedQuestionFieldMock =
+  vi.fn<(key: string, value?: unknown) => void>()
 const duplicateQuestionMock = vi.fn<(index: number) => void>()
 const deleteQuestionMock = vi.fn<(index: number) => void>()
-const replaceQuestionMock = vi.fn<(index: number, next: QuestionData) => void>()
+const replaceQuestionMock = vi.fn<(index: number) => void>()
 
 const setQuizSettingsMock = vi.fn<(next: QuizSettings) => void>()
-const onQuizSettingsValueChangeMock = vi.fn<(next: unknown) => void>()
-const onQuizSettingsValidChangeMock = vi.fn<(next: boolean) => void>()
-
-let mockQuizId: QuizId
+const updateSettingsFieldMock =
+  vi.fn<
+    <K extends keyof QuizSettings>(key: K, value?: QuizSettings[K]) => void
+  >()
 
 let mockQuizSettings: QuizSettings
+let mockQuizSettingsValidation: Record<string, boolean | undefined>
 let mockAllQuizSettingsValid = true
 
-let mockQuestions: QuestionData[] = []
+let mockGameMode: GameMode | undefined
+let mockQuestions: unknown[] = []
+let mockQuestionValidations: Record<string, unknown>[] = []
 let mockAllQuestionsValid = true
+let mockSelectedQuestion: unknown
+let mockSelectedQuestionIndex = -1
 
 let mockQuizQueryState: UseQueryResult<QuizSummary>
-let mockQuestionsQueryState: UseQueryResult<
-  ClassicQuestionData[] | ZeroToOneHundredQuestionData[]
->
+let mockQuestionsQueryState: UseQueryResult<unknown[]>
+
+/**
+ * Guards used during save filtering.
+ */
+const isClassicMultiChoiceQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isClassicRangeQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isClassicTrueFalseQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isClassicTypeAnswerQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isClassicPinQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isClassicPuzzleQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
+const isZeroToOneHundredRangeQuestionMock =
+  vi.fn<(mode: GameMode, q: unknown) => boolean>()
 
 vi.mock('react-router-dom', async () => {
   const actual =
@@ -149,71 +152,110 @@ vi.mock('../../api/use-quiz-service-client.tsx', () => ({
   useQuizServiceClient: () => ({
     createQuiz: createQuizMock,
     updateQuiz: updateQuizMock,
-    getQuiz: vi.fn(),
-    getQuizQuestions: vi.fn(),
+    getQuiz: getQuizMock,
+    getQuizQuestions: getQuizQuestionsMock,
   }),
 }))
 
 vi.mock('./utils/QuizSettingsDataSource', () => ({
   useQuizSettingsDataSource: () => ({
-    values: mockQuizSettings,
-    setValues: setQuizSettingsMock,
-    valid: mockAllQuizSettingsValid,
-    onValueChange: onQuizSettingsValueChangeMock,
-    onValidChange: onQuizSettingsValidChangeMock,
+    settings: mockQuizSettings,
+    setSettings: setQuizSettingsMock,
+    settingsValidation: mockQuizSettingsValidation,
+    allSettingsValid: mockAllQuizSettingsValid,
+    updateSettingsField: updateSettingsFieldMock,
   }),
 }))
 
-vi.mock('./utils/QuestionDataSource', () => ({
-  useQuestionDataSource: () => ({
-    questions: mockQuestions,
-    setQuestions: setQuestionsMock,
-    allQuestionsValid: mockAllQuestionsValid,
-    selectedQuestion: undefined,
-    selectedQuestionIndex: -1,
-    selectQuestion: selectQuestionMock,
-    addQuestion: addQuestionMock,
-    setQuestionValue: setQuestionValueMock,
-    setQuestionValueValid: setQuestionValueValidMock,
-    dropQuestion: dropQuestionMock,
-    duplicateQuestion: duplicateQuestionMock,
-    deleteQuestion: deleteQuestionMock,
-    replaceQuestion: replaceQuestionMock,
-    resetQuestions: resetQuestionsMock,
-  }),
-}))
+vi.mock('./utils/QuestionDataSource', async () => {
+  const React = await vi.importActual<typeof import('react')>('react')
+
+  return {
+    useQuestionDataSource: () => {
+      const [gameMode, setGameMode] = React.useState<GameMode | undefined>(
+        mockGameMode,
+      )
+      const [questions, setQuestions] = React.useState<unknown[]>(mockQuestions)
+
+      const selectQuestion = (index: number) => {
+        selectQuestionMock(index)
+      }
+
+      const setGameModeWrapped = (mode: GameMode) => {
+        mockGameMode = mode
+        setGameModeMock(mode)
+        setGameMode(mode)
+      }
+
+      const setQuestionsWrapped = (qs: unknown[]) => {
+        mockQuestions = qs
+        setQuestionsMock(qs)
+        setQuestions(qs)
+      }
+
+      return {
+        gameMode,
+        setGameMode: setGameModeWrapped,
+
+        questions,
+        setQuestions: setQuestionsWrapped,
+
+        questionValidations: mockQuestionValidations,
+        allQuestionsValid: mockAllQuestionsValid,
+
+        selectedQuestion: mockSelectedQuestion,
+        selectedQuestionIndex: mockSelectedQuestionIndex,
+
+        selectQuestion,
+
+        addQuestion: addQuestionMock,
+        updateSelectedQuestionField: updateSelectedQuestionFieldMock,
+        duplicateQuestion: duplicateQuestionMock,
+        deleteQuestion: deleteQuestionMock,
+        replaceQuestion: replaceQuestionMock,
+      }
+    },
+  }
+})
 
 vi.mock('@tanstack/react-query', () => ({
-  useQuery: (args: { queryKey: readonly unknown[] }) => {
-    const key = args.queryKey?.[0]
+  useQuery: (args: { queryKey: readonly unknown[]; enabled?: boolean }) => {
+    const key = String(args.queryKey?.[0] ?? '')
     if (key === 'quiz') return mockQuizQueryState
     if (key === 'quiz_questions') return mockQuestionsQueryState
-    throw new Error(`Unexpected queryKey: ${String(key)}`)
+    throw new Error(`Unexpected queryKey: ${key}`)
   },
+}))
+
+vi.mock('../../components', () => ({
+  LoadingSpinner: () => <div data-testid="loading-spinner" />,
+  Page: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="page">{children}</div>
+  ),
 }))
 
 vi.mock('./components/QuizCreatorPageUI', () => ({
   default: (props: QuizCreatorPageUIProps) => {
     latestUIProps = props
-    return null
+    return <div data-testid="quiz-creator-ui" />
   },
 }))
 
-vi.mock('./utils/QuestionDataSource/question-data-source.utils.ts', () => ({
-  isClassicMultiChoiceQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.MultiChoice,
-  isClassicRangeQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.Range,
-  isClassicTrueFalseQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.TrueFalse,
-  isClassicTypeAnswerQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.TypeAnswer,
-  isClassicPinQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.Pin,
-  isClassicPuzzleQuestion: (q: QuestionData) =>
-    q.mode === GameMode.Classic && q.data.type === QuestionType.Puzzle,
-  isZeroToOneHundredRangeQuestion: (q: QuestionData) =>
-    q.mode === GameMode.ZeroToOneHundred && q.data.type === QuestionType.Range,
+vi.mock('../../utils/questions', () => ({
+  isClassicMultiChoiceQuestion: (mode: GameMode, q: unknown) =>
+    isClassicMultiChoiceQuestionMock(mode, q),
+  isClassicRangeQuestion: (mode: GameMode, q: unknown) =>
+    isClassicRangeQuestionMock(mode, q),
+  isClassicTrueFalseQuestion: (mode: GameMode, q: unknown) =>
+    isClassicTrueFalseQuestionMock(mode, q),
+  isClassicTypeAnswerQuestion: (mode: GameMode, q: unknown) =>
+    isClassicTypeAnswerQuestionMock(mode, q),
+  isClassicPinQuestion: (mode: GameMode, q: unknown) =>
+    isClassicPinQuestionMock(mode, q),
+  isClassicPuzzleQuestion: (mode: GameMode, q: unknown) =>
+    isClassicPuzzleQuestionMock(mode, q),
+  isZeroToOneHundredRangeQuestion: (mode: GameMode, q: unknown) =>
+    isZeroToOneHundredRangeQuestionMock(mode, q),
 }))
 
 const flushPromises = async (): Promise<void> => {
@@ -222,12 +264,14 @@ const flushPromises = async (): Promise<void> => {
   })
 }
 
-const selectGameMode = async (mode: GameMode): Promise<void> => {
-  expect(latestUIProps).toBeDefined()
-  act(() => {
-    latestUIProps?.onSelectGameMode(mode)
-  })
-  await waitFor(() => expect(latestUIProps?.gameMode).toBe(mode))
+const setAllGuardsFalse = (): void => {
+  isClassicMultiChoiceQuestionMock.mockReturnValue(false)
+  isClassicRangeQuestionMock.mockReturnValue(false)
+  isClassicTrueFalseQuestionMock.mockReturnValue(false)
+  isClassicTypeAnswerQuestionMock.mockReturnValue(false)
+  isClassicPinQuestionMock.mockReturnValue(false)
+  isClassicPuzzleQuestionMock.mockReturnValue(false)
+  isZeroToOneHundredRangeQuestionMock.mockReturnValue(false)
 }
 
 describe('QuizCreatorPage', () => {
@@ -245,10 +289,15 @@ describe('QuizCreatorPage', () => {
       category: QuizCategory.Other,
       languageCode: LanguageCode.English,
     }
+    mockQuizSettingsValidation = {}
     mockAllQuizSettingsValid = true
 
+    mockGameMode = undefined
     mockQuestions = []
+    mockQuestionValidations = []
     mockAllQuestionsValid = true
+    mockSelectedQuestion = undefined
+    mockSelectedQuestionIndex = -1
 
     mockQuizQueryState = { data: undefined, isLoading: false, isError: false }
     mockQuestionsQueryState = {
@@ -256,75 +305,127 @@ describe('QuizCreatorPage', () => {
       isLoading: false,
       isError: false,
     }
+
+    setAllGuardsFalse()
   })
 
-  it('selecting game mode sets state and resets questions', async () => {
+  it('renders spinner page when quizId exists and quiz or questions query is loading or errored', () => {
+    mockQuizId = 'quiz-1'
+    mockQuizQueryState = { data: undefined, isLoading: true, isError: false }
+    mockQuestionsQueryState = {
+      data: undefined,
+      isLoading: false,
+      isError: false,
+    }
+
     render(<QuizCreatorPage />)
 
-    expect(latestUIProps?.gameMode).toBeUndefined()
-
-    await selectGameMode(GameMode.Classic)
-
-    expect(resetQuestionsMock).toHaveBeenCalledWith(GameMode.Classic)
+    expect(latestUIProps).toBeUndefined()
+    expect(document.querySelector('[data-testid="page"]')).toBeTruthy()
+    expect(
+      document.querySelector('[data-testid="loading-spinner"]'),
+    ).toBeTruthy()
   })
 
-  it('adding a question in Classic adds MultiChoice', async () => {
+  it('when originalQuiz loads, sets game mode and copies settings', async () => {
+    mockQuizId = 'quiz-123'
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        description: 'Loaded desc',
+        imageCoverURL: 'https://cdn/cover.jpg',
+        visibility: QuizVisibility.Private,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.Swedish,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
     render(<QuizCreatorPage />)
 
-    await selectGameMode(GameMode.Classic)
+    expect(setGameModeMock).toHaveBeenCalledWith(GameMode.Classic)
+    expect(setQuizSettingsMock).toHaveBeenCalledWith({
+      title: 'Loaded title',
+      description: 'Loaded desc',
+      imageCoverURL: 'https://cdn/cover.jpg',
+      visibility: QuizVisibility.Private,
+      category: QuizCategory.Other,
+      languageCode: LanguageCode.Swedish,
+    })
+  })
+
+  it('when gameMode and originalQuizQuestions load, sets questions and selects question 0', async () => {
+    mockQuizId = 'quiz-123'
+
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        visibility: QuizVisibility.Public,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.English,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
+    const loadedQuestions = [{ id: 'q1' }, { id: 'q2' }]
+
+    mockQuestionsQueryState = {
+      data: loadedQuestions,
+      isLoading: false,
+      isError: false,
+    }
+
+    render(<QuizCreatorPage />)
+
+    await act(async () => {
+      await Promise.resolve()
+    })
+
+    expect(setQuestionsMock).toHaveBeenCalledWith(loadedQuestions)
+    expect(selectQuestionMock).toHaveBeenCalledWith(0)
+  })
+
+  it('handleAddQuestion adds MultiChoice for Classic and Range for ZeroToOneHundred', async () => {
+    render(<QuizCreatorPage />)
+    expect(latestUIProps).toBeDefined()
+
+    act(() => {
+      latestUIProps?.onSelectGameMode(GameMode.Classic)
+    })
+
+    await act(async () => {
+      await Promise.resolve()
+    })
 
     act(() => {
       latestUIProps?.onAddQuestion()
     })
+    expect(addQuestionMock).toHaveBeenCalledWith(QuestionType.MultiChoice)
 
-    expect(addQuestionMock).toHaveBeenCalledWith(
-      GameMode.Classic,
-      QuestionType.MultiChoice,
-    )
-  })
+    addQuestionMock.mockClear()
 
-  it('adding a question in ZeroToOneHundred adds Range', async () => {
-    render(<QuizCreatorPage />)
+    act(() => {
+      latestUIProps?.onSelectGameMode(GameMode.ZeroToOneHundred)
+    })
 
-    await selectGameMode(GameMode.ZeroToOneHundred)
+    await act(async () => {
+      await Promise.resolve()
+    })
 
     act(() => {
       latestUIProps?.onAddQuestion()
     })
-
-    expect(addQuestionMock).toHaveBeenCalledWith(
-      GameMode.ZeroToOneHundred,
-      QuestionType.Range,
-    )
+    expect(addQuestionMock).toHaveBeenCalledWith(QuestionType.Range)
   })
 
-  it('save: if already saving, it returns early', async () => {
-    render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
-
-    act(() => {
-      latestUIProps?.onSaveQuiz()
-    })
-    expect(createQuizMock).toHaveBeenCalledTimes(1)
-
-    act(() => {
-      latestUIProps?.onSaveQuiz()
-    })
-
-    expect(createQuizMock).toHaveBeenCalledTimes(1)
-    expect(updateQuizMock).toHaveBeenCalledTimes(0)
-
-    await flushPromises()
-    await waitFor(() => expect(latestUIProps?.isSavingQuiz).toBe(false))
-  })
-
-  it('save: invalid settings/questions shows validation error', async () => {
+  it('save: if invalid settings or questions -> notify and does not save', () => {
     mockAllQuizSettingsValid = false
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
@@ -338,7 +439,7 @@ describe('QuizCreatorPage', () => {
     expect(navigateMock).not.toHaveBeenCalled()
   })
 
-  it('save: missing game mode shows error', async () => {
+  it('save: missing game mode -> notify and does not save', () => {
     render(<QuizCreatorPage />)
 
     act(() => {
@@ -350,15 +451,14 @@ describe('QuizCreatorPage', () => {
     expect(updateQuizMock).not.toHaveBeenCalled()
   })
 
-  it('save: missing/blank title shows error', async () => {
+  it('save: missing/blank title -> notify and does not save', () => {
+    mockGameMode = GameMode.Classic
     mockQuizSettings = {
       ...mockQuizSettings,
       title: '   ',
     }
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
@@ -369,23 +469,17 @@ describe('QuizCreatorPage', () => {
     expect(updateQuizMock).not.toHaveBeenCalled()
   })
 
-  it('save: questions length mismatch (invalid/unsupported) shows error', async () => {
-    mockQuestions = [
-      {
-        mode: GameMode.Classic,
-        data: { type: QuestionType.MultiChoice, id: 'q1' },
-        validation: {},
-      },
-      {
-        mode: GameMode.Classic,
-        data: { type: 'Unsupported', id: 'q2' },
-        validation: {},
-      },
-    ]
+  it('save: filters questions and errors if some are unsupported (length mismatch)', () => {
+    mockGameMode = GameMode.Classic
+
+    const q1 = { type: QuestionType.MultiChoice, id: 'q1' }
+    const q2 = { type: 'Unsupported', id: 'q2' }
+    mockQuestions = [q1, q2]
+
+    // Only q1 is considered valid classic multi
+    isClassicMultiChoiceQuestionMock.mockImplementation((_mode, q) => q === q1)
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
@@ -399,6 +493,9 @@ describe('QuizCreatorPage', () => {
   })
 
   it('save: creates Classic quiz with trimmed title/description and defaults', async () => {
+    mockQuizId = undefined
+    mockGameMode = GameMode.Classic
+
     mockQuizSettings = {
       title: '  My quiz  ',
       description: '  Desc  ',
@@ -408,30 +505,22 @@ describe('QuizCreatorPage', () => {
       languageCode: undefined,
     }
 
-    mockQuestions = [
-      {
-        mode: GameMode.Classic,
-        data: { type: QuestionType.MultiChoice, id: 'q1' },
-        validation: {},
-      },
-      {
-        mode: GameMode.Classic,
-        data: { type: QuestionType.TrueFalse, id: 'q2' },
-        validation: {},
-      },
-    ]
+    const q1 = { type: QuestionType.MultiChoice, id: 'q1' }
+    const q2 = { type: QuestionType.TrueFalse, id: 'q2' }
+    mockQuestions = [q1, q2]
+
+    isClassicMultiChoiceQuestionMock.mockImplementation((_mode, q) => q === q1)
+    isClassicTrueFalseQuestionMock.mockImplementation((_mode, q) => q === q2)
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
     })
 
     expect(createQuizMock).toHaveBeenCalledTimes(1)
-    const request = createQuizMock.mock.calls[0]?.[0]
-    expect(request).toEqual({
+    const req = createQuizMock.mock.calls[0]?.[0]
+    expect(req).toEqual({
       title: 'My quiz',
       description: 'Desc',
       visibility: QuizVisibility.Public,
@@ -439,47 +528,34 @@ describe('QuizCreatorPage', () => {
       imageCoverURL: 'https://example.com/cover.png',
       languageCode: LanguageCode.English,
       mode: GameMode.Classic,
-      questions: [
-        { type: QuestionType.MultiChoice, id: 'q1' },
-        { type: QuestionType.TrueFalse, id: 'q2' },
-      ],
+      questions: [q1, q2],
     })
 
     await flushPromises()
     expect(navigateMock).toHaveBeenCalledWith('/profile/quizzes')
-    await waitFor(() => expect(latestUIProps?.isSavingQuiz).toBe(false))
   })
 
   it('save: creates ZeroToOneHundred quiz and only saves supported range questions', async () => {
-    mockQuestions = [
-      {
-        mode: GameMode.ZeroToOneHundred,
-        data: { type: QuestionType.Range, id: 'q1' },
-        validation: {},
-      },
-      {
-        mode: GameMode.ZeroToOneHundred,
-        data: { type: QuestionType.Range, id: 'q2' },
-        validation: {},
-      },
-    ]
+    mockQuizId = undefined
+    mockGameMode = GameMode.ZeroToOneHundred
+
+    const q1 = { type: QuestionType.Range, id: 'q1' }
+    const q2 = { type: QuestionType.Range, id: 'q2' }
+    mockQuestions = [q1, q2]
+
+    isZeroToOneHundredRangeQuestionMock.mockReturnValue(true)
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.ZeroToOneHundred)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
     })
 
     expect(createQuizMock).toHaveBeenCalledTimes(1)
-    const request = createQuizMock.mock.calls[0]?.[0]
-    expect(request).toMatchObject({
+    const req = createQuizMock.mock.calls[0]?.[0]
+    expect(req).toMatchObject({
       mode: GameMode.ZeroToOneHundred,
-      questions: [
-        { type: QuestionType.Range, id: 'q1' },
-        { type: QuestionType.Range, id: 'q2' },
-      ],
+      questions: [q1, q2],
     })
 
     await flushPromises()
@@ -488,17 +564,13 @@ describe('QuizCreatorPage', () => {
 
   it('save: updates quiz when quizId exists', async () => {
     mockQuizId = 'quiz-123'
-    mockQuestions = [
-      {
-        mode: GameMode.Classic,
-        data: { type: QuestionType.MultiChoice, id: 'q1' },
-        validation: {},
-      },
-    ]
+    mockGameMode = GameMode.Classic
+
+    const q1 = { type: QuestionType.MultiChoice, id: 'q1' }
+    mockQuestions = [q1]
+    isClassicMultiChoiceQuestionMock.mockReturnValue(true)
 
     render(<QuizCreatorPage />)
-
-    await selectGameMode(GameMode.Classic)
 
     act(() => {
       latestUIProps?.onSaveQuiz()
@@ -508,10 +580,46 @@ describe('QuizCreatorPage', () => {
     expect(updateQuizMock.mock.calls[0]?.[0]).toBe('quiz-123')
     expect(updateQuizMock.mock.calls[0]?.[1]).toMatchObject({
       mode: GameMode.Classic,
-      questions: [{ type: QuestionType.MultiChoice, id: 'q1' }],
+      questions: [q1],
     })
 
     await flushPromises()
     expect(navigateMock).toHaveBeenCalledWith('/profile/quizzes')
+  })
+
+  it('save: ignores subsequent save attempts while saving (create called once)', async () => {
+    mockGameMode = GameMode.Classic
+    const q1 = { type: QuestionType.MultiChoice, id: 'q1' }
+    mockQuestions = [q1]
+    isClassicMultiChoiceQuestionMock.mockReturnValue(true)
+
+    let resolveCreate: (() => void) | undefined
+    createQuizMock.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCreate = resolve
+        }),
+    )
+
+    render(<QuizCreatorPage />)
+
+    act(() => {
+      latestUIProps?.onSaveQuiz()
+    })
+
+    await act(async () => {
+      await Promise.resolve()
+    })
+
+    act(() => {
+      latestUIProps?.onSaveQuiz()
+    })
+
+    expect(createQuizMock).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolveCreate?.()
+      await Promise.resolve()
+    })
   })
 })

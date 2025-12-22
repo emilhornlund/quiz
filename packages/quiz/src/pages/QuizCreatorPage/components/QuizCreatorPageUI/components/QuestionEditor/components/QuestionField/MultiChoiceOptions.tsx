@@ -21,7 +21,6 @@ import { faGrip } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   QuestionMultiChoiceOptionDto,
-  QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX,
   QUIZ_MULTI_CHOICE_OPTIONS_MAX,
   QUIZ_MULTI_CHOICE_OPTIONS_MIN,
 } from '@quiz/common'
@@ -36,13 +35,15 @@ import React, {
 
 import { TextField } from '../../../../../../../../components'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
+import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'
 
 export interface MultiChoiceOptionsProps {
   values?: QuestionMultiChoiceOptionDto[]
+  validation: QuizQuestionValidationResult
   onChange: (value: QuestionMultiChoiceOptionDto[]) => void
-  onValid: (valid: boolean) => void
 }
 
 type MultiChoiceSortableOptionValue = QuestionMultiChoiceOptionDto & {
@@ -52,10 +53,10 @@ type MultiChoiceSortableOptionValue = QuestionMultiChoiceOptionDto & {
 type MultiChoiceSortableOptionProps = MultiChoiceSortableOptionValue & {
   placeholder: string
   required: boolean
+  errorMessage?: string
   showErrorMessage: boolean
   onChange: (value: string) => void
   onCheck: (checked: boolean) => void
-  onValid: (valid: boolean) => void
   onAdditionalValidation: () => boolean | string
 }
 
@@ -65,10 +66,10 @@ const MultiChoiceSortableOption: FC<MultiChoiceSortableOptionProps> = ({
   value,
   correct,
   required,
+  errorMessage,
   showErrorMessage,
   onChange,
   onCheck,
-  onValid,
   onAdditionalValidation,
 }) => {
   const {
@@ -133,12 +134,11 @@ const MultiChoiceSortableOption: FC<MultiChoiceSortableOptionProps> = ({
           placeholder={placeholder}
           value={value}
           checked={correct}
-          regex={QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX}
           onChange={(newValue) => onChange(newValue as string)}
           onCheck={onCheck}
-          onValid={onValid}
           onAdditionalValidation={onAdditionalValidation}
           required={required}
+          customErrorMessage={errorMessage}
           forceValidate
           showErrorMessage={showErrorMessage}
         />
@@ -159,8 +159,8 @@ const MultiChoiceSortableOption: FC<MultiChoiceSortableOptionProps> = ({
 
 const MultiChoiceOptions: FC<MultiChoiceOptionsProps> = ({
   values,
+  validation,
   onChange,
-  onValid,
 }) => {
   const prefix = useId().replace(/:/g, '')
 
@@ -240,37 +240,6 @@ const MultiChoiceOptions: FC<MultiChoiceOptionsProps> = ({
     [onChange],
   )
 
-  const [validById, setValidById] = useState<Record<string, boolean>>({})
-
-  useEffect(() => {
-    const allowed = new Set(options.map((o) => o.id))
-    setValidById((prev) => {
-      let changed = false
-      const next: Record<string, boolean> = {}
-      for (const id of Object.keys(prev)) {
-        if (allowed.has(id)) next[id] = prev[id]
-        else changed = true
-      }
-      return changed ? next : prev
-    })
-  }, [options])
-
-  const handleValidChange = useCallback((id: string, valid: boolean) => {
-    setValidById((prev) =>
-      prev[id] === valid ? prev : { ...prev, [id]: valid },
-    )
-  }, [])
-
-  const isAllValid = options.every((o) => validById[o.id])
-  const wasAllValid = useRef<boolean | undefined>(undefined)
-
-  useEffect(() => {
-    if (wasAllValid.current !== isAllValid) {
-      wasAllValid.current = isAllValid
-      onValid(isAllValid)
-    }
-  }, [isAllValid, onValid])
-
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 2 } }),
     useSensor(TouchSensor, {
@@ -345,6 +314,17 @@ const MultiChoiceOptions: FC<MultiChoiceOptionsProps> = ({
             <MultiChoiceSortableOption
               key={option.id}
               placeholder={`Option ${index + 1}`}
+              errorMessage={
+                getValidationErrorMessage(
+                  validation,
+                  `options[${index}].value`,
+                ) ||
+                getValidationErrorMessage(
+                  validation,
+                  `options[${index}].correct`,
+                ) ||
+                getValidationErrorMessage(validation, 'options')
+              }
               showErrorMessage={!isDragging}
               onChange={(newValue) =>
                 handleChange(index, newValue as string, undefined)
@@ -352,7 +332,6 @@ const MultiChoiceOptions: FC<MultiChoiceOptionsProps> = ({
               onCheck={(newChecked) =>
                 handleChange(index, undefined, newChecked)
               }
-              onValid={(v) => handleValidChange(option.id, v)}
               onAdditionalValidation={() => handleAdditionalValidation(index)}
               required={isRequired(index)}
               {...option}

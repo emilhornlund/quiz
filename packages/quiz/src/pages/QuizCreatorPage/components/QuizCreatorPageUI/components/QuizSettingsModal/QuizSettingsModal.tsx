@@ -2,11 +2,6 @@ import { faPlus, faRetweet, faTrash } from '@fortawesome/free-solid-svg-icons'
 import {
   LanguageCode,
   MediaType,
-  QUIZ_DESCRIPTION_MAX_LENGTH,
-  QUIZ_DESCRIPTION_REGEX,
-  QUIZ_TITLE_MAX_LENGTH,
-  QUIZ_TITLE_MIN_LENGTH,
-  QUIZ_TITLE_REGEX,
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
@@ -25,19 +20,20 @@ import {
   LanguageLabels,
   QuizCategoryLabels,
   QuizVisibilityLabels,
-} from '../../../../../../models/labels.ts'
+} from '../../../../../../models'
 import {
-  QuizSettingsData,
-  QuizSettingsDataSourceValidChangeFunction,
-  QuizSettingsDataSourceValueChangeFunction,
+  QuizSettingsModel,
+  QuizSettingsModelFieldChangeFunction,
+  QuizSettingsValidationResult,
 } from '../../../../utils/QuizSettingsDataSource'
+import { getValidationErrorMessage } from '../../../../validation-rules'
 
 import styles from './QuizSettingsModal.module.scss'
 
 export interface QuizSettingsModalProps {
-  values: Partial<QuizSettingsData>
-  onValueChange: QuizSettingsDataSourceValueChangeFunction
-  onValidChange: QuizSettingsDataSourceValidChangeFunction
+  values: QuizSettingsModel
+  validation: QuizSettingsValidationResult
+  onValueChange: QuizSettingsModelFieldChangeFunction
   onClose: () => void
 }
 
@@ -50,15 +46,14 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
     visibility,
     languageCode,
   } = {},
+  validation,
   onValueChange,
-  onValidChange,
   onClose,
 }) => {
   const [showMediaModal, setShowMediaModal] = useState(false)
 
   const handleDeleteImageCover = () => {
     onValueChange('imageCoverURL', undefined)
-    onValidChange('imageCoverURL', true)
   }
 
   return (
@@ -72,12 +67,8 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
             kind="secondary"
             placeholder="Title"
             value={title}
-            minLength={QUIZ_TITLE_MIN_LENGTH}
-            maxLength={QUIZ_TITLE_MAX_LENGTH}
-            regex={QUIZ_TITLE_REGEX}
+            customErrorMessage={getValidationErrorMessage(validation, 'title')}
             onChange={(value) => onValueChange('title', value as string)}
-            onValid={(valid) => onValidChange('title', valid)}
-            required
             forceValidate
           />
         </div>
@@ -88,10 +79,11 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
             placeholder="Description"
             kind="secondary"
             value={description}
-            maxLength={QUIZ_DESCRIPTION_MAX_LENGTH}
-            regex={QUIZ_DESCRIPTION_REGEX}
+            customErrorMessage={getValidationErrorMessage(
+              validation,
+              'description',
+            )}
             onChange={(value) => onValueChange('description', value as string)}
-            onValid={(valid) => onValidChange('description', valid)}
             forceValidate
           />
         </div>
@@ -133,6 +125,10 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
               })),
             ]}
             value={category || 'none'}
+            customErrorMessage={getValidationErrorMessage(
+              validation,
+              'category',
+            )}
             onChange={(value) =>
               onValueChange(
                 'category',
@@ -152,6 +148,10 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
               valueLabel: QuizVisibilityLabels[visibility],
             }))}
             value={visibility}
+            customErrorMessage={getValidationErrorMessage(
+              validation,
+              'visibility',
+            )}
             onChange={(value) =>
               onValueChange(
                 'visibility',
@@ -174,6 +174,10 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
               })),
             ]}
             value={languageCode || 'none'}
+            customErrorMessage={getValidationErrorMessage(
+              validation,
+              'languageCode',
+            )}
             onChange={(value) =>
               onValueChange(
                 'languageCode',
@@ -193,7 +197,6 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
             value.type === MediaType.Image &&
             onValueChange('imageCoverURL', value.url)
           }
-          onValid={(valid) => onValidChange('imageCoverURL', valid)}
           onClose={() => setShowMediaModal(false)}
           imageOnly
         />

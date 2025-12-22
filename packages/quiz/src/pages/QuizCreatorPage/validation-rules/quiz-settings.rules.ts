@@ -6,15 +6,15 @@ import {
   QUIZ_TITLE_MIN_LENGTH,
   QUIZ_TITLE_REGEX,
   QuizCategory,
+  QuizRequestBaseDto,
   QuizVisibility,
   URL_REGEX,
 } from '@quiz/common'
 
 import { defineRules } from '../../../validation'
-import { QuizSettingsData } from '../utils/QuizSettingsDataSource'
 
 /**
- * Validation rules for Quiz Settings data.
+ * Validation rules for quiz request base dto.
  *
  * Validates:
  * - Title format and length
@@ -24,7 +24,7 @@ import { QuizSettingsData } from '../utils/QuizSettingsDataSource'
  * - Visibility is `Public` or `Private`
  * - Language code is one of the supported language codes
  */
-export const quizSettingsRules = defineRules<QuizSettingsData>()({
+export const quizSettingsRules = defineRules<QuizRequestBaseDto>()({
   optionalKeys: ['description', 'imageCoverURL'] as const,
 })({
   title: {

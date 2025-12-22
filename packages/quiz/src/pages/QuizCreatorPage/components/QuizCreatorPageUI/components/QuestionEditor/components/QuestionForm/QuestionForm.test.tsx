@@ -8,6 +8,8 @@ import React from 'react'
 import '@testing-library/jest-dom'
 import { describe, expect, it } from 'vitest'
 
+import { ValidationResult } from '../../../../../../../../validation'
+
 import {
   ClassicMultiChoiceOptionQuestionForm,
   ClassicRangeQuestionForm,
@@ -16,11 +18,25 @@ import {
   ZeroToOneHundredRangeQuestionForm,
 } from './QuestionForm'
 
+type AnyValidation = ValidationResult<Record<string, unknown>>
+
+function makeValidation(
+  errors: Array<{ path: string; message: string }> = [],
+): AnyValidation {
+  return {
+    valid: errors.length === 0,
+    errors: errors.map((e) => ({
+      path: e.path,
+      message: e.message,
+    })),
+  } as unknown as AnyValidation
+}
+
 describe('QuestionForm', () => {
   it('renders a classic multi choice option question form', () => {
     const { container } = render(
       <ClassicMultiChoiceOptionQuestionForm
-        data={{
+        question={{
           type: QuestionType.MultiChoice,
           question: 'Who painted The Starry Night?',
           media: {
@@ -38,8 +54,8 @@ describe('QuestionForm', () => {
           points: 1000,
           duration: 30,
         }}
+        questionValidation={makeValidation()}
         onChange={() => undefined}
-        onValidChange={() => undefined}
       />,
     )
 
@@ -49,7 +65,7 @@ describe('QuestionForm', () => {
   it('renders a classic range question form', () => {
     const { container } = render(
       <ClassicRangeQuestionForm
-        data={{
+        question={{
           type: QuestionType.Range,
           question:
             "What percentage of the earth's surface is covered by water?",
@@ -64,8 +80,8 @@ describe('QuestionForm', () => {
           points: 1000,
           duration: 30,
         }}
+        questionValidation={makeValidation()}
         onChange={() => undefined}
-        onValidChange={() => undefined}
       />,
     )
 
@@ -75,7 +91,7 @@ describe('QuestionForm', () => {
   it('renders a classic true or false question form', () => {
     const { container } = render(
       <ClassicTrueFalseQuestionForm
-        data={{
+        question={{
           type: QuestionType.TrueFalse,
           question: "Rabbits can't vomit?",
           media: {
@@ -86,8 +102,8 @@ describe('QuestionForm', () => {
           points: 1000,
           duration: 30,
         }}
+        questionValidation={makeValidation()}
         onChange={() => undefined}
-        onValidChange={() => undefined}
       />,
     )
 
@@ -97,7 +113,7 @@ describe('QuestionForm', () => {
   it('renders a classic type answer question form', () => {
     const { container } = render(
       <ClassicTypeAnswerQuestionForm
-        data={{
+        question={{
           type: QuestionType.TypeAnswer,
           question: 'Who painted the Mono Lisa?',
           media: {
@@ -108,8 +124,8 @@ describe('QuestionForm', () => {
           points: 1000,
           duration: 30,
         }}
+        questionValidation={makeValidation()}
         onChange={() => undefined}
-        onValidChange={() => undefined}
       />,
     )
 
@@ -119,7 +135,7 @@ describe('QuestionForm', () => {
   it('renders a zero to one hundred range question form', () => {
     const { container } = render(
       <ZeroToOneHundredRangeQuestionForm
-        data={{
+        question={{
           type: QuestionType.Range,
           question:
             "What percentage of the earth's surface is covered by water?",
@@ -130,8 +146,8 @@ describe('QuestionForm', () => {
           correct: 71,
           duration: 30,
         }}
+        questionValidation={makeValidation()}
         onChange={() => undefined}
-        onValidChange={() => undefined}
       />,
     )
 

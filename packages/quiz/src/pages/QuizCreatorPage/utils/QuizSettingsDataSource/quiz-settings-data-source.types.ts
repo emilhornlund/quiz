@@ -1,110 +1,50 @@
-import { LanguageCode, QuizCategory, QuizVisibility } from '@quiz/common'
+import { QuizRequestBaseDto } from '@quiz/common'
+
+import { ValidationResult } from '../../../../validation'
 
 /**
- * Data model representing configurable quiz settings.
+ * Internal model representing the quiz settings state.
  *
- * This interface defines the canonical shape of quiz metadata used during
- * quiz creation and editing. It is intentionally UI-agnostic and shared
- * between state management and validation layers.
+ * Holds the current settings data together with field-level validity flags.
+ * This structure is managed by the quiz settings data source and is not
+ * intended to be mutated directly by UI components.
  *
- * Notes:
- * - Required fields must be validated before submission.
- * - Optional fields may be omitted during creation.
- * - Default values are typically provided by the data source hook.
+ * - `data` contains the current partial settings values.
+ * - `validation` tracks field-level validity as reported by form controls.
  */
-export interface QuizSettingsData {
-  /**
-   * The title of the quiz.
-   *
-   * Required at submission time:
-   * - During editing this may be `undefined` because the UI model uses `Partial<QuizSettingsData>`.
-   * - A non-empty title must be provided (and validated) before the quiz can be created.
-   */
-  title: string
-
-  /**
-   * A short description of the quiz.
-   *
-   * This field is optional and may be left undefined.
-   */
-  description?: string
-
-  /**
-   * The URL of the cover image for the quiz.
-   *
-   * This field is optional and typically validated only if provided.
-   */
-  imageCoverURL?: string
-
-  /**
-   * Visibility setting for the quiz.
-   *
-   * Determines whether the quiz is publicly discoverable or restricted.
-   */
-  visibility: QuizVisibility
-
-  /**
-   * Category used to classify the quiz.
-   *
-   * Categories are used for organization, filtering, and discovery.
-   */
-  category: QuizCategory
-
-  /**
-   * Language code representing the primary language of the quiz.
-   *
-   * Used for localization and content targeting.
-   */
-  languageCode: LanguageCode
-}
+export type QuizSettingsModel = Partial<QuizRequestBaseDto>
 
 /**
- * Function signature for updating a single quiz setting value.
+ * Validation result for quiz settings data.
  *
- * This function is typically exposed by a data source or hook and called
- * from controlled form inputs. It is strongly typed to ensure that the
- * value matches the key being updated.
+ * Represents the outcome of validating the quiz settings section in the quiz
+ * creator. This is derived from the current settings data and the active
+ * validation rules.
  *
- * @typeParam K - A key of `QuizSettingsData`
- * @param key - The quiz setting to update
- * @param value - The new value for the setting
+ * Guarantees:
+ * - `valid` reflects the overall validity of the settings data.
+ * - `errors` contains path-based validation errors suitable for UI mapping.
+ * - `fields` provides per-field validity for direct field-level feedback.
+ *
+ * This type is intended to be consumed directly by UI components.
  */
-export type QuizSettingsDataSourceValueChangeFunction = <
-  K extends keyof QuizSettingsData,
+export type QuizSettingsValidationResult = ValidationResult<QuizRequestBaseDto>
+
+/**
+ * Function for updating a single quiz settings field.
+ *
+ * Used by UI components to update quiz settings in a type-safe manner.
+ * The key determines which field is updated, and the value represents the
+ * new value for that field.
+ *
+ * Passing `undefined` clears the value for optional fields.
+ *
+ * This function does not perform validation directly; validation is handled
+ * by the owning data source and exposed via `QuizSettingsValidationResult`.
+ */
+export type QuizSettingsModelFieldChangeFunction = <
+  K extends keyof QuizRequestBaseDto,
 >(
   key: K,
-  value?: QuizSettingsData[K],
+  value?: QuizRequestBaseDto[K],
 ) => void
-
-/**
- * Function signature for reporting validation state of a quiz setting.
- *
- * This function is used by field-level validators to communicate whether
- * a specific setting is currently valid.
- *
- * @typeParam K - A key of `QuizSettingsData`
- * @param key - The quiz setting being validated
- * @param valid - Whether the field value is valid
- */
-export type QuizSettingsDataSourceValidChangeFunction = <
-  K extends keyof QuizSettingsData,
->(
-  key: K,
-  valid: boolean,
-) => void
-
-/**
- * Internal validation model used by the quiz settings data source.
- *
- * Structure:
- * - `data` holds the current (possibly partial) quiz settings.
- * - `validation` tracks per-field validation state.
- *
- * Notes:
- * - `data` is partial to allow incremental editing.
- * - Validation entries may be omitted until a field has been evaluated.
- */
-export type QuizSettingsDataSourceValidationModel = {
-  data: Partial<QuizSettingsData>
-  validation: { [key in keyof QuizSettingsData]?: boolean }
-}

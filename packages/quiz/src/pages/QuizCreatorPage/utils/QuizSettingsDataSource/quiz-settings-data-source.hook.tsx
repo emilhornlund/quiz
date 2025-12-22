@@ -1,51 +1,33 @@
-import { LanguageCode, QuizCategory, QuizVisibility } from '@quiz/common'
+import {
+  LanguageCode,
+  QuizCategory,
+  QuizRequestBaseDto,
+  QuizVisibility,
+} from '@quiz/common'
 import { useCallback, useMemo, useState } from 'react'
 
-import { buildValidationModel } from '../../../../utils/validation'
+import { validateDto } from '../../../../validation'
+import { quizSettingsRules } from '../../validation-rules'
 
 import {
-  QuizSettingsData,
-  QuizSettingsDataSourceValidationModel,
-  QuizSettingsDataSourceValidChangeFunction,
-  QuizSettingsDataSourceValueChangeFunction,
+  QuizSettingsModel,
+  QuizSettingsModelFieldChangeFunction,
+  QuizSettingsValidationResult,
 } from './quiz-settings-data-source.types.ts'
-import { quizSettingsDataValidationRules } from './validation-model.builder.rules.ts'
 
 /**
- * Return value for the quiz settings data source hook.
+ * Initial quiz settings state for the quiz editor.
  *
- * Properties:
- * - values:
- *   Current quiz settings values. Partial during editing.
- *
- * - valid:
- *   Aggregate validation result. True only if all fields are valid.
- *
- * - setValues:
- *   Replaces the entire quiz settings object and recomputes validation.
- *
- * - onValueChange:
- *   Updates a single quiz setting value.
- *
- * - onValidChange:
- *   Updates validation status for a single quiz setting field.
- */
-type QuizSettingsDataSourceReturnType = {
-  values: Partial<QuizSettingsData>
-  valid: boolean
-  setValues: (values: QuizSettingsData) => void
-  onValueChange: QuizSettingsDataSourceValueChangeFunction
-  onValidChange: QuizSettingsDataSourceValidChangeFunction
-}
-
-/**
- * Initial quiz settings used by the quiz creator.
+ * Establishes a predictable baseline where optional text fields start as
+ * `undefined`, while select-like fields have sensible defaults.
  *
  * Notes:
- * - Optional string fields are initialized as `undefined` to represent "not provided".
- * - Enum-backed fields are initialized to sensible defaults to avoid undefined UI state.
+ * - `title`, `description`, and `imageCoverURL` are intentionally `undefined` so
+ *   required/format validation can drive UI state and error messaging.
+ * - `category`, `visibility`, and `languageCode` default to commonly used values
+ *   to reduce required user interaction.
  */
-const initialData: Partial<QuizSettingsData> = {
+const initialData: QuizSettingsModel = {
   title: undefined,
   description: undefined,
   imageCoverURL: undefined,
@@ -55,113 +37,64 @@ const initialData: Partial<QuizSettingsData> = {
 }
 
 /**
- * React hook that manages quiz settings state and aggregated validation.
+ * React hook that owns quiz settings state and validation for the quiz editor.
  *
- * This hook acts as a small state container for the Quiz Creator flow. It
- * centralizes both the current quiz settings values and their validation
- * status, while exposing a minimal API for updating individual fields and
- * reporting validation changes from UI components.
- *
- * Responsibilities:
- * - Provide default quiz settings values.
- * - Track per-field validation state.
- * - Expose a derived `valid` flag representing overall form validity.
- * - Allow both bulk replacement of values and granular updates.
- *
- * Initial state:
- * - Required fields (e.g. `title`) start as invalid.
- * - Optional or defaulted fields start as valid.
- *
- * Validation model:
- * - Validation is tracked per field.
- * - Overall validity is computed by requiring all validation flags to be true.
+ * Provides:
+ * - A mutable `settings` model (partial while the form is being filled in).
+ * - A computed `settingsValidation` result derived from `quizSettingsRules`.
+ * - A type-safe `updateSettingsField` helper for updating individual fields.
  *
  * Intended usage:
- * - Form inputs call `onValueChange` when their value changes.
- * - Field-level validators call `onValidChange` to report validity.
- * - Consumers read `values` and `valid` to drive UI state and submission logic.
- *
- * Notes:
- * - `setValues` replaces the entire data object and recomputes validation.
- * - This hook derives initial validation and recomputes validation for bulk
- *   updates via `buildValidationModel`. Field-level components may still report
- *   validity via `onValidChange`.
+ * - Bind `settings` values to form inputs.
+ * - Use `settingsValidation` for field-level error display.
+ * - Use `allSettingsValid` to enable/disable "Continue"/"Save" actions.
  */
-export const useQuizSettingsDataSource =
-  (): QuizSettingsDataSourceReturnType => {
-    const [model, setModel] = useState<QuizSettingsDataSourceValidationModel>({
-      data: initialData,
-      validation: buildValidationModel(
-        initialData,
-        quizSettingsDataValidationRules,
-      ).validation,
-    })
+export const useQuizSettingsDataSource = () => {
+  /**
+   * Current quiz settings data being edited.
+   *
+   * Stored as a `QuizSettingsModel` to support incremental form entry
+   * where required fields may be missing until the user completes them.
+   */
+  const [settings, setSettings] = useState<QuizSettingsModel>(initialData)
 
-    const values = useMemo<Partial<QuizSettingsData>>(() => model.data, [model])
+  /**
+   * Validation result for the current settings state.
+   *
+   * Recomputed whenever `settings` changes and uses `quizSettingsRules` to
+   * validate required fields, formats, and constraints.
+   */
+  const settingsValidation = useMemo<QuizSettingsValidationResult>(
+    () => Object.freeze(validateDto(settings, quizSettingsRules)),
+    [settings],
+  )
 
-    const valid = useMemo(() => {
-      const validationValues = Object.values(model.validation)
-      return validationValues.length > 0 && validationValues.every(Boolean)
-    }, [model.validation])
+  /**
+   * Updates a single quiz settings field in a type-safe way.
+   *
+   * Performs a shallow merge to preserve unrelated fields.
+   *
+   * @param key - The settings field key to update.
+   * @param value - The new value for the given field. Pass `undefined` to clear
+   * the field (where supported by the DTO).
+   */
+  const updateSettingsField = useCallback<QuizSettingsModelFieldChangeFunction>(
+    <K extends keyof QuizRequestBaseDto>(
+      key: K,
+      value?: QuizRequestBaseDto[K],
+    ) => {
+      setSettings((prevData) => ({ ...prevData, [key]: value }))
+    },
+    [],
+  )
 
-    /**
-     * Replaces all quiz setting values at once and recomputes validation for all fields.
-     *
-     * This is useful when initializing the form from existing data or restoring
-     * a previously saved draft. Validation is recomputed.
-     *
-     * @param values - Complete quiz settings object
-     */
-    const setValues = useCallback((values: QuizSettingsData) => {
-      setModel({
-        data: values,
-        validation: buildValidationModel(
-          values,
-          quizSettingsDataValidationRules,
-        ).validation,
-      })
-    }, [])
+  return {
+    settings,
+    setSettings,
 
-    /**
-     * Updates a single quiz setting value.
-     *
-     * This function is typically called from controlled form inputs.
-     * It does not perform validation and does not affect validity directly.
-     *
-     * @param key - Quiz setting key to update
-     * @param value - New value for the setting
-     */
-    const onValueChange = useCallback(
-      <K extends keyof QuizSettingsData>(
-        key: K,
-        value?: QuizSettingsData[K],
-      ) => {
-        setModel((prevModel) => ({
-          ...prevModel,
-          data: { ...prevModel.data, [key]: value },
-        }))
-      },
-      [],
-    )
+    settingsValidation,
+    allSettingsValid: settingsValidation.valid,
 
-    /**
-     * Updates validation state for a single quiz setting.
-     *
-     * This function is typically called by field-level validators or input
-     * components that know when their value is valid.
-     *
-     * @param key - Quiz setting key being validated
-     * @param valid - Whether the field is currently valid
-     */
-    const onValidChange = useCallback(
-      <K extends keyof QuizSettingsData>(key: K, valid: boolean) => {
-        setModel((prevModel) => ({
-          ...prevModel,
-          validation: { ...prevModel.validation, [key]: valid },
-        }))
-      },
-      [],
-    )
-
-    return { values, setValues, valid, onValueChange, onValidChange }
+    updateSettingsField,
   }
+}

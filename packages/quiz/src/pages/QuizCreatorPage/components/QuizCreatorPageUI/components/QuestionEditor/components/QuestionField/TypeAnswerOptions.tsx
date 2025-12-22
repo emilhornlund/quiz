@@ -1,24 +1,25 @@
 import {
   QUIZ_TYPE_ANSWER_OPTIONS_MAX,
   QUIZ_TYPE_ANSWER_OPTIONS_MIN,
-  QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
 } from '@quiz/common'
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
+import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'
 
 export interface TypeAnswerOptionsProps {
   values?: string[]
+  validation: QuizQuestionValidationResult
   onChange: (values?: string[]) => void
-  onValid: (valid: boolean) => void
 }
 
 const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
   values,
+  validation,
   onChange,
-  onValid,
 }) => {
   const [options, setOptions] = useState<string[]>(() =>
     Array.from(
@@ -80,15 +81,6 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
     [validOptions],
   )
 
-  const previousValid = useRef<boolean | undefined>(undefined)
-  useEffect(() => {
-    const allValid = validOptions.every(Boolean)
-    if (previousValid.current !== allValid) {
-      previousValid.current = allValid
-      onValid(allValid)
-    }
-  }, [validOptions, onValid])
-
   return (
     <div className={styles.optionsContainer}>
       {options.map((option, index) => (
@@ -99,7 +91,10 @@ const TypeAnswerOptions: FC<TypeAnswerOptionsProps> = ({
               type="text"
               placeholder={`Option ${index + 1}`}
               value={option}
-              regex={QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX}
+              customErrorMessage={
+                getValidationErrorMessage(validation, `options[${index}]`) ||
+                getValidationErrorMessage(validation, 'options')
+              }
               onChange={(newValue) => handleChange(index, newValue as string)}
               onValid={(newValid) => handleValidChange(index, newValid)}
               required={isRequired(index)}

@@ -8,6 +8,8 @@ import {
 } from '../../../../../../../../../../../components'
 import { ImageRevealEffectLabels } from '../../../../../../../../../../../models'
 import { classNames } from '../../../../../../../../../../../utils/helpers.ts'
+import { QuizQuestionValidationResult } from '../../../../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../../../../validation-rules'
 
 import styles from './ImageEffectModal.module.scss'
 
@@ -16,6 +18,7 @@ export const NONE_KEY = 'none'
 export type ImageEffectModalProps = {
   title?: string
   value?: QuestionImageRevealEffectType
+  validation: QuizQuestionValidationResult
   onClose: () => void
   onChangeImageEffect: (
     value?: QuestionImageRevealEffectType | undefined,
@@ -25,6 +28,7 @@ export type ImageEffectModalProps = {
 const ImageEffectModal: FC<ImageEffectModalProps> = ({
   title,
   value,
+  validation,
   onClose,
   onChangeImageEffect,
 }) => {
@@ -59,6 +63,11 @@ const ImageEffectModal: FC<ImageEffectModalProps> = ({
               valueLabel: ImageRevealEffectLabels[type],
             })),
           ]}
+          value={selectedImageEffect ?? NONE_KEY}
+          customErrorMessage={getValidationErrorMessage(
+            validation,
+            'media.effect',
+          )}
           onChange={(value) =>
             setSelectedImageEffect(
               value !== NONE_KEY
@@ -66,7 +75,6 @@ const ImageEffectModal: FC<ImageEffectModalProps> = ({
                 : undefined,
             )
           }
-          value={selectedImageEffect ?? NONE_KEY}
         />
         <div className={classNames(styles.column, styles.actions)}>
           <Button
