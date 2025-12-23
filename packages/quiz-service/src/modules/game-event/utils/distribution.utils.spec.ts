@@ -1075,6 +1075,130 @@ describe('distribution', () => {
       expect(result.distribution[1].correct).toBe(false)
       expect(result.distribution[1].value).toBe('wrong')
     })
+
+    it('should trim player answers before distribution grouping', () => {
+      const results: QuestionResultTaskItem[] = [
+        {
+          type: QuestionType.TypeAnswer,
+          playerId: 'player1',
+          nickname: 'Player 1',
+          answer: {
+            type: QuestionType.TypeAnswer,
+            playerId: 'player1',
+            created: new Date(),
+            answer: '  Correct Answer  ',
+          },
+          correct: true,
+          lastScore: 100,
+          totalScore: 100,
+          position: 1,
+          streak: 1,
+        },
+        {
+          type: QuestionType.TypeAnswer,
+          playerId: 'player2',
+          nickname: 'Player 2',
+          answer: {
+            type: QuestionType.TypeAnswer,
+            playerId: 'player2',
+            created: new Date(),
+            answer: 'correct answer',
+          },
+          correct: true,
+          lastScore: 100,
+          totalScore: 200,
+          position: 1,
+          streak: 2,
+        },
+      ]
+
+      const correctAnswers: QuestionResultTaskCorrectAnswer[] = [
+        { type: QuestionType.TypeAnswer, value: 'Correct Answer' },
+      ]
+
+      const result = createTypeAnswerQuestionResultDistribution(
+        results,
+        correctAnswers,
+      )
+
+      expect(result.distribution).toEqual([
+        { value: 'correct answer', count: 2, correct: true },
+      ])
+    })
+
+    it('should ignore whitespace-only player answers after normalization', () => {
+      const results: QuestionResultTaskItem[] = [
+        {
+          type: QuestionType.TypeAnswer,
+          playerId: 'player1',
+          nickname: 'Player 1',
+          answer: {
+            type: QuestionType.TypeAnswer,
+            playerId: 'player1',
+            created: new Date(),
+            answer: '   ',
+          },
+          correct: false,
+          lastScore: 0,
+          totalScore: 0,
+          position: 1,
+          streak: 0,
+        },
+      ]
+
+      const correctAnswers: QuestionResultTaskCorrectAnswer[] = [
+        { type: QuestionType.TypeAnswer, value: 'Correct Answer' },
+      ]
+
+      const result = createTypeAnswerQuestionResultDistribution(
+        results,
+        correctAnswers,
+      )
+
+      expect(result.distribution).toHaveLength(1)
+      expect(result.distribution[0]).toEqual({
+        value: 'correct answer',
+        count: 0,
+        correct: true,
+      })
+    })
+
+    it('should normalize correctAnswers initial distribution values using the same normalization as player answers', () => {
+      const results: QuestionResultTaskItem[] = [
+        {
+          type: QuestionType.TypeAnswer,
+          playerId: 'player1',
+          nickname: 'Player 1',
+          answer: {
+            type: QuestionType.TypeAnswer,
+            playerId: 'player1',
+            created: new Date(),
+            answer: 'Correct Answer',
+          },
+          correct: true,
+          lastScore: 100,
+          totalScore: 100,
+          position: 1,
+          streak: 1,
+        },
+      ]
+
+      const correctAnswers: QuestionResultTaskCorrectAnswer[] = [
+        { type: QuestionType.TypeAnswer, value: '  Correct Answer  ' },
+      ]
+
+      const result = createTypeAnswerQuestionResultDistribution(
+        results,
+        correctAnswers,
+      )
+
+      expect(result.distribution).toHaveLength(1)
+      expect(result.distribution[0]).toEqual({
+        value: 'correct answer',
+        count: 1,
+        correct: true,
+      })
+    })
   })
 
   describe('createPinQuestionResultDistribution', () => {
