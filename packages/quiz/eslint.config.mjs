@@ -77,4 +77,10 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  // Override react recommended defaults
+  {
+    rules: {
+      'react/prop-types': 'off',
+    },
+  },
 ]
