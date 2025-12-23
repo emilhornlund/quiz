@@ -139,7 +139,8 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             onClick={onSaveQuiz}
           />
         </div>
-      }>
+      }
+      disableContentFadeAnimation>
       <div className={styles.quizCreatorPage}>
         {!gameMode && <GameModeSelectionModal onSelect={onSelectGameMode} />}
 

@@ -116,7 +116,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1409,7 +1409,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1576,7 +1576,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1743,7 +1743,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1912,7 +1912,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
