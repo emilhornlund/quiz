@@ -2,6 +2,7 @@ import {
   arraysEqual,
   GameEventQuestionResults,
   isDefined,
+  normalizeString,
   QuestionType,
 } from '@quiz/common'
 
@@ -245,15 +246,17 @@ export function createTypeAnswerQuestionResultDistribution(
       .reduce(
         (prev, playerResultItem) => {
           if (isTypeAnswerAnswer(playerResultItem.answer)) {
-            const answer = playerResultItem.answer.answer
+            const normalizedAnswer = normalizeString(
+              playerResultItem.answer.answer,
+            )
             const distributionIndex = prev.findIndex(
-              (item) => item.value.toLowerCase() === answer.toLowerCase(),
+              (item) => normalizeString(item.value) === normalizedAnswer,
             )
             if (distributionIndex >= 0) {
               prev[distributionIndex].count += 1
-            } else if (answer?.length > 0) {
+            } else if (normalizedAnswer?.length > 0) {
               prev.push({
-                value: answer.toLowerCase(),
+                value: normalizedAnswer,
                 count: 1,
                 correct: playerResultItem.correct,
               })
@@ -262,7 +265,7 @@ export function createTypeAnswerQuestionResultDistribution(
           return prev
         },
         correctAnswers.filter(isTypeAnswerCorrectAnswer).map(({ value }) => ({
-          value: value.toLowerCase(),
+          value: normalizeString(value),
           count: 0,
           correct: true,
         })),
