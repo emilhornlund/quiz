@@ -1,6 +1,5 @@
 import { Authority, GameParticipantType } from '@quiz/common'
-import { PartialStoryFn } from '@storybook/core/csf'
-import type { Decorator, ReactRenderer, StoryContext } from '@storybook/react'
+import { type Decorator } from '@storybook/react'
 import React from 'react'
 
 import { AuthContext, AuthContextType } from '../src/context/auth'
@@ -57,12 +56,8 @@ const mockAuth: AuthContextType = {
 /**
  * Wraps a story in AuthContext.Provider using `mockAuth`.
  */
-export const withMockAuth: Decorator = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Story: PartialStoryFn<ReactRenderer, any>,
-  context: StoryContext,
-) => (
+export const withMockAuth: Decorator = (Story, context) => (
   <AuthContext.Provider value={mockAuth}>
-    <Story {...context} />
+    <Story {...context.args} />
   </AuthContext.Provider>
 )
