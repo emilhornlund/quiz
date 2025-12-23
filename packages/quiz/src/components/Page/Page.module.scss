@@ -1,3 +1,4 @@
+@use '../../styles/animations';
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
@@ -205,17 +206,6 @@
             @include iconSize();
           }
         }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
       }
     }
 
@@ -251,8 +241,10 @@
         align-items: center;
         width: 100%;
 
-        @media (prefers-reduced-motion: no-preference) {
-          animation: fadeInUp 0.5s ease-out;
+        &:not(&.disableAnimation) {
+          @media (prefers-reduced-motion: no-preference) {
+            animation: fadeInUp 0.5s ease-out;
+          }
         }
       }
     }

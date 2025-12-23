@@ -10,8 +10,8 @@ import {
   GIVEN_NAME_MAX_LENGTH,
   GIVEN_NAME_MIN_LENGTH,
   GIVEN_NAME_REGEX,
+  UserProfileResponseDto,
 } from '@quiz/common'
-import { UserProfileResponseDto } from '@quiz/common/src'
 import React, {
   FC,
   FormEvent,

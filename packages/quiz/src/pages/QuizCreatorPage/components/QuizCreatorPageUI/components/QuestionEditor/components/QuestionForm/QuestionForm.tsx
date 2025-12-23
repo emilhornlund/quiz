@@ -1,6 +1,7 @@
 import {
   calculateRangeBounds,
   calculateRangeStep,
+  QuestionDto,
   QuestionMultiChoiceDto,
   QuestionPinDto,
   QuestionPuzzleDto,
@@ -13,65 +14,69 @@ import {
 import React, { FC, useMemo } from 'react'
 
 import { isValidNumber } from '../../../../../../../../utils/helpers.ts'
+import {
+  QuizQuestionModelFieldChangeFunction,
+  QuizQuestionValidationResult,
+} from '../../../../../../utils/QuestionDataSource'
 import styles from '../../QuestionEditor.module.scss'
 import QuestionField, { QuestionFieldType } from '../QuestionField'
 
-export interface QuestionFormProps<T> {
-  data: Partial<T>
-  onChange: <K extends keyof T>(field: K, value?: T[K]) => void
-  onValidChange: <K extends keyof T>(field: K, valid: boolean) => void
+export interface QuestionFormProps<T extends QuestionDto> {
+  question: Partial<T>
+  questionValidation: QuizQuestionValidationResult
+  onChange: QuizQuestionModelFieldChangeFunction<T>
 }
 
 export const ClassicMultiChoiceOptionQuestionForm: FC<
   QuestionFormProps<QuestionMultiChoiceDto>
-> = ({ data, onChange, onValidChange }) => {
+> = ({ question, questionValidation, onChange }) => {
   return (
     <>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonQuestion}
-          value={data.question}
+          value={question.question}
+          validation={questionValidation}
           onChange={(newValue) => onChange('question', newValue)}
-          onValid={(valid) => onValidChange('question', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonMedia}
-          value={data.media}
-          duration={data.duration}
+          value={question.media}
+          duration={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('media', newValue)}
-          onValid={(valid) => onValidChange('media', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.MultiChoiceOptions}
-          values={data.options}
+          values={question.options}
+          validation={questionValidation}
           onChange={(newValue) => onChange('options', newValue)}
-          onValid={(valid) => onValidChange('options', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonPoints}
-          value={data.points}
+          value={question.points}
+          validation={questionValidation}
           onChange={(newValue) => onChange('points', newValue)}
-          onValid={(valid) => onValidChange('points', valid)}
         />
         <QuestionField
           type={QuestionFieldType.CommonDuration}
-          value={data.duration}
+          value={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('duration', newValue)}
-          onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonInfo}
-          value={data.info}
+          value={question.info}
+          validation={questionValidation}
           onChange={(newValue) => onChange('info', newValue)}
-          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>
@@ -80,14 +85,14 @@ export const ClassicMultiChoiceOptionQuestionForm: FC<
 
 export const ClassicRangeQuestionForm: FC<
   QuestionFormProps<QuestionRangeDto>
-> = ({ data, onChange, onValidChange }) => {
+> = ({ question, questionValidation, onChange }) => {
   const correctRangeMarginFooter = useMemo<string | undefined>(() => {
     const {
       correct = 0,
       margin = QuestionRangeAnswerMargin.Medium,
       min = 0,
       max = 100,
-    } = data
+    } = question
 
     if (!isValidNumber(correct, min, max)) {
       return undefined
@@ -110,78 +115,78 @@ export const ClassicRangeQuestionForm: FC<
     )
 
     return `Answers between ${lowerBound} and ${upperBound} will be considered correct.`
-  }, [data])
+  }, [question])
 
   return (
     <>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonQuestion}
-          value={data.question}
+          value={question.question}
+          validation={questionValidation}
           onChange={(newValue) => onChange('question', newValue)}
-          onValid={(valid) => onValidChange('question', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonMedia}
-          value={data.media}
-          duration={data.duration}
+          value={question.media}
+          duration={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('media', newValue)}
-          onValid={(valid) => onValidChange('media', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.RangeMin}
-          value={data.min}
-          max={data.max}
+          value={question.min}
+          max={question.max}
+          validation={questionValidation}
           onChange={(newValue) => onChange('min', newValue)}
-          onValid={(valid) => onValidChange('min', valid)}
         />
         <QuestionField
           type={QuestionFieldType.RangeMax}
-          value={data.max}
-          min={data.min}
+          value={question.max}
+          min={question.min}
+          validation={questionValidation}
           onChange={(newValue) => onChange('max', newValue)}
-          onValid={(valid) => onValidChange('max', valid)}
         />
         <QuestionField
           type={QuestionFieldType.RangeCorrect}
-          value={data.correct}
-          min={data.min}
-          max={data.max}
+          value={question.correct}
+          min={question.min}
+          max={question.max}
+          validation={questionValidation}
           onChange={(newValue) => onChange('correct', newValue)}
-          onValid={(valid) => onValidChange('correct', valid)}
         />
         <QuestionField
           type={QuestionFieldType.RangeMargin}
-          value={data.margin}
+          value={question.margin}
           footer={correctRangeMarginFooter}
+          validation={questionValidation}
           onChange={(newValue) => onChange('margin', newValue)}
-          onValid={(valid) => onValidChange('margin', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonPoints}
-          value={data.points}
+          value={question.points}
+          validation={questionValidation}
           onChange={(newValue) => onChange('points', newValue)}
-          onValid={(valid) => onValidChange('points', valid)}
         />
         <QuestionField
           type={QuestionFieldType.CommonDuration}
-          value={data.duration}
+          value={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('duration', newValue)}
-          onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonInfo}
-          value={data.info}
+          value={question.info}
+          validation={questionValidation}
           onChange={(newValue) => onChange('info', newValue)}
-          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>
@@ -190,54 +195,54 @@ export const ClassicRangeQuestionForm: FC<
 
 export const ClassicTrueFalseQuestionForm: FC<
   QuestionFormProps<QuestionTrueFalseDto>
-> = ({ data, onChange, onValidChange }) => {
+> = ({ question, questionValidation, onChange }) => {
   return (
     <>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonQuestion}
-          value={data.question}
+          value={question.question}
+          validation={questionValidation}
           onChange={(newValue) => onChange('question', newValue)}
-          onValid={(valid) => onValidChange('question', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonMedia}
-          value={data.media}
-          duration={data.duration}
+          value={question.media}
+          duration={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('media', newValue)}
-          onValid={(valid) => onValidChange('media', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.TrueFalseOptions}
-          value={data.correct}
+          value={question.correct}
+          validation={questionValidation}
           onChange={(newValue) => onChange('correct', newValue)}
-          onValid={(valid) => onValidChange('correct', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonPoints}
-          value={data.points}
+          value={question.points}
+          validation={questionValidation}
           onChange={(newValue) => onChange('points', newValue)}
-          onValid={(valid) => onValidChange('points', valid)}
         />
         <QuestionField
           type={QuestionFieldType.CommonDuration}
-          value={data.duration}
+          value={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('duration', newValue)}
-          onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonInfo}
-          value={data.info}
+          value={question.info}
+          validation={questionValidation}
           onChange={(newValue) => onChange('info', newValue)}
-          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>
@@ -246,54 +251,54 @@ export const ClassicTrueFalseQuestionForm: FC<
 
 export const ClassicTypeAnswerQuestionForm: FC<
   QuestionFormProps<QuestionTypeAnswerDto>
-> = ({ data, onChange, onValidChange }) => {
+> = ({ question, questionValidation, onChange }) => {
   return (
     <>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonQuestion}
-          value={data.question}
+          value={question.question}
+          validation={questionValidation}
           onChange={(newValue) => onChange('question', newValue)}
-          onValid={(valid) => onValidChange('question', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonMedia}
-          value={data.media}
-          duration={data.duration}
+          value={question.media}
+          duration={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('media', newValue)}
-          onValid={(valid) => onValidChange('media', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.TypeAnswerOptions}
-          values={data.options}
+          values={question.options}
+          validation={questionValidation}
           onChange={(newValue) => onChange('options', newValue)}
-          onValid={(valid) => onValidChange('options', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonPoints}
-          value={data.points}
+          value={question.points}
+          validation={questionValidation}
           onChange={(newValue) => onChange('points', newValue)}
-          onValid={(valid) => onValidChange('points', valid)}
         />
         <QuestionField
           type={QuestionFieldType.CommonDuration}
-          value={data.duration}
+          value={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('duration', newValue)}
-          onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonInfo}
-          value={data.info}
+          value={question.info}
+          validation={questionValidation}
           onChange={(newValue) => onChange('info', newValue)}
-          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>
@@ -301,68 +306,64 @@ export const ClassicTypeAnswerQuestionForm: FC<
 }
 
 export const ClassicPinQuestionForm: FC<QuestionFormProps<QuestionPinDto>> = ({
-  data,
+  question,
+  questionValidation,
   onChange,
-  onValidChange,
 }) => (
   <>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonQuestion}
-        value={data.question}
+        value={question.question}
+        validation={questionValidation}
         onChange={(newValue) => onChange('question', newValue)}
-        onValid={(valid) => onValidChange('question', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.Pin}
-        imageURL={data.imageURL}
+        imageURL={question.imageURL}
         position={{
-          x: data?.positionX,
-          y: data?.positionY,
+          x: question?.positionX,
+          y: question?.positionY,
         }}
-        tolerance={data.tolerance}
+        tolerance={question.tolerance}
+        validation={questionValidation}
         onImageUrlChange={(newValue) => onChange('imageURL', newValue)}
-        onImageUrlValid={(newValid) => onValidChange('imageURL', newValid)}
         onPositionChange={(pos) => {
           onChange('positionX', pos?.x)
           onChange('positionY', pos?.y)
-        }}
-        onPositionValid={(valid) => {
-          onValidChange('positionX', valid)
-          onValidChange('positionY', valid)
         }}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.PinTolerance}
-        value={data.tolerance}
+        value={question.tolerance}
+        validation={questionValidation}
         onChange={(newValue) => onChange('tolerance', newValue)}
-        onValid={(valid) => onValidChange('tolerance', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonPoints}
-        value={data.points}
+        value={question.points}
+        validation={questionValidation}
         onChange={(newValue) => onChange('points', newValue)}
-        onValid={(valid) => onValidChange('points', valid)}
       />
       <QuestionField
         type={QuestionFieldType.CommonDuration}
-        value={data.duration}
+        value={question.duration}
+        validation={questionValidation}
         onChange={(newValue) => onChange('duration', newValue)}
-        onValid={(valid) => onValidChange('duration', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonInfo}
-        value={data.info}
+        value={question.info}
+        validation={questionValidation}
         onChange={(newValue) => onChange('info', newValue)}
-        onValid={(valid) => onValidChange('info', valid)}
       />
     </div>
   </>
@@ -370,53 +371,53 @@ export const ClassicPinQuestionForm: FC<QuestionFormProps<QuestionPinDto>> = ({
 
 export const ClassicPuzzleQuestionForm: FC<
   QuestionFormProps<QuestionPuzzleDto>
-> = ({ data, onChange, onValidChange }) => (
+> = ({ question, questionValidation, onChange }) => (
   <>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonQuestion}
-        value={data.question}
+        value={question.question}
+        validation={questionValidation}
         onChange={(newValue) => onChange('question', newValue)}
-        onValid={(valid) => onValidChange('question', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonMedia}
-        value={data.media}
-        duration={data.duration}
+        value={question.media}
+        duration={question.duration}
+        validation={questionValidation}
         onChange={(newValue) => onChange('media', newValue)}
-        onValid={(valid) => onValidChange('media', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.PuzzleValues}
-        value={data.values}
+        value={question.values}
+        validation={questionValidation}
         onChange={(newValue) => onChange('values', newValue)}
-        onValid={(valid) => onValidChange('values', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonPoints}
-        value={data.points}
+        value={question.points}
+        validation={questionValidation}
         onChange={(newValue) => onChange('points', newValue)}
-        onValid={(valid) => onValidChange('points', valid)}
       />
       <QuestionField
         type={QuestionFieldType.CommonDuration}
-        value={data.duration}
+        value={question.duration}
+        validation={questionValidation}
         onChange={(newValue) => onChange('duration', newValue)}
-        onValid={(valid) => onValidChange('duration', valid)}
       />
     </div>
     <div className={styles.section}>
       <QuestionField
         type={QuestionFieldType.CommonInfo}
-        value={data.info}
+        value={question.info}
+        validation={questionValidation}
         onChange={(newValue) => onChange('info', newValue)}
-        onValid={(valid) => onValidChange('info', valid)}
       />
     </div>
   </>
@@ -424,50 +425,50 @@ export const ClassicPuzzleQuestionForm: FC<
 
 export const ZeroToOneHundredRangeQuestionForm: FC<
   QuestionFormProps<QuestionZeroToOneHundredRangeDto>
-> = ({ data, onChange, onValidChange }) => {
+> = ({ question, questionValidation, onChange }) => {
   return (
     <>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonQuestion}
-          value={data.question}
+          value={question.question}
+          validation={questionValidation}
           onChange={(newValue) => onChange('question', newValue)}
-          onValid={(valid) => onValidChange('question', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonMedia}
-          value={data.media}
-          duration={data.duration}
+          value={question.media}
+          duration={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('media', newValue)}
-          onValid={(valid) => onValidChange('media', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.RangeCorrect}
-          value={data.correct}
+          value={question.correct}
           min={0}
           max={100}
+          validation={questionValidation}
           onChange={(newValue) => onChange('correct', newValue)}
-          onValid={(valid) => onValidChange('correct', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonDuration}
-          value={data.duration}
+          value={question.duration}
+          validation={questionValidation}
           onChange={(newValue) => onChange('duration', newValue)}
-          onValid={(valid) => onValidChange('duration', valid)}
         />
       </div>
       <div className={styles.section}>
         <QuestionField
           type={QuestionFieldType.CommonInfo}
-          value={data.info}
+          value={question.info}
+          validation={questionValidation}
           onChange={(newValue) => onChange('info', newValue)}
-          onValid={(valid) => onValidChange('info', valid)}
         />
       </div>
     </>

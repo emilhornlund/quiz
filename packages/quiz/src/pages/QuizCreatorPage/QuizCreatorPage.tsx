@@ -2,6 +2,8 @@ import {
   GameMode,
   LanguageCode,
   QuestionMultiChoiceDto,
+  QuestionPinDto,
+  QuestionPuzzleDto,
   QuestionRangeDto,
   QuestionTrueFalseDto,
   QuestionType,
@@ -17,10 +19,19 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
+import { notifyError } from '../../utils/notification.ts'
+import {
+  isClassicMultiChoiceQuestion,
+  isClassicPinQuestion,
+  isClassicPuzzleQuestion,
+  isClassicRangeQuestion,
+  isClassicTrueFalseQuestion,
+  isClassicTypeAnswerQuestion,
+  isZeroToOneHundredRangeQuestion,
+} from '../../utils/questions'
 
 import QuizCreatorPageUI from './components/QuizCreatorPageUI'
 import { useQuestionDataSource } from './utils/QuestionDataSource'
-import { QuestionData } from './utils/QuestionDataSource/question-data-source.types.ts'
 import { useQuizSettingsDataSource } from './utils/QuizSettingsDataSource'
 
 const QuizCreatorPage: FC = () => {
@@ -31,31 +42,30 @@ const QuizCreatorPage: FC = () => {
   const { createQuiz, getQuiz, getQuizQuestions, updateQuiz } =
     useQuizServiceClient()
 
-  const [gameMode, setGameMode] = useState<GameMode>()
-
   const {
-    values: quizSettings,
-    setValues: setQuizSettings,
-    valid: allQuizSettingsValid,
-    onValueChange: onQuizSettingsValueChange,
-    onValidChange: onQuizSettingsValidChange,
+    settings: quizSettings,
+    setSettings: setQuizSettings,
+    settingsValidation: quizSettingsValidation,
+    allSettingsValid: allQuizSettingsValid,
+    updateSettingsField: onQuizSettingsValueChange,
   } = useQuizSettingsDataSource()
 
   const {
+    gameMode,
+    setGameMode,
     questions,
     setQuestions,
+    questionValidations,
     allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,
     selectQuestion,
     addQuestion,
-    setQuestionValue,
-    setQuestionValueValid,
-    dropQuestion,
+    updateSelectedQuestionField,
+    moveSelectedQuestionTo,
     duplicateQuestion,
     deleteQuestion,
     replaceQuestion,
-    resetQuestions,
   } = useQuestionDataSource()
 
   const {
@@ -89,7 +99,7 @@ const QuizCreatorPage: FC = () => {
   } = useQuery({
     queryKey: ['quiz_questions', quizId],
     queryFn: () => getQuizQuestions(quizId as string),
-    enabled: !!quizId,
+    enabled: !!quizId && !!gameMode,
   })
 
   useEffect(() => {
@@ -99,13 +109,8 @@ const QuizCreatorPage: FC = () => {
       !isQuizQuestionsLoading &&
       !isQuizQuestionsError
     ) {
-      setQuestions(
-        originalQuizQuestions.map((question) => ({
-          mode: gameMode,
-          data: question,
-          validation: {},
-        })) as QuestionData[],
-      )
+      setQuestions(originalQuizQuestions)
+      selectQuestion(0)
     }
   }, [
     gameMode,
@@ -115,56 +120,105 @@ const QuizCreatorPage: FC = () => {
     setQuestions,
   ])
 
-  const handleSetGameMode = (gameMode: GameMode): void => {
-    setGameMode(gameMode)
-    resetQuestions(gameMode)
-  }
-
   const handleAddQuestion = (): void => {
     if (gameMode === GameMode.Classic) {
-      addQuestion(GameMode.Classic, QuestionType.MultiChoice)
+      addQuestion(QuestionType.MultiChoice)
     }
     if (gameMode === GameMode.ZeroToOneHundred) {
-      addQuestion(GameMode.ZeroToOneHundred, QuestionType.Range)
+      addQuestion(QuestionType.Range)
     }
   }
 
   const [isSavingQuiz, setIsSavingQuiz] = useState(false)
 
   const handleSaveQuiz = () => {
-    if (!allQuizSettingsValid || !allQuestionsValid) {
+    if (isSavingQuiz) {
       return
     }
 
-    const requestData = {
-      title: quizSettings.title as string,
-      description: quizSettings.description,
-      visibility: quizSettings.visibility ?? QuizVisibility.Public,
-      category: quizSettings.category ?? QuizCategory.Other,
-      imageCoverURL: quizSettings.imageCoverURL,
-      languageCode: quizSettings.languageCode ?? LanguageCode.English,
-      mode: gameMode as GameMode,
-      questions: questions.map(({ data }) => data) as
-        | (
+    if (!allQuizSettingsValid || !allQuestionsValid) {
+      notifyError('Please fix the highlighted fields before saving')
+      return
+    }
+
+    const title = quizSettings.title?.trim()
+    const description = quizSettings.description?.trim() || undefined
+
+    if (!gameMode) {
+      notifyError('Game mode is required')
+      return
+    }
+
+    if (!title) {
+      notifyError('Title is required')
+      return
+    }
+
+    const questionsToSave:
+      | {
+          mode: GameMode.Classic
+          questions: (
             | QuestionMultiChoiceDto
             | QuestionRangeDto
             | QuestionTrueFalseDto
             | QuestionTypeAnswerDto
+            | QuestionPinDto
+            | QuestionPuzzleDto
           )[]
-        | QuestionZeroToOneHundredRangeDto[],
-    } as QuizRequestDto
+        }
+      | {
+          mode: GameMode.ZeroToOneHundred
+          questions: QuestionZeroToOneHundredRangeDto[]
+        } =
+      gameMode === GameMode.Classic
+        ? {
+            mode: GameMode.Classic,
+            questions: questions.filter(
+              (question) =>
+                isClassicMultiChoiceQuestion(GameMode.Classic, question) ||
+                isClassicRangeQuestion(GameMode.Classic, question) ||
+                isClassicTrueFalseQuestion(GameMode.Classic, question) ||
+                isClassicTypeAnswerQuestion(GameMode.Classic, question) ||
+                isClassicPinQuestion(GameMode.Classic, question) ||
+                isClassicPuzzleQuestion(GameMode.Classic, question),
+            ),
+          }
+        : {
+            mode: GameMode.ZeroToOneHundred,
+            questions: questions.filter((question) =>
+              isZeroToOneHundredRangeQuestion(
+                GameMode.ZeroToOneHundred,
+                question,
+              ),
+            ),
+          }
+
+    if (questionsToSave.questions.length !== questions.length) {
+      notifyError(
+        'Some questions are invalid or unsupported. Please review your questions.',
+      )
+      return
+    }
+
+    const requestData: QuizRequestDto = {
+      title,
+      description,
+      visibility: quizSettings.visibility ?? QuizVisibility.Public,
+      category: quizSettings.category ?? QuizCategory.Other,
+      imageCoverURL: quizSettings.imageCoverURL,
+      languageCode: quizSettings.languageCode ?? LanguageCode.English,
+      ...questionsToSave,
+    }
 
     setIsSavingQuiz(true)
 
-    if (quizId) {
-      updateQuiz(quizId, requestData)
-        .then(() => navigate('/profile/quizzes'))
-        .finally(() => setIsSavingQuiz(false))
-    } else {
-      createQuiz(requestData)
-        .then(() => navigate('/profile/quizzes'))
-        .finally(() => setIsSavingQuiz(false))
-    }
+    const savePromise = quizId
+      ? updateQuiz(quizId, requestData)
+      : createQuiz(requestData)
+
+    savePromise
+      .then(() => navigate('/profile/quizzes'))
+      .finally(() => setIsSavingQuiz(false))
   }
 
   if (
@@ -184,21 +238,21 @@ const QuizCreatorPage: FC = () => {
   return (
     <QuizCreatorPageUI
       gameMode={gameMode}
-      onSelectGameMode={handleSetGameMode}
+      onSelectGameMode={setGameMode}
       quizSettings={quizSettings}
+      quizSettingsValidation={quizSettingsValidation}
       allQuizSettingsValid={allQuizSettingsValid}
       onQuizSettingsValueChange={onQuizSettingsValueChange}
-      onQuizSettingsValidChange={onQuizSettingsValidChange}
       questions={questions}
+      questionValidations={questionValidations}
       allQuestionsValid={allQuestionsValid}
       selectedQuestion={selectedQuestion}
       selectedQuestionIndex={selectedQuestionIndex}
       onSetQuestions={setQuestions}
       onSelectedQuestionIndex={selectQuestion}
       onAddQuestion={handleAddQuestion}
-      onQuestionValueChange={setQuestionValue}
-      onQuestionValueValidChange={setQuestionValueValid}
-      onDropQuestionIndex={dropQuestion}
+      onQuestionValueChange={updateSelectedQuestionField}
+      onDropQuestionIndex={moveSelectedQuestionTo}
       onDuplicateQuestionIndex={duplicateQuestion}
       onDeleteQuestionIndex={deleteQuestion}
       onReplaceQuestion={replaceQuestion}

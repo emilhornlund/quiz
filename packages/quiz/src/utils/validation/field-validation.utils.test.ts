@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { isCallbackValid, isValidNumber, isValidString } from './validation'
+import {
+  isCallbackValid,
+  isValidNumber,
+  isValidString,
+} from './field-validation.utils.ts'
 
 describe('isCallbackValid', () => {
   it('returns [true, undefined] when no callback is provided', () => {

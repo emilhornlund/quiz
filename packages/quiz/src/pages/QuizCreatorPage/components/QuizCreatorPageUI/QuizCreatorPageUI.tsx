@@ -4,13 +4,7 @@ import {
   faGear,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-  GameMode,
-  QuestionType,
-  QUIZ_TITLE_MAX_LENGTH,
-  QUIZ_TITLE_MIN_LENGTH,
-  QUIZ_TITLE_REGEX,
-} from '@quiz/common'
+import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
 import React, { FC, useMemo, useState } from 'react'
 
 import { Button, Page, TextField } from '../../../../components'
@@ -19,14 +13,14 @@ import {
   useDeviceSizeType,
 } from '../../../../utils/useDeviceSizeType'
 import {
-  QuestionData,
-  QuestionValueChangeFunction,
-  QuestionValueValidChangeFunction,
-} from '../../utils/QuestionDataSource/question-data-source.types.ts'
+  QuizQuestionModel,
+  QuizQuestionModelFieldChangeFunction,
+  QuizQuestionValidationResult,
+} from '../../utils/QuestionDataSource'
 import {
-  QuizSettingsData,
-  QuizSettingsDataSourceValidChangeFunction,
-  QuizSettingsDataSourceValueChangeFunction,
+  QuizSettingsModel,
+  QuizSettingsModelFieldChangeFunction,
+  QuizSettingsValidationResult,
 } from '../../utils/QuizSettingsDataSource'
 
 import {
@@ -41,19 +35,19 @@ import styles from './QuizCreatorPageUI.module.scss'
 export interface QuizCreatorPageUIProps {
   gameMode?: GameMode
   onSelectGameMode?: (gameMode: GameMode) => void
-  quizSettings: Partial<QuizSettingsData>
+  quizSettings: QuizSettingsModel
+  quizSettingsValidation: QuizSettingsValidationResult
   allQuizSettingsValid: boolean
-  onQuizSettingsValueChange: QuizSettingsDataSourceValueChangeFunction
-  onQuizSettingsValidChange: QuizSettingsDataSourceValidChangeFunction
-  questions: QuestionData[]
-  onSetQuestions: (questions: QuestionData[]) => void
+  onQuizSettingsValueChange: QuizSettingsModelFieldChangeFunction
+  questions: QuizQuestionModel[]
+  questionValidations: QuizQuestionValidationResult[]
+  onSetQuestions: (questions: QuizQuestionModel[]) => void
   allQuestionsValid: boolean
-  selectedQuestion?: QuestionData
+  selectedQuestion?: QuizQuestionModel
   selectedQuestionIndex: number
   onSelectedQuestionIndex: (index: number) => void
   onAddQuestion: () => void
-  onQuestionValueChange: QuestionValueChangeFunction
-  onQuestionValueValidChange: QuestionValueValidChangeFunction
+  onQuestionValueChange: QuizQuestionModelFieldChangeFunction<QuestionDto>
   onDropQuestionIndex: (index: number) => void
   onDuplicateQuestionIndex: (index: number) => void
   onDeleteQuestionIndex: (index: number) => void
@@ -66,10 +60,11 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   gameMode,
   onSelectGameMode,
   quizSettings,
+  quizSettingsValidation,
   allQuizSettingsValid,
   onQuizSettingsValueChange,
-  onQuizSettingsValidChange,
   questions,
+  questionValidations,
   onSetQuestions,
   allQuestionsValid,
   selectedQuestion,
@@ -77,7 +72,6 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
   onSelectedQuestionIndex,
   onAddQuestion,
   onQuestionValueChange,
-  onQuestionValueValidChange,
   onDropQuestionIndex,
   onDuplicateQuestionIndex,
   onDeleteQuestionIndex,
@@ -110,15 +104,15 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
               size="small"
               placeholder="Title"
               value={quizSettings.title}
-              minLength={QUIZ_TITLE_MIN_LENGTH}
-              maxLength={QUIZ_TITLE_MAX_LENGTH}
-              regex={QUIZ_TITLE_REGEX}
               onChange={(value) =>
                 onQuizSettingsValueChange('title', value as string)
               }
-              onValid={(valid) => onQuizSettingsValidChange('title', valid)}
+              customErrorMessage={
+                quizSettingsValidation.errors.filter(
+                  ({ path }) => path === 'title',
+                )?.[0]?.message
+              }
               showErrorMessage={false}
-              required
               forceValidate
             />
           )}
@@ -145,15 +139,16 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
             onClick={onSaveQuiz}
           />
         </div>
-      }>
+      }
+      disableContentFadeAnimation>
       <div className={styles.quizCreatorPage}>
         {!gameMode && <GameModeSelectionModal onSelect={onSelectGameMode} />}
 
         {gameMode && showQuizSettingsModal && (
           <QuizSettingsModal
             values={quizSettings}
+            validation={quizSettingsValidation}
             onValueChange={onQuizSettingsValueChange}
-            onValidChange={onQuizSettingsValidChange}
             onClose={() => setShowQuizSettingsModal(false)}
           />
         )}
@@ -161,12 +156,10 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
         {gameMode && selectedQuestion && !showAdvancedQuestionEditor && (
           <>
             <QuestionPicker
-              questions={questions.map(({ data, validation }) => ({
-                type: data.type as QuestionType,
-                text: data.question,
-                error: Object.values(validation).some(
-                  (valid) => valid === false,
-                ),
+              questions={questions.map((question, index) => ({
+                type: question.type as QuestionType,
+                text: question.question,
+                error: !questionValidations[index].valid,
               }))}
               selectedQuestionIndex={selectedQuestionIndex}
               onAddQuestion={onAddQuestion}
@@ -176,9 +169,10 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
               onDeleteQuestion={onDeleteQuestionIndex}
             />
             <QuestionEditor
+              mode={gameMode}
               question={selectedQuestion}
+              questionValidation={questionValidations[selectedQuestionIndex]}
               onQuestionValueChange={onQuestionValueChange}
-              onQuestionValueValidChange={onQuestionValueValidChange}
               onTypeChange={onReplaceQuestion}
             />
           </>
@@ -188,6 +182,7 @@ const QuizCreatorPageUI: FC<QuizCreatorPageUIProps> = ({
           <AdvancedQuestionEditor
             gameMode={gameMode}
             questions={questions}
+            questionValidations={questionValidations}
             onChange={onSetQuestions}
           />
         )}

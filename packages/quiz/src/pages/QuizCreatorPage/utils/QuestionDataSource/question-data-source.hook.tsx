@@ -1,422 +1,403 @@
-import {
-  GameMode,
-  QuestionMultiChoiceDto,
-  QuestionPinDto,
-  QuestionPinTolerance,
-  QuestionPuzzleDto,
-  QuestionRangeAnswerMargin,
-  QuestionRangeDto,
-  QuestionTrueFalseDto,
-  QuestionType,
-  QuestionTypeAnswerDto,
-  QuestionZeroToOneHundredRangeDto,
-} from '@quiz/common'
+import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
 import { useCallback, useMemo, useState } from 'react'
 
+import { buildPartialQuestionDto } from '../../../../utils/questions'
+import { validateDiscriminatedDto } from '../../../../validation'
 import {
-  QuestionData,
-  QuestionValueChangeFunction,
-  QuestionValueValidChangeFunction,
-} from './question-data-source.types.ts'
-import { createQuestionValidationModel } from './question-data-source.utils.ts'
+  classicQuestionRules,
+  zeroToOneHundredQuestionRules,
+} from '../../validation-rules'
 
-type QuestionDataSourceReturnType = {
-  questions: QuestionData[]
-  setQuestions: (questions: QuestionData[]) => void
-  allQuestionsValid: boolean
-  selectedQuestion?: QuestionData
-  selectedQuestionIndex: number
-  selectQuestion: (index: number) => void
-  addQuestion: (mode: GameMode, type: QuestionType) => void
-  setQuestionValue: QuestionValueChangeFunction
-  setQuestionValueValid: QuestionValueValidChangeFunction
-  dropQuestion: (index: number) => void
-  duplicateQuestion: (index: number) => void
-  deleteQuestion: (index: number) => void
-  replaceQuestion: (type: QuestionType) => void
-  resetQuestions: (gameMode: GameMode, questions?: QuestionData[]) => void
+import {
+  QuizQuestionModel,
+  QuizQuestionModelFieldChangeFunction,
+  QuizQuestionValidationResult,
+} from './question-data-source.types.ts'
+
+/**
+ * Creates a deep copy of a value.
+ *
+ * Prefers `structuredClone` when available for correctness and broader type support.
+ * Falls back to JSON serialization for plain data objects.
+ *
+ * @typeParam T - The type of the value being cloned.
+ * @param value - The value to clone.
+ * @returns A deep copy of the provided value.
+ */
+const deepClone = <T,>(value: T): T => {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(value)
+  }
+
+  return JSON.parse(JSON.stringify(value)) as T
 }
 
-export const useQuestionDataSource = (): QuestionDataSourceReturnType => {
-  const [model, setModel] = useState<{
-    questions: QuestionData[]
-    selectedIndex: number
-  }>({ questions: [], selectedIndex: -1 })
+/**
+ * Checks whether an index is valid for an array-like collection with the given length.
+ *
+ * @param index - The index to validate.
+ * @param length - The length of the collection.
+ * @returns `true` if the index is within bounds, otherwise `false`.
+ */
+const isValidIndex = (index: number, length: number): boolean =>
+  index >= 0 && index < length
 
-  const isValidIndex = useCallback(
-    (index: number): boolean => index >= 0 && index < model.questions.length,
-    [model.questions],
-  )
+/**
+ * Provides a stateful question DTO source for the quiz editor.
+ *
+ * Manages:
+ * - The active `GameMode` (Classic or ZeroToOneHundred).
+ * - A list of partial `QuestionDto` objects for editing.
+ * - The currently selected question index and derived selected question.
+ * - Mode-specific discriminated validation for each question and an aggregate validity flag.
+ *
+ * Exposes a set of actions to select, add, update, duplicate, delete, and replace questions.
+ *
+ * @returns An object containing the current state (mode, questions, selection, validations)
+ * and actions to update that state.
+ */
+export const useQuestionDataSource = () => {
+  /**
+   * The currently selected game mode for the question editor.
+   *
+   * When undefined, the editor has not been initialized via `setGameMode`.
+   */
+  const [mode, setMode] = useState<GameMode>()
 
-  const questions = useMemo<QuestionData[]>(() => model.questions, [model])
+  /**
+   * The list of questions being edited as partial DTOs.
+   *
+   * Questions are stored as partials to allow incremental form editing before the DTO is complete.
+   */
+  const [questions, setQuestions] = useState<Array<QuizQuestionModel>>([])
 
-  const setQuestions = useCallback((questions: QuestionData[]) => {
-    setModel({ questions, selectedIndex: 0 })
-  }, [])
+  /**
+   * The index of the currently selected question.
+   *
+   * A value of `-1` indicates that no question is selected.
+   */
+  const [selectedQuestionIndex, setSelectedIndex] = useState<number>(-1)
 
+  /**
+   * Validation results for each question, using the discriminated rules for the active mode.
+   *
+   * Returns an empty array when the mode is not yet selected.
+   */
+  const questionValidations = useMemo<QuizQuestionValidationResult[]>(() => {
+    if (!mode) {
+      return []
+    }
+    return questions.map((q) => {
+      if (mode === GameMode.Classic) {
+        return Object.freeze(validateDiscriminatedDto(q, classicQuestionRules))
+      }
+      return Object.freeze(
+        validateDiscriminatedDto(q, zeroToOneHundredQuestionRules),
+      )
+    })
+  }, [mode, questions])
+
+  /**
+   * Indicates whether all questions are currently valid.
+   *
+   * Returns `false` when there are no questions or when any question fails validation.
+   */
   const allQuestionsValid = useMemo(
     () =>
-      model.questions.every(
-        ({ validation }) =>
-          !Object.values(validation).some((valid) => valid === false),
-      ),
-    [model],
+      questionValidations.length > 0 &&
+      questionValidations.every((v) => v.valid),
+    [questionValidations],
   )
 
-  const selectedQuestion = useMemo<QuestionData | undefined>(() => {
-    if (isValidIndex(model.selectedIndex)) {
-      return model.questions[model.selectedIndex]
+  /**
+   * The currently selected question DTO, if a valid mode and selection exist.
+   *
+   * Returns `undefined` when:
+   * - No mode is selected, or
+   * - No question is selected, or
+   * - The selected index is out of bounds.
+   */
+  const selectedQuestion = useMemo<QuizQuestionModel | undefined>(() => {
+    if (!mode) {
+      return undefined
     }
-    return undefined
-  }, [model.selectedIndex, model.questions, isValidIndex])
+    if (!isValidIndex(selectedQuestionIndex, questions.length)) {
+      return undefined
+    }
+    return questions[selectedQuestionIndex]
+  }, [mode, selectedQuestionIndex, questions])
 
-  const selectedQuestionIndex = useMemo<number>(
-    () => model.selectedIndex,
-    [model.selectedIndex],
-  )
-
+  /**
+   * Selects a question by index.
+   *
+   * @param index - The index of the question to select.
+   * @throws Error when the game mode is not set.
+   * @throws Error when the index is out of bounds.
+   */
   const selectQuestion = useCallback(
     (index: number): void => {
-      if (!isValidIndex(index)) {
+      if (!mode) {
+        throw new Error('Invalid game mode')
+      }
+      if (!isValidIndex(index, questions.length)) {
         throw new Error('Invalid question index')
       }
-
-      setModel((prevModel) => ({ ...prevModel, selectedIndex: index }))
+      setSelectedIndex(index)
     },
-    [isValidIndex],
+    [mode, questions.length],
   )
 
-  const setQuestionValue = useCallback(
-    <
-      T extends
-        | QuestionMultiChoiceDto
-        | QuestionRangeDto
-        | QuestionTrueFalseDto
-        | QuestionTypeAnswerDto
-        | QuestionPinDto
-        | QuestionPuzzleDto
-        | QuestionZeroToOneHundredRangeDto,
-    >(
-      key: keyof T,
-      value?: T[keyof T],
-    ) => {
-      setModel((prevModel) => {
-        const { selectedIndex, questions } = prevModel
-
-        if (!isValidIndex(selectedIndex)) {
-          throw new Error('Invalid question index')
+  /**
+   * Updates a single property on the currently selected question.
+   *
+   * @typeParam K - A key of the `QuestionDto` union type.
+   * @param key - The property key to update.
+   * @param value - The new value for the given key. Pass `undefined` to clear the field.
+   * @throws Error when the game mode is not set.
+   * @throws Error when no valid question is currently selected.
+   */
+  const updateSelectedQuestionField: QuizQuestionModelFieldChangeFunction<QuestionDto> =
+    useCallback(
+      (key, value) => {
+        if (!mode) {
+          throw new Error('Invalid game mode')
         }
 
-        const currentQuestion = questions[selectedIndex]
+        setQuestions((prevQuestions) => {
+          const index = selectedQuestionIndex
+          if (!isValidIndex(index, prevQuestions.length)) {
+            throw new Error('Invalid question index')
+          }
 
-        const updatedQuestions = [...questions]
-        updatedQuestions[selectedIndex] = {
-          ...currentQuestion,
-          data: { ...currentQuestion.data, [key]: value },
-          validation: {
-            ...currentQuestion.validation,
-          },
-        } as QuestionData
+          const updated = [...prevQuestions]
+          updated[index] = { ...updated[index], [key]: value } as QuestionDto
+          return updated
+        })
+      },
+      [mode, selectedQuestionIndex],
+    )
 
-        return {
-          ...prevModel,
-          questions: updatedQuestions,
-        }
-      })
-    },
-    [isValidIndex],
-  )
-
-  const setQuestionValueValid = useCallback(
-    <
-      T extends
-        | QuestionMultiChoiceDto
-        | QuestionRangeDto
-        | QuestionTrueFalseDto
-        | QuestionTypeAnswerDto
-        | QuestionPinDto
-        | QuestionPuzzleDto
-        | QuestionZeroToOneHundredRangeDto,
-    >(
-      key: keyof T,
-      valid: boolean,
-    ) => {
-      setModel((prevModel) => {
-        const { selectedIndex, questions } = prevModel
-
-        if (!isValidIndex(selectedIndex)) {
-          throw new Error('Invalid question index')
-        }
-
-        const currentQuestion = questions[selectedIndex]
-
-        const updatedQuestions = [...questions]
-        updatedQuestions[selectedIndex] = {
-          ...currentQuestion,
-          data: { ...currentQuestion.data },
-          validation: {
-            ...currentQuestion.validation,
-            [key]: valid,
-          },
-        } as QuestionData
-
-        return {
-          ...prevModel,
-          questions: updatedQuestions,
-        }
-      })
-    },
-    [isValidIndex],
-  )
-
+  /**
+   * Appends a new question of the given type and selects it.
+   *
+   * The new question is created as a partial DTO appropriate for the current mode.
+   *
+   * @param type - The question type to add.
+   * @throws Error when the game mode is not set.
+   */
   const addQuestion = useCallback(
-    (mode: GameMode, type: QuestionType): void => {
-      setModel((prevModel) => ({
-        ...prevModel,
-        questions: [
-          ...prevModel.questions,
-          createQuestionValidationModel(mode, type),
-        ],
-        selectedIndex: prevModel.questions.length,
-      }))
-    },
-    [],
-  )
-
-  const dropQuestion = useCallback(
-    (index: number): void => {
-      if (!isValidIndex(index)) {
-        throw new Error('Invalid question index')
+    (type: QuestionType): void => {
+      if (!mode) {
+        throw new Error('Invalid game mode')
       }
 
-      setModel((prevModel) => {
-        const newQuestions = [...prevModel.questions]
-
-        ;[newQuestions[prevModel.selectedIndex], newQuestions[index]] = [
-          newQuestions[index],
-          newQuestions[prevModel.selectedIndex],
-        ]
-
-        return {
-          ...prevModel,
-          questions: newQuestions,
-          selectedIndex: index,
-        }
+      setQuestions((prevQuestions) => {
+        const nextIndex = prevQuestions.length
+        setSelectedIndex(nextIndex)
+        return [...prevQuestions, buildPartialQuestionDto(mode, type)]
       })
     },
-    [isValidIndex],
+    [mode],
   )
 
+  /**
+   * Moves the currently selected question to a new index.
+   *
+   * Removes the selected question from its current position and inserts it at
+   * the target index. The relative order of all other questions is preserved.
+   *
+   * After the move, the selected question index becomes the target index.
+   *
+   * Intended for drag-and-drop reordering.
+   *
+   * @param index - The target index to move the selected question to.
+   * @throws Error when the game mode is not set.
+   * @throws Error when the selected index is invalid.
+   * @throws Error when the target index is invalid.
+   */
+  const moveSelectedQuestionTo = useCallback(
+    (index: number): void => {
+      if (!mode) {
+        throw new Error('Invalid game mode')
+      }
+
+      setQuestions((prevQuestions) => {
+        const fromIndex = selectedQuestionIndex
+
+        if (!isValidIndex(fromIndex, prevQuestions.length)) {
+          throw new Error('Invalid question index')
+        }
+        if (!isValidIndex(index, prevQuestions.length)) {
+          throw new Error('Invalid question index')
+        }
+
+        if (fromIndex === index) {
+          return prevQuestions
+        }
+
+        const updated = [...prevQuestions]
+        const [moved] = updated.splice(fromIndex, 1)
+
+        updated.splice(index, 0, moved)
+
+        setSelectedIndex(index)
+        return updated
+      })
+    },
+    [mode, selectedQuestionIndex],
+  )
+
+  /**
+   * Duplicates a question at the given index and inserts the copy directly after it.
+   *
+   * @param index - The index of the question to duplicate.
+   * @throws Error when the game mode is not set.
+   * @throws Error when the index is out of bounds.
+   */
   const duplicateQuestion = useCallback(
     (index: number): void => {
-      if (!isValidIndex(index)) {
-        throw new Error('Invalid question index')
+      if (!mode) {
+        throw new Error('Invalid game mode')
       }
 
-      setModel((prevModel) => {
-        const newQuestions = [...prevModel.questions]
-        newQuestions.splice(index + 1, 0, prevModel.questions[index])
-
-        return {
-          ...prevModel,
-          questions: newQuestions,
-          selectedIndex: index,
-        }
-      })
-    },
-    [isValidIndex],
-  )
-
-  const deleteQuestion = useCallback(
-    (index: number): void => {
-      if (!isValidIndex(index)) {
-        throw new Error('Invalid question index')
-      }
-
-      setModel((prevModel) => {
-        const newQuestions = [...prevModel.questions]
-        newQuestions.splice(index, 1)
-
-        return {
-          ...prevModel,
-          questions: newQuestions,
-          selectedIndex: newQuestions.length
-            ? Math.min(index, newQuestions.length - 1)
-            : -1,
-        }
-      })
-    },
-    [isValidIndex],
-  )
-
-  // TODO: replaceQuestion() => use when change type
-
-  const replaceQuestion = useCallback(
-    (type: QuestionType) => {
-      setModel((prevModel) => {
-        const { selectedIndex, questions } = prevModel
-
-        if (!isValidIndex(selectedIndex)) {
+      setQuestions((prevQuestions) => {
+        if (!isValidIndex(index, prevQuestions.length)) {
           throw new Error('Invalid question index')
         }
 
-        const currentQuestion = questions[selectedIndex]
+        const duplicated = deepClone(prevQuestions[index])
+        const updated = [...prevQuestions]
+        updated.splice(index + 1, 0, duplicated)
 
-        const updatedQuestions = [...questions]
-
-        if (currentQuestion.mode === GameMode.Classic) {
-          if (type === QuestionType.MultiChoice) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                options: [],
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-          if (type === QuestionType.TrueFalse) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-          if (type === QuestionType.Range) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                min: 0,
-                max: 100,
-                correct: 0,
-                margin: QuestionRangeAnswerMargin.Medium,
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-          if (type === QuestionType.TypeAnswer) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                options: [],
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-          if (type === QuestionType.Pin) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                positionX: 0.5,
-                positionY: 0.5,
-                tolerance: QuestionPinTolerance.Medium,
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-          if (type === QuestionType.Puzzle) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                points: currentQuestion.data.points,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-        } else if (currentQuestion.mode === GameMode.ZeroToOneHundred) {
-          if (type === QuestionType.Range) {
-            updatedQuestions[selectedIndex] = {
-              mode: GameMode.Classic,
-              data: {
-                type,
-                question: currentQuestion.data.question,
-                media: currentQuestion.data.media,
-                correct: 0,
-                duration: currentQuestion.data.duration,
-                info: currentQuestion.data.info,
-              },
-              validation: {},
-            }
-          }
-        }
-
-        return {
-          ...prevModel,
-          questions: updatedQuestions,
-        }
+        return updated
       })
     },
-    [isValidIndex],
+    [mode],
   )
 
-  const resetQuestions = useCallback(
-    (gameMode: GameMode, questions?: QuestionData[]): void => {
-      setModel((prevModel) => ({
-        ...prevModel,
-        questions:
-          questions ||
-          (gameMode === GameMode.Classic
-            ? [
-                createQuestionValidationModel(
-                  GameMode.Classic,
-                  QuestionType.MultiChoice,
-                ),
-              ]
-            : [
-                createQuestionValidationModel(
-                  GameMode.ZeroToOneHundred,
-                  QuestionType.Range,
-                ),
-              ]),
-        selectedIndex: 0,
-      }))
+  /**
+   * Deletes a question at the given index and adjusts the selection accordingly.
+   *
+   * Selection rules:
+   * - If the list becomes empty, selection becomes `-1`.
+   * - If the deleted index was selected, select the nearest remaining item.
+   * - If the deleted index was before the selected index, shift selection left by one.
+   *
+   * @param index - The index of the question to delete.
+   * @throws Error when the game mode is not set.
+   * @throws Error when the index is out of bounds.
+   */
+  const deleteQuestion = useCallback(
+    (index: number): void => {
+      if (!mode) {
+        throw new Error('Invalid game mode')
+      }
+
+      setQuestions((prevQuestions) => {
+        if (!isValidIndex(index, prevQuestions.length)) {
+          throw new Error('Invalid question index')
+        }
+
+        const updated = [...prevQuestions]
+        updated.splice(index, 1)
+
+        setSelectedIndex((prevSelected) => {
+          if (updated.length === 0) {
+            return -1
+          }
+
+          if (prevSelected === index) {
+            return Math.min(index, updated.length - 1)
+          }
+
+          if (prevSelected > index) {
+            return prevSelected - 1
+          }
+
+          return prevSelected
+        })
+
+        return updated
+      })
     },
-    [],
+    [mode],
   )
+
+  /**
+   * Replaces the currently selected question with a new partial question of the given type.
+   *
+   * The replacement is created using the current mode and may reuse compatible values
+   * from the current question as provided by `buildPartialQuestionDto`.
+   *
+   * @param type - The new question type to replace the selected question with.
+   * @throws Error when the game mode is not set.
+   * @throws Error when no valid question is currently selected.
+   */
+  const replaceQuestion = useCallback(
+    (type: QuestionType): void => {
+      if (!mode) {
+        throw new Error('Invalid game mode')
+      }
+
+      setQuestions((prevQuestions) => {
+        if (!isValidIndex(selectedQuestionIndex, prevQuestions.length)) {
+          throw new Error('Invalid question index')
+        }
+
+        const current = prevQuestions[selectedQuestionIndex]
+        const updated = [...prevQuestions]
+        updated[selectedQuestionIndex] = buildPartialQuestionDto(
+          mode,
+          type,
+          current,
+        )
+        return updated
+      })
+    },
+    [mode, selectedQuestionIndex],
+  )
+
+  /**
+   * Sets the active game mode and initializes the editor with a single default question.
+   *
+   * Defaults:
+   * - Classic mode starts with a `MultiChoice` question.
+   * - ZeroToOneHundred mode starts with a `Range` question.
+   *
+   * Resets selection to index `0`.
+   *
+   * @param gameMode - The mode to activate for the editor.
+   */
+  const setGameMode = useCallback((gameMode: GameMode): void => {
+    const initialType =
+      gameMode === GameMode.Classic
+        ? QuestionType.MultiChoice
+        : QuestionType.Range
+
+    setMode(gameMode)
+    setQuestions([buildPartialQuestionDto(gameMode, initialType)])
+    setSelectedIndex(0)
+  }, [])
 
   return {
+    gameMode: mode,
+    setGameMode,
+
     questions,
     setQuestions,
+
+    questionValidations,
     allQuestionsValid,
+
     selectedQuestion,
     selectedQuestionIndex,
     selectQuestion,
+
     addQuestion,
-    setQuestionValue,
-    setQuestionValueValid,
-    dropQuestion,
+    updateSelectedQuestionField,
+    moveSelectedQuestionTo,
     duplicateQuestion,
     deleteQuestion,
     replaceQuestion,
-    resetQuestions,
   }
 }

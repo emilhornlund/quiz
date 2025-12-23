@@ -1,11 +1,6 @@
-import { GameMode, QuestionType } from '@quiz/common'
+import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
 import React, { FC } from 'react'
 
-import {
-  QuestionData,
-  QuestionValueChangeFunction,
-  QuestionValueValidChangeFunction,
-} from '../../../../utils/QuestionDataSource/question-data-source.types.ts'
 import {
   isClassicMultiChoiceQuestion,
   isClassicPinQuestion,
@@ -13,8 +8,13 @@ import {
   isClassicRangeQuestion,
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
-  isZeroToOneHundredRangeDto,
-} from '../../../../utils/QuestionDataSource/question-data-source.utils.ts'
+  isZeroToOneHundredRangeQuestion,
+} from '../../../../../../utils/questions'
+import {
+  QuizQuestionModel,
+  QuizQuestionModelFieldChangeFunction,
+  QuizQuestionValidationResult,
+} from '../../../../utils/QuestionDataSource'
 
 import {
   ClassicMultiChoiceOptionQuestionForm,
@@ -30,84 +30,86 @@ import {
 import styles from './QuestionEditor.module.scss'
 
 export interface QuestionEditorProps {
-  question: QuestionData
+  mode?: GameMode
+  question: QuizQuestionModel
+  questionValidation: QuizQuestionValidationResult
   onTypeChange: (type: QuestionType) => void
-  onQuestionValueChange: QuestionValueChangeFunction
-  onQuestionValueValidChange: QuestionValueValidChangeFunction
+  onQuestionValueChange: QuizQuestionModelFieldChangeFunction<QuestionDto>
 }
 
 const QuestionEditor: FC<QuestionEditorProps> = ({
+  mode,
   question,
+  questionValidation,
   onTypeChange,
   onQuestionValueChange,
-  onQuestionValueValidChange,
 }) => {
   return (
     <div className={styles.questionEditorContainer}>
-      {question.mode === GameMode.Classic && (
+      {mode === GameMode.Classic && (
         <div className={styles.section}>
           <QuestionField
             type={QuestionFieldType.CommonType}
-            value={question.data.type}
+            value={question.type}
+            validation={questionValidation}
             onChange={onTypeChange}
-            onValid={() => undefined}
           />
         </div>
       )}
 
-      {isClassicMultiChoiceQuestion(question) && (
+      {mode && isClassicMultiChoiceQuestion(mode, question) && (
         <ClassicMultiChoiceOptionQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isClassicRangeQuestion(question) && (
+      {mode && isClassicRangeQuestion(mode, question) && (
         <ClassicRangeQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isClassicTrueFalseQuestion(question) && (
+      {mode && isClassicTrueFalseQuestion(mode, question) && (
         <ClassicTrueFalseQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isClassicTypeAnswerQuestion(question) && (
+      {mode && isClassicTypeAnswerQuestion(mode, question) && (
         <ClassicTypeAnswerQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isClassicPinQuestion(question) && (
+      {mode && isClassicPinQuestion(mode, question) && (
         <ClassicPinQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isClassicPuzzleQuestion(question) && (
+      {mode && isClassicPuzzleQuestion(mode, question) && (
         <ClassicPuzzleQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
 
-      {isZeroToOneHundredRangeDto(question) && (
+      {mode && isZeroToOneHundredRangeQuestion(mode, question) && (
         <ZeroToOneHundredRangeQuestionForm
-          data={question.data}
+          question={question}
+          questionValidation={questionValidation}
           onChange={onQuestionValueChange}
-          onValidChange={onQuestionValueValidChange}
         />
       )}
     </div>

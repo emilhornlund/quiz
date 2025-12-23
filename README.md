@@ -17,7 +17,7 @@ A full‑stack quiz game platform built with a modern monorepo setup. It feature
 
 Before you get started, make sure you have the following installed on your machine:
 
-- **Node.js** v22.12.0 or higher  
+- **Node.js** v24 (Active LTS) or higher
   We recommend using [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) to manage your Node versions.
 
 - **Yarn** v1.22.22 or higher  

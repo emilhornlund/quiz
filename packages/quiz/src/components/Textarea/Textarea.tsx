@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
-import { isCallbackValid, isValidString } from '../../utils/validation.ts'
+import { isCallbackValid, isValidString } from '../../utils/validation'
 
 import styles from './Textarea.module.scss'
 
@@ -28,6 +28,7 @@ export interface TextareaProps {
   maxLength?: number
   disabled?: boolean
   forceValidate?: boolean
+  customErrorMessage?: string
   onChange?: (value: string) => void
   onValid?: (valid: boolean) => void
   onAdditionalValidation?: (value: string) => boolean | string
@@ -46,6 +47,7 @@ const Textarea: FC<TextareaProps> = ({
   maxLength,
   disabled = false,
   forceValidate = false,
+  customErrorMessage,
   onChange,
   onValid,
   onAdditionalValidation,
@@ -60,6 +62,10 @@ const Textarea: FC<TextareaProps> = ({
   const [lostFocus, setLostFocus] = useState<boolean>(false)
 
   const [valid, errorMessage] = useMemo<[boolean, string | undefined]>(() => {
+    if (customErrorMessage?.trim()?.length) {
+      return [false, customErrorMessage]
+    }
+
     let [tmpValid, tmpErrorMessage] = isValidString({
       value: internalValue,
       disabled,
@@ -101,8 +107,10 @@ const Textarea: FC<TextareaProps> = ({
   }, [handleValidChange])
 
   const showError = useMemo(
-    () => !valid && (lostFocus || hasFocus || forceValidate),
-    [valid, lostFocus, hasFocus, forceValidate],
+    () =>
+      (!valid || customErrorMessage) &&
+      (lostFocus || hasFocus || forceValidate),
+    [valid, customErrorMessage, lostFocus, hasFocus, forceValidate],
   )
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {

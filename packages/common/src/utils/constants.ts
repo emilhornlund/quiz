@@ -126,6 +126,16 @@ export const QUIZ_STANDARD_POINTS = 1000
 export const QUIZ_DOUBLE_POINTS = 2000
 export const QUIZ_MIN_POINTS = QUIZ_ZERO_POINTS
 export const QUIZ_MAX_POINTS = QUIZ_DOUBLE_POINTS
+export const QUIZ_POINTS_ALLOWED = [
+  QUIZ_ZERO_POINTS,
+  QUIZ_STANDARD_POINTS,
+  QUIZ_DOUBLE_POINTS,
+] as const
+
+/* Quiz Question Duration */
+export const QUIZ_DURATION_ALLOWED = [
+  5, 10, 20, 30, 45, 60, 90, 120, 180, 240,
+] as const
 
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/

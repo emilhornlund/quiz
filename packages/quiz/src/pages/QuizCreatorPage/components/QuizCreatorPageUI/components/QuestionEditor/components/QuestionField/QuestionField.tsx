@@ -5,12 +5,6 @@ import {
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
-  QUIZ_QUESTION_INFO_MAX_LENGTH,
-  QUIZ_QUESTION_INFO_MIN_LENGTH,
-  QUIZ_QUESTION_INFO_REGEX,
-  QUIZ_QUESTION_TEXT_MAX_LENGTH,
-  QUIZ_QUESTION_TEXT_MIN_LENGTH,
-  QUIZ_QUESTION_TEXT_REGEX,
 } from '@quiz/common'
 import React, { FC, ReactNode } from 'react'
 
@@ -25,6 +19,8 @@ import {
   classNames,
   trimToUndefined,
 } from '../../../../../../../../utils/helpers.ts'
+import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import MediaQuestionField from './MediaQuestionField'
 import MultiChoiceOptions from './MultiChoiceOptions.tsx'
@@ -39,100 +35,101 @@ export type QuestionFieldProps = (
   | {
       type: QuestionFieldType.CommonDuration
       value?: number
+      validation: QuizQuestionValidationResult
       onChange: (value: number) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.CommonInfo
       value?: string
+      validation: QuizQuestionValidationResult
       onChange: (value?: string) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.CommonMedia
       value?: QuestionMediaDto
       duration?: number
+      validation: QuizQuestionValidationResult
       onChange: (value?: QuestionMediaDto) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.CommonPoints
       value?: number
+      validation: QuizQuestionValidationResult
       onChange: (value: number) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.CommonQuestion
       value?: string
+      validation: QuizQuestionValidationResult
       onChange: (value: string) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.CommonType
       value?: QuestionType
+      validation: QuizQuestionValidationResult
       onChange: (value: QuestionType) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.MultiChoiceOptions
       values?: QuestionMultiChoiceOptionDto[]
+      validation: QuizQuestionValidationResult
       onChange: (value: QuestionMultiChoiceOptionDto[]) => void
-      onValid: (valid: boolean) => void
     }
   | ({
       type: QuestionFieldType.Pin
+      validation: QuizQuestionValidationResult
     } & PinQuestionFieldProps)
   | {
       type: QuestionFieldType.PinTolerance
       value?: QuestionPinTolerance
+      validation: QuizQuestionValidationResult
       onChange: (value?: QuestionPinTolerance) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.PuzzleValues
       value?: string[]
+      validation: QuizQuestionValidationResult
       onChange: (values?: string[]) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.RangeCorrect
       value?: number
       min?: number
       max?: number
+      validation: QuizQuestionValidationResult
       onChange: (value: number) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.RangeMargin
       value?: QuestionRangeAnswerMargin
+      validation: QuizQuestionValidationResult
       onChange: (value: QuestionRangeAnswerMargin) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.RangeMax
       value?: number
       min?: number
+      validation: QuizQuestionValidationResult
       onChange: (value: number) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.RangeMin
       value?: number
       max?: number
+      validation: QuizQuestionValidationResult
       onChange: (value: number) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.TrueFalseOptions
       value?: boolean
+      validation: QuizQuestionValidationResult
       onChange: (value?: boolean) => void
-      onValid: (valid: boolean) => void
     }
   | {
       type: QuestionFieldType.TypeAnswerOptions
       values?: string[]
+      validation: QuizQuestionValidationResult
       onChange: (values?: string[]) => void
-      onValid: (valid: boolean) => void
     }
 ) & { footer?: string }
 
@@ -242,8 +239,12 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 valueLabel: '4 minutes',
               },
             ]}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'duration',
+            )}
             onChange={(value) => props.onChange(parseInt(value))}
-            onValid={props.onValid}
+            forceValidate
           />
         </QuestionFieldWrapper>
       )
@@ -259,14 +260,13 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="text"
             placeholder="Info"
             value={props.value}
-            minLength={QUIZ_QUESTION_INFO_MIN_LENGTH}
-            maxLength={QUIZ_QUESTION_INFO_MAX_LENGTH}
-            regex={QUIZ_QUESTION_INFO_REGEX}
-            required={false}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'info',
+            )}
             onChange={(value) =>
               props.onChange(trimToUndefined(value as string))
             }
-            onValid={props.onValid}
             forceValidate
           />
         </QuestionFieldWrapper>
@@ -277,8 +277,8 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
           <MediaQuestionField
             value={props.value}
             duration={props.duration}
+            validation={props.validation}
             onChange={props.onChange}
-            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -319,8 +319,12 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
                 valueLabel: 'Double Points (2000)',
               },
             ]}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'points',
+            )}
             onChange={(value) => props.onChange(parseInt(value))}
-            onValid={props.onValid}
+            forceValidate
           />
         </QuestionFieldWrapper>
       )
@@ -335,12 +339,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="text"
             placeholder="Question"
             value={props.value}
-            minLength={QUIZ_QUESTION_TEXT_MIN_LENGTH}
-            maxLength={QUIZ_QUESTION_TEXT_MAX_LENGTH}
-            regex={QUIZ_QUESTION_TEXT_REGEX}
-            required={true}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'question',
+            )}
             onChange={(value) => props.onChange(value as string)}
-            onValid={props.onValid}
             forceValidate
           />
         </QuestionFieldWrapper>
@@ -356,8 +359,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               value: type,
               valueLabel: QuestionTypeLabels[type],
             }))}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'type',
+            )}
             onChange={(value) => props.onChange(value as QuestionType)}
-            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -414,8 +420,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               value: type,
               valueLabel: QuestionPinToleranceLabels[type],
             }))}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'tolerance',
+            )}
             onChange={(value) => props.onChange(value as QuestionPinTolerance)}
-            onValid={props.onValid}
           />
         </QuestionFieldWrapper>
       )
@@ -446,11 +455,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="number"
             placeholder=""
             value={props.value}
-            min={props.min}
-            max={props.max}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'correct',
+            )}
             onChange={(value) => props.onChange(value as number)}
-            onValid={props.onValid}
-            required
           />
         </QuestionFieldWrapper>
       )
@@ -483,10 +492,14 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
               value: type,
               valueLabel: QuestionRangeAnswerMarginLabels[type],
             }))}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'margin',
+            )}
             onChange={(value) =>
               props.onChange(value as QuestionRangeAnswerMargin)
             }
-            onValid={props.onValid}
+            forceValidate
           />
         </QuestionFieldWrapper>
       )
@@ -502,10 +515,11 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="number"
             placeholder="Max"
             value={props.value}
-            min={props.min}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'max',
+            )}
             onChange={(value) => props.onChange(value as number)}
-            onValid={props.onValid}
-            required
           />
         </QuestionFieldWrapper>
       )
@@ -521,11 +535,12 @@ const QuestionField: FC<QuestionFieldProps> = (props) => {
             type="number"
             placeholder="Min"
             value={props.value}
-            max={props.max}
+            customErrorMessage={getValidationErrorMessage(
+              props.validation,
+              'min',
+            )}
             onChange={(value) => props.onChange(value as number)}
-            onValid={(valid) => props.onValid(valid)}
             forceValidate
-            required
           />
         </QuestionFieldWrapper>
       )

@@ -1,14 +1,65 @@
-import { QUIZ_MULTI_CHOICE_OPTIONS_MIN } from '@quiz/common'
-import { render, screen, waitFor } from '@testing-library/react'
+import {
+  QUIZ_MULTI_CHOICE_OPTIONS_MAX,
+  QUIZ_MULTI_CHOICE_OPTIONS_MIN,
+} from '@quiz/common'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+import { ValidationResult } from '../../../../../../../../validation'
 
 import MultiChoiceOptions from './MultiChoiceOptions'
 
+type AnyValidation = ValidationResult<Record<string, unknown>>
+
+function makeValidation(
+  errors: Array<{ path: string; message: string }> = [],
+): AnyValidation {
+  return {
+    valid: errors.length === 0,
+    errors: errors.map((e) => ({
+      path: e.path,
+      message: e.message,
+    })),
+  } as unknown as AnyValidation
+}
+
+function lastCallArg<T>(
+  mock: { calls: unknown[][] },
+  argIndex = 0,
+): T | undefined {
+  const calls = mock.calls
+  if (!calls.length) return undefined
+  return calls[calls.length - 1][argIndex] as T
+}
+
+/**
+ * Tries to locate the checkbox rendered by TextField inside the option wrapper for Option N.
+ * We avoid depending on TextField implementation details beyond common DOM patterns.
+ */
+function getOptionCheckboxByIndex(index: number): HTMLElement {
+  const input = screen.getByPlaceholderText(`Option ${index + 1}`)
+  const optionContainer =
+    input.closest('[class*="option"]') ?? input.parentElement
+  if (!optionContainer) throw new Error('Could not locate option container')
+
+  const checkboxInput = optionContainer.querySelector('input[type="checkbox"]')
+  if (checkboxInput) return checkboxInput as HTMLElement
+
+  const roleCheckbox = optionContainer.querySelector('[role="checkbox"]')
+  if (roleCheckbox) return roleCheckbox as HTMLElement
+
+  throw new Error(
+    'Could not find checkbox control (input[type=checkbox] or [role=checkbox]) for multi-choice option',
+  )
+}
+
 vi.mock('@dnd-kit/core', async () => {
+  // Import actual for types/exports we don’t override
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const actual = await vi.importActual<any>('@dnd-kit/core')
+
   let lastProps: Record<string, unknown> | null = null
 
   const DndContext = (
@@ -22,12 +73,20 @@ vi.mock('@dnd-kit/core', async () => {
     ...actual,
     DndContext,
     __getLastDndProps: () => lastProps,
+    // sensors: we can keep the actual hooks, but mocking them simplifies runtime
+    useSensor: () => ({}),
+    useSensors: () => [],
+    MouseSensor: function MouseSensor() {},
+    TouchSensor: function TouchSensor() {},
+    KeyboardSensor: function KeyboardSensor() {},
+    closestCenter: () => null,
   }
 })
 
 vi.mock('@dnd-kit/sortable', async () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const actual = await vi.importActual<any>('@dnd-kit/sortable')
+
   return {
     ...actual,
     SortableContext: (props: { children: React.ReactNode }) => (
@@ -42,137 +101,82 @@ vi.mock('@dnd-kit/sortable', async () => {
       transform: null,
       transition: null,
     }),
+    rectSortingStrategy: actual.rectSortingStrategy,
+    sortableKeyboardCoordinates: actual.sortableKeyboardCoordinates,
+    arrayMove: actual.arrayMove,
+    defaultAnimateLayoutChanges: actual.defaultAnimateLayoutChanges,
   }
 })
-
-vi.mock('../../../../../../../../components', () => {
-  return {
-    TextField: (props: {
-      id: string
-      value: string
-      checked?: boolean
-      placeholder?: string
-      regex?: RegExp
-      onChange?: (v: string) => void
-      onCheck?: (c: boolean) => void
-      onValid?: (ok: boolean) => void
-      onAdditionalValidation?: () => boolean | string
-      required?: boolean
-      forceValidate?: boolean
-      showErrorMessage?: boolean
-      type?: string
-    }) => {
-      const {
-        id,
-        value,
-        checked,
-        placeholder,
-        regex,
-        onChange,
-        onCheck,
-        onValid,
-        onAdditionalValidation,
-        required,
-      } = props
-
-      const runValidation = (val: string) => {
-        if (!onValid) return
-        let ok = true
-        const hasValue = val.length > 0
-
-        if (required) {
-          ok = ok && hasValue
-          if (hasValue && regex) ok = ok && regex.test(val)
-          if (onAdditionalValidation)
-            ok = ok && onAdditionalValidation() === true
-        } else {
-          if (hasValue && regex) ok = ok && regex.test(val)
-        }
-
-        onValid(ok)
-      }
-
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const next = e.target.value
-        onChange?.(next)
-        runValidation(next)
-      }
-
-      const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onCheck?.(e.target.checked)
-        // re-run after parent state (options.some(o.correct)) updates
-        queueMicrotask(() => runValidation(value))
-      }
-
-      // Re-run validation whenever validation-relevant props change
-      React.useEffect(() => {
-        runValidation(value)
-      }, [value, required, regex, onAdditionalValidation, checked])
-
-      return (
-        <div data-testid={`textfield-${id}`}>
-          <input
-            data-testid={`input-${id}`}
-            id={id}
-            placeholder={placeholder}
-            value={value}
-            onChange={handleChange}
-          />
-          <input
-            data-testid={`check-${id}`}
-            type="checkbox"
-            checked={!!checked}
-            onChange={handleCheck}
-          />
-        </div>
-      )
-    },
-  }
-})
-
-function lastCallArg<T>(
-  mock: { calls: unknown[][] },
-  argIndex = 0,
-): T | undefined {
-  const calls = mock.calls
-  if (!calls.length) return undefined
-
-  return calls[calls.length - 1][argIndex] as T
-}
 
 describe('MultiChoiceOptions', () => {
-  const user = userEvent.setup()
-  let mathSpy: ReturnType<typeof vi.spyOn>
-
-  beforeEach(() => {
-    mathSpy = vi.spyOn(Math, 'random').mockReturnValue(0.123456)
-  })
-
-  afterEach(() => {
-    mathSpy.mockRestore()
-    vi.clearAllMocks()
-  })
-
-  it('renders and matches snapshot', () => {
+  it('renders QUIZ_MULTI_CHOICE_OPTIONS_MAX inputs with correct placeholders', () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { container } = render(
-      <MultiChoiceOptions onChange={onChange} onValid={onValid} />,
+
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[]}
+      />,
     )
-    expect(container).toMatchSnapshot()
+
+    const inputs = Array.from(
+      { length: QUIZ_MULTI_CHOICE_OPTIONS_MAX },
+      (_, i) => screen.getByPlaceholderText(`Option ${i + 1}`),
+    )
+    expect(inputs).toHaveLength(QUIZ_MULTI_CHOICE_OPTIONS_MAX)
   })
 
-  it('updates values and emits trimmed array (respects minimum required options)', async () => {
+  it('initializes from values and updates when values changes', () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<MultiChoiceOptions onChange={onChange} onValid={onValid} />)
 
-    const first = await screen.findByPlaceholderText('Option 1')
-    const second = await screen.findByPlaceholderText('Option 2')
+    const { rerender } = render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[
+          { value: 'One', correct: false },
+          { value: 'Two', correct: true },
+        ]}
+      />,
+    )
 
-    await user.clear(first)
+    expect(screen.getByPlaceholderText('Option 1')).toHaveValue('One')
+    expect(screen.getByPlaceholderText('Option 2')).toHaveValue('Two')
+
+    rerender(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[
+          { value: 'A', correct: true },
+          { value: 'B', correct: false },
+          { value: 'C', correct: false },
+        ]}
+      />,
+    )
+
+    expect(screen.getByPlaceholderText('Option 1')).toHaveValue('A')
+    expect(screen.getByPlaceholderText('Option 2')).toHaveValue('B')
+    expect(screen.getByPlaceholderText('Option 3')).toHaveValue('C')
+  })
+
+  it('updates values and emits trimmed array enforcing QUIZ_MULTI_CHOICE_OPTIONS_MIN', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[]}
+      />,
+    )
+
+    const first = screen.getByPlaceholderText('Option 1')
+    const second = screen.getByPlaceholderText('Option 2')
+
     await user.type(first, 'Alpha')
-    await user.clear(second)
     await user.type(second, 'Beta')
 
     const emitted = lastCallArg<{ value: string; correct: boolean }[]>(
@@ -182,47 +186,74 @@ describe('MultiChoiceOptions', () => {
     expect(emitted!.length).toBeGreaterThanOrEqual(
       QUIZ_MULTI_CHOICE_OPTIONS_MIN,
     )
-    expect(emitted![0].value).toBe('Alpha')
-    expect(emitted![1].value).toBe('Beta')
+    expect(emitted![0]).toEqual({ value: 'Alpha', correct: false })
+    expect(emitted![1]).toEqual({ value: 'Beta', correct: false })
   })
 
-  it('computes validity and calls onValid(true) when required fields are valid and one is marked correct', async () => {
+  it('marking an option correct emits updated correct flags', async () => {
+    const user = userEvent.setup()
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    render(<MultiChoiceOptions onChange={onChange} onValid={onValid} />)
 
-    const first = await screen.findByPlaceholderText('Option 1')
-    const second = await screen.findByPlaceholderText('Option 2')
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[
+          { value: 'Alpha', correct: false },
+          { value: 'Beta', correct: false },
+        ]}
+      />,
+    )
 
-    await user.clear(first)
-    await user.type(first, 'Alpha')
-    await user.clear(second)
-    await user.type(second, 'Beta')
+    await user.click(getOptionCheckboxByIndex(1))
 
-    const inputs = screen.getAllByTestId(/input-.*multi-choice-option-.*/)
-    const ids = inputs.map((n) => (n as HTMLInputElement).id)
-    const checkbox = screen.getByTestId(`check-${ids[1]}`)
-    await user.click(checkbox)
+    const emitted = lastCallArg<{ value: string; correct: boolean }[]>(
+      onChange.mock,
+    )
+    expect(emitted).toBeDefined()
+    expect(emitted![0]).toEqual({ value: 'Alpha', correct: false })
+    expect(emitted![1]).toEqual({ value: 'Beta', correct: true })
+  })
 
-    // nudge BOTH required fields so each recalculates validity under the new rule
-    await user.type(first, ' ')
-    await user.type(first, '{backspace}')
-    await user.type(second, ' ')
-    await user.type(second, '{backspace}')
+  it('trims to last non-empty/checked while enforcing minimum', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
 
-    await waitFor(() => {
-      const valid = lastCallArg<boolean>(onValid.mock)
-      expect(valid).toBe(true)
-    })
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation()}
+        values={[]}
+      />,
+    )
+
+    // Check option 5 without text => it becomes "filled" via correct=true, so cutoff should be >= 5
+    await user.click(getOptionCheckboxByIndex(4))
+
+    const emitted1 = lastCallArg<{ value: string; correct: boolean }[]>(
+      onChange.mock,
+    )
+    expect(emitted1).toBeDefined()
+    expect(emitted1!.length).toBeGreaterThanOrEqual(5)
+    expect(emitted1![4]?.correct).toBe(true)
+
+    // Uncheck it => should fall back to min (2)
+    await user.click(getOptionCheckboxByIndex(4))
+
+    const emitted2 = lastCallArg<{ value: string; correct: boolean }[]>(
+      onChange.mock,
+    )
+    expect(emitted2).toBeDefined()
+    expect(emitted2!.length).toBe(QUIZ_MULTI_CHOICE_OPTIONS_MIN)
   })
 
   it('reorders on drag end and emits reordered values', async () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
+
     render(
       <MultiChoiceOptions
         onChange={onChange}
-        onValid={onValid}
+        validation={makeValidation()}
         values={[
           { value: 'One', correct: false },
           { value: 'Two', correct: true },
@@ -231,42 +262,86 @@ describe('MultiChoiceOptions', () => {
       />,
     )
 
-    const inputs = screen.getAllByTestId(/input-.*multi-choice-option-.*/)
-    const ids = inputs.map((n) => (n as HTMLInputElement).id)
+    const option1 = screen.getByPlaceholderText('Option 1') as HTMLInputElement
+    const option3 = screen.getByPlaceholderText('Option 3') as HTMLInputElement
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const core: any = await import('@dnd-kit/core')
     const dndProps = core.__getLastDndProps()
     expect(dndProps).toBeTruthy()
 
-    dndProps.onDragEnd?.({
-      active: { id: ids[0] },
-      over: { id: ids[2] },
+    act(() => {
+      dndProps.onDragEnd?.({
+        active: { id: option1.id },
+        over: { id: option3.id },
+      })
     })
 
-    const emitted = lastCallArg<{ value: string; correct: boolean }[]>(
-      onChange.mock,
-    )
-    expect(emitted![0].value).toBe('Two')
-    expect(emitted![1].value).toBe('Three')
-    expect(emitted![2]?.value).toBe('One')
+    await waitFor(() => {
+      const emitted = lastCallArg<{ value: string; correct: boolean }[]>(
+        onChange.mock,
+      )
+      expect(emitted).toBeDefined()
+      expect(emitted![0]?.value).toBe('Two')
+      expect(emitted![1]?.value).toBe('Three')
+      expect(emitted![2]?.value).toBe('One')
+    })
   })
 
-  it('hides error messages while dragging, then restores after drag end (snapshots)', async () => {
+  it('shows global options error on all fields when validation has path "options"', async () => {
     const onChange = vi.fn()
-    const onValid = vi.fn()
-    const { container } = render(
-      <MultiChoiceOptions onChange={onChange} onValid={onValid} />,
+
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'options', message: 'Options error' },
+        ])}
+        values={[]}
+      />,
+    )
+
+    const all = screen.getAllByText('Options error')
+    expect(all).toHaveLength(QUIZ_MULTI_CHOICE_OPTIONS_MAX)
+  })
+
+  it('hides error messages while dragging and restores after drag end', async () => {
+    const onChange = vi.fn()
+
+    render(
+      <MultiChoiceOptions
+        onChange={onChange}
+        validation={makeValidation([
+          { path: 'options', message: 'Options error' },
+        ])}
+        values={[]}
+      />,
+    )
+
+    expect(screen.getAllByText('Options error')).toHaveLength(
+      QUIZ_MULTI_CHOICE_OPTIONS_MAX,
     )
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const core: any = await import('@dnd-kit/core')
     const dndProps = core.__getLastDndProps()
+    expect(dndProps).toBeTruthy()
 
-    dndProps.onDragStart?.({ active: { id: 'x' } })
-    expect(container).toMatchSnapshot()
+    act(() => {
+      dndProps.onDragStart?.({ active: { id: 'x' } })
+    })
 
-    dndProps.onDragEnd?.({ active: { id: 'x' }, over: { id: 'x' } })
-    expect(container).toMatchSnapshot()
+    // While dragging, showErrorMessage={!isDragging} => false, so errors should not render
+    expect(screen.queryAllByText('Options error')).toHaveLength(0)
+
+    act(() => {
+      dndProps.onDragEnd?.({ active: { id: 'x' }, over: { id: 'x' } })
+    })
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Options error')).toHaveLength(
+        QUIZ_MULTI_CHOICE_OPTIONS_MAX,
+      )
+    })
   })
 })

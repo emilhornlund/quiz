@@ -1,73 +1,73 @@
 import { GameMode, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
 import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
-import { useQuestionDataSource } from '../../utils/QuestionDataSource'
-import { useQuizSettingsDataSource } from '../../utils/QuizSettingsDataSource'
+import {
+  QuizQuestionValidationResult,
+  useQuestionDataSource,
+} from '../../utils/QuestionDataSource'
+import {
+  QuizSettingsValidationResult,
+  useQuizSettingsDataSource,
+} from '../../utils/QuizSettingsDataSource'
 
 import QuizCreatorPageUI, { QuizCreatorPageUIProps } from './QuizCreatorPageUI'
 
 const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
-  const [gameMode, setGameMode] = useState<GameMode>()
-
   const {
-    values: quizSettings,
-    valid: allQuizSettingsValid,
-    onValueChange: onQuizSettingsValueChange,
-    onValidChange: onQuizSettingsValidChange,
+    settings: quizSettings,
+    settingsValidation: quizSettingsValidation,
+    allSettingsValid: allQuizSettingsValid,
+    updateSettingsField: onQuizSettingsValueChange,
   } = useQuizSettingsDataSource()
 
   const {
+    gameMode,
+    setGameMode,
     questions,
     setQuestions,
+    questionValidations,
     allQuestionsValid,
     selectedQuestion,
     selectedQuestionIndex,
     selectQuestion,
     addQuestion,
-    setQuestionValue,
-    setQuestionValueValid,
-    dropQuestion,
+    updateSelectedQuestionField,
+    moveSelectedQuestionTo,
     duplicateQuestion,
     deleteQuestion,
     replaceQuestion,
-    resetQuestions,
   } = useQuestionDataSource()
-
-  const handleSetGameMode = (gameMode: GameMode): void => {
-    setGameMode(gameMode)
-    resetQuestions(gameMode)
-  }
 
   const handleAddQuestion = (): void => {
     if (gameMode === GameMode.Classic) {
-      addQuestion(GameMode.Classic, QuestionType.MultiChoice)
+      addQuestion(QuestionType.MultiChoice)
     }
     if (gameMode === GameMode.ZeroToOneHundred) {
-      addQuestion(GameMode.ZeroToOneHundred, QuestionType.Range)
+      addQuestion(QuestionType.Range)
     }
   }
 
   return (
     <QuizCreatorPageUI
       gameMode={gameMode}
-      onSelectGameMode={handleSetGameMode}
+      onSelectGameMode={setGameMode}
       quizSettings={quizSettings}
+      quizSettingsValidation={quizSettingsValidation}
       allQuizSettingsValid={allQuizSettingsValid}
       onQuizSettingsValueChange={onQuizSettingsValueChange}
-      onQuizSettingsValidChange={onQuizSettingsValidChange}
       questions={questions}
+      questionValidations={questionValidations}
       allQuestionsValid={allQuestionsValid}
       selectedQuestion={selectedQuestion}
       selectedQuestionIndex={selectedQuestionIndex}
       onSetQuestions={setQuestions}
       onSelectedQuestionIndex={selectQuestion}
       onAddQuestion={handleAddQuestion}
-      onQuestionValueChange={setQuestionValue}
-      onQuestionValueValidChange={setQuestionValueValid}
-      onDropQuestionIndex={dropQuestion}
+      onQuestionValueChange={updateSelectedQuestionField}
+      onDropQuestionIndex={moveSelectedQuestionTo}
       onDuplicateQuestionIndex={duplicateQuestion}
       onDeleteQuestionIndex={deleteQuestion}
       onReplaceQuestion={replaceQuestion}
@@ -92,18 +92,18 @@ type Story = StoryObj<typeof meta>
 export const Default = {
   args: {
     quizSettings: {},
+    quizSettingsValidation: {} as QuizSettingsValidationResult,
     allQuizSettingsValid: false,
     questions: [],
+    questionValidations: [] as QuizQuestionValidationResult[],
     allQuestionsValid: false,
     selectedQuestion: undefined,
     selectedQuestionIndex: -1,
     onSetQuestions: () => undefined,
     onQuizSettingsValueChange: () => undefined,
-    onQuizSettingsValidChange: () => undefined,
     onSelectedQuestionIndex: () => undefined,
     onAddQuestion: () => undefined,
     onQuestionValueChange: () => undefined,
-    onQuestionValueValidChange: () => undefined,
     onDropQuestionIndex: () => undefined,
     onDuplicateQuestionIndex: () => undefined,
     onDeleteQuestionIndex: () => undefined,

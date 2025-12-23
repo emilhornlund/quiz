@@ -1,3 +1,4 @@
+@use '../../styles/animations';
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
@@ -30,6 +31,10 @@
     width: variables.$mobile-width;
     max-height: 100%;
     overflow: hidden;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: fadeInUp 0.5s ease-out;
+    }
 
     @include helpers.mobile {
       padding: variables.$mobile-medium-layout-gutter;

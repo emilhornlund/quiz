@@ -46,9 +46,9 @@ export enum QuizCategory {
 }
 
 /**
- * Data transfer object for quiz creation and updating requests.
+ * Base data transfer object for quiz creation and updating requests.
  */
-export type QuizRequestDto = {
+export type QuizRequestBaseDto = {
   /**
    * The title of the quiz.
    */
@@ -78,23 +78,29 @@ export type QuizRequestDto = {
    * The language code of the quiz.
    */
   languageCode: LanguageCode
-} & (
-  | {
-      mode: GameMode.Classic
-      questions: (
-        | QuestionMultiChoiceDto
-        | QuestionRangeDto
-        | QuestionTrueFalseDto
-        | QuestionTypeAnswerDto
-        | QuestionPinDto
-        | QuestionPuzzleDto
-      )[]
-    }
-  | {
-      mode: GameMode.ZeroToOneHundred
-      questions: QuestionZeroToOneHundredRangeDto[]
-    }
-)
+}
+
+/**
+ * Data transfer object for quiz creation and updating requests.
+ */
+export type QuizRequestDto = QuizRequestBaseDto &
+  (
+    | {
+        mode: GameMode.Classic
+        questions: (
+          | QuestionMultiChoiceDto
+          | QuestionRangeDto
+          | QuestionTrueFalseDto
+          | QuestionTypeAnswerDto
+          | QuestionPinDto
+          | QuestionPuzzleDto
+        )[]
+      }
+    | {
+        mode: GameMode.ZeroToOneHundred
+        questions: QuestionZeroToOneHundredRangeDto[]
+      }
+  )
 
 /**
  * Data transfer object for a classic mode quiz creation and updating requests.

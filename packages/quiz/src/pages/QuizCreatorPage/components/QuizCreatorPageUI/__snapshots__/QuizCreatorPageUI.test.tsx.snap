@@ -38,14 +38,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindSecondary small error"
+              class="textFieldInputContainer textFieldInputKindSecondary small"
             >
               <input
                 class="textfield"
                 data-testid="test-quiz-title-textfield-textfield"
                 id="quiz-title-textfield"
-                maxlength="95"
-                minlength="3"
                 name="quiz-title-textfield"
                 placeholder="Title"
                 type="text"
@@ -118,7 +116,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -445,8 +443,6 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                           class="textfield"
                           data-testid="test-question-text-textfield-textfield"
                           id="question-text-textfield"
-                          maxlength="120"
-                          minlength="3"
                           name="question-text-textfield"
                           placeholder="Question"
                           type="text"
@@ -1240,8 +1236,6 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode 1`] = `
                           class="textfield"
                           data-testid="test-question-info-textfield-textfield"
                           id="question-info-textfield"
-                          maxlength="256"
-                          minlength="1"
                           name="question-info-textfield"
                           placeholder="Info"
                           type="text"
@@ -1337,14 +1331,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindSecondary small error"
+              class="textFieldInputContainer textFieldInputKindSecondary small"
             >
               <input
                 class="textfield"
                 data-testid="test-quiz-title-textfield-textfield"
                 id="quiz-title-textfield"
-                maxlength="95"
-                minlength="3"
                 name="quiz-title-textfield"
                 placeholder="Title"
                 type="text"
@@ -1417,7 +1409,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for classic mode without 
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1506,14 +1498,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindSecondary small error"
+              class="textFieldInputContainer textFieldInputKindSecondary small"
             >
               <input
                 class="textfield"
                 data-testid="test-quiz-title-textfield-textfield"
                 id="quiz-title-textfield"
-                maxlength="95"
-                minlength="3"
                 name="quiz-title-textfield"
                 placeholder="Title"
                 type="text"
@@ -1586,7 +1576,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1675,14 +1665,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindSecondary small error"
+              class="textFieldInputContainer textFieldInputKindSecondary small"
             >
               <input
                 class="textfield"
                 data-testid="test-quiz-title-textfield-textfield"
                 id="quiz-title-textfield"
-                maxlength="95"
-                minlength="3"
                 name="quiz-title-textfield"
                 placeholder="Title"
                 type="text"
@@ -1755,7 +1743,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI for zero to one hundred m
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"
@@ -1846,14 +1834,12 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
             class="inputContainer"
           >
             <div
-              class="textFieldInputContainer textFieldInputKindSecondary small error"
+              class="textFieldInputContainer textFieldInputKindSecondary small"
             >
               <input
                 class="textfield"
                 data-testid="test-quiz-title-textfield-textfield"
                 id="quiz-title-textfield"
-                maxlength="95"
-                minlength="3"
                 name="quiz-title-textfield"
                 placeholder="Title"
                 type="text"
@@ -1926,7 +1912,7 @@ exports[`QuizCreatorPageUI > renders QuizCreatorPageUI without mdoe 1`] = `
         class="contentWrapper fullWidth"
       >
         <div
-          class="contentInner"
+          class="contentInner disableAnimation"
         >
           <div
             class="quizCreatorPage"

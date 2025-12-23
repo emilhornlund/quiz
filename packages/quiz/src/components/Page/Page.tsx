@@ -26,6 +26,7 @@ export interface PageProps {
   discover?: boolean
   profile?: boolean
   hideLogin?: boolean
+  disableContentFadeAnimation?: boolean
   header?: React.ReactNode
   footer?: React.ReactNode
   children: React.ReactNode | React.ReactNode[]
@@ -39,6 +40,7 @@ const Page: React.FC<PageProps> = ({
   discover = false,
   profile = false,
   hideLogin = false,
+  disableContentFadeAnimation = false,
   header,
   footer,
   children,
@@ -153,7 +155,13 @@ const Page: React.FC<PageProps> = ({
             width === 'medium' ? styles.mediumWidth : undefined,
             width === 'full' ? styles.fullWidth : undefined,
           )}>
-          <div className={styles.contentInner}>{children}</div>
+          <div
+            className={classNames(
+              styles.contentInner,
+              disableContentFadeAnimation ? styles.disableAnimation : undefined,
+            )}>
+            {children}
+          </div>
         </div>
       </div>
       {footer && <div className={classNames(styles.footer)}>{footer}</div>}
