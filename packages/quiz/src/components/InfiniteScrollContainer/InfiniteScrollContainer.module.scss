@@ -1,0 +1,44 @@
+.viewport {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+
+  &.hCenter {
+    justify-content: center;
+  }
+
+  &.hStart {
+    justify-content: flex-start;
+  }
+
+  &.vCenter {
+    align-items: center;
+  }
+
+  &.vStart {
+    align-items: flex-start;
+  }
+
+  .track {
+    width: 100%;
+    will-change: transform;
+    text-align: center;
+
+    .block {
+      display: inline-block;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .block > * {
+      display: block;
+      max-width: 100%;
+    }
+
+    .gap {
+      width: 100%;
+    }
+  }
+}
