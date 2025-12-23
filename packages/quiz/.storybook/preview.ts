@@ -2,6 +2,7 @@ import { Preview } from '@storybook/react'
 
 import '../src/styles/fonts.scss'
 import '../src/styles/index.css'
+import './storybook.styles.css'
 
 /** @type { import('@storybook/react').Preview } */
 const preview: Preview = {
