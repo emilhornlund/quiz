@@ -103,12 +103,20 @@ exports[`PlayerQuestionPreviewState > should render PlayerQuestionPreviewState 1
             </div>
           </div>
           <div
-            class="questionTextContainer"
+            class="viewport hCenter vCenter questionTextContainer"
           >
             <div
-              class="typography title medium"
+              class="track"
             >
-              Who painted The Starry Night?
+              <div
+                class="block"
+              >
+                <div
+                  class="typography title medium"
+                >
+                  Who painted The Starry Night?
+                </div>
+              </div>
             </div>
           </div>
           <div
