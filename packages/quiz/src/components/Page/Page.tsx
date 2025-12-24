@@ -5,15 +5,16 @@ import {
   faRightFromBracket,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
 import Bars from '../../assets/images/bars.svg'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import { useAuthContext } from '../../context/auth'
+import { DeviceType } from '../../utils/device-size.types.ts'
 import { classNames } from '../../utils/helpers'
-import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import { Menu, MenuItem, MenuSeparator } from '../Menu'
 
 import styles from './Page.module.scss'

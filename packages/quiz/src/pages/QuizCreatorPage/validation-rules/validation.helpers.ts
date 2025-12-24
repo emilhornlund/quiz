@@ -1,4 +1,4 @@
-import { ValidationResult } from '../../../validation'
+import type { ValidationResult } from '../../../validation'
 
 /**
  * Retrieves the validation error message for a specific field path.

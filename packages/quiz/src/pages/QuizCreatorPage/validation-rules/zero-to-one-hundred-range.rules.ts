@@ -1,7 +1,7 @@
+import type { QuestionZeroToOneHundredRangeDto } from '@quiz/common'
 import {
   MediaType,
   QuestionType,
-  QuestionZeroToOneHundredRangeDto,
   QUIZ_DURATION_ALLOWED,
   QUIZ_QUESTION_INFO_MAX_LENGTH,
   QUIZ_QUESTION_INFO_MIN_LENGTH,

@@ -1,5 +1,6 @@
-import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
-import React, { FC } from 'react'
+import type { QuestionDto } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
+import type { FC } from 'react'
 
 import {
   isClassicMultiChoiceQuestion,
@@ -10,7 +11,7 @@ import {
   isClassicTypeAnswerQuestion,
   isZeroToOneHundredRangeQuestion,
 } from '../../../../../../utils/questions'
-import {
+import type {
   QuizQuestionModel,
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,

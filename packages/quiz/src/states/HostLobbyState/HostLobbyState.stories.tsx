@@ -1,12 +1,14 @@
 import { GameEventType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useMemo, useState } from 'react'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
-import { GameContext, GameContextType } from '../../context/game'
+import type { GameContextType } from '../../context/game'
+import { GameContext } from '../../context/game'
 
-import HostLobbyState, { HostLobbyStateProps } from './HostLobbyState'
+import HostLobbyState, { type HostLobbyStateProps } from './HostLobbyState'
 
 const HostLobbyStateComponent: FC<HostLobbyStateProps> = (props) => {
   const [players, setPlayers] = useState<

@@ -1,5 +1,7 @@
-import { GameQuestionPlayerAnswerEvent, QuestionType } from '@quiz/common'
-import React, { FC, useCallback, useMemo } from 'react'
+import type { GameQuestionPlayerAnswerEvent } from '@quiz/common'
+import { QuestionType } from '@quiz/common'
+import type { FC } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { classNames } from '../../../../../utils/helpers.ts'
 

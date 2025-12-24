@@ -1,5 +1,6 @@
 import { TokenScope } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context/auth'

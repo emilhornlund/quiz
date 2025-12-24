@@ -1,6 +1,6 @@
-import { GameMode, type GameResultDto, QuestionType } from '@quiz/common'
+import type { GameResultDto } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { describe, expect, it } from 'vitest'

@@ -1,9 +1,10 @@
 import { QuestionImageRevealEffectType } from '@quiz/common'
 import { act, render } from '@testing-library/react'
-import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import ImageSquareEffect, { ImageSquareEffectProps } from './ImageSquareEffect'
+import ImageSquareEffect, {
+  type ImageSquareEffectProps,
+} from './ImageSquareEffect'
 
 vi.mock('./ImageSquareEffect.module.scss', () => ({
   default: {

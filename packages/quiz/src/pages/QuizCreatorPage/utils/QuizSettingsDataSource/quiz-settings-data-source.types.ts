@@ -1,6 +1,6 @@
-import { QuizRequestBaseDto } from '@quiz/common'
+import type { QuizRequestBaseDto } from '@quiz/common'
 
-import { ValidationResult } from '../../../../validation'
+import type { ValidationResult } from '../../../../validation'
 
 /**
  * Internal model representing the quiz settings state.

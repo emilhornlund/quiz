@@ -1,4 +1,4 @@
-import { UserProfileResponseDto } from '@quiz/common'
+import type { UserProfileResponseDto } from '@quiz/common'
 import { createContext } from 'react'
 
 /**

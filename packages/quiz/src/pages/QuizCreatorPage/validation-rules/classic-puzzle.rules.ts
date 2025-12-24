@@ -1,6 +1,6 @@
+import type { QuestionPuzzleDto } from '@quiz/common'
 import {
   MediaType,
-  QuestionPuzzleDto,
   QuestionType,
   QUIZ_DURATION_ALLOWED,
   QUIZ_POINTS_ALLOWED,

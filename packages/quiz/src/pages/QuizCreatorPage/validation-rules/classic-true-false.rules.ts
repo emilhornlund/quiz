@@ -1,6 +1,6 @@
+import type { QuestionTrueFalseDto } from '@quiz/common'
 import {
   MediaType,
-  QuestionTrueFalseDto,
   QuestionType,
   QUIZ_DURATION_ALLOWED,
   QUIZ_POINTS_ALLOWED,

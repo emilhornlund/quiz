@@ -1,6 +1,6 @@
 import { faCircleQuestion, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import styles from './HostGameFooter.module.scss'
 

@@ -1,6 +1,7 @@
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { GameHistoryDto, GameStatus } from '@quiz/common'
-import React, { FC } from 'react'
+import type { GameHistoryDto } from '@quiz/common'
+import { GameStatus } from '@quiz/common'
+import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button, Page, Pagination, Typography } from '../../../components'

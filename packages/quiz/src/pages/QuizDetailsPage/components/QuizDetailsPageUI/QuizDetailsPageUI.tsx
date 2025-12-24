@@ -12,10 +12,11 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { QuizResponseDto } from '@quiz/common'
+import type { QuizResponseDto } from '@quiz/common'
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   Button,

@@ -1,7 +1,8 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameResultPlayerEvent } from '@quiz/common'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import type { GameResultPlayerEvent } from '@quiz/common'
+import type { FC } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   Badge,

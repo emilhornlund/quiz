@@ -1,4 +1,5 @@
-import { Bounce, toast, type ToastOptions } from 'react-toastify'
+import type { ToastOptions } from 'react-toastify'
+import { Bounce, toast } from 'react-toastify'
 
 /**
  * Base toast configuration shared by all notification helpers.

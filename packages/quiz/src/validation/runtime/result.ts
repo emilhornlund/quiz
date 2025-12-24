@@ -1,4 +1,4 @@
-import { ValidationError } from '../model'
+import type { ValidationError } from '../model'
 import { topLevelFieldFromPath } from '../utils'
 
 /**

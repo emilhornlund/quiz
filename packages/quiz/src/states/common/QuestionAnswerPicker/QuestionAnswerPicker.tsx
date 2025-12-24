@@ -1,10 +1,10 @@
-import {
+import type {
   GameEventQuestion,
   GameQuestionPlayerAnswerEvent,
-  QuestionType,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import { QuestionType } from '@quiz/common'
+import type { FC } from 'react'
 
 import {
   AnswerInput,

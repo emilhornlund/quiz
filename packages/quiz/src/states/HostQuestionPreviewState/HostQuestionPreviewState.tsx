@@ -1,5 +1,5 @@
-import { GameQuestionPreviewHostEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import type { GameQuestionPreviewHostEvent } from '@quiz/common'
+import type { FC } from 'react'
 
 import { HostGameFooter, ProgressBar } from '../../components'
 import { GamePage, QuestionTextPreview, QuestionTypePointsBar } from '../common'

@@ -1,5 +1,5 @@
+import type { ClassicQuestionDto } from '@quiz/common'
 import {
-  type ClassicQuestionDto,
   MediaType,
   QuestionImageRevealEffectType,
   QuestionPinTolerance,

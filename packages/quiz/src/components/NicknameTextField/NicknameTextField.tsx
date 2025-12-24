@@ -5,10 +5,10 @@ import {
   PLAYER_NICKNAME_MIN_LENGTH,
   PLAYER_NICKNAME_REGEX,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import Button from '../Button'
-import { TextField } from '../index.ts'
+import TextField from '../TextField'
 
 import styles from './NicknameTextField.module.scss'
 

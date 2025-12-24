@@ -1,12 +1,9 @@
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  GameQuestionHostEvent,
-  MediaType,
-  QuestionMediaEvent,
-  QuestionType,
-} from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import type { GameQuestionHostEvent, QuestionMediaEvent } from '@quiz/common'
+import { MediaType, QuestionType } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   HostGameFooter,

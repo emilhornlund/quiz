@@ -4,13 +4,14 @@ import {
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
+import type {
   GameEventQuestionResults,
   GameEventQuestionResultsMultiChoice,
   QuestionCorrectAnswerDto,
-  QuestionType,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import { QuestionType } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import { classNames } from '../../../../utils/helpers'
 

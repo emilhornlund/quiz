@@ -1,12 +1,11 @@
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
-import {
-  AuthPasswordForgotFormFields,
-  AuthPasswordForgotPageUI,
-} from './components'
+import type { AuthPasswordForgotFormFields } from './components'
+import { AuthPasswordForgotPageUI } from './components'
 
 const AuthPasswordForgotPage: FC = () => {
   const navigate = useNavigate()

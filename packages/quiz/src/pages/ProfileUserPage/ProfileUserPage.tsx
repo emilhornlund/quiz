@@ -1,14 +1,16 @@
 import { AuthProvider } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
 import { useUserContext } from '../../context/user'
 import { trimToUndefined } from '../../utils/helpers.ts'
 
-import { ProfileUserPageUI, UpdateUserDetailsFormFields } from './components'
-import { UpdateUserPasswordFormFields } from './components/ProfileUserPageUI/components'
+import type { UpdateUserDetailsFormFields } from './components'
+import { ProfileUserPageUI } from './components'
+import type { UpdateUserPasswordFormFields } from './components/ProfileUserPageUI/components'
 
 const ProfileUserPage: FC = () => {
   const {

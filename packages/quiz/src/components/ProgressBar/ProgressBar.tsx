@@ -1,5 +1,6 @@
-import { CountdownEvent } from '@quiz/common'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import type { CountdownEvent } from '@quiz/common'
+import type { FC } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 

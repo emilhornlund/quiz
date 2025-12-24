@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react'
-import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { DeviceType } from '../../../utils/device-size.types.ts'
 import * as deviceHook from '../../../utils/useDeviceSizeType.tsx'
 
 import QuestionTextPreview from './QuestionTextPreview'
@@ -85,18 +85,14 @@ describe('QuestionTextPreview', () => {
   })
 
   it('renders the provided text', () => {
-    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(
-      deviceHook.DeviceType.Mobile,
-    )
+    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(DeviceType.Mobile)
 
     const { getByText } = render(<QuestionTextPreview text="HELLO WORLD" />)
     expect(getByText('HELLO WORLD')).toBeInTheDocument()
   })
 
   it('uses mobile speed (70 px/s) and gap (64px) when device type is Mobile', async () => {
-    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(
-      deviceHook.DeviceType.Mobile,
-    )
+    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(DeviceType.Mobile)
 
     const { container } = render(
       <QuestionTextPreview text="A very long piece of text that overflows" />,
@@ -122,9 +118,7 @@ describe('QuestionTextPreview', () => {
   })
 
   it('uses tablet speed (95 px/s) and gap (96px) when device type is Tablet', async () => {
-    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(
-      deviceHook.DeviceType.Tablet,
-    )
+    vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(DeviceType.Tablet)
 
     const { container } = render(
       <QuestionTextPreview text="A very long piece of text that overflows" />,
@@ -151,7 +145,7 @@ describe('QuestionTextPreview', () => {
 
   it('uses desktop speed (110 px/s) and gap (128px) when device type is Desktop', async () => {
     vi.spyOn(deviceHook, 'useDeviceSizeType').mockReturnValue(
-      deviceHook.DeviceType.Desktop,
+      DeviceType.Desktop,
     )
 
     const { container } = render(

@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 
 import styles from './Confetti.module.scss'
 

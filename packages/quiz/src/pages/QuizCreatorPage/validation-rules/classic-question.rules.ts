@@ -1,4 +1,5 @@
-import { ClassicQuestionDto, QuestionType } from '@quiz/common'
+import type { ClassicQuestionDto } from '@quiz/common'
+import { QuestionType } from '@quiz/common'
 
 import { defineDiscriminatedRules } from '../../../validation'
 

@@ -1,14 +1,7 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { ChangeEvent, FC } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import { isCallbackValid, isValidString } from '../../utils/validation'

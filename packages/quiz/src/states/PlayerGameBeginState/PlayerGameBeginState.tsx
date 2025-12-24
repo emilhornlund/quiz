@@ -1,5 +1,5 @@
-import { GameBeginPlayerEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import type { GameBeginPlayerEvent } from '@quiz/common'
+import type { FC } from 'react'
 
 import BellRingIcon from '../../assets/images/bell-ring-icon.svg'
 import {

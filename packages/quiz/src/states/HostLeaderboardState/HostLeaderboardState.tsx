@@ -1,5 +1,6 @@
-import { GameLeaderboardHostEvent } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { GameLeaderboardHostEvent } from '@quiz/common'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   HostGameFooter,

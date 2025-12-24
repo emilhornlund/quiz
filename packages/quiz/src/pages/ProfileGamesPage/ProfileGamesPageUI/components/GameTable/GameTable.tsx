@@ -6,10 +6,11 @@ import {
   faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameHistoryDto, GameParticipantType, GameStatus } from '@quiz/common'
+import type { GameHistoryDto } from '@quiz/common'
+import { GameParticipantType, GameStatus } from '@quiz/common'
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import React, { FC, MouseEvent } from 'react'
+import type { FC, MouseEvent } from 'react'
 
 import Picture from '../../../../../assets/images/picture.svg'
 import {

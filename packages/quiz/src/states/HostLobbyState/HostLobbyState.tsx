@@ -1,7 +1,9 @@
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GAME_MAX_PLAYERS, GameLobbyHostEvent } from '@quiz/common'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import type { GameLobbyHostEvent } from '@quiz/common'
+import { GAME_MAX_PLAYERS } from '@quiz/common'
+import type { FC } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import QRCode from 'react-qr-code'
 
 import {

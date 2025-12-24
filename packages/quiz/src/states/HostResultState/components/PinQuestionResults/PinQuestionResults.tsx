@@ -1,7 +1,9 @@
-import { GameEventQuestionResultsPin } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import type { GameEventQuestionResultsPin } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
-import { PinColor, PinImage, PinImageValue } from '../../../../components'
+import type { PinImageValue } from '../../../../components'
+import { PinColor, PinImage } from '../../../../components'
 
 import styles from './PinQuestionResults.module.scss'
 

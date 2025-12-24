@@ -1,5 +1,5 @@
+import type { CreateUserRequestDto } from '@quiz/common'
 import {
-  CreateUserRequestDto,
   EMAIL_MAX_LENGTH,
   EMAIL_MIN_LENGTH,
   EMAIL_REGEX,
@@ -13,7 +13,8 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {

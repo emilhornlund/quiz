@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
 import { Menu, MenuItem } from './Menu'

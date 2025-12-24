@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import Dropzone, { DropzoneProps } from './Dropzone'
+import Dropzone, { type DropzoneProps } from './Dropzone'
 
 const DropzoneStoryComponent: FC<DropzoneProps> = (props) => {
   const [progress, setProgress] = useState<number>()

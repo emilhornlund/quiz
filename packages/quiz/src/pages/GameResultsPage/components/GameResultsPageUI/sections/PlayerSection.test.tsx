@@ -1,6 +1,6 @@
-import { GameMode, type GameResultDto } from '@quiz/common'
+import type { GameResultDto } from '@quiz/common'
+import { GameMode } from '@quiz/common'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import PlayerSection from './PlayerSection'

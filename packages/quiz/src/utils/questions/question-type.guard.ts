@@ -1,15 +1,14 @@
-import {
-  GameMode,
+import type {
   QuestionDto,
   QuestionMultiChoiceDto,
   QuestionPinDto,
   QuestionPuzzleDto,
   QuestionRangeDto,
   QuestionTrueFalseDto,
-  QuestionType,
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
 } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 
 /**
  * Type guard for a Classic-mode MultiChoice question.

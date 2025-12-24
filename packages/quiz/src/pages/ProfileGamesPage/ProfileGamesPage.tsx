@@ -1,6 +1,7 @@
 import { GameStatus } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
-import React, { FC, useEffect, useMemo } from 'react'
+import type { FC } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'

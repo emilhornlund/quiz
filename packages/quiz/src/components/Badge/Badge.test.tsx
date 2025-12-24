@@ -1,7 +1,6 @@
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 import { describe, expect, test, vi } from 'vitest'
 
 import Badge from './Badge'

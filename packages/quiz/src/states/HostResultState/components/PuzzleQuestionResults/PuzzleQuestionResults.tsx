@@ -1,7 +1,8 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GameEventQuestionResultsPuzzle } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import type { GameEventQuestionResultsPuzzle } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import { SortableTable } from '../../../../components'
 import colors from '../../../../styles/colors.module.scss'

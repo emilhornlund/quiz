@@ -5,12 +5,14 @@ import {
   QuizVisibility,
 } from '@quiz/common'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import '@testing-library/jest-dom'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import QuizTable, { QuizTableItem, QuizTablePagination } from './QuizTable'
+import QuizTable, {
+  type QuizTableItem,
+  type QuizTablePagination,
+} from './QuizTable'
 
 const PLAYER_ID = '490fbab7-dc75-47fe-bf17-048308eaad14'
 

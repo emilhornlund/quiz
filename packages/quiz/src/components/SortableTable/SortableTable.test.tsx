@@ -1,6 +1,5 @@
 // packages/quiz/src/components/SortableTable/SortableTable.test.tsx
 import { act, render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // ---- Mocks (must come before component import) ----
@@ -40,6 +39,8 @@ vi.mock('@fortawesome/react-fontawesome', () => ({
 const lastDndHandlers: { onDragEnd?: (evt: any) => void } = {}
 
 vi.mock('@dnd-kit/core', () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react')
   return {
@@ -107,7 +108,7 @@ vi.mock('@dnd-kit/sortable', () => ({
 }))
 
 // ---- Import the component under test (after mocks) ----
-import SortableTable, { SortableTableValue } from './SortableTable'
+import SortableTable, { type SortableTableValue } from './SortableTable'
 
 const sampleValues: SortableTableValue[] = [
   { id: '1', value: 'Alpha' }, // no custom icon -> default grip shows when enabled

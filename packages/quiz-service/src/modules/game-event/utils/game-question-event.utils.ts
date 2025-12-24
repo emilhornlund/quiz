@@ -1,9 +1,9 @@
+import type { GameQuestionPlayerAnswerEvent } from '@quiz/common'
 import {
   CountdownEvent,
   GameEventQuestion,
   GameEventType,
   GameQuestionHostEvent,
-  GameQuestionPlayerAnswerEvent,
   GameQuestionPlayerEvent,
   GameQuestionPreviewHostEvent,
   GameQuestionPreviewPlayerEvent,

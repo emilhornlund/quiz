@@ -1,6 +1,6 @@
 import { TokenScope, TokenType } from '@quiz/common'
 import { act, cleanup, render, waitFor } from '@testing-library/react'
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 

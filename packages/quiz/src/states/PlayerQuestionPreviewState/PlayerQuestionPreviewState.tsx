@@ -1,5 +1,5 @@
-import { GameQuestionPreviewPlayerEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import type { GameQuestionPreviewPlayerEvent } from '@quiz/common'
+import type { FC } from 'react'
 
 import { PlayerGameFooter, ProgressBar } from '../../components'
 import { GamePage, QuestionTextPreview, QuestionTypePointsBar } from '../common'

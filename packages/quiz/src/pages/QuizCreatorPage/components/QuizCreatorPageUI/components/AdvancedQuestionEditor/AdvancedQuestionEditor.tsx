@@ -1,8 +1,9 @@
 import { GameMode } from '@quiz/common'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Textarea from '../../../../../../components/Textarea'
-import {
+import type {
   QuizQuestionModel,
   QuizQuestionValidationResult,
 } from '../../../../utils/QuestionDataSource'

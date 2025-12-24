@@ -5,11 +5,12 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, FormEvent, useEffect, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useEffect, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'
-import { TextField } from '../index.ts'
+import TextField from '../TextField'
 
 import FilterModal from './components/FilterModal'
 import styles from './QuizTableFilter.module.scss'

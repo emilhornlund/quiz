@@ -1,8 +1,9 @@
 import { QuestionPinTolerance } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import PinImage, { PinImageProps } from './PinImage.tsx'
+import PinImage, { type PinImageProps } from './PinImage.tsx'
 import { PinColor } from './types.ts'
 
 const PinImageStoryComponent: FC<PinImageProps> = (props) => {

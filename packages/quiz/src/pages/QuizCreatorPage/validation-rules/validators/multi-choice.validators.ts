@@ -1,4 +1,4 @@
-import { CustomValidator } from '../../../../validation'
+import type { CustomValidator } from '../../../../validation'
 
 /**
  * Minimal shape for option objects that can carry correctness metadata.

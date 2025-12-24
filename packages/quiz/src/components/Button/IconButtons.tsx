@@ -1,7 +1,7 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
-import Button, { ButtonProps } from './Button'
+import Button, { type ButtonProps } from './Button'
 
 type IconButtonProps = Omit<ButtonProps, 'icon' | 'iconPosition'>
 

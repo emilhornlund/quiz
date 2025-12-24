@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
-import { Button } from '../index.ts'
+import Button from '../Button'
 import Modal from '../Modal'
 
 import styles from './ConfirmDialog.module.scss'

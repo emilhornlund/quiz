@@ -1,6 +1,6 @@
-import { QuestionDto } from '@quiz/common'
+import type { QuestionDto } from '@quiz/common'
 
-import { ValidationResult } from '../../../../validation'
+import type { ValidationResult } from '../../../../validation'
 
 /**
  * Editable question model used by the quiz creator UI.

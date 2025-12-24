@@ -1,10 +1,7 @@
-import {
-  AuthPasswordForgotRequestDto,
-  EMAIL_MAX_LENGTH,
-  EMAIL_MIN_LENGTH,
-  EMAIL_REGEX,
-} from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { AuthPasswordForgotRequestDto } from '@quiz/common'
+import { EMAIL_MAX_LENGTH, EMAIL_MIN_LENGTH, EMAIL_REGEX } from '@quiz/common'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   IconButtonArrowRight,

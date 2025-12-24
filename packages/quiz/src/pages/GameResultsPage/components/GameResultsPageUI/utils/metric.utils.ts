@@ -1,4 +1,4 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import {
   faCheckCircle,
   faFire,
@@ -7,14 +7,14 @@ import {
   faStopwatch,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-  GameMode,
+import type {
   GameResultClassicModePlayerMetricDto,
   GameResultClassicModeQuestionMetricDto,
   GameResultDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
+import { GameMode } from '@quiz/common'
 
 import colors from '../../../../../styles/colors.module.scss'
 

@@ -1,6 +1,7 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import type { FC, ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './Menu.module.scss'

@@ -1,7 +1,7 @@
+import type { QuestionRangeDto } from '@quiz/common'
 import {
   MediaType,
   QuestionRangeAnswerMargin,
-  QuestionRangeDto,
   QuestionType,
   QUIZ_DURATION_ALLOWED,
   QUIZ_POINTS_ALLOWED,

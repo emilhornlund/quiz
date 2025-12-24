@@ -5,7 +5,8 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   Button,
@@ -21,7 +22,7 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../../../models'
-import {
+import type {
   QuizSettingsModel,
   QuizSettingsModelFieldChangeFunction,
   QuizSettingsValidationResult,

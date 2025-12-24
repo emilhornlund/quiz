@@ -1,8 +1,9 @@
 import { QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import AnswerPin, { AnswerPinProps } from './AnswerPin'
+import AnswerPin, { type AnswerPinProps } from './AnswerPin'
 
 const AnswerPinComponent: FC<AnswerPinProps> = (props) => {
   const [submittedAnswer, setSubmittedAnswer] = useState<{

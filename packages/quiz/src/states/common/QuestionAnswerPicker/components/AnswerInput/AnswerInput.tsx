@@ -1,18 +1,11 @@
+import type { GameQuestionPlayerAnswerEvent } from '@quiz/common'
 import {
-  GameQuestionPlayerAnswerEvent,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH,
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX,
 } from '@quiz/common'
-import React, {
-  FC,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { FC, FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Button, TextField } from '../../../../../components'
 import NonInteractiveInfoBox from '../../../NonInteractiveInfoBox'

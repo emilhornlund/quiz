@@ -1,7 +1,7 @@
+import type { QuestionMultiChoiceDto } from '@quiz/common'
 import {
   MediaType,
   QuestionImageRevealEffectType,
-  QuestionMultiChoiceDto,
   QuestionType,
   QUIZ_DURATION_ALLOWED,
   QUIZ_MULTI_CHOICE_OPTION_VALUE_MAX_LENGTH,

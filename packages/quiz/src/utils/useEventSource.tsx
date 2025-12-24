@@ -1,28 +1,12 @@
-import {
-  deepEqual,
-  GameEvent,
-  GameEventType,
-  HEARTBEAT_INTERVAL,
-} from '@quiz/common'
+import type { GameEvent } from '@quiz/common'
+import { deepEqual, GameEventType, HEARTBEAT_INTERVAL } from '@quiz/common'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import config from '../config.ts'
 
-/**
- * Connection lifecycle statuses for the EventSource stream.
- *
- * - `INITIALIZED`: Hook is set up or reconnect has just started.
- * - `CONNECTED`: The SSE connection is open.
- * - `RECONNECTING`: A transient error occurred; an automatic retry is scheduled.
- * - `RECONNECTING_FAILED`: Retries exhausted; no further attempts will be made.
- */
-export enum ConnectionStatus {
-  INITIALIZED = 'INITIALIZED',
-  CONNECTED = 'CONNECTED',
-  RECONNECTING = 'RECONNECTING',
-  RECONNECTING_FAILED = 'RECONNECTING_FAILED',
-}
+import type { ConnectionStatus } from './event-source.types.ts'
+import { ConnectionStatus as ConnectionStatusValue } from './event-source.types.ts'
 
 /**
  * Subscribes to server-sent events (SSE) for a given game and token, returning
@@ -45,7 +29,7 @@ export const useEventSource = (
 ): [GameEvent | undefined, ConnectionStatus] => {
   const [gameEvent, setGameEvent] = useState<GameEvent>()
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.INITIALIZED,
+    ConnectionStatusValue.INITIALIZED,
   )
 
   const MAX_RETRIES = 10
@@ -89,7 +73,7 @@ export const useEventSource = (
           'Max retry attempts reached. Stopping reconnection attempts.',
         )
         cleanupEventSource()
-        setConnectionStatus(ConnectionStatus.RECONNECTING_FAILED)
+        setConnectionStatus(ConnectionStatusValue.RECONNECTING_FAILED)
         return
       }
 
@@ -113,7 +97,7 @@ export const useEventSource = (
 
       eventSource.onopen = () => {
         if (instanceId !== instanceIdRef.current) return
-        setConnectionStatus(ConnectionStatus.CONNECTED)
+        setConnectionStatus(ConnectionStatusValue.CONNECTED)
       }
 
       eventSource.onmessage = (event) => {
@@ -139,7 +123,7 @@ export const useEventSource = (
         }
 
         console.error('Connection error, retrying...')
-        setConnectionStatus(ConnectionStatus.RECONNECTING)
+        setConnectionStatus(ConnectionStatusValue.RECONNECTING)
 
         eventSource.onopen = null
         eventSource.onmessage = null
@@ -161,7 +145,7 @@ export const useEventSource = (
   useEffect(() => {
     if (gameID && token) {
       isShuttingDownRef.current = false
-      setConnectionStatus(ConnectionStatus.INITIALIZED)
+      setConnectionStatus(ConnectionStatusValue.INITIALIZED)
       createEventSource(gameID, token)
     }
 

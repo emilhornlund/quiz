@@ -1,18 +1,15 @@
+import type { QuestionDto } from '@quiz/common'
 import {
   GameMode,
   MediaType,
-  type QuestionDto,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
 import { act, render } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import {
-  buildValidationResult,
-  ValidationError,
-} from '../../../../../../validation'
+import type { ValidationError } from '../../../../../../validation'
+import { buildValidationResult } from '../../../../../../validation'
 import type {
   QuizQuestionModel,
   QuizQuestionValidationResult,

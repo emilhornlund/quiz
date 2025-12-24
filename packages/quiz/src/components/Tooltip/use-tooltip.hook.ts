@@ -12,7 +12,7 @@ import {
 } from '@floating-ui/react'
 import { useMemo, useState } from 'react'
 
-import { TooltipOptions } from './tooltip.types'
+import type { TooltipOptions } from './tooltip.types'
 
 /**
  * Creates and composes Floating UI tooltip behavior.

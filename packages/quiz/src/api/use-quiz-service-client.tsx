@@ -1,4 +1,4 @@
-import {
+import type {
   AuthGameRequestDto,
   AuthGoogleExchangeRequestDto,
   AuthLoginRequestDto,
@@ -21,20 +21,19 @@ import {
   QuizRequestDto,
   QuizResponseDto,
   SubmitQuestionAnswerRequestDto,
-  TokenScope,
-  TokenType,
   UpdateGoogleUserProfileRequestDto,
   UpdateLocalUserProfileRequestDto,
   UserProfileResponseDto,
 } from '@quiz/common'
+import { TokenScope, TokenType } from '@quiz/common'
 import { useCallback } from 'react'
 
 import { useAuthContext } from '../context/auth'
 import { useUserContext } from '../context/user'
 import { notifyError, notifySuccess } from '../utils/notification.ts'
 
+import type { ApiPostBody } from './api.utils'
 import {
-  ApiPostBody,
   isTokenExpired,
   parseQueryParams,
   parseResponseAndHandleError,

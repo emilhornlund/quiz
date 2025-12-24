@@ -1,13 +1,12 @@
+import type { QuizRequestDto } from '@quiz/common'
 import {
   GameMode,
   LanguageCode,
   QuestionType,
   QuizCategory,
-  type QuizRequestDto,
   QuizVisibility,
 } from '@quiz/common'
 import { act, render } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import QuizCreatorPage from './QuizCreatorPage'

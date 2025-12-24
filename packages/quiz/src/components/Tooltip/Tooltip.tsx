@@ -1,7 +1,6 @@
-import React, { ReactNode } from 'react'
-import { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
-import { TooltipOptions } from './tooltip.types'
+import type { TooltipOptions } from './tooltip.types'
 import { TooltipContext } from './use-tooltip.context'
 import { useTooltip } from './use-tooltip.hook'
 

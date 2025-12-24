@@ -1,8 +1,8 @@
 import { render, waitFor } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { UserContext, UserContextType } from './UserContext'
+import type { UserContextType } from './UserContext'
+import { UserContext } from './UserContext'
 import UserContextProvider from './UserContextProvider'
 
 // --- Mocks ------------------------------------------------------------------

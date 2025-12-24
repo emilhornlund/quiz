@@ -1,5 +1,6 @@
-import { GameLobbyPlayerEvent } from '@quiz/common'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import type { GameLobbyPlayerEvent } from '@quiz/common'
+import type { FC } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import HourglassIcon from '../../assets/images/hourglass-icon.svg'

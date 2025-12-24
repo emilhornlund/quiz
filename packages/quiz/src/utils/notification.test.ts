@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
+import type { Mock } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('react-toastify', () => {
   const success = vi.fn()

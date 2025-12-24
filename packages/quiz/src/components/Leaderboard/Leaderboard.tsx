@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import StreakBadge from '../StreakBadge'

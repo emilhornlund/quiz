@@ -1,8 +1,5 @@
-import {
-  MediaType,
-  QuestionType,
-  type ZeroToOneHundredQuestionDto,
-} from '@quiz/common'
+import type { ZeroToOneHundredQuestionDto } from '@quiz/common'
+import { MediaType, QuestionType } from '@quiz/common'
 import { describe, expect, it } from 'vitest'
 
 import { validateDiscriminatedDto } from '../../../validation'

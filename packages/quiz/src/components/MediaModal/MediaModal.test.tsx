@@ -1,6 +1,6 @@
 import { MediaType, URL_REGEX } from '@quiz/common'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
+import { useEffect, useRef } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import MediaModal from './MediaModal'
@@ -117,7 +117,7 @@ vi.mock('../TextField', () => ({
     onChange?: (value: string) => void
     onValid?: (valid: boolean) => void
   }) => {
-    const lastValidRef = React.useRef<boolean | null>(null)
+    const lastValidRef = useRef<boolean | null>(null)
 
     const computeValid = (v: string): boolean => {
       const hasValue = v.length > 0
@@ -138,7 +138,7 @@ vi.mock('../TextField', () => ({
       }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
       emitValidIfChanged(value ?? '')
       // IMPORTANT: do NOT depend on `regex` object identity, it changes every render.
     }, [value, required, regex?.value])

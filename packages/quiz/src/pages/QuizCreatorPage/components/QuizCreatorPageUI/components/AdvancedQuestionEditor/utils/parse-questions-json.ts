@@ -9,7 +9,7 @@ import {
   isClassicTypeAnswerQuestion,
   isZeroToOneHundredRangeQuestion,
 } from '../../../../../../../utils/questions'
-import { QuizQuestionModel } from '../../../../../utils/QuestionDataSource'
+import type { QuizQuestionModel } from '../../../../../utils/QuestionDataSource'
 
 const assertType = <T>(
   value: T,

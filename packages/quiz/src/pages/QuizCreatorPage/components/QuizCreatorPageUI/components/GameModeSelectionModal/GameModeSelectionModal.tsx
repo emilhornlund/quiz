@@ -1,5 +1,5 @@
 import { GameMode } from '@quiz/common'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import { Modal } from '../../../../../../components'
 

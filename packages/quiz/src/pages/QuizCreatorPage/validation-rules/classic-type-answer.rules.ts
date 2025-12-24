@@ -1,7 +1,7 @@
+import type { QuestionTypeAnswerDto } from '@quiz/common'
 import {
   MediaType,
   QuestionType,
-  QuestionTypeAnswerDto,
   QUIZ_DURATION_ALLOWED,
   QUIZ_POINTS_ALLOWED,
   QUIZ_QUESTION_INFO_MAX_LENGTH,
