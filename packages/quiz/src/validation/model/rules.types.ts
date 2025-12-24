@@ -1,4 +1,4 @@
-import { OptionalKeys } from './dto-rules.types'
+import type { OptionalKeys } from './dto-rules.types'
 
 /**
  * Validator function for cross-field or custom checks.

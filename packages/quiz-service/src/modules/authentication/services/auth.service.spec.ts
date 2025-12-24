@@ -1,13 +1,12 @@
 import { UnauthorizedException } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import {
-  type AuthLoginRequestDto,
-  Authority,
-  type AuthRefreshRequestDto,
-  type AuthResponseDto,
-  type TokenDto,
-  TokenScope,
+import type {
+  AuthLoginRequestDto,
+  AuthRefreshRequestDto,
+  AuthResponseDto,
+  TokenDto,
 } from '@quiz/common'
+import { Authority, TokenScope } from '@quiz/common'
 
 import { AuthService } from './auth.service'
 import { USER_LOGIN_EVENT_KEY } from './utils'

@@ -1,8 +1,8 @@
 import { Authority, GameParticipantType } from '@quiz/common'
-import { type Decorator } from '@storybook/react'
-import React from 'react'
+import type { Decorator } from '@storybook/react'
 
-import { AuthContext, AuthContextType } from '../src/context/auth'
+import type { AuthContextType } from '../src/context/auth'
+import { AuthContext } from '../src/context/auth'
 
 /**
  * Storybook decorator supplying a mock AuthContext with dummy tokens

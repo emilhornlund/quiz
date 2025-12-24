@@ -1,19 +1,17 @@
 import { GameMode, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
 import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
-import {
-  QuizQuestionValidationResult,
-  useQuestionDataSource,
-} from '../../utils/QuestionDataSource'
-import {
-  QuizSettingsValidationResult,
-  useQuizSettingsDataSource,
-} from '../../utils/QuizSettingsDataSource'
+import type { QuizQuestionValidationResult } from '../../utils/QuestionDataSource'
+import { useQuestionDataSource } from '../../utils/QuestionDataSource'
+import type { QuizSettingsValidationResult } from '../../utils/QuizSettingsDataSource'
+import { useQuizSettingsDataSource } from '../../utils/QuizSettingsDataSource'
 
-import QuizCreatorPageUI, { QuizCreatorPageUIProps } from './QuizCreatorPageUI'
+import QuizCreatorPageUI, {
+  type QuizCreatorPageUIProps,
+} from './QuizCreatorPageUI'
 
 const QuizCreatorPageUIStoryComponent: FC<QuizCreatorPageUIProps> = () => {
   const {

@@ -1,4 +1,4 @@
-import React, { FC, ImgHTMLAttributes } from 'react'
+import type { FC, ImgHTMLAttributes } from 'react'
 
 import styles from './PageProminentIcon.module.scss'
 

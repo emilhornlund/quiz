@@ -1,17 +1,7 @@
 import { useLayoutEffect, useState } from 'react'
 
-/**
- * Enum representing device size breakpoints.
- *
- * - `Mobile`: viewport width < 768px
- * - `Tablet`: viewport width between 768px and 1023px
- * - `Desktop`: viewport width ≥ 1024px
- */
-export enum DeviceType {
-  Mobile = 'MOBILE',
-  Tablet = 'TABLET',
-  Desktop = 'DESKTOP',
-}
+import type { DeviceType } from './device-size.types.ts'
+import { DeviceType as DeviceTypeValue } from './device-size.types.ts'
 
 /**
  * React hook that determines the current `DeviceType` based on `window.innerWidth`.
@@ -32,11 +22,11 @@ export const useDeviceSizeType = (): DeviceType | undefined => {
   useLayoutEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 0 && window.innerWidth < 768) {
-        setType(DeviceType.Mobile)
+        setType(DeviceTypeValue.Mobile)
       } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
-        setType(DeviceType.Tablet)
+        setType(DeviceTypeValue.Tablet)
       } else {
-        setType(DeviceType.Desktop)
+        setType(DeviceTypeValue.Desktop)
       }
     }
 

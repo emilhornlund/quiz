@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'

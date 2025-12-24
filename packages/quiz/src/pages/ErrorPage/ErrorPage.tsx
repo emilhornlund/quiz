@@ -1,6 +1,6 @@
 import { faHeartCrack } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 import { useNavigate, useRouteError } from 'react-router-dom'
 
 import { IconButtonArrowLeft, Page, Typography } from '../../components'

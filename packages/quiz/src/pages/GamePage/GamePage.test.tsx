@@ -1,6 +1,5 @@
 import { GameEventType } from '@quiz/common'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
 import type { Location } from 'react-router'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'

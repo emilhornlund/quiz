@@ -1,4 +1,4 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import {
   faCalendar,
   faCircleQuestion,
@@ -8,16 +8,17 @@ import {
   faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  GameMode,
+import type {
   GameResultClassicModeQuestionMetricDto,
   GameResultDto,
   GameResultParticipantDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
+import { GameMode } from '@quiz/common'
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import React, { FC, ReactElement, useMemo } from 'react'
+import type { FC, ReactElement } from 'react'
+import { useMemo } from 'react'
 
 import {
   CircularProgressBar,

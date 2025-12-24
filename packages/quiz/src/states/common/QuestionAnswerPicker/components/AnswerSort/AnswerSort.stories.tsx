@@ -1,8 +1,9 @@
 import { QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import AnswerSort, { AnswerSortProps } from './AnswerSort'
+import AnswerSort, { type AnswerSortProps } from './AnswerSort'
 
 const AnswerSortComponent: FC<AnswerSortProps> = (props) => {
   const [submittedAnswer, setSubmittedAnswer] = useState<{

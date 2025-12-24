@@ -1,6 +1,6 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, MouseEvent } from 'react'
+import type { FC, MouseEvent } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 

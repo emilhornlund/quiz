@@ -1,11 +1,5 @@
-import React, {
-  FC,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { FC, ReactNode } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 
@@ -187,7 +181,7 @@ const InfiniteScrollContainer: FC<InfiniteScrollProps> = ({
           transform: shouldLoop ? `translateY(-${offset}px)` : undefined,
         }}>
         {blocks.map((idx) => (
-          <React.Fragment key={idx}>
+          <Fragment key={idx}>
             <div
               ref={idx === 0 ? firstRef : undefined}
               className={styles.block}>
@@ -196,7 +190,7 @@ const InfiniteScrollContainer: FC<InfiniteScrollProps> = ({
             {idx === 0 && shouldLoop ? (
               <div className={styles.gap} style={{ height: gapPx }} />
             ) : null}
-          </React.Fragment>
+          </Fragment>
         ))}
       </div>
     </div>

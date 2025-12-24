@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { ValidationResult } from '../../../../../../../../validation'
+import type { ValidationResult } from '../../../../../../../../validation'
 
 import TrueFalseOptions from './TrueFalseOptions'
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import React, { createRef } from 'react'
+import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import TooltipTrigger from './TooltipTrigger'

@@ -1,11 +1,11 @@
+import type { CountdownEvent, QuestionMediaEvent } from '@quiz/common'
 import {
-  CountdownEvent,
   MediaType,
   QuestionImageRevealEffectType,
-  QuestionMediaEvent,
   QuestionType,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import ResponsiveImage from '../../../components/ResponsiveImage'
 import ResponsivePlayer from '../../../components/ResponsivePlayer'

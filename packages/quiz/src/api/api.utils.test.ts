@@ -1,5 +1,6 @@
+import type { Mock } from 'vitest'
 // eslint-disable-next-line import/order
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('jwt-decode', () => ({
   jwtDecode: vi.fn(),

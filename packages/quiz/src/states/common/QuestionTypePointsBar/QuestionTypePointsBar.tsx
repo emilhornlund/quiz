@@ -1,7 +1,7 @@
 import { faQuestionCircle, faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GameMode, QuestionType } from '@quiz/common'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import { QuestionTypeLabels } from '../../../models'
 import colors from '../../../styles/colors.module.scss'

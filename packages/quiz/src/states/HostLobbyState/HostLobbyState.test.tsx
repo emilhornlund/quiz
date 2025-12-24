@@ -1,6 +1,5 @@
 import { GameEventType } from '@quiz/common'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { beforeEach, describe, expect, it, vi } from 'vitest'

@@ -1,9 +1,11 @@
 import { faMaximize, faMinimize } from '@fortawesome/free-solid-svg-icons'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
-import { Button, Page, PageProps } from '../../../components'
+import type { PageProps } from '../../../components'
+import { Button, Page } from '../../../components'
 import { useGameContext } from '../../../context/game'
-import { DeviceType, useDeviceSizeType } from '../../../utils/useDeviceSizeType'
+import { DeviceType } from '../../../utils/device-size.types'
+import { useDeviceSizeType } from '../../../utils/useDeviceSizeType'
 
 const GamePage: FC<PageProps> = ({ header, children, ...rest }) => {
   const { isFullscreenActive, toggleFullscreen } = useGameContext()

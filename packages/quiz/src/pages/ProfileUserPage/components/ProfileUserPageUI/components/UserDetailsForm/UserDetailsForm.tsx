@@ -1,4 +1,5 @@
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons'
+import type { UserProfileResponseDto } from '@quiz/common'
 import {
   AuthProvider,
   EMAIL_MAX_LENGTH,
@@ -10,16 +11,9 @@ import {
   GIVEN_NAME_MAX_LENGTH,
   GIVEN_NAME_MIN_LENGTH,
   GIVEN_NAME_REGEX,
-  UserProfileResponseDto,
 } from '@quiz/common'
-import React, {
-  FC,
-  FormEvent,
-  MouseEvent,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import type { FC, FormEvent, MouseEvent } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Button, TextField, Typography } from '../../../../../../components'
 import NicknameTextField from '../../../../../../components/NicknameTextField'

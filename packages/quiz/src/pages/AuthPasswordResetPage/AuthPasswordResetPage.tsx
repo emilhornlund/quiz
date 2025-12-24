@@ -1,13 +1,12 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { isTokenExpired } from '../../api/api.utils'
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
-import {
-  AuthPasswordResetFormFields,
-  AuthPasswordResetPageUI,
-} from './components'
+import type { AuthPasswordResetFormFields } from './components'
+import { AuthPasswordResetPageUI } from './components'
 
 const AuthPasswordResetPage: FC = () => {
   const navigate = useNavigate()

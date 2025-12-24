@@ -1,6 +1,6 @@
 import { DEFAULT_QUIZ_PAGINATION_LIMIT } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'

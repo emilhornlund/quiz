@@ -1,12 +1,13 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import type { QuizResponseDto } from '@quiz/common'
 import {
   GameMode,
   LanguageCode,
   QuizCategory,
-  QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   Button,

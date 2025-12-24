@@ -1,5 +1,6 @@
-import { GameResultDto } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { GameResultDto } from '@quiz/common'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import { Page, SegmentedControl, Typography } from '../../../../components'
 
@@ -11,11 +12,28 @@ export type GameResultsPageUIProps = {
   currentParticipantId: string
 }
 
-enum GameResultSection {
-  Summary = 'SUMMARY',
-  Players = 'PLAYERS',
-  Questions = 'QUESTIONS',
-}
+/**
+ * Runtime map of sections displayed in the game results view.
+ *
+ * These values are used at runtime to control which result section
+ * is rendered or selected.
+ */
+export const GameResultSection = {
+  Summary: 'SUMMARY',
+  Players: 'PLAYERS',
+  Questions: 'QUESTIONS',
+} as const
+
+/**
+ * Identifies a logical section within the game results view.
+ *
+ * Possible values:
+ * - `Summary` – Overall game summary and aggregated results
+ * - `Players` – Per-player results and rankings
+ * - `Questions` – Per-question statistics and breakdowns
+ */
+export type GameResultSection =
+  (typeof GameResultSection)[keyof typeof GameResultSection]
 
 const GameResultSectionLabels: { [key in GameResultSection]: string } = {
   [GameResultSection.Summary]: 'Summary',

@@ -1,20 +1,22 @@
-import {
+import type {
   ClassicQuestionDto,
-  GameMode,
   QuestionCommonDto,
   QuestionDto,
   QuestionMultiChoiceDto,
   QuestionPinDto,
-  QuestionPinTolerance,
   QuestionPuzzleDto,
-  QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
-  QuestionType,
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
-  QUIZ_STANDARD_POINTS,
   ZeroToOneHundredQuestionDto,
+} from '@quiz/common'
+import {
+  GameMode,
+  QuestionPinTolerance,
+  QuestionRangeAnswerMargin,
+  QuestionType,
+  QUIZ_STANDARD_POINTS,
 } from '@quiz/common'
 
 import {

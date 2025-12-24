@@ -1,4 +1,4 @@
-import { CountdownEvent } from '@quiz/common'
+import type { CountdownEvent } from '@quiz/common'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 type Box = { w: number; h: number }

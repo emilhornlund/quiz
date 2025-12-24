@@ -1,15 +1,14 @@
-import {
-  GameMode,
+import type {
   QuestionDto,
   QuestionMultiChoiceDto,
   QuestionPinDto,
   QuestionPuzzleDto,
   QuestionRangeDto,
   QuestionTrueFalseDto,
-  QuestionType,
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
 } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 

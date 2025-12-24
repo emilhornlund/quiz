@@ -1,6 +1,8 @@
-import React, { FC, useMemo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
-import { Confetti, ConfettiIntensity, NicknameChip } from '../index.ts'
+import Confetti, { type ConfettiIntensity } from '../Confetti'
+import NicknameChip from '../NicknameChip'
 
 import styles from './Podium.module.scss'
 

@@ -4,12 +4,10 @@ import {
   faTrash,
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-  MediaType,
-  QuestionImageRevealEffectType,
-  QuestionMediaDto,
-} from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import type { QuestionMediaDto } from '@quiz/common'
+import { MediaType, QuestionImageRevealEffectType } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Button,
@@ -17,8 +15,8 @@ import {
   ResponsiveImage,
   ResponsivePlayer,
 } from '../../../../../../../../../components'
-import { RevealEffect } from '../../../../../../../../../components/ResponsiveImage'
-import { QuizQuestionValidationResult } from '../../../../../../../utils/QuestionDataSource'
+import type { RevealEffect } from '../../../../../../../../../components/ResponsiveImage'
+import type { QuizQuestionValidationResult } from '../../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../../validation-rules'
 
 import { ImageEffectModal } from './components'

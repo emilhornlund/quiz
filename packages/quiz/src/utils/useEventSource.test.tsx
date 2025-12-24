@@ -2,7 +2,8 @@ import { GameEventType } from '@quiz/common'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ConnectionStatus, useEventSource } from './useEventSource'
+import { ConnectionStatus } from './event-source.types.ts'
+import { useEventSource } from './useEventSource'
 
 vi.mock('../config.ts', () => ({
   default: { quizServiceUrl: 'http://quiz-service.local' },
@@ -28,7 +29,11 @@ vi.mock('event-source-polyfill', () => {
     })
 
     constructor(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       public url: string,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       public init: Record<string, unknown>,
     ) {
       instances.push(this)

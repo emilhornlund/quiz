@@ -1,18 +1,13 @@
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { CountdownEvent, QuestionImageRevealEffectType } from '@quiz/common'
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { CountdownEvent } from '@quiz/common'
+import { QuestionImageRevealEffectType } from '@quiz/common'
+import type { FC, ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
-import { LoadingSpinner, Typography } from '../index.ts'
+import LoadingSpinner from '../LoadingSpinner'
+import Typography from '../Typography'
 
 import { ImageSquareEffect } from './components'
 import { useImageBlurEffect } from './hook'

@@ -1,8 +1,9 @@
-import {
+import type {
   GameQuestionPlayerEvent,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import { PlayerGameFooter, ProgressBar, Typography } from '../../components'
 import { useGameContext } from '../../context/game'

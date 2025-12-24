@@ -1,4 +1,5 @@
-import { QuestionType, ZeroToOneHundredQuestionDto } from '@quiz/common'
+import type { ZeroToOneHundredQuestionDto } from '@quiz/common'
+import { QuestionType } from '@quiz/common'
 
 import { defineDiscriminatedRules } from '../../../validation'
 

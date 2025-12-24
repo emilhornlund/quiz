@@ -1,14 +1,10 @@
-import { deepEqual, GameEvent, GameEventType, GameStatus } from '@quiz/common'
+import type { GameEvent } from '@quiz/common'
+import { deepEqual, GameEventType, GameStatus } from '@quiz/common'
 import { setContext } from '@sentry/react'
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
+import type { FC } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { BlockerFunction } from 'react-router-dom'
+import { useBlocker, useNavigate } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
 import Button from '../../components/Button'
@@ -28,15 +24,13 @@ import {
   PlayerQuestionState,
   PlayerResultState,
 } from '../../states'
+import { ConnectionStatus } from '../../utils/event-source.types.ts'
 import {
   notifyError,
   notifySuccess,
   notifyWarning,
 } from '../../utils/notification.ts'
-import {
-  ConnectionStatus,
-  useEventSource,
-} from '../../utils/useEventSource.tsx'
+import { useEventSource } from '../../utils/useEventSource.tsx'
 
 import styles from './GamePage.module.scss'
 

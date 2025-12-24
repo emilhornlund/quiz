@@ -1,12 +1,6 @@
-import { GameQuestionPlayerAnswerEvent } from '@quiz/common'
-import React, {
-  ChangeEvent,
-  FC,
-  FormEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import type { GameQuestionPlayerAnswerEvent } from '@quiz/common'
+import type { ChangeEvent, FC, FormEvent } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Button, TextField } from '../../../../../components'
 import { isValidNumber } from '../../../../../utils/helpers'

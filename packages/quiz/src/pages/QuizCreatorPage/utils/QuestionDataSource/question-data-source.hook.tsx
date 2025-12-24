@@ -1,4 +1,5 @@
-import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
+import type { QuestionDto } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 import { useCallback, useMemo, useState } from 'react'
 
 import { buildPartialQuestionDto } from '../../../../utils/questions'
@@ -8,7 +9,7 @@ import {
   zeroToOneHundredQuestionRules,
 } from '../../validation-rules'
 
-import {
+import type {
   QuizQuestionModel,
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,

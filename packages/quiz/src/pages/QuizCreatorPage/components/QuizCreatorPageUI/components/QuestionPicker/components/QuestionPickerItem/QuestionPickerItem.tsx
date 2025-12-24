@@ -2,8 +2,13 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons'
 import { faCircleExclamation, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { QuestionType } from '@quiz/common'
-import React, { DragEvent, FC, MouseEvent } from 'react'
+import type { DragEvent, FC, MouseEvent } from 'react'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../../../../../../../components'
 import { QuestionTypeLabels } from '../../../../../../../../models'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
 
@@ -14,7 +19,7 @@ export interface QuestionPickerItemProps {
   text: string
   type: QuestionType
   active?: boolean
-  error?: boolean
+  errorMessage?: string
   onClick?: () => void
   onDrop?: (id: number) => void
   onDuplicate?: () => void
@@ -26,7 +31,7 @@ const QuestionPickerItem: FC<QuestionPickerItemProps> = ({
   text,
   type,
   active,
-  error,
+  errorMessage,
   onClick,
   onDrop,
   onDuplicate,
@@ -97,9 +102,18 @@ const QuestionPickerItem: FC<QuestionPickerItemProps> = ({
               <FontAwesomeIcon icon={faCopy} />
             </button>
           )}
-          {!!error && (
+          {!!errorMessage && (
             <div className={styles.questionPickerItemOverlayError}>
-              <FontAwesomeIcon icon={faCircleExclamation} />
+              <Tooltip placement="bottom">
+                <TooltipTrigger>
+                  <FontAwesomeIcon icon={faCircleExclamation} />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className={styles.tooltipErrorContent}>
+                    {errorMessage}
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             </div>
           )}
           {active && (

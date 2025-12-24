@@ -1,6 +1,6 @@
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import { getPinColorColor } from './pin-utils.ts'
 import styles from './PinImage.module.scss'

@@ -1,12 +1,10 @@
 import { faRocket } from '@fortawesome/free-solid-svg-icons'
-import { GameQuestionPlayerAnswerEvent } from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import type { GameQuestionPlayerAnswerEvent } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 
-import {
-  Button,
-  SortableTable,
-  SortableTableValue,
-} from '../../../../../components'
+import type { SortableTableValue } from '../../../../../components'
+import { Button, SortableTable } from '../../../../../components'
 
 import styles from './AnswerSort.module.scss'
 

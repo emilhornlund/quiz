@@ -1,9 +1,8 @@
 import { MediaType, QuestionImageRevealEffectType } from '@quiz/common'
 import { fireEvent, render, screen, within } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ValidationResult } from '../../../../../../../../../validation'
+import type { ValidationResult } from '../../../../../../../../../validation'
 
 import MediaQuestionField from './MediaQuestionField'
 

@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import SegmentedControl, { SegmentedControlProps } from './SegmentedControl'
+import SegmentedControl, {
+  type SegmentedControlProps,
+} from './SegmentedControl'
 
 const SegmentedControlStoryComponent: FC<SegmentedControlProps> = (props) => {
   const [value, setValue] = useState<string>()

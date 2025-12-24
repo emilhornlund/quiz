@@ -1,5 +1,5 @@
+import type { QuestionPinDto } from '@quiz/common'
 import {
-  QuestionPinDto,
   QuestionPinTolerance,
   QuestionType,
   QUIZ_DURATION_ALLOWED,

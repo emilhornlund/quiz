@@ -10,9 +10,10 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react'
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, ReactNode, useState } from 'react'
+import type { FC, ReactNode } from 'react'
+import { useState } from 'react'
 
 import styles from './IconTooltip.module.scss'
 

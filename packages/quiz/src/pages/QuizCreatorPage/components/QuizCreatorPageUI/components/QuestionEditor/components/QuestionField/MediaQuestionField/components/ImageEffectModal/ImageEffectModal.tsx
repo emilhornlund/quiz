@@ -1,5 +1,6 @@
 import { QuestionImageRevealEffectType } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   Button,
@@ -8,7 +9,7 @@ import {
 } from '../../../../../../../../../../../components'
 import { ImageRevealEffectLabels } from '../../../../../../../../../../../models'
 import { classNames } from '../../../../../../../../../../../utils/helpers.ts'
-import { QuizQuestionValidationResult } from '../../../../../../../../../utils/QuestionDataSource'
+import type { QuizQuestionValidationResult } from '../../../../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../../../../validation-rules'
 
 import styles from './ImageEffectModal.module.scss'

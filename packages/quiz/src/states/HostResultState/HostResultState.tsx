@@ -1,12 +1,13 @@
 import { faChartSimple, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
-import {
+import type {
   GameEventQuestionResultsPin,
   GameEventQuestionResultsPuzzle,
   GameResultHostEvent,
   QuestionCorrectAnswerDto,
-  QuestionType,
 } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import { QuestionType } from '@quiz/common'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import {
   Button,

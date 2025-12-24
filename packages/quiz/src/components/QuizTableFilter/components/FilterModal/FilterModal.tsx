@@ -4,7 +4,8 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   GameModeLabels,

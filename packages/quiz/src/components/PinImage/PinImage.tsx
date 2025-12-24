@@ -2,10 +2,8 @@ import {
   QUESTION_PIN_TOLERANCE_RADIUS,
   QuestionPinTolerance,
 } from '@quiz/common'
-import React, {
-  FC,
-  PointerEvent,
-  ReactNode,
+import type { FC, PointerEvent, ReactNode } from 'react'
+import {
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -14,13 +12,15 @@ import React, {
   useState,
 } from 'react'
 
-import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
-import ResponsiveImage, { ResponsiveImageProps } from '../ResponsiveImage'
+import { DeviceType } from '../../utils/device-size.types.ts'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import ResponsiveImage, { type ResponsiveImageProps } from '../ResponsiveImage'
 
 import { clamp01 } from './pin-utils.ts'
 import Pin from './Pin.tsx'
 import styles from './PinImage.module.scss'
-import { PinColor, PinImagePosition, PinImageValue } from './types.ts'
+import type { PinImagePosition, PinImageValue } from './types.ts'
+import { PinColor } from './types.ts'
 
 const toPinImagePosition = (
   value?: PinImageValue,

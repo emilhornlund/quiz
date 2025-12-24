@@ -6,14 +6,15 @@ import {
   faLanguage,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type { QuizAuthorResponseDto } from '@quiz/common'
 import {
   GameMode,
   LanguageCode,
-  QuizAuthorResponseDto,
   QuizCategory,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC, MouseEvent, useMemo } from 'react'
+import type { FC, MouseEvent } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Picture from '../../assets/images/picture.svg'

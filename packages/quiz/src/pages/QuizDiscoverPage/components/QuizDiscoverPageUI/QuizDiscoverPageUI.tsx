@@ -1,11 +1,11 @@
+import type { QuizResponseDto } from '@quiz/common'
 import {
   GameMode,
   LanguageCode,
   QuizCategory,
-  QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import {
   LoadingSpinner,

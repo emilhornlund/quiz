@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
@@ -11,7 +12,8 @@ import {
   sha256,
 } from '../../utils/oauth.ts'
 
-import { AuthLoginPageUI, LoginFormFields } from './components'
+import type { LoginFormFields } from './components'
+import { AuthLoginPageUI } from './components'
 
 const AuthLoginPage: FC = () => {
   const { login } = useQuizServiceClient()

@@ -1,10 +1,10 @@
-import {
-  GameMode,
+import type {
   GameResultClassicModeQuestionMetricDto,
   GameResultDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@quiz/common'
-import React, { FC } from 'react'
+import { GameMode } from '@quiz/common'
+import type { FC } from 'react'
 
 import {
   buildQuestionSectionMetricDetails,

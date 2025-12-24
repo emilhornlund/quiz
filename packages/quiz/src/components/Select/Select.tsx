@@ -3,18 +3,12 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { ChangeEvent, FC } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { DeviceType } from '../../utils/device-size.types.ts'
 import { classNames } from '../../utils/helpers.ts'
-import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import { isCallbackValid } from '../../utils/validation'
 
 import styles from './Select.module.scss'

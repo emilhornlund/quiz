@@ -1,6 +1,8 @@
 import { faPlus, faRetweet, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { MediaType, QuestionPinDto, QuestionPinTolerance } from '@quiz/common'
-import React, { FC, useEffect, useState } from 'react'
+import type { QuestionPinDto } from '@quiz/common'
+import { MediaType, QuestionPinTolerance } from '@quiz/common'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Button,

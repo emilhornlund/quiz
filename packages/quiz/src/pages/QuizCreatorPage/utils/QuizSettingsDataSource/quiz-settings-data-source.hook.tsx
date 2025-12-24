@@ -1,15 +1,11 @@
-import {
-  LanguageCode,
-  QuizCategory,
-  QuizRequestBaseDto,
-  QuizVisibility,
-} from '@quiz/common'
+import type { QuizRequestBaseDto } from '@quiz/common'
+import { LanguageCode, QuizCategory, QuizVisibility } from '@quiz/common'
 import { useCallback, useMemo, useState } from 'react'
 
 import { validateDto } from '../../../../validation'
 import { quizSettingsRules } from '../../validation-rules'
 
-import {
+import type {
   QuizSettingsModel,
   QuizSettingsModelFieldChangeFunction,
   QuizSettingsValidationResult,

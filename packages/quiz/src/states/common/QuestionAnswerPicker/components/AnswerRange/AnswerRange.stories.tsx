@@ -1,8 +1,9 @@
 import { QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
-import AnswerRange, { AnswerRangeProps } from './AnswerRange'
+import AnswerRange, { type AnswerRangeProps } from './AnswerRange'
 
 const AnswerRangeComponent: FC<AnswerRangeProps> = (props) => {
   const [submittedAnswer, setSubmittedAnswer] = useState<{

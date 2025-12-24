@@ -1,7 +1,7 @@
+import type { DragEndEvent } from '@dnd-kit/core'
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
@@ -17,10 +17,11 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { faGrip } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import colors from '../../styles/colors.module.scss'
 import { classNames } from '../../utils/helpers.ts'

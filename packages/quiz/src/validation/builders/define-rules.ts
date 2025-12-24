@@ -1,4 +1,4 @@
-import { DtoRules, OptionalKeys, ValidationRules } from '../model'
+import type { DtoRules, OptionalKeys, ValidationRules } from '../model'
 
 /**
  * Builder for strongly-typed DTO validation rules.

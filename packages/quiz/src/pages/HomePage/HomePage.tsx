@@ -1,5 +1,6 @@
 import { GAME_PIN_LENGTH, GAME_PIN_REGEX } from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'

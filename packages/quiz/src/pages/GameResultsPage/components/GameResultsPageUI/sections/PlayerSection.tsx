@@ -1,10 +1,11 @@
-import {
-  GameMode,
+import type {
   GameResultClassicModePlayerMetricDto,
   GameResultDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import { GameMode } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import {
   buildPlayerSectionMetricDetails,
@@ -12,7 +13,8 @@ import {
   getCorrectPercentage,
 } from '../utils'
 
-import { GameResultTable, TableItem, TableSeparator } from './components'
+import type { TableItem, TableSeparator } from './components'
+import { GameResultTable } from './components'
 
 function getProgress(
   mode: GameMode,

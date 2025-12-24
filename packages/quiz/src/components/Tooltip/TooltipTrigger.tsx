@@ -1,11 +1,6 @@
 import { useMergeRefs } from '@floating-ui/react'
-import React, {
-  HTMLAttributes,
-  isValidElement,
-  ReactElement,
-  ReactNode,
-  Ref,
-} from 'react'
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from 'react'
+import { isValidElement } from 'react'
 import { cloneElement, forwardRef } from 'react'
 
 import { useTooltipContext } from './use-tooltip.context'

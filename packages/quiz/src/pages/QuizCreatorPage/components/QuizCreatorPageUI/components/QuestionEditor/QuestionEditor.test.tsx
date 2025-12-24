@@ -5,11 +5,10 @@ import {
   QuestionType,
 } from '@quiz/common'
 import { render } from '@testing-library/react'
-import React from 'react'
 import '@testing-library/jest-dom'
 import { describe, expect, it } from 'vitest'
 
-import { ValidationResult } from '../../../../../../validation'
+import type { ValidationResult } from '../../../../../../validation'
 
 import QuestionEditor from './QuestionEditor.tsx'
 

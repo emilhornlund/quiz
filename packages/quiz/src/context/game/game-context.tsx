@@ -1,4 +1,4 @@
-import {
+import type {
   QuestionCorrectAnswerDto,
   SubmitQuestionAnswerRequestDto,
 } from '@quiz/common'

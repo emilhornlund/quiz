@@ -1,7 +1,7 @@
-import { GameMode, type GameResultDto, QuestionType } from '@quiz/common'
+import type { GameResultDto } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 

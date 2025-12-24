@@ -33,8 +33,7 @@ export default defineConfig(({ mode }) => {
         modules: { classNameStrategy: 'non-scoped' },
       },
       coverage: {
-        provider: 'istanbul',
-        all: true,
+        provider: 'v8',
         include: ['src/**/*.{ts,tsx}'],
         exclude: [
           'node_modules/**',

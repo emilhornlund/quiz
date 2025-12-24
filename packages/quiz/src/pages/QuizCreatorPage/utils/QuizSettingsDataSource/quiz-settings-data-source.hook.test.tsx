@@ -3,7 +3,7 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { useQuizSettingsDataSource } from './quiz-settings-data-source.hook'
-import { QuizSettingsModel } from './quiz-settings-data-source.types.ts'
+import type { QuizSettingsModel } from './quiz-settings-data-source.types.ts'
 
 const makeValidSettings = (): QuizSettingsModel => ({
   title: 'My Quiz',

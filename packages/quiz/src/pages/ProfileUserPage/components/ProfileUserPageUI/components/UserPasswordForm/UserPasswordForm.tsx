@@ -1,11 +1,12 @@
 import { faLock } from '@fortawesome/free-solid-svg-icons'
+import type { AuthPasswordChangeRequestDto } from '@quiz/common'
 import {
-  AuthPasswordChangeRequestDto,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Button, TextField, Typography } from '../../../../../../components'
 import styles from '../../../../../../styles/form.module.scss'

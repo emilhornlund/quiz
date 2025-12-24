@@ -1,9 +1,8 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import { describe, expect, it } from 'vitest'
 
-import GameResultTable, { TableItem } from './GameResultTable'
+import GameResultTable, { type TableItem } from './GameResultTable'
 
 describe('GameResultTable', () => {
   const items: TableItem[] = [

@@ -1,7 +1,7 @@
 import { TokenScope } from '@quiz/common'
 import { createContext } from 'react'
 
-import { AuthState } from '../../models'
+import type { AuthState } from '../../models'
 
 /**
  * AuthContextType defines the shape of authentication-related data

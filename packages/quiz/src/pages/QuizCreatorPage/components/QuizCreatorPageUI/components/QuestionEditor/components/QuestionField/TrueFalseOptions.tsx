@@ -1,7 +1,8 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
-import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import type { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'

@@ -8,7 +8,8 @@ import {
   useRole,
 } from '@floating-ui/react'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import React, { FC, ReactNode, useId } from 'react'
+import type { FC, ReactNode } from 'react'
+import { useId } from 'react'
 
 import { classNames } from '../../utils/helpers.ts'
 import Button from '../Button'

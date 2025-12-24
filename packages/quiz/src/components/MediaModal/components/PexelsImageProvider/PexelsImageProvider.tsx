@@ -1,6 +1,7 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { PaginatedMediaPhotoSearchDto } from '@quiz/common'
-import React, { FC, useState } from 'react'
+import type { PaginatedMediaPhotoSearchDto } from '@quiz/common'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
 import { classNames } from '../../../../utils/helpers.ts'

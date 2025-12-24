@@ -1,20 +1,23 @@
-import {
-  calculateRangeBounds,
-  calculateRangeStep,
+import type {
   QuestionDto,
   QuestionMultiChoiceDto,
   QuestionPinDto,
   QuestionPuzzleDto,
-  QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionTrueFalseDto,
   QuestionTypeAnswerDto,
   QuestionZeroToOneHundredRangeDto,
 } from '@quiz/common'
-import React, { FC, useMemo } from 'react'
+import {
+  calculateRangeBounds,
+  calculateRangeStep,
+  QuestionRangeAnswerMargin,
+} from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import { isValidNumber } from '../../../../../../../../utils/helpers.ts'
-import {
+import type {
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,
 } from '../../../../../../utils/QuestionDataSource'

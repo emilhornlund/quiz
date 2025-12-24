@@ -1,15 +1,8 @@
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { QuestionType } from '@quiz/common'
-import React, {
-  FC,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import type { FC, MouseEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ConfirmDialog } from '../../../../../../components'
 
@@ -19,7 +12,7 @@ import styles from './QuestionPicker.module.scss'
 export type QuestionPickerItem = {
   type: QuestionType
   text?: string
-  error?: boolean
+  errorMessage?: string
 }
 
 export interface QuestionPickerProps {
@@ -82,14 +75,14 @@ const QuestionPicker: FC<QuestionPickerProps> = ({
       <div
         ref={questionPickerItemContainerRef}
         className={styles.questionPickerItemContainer}>
-        {questions.map(({ type, text, error }, index) => (
+        {questions.map(({ type, text, errorMessage }, index) => (
           <QuestionPickerItem
             key={`question-picker-item-${index}`}
             index={index}
             text={text || 'Question'}
             type={type}
             active={isActive(index)}
-            error={error}
+            errorMessage={errorMessage}
             onClick={() => onSelectQuestion(index)}
             onDrop={onDropQuestion}
             onDuplicate={() => onDuplicateQuestion(index)}

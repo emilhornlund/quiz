@@ -1,5 +1,5 @@
 import { QuestionImageRevealEffectType } from '@quiz/common'
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -20,6 +20,7 @@ class MockImage {
     }
   }
 }
+
 vi.stubGlobal('Image', MockImage as unknown as typeof Image)
 
 let didNotifyResize = false
@@ -48,13 +49,17 @@ vi.mock('usehooks-ts', () => ({
 }))
 
 vi.mock('./hook', () => ({
-  useImageBlurEffect: (countdown?: unknown) =>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  useImageBlurEffect: (_box?: unknown, countdown?: unknown, _opts?: unknown) =>
     countdown ? { filter: 'blur(8px)' } : { filter: 'blur(0px)' },
 }))
 
-vi.mock('../index.ts', () => ({
-  LoadingSpinner: () => <div data-testid="spinner" />,
-  Typography: ({ children }: { children: React.ReactNode }) => (
+vi.mock('../LoadingSpinner', () => ({
+  default: () => <div data-testid="loading-spinner" />,
+}))
+
+vi.mock('../Typography', () => ({
+  default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="typography">{children}</div>
   ),
 }))
@@ -73,70 +78,23 @@ describe('ResponsiveImage', () => {
     didNotifyResize = false
   })
 
-  it('should render ResponsiveImage with props', async () => {
-    const { container } = render(
-      <ResponsiveImage
-        imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        alt="Who painted The Starry Night?"
-      />,
-    )
-    expect(container).toMatchSnapshot()
-  })
-
-  it('should render loading state', () => {
+  it('should render loading state when no imageURL is provided', () => {
     const { container } = render(<ResponsiveImage alt="loading" />)
     expect(container).toMatchSnapshot()
   })
 
-  it('should render error state', async () => {
+  it('should render error state when image fails to load', async () => {
     const { container } = render(
       <ResponsiveImage imageURL="invalid-url" alt="error" />,
     )
-    await act(async () => {})
-    expect(container).toMatchSnapshot()
-  })
 
-  it('should render with blur effect', () => {
-    const { container } = render(
-      <ResponsiveImage
-        imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        alt="blur"
-        revealEffect={{ type: QuestionImageRevealEffectType.Blur }}
-      />,
-    )
-    expect(container).toMatchSnapshot()
-  })
+    await waitFor(() => {
+      expect(screen.getByTestId('typography')).toHaveTextContent(
+        'Oh no! Unable to load image',
+      )
+    })
 
-  it('should render with square effect', () => {
-    const { container } = render(
-      <ResponsiveImage
-        imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        alt="square"
-        revealEffect={{ type: QuestionImageRevealEffectType.Square3x3 }}
-      />,
-    )
-    expect(container).toMatchSnapshot()
-  })
-
-  it('should render with overlay children', () => {
-    const { container } = render(
-      <ResponsiveImage
-        imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        alt="overlay">
-        <span>Overlay Content</span>
-      </ResponsiveImage>,
-    )
-    expect(container).toMatchSnapshot()
-  })
-
-  it('should render with noBorder', () => {
-    const { container } = render(
-      <ResponsiveImage
-        imageURL="https://i.pinimg.com/originals/a6/60/72/a66072b0e88258f2898a76c3f3c01041.jpg"
-        alt="noBorder"
-        noBorder
-      />,
-    )
+    expect(container.querySelector('img')).toBeNull()
     expect(container).toMatchSnapshot()
   })
 
@@ -145,12 +103,14 @@ describe('ResponsiveImage', () => {
       <ResponsiveImage imageURL="https://cdn/img.jpg" alt="computed" />,
     )
 
-    await act(async () => {})
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
 
-    const box = container.querySelector('[class*="box"]')
+    const box = container.querySelector('[class*="box"]') as HTMLElement | null
     expect(box).toBeTruthy()
-    expect((box as HTMLElement).style.width).toBe('800px')
-    expect((box as HTMLElement).style.height).toBe('600px')
+    expect(box?.style.width).toBe('800px')
+    expect(box?.style.height).toBe('600px')
 
     const img = container.querySelector('img')
     expect(img).toHaveAttribute('src', 'https://cdn/img.jpg')
@@ -169,6 +129,7 @@ describe('ResponsiveImage', () => {
         // never call onload/onerror -> stays "loading"
       }
     }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const prev = (globalThis as any).Image
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -177,9 +138,11 @@ describe('ResponsiveImage', () => {
     const { container, unmount } = render(
       <ResponsiveImage imageURL="https://cdn/slow.jpg" alt="loading" />,
     )
-    await act(async () => {})
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
+    })
+
     expect(container.querySelector('img')).toBeNull()
 
     unmount()
@@ -187,19 +150,10 @@ describe('ResponsiveImage', () => {
     ;(globalThis as any).Image = prev
   })
 
-  it('shows error overlay when image fails to load', async () => {
-    const { container } = render(<ResponsiveImage imageURL="bad" alt="err" />)
-    await act(async () => {}) // allow onerror phase to apply
-    expect(screen.getByTestId('typography')).toHaveTextContent(
-      'Oh no! Unable to load image',
-    )
-    const img = container.querySelector('img')
-    expect(img).toBeNull()
-  })
-
   it('applies Blur effect style via hook and does NOT render square effect', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const countdown = { remainingMs: 3000 } as any
+
     const { container } = render(
       <ResponsiveImage
         imageURL="https://cdn/blur.jpg"
@@ -207,15 +161,19 @@ describe('ResponsiveImage', () => {
         revealEffect={{ type: QuestionImageRevealEffectType.Blur, countdown }}
       />,
     )
-    await act(async () => {})
 
-    const img = container.querySelector('img') as HTMLImageElement
-    expect(img.getAttribute('style') || '').toMatch(/blur\(8px\)/i)
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
+
+    const img = container.querySelector('img') as HTMLImageElement | null
+    expect(img).toBeTruthy()
+    expect(img?.getAttribute('style') || '').toMatch(/blur\(8px\)/i)
 
     expect(screen.queryByTestId('square-effect')).toBeNull()
   })
 
-  it('renders ImageSquareEffect for Square3x3 and passes box + effect', async () => {
+  it('renders ImageSquareEffect for Square3x3 and does NOT apply blur style', async () => {
     const { container } = render(
       <ResponsiveImage
         imageURL="https://cdn/tiles.jpg"
@@ -223,17 +181,35 @@ describe('ResponsiveImage', () => {
         revealEffect={{ type: QuestionImageRevealEffectType.Square3x3 }}
       />,
     )
-    await act(async () => {})
+
+    await waitFor(() => {
+      expect(screen.getByTestId('square-effect')).toBeInTheDocument()
+    })
 
     const square = screen.getByTestId('square-effect')
-    expect(square).toBeInTheDocument()
     expect(square).toHaveAttribute(
       'data-effect',
       String(QuestionImageRevealEffectType.Square3x3),
     )
 
-    const img = container.querySelector('img') as HTMLImageElement
-    expect(img.getAttribute('style') || '').not.toMatch(/blur/i)
+    const img = container.querySelector('img') as HTMLImageElement | null
+    expect(img).toBeTruthy()
+    expect(img?.getAttribute('style') || '').not.toMatch(/blur/i)
+  })
+
+  it('renders children into overlay when provided', async () => {
+    const { container } = render(
+      <ResponsiveImage imageURL="https://cdn/overlay.jpg" alt="overlay">
+        <span data-testid="overlay-child">Overlay Content</span>
+      </ResponsiveImage>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-child')).toBeInTheDocument()
+    })
+
+    const overlay = container.querySelector('[class*="overlay"]')
+    expect(overlay).toBeTruthy()
   })
 
   it('respects noBorder by using the boxNoBorder class', async () => {
@@ -244,43 +220,35 @@ describe('ResponsiveImage', () => {
         noBorder
       />,
     )
-    await act(async () => {})
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
 
     const box = container.querySelector('[class*="boxNoBorder"]')
     expect(box).toBeTruthy()
+
     const bordered = container.querySelector(
       '[class*="box"]:not([class*="boxNoBorder"])',
     )
     expect(bordered).toBeNull()
   })
 
-  it('renders children into overlay when provided', async () => {
-    const { container } = render(
-      <ResponsiveImage imageURL="https://cdn/overlay.jpg" alt="overlay">
-        <span data-testid="overlay-child">Overlay Content</span>
-      </ResponsiveImage>,
-    )
-    await act(async () => {})
-
-    const overlayChild = screen.getByTestId('overlay-child')
-    expect(overlayChild).toBeInTheDocument()
-
-    const overlay = container.querySelector('[class*="overlay"]')
-    expect(overlay).toBeTruthy()
-  })
-
   it('resets to idle (no content) when imageURL becomes undefined after being set', async () => {
     const { rerender, container } = render(
       <ResponsiveImage imageURL="https://cdn/once.jpg" alt="once" />,
     )
-    await act(async () => {})
-    expect(container.querySelector('img')).toBeTruthy()
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
 
     rerender(<ResponsiveImage alt="idle" />)
+
     await act(async () => {})
 
     expect(container.querySelector('img')).toBeNull()
-    expect(screen.queryByTestId('spinner')).toBeNull()
+    expect(screen.queryByTestId('loading-spinner')).toBeNull()
     expect(screen.queryByTestId('typography')).toBeNull()
   })
 
@@ -295,10 +263,11 @@ describe('ResponsiveImage', () => {
     const { container } = render(
       <ResponsiveImage imageURL="https://cdn/nosize.jpg" alt="nosize" />,
     )
+
     await act(async () => {})
 
     expect(container.querySelector('img')).toBeNull()
-    expect(screen.queryByTestId('spinner')).toBeNull()
+    expect(screen.queryByTestId('loading-spinner')).toBeNull()
     expect(screen.queryByTestId('typography')).toBeNull()
 
     resizeObserverImpl.mockReset()

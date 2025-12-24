@@ -1,9 +1,6 @@
 import { faMaximize, faMinimize } from '@fortawesome/free-solid-svg-icons'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-import { DeviceType } from '../../../utils/useDeviceSizeType'
 
 const h = vi.hoisted(() => {
   return {
@@ -38,12 +35,16 @@ vi.mock('../../../context/game', () => ({
   }),
 }))
 
-vi.mock('../../../utils/useDeviceSizeType', () => ({
+vi.mock('../../../utils/device-size.types', () => ({
   DeviceType: {
     Mobile: 'Mobile',
     Tablet: 'Tablet',
     Desktop: 'Desktop',
   } as const,
+}))
+import { DeviceType } from '../../../utils/device-size.types'
+
+vi.mock('../../../utils/useDeviceSizeType', () => ({
   useDeviceSizeType: () => h.state.deviceType,
 }))
 

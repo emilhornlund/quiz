@@ -2,7 +2,8 @@ import {
   UPLOAD_IMAGE_MAX_FILE_SIZE,
   UPLOAD_IMAGE_MIN_FILE_SIZE,
 } from '@quiz/common'
-import React, { FC, useCallback } from 'react'
+import type { FC } from 'react'
+import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { classNames } from '../../utils/helpers.ts'

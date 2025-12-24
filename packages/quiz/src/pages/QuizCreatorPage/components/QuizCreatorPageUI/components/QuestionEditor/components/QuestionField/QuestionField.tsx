@@ -1,12 +1,14 @@
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
-import {
+import type {
   QuestionMediaDto,
   QuestionMultiChoiceOptionDto,
+} from '@quiz/common'
+import {
   QuestionPinTolerance,
   QuestionRangeAnswerMargin,
   QuestionType,
 } from '@quiz/common'
-import React, { FC, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 
 import { Select, TextField } from '../../../../../../../../components'
 import IconTooltip from '../../../../../../../../components/IconTooltip'
@@ -19,12 +21,14 @@ import {
   classNames,
   trimToUndefined,
 } from '../../../../../../../../utils/helpers.ts'
-import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import type { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import MediaQuestionField from './MediaQuestionField'
 import MultiChoiceOptions from './MultiChoiceOptions.tsx'
-import PinQuestionField, { PinQuestionFieldProps } from './PinQuestionField'
+import PinQuestionField, {
+  type PinQuestionFieldProps,
+} from './PinQuestionField'
 import PuzzleValues from './PuzzleValues.tsx'
 import styles from './QuestionField.module.scss'
 import TrueFalseOptions from './TrueFalseOptions.tsx'
@@ -33,66 +37,66 @@ import { QuestionFieldType } from './types.ts'
 
 export type QuestionFieldProps = (
   | {
-      type: QuestionFieldType.CommonDuration
+      type: typeof QuestionFieldType.CommonDuration
       value?: number
       validation: QuizQuestionValidationResult
       onChange: (value: number) => void
     }
   | {
-      type: QuestionFieldType.CommonInfo
+      type: typeof QuestionFieldType.CommonInfo
       value?: string
       validation: QuizQuestionValidationResult
       onChange: (value?: string) => void
     }
   | {
-      type: QuestionFieldType.CommonMedia
+      type: typeof QuestionFieldType.CommonMedia
       value?: QuestionMediaDto
       duration?: number
       validation: QuizQuestionValidationResult
       onChange: (value?: QuestionMediaDto) => void
     }
   | {
-      type: QuestionFieldType.CommonPoints
+      type: typeof QuestionFieldType.CommonPoints
       value?: number
       validation: QuizQuestionValidationResult
       onChange: (value: number) => void
     }
   | {
-      type: QuestionFieldType.CommonQuestion
+      type: typeof QuestionFieldType.CommonQuestion
       value?: string
       validation: QuizQuestionValidationResult
       onChange: (value: string) => void
     }
   | {
-      type: QuestionFieldType.CommonType
+      type: typeof QuestionFieldType.CommonType
       value?: QuestionType
       validation: QuizQuestionValidationResult
       onChange: (value: QuestionType) => void
     }
   | {
-      type: QuestionFieldType.MultiChoiceOptions
+      type: typeof QuestionFieldType.MultiChoiceOptions
       values?: QuestionMultiChoiceOptionDto[]
       validation: QuizQuestionValidationResult
       onChange: (value: QuestionMultiChoiceOptionDto[]) => void
     }
   | ({
-      type: QuestionFieldType.Pin
+      type: typeof QuestionFieldType.Pin
       validation: QuizQuestionValidationResult
     } & PinQuestionFieldProps)
   | {
-      type: QuestionFieldType.PinTolerance
+      type: typeof QuestionFieldType.PinTolerance
       value?: QuestionPinTolerance
       validation: QuizQuestionValidationResult
       onChange: (value?: QuestionPinTolerance) => void
     }
   | {
-      type: QuestionFieldType.PuzzleValues
+      type: typeof QuestionFieldType.PuzzleValues
       value?: string[]
       validation: QuizQuestionValidationResult
       onChange: (values?: string[]) => void
     }
   | {
-      type: QuestionFieldType.RangeCorrect
+      type: typeof QuestionFieldType.RangeCorrect
       value?: number
       min?: number
       max?: number
@@ -100,33 +104,33 @@ export type QuestionFieldProps = (
       onChange: (value: number) => void
     }
   | {
-      type: QuestionFieldType.RangeMargin
+      type: typeof QuestionFieldType.RangeMargin
       value?: QuestionRangeAnswerMargin
       validation: QuizQuestionValidationResult
       onChange: (value: QuestionRangeAnswerMargin) => void
     }
   | {
-      type: QuestionFieldType.RangeMax
+      type: typeof QuestionFieldType.RangeMax
       value?: number
       min?: number
       validation: QuizQuestionValidationResult
       onChange: (value: number) => void
     }
   | {
-      type: QuestionFieldType.RangeMin
+      type: typeof QuestionFieldType.RangeMin
       value?: number
       max?: number
       validation: QuizQuestionValidationResult
       onChange: (value: number) => void
     }
   | {
-      type: QuestionFieldType.TrueFalseOptions
+      type: typeof QuestionFieldType.TrueFalseOptions
       value?: boolean
       validation: QuizQuestionValidationResult
       onChange: (value?: boolean) => void
     }
   | {
-      type: QuestionFieldType.TypeAnswerOptions
+      type: typeof QuestionFieldType.TypeAnswerOptions
       values?: string[]
       validation: QuizQuestionValidationResult
       onChange: (values?: string[]) => void

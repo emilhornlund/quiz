@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
-import { Badge, BadgeColor } from '../index.ts'
+import Badge, { type BadgeColor } from '../Badge'
 
 import styles from './StreakBadge.module.scss'
 
@@ -9,7 +9,7 @@ export type StreakBadgeStyle = 'default' | 'gold' | 'silver' | 'bronze'
 export interface StreakBadgeProps {
   streak?: number
   style?: StreakBadgeStyle
-  children?: React.ReactNode | React.ReactNode[]
+  children?: ReactNode | ReactNode[]
 }
 
 const getBackgroundColor = (style: StreakBadgeStyle): BadgeColor => {

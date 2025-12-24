@@ -1,12 +1,13 @@
 import { faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type { AuthPasswordResetRequestDto } from '@quiz/common'
 import {
-  AuthPasswordResetRequestDto,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
 } from '@quiz/common'
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Badge,

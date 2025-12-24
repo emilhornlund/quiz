@@ -1,7 +1,9 @@
-import React, { FC, useMemo } from 'react'
+import type { FC } from 'react'
+import { useMemo } from 'react'
 
+import { DeviceType } from '../../utils/device-size.types.ts'
 import { classNames } from '../../utils/helpers'
-import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 
 import styles from './CircularProgressBar.module.scss'
 import { CircularProgressBarKind, CircularProgressBarSize } from './types'

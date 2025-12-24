@@ -1,7 +1,7 @@
+import type { DragEndEvent } from '@dnd-kit/core'
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
@@ -19,23 +19,17 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { faGrip } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type { QuestionMultiChoiceOptionDto } from '@quiz/common'
 import {
-  QuestionMultiChoiceOptionDto,
   QUIZ_MULTI_CHOICE_OPTIONS_MAX,
   QUIZ_MULTI_CHOICE_OPTIONS_MIN,
 } from '@quiz/common'
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react'
+import type { FC } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
 import { classNames } from '../../../../../../../../utils/helpers.ts'
-import { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
+import type { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import styles from './QuestionField.module.scss'

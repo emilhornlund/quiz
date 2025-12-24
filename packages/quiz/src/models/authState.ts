@@ -1,4 +1,5 @@
-import { GameTokenDto, TokenDto, TokenScope, TokenType } from '@quiz/common'
+import type { GameTokenDto, TokenDto } from '@quiz/common'
+import { TokenScope, TokenType } from '@quiz/common'
 
 /**
  * Represents the decoded payload for a token in a given scope.

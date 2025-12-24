@@ -1,11 +1,13 @@
-import { QuestionCorrectAnswerDto } from '@quiz/common'
-import React, { FC, ReactNode, useMemo } from 'react'
+import type { QuestionCorrectAnswerDto } from '@quiz/common'
+import type { FC, ReactNode } from 'react'
+import { useMemo } from 'react'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { useAuthContext } from '../auth'
 
-import { GameContext, GameContextType } from './game-context.tsx'
+import type { GameContextType } from './game-context.tsx'
+import { GameContext } from './game-context.tsx'
 
 /**
  * Props for the `GameContextProvider` component.

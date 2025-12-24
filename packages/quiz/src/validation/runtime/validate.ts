@@ -1,4 +1,4 @@
-import {
+import type {
   DiscriminatedRules,
   DiscriminatedUnion,
   DiscriminatorKey,
@@ -18,7 +18,8 @@ import {
   isStringRule,
   shouldRequireKey,
 } from './guards'
-import { buildValidationResult, ValidationResult } from './result'
+import type { ValidationResult } from './result'
+import { buildValidationResult } from './result'
 import type { AnyRule } from './types'
 
 /**

@@ -1,5 +1,7 @@
-import { MediaType, QuestionMediaDto, URL_REGEX } from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import type { QuestionMediaDto } from '@quiz/common'
+import { MediaType, URL_REGEX } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 
 import { MediaTypeLabels } from '../../models'
 import { classNames } from '../../utils/helpers.ts'

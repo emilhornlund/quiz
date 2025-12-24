@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
-import { AuthRegisterPageUI, CreateUserFormFields } from './components'
+import type { CreateUserFormFields } from './components'
+import { AuthRegisterPageUI } from './components'
 
 const AuthRegisterPage: FC = () => {
   const navigate = useNavigate()

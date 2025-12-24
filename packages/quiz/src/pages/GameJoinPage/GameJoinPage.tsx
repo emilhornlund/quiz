@@ -1,4 +1,5 @@
-import React, { FC, FormEvent, useMemo, useState } from 'react'
+import type { FC, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'

@@ -1,14 +1,13 @@
 import { AuthProvider } from '@quiz/common'
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 import { Page, PageDivider } from '../../../../components'
 
-import {
+import type {
   UpdateUserDetailsFormFields,
   UpdateUserPasswordFormFields,
-  UserDetailsForm,
-  UserPasswordForm,
 } from './components'
+import { UserDetailsForm, UserPasswordForm } from './components'
 
 export interface ProfileUserPageUIProps {
   authProvider: AuthProvider

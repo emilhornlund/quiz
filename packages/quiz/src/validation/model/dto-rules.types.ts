@@ -1,4 +1,4 @@
-import { ValidationRules } from './rules.types'
+import type { ValidationRules } from './rules.types'
 
 /**
  * Extracts keys from `T` whose property type includes `undefined`.

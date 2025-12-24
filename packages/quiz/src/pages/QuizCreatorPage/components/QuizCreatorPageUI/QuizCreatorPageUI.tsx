@@ -4,20 +4,20 @@ import {
   faGear,
   faSliders,
 } from '@fortawesome/free-solid-svg-icons'
-import { GameMode, QuestionDto, QuestionType } from '@quiz/common'
-import React, { FC, useMemo, useState } from 'react'
+import type { QuestionDto } from '@quiz/common'
+import { GameMode, QuestionType } from '@quiz/common'
+import type { FC } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Button, Page, TextField } from '../../../../components'
-import {
-  DeviceType,
-  useDeviceSizeType,
-} from '../../../../utils/useDeviceSizeType'
-import {
+import { DeviceType } from '../../../../utils/device-size.types.ts'
+import { useDeviceSizeType } from '../../../../utils/useDeviceSizeType'
+import type {
   QuizQuestionModel,
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,
 } from '../../utils/QuestionDataSource'
-import {
+import type {
   QuizSettingsModel,
   QuizSettingsModelFieldChangeFunction,
   QuizSettingsValidationResult,

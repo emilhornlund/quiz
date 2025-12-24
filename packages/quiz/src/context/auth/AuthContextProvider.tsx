@@ -1,20 +1,16 @@
-import { GameTokenDto, TokenDto, TokenScope, TokenType } from '@quiz/common'
+import type { GameTokenDto, TokenDto } from '@quiz/common'
+import { TokenScope, TokenType } from '@quiz/common'
 import { jwtDecode } from 'jwt-decode'
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react'
+import type { FC, ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
-import { AuthState, ScopePayload } from '../../models'
+import type { AuthState, ScopePayload } from '../../models'
 
-import { AuthContext, AuthContextType } from './auth-context.tsx'
+import type { AuthContextType } from './auth-context.tsx'
+import { AuthContext } from './auth-context.tsx'
 
 /**
  * Props for the `AuthContextProvider` component.

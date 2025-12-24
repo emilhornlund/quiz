@@ -1,5 +1,5 @@
-import { GameBeginHostEvent } from '@quiz/common'
-import React, { FC } from 'react'
+import type { GameBeginHostEvent } from '@quiz/common'
+import type { FC } from 'react'
 
 import MegaphoneIcon from '../../assets/images/megaphone-icon.svg'
 import { LoadingSpinner, PageProminentIcon, Typography } from '../../components'

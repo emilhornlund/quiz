@@ -1,9 +1,10 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
+import { DeviceType } from '../../utils/device-size.types.ts'
 import { classNames } from '../../utils/helpers'
-import { DeviceType, useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 
 import styles from './Button.module.scss'
 

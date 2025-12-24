@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
 import Page from './Page'

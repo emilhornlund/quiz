@@ -1,3 +1,4 @@
+import type { QuizRequestBaseDto } from '@quiz/common'
 import {
   LanguageCode,
   QUIZ_DESCRIPTION_MAX_LENGTH,
@@ -6,7 +7,6 @@ import {
   QUIZ_TITLE_MIN_LENGTH,
   QUIZ_TITLE_REGEX,
   QuizCategory,
-  QuizRequestBaseDto,
   QuizVisibility,
   URL_REGEX,
 } from '@quiz/common'

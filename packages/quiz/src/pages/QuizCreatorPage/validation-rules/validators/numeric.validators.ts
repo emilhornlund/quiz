@@ -1,4 +1,4 @@
-import { CustomValidator } from '../../../../validation'
+import type { CustomValidator } from '../../../../validation'
 
 /**
  * Chains multiple validators and returns the first error message encountered.

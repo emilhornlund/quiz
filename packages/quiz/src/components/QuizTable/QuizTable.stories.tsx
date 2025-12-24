@@ -7,7 +7,7 @@ import {
 import type { Meta, StoryObj } from '@storybook/react'
 import { v4 as uuidv4 } from 'uuid'
 
-import QuizTable, { QuizTableItem } from './QuizTable'
+import QuizTable, { type QuizTableItem } from './QuizTable'
 
 const meta = {
   component: QuizTable,

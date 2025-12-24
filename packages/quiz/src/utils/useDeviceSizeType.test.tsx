@@ -1,7 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { DeviceType, useDeviceSizeType } from './useDeviceSizeType'
+import { DeviceType } from './device-size.types.ts'
+import { useDeviceSizeType } from './useDeviceSizeType'
 
 const resizeWindow = (width: number) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

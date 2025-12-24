@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import { useState } from 'react'
 
 import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
 import config from '../../../../config.ts'
