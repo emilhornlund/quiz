@@ -2,7 +2,7 @@ import { faPlus, faRetweet, faTrash } from '@fortawesome/free-solid-svg-icons'
 import type { QuestionPinDto } from '@quiz/common'
 import { MediaType, QuestionPinTolerance } from '@quiz/common'
 import type { FC } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import {
   Button,
@@ -36,10 +36,6 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
   const [showMediaModal, setShowMediaModal] = useState(false)
   const [showConfirmDeleteImage, setShowConfirmDeleteImage] = useState(false)
 
-  useEffect(() => {
-    console.log('showMediaModal', showMediaModal)
-  }, [showMediaModal])
-
   return (
     <>
       <div className={styles.pinQuestionField}>
@@ -57,10 +53,7 @@ const PinQuestionField: FC<PinQuestionFieldProps> = ({
                   kind="call-to-action"
                   size="small"
                   icon={faRetweet}
-                  onClick={() => {
-                    console.log('FOOO')
-                    setShowMediaModal(true)
-                  }}
+                  onClick={() => setShowMediaModal(true)}
                 />
                 <Button
                   id="delete-image-button"
