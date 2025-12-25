@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { generateNickname } from './nickname.utils' // <-- adjust path
 
 // Local copies for assertions (kept in sync with the source)
@@ -69,27 +71,27 @@ const ANIMALS = [
 
 describe('generateNickname', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('calls Math.random exactly twice per nickname generation', () => {
-    const spy = jest.spyOn(Math, 'random').mockReturnValue(0.5)
+    const spy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
     generateNickname()
     expect(spy).toHaveBeenCalledTimes(2)
   })
 
   it('uses lower-bound selection when Math.random() returns 0 (first items)', () => {
-    jest.spyOn(Math, 'random').mockReturnValueOnce(0).mockReturnValueOnce(0)
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0).mockReturnValueOnce(0)
     const nick = generateNickname()
     expect(nick).toBe(`${ADJECTIVES[0]}${ANIMALS[0]}`) // FrostyBear
   })
 
   it('uses upper-bound selection when Math.random() is just below 1 (last items)', () => {
     // floor(0.999999 * len) === len - 1
-    jest
-      .spyOn(Math, 'random')
+    vi.spyOn(Math, 'random')
       .mockReturnValueOnce(0.999999)
       .mockReturnValueOnce(0.999999)
+
     const nick = generateNickname()
     expect(nick).toBe(
       `${ADJECTIVES[ADJECTIVES.length - 1]}${ANIMALS[ANIMALS.length - 1]}`,
@@ -100,8 +102,8 @@ describe('generateNickname', () => {
     // adjective index 1 -> 'Fiery', animal index 3 -> 'Falcon'
     const adjIdx = 1
     const aniIdx = 3
-    jest
-      .spyOn(Math, 'random')
+
+    vi.spyOn(Math, 'random')
       .mockReturnValueOnce(adjIdx / ADJECTIVES.length + 1e-9)
       .mockReturnValueOnce(aniIdx / ANIMALS.length + 1e-9)
 
@@ -137,19 +139,19 @@ describe('generateNickname', () => {
 
   it('produces different outputs for different random sequences (deterministic via mocking)', () => {
     // First run: pick indices 0 and 0
-    jest.spyOn(Math, 'random').mockReturnValueOnce(0.0).mockReturnValueOnce(0.0)
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.0).mockReturnValueOnce(0.0)
     const n1 = generateNickname()
     expect(n1).toBe(`${ADJECTIVES[0]}${ANIMALS[0]}`)
 
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
 
     // Second run: pick different indices
     const adjIdx = ADJECTIVES.length - 2 // 'Echo'
     const aniIdx = ANIMALS.length - 2 // 'Scorpion'
-    jest
-      .spyOn(Math, 'random')
+    vi.spyOn(Math, 'random')
       .mockReturnValueOnce(adjIdx / ADJECTIVES.length + 1e-9)
       .mockReturnValueOnce(aniIdx / ANIMALS.length + 1e-9)
+
     const n2 = generateNickname()
     expect(n2).toBe(`${ADJECTIVES[adjIdx]}${ANIMALS[aniIdx]}`)
 

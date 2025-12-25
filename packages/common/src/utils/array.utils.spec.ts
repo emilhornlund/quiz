@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { arraysEqual, shuffleArray, shuffleDifferent } from './array.utils'
 
 describe('arraysEqual', () => {
@@ -47,7 +49,7 @@ describe('arraysEqual', () => {
 
 describe('shuffleArray', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('returns the same reference for empty or single-element arrays', () => {
@@ -87,8 +89,7 @@ describe('shuffleArray', () => {
     // i=3 → random=0.5 → j=2  (swap idx 3<->2)
     // i=2 → random ~0.99 → j=2 (swap idx 2<->2) no-op
     // i=1 → random ~0.99 → j=1 (swap idx 1<->1) no-op
-    jest
-      .spyOn(Math, 'random')
+    vi.spyOn(Math, 'random')
       .mockReturnValueOnce(0.0)
       .mockReturnValueOnce(0.5)
       .mockReturnValueOnce(0.99)
@@ -108,7 +109,7 @@ describe('shuffleArray', () => {
 
 describe('shuffleDifferent', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('returns the same reference for empty or single-element arrays', () => {
@@ -141,8 +142,7 @@ describe('shuffleDifferent', () => {
     //
     // First shuffle (identity): i=3,2,1 → use 0.99, 0.99, 0.99
     // Second shuffle (introduce change): i=3 → random=0.0 → j=0 (guaranteed different), then anything for i=2,1.
-    jest
-      .spyOn(Math, 'random')
+    vi.spyOn(Math, 'random')
       // first shuffle (identity):
       .mockReturnValueOnce(0.99) // i=3, j=3
       .mockReturnValueOnce(0.99) // i=2, j=2
@@ -167,8 +167,7 @@ describe('shuffleDifferent', () => {
   it('eventually differs even if the first few shuffles match the original', () => {
     // For a 3-element array, each shuffle consumes 2 random calls (i=2,1).
     // Force two identity shuffles, then a different one.
-    jest
-      .spyOn(Math, 'random')
+    vi.spyOn(Math, 'random')
       // 1st shuffle (identity): i=2→j=2, i=1→j=1
       .mockReturnValueOnce(0.99)
       .mockReturnValueOnce(0.99)
