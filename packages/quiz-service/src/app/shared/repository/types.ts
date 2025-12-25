@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document, Model } from 'mongoose'
 
 /**
  * Base document interface that all domain entities should extend
@@ -70,3 +70,8 @@ export interface DeleteResult {
   acknowledged: boolean
   deletedCount: number
 }
+
+/**
+ * description here
+ */
+export type CreateInput<TRaw> = Parameters<Model<TRaw>['create']>[0]

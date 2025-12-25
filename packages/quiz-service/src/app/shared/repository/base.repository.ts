@@ -1,19 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { FilterQuery, Model, UpdateQuery } from 'mongoose'
+import { Model, QueryFilter, UpdateQuery } from 'mongoose'
 
 import { IBaseRepository } from './base-repository.interface'
+import { CreateInput } from './types'
 /**
  * Abstract base repository providing common CRUD operations
  */
 @Injectable()
 export abstract class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly logger: Logger
+
   protected constructor(
     protected readonly model: Model<T>,
     protected readonly modelName: string,
   ) {
     this.logger = new Logger(`${modelName}Repository`)
   }
+
   /**
    * Find a document by its ID
    */
@@ -29,10 +32,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Find a single document matching the filter
    */
-  async findOne(filter: FilterQuery<T>): Promise<T | null> {
+  async findOne(filter: QueryFilter<T>): Promise<T | null> {
     try {
       const document = await this.model.findOne(filter)
       if (!document) {
@@ -44,10 +48,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Find multiple documents matching the filter
    */
-  async find(filter: FilterQuery<T> = {}): Promise<T[]> {
+  async find(filter: QueryFilter<T> = {}): Promise<T[]> {
     try {
       return await this.model.find(filter)
     } catch (error) {
@@ -55,11 +60,12 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Find documents with pagination
    */
   async findWithPagination(
-    filter: FilterQuery<T> = {},
+    filter: QueryFilter<T> = {},
     options: {
       skip?: number
       limit?: number
@@ -92,21 +98,23 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Create a new document
    */
-  async create(data: Partial<T>): Promise<T> {
+  async create(data: CreateInput<T>): Promise<T> {
     try {
       const document = await this.model.create(data)
       this.logger.log(
         `Created new ${this.modelName} document with id '${document._id}'`,
       )
-      return document
+      return document.toObject()
     } catch (error) {
       this.logger.error(`Error creating ${this.modelName} document:`, error)
       throw error
     }
   }
+
   /**
    * Update a document by ID
    */
@@ -133,17 +141,22 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Update multiple documents matching the filter
    */
   async updateMany(
-    filter: FilterQuery<T>,
+    filter: QueryFilter<T>,
     data: UpdateQuery<T>,
   ): Promise<number> {
     try {
-      const result = await this.model.updateMany(filter, data, {
-        runValidators: true,
-      })
+      const options: Record<string, unknown> = { runValidators: true }
+
+      if (Array.isArray(data)) {
+        options.updatePipeline = true
+      }
+
+      const result = await this.model.updateMany(filter, data, options)
       this.logger.log(
         `Updated ${result.modifiedCount} ${this.modelName} documents`,
       )
@@ -153,6 +166,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Delete a document by ID
    */
@@ -176,10 +190,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Delete multiple documents matching the filter
    */
-  async deleteMany(filter: FilterQuery<T>): Promise<number> {
+  async deleteMany(filter: QueryFilter<T>): Promise<number> {
     try {
       const result = await this.model.deleteMany(filter)
       this.logger.log(
@@ -191,10 +206,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Count documents matching the filter
    */
-  async count(filter: FilterQuery<T> = {}): Promise<number> {
+  async count(filter: QueryFilter<T> = {}): Promise<number> {
     try {
       return await this.model.countDocuments(filter)
     } catch (error) {
@@ -202,10 +218,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Check if a document exists matching the filter
    */
-  async exists(filter: FilterQuery<T>): Promise<boolean> {
+  async exists(filter: QueryFilter<T>): Promise<boolean> {
     try {
       const exists = await this.model.exists(filter)
       return !!exists
@@ -217,6 +234,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       throw error
     }
   }
+
   /**
    * Builds an update operations object by splitting the input data into
    * MongoDB $set and $unset operators.

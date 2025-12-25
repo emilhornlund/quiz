@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { RootFilterQuery } from 'mongoose'
+import { QueryFilter } from 'mongoose'
 
 import {
   BaseRepository,
@@ -54,7 +54,7 @@ export class QuizRepository extends BaseRepository<Quiz> {
    *
    * @returns The total number of quizzes that match the filter.
    */
-  public async countQuizzes(filter: RootFilterQuery<Quiz>): Promise<number> {
+  public async countQuizzes(filter: QueryFilter<Quiz>): Promise<number> {
     return this.count(filter)
   }
 
@@ -70,7 +70,7 @@ export class QuizRepository extends BaseRepository<Quiz> {
    * @returns List of matching quizzes.
    */
   public async findQuizzes(
-    filter: RootFilterQuery<Quiz>,
+    filter: QueryFilter<Quiz>,
     sortField: 'title' | 'created' | 'updated' = 'created',
     sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,

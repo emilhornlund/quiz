@@ -20,7 +20,7 @@ import {
   QuizResponseDto,
   QuizVisibility,
 } from '@quiz/common'
-import { RootFilterQuery } from 'mongoose'
+import { QueryFilter } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
 import { User } from '../../user/repositories'
@@ -204,8 +204,8 @@ export class QuizService {
     limit: number = 10,
     offset: number = 0,
   ): Promise<PaginatedQuizResponseDto> {
-    const filter: RootFilterQuery<Quiz> = {
-      ...(ownerId ? { owner: ownerId } : {}),
+    const filter: QueryFilter<Quiz> = {
+      ...(ownerId ? { owner: { _id: ownerId } } : {}),
       ...(search?.length ? { title: { $regex: search, $options: 'i' } } : {}),
       ...(mode ? { mode } : {}),
       ...(visibility ? { visibility } : {}),

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { GameStatus } from '@quiz/common'
-import { Model, RootFilterQuery } from 'mongoose'
+import { Model, QueryFilter } from 'mongoose'
 import { MurLock } from 'murlock'
 
 import { BaseRepository } from '../../../app/shared/repository'
@@ -167,7 +167,7 @@ export class GameRepository extends BaseRepository<Game> {
     results: GameDocument[]
     total: number
   }> {
-    const filter: RootFilterQuery<Game> = {
+    const filter: QueryFilter<Game> = {
       status: { $in: [GameStatus.Completed, GameStatus.Active] },
       'participants.participantId': participantId,
     }
@@ -295,7 +295,7 @@ export class GameRepository extends BaseRepository<Game> {
    */
   public async deleteGamesByQuizId(quizId: string): Promise<number> {
     return this.deleteMany({
-      quiz: quizId,
+      quiz: { _id: quizId },
     })
   }
 }
