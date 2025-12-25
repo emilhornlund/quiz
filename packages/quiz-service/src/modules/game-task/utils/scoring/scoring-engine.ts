@@ -369,7 +369,7 @@ function buildMeta<
  */
 export function calculateQuestionScoreForParticipant(
   mode: GameMode,
-  presented: Date,
+  presented: Date | undefined,
   question: QuestionDao,
   correctAnswers: QuestionResultTaskCorrectAnswer[],
   answer?: QuestionTaskAnswer,

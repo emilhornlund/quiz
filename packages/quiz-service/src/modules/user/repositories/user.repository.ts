@@ -7,7 +7,8 @@ import { BaseRepository } from '../../../app/shared/repository'
 import { isGoogleUser } from '../../../app/shared/user'
 import { EmailNotUniqueException, UserNotFoundException } from '../exceptions'
 
-import { GoogleUser, LocalUser, User, UserModel } from './models'
+import type { UserModel } from './models'
+import { GoogleUser, LocalUser, User } from './models'
 
 /**
  * Repository for interacting with the User collection in the database.

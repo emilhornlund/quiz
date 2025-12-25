@@ -1,5 +1,6 @@
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq'
 import { Injectable, Logger } from '@nestjs/common'
+import { isDefined } from '@quiz/common'
 import { Job, Queue } from 'bullmq'
 
 import { GameRepository } from '../../game-core/repositories'
@@ -118,7 +119,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
   private async scheduleDeferredTransition(
     gameDocument: GameDocument,
     delay: number,
-    nextStatus: 'active' | 'completed',
+    nextStatus?: 'active' | 'completed',
   ): Promise<void> {
     const { _id, currentTask } = gameDocument
     const { type, status } = currentTask
@@ -281,9 +282,11 @@ export class GameTaskTransitionScheduler extends WorkerHost {
           latestGameDocument.currentTask.type === type &&
           latestGameDocument.currentTask.status === status
         ) {
-          const existingTransitionJob = await this.taskQueue.getJob(job.id)
-          if (existingTransitionJob) {
-            await this.taskQueue.remove(job.id)
+          if (job.id) {
+            const existingTransitionJob = await this.taskQueue.getJob(job.id)
+            if (isDefined(existingTransitionJob)) {
+              await this.taskQueue.remove(job.id)
+            }
           }
           await this.performTransition(gameDocument, nextStatus, callback)
         } else {
@@ -292,9 +295,11 @@ export class GameTaskTransitionScheduler extends WorkerHost {
           )
         }
       } catch (error) {
-        const existingTransitionJob = await this.taskQueue.getJob(job.id)
-        if (existingTransitionJob) {
-          await this.taskQueue.remove(job.id)
+        if (job.id) {
+          const existingTransitionJob = await this.taskQueue.getJob(job.id)
+          if (isDefined(existingTransitionJob)) {
+            await this.taskQueue.remove(job.id)
+          }
         }
         this.logger.error(
           `Error during scheduled deferred transition for task ${type} from status ${status} to ${nextStatus} for Game ID: ${gameDocument._id}`,

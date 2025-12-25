@@ -1185,18 +1185,19 @@ function createMultiChoiceGame(answers: number[], correctIndexes?: number[]) {
   })
 }
 
-function withMultiChoiceAnswers(answers: number[], correctIndexes: number[]) {
+function withMultiChoiceAnswers(answers: number[], correctIndexes?: number[]) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctIndexes.map((index) => ({
-      type: QuestionType.MultiChoice,
-      index,
-    })),
+    correctAnswers:
+      correctIndexes?.map((index) => ({
+        type: QuestionType.MultiChoice,
+        index,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.MultiChoice,
         answer: createMockQuestionTaskMultiChoiceAnswer({ answer }),
-        correct: correctIndexes.includes(answer),
+        correct: correctIndexes?.includes(answer) || false,
       }),
     ),
   })
@@ -1209,18 +1210,19 @@ function createRangeGame(answers: number[], correctValues?: number[]) {
   })
 }
 
-function withRangeAnswers(answers: number[], correctValues: number[]) {
+function withRangeAnswers(answers: number[], correctValues?: number[]) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctValues.map((value) => ({
-      type: QuestionType.Range,
-      value,
-    })),
+    correctAnswers:
+      correctValues?.map((value) => ({
+        type: QuestionType.Range,
+        value,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.MultiChoice,
         answer: createMockQuestionTaskRangeAnswer({ answer }),
-        correct: correctValues.includes(answer),
+        correct: correctValues?.includes(answer) || false,
       }),
     ),
   })
@@ -1233,18 +1235,19 @@ function createTrueFalseGame(answers: boolean[], correctValues?: boolean[]) {
   })
 }
 
-function withTrueFalseAnswers(answers: boolean[], correctValues: boolean[]) {
+function withTrueFalseAnswers(answers: boolean[], correctValues?: boolean[]) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctValues.map((value) => ({
-      type: QuestionType.TrueFalse,
-      value,
-    })),
+    correctAnswers:
+      correctValues?.map((value) => ({
+        type: QuestionType.TrueFalse,
+        value,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.TrueFalse,
         answer: createMockQuestionTaskTrueFalseAnswer({ answer }),
-        correct: correctValues.includes(answer),
+        correct: correctValues?.includes(answer) || false,
       }),
     ),
   })
@@ -1257,18 +1260,19 @@ function createTypeAnswerGame(answers: string[], correctValues?: string[]) {
   })
 }
 
-function withTypeAnswers(answers: string[], correctValues: string[]) {
+function withTypeAnswers(answers: string[], correctValues?: string[]) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctValues.map((value) => ({
-      type: QuestionType.TypeAnswer,
-      value,
-    })),
+    correctAnswers:
+      correctValues?.map((value) => ({
+        type: QuestionType.TypeAnswer,
+        value,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.TypeAnswer,
         answer: createMockQuestionTaskTypeAnswer({ answer }),
-        correct: correctValues.includes(answer),
+        correct: correctValues?.includes(answer) || false,
       }),
     ),
   })
@@ -1281,42 +1285,54 @@ function createPinGame(answers: string[], correctValues?: string[]) {
   })
 }
 
-function withPinAnswers(answers: string[], correctValues: string[]) {
+function withPinAnswers(answers: string[], correctValues?: string[]) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctValues.map((value) => ({
-      type: QuestionType.Pin,
-      value,
-    })),
+    correctAnswers:
+      correctValues?.map((value) => ({
+        type: QuestionType.Pin,
+        value,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.Pin,
         answer: createMockQuestionTaskPinAnswer({ answer }),
-        correct: correctValues.includes(answer),
+        correct: correctValues?.includes(answer) || false,
       }),
     ),
   })
 }
 
-function createPuzzleGame(answers: string[][], correctValues?: string[][]) {
+function createPuzzleGame(
+  answers: (string[] | null)[],
+  correctValues?: string[][],
+) {
   return createMockGameDocument({
     questions: [createMockPuzzleQuestionDocument()],
     currentTask: withPuzzleAnswers(answers, correctValues),
   })
 }
 
-function withPuzzleAnswers(answers: string[][], correctValues: string[][]) {
+function withPuzzleAnswers(
+  answers: (string[] | null)[],
+  correctValues?: string[][],
+) {
   return createMockQuestionResultTaskDocument({
     status: 'active',
-    correctAnswers: correctValues.map((value) => ({
-      type: QuestionType.Puzzle,
-      value,
-    })),
+    correctAnswers:
+      correctValues?.map((value) => ({
+        type: QuestionType.Puzzle,
+        value,
+      })) || [],
     results: answers.map((answer) =>
       createMockQuestionResultTaskItemDocument({
         type: QuestionType.Puzzle,
-        answer: createMockQuestionTaskPuzzleAnswer({ answer }),
-        correct: correctValues.some((cv) => arraysEqual(cv, answer)),
+        answer: answer
+          ? createMockQuestionTaskPuzzleAnswer({ answer })
+          : undefined,
+        correct:
+          (answer && correctValues?.some((cv) => arraysEqual(cv, answer))) ||
+          false,
       }),
     ),
   })

@@ -47,6 +47,9 @@ export function toQuestionTaskAnswer(
     answer = `${submitQuestionAnswerRequest.positionX},${submitQuestionAnswerRequest.positionY}`
   } else if (type === QuestionType.Puzzle) {
     answer = submitQuestionAnswerRequest.values
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    throw new Error(`Unsupported question type '${type as any}'`)
   }
 
   return {
@@ -75,7 +78,7 @@ export function toQuestionTaskAnswerFromString(
     created: new Date(deserializedValue.created as Date),
   }
 
-  let answer: string | string[] | number | boolean
+  let answer: string | string[] | number | boolean = ''
 
   switch (deserializedValue.type) {
     case QuestionType.MultiChoice:
@@ -96,6 +99,11 @@ export function toQuestionTaskAnswerFromString(
     case QuestionType.Puzzle:
       answer = deserializedValue.answer as string[]
       break
+    default:
+      throw new Error(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        `Unsupported question type '${deserializedValue.type as any}'`,
+      )
   }
 
   return { ...base, answer }
@@ -124,7 +132,7 @@ export function toBaseQuestionTaskEventMetaDataTuple(
       created: new Date(deserializedValue.created as Date),
     }
 
-    let answer: string | string[] | number | boolean
+    let answer: string | string[] | number | boolean = ''
 
     switch (deserializedValue.type) {
       case QuestionType.MultiChoice:
@@ -145,6 +153,11 @@ export function toBaseQuestionTaskEventMetaDataTuple(
       case QuestionType.Puzzle:
         answer = deserializedValue.answer as string[]
         break
+      default:
+        throw new Error(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          `Unsupported question type '${deserializedValue.type as any}'`,
+        )
     }
 
     return { ...base, answer }

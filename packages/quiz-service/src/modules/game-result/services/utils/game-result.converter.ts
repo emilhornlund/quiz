@@ -1,4 +1,4 @@
-import { GameMode, GameParticipantType } from '@quiz/common'
+import { GameMode, GameParticipantType, isDefined } from '@quiz/common'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -7,6 +7,7 @@ import {
   LeaderboardTaskItem,
   ParticipantPlayerWithBase,
   QuestionResultTaskWithBase,
+  QuestionTaskAnswer,
   QuestionTaskWithBase,
   TaskType,
 } from '../../../game-core/repositories/models/schemas'
@@ -41,6 +42,10 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     (p) => p.type === GameParticipantType.HOST,
   )?.participantId
 
+  if (!hostParticipantId) {
+    throw new Error('No host participantId found.')
+  }
+
   const playerParticipants: ParticipantPlayerWithBase[] = participants
     .filter(({ type }) => type === GameParticipantType.PLAYER)
     .map((player) => player as ParticipantPlayerWithBase)
@@ -58,6 +63,10 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
   const hosted =
     previousTasks.find(({ type }) => type === TaskType.Question)?.created ??
     null
+
+  if (!hosted) {
+    throw new Error('No hosted date was found.')
+  }
 
   const { created: completed } = currentTask
 
@@ -118,19 +127,18 @@ function buildPlayerMetrics(
           ) || { correct: false, answer: undefined, streak: 0, lastScore: 0 }
           return {
             ...accumulator,
-            correct:
-              mode === GameMode.Classic
-                ? accumulator.correct + (correct && answer ? 1 : 0)
-                : undefined,
-            incorrect:
-              mode === GameMode.Classic
-                ? accumulator.incorrect + (!correct && answer ? 1 : 0)
-                : undefined,
-            averagePrecision:
-              mode === GameMode.ZeroToOneHundred
-                ? accumulator.averagePrecision +
-                  (100 - Math.max(lastScore, 0)) / 100
-                : undefined,
+            correct: calculateCorrectCount(mode, accumulator, correct, answer),
+            incorrect: calculateIncorrectCount(
+              mode,
+              accumulator,
+              correct,
+              answer,
+            ),
+            averagePrecision: calculateAveragePrecision(
+              mode,
+              accumulator,
+              lastScore,
+            ),
             unanswered: accumulator.unanswered + (answer ? 0 : 1),
             averageResponseTime: calculateAverageResponseTimeByPlayer(
               participantPlayer,
@@ -159,12 +167,11 @@ function buildPlayerMetrics(
     })
     .map((metric) => ({
       ...metric,
-      averagePrecision:
-        mode === GameMode.ZeroToOneHundred
-          ? Number(
-              (metric.averagePrecision / questionResultTasks.length).toFixed(2),
-            )
-          : undefined,
+      averagePrecision: normalizeAveragePrecision(
+        mode,
+        metric,
+        questionResultTasks.length,
+      ),
     }))
     .sort((lhs, rhs) => lhs.rank - rhs.rank)
 }
@@ -192,19 +199,18 @@ function buildQuestionMetrics(
       return results.reduce(
         (accumulator, { correct, answer, lastScore }) => ({
           ...accumulator,
-          correct:
-            mode === GameMode.Classic
-              ? accumulator.correct + (correct && answer ? 1 : 0)
-              : undefined,
-          incorrect:
-            mode === GameMode.Classic
-              ? accumulator.incorrect + (!correct && answer ? 1 : 0)
-              : undefined,
-          averagePrecision:
-            mode === GameMode.ZeroToOneHundred
-              ? accumulator.averagePrecision +
-                (100 - Math.max(lastScore, 0)) / 100
-              : undefined,
+          correct: calculateCorrectCount(mode, accumulator, correct, answer),
+          incorrect: calculateIncorrectCount(
+            mode,
+            accumulator,
+            correct,
+            answer,
+          ),
+          averagePrecision: calculateAveragePrecision(
+            mode,
+            accumulator,
+            lastScore,
+          ),
           unanswered:
             accumulator.unanswered + (typeof answer === 'undefined' ? 1 : 0),
         }),
@@ -227,13 +233,126 @@ function buildQuestionMetrics(
     })
     .map((metric) => ({
       ...metric,
-      averagePrecision:
-        mode === GameMode.ZeroToOneHundred
-          ? Number(
-              (metric.averagePrecision / playerParticipants.length).toFixed(2),
-            )
-          : undefined,
+      averagePrecision: normalizeAveragePrecision(
+        mode,
+        metric,
+        playerParticipants.length,
+      ),
     }))
+}
+
+/**
+ * Increments the running correct-answer count for Classic mode.
+ *
+ * In Classic mode, an answer only counts as correct if:
+ * - The result is marked as `correct`, and
+ * - The player actually submitted an `answer` (i.e., not unanswered).
+ *
+ * In ZeroToOneHundred mode, this metric is not tracked and `undefined` is returned.
+ *
+ * @param mode - The current game mode.
+ * @param accumulator - The partially built metric object containing the current correct count.
+ * @param correct - Whether the submitted answer was correct for the question.
+ * @param answer - The player's submitted answer payload; `undefined` indicates unanswered.
+ * @returns The updated correct count for Classic mode, otherwise `undefined`.
+ */
+function calculateCorrectCount(
+  mode: GameMode,
+  accumulator: { correct?: number },
+  correct: boolean,
+  answer?: QuestionTaskAnswer | undefined,
+): number | undefined {
+  if (mode === GameMode.Classic && isDefined(accumulator.correct)) {
+    return accumulator.correct + (correct && answer ? 1 : 0)
+  }
+  return undefined
+}
+
+/**
+ * Increments the running incorrect-answer count for Classic mode.
+ *
+ * In Classic mode, an answer only counts as incorrect if:
+ * - The result is marked as not `correct`, and
+ * - The player actually submitted an `answer` (i.e., not unanswered).
+ *
+ * In ZeroToOneHundred mode, this metric is not tracked and `undefined` is returned.
+ *
+ * @param mode - The current game mode.
+ * @param accumulator - The partially built metric object containing the current incorrect count.
+ * @param correct - Whether the submitted answer was correct for the question.
+ * @param answer - The player's submitted answer payload; `undefined` indicates unanswered.
+ * @returns The updated incorrect count for Classic mode, otherwise `undefined`.
+ */
+function calculateIncorrectCount(
+  mode: GameMode,
+  accumulator: { incorrect?: number },
+  correct: boolean,
+  answer?: QuestionTaskAnswer | undefined,
+): number | undefined {
+  if (mode === GameMode.Classic && isDefined(accumulator.incorrect)) {
+    return accumulator.incorrect + (!correct && answer ? 1 : 0)
+  }
+  return undefined
+}
+
+/**
+ * Accumulates the raw precision total for ZeroToOneHundred mode.
+ *
+ * In ZeroToOneHundred mode, each answered question contributes a precision value based on `lastScore`,
+ * where 100 is perfect and 0 is worst:
+ * - Precision contribution is `(100 - max(lastScore, 0)) / 100`.
+ *
+ * This function is designed to be used inside a `reduce` to build a running total. The final average
+ * is computed by dividing by the number of items (players or questions) in `calculateAveragePrecisionFinal`.
+ *
+ * In Classic mode, this metric is not tracked and `undefined` is returned.
+ *
+ * @param mode - The current game mode.
+ * @param accumulator - The partially built metric object containing the running precision total.
+ * @param lastScore - The last scored value for the answer (0..100 typical); negative values are clamped to 0.
+ * @returns The updated running precision total for ZeroToOneHundred mode, otherwise `undefined`.
+ */
+function calculateAveragePrecision(
+  mode: GameMode,
+  accumulator: { averagePrecision?: number },
+  lastScore: number,
+) {
+  if (
+    mode === GameMode.ZeroToOneHundred &&
+    isDefined(accumulator.averagePrecision)
+  ) {
+    return accumulator.averagePrecision + (100 - Math.max(lastScore, 0)) / 100
+  }
+  return undefined
+}
+
+/**
+ * Converts the accumulated ZeroToOneHundred precision total into a final average.
+ *
+ * The accumulator built by `calculateAveragePrecision` represents a running total. This function:
+ * - Divides that total by `length` (number of players or number of answers aggregated),
+ * - Rounds to 2 decimals,
+ * - Returns `0` when no precision was accumulated.
+ *
+ * In Classic mode, this metric is not tracked and `undefined` is returned.
+ *
+ * @param mode - The current game mode.
+ * @param metric - The metric object containing the accumulated `averagePrecision` total.
+ * @param length - The divisor used to compute the average (e.g., number of players or number of questions).
+ * @returns The final average precision (0..1) rounded to 2 decimals for ZeroToOneHundred mode, otherwise `undefined`.
+ */
+function normalizeAveragePrecision(
+  mode: GameMode,
+  metric: { averagePrecision?: number },
+  length: number,
+): number | undefined {
+  if (mode === GameMode.ZeroToOneHundred) {
+    if (metric.averagePrecision) {
+      return Number((metric.averagePrecision / length).toFixed(2))
+    }
+    return 0
+  }
+  return undefined
 }
 
 /**
@@ -251,14 +370,24 @@ function calculateAverageResponseTimeByPlayer(
   questions: QuestionDao[],
 ): number {
   const totalResponseTime = questionTasks
-    .map(({ presented, answers, questionIndex }) => ({
-      presentedTime: presented.getTime(),
-      answerTime:
+    .map(({ presented, answers, questionIndex }) => {
+      const presentedTime = presented?.getTime()
+
+      if (!presentedTime) {
+        throw new Error('Missing presented time')
+      }
+
+      const answerTime =
         answers
           .find(({ playerId }) => playerId === playerParticipant.participantId)
           ?.created?.getTime() ||
-        presented.getTime() + questions[questionIndex].duration * 1000,
-    }))
+        presentedTime + questions[questionIndex].duration * 1000
+
+      return {
+        presentedTime,
+        answerTime,
+      }
+    })
     .reduce(
       (accumulator, { presentedTime, answerTime }) =>
         accumulator + (answerTime - presentedTime),
@@ -285,6 +414,10 @@ function calculateAverageResponseTimeByQuestion(
   playerParticipants: ParticipantPlayerWithBase[],
 ): number {
   const { presented, answers, questionIndex } = questionTask
+
+  if (!presented) {
+    throw new Error('Missing presented time')
+  }
 
   const totalAnsweredResponseTime = answers.reduce(
     (accumulator, { created }) =>

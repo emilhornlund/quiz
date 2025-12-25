@@ -1,11 +1,11 @@
 import {
-  ArgumentsHost,
   Catch,
   ExceptionFilter,
   HttpException,
   HttpStatus,
   Logger,
 } from '@nestjs/common'
+import type { ArgumentsHost } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
 import { SentryExceptionCaptured } from '@sentry/nestjs'
 

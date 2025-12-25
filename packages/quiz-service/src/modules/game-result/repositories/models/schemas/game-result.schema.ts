@@ -90,6 +90,7 @@ export class QuestionMetric {
    * The type of the question (e.g., multiple choice, slider, true/false).
    */
   @Prop({
+    type: String,
     enum: QuestionType,
     required: true,
   })

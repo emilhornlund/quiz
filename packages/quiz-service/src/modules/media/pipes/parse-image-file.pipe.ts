@@ -23,7 +23,7 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EnvironmentVariables } from '../../../app/config'
-import { AuthGuardRequest } from '../../../app/shared/auth'
+import type { AuthGuardRequest } from '../../../app/shared/auth'
 import { User } from '../../user/repositories'
 
 /**
@@ -147,8 +147,8 @@ export class ParseImageFilePipe implements PipeTransform<
 
     await image
       .resize({
-        width: metadata.width > metadata.height ? 800 : null,
-        height: metadata.height > metadata.width ? 800 : null,
+        width: metadata.width > metadata.height ? 800 : undefined,
+        height: metadata.height > metadata.width ? 800 : undefined,
         withoutEnlargement: true,
       })
       .webp({ quality: 75 })

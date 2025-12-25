@@ -188,8 +188,8 @@ export class GameResultService {
     const { correct, incorrect } = playerMetric
     return {
       ...GameResultService.toBasePlayerMetricDto(playerMetric),
-      correct,
-      incorrect,
+      correct: correct ?? 0,
+      incorrect: incorrect ?? 0,
     }
   }
 
@@ -206,7 +206,7 @@ export class GameResultService {
     const { averagePrecision } = playerMetric
     return {
       ...GameResultService.toBasePlayerMetricDto(playerMetric),
-      averagePrecision,
+      averagePrecision: averagePrecision ?? 0,
     }
   }
 
@@ -237,8 +237,8 @@ export class GameResultService {
     const { correct, incorrect } = questionMetric
     return {
       ...GameResultService.toBaseQuestionMetricDto(questionMetric),
-      correct,
-      incorrect,
+      correct: correct ?? 0,
+      incorrect: incorrect ?? 0,
     }
   }
 
@@ -255,7 +255,7 @@ export class GameResultService {
     const { averagePrecision } = questionMetric
     return {
       ...GameResultService.toBaseQuestionMetricDto(questionMetric),
-      averagePrecision,
+      averagePrecision: averagePrecision ?? 0,
     }
   }
 }

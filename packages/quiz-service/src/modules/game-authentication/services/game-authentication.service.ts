@@ -51,16 +51,29 @@ export class GameAuthenticationService {
     userAgent: string,
     userId?: string,
   ): Promise<AuthResponseDto> {
-    let game: GameDocument
+    let game: GameDocument | undefined = undefined
     try {
-      game = await (authGameRequest.gameId
-        ? this.gameRepository.findGameByIDOrThrow(authGameRequest.gameId)
-        : this.gameRepository.findGameByPINOrThrow(authGameRequest.gamePIN))
+      if (authGameRequest.gameId) {
+        game = await this.gameRepository.findGameByIDOrThrow(
+          authGameRequest.gameId,
+        )
+      } else if (authGameRequest.gamePIN) {
+        game = await this.gameRepository.findGameByPINOrThrow(
+          authGameRequest.gamePIN!,
+        )
+      }
     } catch (error) {
       const { message, stack } = error as Error
       this.logger.warn(
         `Failed to authenticate since an active game was not found: '${message}'.`,
         stack,
+      )
+      throw new UnauthorizedException()
+    }
+
+    if (!game) {
+      this.logger.warn(
+        `Failed to authenticate since an active game could not be found by either ID or PIN.`,
       )
       throw new UnauthorizedException()
     }

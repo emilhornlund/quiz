@@ -90,7 +90,7 @@ describe('AuthGuard', () => {
       sub: 'x',
       scope: TokenScope.Game,
       authorities: [],
-    } as TokenDto)
+    })
 
     jest
       .spyOn(reflector, 'getAllAndMerge')
@@ -110,7 +110,7 @@ describe('AuthGuard', () => {
       sub: 'x',
       scope: TokenScope.User,
       authorities: [],
-    } as TokenDto)
+    })
     jest
       .spyOn(reflector, 'getAllAndMerge')
       .mockImplementation((key) =>

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 
-import { UserLoginEvent } from '../../authentication/services/models'
+import type { UserLoginEvent } from '../../authentication/services/models'
 import { USER_LOGIN_EVENT_KEY } from '../../authentication/services/utils'
 import { UserRepository } from '../repositories'
 

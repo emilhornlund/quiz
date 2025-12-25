@@ -6,6 +6,7 @@
   "main": "dist/main.js",
   "scripts": {
     "clean": "rimraf dist",
+    "prebuild": "yarn workspace @quiz/common build",
     "build": "yarn clean && nest build",
     "dev": "nest start --watch",
     "dev:e2e": "NODE_ENV=test yarn dev",
@@ -16,7 +17,9 @@
     "test:coverage": "yarn test --coverage",
     "check-circular-deps": "yarn madge --circular src/main.ts",
     "e2e:setup": "tsx scripts/e2e/setup.ts",
-    "e2e:teardown": "tsx scripts/e2e/teardown.ts"
+    "e2e:teardown": "tsx scripts/e2e/teardown.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:tests": "tsc -p tsconfig.spec.json --noEmit"
   },
   "dependencies": {
     "@keyv/redis": "^5.1.5",

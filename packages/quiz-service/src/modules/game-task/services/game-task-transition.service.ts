@@ -57,7 +57,7 @@ export class GameTaskTransitionService {
    */
   public getTaskTransitionCallback(
     gameDocument: GameDocument,
-  ): (gameDocument: GameDocument) => Promise<void> | undefined {
+  ): ((gameDocument: GameDocument) => Promise<void>) | undefined {
     const { type, status } = gameDocument.currentTask
     if (type === TaskType.Lobby) {
       if (status === 'completed') {

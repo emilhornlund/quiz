@@ -221,7 +221,7 @@ function buildQuestionResultTaskResults({
   mode: GameMode
   participants: Participant[]
   question: QuestionDao
-  presented: Date
+  presented: Date | undefined
   correctAnswers: QuestionResultTaskCorrectAnswer[]
   answers: QuestionTaskAnswer[]
 }): QuestionResultTaskItem[] {
@@ -263,7 +263,7 @@ function buildQuestionResultTaskResults({
  */
 function buildQuestionResultTaskItem(
   mode: GameMode,
-  presented: Date,
+  presented: Date | undefined,
   participantPlayer: ParticipantPlayerWithBase,
   question: QuestionDao,
   correctAnswers: QuestionResultTaskCorrectAnswer[],

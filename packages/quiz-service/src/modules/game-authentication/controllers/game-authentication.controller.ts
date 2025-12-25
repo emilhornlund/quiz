@@ -117,6 +117,9 @@ export class GameAuthenticationController {
     const accessToken = type === 'Bearer' ? token : undefined
 
     try {
+      if (!accessToken) {
+        throw new UnauthorizedException('Missing access token')
+      }
       const payload = await this.tokenService.verifyToken(accessToken)
       if (
         payload.scope === TokenScope.User &&

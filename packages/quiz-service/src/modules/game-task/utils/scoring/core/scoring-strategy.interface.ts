@@ -25,7 +25,7 @@ export interface ScoringStrategy<
   ): boolean
 
   calculateScore(
-    presented: Date,
+    presented: Date | undefined,
     answered: Date,
     duration: number,
     points: number,

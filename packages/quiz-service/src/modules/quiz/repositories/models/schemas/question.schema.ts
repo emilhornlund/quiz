@@ -69,6 +69,7 @@ export class BaseQuestionDao {
    * The type of the question.
    */
   @Prop({
+    type: String,
     enum: QuestionType,
     required: true,
   })

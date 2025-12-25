@@ -18,7 +18,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
-import { Authority, TokenDto, TokenScope } from '@quiz/common'
+import type { TokenDto } from '@quiz/common'
+import { Authority, TokenScope } from '@quiz/common'
 
 import {
   JwtPayload,

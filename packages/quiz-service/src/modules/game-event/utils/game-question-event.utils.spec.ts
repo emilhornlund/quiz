@@ -440,10 +440,10 @@ describe('Game Question Event Utils', () => {
         }),
       })
 
-      const result = buildGameQuestionHostEvent(game as never, 0, 1)
-
       // When no conditions match, buildGameEventQuestion returns undefined
-      expect(result.question).toBeUndefined()
+      expect(() => buildGameQuestionHostEvent(game as never, 0, 1)).toThrow(
+        "Unsupported question type 'PUZZLE'",
+      )
     })
   })
 

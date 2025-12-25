@@ -41,12 +41,17 @@ export class GoogleAuthService {
     const params = new URLSearchParams()
     params.append('code', code)
     params.append('code_verifier', codeVerifier)
-    params.append('client_id', this.configService.get('GOOGLE_CLIENT_ID'))
-    params.append(
-      'client_secret',
-      this.configService.get('GOOGLE_CLIENT_SECRET'),
-    )
-    params.append('redirect_uri', this.configService.get('GOOGLE_REDIRECT_URI'))
+    const clientId = this.configService.get('GOOGLE_CLIENT_ID')
+    const clientSecret = this.configService.get('GOOGLE_CLIENT_SECRET')
+    const redirectUri = this.configService.get('GOOGLE_REDIRECT_URI')
+
+    if (!clientId || !clientSecret || !redirectUri) {
+      throw new Error('Missing required Google OAuth configuration')
+    }
+
+    params.append('client_id', clientId)
+    params.append('client_secret', clientSecret)
+    params.append('redirect_uri', redirectUri)
     params.append('grant_type', 'authorization_code')
 
     try {
