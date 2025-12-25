@@ -6,9 +6,10 @@ import {
   Query,
   UpdateWriteOpResult,
 } from 'mongoose'
-import { FilterQuery, UpdateQuery } from 'mongoose'
+import { QueryFilter, UpdateQuery } from 'mongoose'
 
 import { BaseRepository } from './base.repository'
+import { CreateInput } from './types'
 
 interface TestDocument extends Document<string> {
   _id: string
@@ -108,7 +109,7 @@ describe('BaseRepository', () => {
 
   describe('findOne', () => {
     it('should return the document if found', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       const mockDoc = {
         _id: '1',
         name: 'test',
@@ -125,7 +126,7 @@ describe('BaseRepository', () => {
     })
 
     it('should return null if not found and log debug', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       mockModel.findOne.mockResolvedValue(null)
 
       const result = await repository.findOne(filter)
@@ -139,7 +140,7 @@ describe('BaseRepository', () => {
     })
 
     it('should throw error and log if exception occurs', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       const error = new Error('findOne error')
       mockModel.findOne.mockRejectedValue(error)
 
@@ -153,7 +154,7 @@ describe('BaseRepository', () => {
 
   describe('find', () => {
     it('should return an array of documents', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const mockDocs = [
         { _id: '1', name: 'test1', createdAt: new Date(), age: 10 },
         { _id: '2', name: 'test2', createdAt: new Date(), age: 15 },
@@ -176,7 +177,7 @@ describe('BaseRepository', () => {
     })
 
     it('should throw error and log if exception occurs', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const error = new Error('find error')
       mockModel.find.mockRejectedValue(error)
 
@@ -207,7 +208,7 @@ describe('BaseRepository', () => {
     })
 
     it('should return paginated documents and total count', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const options = { skip: 0, limit: 10, sort: { createdAt: -1 as 1 | -1 } }
       const mockDocs = [
         { _id: '1', name: 'test1', createdAt: new Date(), age: 10 },
@@ -272,25 +273,28 @@ describe('BaseRepository', () => {
 
   describe('create', () => {
     it('should create and return the document', async () => {
-      const data: Partial<TestDocument> = { name: 'new', age: 20 }
-      const mockDoc = {
+      const data: CreateInput<TestDocument> = { name: 'new', age: 20 }
+
+      const plain = {
         _id: '1',
         name: 'new',
         age: 20,
         createdAt: new Date(),
         __v: 0,
-      } as HydratedDocument<TestDocument>
-      ;(
-        mockModel.create as unknown as jest.Mock<
-          Promise<HydratedDocument<TestDocument>>,
-          [Partial<TestDocument>]
-        >
-      ).mockResolvedValue(mockDoc)
+      }
+
+      const mockDoc = {
+        ...plain,
+        toObject: jest.fn(() => plain),
+      } as unknown as HydratedDocument<TestDocument>
+
+      ;(mockModel.create as unknown as jest.Mock).mockResolvedValue(mockDoc)
 
       const result = await repository.create(data)
 
-      expect(result).toEqual(mockDoc)
+      expect(result).toEqual(plain)
       expect(mockModel.create).toHaveBeenCalledWith(data)
+      expect(mockDoc.toObject).toHaveBeenCalledTimes(1)
       expect(mockLoggerLog).toHaveBeenCalledWith(
         `Created new Test document with id '1'`,
       )
@@ -385,7 +389,7 @@ describe('BaseRepository', () => {
 
   describe('updateMany', () => {
     it('should update multiple documents and return modified count', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const data: UpdateQuery<TestDocument> = { name: 'updated' }
       mockModel.updateMany.mockResolvedValue({
         modifiedCount: 2,
@@ -412,7 +416,7 @@ describe('BaseRepository', () => {
     })
 
     it('should throw error and log if exception occurs', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const data: UpdateQuery<TestDocument> = { name: 'updated' }
       const error = new Error('updateMany error')
       mockModel.updateMany.mockRejectedValue(error)
@@ -472,7 +476,7 @@ describe('BaseRepository', () => {
 
   describe('deleteMany', () => {
     it('should delete multiple documents and return deleted count', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       mockModel.deleteMany.mockResolvedValue({
         acknowledged: true,
         deletedCount: 3,
@@ -498,7 +502,7 @@ describe('BaseRepository', () => {
     })
 
     it('should throw error and log if exception occurs', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       const error = new Error('deleteMany error')
       mockModel.deleteMany.mockRejectedValue(error)
 
@@ -512,7 +516,7 @@ describe('BaseRepository', () => {
 
   describe('count', () => {
     it('should return the count of documents', async () => {
-      const filter: FilterQuery<TestDocument> = { age: { $gt: 5 } }
+      const filter: QueryFilter<TestDocument> = { age: { $gt: 5 } }
       mockModel.countDocuments.mockResolvedValue(5)
 
       const result = await repository.count(filter)
@@ -544,7 +548,7 @@ describe('BaseRepository', () => {
 
   describe('exists', () => {
     it('should return true if document exists', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       mockModel.exists.mockResolvedValue({ _id: '1' })
 
       const result = await repository.exists(filter)
@@ -554,7 +558,7 @@ describe('BaseRepository', () => {
     })
 
     it('should return false if document does not exist', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       mockModel.exists.mockResolvedValue(null)
 
       const result = await repository.exists(filter)
@@ -564,7 +568,7 @@ describe('BaseRepository', () => {
     })
 
     it('should throw error and log if exception occurs', async () => {
-      const filter: FilterQuery<TestDocument> = { name: 'test' }
+      const filter: QueryFilter<TestDocument> = { name: 'test' }
       const error = new Error('exists error')
       mockModel.exists.mockRejectedValue(error)
 

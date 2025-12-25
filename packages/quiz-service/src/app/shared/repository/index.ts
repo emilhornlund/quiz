@@ -11,6 +11,7 @@ export type {
   QueryOptions,
   UpdateResult,
   DeleteResult,
+  CreateInput,
 } from './types'
 
 // Utils

@@ -1,4 +1,6 @@
-import { FilterQuery, UpdateQuery } from 'mongoose'
+import { QueryFilter, UpdateQuery } from 'mongoose'
+
+import { CreateInput } from './types'
 
 /**
  * Base interface for repository operations
@@ -12,18 +14,18 @@ export interface IBaseRepository<T> {
   /**
    * Find a single document matching the filter
    */
-  findOne(filter: FilterQuery<T>): Promise<T | null>
+  findOne(filter: QueryFilter<T>): Promise<T | null>
 
   /**
    * Find multiple documents matching the filter
    */
-  find(filter: FilterQuery<T>): Promise<T[]>
+  find(filter: QueryFilter<T>): Promise<T[]>
 
   /**
    * Find documents with pagination
    */
   findWithPagination(
-    filter: FilterQuery<T>,
+    filter: QueryFilter<T>,
     options: {
       skip?: number
       limit?: number
@@ -35,7 +37,7 @@ export interface IBaseRepository<T> {
   /**
    * Create a new document
    */
-  create(data: Partial<T>): Promise<T>
+  create(data: CreateInput<T>): Promise<T>
 
   /**
    * Update a document by ID
@@ -45,7 +47,7 @@ export interface IBaseRepository<T> {
   /**
    * Update multiple documents matching the filter
    */
-  updateMany(filter: FilterQuery<T>, data: UpdateQuery<T>): Promise<number>
+  updateMany(filter: QueryFilter<T>, data: UpdateQuery<T>): Promise<number>
 
   /**
    * Delete a document by ID
@@ -55,15 +57,15 @@ export interface IBaseRepository<T> {
   /**
    * Delete multiple documents matching the filter
    */
-  deleteMany(filter: FilterQuery<T>): Promise<number>
+  deleteMany(filter: QueryFilter<T>): Promise<number>
 
   /**
    * Count documents matching the filter
    */
-  count(filter: FilterQuery<T>): Promise<number>
+  count(filter: QueryFilter<T>): Promise<number>
 
   /**
    * Check if a document exists matching the filter
    */
-  exists(filter: FilterQuery<T>): Promise<boolean>
+  exists(filter: QueryFilter<T>): Promise<boolean>
 }
