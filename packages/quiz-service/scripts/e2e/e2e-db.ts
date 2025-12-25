@@ -38,7 +38,12 @@ export async function resetE2eDb(options: ResetOptions): Promise<void> {
     await mongoose.connect(mongoUri)
 
     if (options.shouldWipeMongo) {
-      const collections = await mongoose.connection.db.collections()
+      const db = mongoose.connection.db
+      if (!db) {
+        console.error(`Unable to connect to mongodb '${mongoUri}'`)
+        throw new Error(`Unable to connect to mongodb '${mongoUri}'`)
+      }
+      const collections = await db.collections()
       await Promise.all(collections.map((c) => c.deleteMany({})))
     }
 

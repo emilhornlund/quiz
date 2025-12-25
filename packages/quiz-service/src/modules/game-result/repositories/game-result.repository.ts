@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { BaseRepository } from '../../../app/shared/repository'
 
-import { GameResult, GameResultModel } from './models/schemas'
+import { GameResult } from './models/schemas'
+import type { GameResultModel } from './models/schemas'
 
 /**
  * Repository for querying and persisting game result documents.
@@ -28,7 +29,7 @@ export class GameResultRepository extends BaseRepository<GameResult> {
    * @param gameID - The ID of the game to retrieve results for.
    * @returns The game result if found, otherwise null.
    */
-  public async findGameResult(gameID: string): Promise<GameResult> {
+  public async findGameResult(gameID: string): Promise<GameResult | null> {
     return this.gameResultModel
       .findOne({
         game: { _id: gameID },

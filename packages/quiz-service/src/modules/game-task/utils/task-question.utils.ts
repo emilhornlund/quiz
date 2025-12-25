@@ -69,4 +69,7 @@ function buildQuestionTaskMetadata(
     const randomizedValues = shuffleDifferent(question.values)
     return { type: QuestionType.Puzzle, randomizedValues }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  throw new Error(`Unsupported question type '${(question as any).type}'`)
 }

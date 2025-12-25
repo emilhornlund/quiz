@@ -193,7 +193,7 @@ export class QuizService {
    * @private
    */
   private async findQuizzes(
-    ownerId: string,
+    ownerId?: string,
     search?: string,
     mode?: GameMode,
     visibility?: QuizVisibility,
@@ -437,6 +437,9 @@ export class QuizService {
         } as BaseQuestionDao & QuestionRangeDao
       })
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    throw new Error(`Unsupported game mode '${(quizRequest as any).mode}'`)
   }
 
   /**
@@ -533,6 +536,8 @@ export class QuizService {
         info,
       } as QuestionZeroToOneHundredRangeDto
     }
+
+    throw new Error(`Unsupported game mode '${mode}'`)
   }
 
   /**

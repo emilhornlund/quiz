@@ -68,6 +68,9 @@ export class MediaService {
     userId: string,
   ): Promise<void> {
     const uploadDirectory = this.configService.get<string>('UPLOAD_DIRECTORY')
+    if (!uploadDirectory) {
+      throw new Error('Upload directory not found.')
+    }
     const filePath = join(uploadDirectory, `${userId}/${photoId}.webp`)
 
     if (!(await MediaService.fileExists(filePath))) {

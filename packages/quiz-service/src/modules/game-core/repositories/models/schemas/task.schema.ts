@@ -72,6 +72,7 @@ export type LobbyTaskWithBase = BaseTask & LobbyTask
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionTaskBaseMetadata {
   @Prop({
+    type: String,
     enum: [
       QuestionType.MultiChoice,
       QuestionType.Range,
@@ -188,6 +189,7 @@ export type QuestionTaskMetadata = QuestionTaskBaseMetadata &
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionTaskBaseAnswer {
   @Prop({
+    type: String,
     enum: [
       QuestionType.MultiChoice,
       QuestionType.Range,
@@ -416,6 +418,7 @@ questionTaskAnswerSchema.discriminator(
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionResultTaskItem {
   @Prop({
+    type: String,
     enum: [
       QuestionType.MultiChoice,
       QuestionType.Range,
@@ -497,6 +500,7 @@ questionResultTaskItemSchema.discriminator(
 @Schema({ _id: false, discriminatorKey: 'type' })
 export class QuestionResultTaskBaseCorrectAnswer {
   @Prop({
+    type: String,
     enum: [
       QuestionType.MultiChoice,
       QuestionType.Range,

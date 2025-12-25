@@ -4,7 +4,8 @@ import { InjectModel } from '@nestjs/mongoose'
 import { BaseRepository } from '../../../app/shared/repository'
 import { TokenNotFoundException } from '../exceptions'
 
-import { Token, TokenModel } from './models/schemas'
+import type { TokenModel } from './models/schemas'
+import { Token } from './models/schemas'
 
 /**
  * Repository for managing token documents in MongoDB.

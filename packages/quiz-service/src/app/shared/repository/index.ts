@@ -1,4 +1,4 @@
-export { IBaseRepository } from './base-repository.interface'
+export type { IBaseRepository } from './base-repository.interface'
 export { BaseRepository } from './base.repository'
 
 // Types

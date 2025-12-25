@@ -1693,7 +1693,7 @@ describe('distribution', () => {
             type: QuestionType.Puzzle,
             playerId: 'player1',
             created: new Date(),
-            answer: null,
+            answer: null as never,
           },
           correct: false,
           lastScore: 0,

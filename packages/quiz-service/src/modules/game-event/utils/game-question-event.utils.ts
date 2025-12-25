@@ -195,9 +195,19 @@ function buildGameQuestionCountdownEvent(
     currentTask: { type: TaskType.Question }
   },
 ): CountdownEvent {
+  const {
+    currentTask: { currentTransitionInitiated, currentTransitionExpires } = {},
+  } = game
+
+  if (!currentTransitionInitiated || !currentTransitionExpires) {
+    throw new Error(
+      `Missing transition initiated or expired for game '${game._id}'`,
+    )
+  }
+
   return {
-    initiatedTime: game.currentTask.currentTransitionInitiated?.toISOString(),
-    expiryTime: game.currentTask.currentTransitionExpires?.toISOString(),
+    initiatedTime: currentTransitionInitiated.toISOString(),
+    expiryTime: currentTransitionExpires.toISOString(),
     serverTime: new Date().toISOString(),
   }
 }
@@ -266,6 +276,9 @@ function buildGameEventQuestion(
       ...common,
     }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  throw new Error(`Unsupported question type '${(question as any).type}'`)
 }
 
 /**

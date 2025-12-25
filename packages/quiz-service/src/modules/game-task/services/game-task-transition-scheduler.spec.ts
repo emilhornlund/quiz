@@ -160,7 +160,7 @@ describe('GameTaskTransitionScheduler', () => {
       )
       gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(5_000)
 
-      taskQueue.getJob.mockResolvedValue(null)
+      taskQueue.getJob.mockResolvedValue(undefined)
 
       gameRepository.findAndSaveWithLock.mockImplementation(
         async (_id, mutator) => {
@@ -213,7 +213,7 @@ describe('GameTaskTransitionScheduler', () => {
       )
       gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
 
-      taskQueue.getJob.mockResolvedValue(null)
+      taskQueue.getJob.mockResolvedValue(undefined)
 
       gameRepository.findAndSaveWithLock.mockImplementation(
         async (_id, mutator) => {

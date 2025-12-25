@@ -61,13 +61,13 @@ describe('GameRepository (e2e)', () => {
       const actual = await gameRepository.updateCompletedGames()
       expect(actual).toEqual(1)
 
-      const { status, currentTask, previousTasks } =
-        await gameModel.findById(gameID)
-      expect(status).toEqual(GameStatus.Completed)
-      expect(previousTasks[previousTasks.length - 1].type).toEqual(
-        TaskType.Podium,
-      )
-      expect(currentTask.type).toEqual(TaskType.Quit)
+      const expected = await gameModel.findById(gameID)
+      expect(expected).toBeDefined()
+      expect(expected!.status).toEqual(GameStatus.Completed)
+      expect(
+        expected!.previousTasks[expected!.previousTasks.length - 1].type,
+      ).toEqual(TaskType.Podium)
+      expect(expected!.currentTask.type).toEqual(TaskType.Quit)
     })
 
     it('should not mark active podium games not older than 1 hour as completed', async () => {
@@ -84,8 +84,9 @@ describe('GameRepository (e2e)', () => {
       const actual = await gameRepository.updateCompletedGames()
       expect(actual).toEqual(0)
 
-      const { status } = await gameModel.findById(gameID)
-      expect(status).toEqual(GameStatus.Active)
+      const expected = await gameModel.findById(gameID)
+      expect(expected).toBeDefined()
+      expect(expected!.status).toEqual(GameStatus.Active)
     })
 
     it('should not mark active leaderboard games older than 1 hour as completed', async () => {
@@ -102,8 +103,9 @@ describe('GameRepository (e2e)', () => {
       const actual = await gameRepository.updateCompletedGames()
       expect(actual).toEqual(0)
 
-      const { status } = await gameModel.findById(gameID)
-      expect(status).toEqual(GameStatus.Active)
+      const expected = await gameModel.findById(gameID)
+      expect(expected).toBeDefined()
+      expect(expected!.status).toEqual(GameStatus.Active)
     })
   })
 
@@ -122,13 +124,13 @@ describe('GameRepository (e2e)', () => {
       const expiredCount = await gameRepository.updateExpiredGames()
       expect(expiredCount).toEqual(1)
 
-      const { status, currentTask, previousTasks } =
-        await gameModel.findById(gameID)
-      expect(status).toEqual(GameStatus.Expired)
-      expect(previousTasks[previousTasks.length - 1].type).toEqual(
-        TaskType.Leaderboard,
-      )
-      expect(currentTask.type).toEqual(TaskType.Quit)
+      const expected = await gameModel.findById(gameID)
+      expect(expected).toBeDefined()
+      expect(expected!.status).toEqual(GameStatus.Expired)
+      expect(
+        expected!.previousTasks[expected!.previousTasks.length - 1].type,
+      ).toEqual(TaskType.Leaderboard)
+      expect(expected!.currentTask.type).toEqual(TaskType.Quit)
     })
 
     it('should not update active games not older than 1 hour', async () => {
@@ -145,8 +147,9 @@ describe('GameRepository (e2e)', () => {
       const expiredCount = await gameRepository.updateExpiredGames()
       expect(expiredCount).toEqual(0)
 
-      const { status } = await gameModel.findById(gameID)
-      expect(status).toEqual(GameStatus.Active)
+      const expected = await gameModel.findById(gameID)
+      expect(expected).toBeDefined()
+      expect(expected!.status).toEqual(GameStatus.Active)
     })
   })
 })

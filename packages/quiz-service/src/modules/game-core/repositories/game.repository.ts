@@ -196,7 +196,7 @@ export class GameRepository extends BaseRepository<Game> {
    */
   private async generateUniqueGamePIN(): Promise<string> {
     let isUnique = false
-    let gamePIN: string
+    let gamePIN: string = ''
 
     while (!isUnique) {
       gamePIN = Math.floor(100000 + Math.random() * 900000).toString()

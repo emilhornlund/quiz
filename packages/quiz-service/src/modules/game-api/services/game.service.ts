@@ -124,6 +124,12 @@ export class GameService {
           (participant) => participant.participantId === participantId,
         )
 
+        if (!participant) {
+          throw new Error(
+            `Participant ${participantId} not found in game ${gameDocument._id}`,
+          )
+        }
+
         return {
           id: gameDocument._id,
           name: gameDocument.name,

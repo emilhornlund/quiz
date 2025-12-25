@@ -133,7 +133,8 @@ describe('GameController (e2e)', () => {
         })
 
       const updatedDocument = await gameModel.findById(gameId)
-      expect(updatedDocument.participants).toHaveLength(2)
+      expect(updatedDocument).toBeDefined()
+      expect(updatedDocument!.participants).toHaveLength(2)
     })
 
     it('should fail in joining when a player has already joined', async () => {
@@ -764,12 +765,10 @@ describe('GameController (e2e)', () => {
           expect(res.body).toStrictEqual({})
         })
 
-      const {
-        status,
-        currentTask: { type },
-      } = await gameModel.findById(gameId)
-      expect(type).toEqual(TaskType.Quit)
-      expect(status).toEqual(GameStatus.Completed)
+      const actual = await gameModel.findById(gameId)
+      expect(actual).toBeDefined()
+      expect(actual!.currentTask.type).toEqual(TaskType.Quit)
+      expect(actual!.status).toEqual(GameStatus.Completed)
     })
 
     it('should succeed in completing the current podium task without players', async () => {
@@ -801,12 +800,10 @@ describe('GameController (e2e)', () => {
           expect(res.body).toStrictEqual({})
         })
 
-      const {
-        status,
-        currentTask: { type },
-      } = await gameModel.findById(gameId)
-      expect(type).toEqual(TaskType.Quit)
-      expect(status).toEqual(GameStatus.Expired)
+      const actual = await gameModel.findById(gameId)
+      expect(actual).toBeDefined()
+      expect(actual!.currentTask.type).toEqual(TaskType.Quit)
+      expect(actual!.status).toEqual(GameStatus.Expired)
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {
@@ -1223,7 +1220,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.MultiChoice, index: 0 },
@@ -1345,7 +1342,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.Range, value: 50 },
@@ -1467,7 +1464,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         { type: QuestionType.TrueFalse, value: false },
@@ -1597,7 +1594,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([
         {
@@ -1888,7 +1885,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2003,7 +2000,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2119,7 +2116,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 
@@ -2242,7 +2239,7 @@ describe('GameController (e2e)', () => {
 
       const { correctAnswers, results } = (
         await gameModel.findById(gameDocument._id).exec()
-      ).currentTask as QuestionResultTaskWithBase
+      )?.currentTask as QuestionResultTaskWithBase
 
       expect(toPlain(correctAnswers)).toEqual([])
 

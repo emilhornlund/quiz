@@ -84,7 +84,7 @@ describe('MediaController (e2e)', () => {
               join(
                 __dirname,
                 '../../../../',
-                process.env.UPLOAD_DIRECTORY,
+                process.env.UPLOAD_DIRECTORY || '',
                 `/${dirname(res.body.filename)}`,
               ),
               { recursive: true, force: true },
@@ -143,7 +143,7 @@ describe('MediaController (e2e)', () => {
       const dstFile = join(
         __dirname,
         '../../../../',
-        process.env.UPLOAD_DIRECTORY,
+        process.env.UPLOAD_DIRECTORY || '',
         `/${userId}/${photoId}.webp`,
       )
       await mkdir(dirname(dstFile))

@@ -443,7 +443,6 @@ const buildQuestionResultTaskItem = (
       playerId,
       answer: 0,
       created: new Date(),
-      ...(overrides.answer ?? {}),
     },
     correct: overrides.correct ?? true,
     lastScore: overrides.lastScore ?? 0,

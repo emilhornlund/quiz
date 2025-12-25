@@ -60,13 +60,18 @@ export class Quiz {
   /**
    * Whether the quiz's visibility is public or private.
    */
-  @Prop({ enum: QuizVisibility, required: true })
+  @Prop({ type: String, enum: QuizVisibility, required: true })
   visibility: QuizVisibility
 
   /**
    * Specifies the category of the quiz.
    */
-  @Prop({ enum: QuizCategory, required: true, default: QuizCategory.Other })
+  @Prop({
+    type: String,
+    enum: QuizCategory,
+    required: true,
+    default: QuizCategory.Other,
+  })
   category: QuizCategory
 
   /**
@@ -78,7 +83,7 @@ export class Quiz {
   /**
    * The language code of the quiz.
    */
-  @Prop({ enum: LanguageCode, required: true })
+  @Prop({ type: String, enum: LanguageCode, required: true })
   languageCode: LanguageCode
 
   /**

@@ -48,7 +48,7 @@ import {
 import {
   BaseQuestionDao,
   QuestionDao,
-  QuestionMultiChoiceDao,
+  QuestionMultiChoiceWithBase,
   QuestionPinDao,
   QuestionPuzzleDao,
   QuestionRangeDao,
@@ -111,7 +111,7 @@ export const MOCK_DEFAULT_PLAYER_ID = uuidv4()
 export const MOCK_DEFAULT_PLAYER_NICKNAME = 'FrostyBear'
 
 export function createMockMultiChoiceQuestionDocument(
-  question?: Partial<BaseQuestionDao & QuestionMultiChoiceDao>,
+  question?: Partial<QuestionMultiChoiceWithBase>,
 ): QuestionDao {
   return {
     type: QuestionType.MultiChoice,
@@ -250,6 +250,8 @@ export function createMockQuestionTaskDocument(
     answers: [],
     presented: offsetSeconds(0),
     created: offsetSeconds(0),
+    currentTransitionInitiated: offsetSeconds(0),
+    currentTransitionExpires: offsetSeconds(30),
     ...(task ?? {}),
   }
 }

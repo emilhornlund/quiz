@@ -47,7 +47,7 @@ describe('JoinGameRequest', () => {
       const errors = await validate(joinGameRequest)
       expect(errors.length).toBeGreaterThan(0)
       expect(errors[0].constraints).toHaveProperty('matches')
-      expect(errors[0].constraints.matches).toContain(
+      expect(errors[0].constraints?.matches).toContain(
         'Nickname can only contain letters, numbers, and underscores.',
       )
     })

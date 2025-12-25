@@ -11,6 +11,7 @@ import {
   GameEventType,
   GameParticipantType,
   HEARTBEAT_INTERVAL,
+  isDefined,
 } from '@quiz/common'
 import { Redis } from 'ioredis'
 import { concat, finalize, from, fromEvent, Observable } from 'rxjs'
@@ -179,8 +180,8 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
 
     return concat(from([initialEvent]), source).pipe(
       filter(
-        (event) =>
-          !!event &&
+        (event): event is DistributedEvent =>
+          isDefined(event) &&
           (event.playerId === undefined || event.playerId === participantId),
       ),
       map((event) => ({ data: JSON.stringify(event.event) })),

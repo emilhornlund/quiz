@@ -5,16 +5,19 @@ async function main() {
     shouldWipeMongo: true,
     shouldWipeRedis: true,
     seed: async ({ mongo }) => {
-      await mongo.connection.db.collection<UserDoc>('users').insertOne({
-        _id: '81b661d2-9b92-4011-b744-8ca7d14b71df',
-        authProvider: 'LOCAL',
-        defaultNickname: 'tester01',
-        email: 'tester01@klurigo.com',
-        hashedPassword:
-          '$2a$10$.0oD9nYtp3OuDONp9Xfx7OP2cl1m22V1ALOpTlfRODbsHpHtQqUhu', //Super$ecretPassw0rd123#
-        createdAt: new Date('2025-08-11T14:52:16.031Z'),
-        updatedAt: new Date('2025-12-17T08:18:50.228Z'),
-      })
+      const db = mongo.connection.db
+      if (db) {
+        await db.collection<UserDoc>('users').insertOne({
+          _id: '81b661d2-9b92-4011-b744-8ca7d14b71df',
+          authProvider: 'LOCAL',
+          defaultNickname: 'tester01',
+          email: 'tester01@klurigo.com',
+          hashedPassword:
+            '$2a$10$.0oD9nYtp3OuDONp9Xfx7OP2cl1m22V1ALOpTlfRODbsHpHtQqUhu', //Super$ecretPassw0rd123#
+          createdAt: new Date('2025-08-11T14:52:16.031Z'),
+          updatedAt: new Date('2025-12-17T08:18:50.228Z'),
+        })
+      }
     },
   })
 }

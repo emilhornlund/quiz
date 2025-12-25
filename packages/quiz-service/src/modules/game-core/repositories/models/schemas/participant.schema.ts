@@ -16,6 +16,7 @@ export class ParticipantBase {
    * The type of participant, either host or player.
    */
   @Prop({
+    type: String,
     enum: GameParticipantType,
     required: true,
   })

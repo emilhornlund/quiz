@@ -144,7 +144,7 @@ describe('ClassicPuzzleScoringStrategy', () => {
 
       const score = strategy.calculateScore(
         presented,
-        undefined,
+        undefined as never,
         duration,
         points,
         correct,
