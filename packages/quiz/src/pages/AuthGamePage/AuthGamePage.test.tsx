@@ -3,12 +3,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
-  authenticateGame: vi.fn<
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    [{ gameId?: string; gamePIN?: string }],
-    Promise<void>
-  >(),
+  authenticateGame:
+    vi.fn<(payload: { gameId?: string; gamePIN?: string }) => Promise<void>>(),
   navigate: vi.fn(),
   notifyError: vi.fn(),
 }))
@@ -51,7 +47,7 @@ describe('AuthGamePage', () => {
   })
 
   it('authenticates with gameId and navigates to /join on success', async () => {
-    h.authenticateGame.mockResolvedValueOnce({})
+    h.authenticateGame.mockResolvedValueOnce(undefined)
     const { container } = render(
       <MemoryRouter initialEntries={['/auth/game?id=abc-123']}>
         <Routes>
@@ -70,7 +66,7 @@ describe('AuthGamePage', () => {
   })
 
   it('authenticates with gamePIN and navigates to /join on success', async () => {
-    h.authenticateGame.mockResolvedValueOnce({})
+    h.authenticateGame.mockResolvedValueOnce(undefined)
     const { container } = render(
       <MemoryRouter initialEntries={['/auth/game?pin=777777']}>
         <Routes>
@@ -89,7 +85,7 @@ describe('AuthGamePage', () => {
   })
 
   it('authenticates with both id and pin and navigates to /join on success', async () => {
-    h.authenticateGame.mockResolvedValueOnce({})
+    h.authenticateGame.mockResolvedValueOnce(undefined)
     const { container } = render(
       <MemoryRouter initialEntries={['/auth/game?id=abc&pin=123']}>
         <Routes>
@@ -124,7 +120,7 @@ describe('AuthGamePage', () => {
   })
 
   it('runs only once even if user clicks back/forward causing re-render with same params', async () => {
-    h.authenticateGame.mockResolvedValueOnce({})
+    h.authenticateGame.mockResolvedValueOnce(undefined)
     const { container } = render(
       <MemoryRouter initialEntries={['/auth/game?id=one']} initialIndex={0}>
         <Routes>

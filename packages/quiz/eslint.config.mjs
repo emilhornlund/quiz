@@ -80,6 +80,8 @@ export default [
   // Override react recommended defaults
   {
     rules: {
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
     },

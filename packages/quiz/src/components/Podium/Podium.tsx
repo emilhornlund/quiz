@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { CSSProperties, FC } from 'react'
 import { useMemo } from 'react'
 
 import Confetti, { type ConfettiIntensity } from '../Confetti'
@@ -43,7 +43,7 @@ const Stack: FC<StackProps> = ({
 }) => (
   <div
     className={styles.column}
-    style={{ '--position-index': animationIndex } as React.CSSProperties}>
+    style={{ '--position-index': animationIndex } as CSSProperties}>
     {[...Array(position - 1).keys()].map((key) => (
       <div key={key} className={styles.spacer} />
     ))}
@@ -67,12 +67,14 @@ const Stack: FC<StackProps> = ({
                   '--sparkle-delay': '0s',
                   '--sparkle-x': `50%`,
                   '--sparkle-y': `50%`,
-                } as React.CSSProperties
+                } as CSSProperties
               }
             />
 
             {[...Array(6)].map((_, i) => {
+              // eslint-disable-next-line react-hooks/purity
               const x = 10 + Math.random() * 80
+              // eslint-disable-next-line react-hooks/purity
               const y = 10 + Math.random() * 30
 
               return (
@@ -84,7 +86,7 @@ const Stack: FC<StackProps> = ({
                       '--sparkle-delay': `${i * 0.2}s`,
                       '--sparkle-x': `${x}%`,
                       '--sparkle-y': `${y}%`,
-                    } as React.CSSProperties
+                    } as CSSProperties
                   }
                 />
               )
@@ -97,7 +99,13 @@ const Stack: FC<StackProps> = ({
 )
 
 const Podium: FC<PodiumProps> = ({ values }) => {
-  const celebrationLevel = useMemo(() => getCelebrationLevel(1), [1])
+  const celebrationLevel = useMemo(() => {
+    const level = getCelebrationLevel(1)
+    if (level !== 'none') {
+      return level
+    }
+    return undefined
+  }, [])
 
   return (
     <div className={styles.main}>
@@ -119,7 +127,7 @@ const Podium: FC<PodiumProps> = ({ values }) => {
         score={values?.[2]?.score}
         animationIndex={0}
       />
-      {celebrationLevel !== 'none' && (
+      {celebrationLevel && (
         <Confetti trigger={true} intensity={celebrationLevel} />
       )}
     </div>

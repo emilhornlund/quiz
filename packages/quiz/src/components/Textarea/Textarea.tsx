@@ -84,6 +84,7 @@ const Textarea: FC<TextareaProps> = ({
     maxLength,
     regex,
     onAdditionalValidation,
+    customErrorMessage,
   ])
 
   const prevValid = useRef<boolean | undefined>(undefined)

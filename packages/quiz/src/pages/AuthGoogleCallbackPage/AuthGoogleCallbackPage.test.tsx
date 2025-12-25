@@ -9,12 +9,8 @@ import {
 } from '../../utils/oauth.ts'
 
 const h = vi.hoisted(() => ({
-  googleExchangeCode: vi.fn<
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    [{ code: string; codeVerifier: string }],
-    Promise<void>
-  >(),
+  googleExchangeCode:
+    vi.fn<(payload: { code: string; codeVerifier: string }) => Promise<void>>(),
   navigate: vi.fn(),
   notifyError: vi.fn(),
 }))
@@ -125,7 +121,7 @@ describe('AuthGoogleCallbackPage', () => {
   })
 
   it('exchanges code and navigates to / on success', async () => {
-    h.googleExchangeCode.mockResolvedValueOnce({})
+    h.googleExchangeCode.mockResolvedValueOnce(undefined)
 
     sessionStorage.setItem(
       GOOGLE_OAUTH_STORAGE_KEY,
@@ -191,7 +187,7 @@ describe('AuthGoogleCallbackPage', () => {
   })
 
   it('runs only once even if component re-renders with same params', async () => {
-    h.googleExchangeCode.mockResolvedValueOnce({})
+    h.googleExchangeCode.mockResolvedValueOnce(undefined)
 
     sessionStorage.setItem(
       GOOGLE_OAUTH_STORAGE_KEY,

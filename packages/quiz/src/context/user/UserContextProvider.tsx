@@ -141,7 +141,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
       setUser(null)
       setContext('auth', null)
     }
-  }, [isMounted, sentryContextKey])
+  }, [isMounted, sentryContextKey, currentUser])
 
   /**
    * Memoized context value to avoid unnecessary re-renders.

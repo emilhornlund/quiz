@@ -1,6 +1,6 @@
 import { MediaType, URL_REGEX } from '@quiz/common'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import MediaModal from './MediaModal'
@@ -53,7 +53,7 @@ vi.mock('../Button', () => ({
     disabled?: boolean
     onClick?: () => void
   }) => (
-    <button id={id} disabled={!!disabled} onClick={onClick}>
+    <button id={id} disabled={disabled} onClick={onClick}>
       {value ?? id}
     </button>
   ),
@@ -117,31 +117,41 @@ vi.mock('../TextField', () => ({
     onChange?: (value: string) => void
     onValid?: (valid: boolean) => void
   }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const lastValidRef = useRef<boolean | null>(null)
 
-    const computeValid = (v: string): boolean => {
-      const hasValue = v.length > 0
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const computeValid = useCallback(
+      (v: string): boolean => {
+        const hasValue = v.length > 0
 
-      if (required && !hasValue) return false
+        if (required && !hasValue) return false
 
-      if (regex && hasValue) return regex.value.test(v)
+        if (regex && hasValue) return regex.value.test(v)
 
-      return true
-    }
+        return true
+      },
+      [regex, required],
+    )
 
-    const emitValidIfChanged = (v: string) => {
-      if (!onValid) return
-      const nextValid = computeValid(v)
-      if (lastValidRef.current !== nextValid) {
-        lastValidRef.current = nextValid
-        onValid(nextValid)
-      }
-    }
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const emitValidIfChanged = useCallback(
+      (v: string) => {
+        if (!onValid) return
+        const nextValid = computeValid(v)
+        if (lastValidRef.current !== nextValid) {
+          lastValidRef.current = nextValid
+          onValid(nextValid)
+        }
+      },
+      [onValid, computeValid],
+    )
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       emitValidIfChanged(value ?? '')
       // IMPORTANT: do NOT depend on `regex` object identity, it changes every render.
-    }, [value, required, regex?.value])
+    }, [value, required, regex?.value, emitValidIfChanged])
 
     return (
       <div data-testid={`textfield-${id}`}>

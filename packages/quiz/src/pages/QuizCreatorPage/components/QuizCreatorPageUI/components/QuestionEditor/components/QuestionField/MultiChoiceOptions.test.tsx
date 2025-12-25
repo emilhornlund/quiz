@@ -4,6 +4,7 @@ import {
 } from '@quiz/common'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import type { ValidationResult } from '../../../../../../../../validation'
@@ -62,8 +63,9 @@ vi.mock('@dnd-kit/core', async () => {
   let lastProps: Record<string, unknown> | null = null
 
   const DndContext = (
-    props: Record<string, unknown> & { children: React.ReactNode },
+    props: Record<string, unknown> & { children: ReactNode },
   ) => {
+    // eslint-disable-next-line react-hooks/globals
     lastProps = props
     return <div data-testid="dnd">{props.children}</div>
   }
@@ -88,9 +90,7 @@ vi.mock('@dnd-kit/sortable', async () => {
 
   return {
     ...actual,
-    SortableContext: (props: { children: React.ReactNode }) => (
-      <>{props.children}</>
-    ),
+    SortableContext: (props: { children: ReactNode }) => <>{props.children}</>,
     useSortable: () => ({
       isDragging: false,
       attributes: {},

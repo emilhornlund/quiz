@@ -33,8 +33,10 @@ const ImageSquareEffect: FC<ImageSquareEffectProps> = ({
   const totalSquares = useMemo(() => n * n, [n])
 
   const seed = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
     if (!countdown) return Date.now()
     const initiated = new Date(countdown.initiatedTime).getTime()
+    // eslint-disable-next-line react-hooks/purity
     return Number.isFinite(initiated) ? initiated : Date.now()
   }, [countdown])
 
