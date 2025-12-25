@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { type FC } from 'react'
 import { useEffect, useState } from 'react'
 
 import styles from './Confetti.module.scss'
@@ -20,40 +20,40 @@ interface ConfettiParticle {
   size: number
 }
 
+const particleCounts = {
+  normal: 25,
+  major: 45,
+  epic: 70,
+}
+
+const colorPalettes = {
+  normal: ['$green-2', '$yellow-2'],
+  major: ['$green-2', '$yellow-2', '$gold'],
+  epic: ['$green-2', '$yellow-2', '$gold', '$pink-2', '$turquoise-2'],
+}
+
+const generateParticles = (
+  intensity: ConfettiIntensity,
+): ConfettiParticle[] => {
+  const count = particleCounts[intensity]
+  const colors = colorPalettes[intensity]
+
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    color: colors[i % colors.length],
+    x: Math.random(),
+    delay: Math.random(),
+    duration: Math.random(),
+    size: Math.random() * 8 + 4, // 4-12px
+  }))
+}
+
 const Confetti: FC<ConfettiProps> = ({
   trigger,
   intensity,
   onAnimationEnd,
 }) => {
   const [particles, setParticles] = useState<ConfettiParticle[]>([])
-
-  const particleCounts = {
-    normal: 25,
-    major: 45,
-    epic: 70,
-  }
-
-  const colorPalettes = {
-    normal: ['$green-2', '$yellow-2'],
-    major: ['$green-2', '$yellow-2', '$gold'],
-    epic: ['$green-2', '$yellow-2', '$gold', '$pink-2', '$turquoise-2'],
-  }
-
-  const generateParticles = (
-    intensity: ConfettiIntensity,
-  ): ConfettiParticle[] => {
-    const count = particleCounts[intensity]
-    const colors = colorPalettes[intensity]
-
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      color: colors[i % colors.length],
-      x: Math.random(),
-      delay: Math.random(),
-      duration: Math.random(),
-      size: Math.random() * 8 + 4, // 4-12px
-    }))
-  }
 
   useEffect(() => {
     if (trigger) {

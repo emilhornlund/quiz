@@ -29,6 +29,7 @@ function renderWithCapture() {
   const Capture = () => (
     <UserContext.Consumer>
       {(value) => {
+        // eslint-disable-next-line react-hooks/globals
         latest = value
         return null
       }}

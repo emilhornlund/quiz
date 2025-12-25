@@ -1,15 +1,14 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import type { NavigateFunction } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
   expired: false,
   resetPassword: vi
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    .fn<[{ password: string }, string], Promise<void>>()
-    .mockResolvedValue({}),
-  navigate: vi.fn(),
+    .fn<(payload: { password: string }, token: string) => Promise<void>>()
+    .mockResolvedValue(undefined),
+  navigate: vi.fn<NavigateFunction>(),
 }))
 
 vi.mock('../../api/api.utils', () => ({

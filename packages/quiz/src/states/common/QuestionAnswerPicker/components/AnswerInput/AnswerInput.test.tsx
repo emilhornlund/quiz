@@ -7,10 +7,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AnswerInput from './AnswerInput'
 
 describe('AnswerInput', () => {
-  let onSubmit: ReturnType<typeof vi.fn>
+  let onSubmit: (value: string) => void
 
   beforeEach(() => {
-    onSubmit = vi.fn()
+    onSubmit = vi.fn<(value: string) => void>()
   })
 
   afterEach(() => {

@@ -34,6 +34,12 @@ import { useEventSource } from '../../utils/useEventSource.tsx'
 
 import styles from './GamePage.module.scss'
 
+const LoadingOverlay: FC = () => (
+  <div className={styles.loadingOverlay} data-testid="loading-overlay">
+    <LoadingSpinner />
+  </div>
+)
+
 /**
  * Represents the main game page.
  *
@@ -134,7 +140,7 @@ const GamePage: FC = () => {
         navigate('/')
       }
     }
-  }, [event, navigate])
+  }, [event, gameID, isUserAuthenticated, navigate])
 
   useEffect(() => {
     if (gameID && gameToken) {
@@ -211,12 +217,6 @@ const GamePage: FC = () => {
       })
     }
   }
-
-  const LoadingOverlay: FC = () => (
-    <div className={styles.loadingOverlay} data-testid="loading-overlay">
-      <LoadingSpinner />
-    </div>
-  )
 
   return (
     <>

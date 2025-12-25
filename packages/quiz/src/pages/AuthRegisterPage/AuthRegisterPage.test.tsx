@@ -1,15 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import type { NavigateFunction } from 'react-router-dom'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  register: vi.fn<[], Promise<void>>().mockResolvedValue(),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  login: vi.fn<[], Promise<void>>().mockResolvedValue(),
-  navigate: vi.fn(),
+  register: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
+  login: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
+  navigate: vi.fn<NavigateFunction>(),
 }))
 
 vi.mock('../../api/use-quiz-service-client.tsx', () => ({
@@ -115,7 +112,7 @@ describe('AuthRegisterPage', () => {
 
   it('disables during successful register+login and re-enables after', async () => {
     let resolveLogin!: () => void
-    h.register.mockResolvedValue({})
+    h.register.mockResolvedValue({} as never)
     h.login.mockImplementation(
       () => new Promise<void>((r) => (resolveLogin = r)),
     )

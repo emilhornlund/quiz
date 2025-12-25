@@ -41,8 +41,8 @@ const AuthLoginPageUI: FC<AuthLoginPageUIProps> = ({
   onSubmit,
   onGoogleClick,
 }) => {
-  const title = useMemo(getTitle, [])
-  const message = useMemo(getMessage, [])
+  const title = useMemo(() => getTitle(), [])
+  const message = useMemo(() => getMessage(), [])
 
   const [formFields, setFormFields] = useState<LoginFormFields>({
     email: '',

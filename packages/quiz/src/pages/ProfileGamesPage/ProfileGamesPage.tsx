@@ -2,7 +2,7 @@ import { GameStatus } from '@quiz/common'
 import { useQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import { LoadingSpinner, Page } from '../../components'
@@ -12,12 +12,11 @@ import ProfileGamesPageUI from './ProfileGamesPageUI'
 
 const ProfileGamesPage: FC = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const offset = useMemo(
     () => Math.max(parseNumber(searchParams.get('offset'), 0), 0),
-    [location.search],
+    [searchParams],
   )
 
   const setOffset = (nextOffset: number) => {

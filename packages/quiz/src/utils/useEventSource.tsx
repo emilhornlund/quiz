@@ -49,7 +49,7 @@ export const useEventSource = (
     }
   }
 
-  const cleanupEventSource = () => {
+  const cleanupEventSource = useCallback(() => {
     clearReconnectTimeout()
 
     const current = eventSourceRef.current
@@ -61,7 +61,7 @@ export const useEventSource = (
     }
 
     eventSourceRef.current = null
-  }
+  }, [])
 
   const getRetryDelay = (retryCount: number) =>
     Math.min(1000 * 2 ** retryCount, 30000)
@@ -135,11 +135,12 @@ export const useEventSource = (
         clearReconnectTimeout()
         reconnectTimeoutRef.current = window.setTimeout(() => {
           if (isShuttingDownRef.current) return
+          // eslint-disable-next-line react-hooks/immutability
           createEventSource(gameIdValue, tokenValue, retryCount + 1)
         }, delay)
       }
     },
-    [],
+    [cleanupEventSource],
   )
 
   useEffect(() => {
@@ -153,7 +154,7 @@ export const useEventSource = (
       isShuttingDownRef.current = true
       cleanupEventSource()
     }
-  }, [createEventSource, gameID, token])
+  }, [cleanupEventSource, createEventSource, gameID, token])
 
   return [gameEvent, connectionStatus]
 }

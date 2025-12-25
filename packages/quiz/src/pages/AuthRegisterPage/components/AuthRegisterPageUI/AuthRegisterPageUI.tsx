@@ -43,8 +43,8 @@ const AuthRegisterPageUI: FC<AuthRegisterPageUIProps> = ({
   loading,
   onSubmit,
 }) => {
-  const title = useMemo(getTitle, [])
-  const message = useMemo(getMessage, [])
+  const title = useMemo(() => getTitle(), [])
+  const message = useMemo(() => getMessage(), [])
 
   const [formFields, setFormFields] = useState<CreateUserFormFields>({
     email: '',

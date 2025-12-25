@@ -56,6 +56,7 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
     if (value?.type !== MediaType.Image || !value.effect || !duration) {
       return undefined
     }
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now()
     return {
       type: value.effect,

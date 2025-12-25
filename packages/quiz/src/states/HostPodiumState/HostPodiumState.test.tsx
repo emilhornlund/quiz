@@ -22,7 +22,7 @@ let mathRandomSpy: ReturnType<typeof vi.spyOn>
 describe('HostPodiumState', () => {
   beforeEach(() => {
     h.completeTask.mockClear()
-    h.completeTask.mockResolvedValue({})
+    h.completeTask.mockResolvedValue({} as never)
 
     mathRandomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
   })

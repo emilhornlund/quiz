@@ -93,7 +93,7 @@ const QuizCreatorPage: FC = () => {
         languageCode: originalQuiz.languageCode,
       })
     }
-  }, [originalQuiz, isQuizLoading, isQuizError, setQuizSettings])
+  }, [originalQuiz, isQuizLoading, isQuizError, setQuizSettings, setGameMode])
 
   const {
     data: originalQuizQuestions,
@@ -121,6 +121,7 @@ const QuizCreatorPage: FC = () => {
     isQuizQuestionsLoading,
     isQuizQuestionsError,
     setQuestions,
+    selectQuestion,
   ])
 
   const handleAddQuestion = (): void => {

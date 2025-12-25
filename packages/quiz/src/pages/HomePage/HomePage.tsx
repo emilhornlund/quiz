@@ -34,6 +34,7 @@ const HomePage: FC = () => {
 
   const message = useMemo(
     () =>
+      // eslint-disable-next-line react-hooks/purity
       `Do you feel confident? ${MESSAGES[Math.floor(Math.random() * MESSAGES.length)]}`,
     [],
   )

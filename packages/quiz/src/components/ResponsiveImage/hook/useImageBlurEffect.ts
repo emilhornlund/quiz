@@ -55,7 +55,7 @@ export function useImageBlurEffect(
       return { maxBlurNumber: Math.max(unit.max, 0), unitSuffix: 'px' }
     }
     return { maxBlurNumber: Math.max(unit.max, 0), unitSuffix: 'rem' }
-  }, [unit, box?.w, box?.h])
+  }, [unit, box])
 
   useEffect(() => {
     if (rafRef.current) {
