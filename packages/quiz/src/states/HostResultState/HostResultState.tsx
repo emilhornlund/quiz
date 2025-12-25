@@ -9,14 +9,9 @@ import { QuestionType } from '@quiz/common'
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import {
-  Button,
-  HostGameFooter,
-  IconButtonArrowRight,
-  Typography,
-} from '../../components'
+import { Button, IconButtonArrowRight, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
-import { GamePage, QuestionMedia } from '../common'
+import { GamePage, HostGameFooter, QuestionMedia } from '../common'
 import NonInteractiveInfoBox from '../common/NonInteractiveInfoBox'
 
 import {

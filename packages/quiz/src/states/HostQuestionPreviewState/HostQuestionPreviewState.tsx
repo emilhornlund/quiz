@@ -1,8 +1,13 @@
 import type { GameQuestionPreviewHostEvent } from '@quiz/common'
 import type { FC } from 'react'
 
-import { HostGameFooter, ProgressBar } from '../../components'
-import { GamePage, QuestionTextPreview, QuestionTypePointsBar } from '../common'
+import { ProgressBar } from '../../components'
+import {
+  GamePage,
+  HostGameFooter,
+  QuestionTextPreview,
+  QuestionTypePointsBar,
+} from '../common'
 
 export interface HostQuestionPreviewStateProps {
   event: GameQuestionPreviewHostEvent
