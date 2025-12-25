@@ -1,7 +1,34 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.cjs.json" },
-    { "path": "./tsconfig.esm.json" }
-  ]
+  "compilerOptions": {
+    /* Targets */
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    /* Modules & Resolution */
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+
+    /* Emit */
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    /* Interop & ergonomics */
+    "esModuleInterop": true,
+
+    /* Paths */
+    "baseUrl": "./",
+
+    /* Strictness & checks */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* Tooling / Build info */
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
+  }
 }

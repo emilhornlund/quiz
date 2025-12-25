@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest'
+
 import { isDefined } from './type-guards.utils'
 
 describe('type-guards', () => {
