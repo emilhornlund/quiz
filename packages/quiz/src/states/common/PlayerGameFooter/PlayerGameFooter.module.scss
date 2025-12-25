@@ -1,6 +1,6 @@
-@use '../../styles/colors';
-@use '../../styles/helpers';
-@use '../../styles/variables';
+@use '../../../styles/colors';
+@use '../../../styles/helpers';
+@use '../../../styles/variables';
 
 $--mobile-font-size: 16px;
 $--mobile-line-height: helpers.pxToRem($--mobile-font-size);

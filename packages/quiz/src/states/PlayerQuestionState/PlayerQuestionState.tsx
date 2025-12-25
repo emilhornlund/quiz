@@ -5,9 +5,9 @@ import type {
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import { PlayerGameFooter, ProgressBar, Typography } from '../../components'
+import { ProgressBar, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
-import { GamePage, QuestionAnswerPicker } from '../common'
+import { GamePage, PlayerGameFooter, QuestionAnswerPicker } from '../common'
 
 import styles from './PlayerQuestionState.module.scss'
 

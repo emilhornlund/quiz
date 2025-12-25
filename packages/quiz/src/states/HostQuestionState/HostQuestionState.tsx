@@ -5,15 +5,15 @@ import { MediaType, QuestionType } from '@quiz/common'
 import type { FC } from 'react'
 import { useMemo, useState } from 'react'
 
-import {
-  HostGameFooter,
-  IconButtonArrowRight,
-  ProgressBar,
-  Typography,
-} from '../../components'
+import { IconButtonArrowRight, ProgressBar, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
 import { classNames } from '../../utils/helpers.ts'
-import { GamePage, QuestionAnswerPicker, QuestionMedia } from '../common'
+import {
+  GamePage,
+  HostGameFooter,
+  QuestionAnswerPicker,
+  QuestionMedia,
+} from '../common'
 
 import styles from './HostQuestionState.module.scss'
 

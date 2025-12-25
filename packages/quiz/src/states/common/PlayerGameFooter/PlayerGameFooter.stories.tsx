@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import PlayerGameFooter from './PlayerGameFooter'
 
 const meta = {
+  title: 'Gameplay Components/PlayerGameFooter',
   component: PlayerGameFooter,
 } satisfies Meta<typeof PlayerGameFooter>
 

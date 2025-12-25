@@ -2,14 +2,9 @@ import type { GameLeaderboardHostEvent } from '@quiz/common'
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import {
-  HostGameFooter,
-  IconButtonArrowRight,
-  Leaderboard,
-  Typography,
-} from '../../components'
+import { IconButtonArrowRight, Leaderboard, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
-import { GamePage } from '../common'
+import { GamePage, HostGameFooter } from '../common'
 
 export interface HostLeaderboardStateProps {
   event: GameLeaderboardHostEvent

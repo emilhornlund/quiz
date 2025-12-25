@@ -8,13 +8,12 @@ import {
   Badge,
   Confetti,
   getBadgePositionBackgroundColor,
-  PlayerGameFooter,
   StreakBadge,
   Typography,
 } from '../../components'
 import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
 import { classNames } from '../../utils/helpers.ts'
-import { GamePage, PointsBehindIndicator } from '../common'
+import { GamePage, PlayerGameFooter, PointsBehindIndicator } from '../common'
 
 import { getPositionMessage } from './message.utils.ts'
 import styles from './PlayerResultState.module.scss'
