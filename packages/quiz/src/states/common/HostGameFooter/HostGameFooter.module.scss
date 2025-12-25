@@ -98,5 +98,43 @@ $--desktop-line-height: helpers.pxToRem($--desktop-font-size);
     @include helpers.desktop {
       column-gap: variables.$desktop-narrow-layout-gutter;
     }
+
+    @mixin iconSize() {
+      @include helpers.mobile {
+        width: helpers.pxToRem(40px);
+        height: helpers.pxToRem(40px);
+      }
+
+      @include helpers.tablet {
+        width: helpers.pxToRem(42px);
+        height: helpers.pxToRem(42px);
+      }
+
+      @include helpers.desktop {
+        width: helpers.pxToRem(44px);
+        height: helpers.pxToRem(44px);
+      }
+    }
+
+    .menuButtonWrapper {
+      div[class*=_buttonInputContainer] {
+        padding: 0;
+        margin: 0;
+
+        button {
+          @include helpers.mobile {
+            @include helpers.fontSize(18px);
+          }
+
+          @include helpers.tablet {
+            @include helpers.fontSize(22px);
+          }
+
+          @include helpers.desktop {
+            @include helpers.fontSize(26px);
+          }
+        }
+      }
+    }
   }
 }
