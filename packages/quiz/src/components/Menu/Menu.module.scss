@@ -44,9 +44,15 @@
     }
 
     &:hover {
-      .content {
-        background-color: colors.$gray-1;
+      &:not(:disabled) {
+        .content {
+          background-color: colors.$gray-1;
+        }
       }
+    }
+
+    &:disabled {
+      color: colors.$gray-2;
     }
   }
 

@@ -1,59 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GamePage > calls toggleFullscreen on click 1`] = `
-<div>
-  <div
-    data-hide-login="true"
-    data-testid="page"
-  >
-    <div
-      data-testid="header"
-    >
-      <button
-        icon="[object Object]"
-        id="fullscreen-button"
-        kind="primary"
-        type="button"
-      />
-      <span>
-        Header
-      </span>
-    </div>
-    <div
-      data-testid="content"
-    >
-      <div>
-        Body
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`GamePage > hides fullscreen button on mobile 1`] = `
-<div>
-  <div
-    data-hide-login="true"
-    data-testid="page"
-  >
-    <div
-      data-testid="header"
-    >
-      <span>
-        Header
-      </span>
-    </div>
-    <div
-      data-testid="content"
-    >
-      <div>
-        Body
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`GamePage > renders Page with header and children and sets hideLogin 1`] = `
 <div>
   <div
@@ -63,12 +9,6 @@ exports[`GamePage > renders Page with header and children and sets hideLogin 1`]
     <div
       data-testid="header"
     >
-      <button
-        icon="[object Object]"
-        id="fullscreen-button"
-        kind="primary"
-        type="button"
-      />
       <div
         data-testid="custom-header"
       >
@@ -81,66 +21,6 @@ exports[`GamePage > renders Page with header and children and sets hideLogin 1`]
       <div
         data-testid="slot"
       >
-        Body
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`GamePage > shows fullscreen button on non-mobile devices with maximize icon initially 1`] = `
-<div>
-  <div
-    data-hide-login="true"
-    data-testid="page"
-  >
-    <div
-      data-testid="header"
-    >
-      <button
-        icon="[object Object]"
-        id="fullscreen-button"
-        kind="primary"
-        type="button"
-      />
-      <span>
-        Header
-      </span>
-    </div>
-    <div
-      data-testid="content"
-    >
-      <div>
-        Body
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`GamePage > uses minimize icon when fullscreen is active 1`] = `
-<div>
-  <div
-    data-hide-login="true"
-    data-testid="page"
-  >
-    <div
-      data-testid="header"
-    >
-      <button
-        icon="[object Object]"
-        id="fullscreen-button"
-        kind="primary"
-        type="button"
-      />
-      <span>
-        Header
-      </span>
-    </div>
-    <div
-      data-testid="content"
-    >
-      <div>
         Body
       </div>
     </div>
