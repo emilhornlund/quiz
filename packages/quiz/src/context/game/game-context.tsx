@@ -26,6 +26,7 @@ export type GameContextType = {
   leaveGame?: (playerID: string) => Promise<void>
   addCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
   deleteCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
+  quitGame?: () => Promise<void>
 }
 
 /**

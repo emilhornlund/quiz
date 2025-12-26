@@ -659,6 +659,21 @@ export const useQuizServiceClient = () => {
     }).then(() => {})
 
   /**
+   * description here
+   *
+   * @param gameID - description here
+   * @returns description here
+   */
+  const quitGame = (gameID: string): Promise<void> =>
+    apiPost(
+      `/games/${gameID}/quit`,
+      {},
+      {
+        scope: TokenScope.Game,
+      },
+    ).then(() => {})
+
+  /**
    * Retrieves the game history associated with the current player.
    *
    * @param options.limit - The maximum number of games to retrieve per page.
@@ -776,6 +791,8 @@ export const useQuizServiceClient = () => {
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
+
+    /* Game API */
     createGame,
     joinGame,
     leaveGame,
@@ -783,6 +800,8 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     addCorrectAnswer,
     deleteCorrectAnswer,
+    quitGame,
+
     getProfileGames,
     getGameResults,
     searchPhotos,

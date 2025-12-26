@@ -16,91 +16,117 @@ vi.mock('./HostGameFooter.module.scss', () => ({
 
 vi.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: (props: { icon: unknown }) => (
-    <span data-testid="fa-icon">{String(!!props.icon)}</span>
+    <span data-testid="fa-icon">{String(Boolean(props.icon))}</span>
   ),
 }))
 
 const toggleFullscreenMock = vi.fn()
+const quitGameMock = vi.fn()
 const useGameContextMock = vi.fn()
 
 vi.mock('../../../context/game', () => ({
   useGameContext: () => useGameContextMock(),
 }))
 
-const buttonMock = vi.fn(
-  ({
-    id,
-    onClick,
-  }: {
-    id?: string
-    onClick?: () => void
-    type?: string
-    kind?: string
-    icon?: unknown
-  }) => (
-    <button type="button" id={id} onClick={onClick}>
-      Button
-    </button>
-  ),
-)
+type ButtonProps = {
+  id?: string
+  onClick?: () => void
+  type?: string
+  kind?: string
+  icon?: unknown
+}
 
-const menuMock = vi.fn(
-  ({
-    isOpen,
-    children,
-    onClose,
-  }: {
-    anchorRef: React.RefObject<HTMLElement | null>
-    position: 'above' | 'below'
-    align: 'start' | 'end'
-    isOpen: boolean
-    onClose: () => void
-    children: React.ReactNode
-  }) => (
-    <div data-testid="menu">
-      <div data-testid="menu-open">{String(isOpen)}</div>
-      <button type="button" data-testid="menu-close" onClick={onClose}>
-        close
-      </button>
-      {isOpen ? <div data-testid="menu-content">{children}</div> : null}
-    </div>
-  ),
-)
+const buttonMock = vi.fn(({ id, onClick }: ButtonProps) => (
+  <button type="button" id={id} onClick={onClick}>
+    Button
+  </button>
+))
 
-const menuItemMock = vi.fn(
-  ({
-    children,
-    onClick,
-    disabled,
-  }: {
-    icon?: unknown
-    disabled?: boolean
-    onClick?: () => void
-    children: React.ReactNode
-  }) => (
-    <button type="button" disabled={disabled} onClick={onClick}>
-      {children}
+type MenuProps = {
+  anchorRef: React.RefObject<HTMLElement | null>
+  position: 'above' | 'below'
+  align: 'start' | 'end'
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+}
+
+const menuMock = vi.fn(({ isOpen, children, onClose }: MenuProps) => (
+  <div data-testid="menu">
+    <div data-testid="menu-open">{String(isOpen)}</div>
+    <button type="button" data-testid="menu-close" onClick={onClose}>
+      close
     </button>
-  ),
-)
+    {isOpen ? <div data-testid="menu-content">{children}</div> : null}
+  </div>
+))
+
+type MenuItemProps = {
+  icon?: unknown
+  disabled?: boolean
+  onClick?: () => void
+  children: React.ReactNode
+}
+
+const menuItemMock = vi.fn(({ children, onClick, disabled }: MenuItemProps) => (
+  <button type="button" disabled={disabled} onClick={onClick}>
+    {children}
+  </button>
+))
 
 const menuSeparatorMock = vi.fn(() => <div data-testid="menu-separator" />)
 
+type ConfirmDialogProps = {
+  title: string
+  message: string
+  open: boolean
+  confirmTitle: string
+  onConfirm: () => void
+  onClose: () => void
+  destructive?: boolean
+}
+
+const confirmDialogMock = vi.fn(
+  ({
+    title,
+    message,
+    open,
+    confirmTitle,
+    onConfirm,
+    onClose,
+  }: ConfirmDialogProps) =>
+    open ? (
+      <div data-testid="confirm-dialog">
+        <div>{title}</div>
+        <div>{message}</div>
+        <button type="button" onClick={onConfirm}>
+          {confirmTitle}
+        </button>
+        <button type="button" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    ) : null,
+)
+
 vi.mock('../../../components', () => ({
-  Button: (props: any) => buttonMock(props),
-  Menu: (props: any) => menuMock(props),
-  MenuItem: (props: any) => menuItemMock(props),
+  Button: (props: ButtonProps) => buttonMock(props),
+  Menu: (props: MenuProps) => menuMock(props),
+  MenuItem: (props: MenuItemProps) => menuItemMock(props),
   MenuSeparator: () => menuSeparatorMock(),
+  ConfirmDialog: (props: ConfirmDialogProps) => confirmDialogMock(props),
 }))
 
 describe('HostGameFooter', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     toggleFullscreenMock.mockReset()
+    quitGameMock.mockReset()
     useGameContextMock.mockReset()
     useGameContextMock.mockReturnValue({
       isFullscreenActive: false,
       toggleFullscreen: toggleFullscreenMock,
+      quitGame: quitGameMock,
     })
   })
 
@@ -172,7 +198,7 @@ describe('HostGameFooter', () => {
     expect(screen.getByRole('button', { name: 'Players' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Maximize' })).toBeEnabled()
     expect(screen.getByTestId('menu-separator')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Quit' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Quit' })).toBeEnabled()
   })
 
   it('closes the settings menu when clicking the settings button again', () => {
@@ -231,6 +257,7 @@ describe('HostGameFooter', () => {
     useGameContextMock.mockReturnValue({
       isFullscreenActive: true,
       toggleFullscreen: toggleFullscreenMock,
+      quitGame: quitGameMock,
     })
 
     render(
@@ -259,7 +286,7 @@ describe('HostGameFooter', () => {
     )
 
     expect(menuMock).toHaveBeenCalled()
-    const call = menuMock.mock.calls[0][0]
+    const call = menuMock.mock.calls[0][0] as MenuProps
 
     expect(call.position).toBe('above')
     expect(call.align).toBe('end')
@@ -274,13 +301,13 @@ describe('HostGameFooter', () => {
       />,
     )
 
-    const call = menuMock.mock.calls[0][0]
+    const call = menuMock.mock.calls[0][0] as MenuProps
     expect(call.anchorRef).toBeTruthy()
     expect(typeof call.anchorRef).toBe('object')
     expect('current' in call.anchorRef).toBe(true)
   })
 
-  it('Players and Quit items are disabled and do not invoke handlers when clicked', () => {
+  it('Players item is disabled and does not invoke handlers when clicked', () => {
     render(
       <HostGameFooter
         gamePIN="123456"
@@ -292,15 +319,11 @@ describe('HostGameFooter', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Button' }))
 
     const players = screen.getByRole('button', { name: 'Players' })
-    const quit = screen.getByRole('button', { name: 'Quit' })
-
     expect(players).toBeDisabled()
-    expect(quit).toBeDisabled()
 
     fireEvent.click(players)
-    fireEvent.click(quit)
-
     expect(toggleFullscreenMock).toHaveBeenCalledTimes(0)
+    expect(quitGameMock).toHaveBeenCalledTimes(0)
   })
 
   it('renders the expected menu item order: Players, Maximize/Minimize, separator, Quit', () => {
@@ -321,5 +344,88 @@ describe('HostGameFooter', () => {
 
     expect(items).toEqual(['Players', 'Maximize', 'Quit'])
     expect(screen.getByTestId('menu-separator')).toBeInTheDocument()
+  })
+
+  it('opens the quit confirmation dialog when clicking Quit', () => {
+    render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Quit' }))
+
+    expect(screen.getByTestId('confirm-dialog')).toBeInTheDocument()
+    expect(
+      screen.getByText('Are you sure you want to quit the game?'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'This will immediately end the game for all participants, and it cannot be resumed.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Quit Game' })).toBeEnabled()
+  })
+
+  it('confirms quit: calls quitGame and closes the dialog', () => {
+    render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Quit' }))
+
+    fireEvent.click(screen.getByRole('button', { name: 'Quit Game' }))
+
+    expect(quitGameMock).toHaveBeenCalledTimes(1)
+    expect(screen.queryByTestId('confirm-dialog')).not.toBeInTheDocument()
+  })
+
+  it('cancels quit: does not call quitGame and closes the dialog', () => {
+    render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Quit' }))
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+
+    expect(quitGameMock).toHaveBeenCalledTimes(0)
+    expect(screen.queryByTestId('confirm-dialog')).not.toBeInTheDocument()
+  })
+
+  it('handles missing quitGame handler gracefully (optional chaining)', () => {
+    useGameContextMock.mockReturnValue({
+      isFullscreenActive: false,
+      toggleFullscreen: toggleFullscreenMock,
+      quitGame: undefined,
+    })
+
+    render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Quit' }))
+
+    fireEvent.click(screen.getByRole('button', { name: 'Quit Game' }))
+
+    expect(screen.queryByTestId('confirm-dialog')).not.toBeInTheDocument()
   })
 })
