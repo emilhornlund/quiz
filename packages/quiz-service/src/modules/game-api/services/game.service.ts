@@ -7,6 +7,7 @@ import {
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import {
   CreateGameResponseDto,
+  GameParticipantPlayerDto,
   GameParticipantType,
   GameStatus,
   MultiChoiceQuestionCorrectAnswerDto,
@@ -24,7 +25,10 @@ import { Redis } from 'ioredis'
 import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
+import {
+  getRedisPlayerParticipantAnswerKey,
+  isParticipantPlayer,
+} from '../../game-core/utils'
 import { GameEventPublisher } from '../../game-event/services'
 import {
   buildGameQuitEvent,
@@ -201,6 +205,25 @@ export class GameService {
     )
 
     await this.gameEventPublisher.publish(savedGameDocument)
+  }
+
+  /**
+   * Retrieves the current list of player participants for a game.
+   *
+   * @param gameId - The unique identifier of the game.
+   * @returns The list of player participants for the specified game.
+   */
+  public async getPlayerParticipants(
+    gameId: string,
+  ): Promise<GameParticipantPlayerDto[]> {
+    const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameId)
+
+    return gameDocument.participants.filter(isParticipantPlayer).map(
+      ({ participantId, nickname }): GameParticipantPlayerDto => ({
+        id: participantId,
+        nickname,
+      }),
+    )
   }
 
   /**
