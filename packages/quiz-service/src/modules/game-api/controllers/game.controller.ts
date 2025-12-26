@@ -414,4 +414,29 @@ export class GameController {
       submitQuestionAnswerRequest,
     )
   }
+
+  /**
+   * Ends the active game.
+   *
+   * Marks the game as terminated.
+   *
+   * @param gameId - The game ID to end.
+   */
+  @Post('/:gameID/quit')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Ends the active game.',
+    description: 'Ends the active game and marks it as terminated.',
+  })
+  @ApiNoContentResponse({
+    description: 'The game was ended successfully.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified game ID.',
+  })
+  @AuthorizedGame(GameParticipantType.HOST)
+  @ApiGameIdParam()
+  public async quitGame(@RouteGameIdParam() gameId: string): Promise<void> {
+    return this.gameService.quitGame(gameId)
+  }
 }
