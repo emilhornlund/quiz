@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   MessageEvent,
@@ -56,6 +57,7 @@ import {
   TrueFalseQuestionCorrectAnswerRequest,
   TypeAnswerQuestionCorrectAnswerRequest,
 } from './models/requests'
+import { GameParticipantPlayerResponse } from './models/response/game-participant-player.response'
 
 /**
  * GameController handles incoming HTTP requests related to game operations,
@@ -131,6 +133,44 @@ export class GameController {
     @Body() request: JoinGameRequest,
   ): Promise<void> {
     return this.gameService.joinGame(gameId, participantId, request.nickname)
+  }
+
+  /**
+   * Retrieves the current list of player participants for a game.
+   *
+   * Only host participants are allowed to access this endpoint.
+   *
+   * @param gameId - The unique identifier of the game.
+   * @returns The list of player participants currently associated with the game.
+   */
+  @Get('/:gameID/players')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Retrieves the current list of players for a game.',
+    description:
+      'Returns the player participants currently associated with the specified game. Only host participants can access this endpoint.',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved the list of player participants.',
+    type: GameParticipantPlayerResponse,
+    isArray: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Missing or invalid access token.',
+  })
+  @ApiForbiddenResponse({
+    description:
+      'Forbidden. The authenticated participant is not allowed to access this game or does not have the required role.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No active game found with the specified unique identifier.',
+  })
+  @AuthorizedGame(GameParticipantType.HOST)
+  @ApiGameIdParam()
+  public async getPlayers(
+    @RouteGameIdParam() gameId: string,
+  ): Promise<GameParticipantPlayerResponse[]> {
+    return this.gameService.getPlayerParticipants(gameId)
   }
 
   /**

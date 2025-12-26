@@ -313,6 +313,153 @@ describe('GameController (e2e)', () => {
     })
   })
 
+  describe('/api/games/:gameID/players (GET)', () => {
+    it('should return 200 ok when retrieving players as a host participant', async () => {
+      const hostParticipantId = uuidv4()
+
+      const player1Id = uuidv4()
+      const player2Id = uuidv4()
+
+      const player1Nickname = 'FrostyBear'
+      const player2Nickname = 'WhiskerFox'
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [
+            createMockGameHostParticipantDocument({
+              participantId: hostParticipantId,
+            }),
+            createMockGamePlayerParticipantDocument({
+              participantId: player1Id,
+              nickname: player1Nickname,
+            }),
+            createMockGamePlayerParticipantDocument({
+              participantId: player2Id,
+              nickname: player2Nickname,
+            }),
+          ],
+          currentTask: createMockQuestionResultTaskDocument(),
+          status: GameStatus.Active,
+        }),
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        game._id,
+        hostParticipantId,
+        GameParticipantType.HOST,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/players`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual([
+            {
+              id: player1Id,
+              nickname: player1Nickname,
+            },
+            {
+              id: player2Id,
+              nickname: player2Nickname,
+            },
+          ])
+        })
+    })
+
+    it('should return 403 when retrieving players as a host participant for another game', async () => {
+      const hostParticipantId = uuidv4()
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [
+            createMockGameHostParticipantDocument({
+              participantId: hostParticipantId,
+            }),
+            createMockGamePlayerParticipantDocument(),
+          ],
+        }),
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        uuidv4(),
+        hostParticipantId,
+        GameParticipantType.HOST,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/players`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 403 when retrieving players as a player participant', async () => {
+      const playerId = uuidv4()
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [
+            createMockGameHostParticipantDocument(),
+            createMockGamePlayerParticipantDocument({
+              participantId: playerId,
+            }),
+          ],
+        }),
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        game._id,
+        playerId,
+        GameParticipantType.PLAYER,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/players`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Forbidden',
+            status: 403,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+
+    it('should return 404 when retrieving players for a non-existing game', async () => {
+      const gameId = uuidv4()
+
+      const accessToken = await authenticateGame(
+        app,
+        gameId,
+        hostUser._id,
+        GameParticipantType.HOST,
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${gameId}/players`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Active game not found by id ${gameId}`,
+            status: 404,
+            timestamp: expect.anything(),
+          })
+        })
+    })
+  })
+
   describe('/api/games/:gameID/players (DELETE)', () => {
     it('should allow a player to leave a game they are part of', async () => {
       const { id: quizId } = await quizService.createQuiz(
@@ -2481,7 +2628,7 @@ describe('GameController (e2e)', () => {
     })
   })
 
-  describe('/api/games/:gameID/quit', () => {
+  describe('/api/games/:gameID/quit (POST)', () => {
     it('should return 204 no content when quitting an existing active game as a host participant', async () => {
       const hostParticipantId = uuidv4()
 
