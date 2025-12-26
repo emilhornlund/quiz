@@ -10,7 +10,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { type FC, useRef, useState } from 'react'
 
-import { Button, Menu, MenuItem, MenuSeparator } from '../../../components'
+import {
+  Button,
+  ConfirmDialog,
+  Menu,
+  MenuItem,
+  MenuSeparator,
+} from '../../../components'
 import { useGameContext } from '../../../context/game'
 
 import styles from './HostGameFooter.module.scss'
@@ -26,11 +32,14 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
   currentQuestion,
   totalQuestions,
 }) => {
-  const { isFullscreenActive, toggleFullscreen } = useGameContext()
+  const { isFullscreenActive, toggleFullscreen, quitGame } = useGameContext()
 
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false)
   const settingsMenuButtonRef = useRef<HTMLDivElement>(null)
   const toggleSettingsMenu = () => setSettingsMenuOpen((prev) => !prev)
+
+  const [showConfirmQuitGameDialog, setShowConfirmQuitGameDialog] =
+    useState<boolean>(false)
 
   return (
     <div className={styles.main}>
@@ -70,13 +79,24 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
             <MenuSeparator />
             <MenuItem
               icon={faRightFromBracket}
-              onClick={() => undefined}
-              disabled>
+              onClick={() => setShowConfirmQuitGameDialog(true)}>
               Quit
             </MenuItem>
           </Menu>
         </div>
       </div>
+      <ConfirmDialog
+        title="Are you sure you want to quit the game?"
+        message="This will immediately end the game for all participants, and it cannot be resumed."
+        open={showConfirmQuitGameDialog}
+        confirmTitle="Quit Game"
+        onConfirm={() => {
+          quitGame?.()
+          setShowConfirmQuitGameDialog(false)
+        }}
+        onClose={() => setShowConfirmQuitGameDialog(false)}
+        destructive
+      />
     </div>
   )
 }

@@ -45,6 +45,8 @@
 
     &:hover {
       &:not(:disabled) {
+        cursor: pointer;
+
         .content {
           background-color: colors.$gray-1;
         }
