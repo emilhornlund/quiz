@@ -8,6 +8,7 @@ import { InjectRedis } from '@nestjs-modules/ioredis'
 import {
   CreateGameResponseDto,
   GameParticipantType,
+  GameStatus,
   MultiChoiceQuestionCorrectAnswerDto,
   PaginatedGameHistoryDto,
   PinQuestionCorrectAnswerDto,
@@ -30,7 +31,7 @@ import {
   toQuestionTaskAnswer,
 } from '../../game-event/utils'
 import { GameTaskTransitionScheduler } from '../../game-task/services'
-import { rebuildQuestionResultTask } from '../../game-task/utils'
+import { buildQuitTask, rebuildQuestionResultTask } from '../../game-task/utils'
 import {
   isMultiChoiceCorrectAnswer,
   isPinCorrectAnswer,
@@ -565,5 +566,32 @@ export class GameService {
     this.logger.log(
       `Deleted '${deletedCount}' games by their quizId '${quizId}'.`,
     )
+  }
+
+  /**
+   * Ends the active game by transitioning it into the Quit task.
+   *
+   * The current task is archived, the Quit task is activated, and the game
+   * status is set to TERMINATED. If the game is already in the Quit task,
+   * the operation is a no-op.
+   *
+   * The updated game state is then published to connected clients.
+   *
+   * @param gameId - The game ID to terminate.
+   */
+  public async quitGame(gameId: string): Promise<void> {
+    const savedGame = await this.gameRepository.findAndSaveWithLock(
+      gameId,
+      async (game) => {
+        if (game.currentTask.type !== TaskType.Quit) {
+          game.previousTasks.push(game.currentTask)
+          game.currentTask = buildQuitTask()
+          game.status = GameStatus.Terminated
+        }
+        return game
+      },
+    )
+
+    await this.gameEventPublisher.publish(savedGame)
   }
 }
