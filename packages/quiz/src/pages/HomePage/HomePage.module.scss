@@ -1,3 +1,4 @@
+@use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
 
@@ -31,6 +32,170 @@
     animation: fadeInUp 0.5s ease-out;
     animation-delay: 0.4s;
     animation-fill-mode: both;
+  }
+}
+
+.resumeGameWrapper {
+  display: flex;
+  flex-direction: column;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fadeInUp 0.5s ease-out;
+    animation-delay: 0.6s;
+    animation-fill-mode: both;
+  }
+
+  @include helpers.mobile {
+    width: 100%;
+    row-gap: variables.$mobile-narrow-layout-gutter;
+  }
+  @include helpers.tablet {
+    width: calc(#{variables.$mobile-width} + (#{variables.$tablet-narrow-layout-gutter} * 2));
+    row-gap: variables.$tablet-narrow-layout-gutter;
+  }
+  @include helpers.desktop {
+    width: calc(#{variables.$mobile-width} + (#{variables.$desktop-narrow-layout-gutter} * 2));
+    row-gap: variables.$desktop-narrow-layout-gutter;
+  }
+
+  .resumeGameButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: colors.$white-1-15;
+    cursor: pointer;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border: variables.$control-outside-border-width solid colors.$white-1-25;
+    flex: 1;
+    font-family: inherit;
+    height: 100%;
+    outline: none;
+
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease;
+
+    &:hover {
+      background: colors.$white-1-20;
+      border-color: colors.$white-1-30;
+    }
+
+    @include helpers.mobile {
+      padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
+    }
+    @include helpers.tablet {
+      padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
+    }
+    @include helpers.desktop {
+      padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
+    }
+
+    .resumeGameContent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+
+      @include helpers.mobile {
+        row-gap: variables.$mobile-narrow-layout-gutter * 0.5;
+      }
+
+      @include helpers.tablet {
+        row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+      }
+
+      @include helpers.desktop {
+        row-gap: variables.$desktop-narrow-layout-gutter * 0.5;
+      }
+
+      .resumeGameContentTitle {
+        font-weight: bold;
+        opacity: 0.95;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(24px);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(26px);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(28px);
+        }
+      }
+
+      .resumeGameContentSubtitle {
+        opacity: 0.78;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(20px);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(22px);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(24px);
+        }
+      }
+    }
+
+    .resumeGameSpacing, .resumeGameIcon {
+      display: flex;
+      flex-direction: column;
+
+      @include helpers.mobile {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      @include helpers.tablet {
+        width: 2rem;
+        height: 2rem;
+      }
+      @include helpers.desktop {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+
+    .resumeGameIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: colors.$white-1-15;
+      border: variables.$control-outside-border-width solid colors.$white-1-25;
+
+      @include helpers.mobile {
+        border-radius: calc(1.5rem / 2);
+      }
+      @include helpers.tablet {
+        border-radius: calc(2rem / 2);
+      }
+      @include helpers.desktop {
+        border-radius: calc(2.5rem / 2);
+      }
+
+      svg {
+        @include helpers.mobile {
+          @include helpers.fontSize(16px);
+        }
+        @include helpers.tablet {
+          @include helpers.fontSize(18px);
+        }
+        @include helpers.desktop {
+          @include helpers.fontSize(20px);
+        }
+      }
+    }
   }
 }
 

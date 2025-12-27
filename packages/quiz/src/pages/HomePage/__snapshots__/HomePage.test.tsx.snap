@@ -1,0 +1,326 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HomePage > renders the "Resume game" button if an active game exists 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="icon"
+          >
+            <div
+              class="main"
+            >
+              <img
+                alt="Klurigo"
+                src="/src/assets/images/klurigo-icon.svg"
+              />
+            </div>
+          </div>
+          <div
+            class="title"
+          >
+            <div
+              class="typography title medium"
+            >
+              Let’s play
+            </div>
+          </div>
+          <div
+            class="message"
+          >
+            <div
+              class="typography text small"
+            >
+              Do you feel confident? Ready to show off your skills? Let’s go!
+            </div>
+          </div>
+          <div
+            class="resumeGameWrapper"
+          >
+            <button
+              class="resumeGameButton"
+              type="button"
+            >
+              <div
+                class="resumeGameSpacing"
+              />
+              <div
+                class="resumeGameContent"
+              >
+                <div
+                  class="resumeGameContentTitle"
+                >
+                  Resume game
+                </div>
+                <div
+                  class="resumeGameContentSubtitle"
+                >
+                  Jump back in where you left off
+                </div>
+              </div>
+              <div
+                class="resumeGameIcon"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right"
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <form
+            class="joinForm form"
+          >
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-game-pin-textfield"
+                  id="game-pin"
+                  maxlength="6"
+                  minlength="6"
+                  name="game-pin"
+                  placeholder="Game PIN"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  Join the game
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right"
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+          <a
+            class="link"
+            data-discover="true"
+            href="/auth/login"
+          >
+            <div
+              class="typography link small"
+            >
+              Want to create your own quiz? Log in to get started!
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`HomePage > renders the base layout and a deterministic message 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content centerAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <div
+            class="icon"
+          >
+            <div
+              class="main"
+            >
+              <img
+                alt="Klurigo"
+                src="/src/assets/images/klurigo-icon.svg"
+              />
+            </div>
+          </div>
+          <div
+            class="title"
+          >
+            <div
+              class="typography title medium"
+            >
+              Let’s play
+            </div>
+          </div>
+          <div
+            class="message"
+          >
+            <div
+              class="typography text small"
+            >
+              Do you feel confident? Ready to show off your skills? Let’s go!
+            </div>
+          </div>
+          <form
+            class="joinForm form"
+          >
+            <div
+              class="inputContainer"
+            >
+              <div
+                class="textFieldInputContainer textFieldInputKindPrimary"
+              >
+                <input
+                  class="textfield"
+                  data-testid="test-game-pin-textfield"
+                  id="game-pin"
+                  maxlength="6"
+                  minlength="6"
+                  name="game-pin"
+                  placeholder="Game PIN"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="buttonInputContainer buttonInputKindCallToAction"
+            >
+              <button
+                data-testid="test-join-button"
+                disabled=""
+                id="join"
+                name="join"
+                type="submit"
+              >
+                <span>
+                  Join the game
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-right"
+                  data-icon="arrow-right"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+          <a
+            class="link"
+            data-discover="true"
+            href="/auth/login"
+          >
+            <div
+              class="typography link small"
+            >
+              Want to create your own quiz? Log in to get started!
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

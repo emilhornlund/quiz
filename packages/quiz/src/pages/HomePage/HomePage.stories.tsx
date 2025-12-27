@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
+import { withMockAuth } from '../../../.storybook/mockAuthContext.tsx'
+
 import HomePage from './HomePage'
 
 const meta = {
   component: HomePage,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockAuth],
   parameters: {
     layout: 'fullscreen',
   },
