@@ -5,12 +5,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { MongooseModule } from '@nestjs/mongoose'
 import * as jwt from 'jsonwebtoken'
+import { MurLockModule } from 'murlock'
 
 import { EnvironmentVariables } from '../../app/config'
 
 import { TokenRepository } from './repositories'
 import { Token, TokenSchema } from './repositories/models/schemas'
-import { TokenService } from './services'
+import { TokenCleanupSchedulerService, TokenService } from './services'
 
 /**
  * Token domain module.
@@ -19,6 +20,7 @@ import { TokenService } from './services'
  * - JWT configuration (issuer, audience, algorithm, keys/secrets).
  * - Token persistence (TokenRepository + Mongo schema).
  * - TokenService for signing, verifying, and revoking tokens.
+ * - Scheduled cleanup of expired tokens (TokenCleanupSchedulerService).
  *
  * Exported:
  * - TokenService (for other modules such as Authentication and User).
@@ -26,7 +28,7 @@ import { TokenService } from './services'
 @Module({
   imports: [
     JwtModule.registerAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, MurLockModule],
       inject: [ConfigService],
       useFactory: async (
         configService: ConfigService<EnvironmentVariables>,
@@ -66,7 +68,7 @@ import { TokenService } from './services'
       },
     ]),
   ],
-  providers: [TokenService, TokenRepository],
+  providers: [TokenCleanupSchedulerService, TokenRepository, TokenService],
   exports: [TokenService],
 })
 export class TokenModule {}
