@@ -67,9 +67,13 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             class="message"
           >
             <div
-              class="typography text small"
+              data-testid="rotating-message"
             >
-              Do you feel confident? Ready to show off your skills? Let’s go!
+              <div
+                class="typography text small"
+              >
+                Ready to show off your skills? Let’s go!
+              </div>
             </div>
           </div>
           <div
@@ -184,7 +188,7 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
 </div>
 `;
 
-exports[`HomePage > renders the base layout and a deterministic message 1`] = `
+exports[`HomePage > renders the base layout and the rotating message container 1`] = `
 <div>
   <div
     class="main"
@@ -251,9 +255,13 @@ exports[`HomePage > renders the base layout and a deterministic message 1`] = `
             class="message"
           >
             <div
-              class="typography text small"
+              data-testid="rotating-message"
             >
-              Do you feel confident? Ready to show off your skills? Let’s go!
+              <div
+                class="typography text small"
+              >
+                Ready to show off your skills? Let’s go!
+              </div>
             </div>
           </div>
           <form

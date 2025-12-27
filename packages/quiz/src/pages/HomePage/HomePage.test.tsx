@@ -28,6 +28,30 @@ vi.mock('react-router-dom', async () => {
   }
 })
 
+vi.mock('../../components', async () => {
+  const actual =
+    await vi.importActual<typeof import('../../components')>('../../components')
+
+  return {
+    ...actual,
+    RotatingMessage: ({
+      messages,
+      renderMessage,
+    }: {
+      messages: string[]
+      renderMessage?: (message: string) => React.ReactNode
+    }) => {
+      const message = messages[0] ?? ''
+      if (!message) return null
+      return (
+        <div data-testid="rotating-message">
+          {renderMessage ? renderMessage(message) : message}
+        </div>
+      )
+    },
+  }
+})
+
 const renderHome = () => {
   return render(
     <MemoryRouter>
@@ -40,9 +64,6 @@ describe('HomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    // Make the random hero message deterministic
-    vi.spyOn(Math, 'random').mockReturnValue(0)
-
     authContextMock.mockReturnValue({
       isUserAuthenticated: false,
       game: undefined,
@@ -54,23 +75,21 @@ describe('HomePage', () => {
     })
   })
 
-  it('renders the base layout and a deterministic message', () => {
+  it('renders the base layout and the rotating message container', () => {
     const { container } = renderHome()
 
     expect(screen.getByText('Let’s play')).toBeInTheDocument()
+
+    expect(screen.getByTestId('rotating-message')).toBeInTheDocument()
     expect(
-      screen.getByText(
-        /Do you feel confident\? Ready to show off your skills\? Let’s go!/i,
-      ),
+      screen.getByText('Ready to show off your skills? Let’s go!'),
     ).toBeInTheDocument()
 
-    // Join form basics
     expect(screen.getByPlaceholderText('Game PIN')).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /join the game/i }),
     ).toBeInTheDocument()
 
-    // Snapshot: unauthenticated, no active session
     expect(container).toMatchSnapshot()
   })
 
@@ -141,7 +160,6 @@ describe('HomePage', () => {
       screen.getByText(/jump back in where you left off/i),
     ).toBeInTheDocument()
 
-    // Snapshot: resume visible
     expect(container).toMatchSnapshot()
   })
 
@@ -188,7 +206,6 @@ describe('HomePage', () => {
 
     quizServiceClientMock.mockReturnValue({ authenticateGame })
 
-    // Prevent the re-thrown error from failing the test as an unhandled rejection.
     const preventUnhandled = (event: PromiseRejectionEvent) =>
       event.preventDefault()
     window.addEventListener('unhandledrejection', preventUnhandled)
@@ -211,7 +228,6 @@ describe('HomePage', () => {
     const input = screen.getByPlaceholderText('Game PIN') as HTMLInputElement
     await userEvent.type(input, '123456')
 
-    // Submit the form directly (independent of the CTA button disabled state)
     const form = input.closest('form')
     expect(form).not.toBeNull()
 
