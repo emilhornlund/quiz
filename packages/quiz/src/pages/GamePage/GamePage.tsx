@@ -51,7 +51,7 @@ const LoadingOverlay: FC = () => (
 const GamePage: FC = () => {
   const navigate = useNavigate()
 
-  const { isUserAuthenticated } = useAuthContext()
+  const { isUserAuthenticated, revokeGame } = useAuthContext()
 
   const { gameID, gameToken, participantId, participantType, leaveGame } =
     useGameContext()
@@ -130,6 +130,8 @@ const GamePage: FC = () => {
 
   useEffect(() => {
     if (event?.type === GameEventType.GameQuitEvent) {
+      revokeGame()
+
       if (
         event.status === GameStatus.Completed &&
         isUserAuthenticated &&
@@ -140,7 +142,7 @@ const GamePage: FC = () => {
         navigate('/')
       }
     }
-  }, [event, gameID, isUserAuthenticated, navigate])
+  }, [event, gameID, isUserAuthenticated, navigate, revokeGame])
 
   useEffect(() => {
     if (gameID && gameToken) {
