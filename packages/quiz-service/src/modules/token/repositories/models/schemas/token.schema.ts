@@ -83,3 +83,4 @@ export type TokenModel = Model<Token>
  * Schema factory for the Token class.
  */
 export const TokenSchema = SchemaFactory.createForClass(Token)
+TokenSchema.index({ expiresAt: 1 })
