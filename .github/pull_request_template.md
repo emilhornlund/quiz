@@ -11,6 +11,7 @@ Relates to #<issue-number>
 
 ## Checklist
 
+- [ ] I have read and agree to the Contributor License Agreement (`CLA.md`).
 - [ ] I’ve run all tests locally and they pass.
 - [ ] I’ve added or updated documentation if needed.
 - [ ] I’ve followed the code style and naming conventions.

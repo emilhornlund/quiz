@@ -8,6 +8,7 @@ The following is a set of guidelines for contributing to this project. These are
 
 - [Getting Started](#getting-started)
 - [Code of Conduct](#code-of-conduct)
+- [Contributor License Agreement](#contributor-license-agreement)
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Features](#suggesting-features)
 - [Pull Request Process](#pull-request-process)
@@ -23,6 +24,16 @@ The following is a set of guidelines for contributing to this project. These are
 
 This project follows a [Code of Conduct](./.github/CODE_OF_CONDUCT.md).  
 By participating, you are expected to uphold this code.
+
+## Contributor License Agreement
+
+By submitting a pull request, you agree that your contributions are licensed
+under the terms of the **Contributor License Agreement (CLA)** found in
+[`CLA.md`](./CLA.md).
+
+This agreement allows the project maintainer to use, modify, and relicense
+contributions, including for commercial purposes, while you retain ownership
+of your original work.
 
 ## Reporting Bugs
 
@@ -47,6 +58,7 @@ We welcome ideas! Submit an [issue](https://github.com/emilhornlund/quiz/issues/
 - Include a summary of changes and link to any related issues.
 - Make sure your code passes linting and tests.
 - Keep PRs focused and small if possible.
+- Only submit original work or code you have the legal right to contribute; do not include code from sources with incompatible licenses.
 
 ## Style Guide
 
