@@ -10,21 +10,3 @@ export const MESSAGES = [
   'Ready your reflexes! The countdown is about to start.',
   'Gather your thoughts — the quiz will kick off any moment now.',
 ]
-
-export function getMessage() {
-  return MESSAGES[Math.floor(Math.random() * MESSAGES.length)]
-}
-
-export function getNextMessage(currentMessage: string): string {
-  const currentIndex = MESSAGES.indexOf(currentMessage)
-  if (currentIndex === -1) {
-    return getMessage()
-  }
-  const nextIndex = (currentIndex + 1) % MESSAGES.length
-  return MESSAGES[nextIndex]
-}
-
-export function getRandomMessageExcluding(excludeMessage: string): string {
-  const availableMessages = MESSAGES.filter((msg) => msg !== excludeMessage)
-  return availableMessages[Math.floor(Math.random() * availableMessages.length)]
-}

@@ -1,6 +1,6 @@
 import type { GameLobbyPlayerEvent } from '@quiz/common'
 import type { FC } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import HourglassIcon from '../../assets/images/hourglass-icon.svg'
@@ -9,20 +9,37 @@ import {
   IconButtonArrowLeft,
   NicknameChip,
   PageProminentIcon,
+  RotatingMessage,
   Typography,
 } from '../../components'
 import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
-import { classNames } from '../../utils/helpers.ts'
 import { GamePage } from '../common'
 
-import { getMessage, getNextMessage } from './message.utils.ts'
-import styles from './PlayerLobbyState.module.scss'
+import { MESSAGES } from './message.utils.ts'
 
+/**
+ * Props for the `PlayerLobbyState` component.
+ *
+ * `event` contains the data required to render the player lobby view, including
+ * the player's nickname.
+ */
 export interface PlayerLobbyStateProps {
+  /**
+   * The lobby event payload for the current player.
+   */
   event: GameLobbyPlayerEvent
 }
 
+/**
+ * Player lobby view shown while waiting for the game to start.
+ *
+ * Responsibilities:
+ * - Displays the player's nickname and a waiting-room title.
+ * - Shows a rotating set of lobby messages to keep the screen lively.
+ * - Allows the player to leave the game via a confirmation dialog.
+ * - Calls `leaveGame` using the authenticated participant id and navigates to `/` on completion.
+ */
 const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
   event: {
     player: { nickname },
@@ -49,41 +66,6 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
     }
   }
 
-  const [currentMessage, setCurrentMessage] = useState<string>(() =>
-    getMessage(),
-  )
-  const [messageAnimationState, setMessageAnimationState] = useState<
-    'visible' | 'entering' | 'exiting'
-  >('visible')
-  const messageIntervalRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Rotate messages every 8 seconds with smooth transitions
-  useEffect(() => {
-    const rotateMessage = () => {
-      setMessageAnimationState('exiting')
-
-      // Change message after fade out
-      setTimeout(() => {
-        setCurrentMessage((prev) => getNextMessage(prev))
-        setMessageAnimationState('entering')
-
-        // Set to visible after fade in
-        setTimeout(() => {
-          setMessageAnimationState('visible')
-        }, 300)
-      }, 200)
-    }
-
-    // Set up interval for message rotation
-    messageIntervalRef.current = setInterval(rotateMessage, 8000)
-
-    return () => {
-      if (messageIntervalRef.current) {
-        clearInterval(messageIntervalRef.current)
-      }
-    }
-  }, [])
-
   return (
     <>
       <GamePage
@@ -106,17 +88,14 @@ const PlayerLobbyState: FC<PlayerLobbyStateProps> = ({
           You’re in the waiting room
         </Typography>
 
-        <div className={styles.messageContainer}>
-          <div
-            className={classNames(
-              styles.message,
-              styles[messageAnimationState],
-            )}>
+        <RotatingMessage
+          messages={MESSAGES}
+          renderMessage={(message) => (
             <Typography variant="text" size="small">
-              {currentMessage}
+              {message}
             </Typography>
-          </div>
-        </div>
+          )}
+        />
       </GamePage>
       <ConfirmDialog
         title="Confirm Leave Game"
