@@ -1,5 +1,5 @@
 import type { QuestionCorrectAnswerDto } from '@quiz/common'
-import type { FC, ReactNode } from 'react'
+import { type FC, type ReactNode, useCallback } from 'react'
 import { useMemo } from 'react'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
@@ -50,6 +50,32 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
   const fullScreenHandle = useFullScreenHandle()
 
   /**
+   * Handles a player leaving the current game.
+   *
+   * Executes a leave operation for the specified player and revokes the local
+   * game session when the leaving player is the current participant.
+   *
+   * @param playerID - The unique identifier of the player leaving the game.
+   * @throws Error when the game identifier is missing.
+   * @returns A promise that resolves once the leave operation and any required
+   *          cleanup have completed.
+   */
+  const handleLeaveGame = useCallback(
+    async (playerID: string): Promise<void> => {
+      if (!gameID) {
+        throw new Error('Missing gameID')
+      }
+
+      await leaveGame(gameID, playerID)
+
+      if (participantId === playerID) {
+        revokeGame()
+      }
+    },
+    [gameID, participantId, leaveGame, revokeGame],
+  )
+
+  /**
    * Memoized value for the `GameContext`, containing the current game ID
    * and methods for completing tasks and submitting question answers.
    */
@@ -63,10 +89,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       completeTask: () => (gameID ? completeTask(gameID) : Promise.reject()),
       submitQuestionAnswer: (request) =>
         gameID ? submitQuestionAnswer(gameID, request) : Promise.reject(),
-      leaveGame: (playerID: string) =>
-        gameID
-          ? leaveGame(gameID, playerID).then(revokeGame)
-          : Promise.reject(),
+      leaveGame: handleLeaveGame,
       addCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
@@ -85,10 +108,9 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       fullScreenHandle,
       completeTask,
       submitQuestionAnswer,
-      leaveGame,
+      handleLeaveGame,
       addCorrectAnswer,
       deleteCorrectAnswer,
-      revokeGame,
       getPlayers,
       quitGame,
     ],
