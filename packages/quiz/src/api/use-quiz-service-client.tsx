@@ -11,6 +11,7 @@ import type {
   CreateGameResponseDto,
   CreateUserRequestDto,
   CreateUserResponseDto,
+  GameParticipantPlayerDto,
   GameResultDto,
   MediaUploadPhotoResponseDto,
   PaginatedGameHistoryDto,
@@ -659,14 +660,27 @@ export const useQuizServiceClient = () => {
     }).then(() => {})
 
   /**
-   * description here
+   * Retrieves the list of player participants for a given game.
    *
-   * @param gameID - description here
-   * @returns description here
+   * @param gameId - The unique identifier of the game.
+   * @returns A promise that resolves to an array of player participants.
    */
-  const quitGame = (gameID: string): Promise<void> =>
+  const getPlayers = (gameId: string): Promise<GameParticipantPlayerDto[]> =>
+    apiGet<GameParticipantPlayerDto[]>(`/games/${gameId}/players`, {
+      scope: TokenScope.Game,
+    })
+
+  /**
+   * Quits the current game for the authenticated client.
+   *
+   * Ends the game session and removes the client from the game.
+   *
+   * @param gameId - The unique identifier of the game.
+   * @returns A promise that resolves when the game has been successfully quit.
+   */
+  const quitGame = (gameId: string): Promise<void> =>
     apiPost(
-      `/games/${gameID}/quit`,
+      `/games/${gameId}/quit`,
       {},
       {
         scope: TokenScope.Game,
@@ -800,6 +814,7 @@ export const useQuizServiceClient = () => {
     submitQuestionAnswer,
     addCorrectAnswer,
     deleteCorrectAnswer,
+    getPlayers,
     quitGame,
 
     getProfileGames,

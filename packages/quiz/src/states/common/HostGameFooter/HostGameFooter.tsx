@@ -19,6 +19,7 @@ import {
 } from '../../../components'
 import { useGameContext } from '../../../context/game'
 
+import { PlayerManagementModal } from './components'
 import styles from './HostGameFooter.module.scss'
 
 export interface HostGameFooterProps {
@@ -37,6 +38,9 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false)
   const settingsMenuButtonRef = useRef<HTMLDivElement>(null)
   const toggleSettingsMenu = () => setSettingsMenuOpen((prev) => !prev)
+
+  const [playerManagementModalOpen, setPlayerManagementModalOpen] =
+    useState<boolean>(false)
 
   const [showConfirmQuitGameDialog, setShowConfirmQuitGameDialog] =
     useState<boolean>(false)
@@ -68,7 +72,9 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
             align="end"
             isOpen={settingsMenuOpen}
             onClose={toggleSettingsMenu}>
-            <MenuItem icon={faUsers} onClick={() => undefined} disabled>
+            <MenuItem
+              icon={faUsers}
+              onClick={() => setPlayerManagementModalOpen(true)}>
               Players
             </MenuItem>
             <MenuItem
@@ -85,6 +91,10 @@ const HostGameFooter: FC<HostGameFooterProps> = ({
           </Menu>
         </div>
       </div>
+      <PlayerManagementModal
+        open={playerManagementModalOpen}
+        onClose={() => setPlayerManagementModalOpen(false)}
+      />
       <ConfirmDialog
         title="Are you sure you want to quit the game?"
         message="This will immediately end the game for all participants, and it cannot be resumed."

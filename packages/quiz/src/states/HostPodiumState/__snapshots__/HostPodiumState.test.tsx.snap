@@ -74,7 +74,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Beta
                 </div>
@@ -106,7 +106,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Alpha
                 </div>
@@ -181,7 +181,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Gamma
                 </div>
@@ -574,7 +574,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Beta
                 </div>
@@ -606,7 +606,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Alpha
                 </div>
@@ -681,7 +681,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Gamma
                 </div>
@@ -1082,7 +1082,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Beta
                 </div>
@@ -1114,7 +1114,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Alpha
                 </div>
@@ -1189,7 +1189,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Gamma
                 </div>
@@ -1590,7 +1590,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Radar
                 </div>
@@ -1622,7 +1622,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   ShadowCyborg
                 </div>
@@ -1697,7 +1697,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   ShadowWhirlwind
                 </div>
@@ -2151,7 +2151,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   Radar
                 </div>
@@ -2183,7 +2183,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   ShadowCyborg
                 </div>
@@ -2258,7 +2258,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
                 class="nickname"
               >
                 <div
-                  class="main "
+                  class="main subtle"
                 >
                   ShadowWhirlwind
                 </div>
