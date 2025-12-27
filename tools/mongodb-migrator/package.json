@@ -1,7 +1,7 @@
 {
   "name": "mongodb-migrator",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
   "bin": {
     "mongodb-migrator": "dist/index.js"
