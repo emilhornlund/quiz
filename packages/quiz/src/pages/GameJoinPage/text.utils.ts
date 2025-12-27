@@ -12,12 +12,3 @@ export const MESSAGES = [
   'Join the action! Let’s see what you’ve got!',
   'Time to shine! Enter your nickname and let the games begin!',
 ]
-
-const getRandomString = (strings: string[]) => {
-  const randomIndex = Math.floor(Math.random() * strings.length)
-  return strings[randomIndex]
-}
-
-export const getTitle = () => getRandomString(TITLES)
-
-export const getMessage = () => getRandomString(MESSAGES)
