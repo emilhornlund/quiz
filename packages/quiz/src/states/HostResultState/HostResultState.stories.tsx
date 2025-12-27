@@ -7,11 +7,13 @@ import {
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
+import { withMockGameHost } from '../../../.storybook/mockGameContext.tsx'
+
 import HostResultState from './HostResultState'
 
 const meta = {
   component: HostResultState,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockGameHost],
   parameters: {
     layout: 'fullscreen',
   },

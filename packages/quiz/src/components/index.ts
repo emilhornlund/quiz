@@ -10,7 +10,11 @@ export type { LeaderboardProps } from './Leaderboard'
 export type { MediaModalProps } from './MediaModal'
 export type { MenuProps, MenuItemProps } from './Menu'
 export type { ModalProps } from './Modal'
-export type { NicknameChipProps } from './NicknameChip'
+export type {
+  NicknameChipProps,
+  NicknameChipVariant,
+  NicknameChipAnimationState,
+} from './NicknameChip'
 export type { NicknameTextFieldProps } from './NicknameTextField'
 export type { PageProps } from './Page'
 export type { PaginationProps } from './Pagination'

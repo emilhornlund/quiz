@@ -2,11 +2,13 @@ import { GameEventType, GameMode, QuestionType } from '@quiz/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
+import { withMockGameHost } from '../../../.storybook/mockGameContext.tsx'
+
 import HostQuestionPreviewState from './HostQuestionPreviewState'
 
 const meta = {
   component: HostQuestionPreviewState,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockGameHost],
   parameters: {
     layout: 'fullscreen',
   },

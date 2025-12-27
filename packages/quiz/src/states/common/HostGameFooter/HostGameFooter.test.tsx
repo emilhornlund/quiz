@@ -109,12 +109,44 @@ const confirmDialogMock = vi.fn(
     ) : null,
 )
 
+/**
+ * PlayerManagementModal is rendered outside the Menu tree and is controlled
+ * via local state inside HostGameFooter. We mock it as a minimal component
+ * that lets us assert `open` and trigger `onClose`.
+ */
+type PlayerManagementModalProps = {
+  open?: boolean
+  onClose?: () => void
+}
+
+const playerManagementModalMock = vi.fn(
+  ({ open, onClose }: PlayerManagementModalProps) =>
+    open ? (
+      <div data-testid="player-management-modal">
+        <div data-testid="player-management-modal-open">
+          {String(Boolean(open))}
+        </div>
+        <button
+          type="button"
+          data-testid="player-management-modal-close"
+          onClick={onClose}>
+          close
+        </button>
+      </div>
+    ) : null,
+)
+
 vi.mock('../../../components', () => ({
   Button: (props: ButtonProps) => buttonMock(props),
   Menu: (props: MenuProps) => menuMock(props),
   MenuItem: (props: MenuItemProps) => menuItemMock(props),
   MenuSeparator: () => menuSeparatorMock(),
   ConfirmDialog: (props: ConfirmDialogProps) => confirmDialogMock(props),
+}))
+
+vi.mock('./components', () => ({
+  PlayerManagementModal: (props: PlayerManagementModalProps) =>
+    playerManagementModalMock(props),
 }))
 
 describe('HostGameFooter', () => {
@@ -195,7 +227,10 @@ describe('HostGameFooter', () => {
 
     expect(screen.getByTestId('menu-open')).toHaveTextContent('true')
     expect(screen.getByTestId('menu-content')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Players' })).toBeDisabled()
+
+    // Players is no longer disabled.
+    expect(screen.getByRole('button', { name: 'Players' })).toBeEnabled()
+
     expect(screen.getByRole('button', { name: 'Maximize' })).toBeEnabled()
     expect(screen.getByTestId('menu-separator')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Quit' })).toBeEnabled()
@@ -307,7 +342,27 @@ describe('HostGameFooter', () => {
     expect('current' in call.anchorRef).toBe(true)
   })
 
-  it('Players item is disabled and does not invoke handlers when clicked', () => {
+  it('Players item is enabled and opens PlayerManagementModal when clicked', () => {
+    render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    expect(screen.queryByTestId('player-management-modal')).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Players' }))
+
+    expect(screen.getByTestId('player-management-modal')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('player-management-modal-open'),
+    ).toHaveTextContent('true')
+  })
+
+  it('closes PlayerManagementModal when its onClose is triggered', () => {
     render(
       <HostGameFooter
         gamePIN="123456"
@@ -317,13 +372,12 @@ describe('HostGameFooter', () => {
     )
 
     fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Players' }))
 
-    const players = screen.getByRole('button', { name: 'Players' })
-    expect(players).toBeDisabled()
+    expect(screen.getByTestId('player-management-modal')).toBeInTheDocument()
 
-    fireEvent.click(players)
-    expect(toggleFullscreenMock).toHaveBeenCalledTimes(0)
-    expect(quitGameMock).toHaveBeenCalledTimes(0)
+    fireEvent.click(screen.getByTestId('player-management-modal-close'))
+    expect(screen.queryByTestId('player-management-modal')).toBeNull()
   })
 
   it('renders the expected menu item order: Players, Maximize/Minimize, separator, Quit', () => {
@@ -342,6 +396,7 @@ describe('HostGameFooter', () => {
       (b) => b.textContent,
     )
 
+    // Note: MenuSeparator is not a button, so it won't appear in this list.
     expect(items).toEqual(['Players', 'Maximize', 'Quit'])
     expect(screen.getByTestId('menu-separator')).toBeInTheDocument()
   })
@@ -427,5 +482,60 @@ describe('HostGameFooter', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Quit Game' }))
 
     expect(screen.queryByTestId('confirm-dialog')).not.toBeInTheDocument()
+  })
+
+  it('matches snapshot (menu closed)', () => {
+    const { container } = render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('matches snapshot (menu open)', () => {
+    const { container } = render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('matches snapshot (player management modal open)', () => {
+    const { container } = render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Players' }))
+
+    expect(container.firstChild).toMatchSnapshot()
+  })
+
+  it('matches snapshot (quit confirm dialog open)', () => {
+    const { container } = render(
+      <HostGameFooter
+        gamePIN="123456"
+        currentQuestion={1}
+        totalQuestions={1}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Button' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Quit' }))
+
+    expect(container.firstChild).toMatchSnapshot()
   })
 })

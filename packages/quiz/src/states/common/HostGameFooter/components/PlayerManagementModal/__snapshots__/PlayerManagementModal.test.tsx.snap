@@ -1,0 +1,155 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerManagementModal > matches snapshot (after players load) 1`] = `
+<div
+  data-testid="modal"
+>
+  <h1>
+    Who’s Playing?
+  </h1>
+  <button
+    data-testid="modal-close"
+  >
+    close
+  </button>
+  <div
+    class="playerManagementModal"
+  >
+    <span
+      class="message"
+    >
+      Here’s everyone in the game. If someone shouldn’t be here, you can politely show them the exit.
+    </span>
+    <div
+      class="flow"
+    >
+      <div
+        data-animation="none"
+        data-delay="0"
+        data-testid="chip-Alice"
+        data-variant="accent"
+      >
+        <span>
+          Alice
+        </span>
+        <button
+          data-testid="chip-delete-Alice"
+        >
+          delete
+        </button>
+      </div>
+      <div
+        data-animation="none"
+        data-delay="0"
+        data-testid="chip-Bob"
+        data-variant="accent"
+      >
+        <span>
+          Bob
+        </span>
+        <button
+          data-testid="chip-delete-Bob"
+        >
+          delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PlayerManagementModal > matches snapshot (confirm dialog open for selected player) 1`] = `
+<div
+  data-testid="modal"
+>
+  <h1>
+    Who’s Playing?
+  </h1>
+  <button
+    data-testid="modal-close"
+  >
+    close
+  </button>
+  <div
+    class="playerManagementModal"
+  >
+    <span
+      class="message"
+    >
+      Here’s everyone in the game. If someone shouldn’t be here, you can politely show them the exit.
+    </span>
+    <div
+      class="flow"
+    >
+      <div
+        data-animation="none"
+        data-delay="0"
+        data-testid="chip-Alice"
+        data-variant="accent"
+      >
+        <span>
+          Alice
+        </span>
+        <button
+          data-testid="chip-delete-Alice"
+        >
+          delete
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    data-destructive="true"
+    data-loading="false"
+    data-testid="confirm-dialog"
+  >
+    <div
+      data-testid="confirm-title"
+    >
+      Kick from the Game?
+    </div>
+    <div
+      data-testid="confirm-message"
+    >
+      This will remove Alice from the game. They’ll need to rejoin if they want back in.
+    </div>
+    <button
+      data-testid="confirm"
+    >
+      Remove Player
+    </button>
+    <button
+      data-testid="confirm-close"
+    >
+      close
+    </button>
+  </div>
+</div>
+`;
+
+exports[`PlayerManagementModal > matches snapshot (modal open, before players load) 1`] = `
+<div
+  data-testid="modal"
+>
+  <h1>
+    Who’s Playing?
+  </h1>
+  <button
+    data-testid="modal-close"
+  >
+    close
+  </button>
+  <div
+    class="playerManagementModal"
+  >
+    <span
+      class="message"
+    >
+      Here’s everyone in the game. If someone shouldn’t be here, you can politely show them the exit.
+    </span>
+    <div
+      class="flow"
+    />
+  </div>
+</div>
+`;

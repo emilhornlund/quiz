@@ -43,6 +43,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
     leaveGame,
     addCorrectAnswer,
     deleteCorrectAnswer,
+    getPlayers,
     quitGame,
   } = useQuizServiceClient()
 
@@ -70,6 +71,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
         gameID ? addCorrectAnswer(gameID, answer) : Promise.reject(),
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? deleteCorrectAnswer(gameID, answer) : Promise.reject(),
+      getPlayers: () => (gameID ? getPlayers(gameID) : Promise.reject()),
       toggleFullscreen: fullScreenHandle.active
         ? fullScreenHandle.exit
         : fullScreenHandle.enter,
@@ -87,6 +89,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       addCorrectAnswer,
       deleteCorrectAnswer,
       revokeGame,
+      getPlayers,
       quitGame,
     ],
   )

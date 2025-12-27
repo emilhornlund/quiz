@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
+import { withMockGameHost } from '../../../.storybook/mockGameContext.tsx'
 import type { GameContextType } from '../../context/game'
 import { GameContext } from '../../context/game'
 
@@ -50,7 +51,7 @@ const HostLobbyStateComponent: FC<HostLobbyStateProps> = (props) => {
 
 const meta = {
   component: HostLobbyState,
-  decorators: [withRouter],
+  decorators: [withRouter, withMockGameHost],
   parameters: {
     layout: 'fullscreen',
   },
