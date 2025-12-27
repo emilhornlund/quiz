@@ -1,6 +1,11 @@
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import { GameParticipantType, GameStatus, QuestionType } from '@quiz/common'
+import {
+  GAME_MAX_PLAYERS,
+  GameParticipantType,
+  GameStatus,
+  QuestionType,
+} from '@quiz/common'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -36,6 +41,7 @@ import {
 import {
   Game,
   GameModel,
+  ParticipantPlayerWithBase,
   QuestionResultTaskItem,
   QuestionResultTaskWithBase,
   QuestionTaskBaseAnswer,
@@ -309,6 +315,84 @@ describe('GameController (e2e)', () => {
           )
           expect(res.body).toHaveProperty('status', 400)
           expect(res.body).toHaveProperty('timestamp')
+        })
+    })
+
+    it('should succeed in joining when game is almost full (maximum players reached)', async () => {
+      const participants: ParticipantPlayerWithBase[] = []
+      for (let i = 0; i < GAME_MAX_PLAYERS - 1; i++) {
+        participants.push(
+          createMockGamePlayerParticipantDocument({
+            participantId: uuidv4(),
+            nickname: `player${i}`,
+          }),
+        )
+      }
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [
+            createMockGameHostParticipantDocument(),
+            ...participants,
+          ],
+        }),
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        game._id,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${game._id}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
+        .expect(204)
+        .expect((res) => {
+          expect(res.body).toEqual({})
+        })
+    })
+
+    it('should fail in joining when game is full (maximum players reached)', async () => {
+      const participants: ParticipantPlayerWithBase[] = []
+      for (let i = 0; i < GAME_MAX_PLAYERS; i++) {
+        participants.push(
+          createMockGamePlayerParticipantDocument({
+            participantId: uuidv4(),
+            nickname: `player${i}`,
+          }),
+        )
+      }
+
+      const game = await gameModel.create(
+        createMockGameDocument({
+          participants: [
+            createMockGameHostParticipantDocument(),
+            ...participants,
+          ],
+        }),
+      )
+
+      const accessToken = await authenticateGame(
+        app,
+        game._id,
+        playerUser._id,
+        GameParticipantType.PLAYER,
+      )
+
+      return supertest(app.getHttpServer())
+        .post(`/api/games/${game._id}/players`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .send({ nickname: MOCK_DEFAULT_PLAYER_NICKNAME })
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: 'Game is full',
+            status: 403,
+            timestamp: expect.anything(),
+          })
         })
     })
   })

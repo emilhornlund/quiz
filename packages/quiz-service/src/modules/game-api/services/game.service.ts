@@ -48,11 +48,12 @@ import { isQuestionResultTask } from '../../game-task/utils/task-type-guards'
 import { QuizRepository } from '../../quiz/repositories'
 import { User } from '../../user/repositories'
 import {
+  GameFullException,
   NicknameNotUniqueException,
   PlayerNotUniqueException,
 } from '../exceptions'
 
-import { isNicknameUnique, isPlayerUnique } from './utils'
+import { isGameFull, isNicknameUnique, isPlayerUnique } from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -158,8 +159,9 @@ export class GameService {
   }
 
   /**
-   * Adds a player to an active game if the game is found and the nickname is not already taken.
-   * Generates a unique token for the joined player.
+   * Adds a player to an active game if the game exists and can accept additional players.
+   * Ensures that both the player identifier and nickname are unique within the game
+   * before adding the participant.
    *
    * @param gameId - The unique identifier of the game the player wants to join.
    * @param participantId - The unique identifier of the player joining the game.
@@ -167,8 +169,10 @@ export class GameService {
    *
    * @returns {Promise<void>} A Promise that resolves when the player is successfully added to the game.
    *
-   * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameID` exists.
-   * @throws {NicknameNotUniqueException} If the provided `nickname` is already taken in the game.
+   * @throws {GameFullException} If the game has already reached the maximum number of allowed player participants.
+   * @throws {ActiveGameNotFoundByIDException} If no active game with the specified `gameId` exists.
+   * @throws {NicknameNotUniqueException} If the provided `nickname` is already taken by another player in the game.
+   * @throws {PlayerNotUniqueException} If the participant is already registered as a player in the game.
    */
   public async joinGame(
     gameId: string,
@@ -176,6 +180,10 @@ export class GameService {
     nickname: string,
   ): Promise<void> {
     const gameDocument = await this.gameRepository.findGameByIDOrThrow(gameId)
+
+    if (isGameFull(gameDocument.participants)) {
+      throw new GameFullException()
+    }
 
     if (!isPlayerUnique(gameDocument.participants, participantId)) {
       throw new PlayerNotUniqueException()
