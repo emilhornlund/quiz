@@ -123,6 +123,9 @@ export class GameController {
     description:
       'Invalid request, possibly due to malformed game ID or validation error.',
   })
+  @ApiForbiddenResponse({
+    description: 'Game is full and cannot accept more players.',
+  })
   @ApiNotFoundResponse({
     description: 'No game found with the specified unique identifier.',
   })

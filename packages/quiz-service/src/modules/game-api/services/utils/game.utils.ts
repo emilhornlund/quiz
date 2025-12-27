@@ -1,6 +1,7 @@
-import { GameParticipantType } from '@quiz/common'
+import { GAME_MAX_PLAYERS, GameParticipantType } from '@quiz/common'
 
 import { GameDocument } from '../../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../../game-core/utils'
 
 /**
  * Checks whether a participant is unique in the list of game participants.
@@ -35,3 +36,15 @@ export const isNicknameUnique = (
       participant.type === GameParticipantType.PLAYER &&
       participant.nickname.trim() === nickname.trim(),
   )
+
+/**
+ * Checks whether the game has reached the maximum number of player participants.
+ *
+ * @param participants - The list of participants in the game.
+ * @returns `true` if the number of player participants is greater than or equal to `GAME_MAX_PLAYERS`,
+ * otherwise `false`.
+ */
+export const isGameFull = (
+  participants: GameDocument['participants'],
+): boolean =>
+  participants.filter(isParticipantPlayer).length >= GAME_MAX_PLAYERS
