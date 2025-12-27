@@ -12,6 +12,7 @@ import {
   IconButtonArrowRight,
   Page,
   PageProminentIcon,
+  RotatingMessage,
   TextField,
   Typography,
 } from '../../components'
@@ -21,10 +22,10 @@ import { classNames } from '../../utils/helpers.ts'
 import styles from './HomePage.module.scss'
 
 /**
- * Randomized, playful tagline fragments shown beneath the page title.
+ * Playful tagline messages displayed beneath the page title.
  *
- * The component picks one message at render time and keeps it stable for the
- * lifetime of the component instance.
+ * These messages are presented using `RotatingMessage`, which cycles through the list
+ * with staged enter/exit transitions.
  */
 const MESSAGES = [
   'Ready to show off your skills? Let’s go!',
@@ -88,18 +89,6 @@ const HomePage: FC = () => {
   const activeGameId = useMemo(() => game?.ACCESS?.gameId, [game])
 
   /**
-   * A stable, randomly selected pep-talk message displayed beneath the page title.
-   *
-   * The message is selected once and memoized for the lifetime of the component instance.
-   */
-  const message = useMemo(
-    () =>
-      // eslint-disable-next-line react-hooks/purity
-      `Do you feel confident? ${MESSAGES[Math.floor(Math.random() * MESSAGES.length)]}`,
-    [],
-  )
-
-  /**
    * Resumes an already active game session.
    *
    * Flow:
@@ -157,9 +146,14 @@ const HomePage: FC = () => {
         </Typography>
       </div>
       <div className={styles.message}>
-        <Typography variant="text" size="small">
-          {message}
-        </Typography>
+        <RotatingMessage
+          messages={MESSAGES}
+          renderMessage={(message) => (
+            <Typography variant="text" size="small">
+              {message}
+            </Typography>
+          )}
+        />
       </div>
 
       {activeGameId && (
