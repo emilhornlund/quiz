@@ -1,7 +1,7 @@
 {
   "name": "@quiz/quiz",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
     "clean": "rimraf dist",

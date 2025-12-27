@@ -1,7 +1,7 @@
 {
   "name": "@quiz/common",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
