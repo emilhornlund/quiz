@@ -1,5 +1,5 @@
 import type { FC, FormEvent } from 'react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
@@ -10,13 +10,14 @@ import {
   NicknameTextField,
   Page,
   PageProminentIcon,
+  RotatingMessage,
   Typography,
 } from '../../components'
 import { useGameContext } from '../../context/game'
 import { useUserContext } from '../../context/user'
 
 import styles from './GameJoinPage.module.scss'
-import { getMessage, getTitle } from './text.utils.ts'
+import { MESSAGES, TITLES } from './text.utils.ts'
 
 const GameJoinPage: FC = () => {
   const navigate = useNavigate()
@@ -31,9 +32,6 @@ const GameJoinPage: FC = () => {
     currentUser?.defaultNickname || '',
   )
   const [nicknameValid, setNicknameValid] = useState<boolean>(false)
-
-  const title = useMemo<string>(() => getTitle(), [])
-  const message = useMemo<string>(() => getMessage(), [])
 
   const [isJoiningGame, setIsJoiningGame] = useState(false)
 
@@ -63,12 +61,25 @@ const GameJoinPage: FC = () => {
       }
       hideLogin>
       <PageProminentIcon src={UsersIcon} alt="Users" />
-      <Typography variant="title" size="medium">
-        {title}
-      </Typography>
-      <Typography variant="text" size="small">
-        {message}
-      </Typography>
+
+      <RotatingMessage
+        messages={TITLES}
+        renderMessage={(title) => (
+          <Typography variant="title" size="medium">
+            {title}
+          </Typography>
+        )}
+      />
+
+      <RotatingMessage
+        messages={MESSAGES}
+        renderMessage={(message) => (
+          <Typography variant="text" size="small">
+            {message}
+          </Typography>
+        )}
+      />
+
       <form
         data-testid="join-form"
         name="join-game-form"

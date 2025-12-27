@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import type React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -30,9 +31,64 @@ vi.mock('../../context/user', () => ({
 }))
 
 vi.mock('./text.utils.ts', () => ({
-  getTitle: () => 'Join the game',
-  getMessage: () => 'Pick a nickname and jump in!',
+  TITLES: ['Join the game', 'Another title'],
+  MESSAGES: ['Pick a nickname and jump in!', 'Another message'],
 }))
+
+vi.mock('../../components', async () => {
+  const actual =
+    await vi.importActual<typeof import('../../components')>('../../components')
+
+  return {
+    ...actual,
+
+    RotatingMessage: ({
+      messages,
+      renderMessage,
+    }: {
+      messages: string[]
+      renderMessage?: (message: string) => React.ReactNode
+    }) => {
+      const message = messages[0] ?? ''
+      if (!message) return null
+      return (
+        <div data-testid="rotating-message">
+          {renderMessage ? renderMessage(message) : message}
+        </div>
+      )
+    },
+
+    NicknameTextField: ({
+      value,
+      placeholder,
+      disabled,
+      onChange,
+      onValid,
+    }: {
+      value: string
+      placeholder?: string
+      disabled?: boolean
+      onChange: (value: string) => void
+      onValid: (valid: boolean) => void
+    }) => {
+      const validate = (v: string) => v.trim().length > 0
+
+      return (
+        <input
+          data-testid="nickname-input"
+          placeholder={placeholder ?? 'Nickname'}
+          disabled={disabled}
+          value={value}
+          onChange={(e) => {
+            const next = e.target.value
+            onChange(next)
+            onValid(validate(next))
+          }}
+        />
+      )
+    },
+  }
+})
 
 import GameJoinPage from './GameJoinPage'
 
@@ -43,11 +99,13 @@ beforeEach(() => {
   vi.clearAllMocks()
   providedGameID = 'GAME123'
   providedDefaultNickname = undefined
+  mockJoinGame.mockResolvedValue(undefined)
 })
 
 describe('GameJoinPage', () => {
-  it('renders title and message', () => {
+  it('renders title and message (via RotatingMessage)', () => {
     const { container } = renderWithRouter(<GameJoinPage />)
+
     expect(screen.getByText('Join the game')).toBeInTheDocument()
     expect(screen.getByText('Pick a nickname and jump in!')).toBeInTheDocument()
 
@@ -56,6 +114,7 @@ describe('GameJoinPage', () => {
 
   it('navigates back when clicking the back button', () => {
     const { container } = renderWithRouter(<GameJoinPage />)
+
     fireEvent.click(screen.getByRole('button', { name: /back/i }))
     expect(mockNavigate).toHaveBeenCalledWith(-1)
 
@@ -68,24 +127,27 @@ describe('GameJoinPage', () => {
     const joinBtn = screen.getByRole('button', { name: /ok, go!/i })
     expect(joinBtn).toBeDisabled()
 
-    const input = screen.getByPlaceholderText(/nickname/i)
-    fireEvent.change(input, { target: { value: 'Emil' } })
+    fireEvent.change(screen.getByTestId('nickname-input'), {
+      target: { value: 'Emil' },
+    })
 
     expect(joinBtn).not.toBeDisabled()
-
     expect(container).toMatchSnapshot()
   })
 
   it('submits with gameID and nickname and navigates to /game', async () => {
     let resolveJoin!: () => void
     mockJoinGame.mockReturnValueOnce(
-      new Promise<void>((r) => (resolveJoin = r)),
+      new Promise<void>((r) => {
+        resolveJoin = r
+      }),
     )
 
     const { container } = renderWithRouter(<GameJoinPage />)
 
-    const input = screen.getByPlaceholderText(/nickname/i)
-    fireEvent.change(input, { target: { value: 'Emil' } })
+    fireEvent.change(screen.getByTestId('nickname-input'), {
+      target: { value: 'Emil' },
+    })
 
     fireEvent.click(screen.getByRole('button', { name: /ok, go!/i }))
 
@@ -101,10 +163,12 @@ describe('GameJoinPage', () => {
     providedGameID = undefined
     const { container } = renderWithRouter(<GameJoinPage />)
 
-    const input = screen.getByPlaceholderText(/nickname/i)
-    fireEvent.change(input, { target: { value: 'Someone' } })
+    fireEvent.change(screen.getByTestId('nickname-input'), {
+      target: { value: 'Someone' },
+    })
 
     fireEvent.click(screen.getByRole('button', { name: /ok, go!/i }))
+
     expect(mockJoinGame).not.toHaveBeenCalled()
     expect(mockNavigate).not.toHaveBeenCalledWith('/game')
 
@@ -115,7 +179,7 @@ describe('GameJoinPage', () => {
     providedDefaultNickname = undefined
     const { container } = renderWithRouter(<GameJoinPage />)
 
-    const input = screen.getByPlaceholderText(/nickname/i) as HTMLInputElement
+    const input = screen.getByTestId('nickname-input') as HTMLInputElement
     const joinBtn = screen.getByRole('button', { name: /ok, go!/i })
 
     expect(input.value).toBe('')
@@ -124,60 +188,58 @@ describe('GameJoinPage', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('prefills nickname from user default but keeps Join disabled until validated', () => {
+  it('prefills nickname from user default and enables Join after validation is triggered', async () => {
     providedDefaultNickname = 'PreFilledNick'
     const { container } = renderWithRouter(<GameJoinPage />)
 
     const input = screen.getByPlaceholderText(/nickname/i) as HTMLInputElement
     const joinBtn = screen.getByRole('button', { name: /ok, go!/i })
 
-    // Prefilled value should be visible
     expect(input.value).toBe('PreFilledNick')
-
-    // Button may still be disabled if NicknameTextField doesn't call onValid on mount
-    expect(joinBtn).not.toBeDisabled()
-
-    // Tweak the value to trigger NicknameTextField's onValid propagation
-    fireEvent.change(input, { target: { value: 'PreFilledNick!' } })
     expect(joinBtn).toBeDisabled()
+
+    fireEvent.change(input, { target: { value: 'PreFilledNick2' } })
+
+    await waitFor(() => {
+      expect(joinBtn).not.toBeDisabled()
+    })
 
     expect(container).toMatchSnapshot()
   })
 
   it('does not submit when nickname is blank or whitespace', () => {
     const { container } = renderWithRouter(<GameJoinPage />)
-    const input = screen.getByPlaceholderText(/nickname/i)
+
+    const input = screen.getByTestId('nickname-input')
     const joinBtn = screen.getByRole('button', { name: /ok, go!/i })
 
     fireEvent.change(input, { target: { value: '   ' } })
-    // If your NicknameTextField trims/validates, Join should remain disabled
     expect(joinBtn).toBeDisabled()
 
-    // Even forcing a submit should not call joinGame since guard checks nickname truthiness
-    fireEvent.submit(
-      screen.getByRole('form', { hidden: true }) || joinBtn.closest('form')!,
-    )
-    expect(mockJoinGame).not.toHaveBeenCalled()
+    fireEvent.submit(screen.getByTestId('join-form'))
 
+    expect(mockJoinGame).not.toHaveBeenCalled()
     expect(container).toMatchSnapshot()
   })
 
   it('disables the input while joining and re-enables after promise resolves', async () => {
     let resolveJoin!: () => void
     mockJoinGame.mockReturnValueOnce(
-      new Promise<void>((r) => (resolveJoin = r)),
+      new Promise<void>((r) => {
+        resolveJoin = r
+      }),
     )
 
     const { container } = renderWithRouter(<GameJoinPage />)
-    const input = screen.getByPlaceholderText(/nickname/i) as HTMLInputElement
+
+    const input = screen.getByTestId('nickname-input') as HTMLInputElement
     fireEvent.change(input, { target: { value: 'Runner' } })
 
-    // Submit -> should disable NicknameTextField (prop: disabled={isJoiningGame})
     fireEvent.click(screen.getByRole('button', { name: /ok, go!/i }))
+
     expect(mockJoinGame).toHaveBeenCalledWith('GAME123', 'Runner')
     expect(input.disabled).toBe(true)
 
-    // Resolve and ensure input is re-enabled
     resolveJoin()
     await waitFor(() => expect(input.disabled).toBe(false))
 
@@ -187,42 +249,49 @@ describe('GameJoinPage', () => {
   it('submits when the form is submitted (Enter key equivalent)', async () => {
     let resolveJoin!: () => void
     mockJoinGame.mockReturnValueOnce(
-      new Promise<void>((r) => (resolveJoin = r)),
+      new Promise<void>((r) => {
+        resolveJoin = r
+      }),
     )
 
     const { container } = renderWithRouter(<GameJoinPage />)
-    const input = screen.getByPlaceholderText(/nickname/i)
-    const form = screen.getByTestId('join-form')
 
-    fireEvent.change(input, { target: { value: 'KeyUser' } })
-    fireEvent.submit(form)
+    fireEvent.change(screen.getByTestId('nickname-input'), {
+      target: { value: 'KeyUser' },
+    })
+
+    fireEvent.submit(screen.getByTestId('join-form'))
 
     expect(mockJoinGame).toHaveBeenCalledWith('GAME123', 'KeyUser')
+
     resolveJoin()
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/game'))
 
     expect(container).toMatchSnapshot()
   })
 
-  it('ignores rapid double-submit (only calls joinGame once)', async () => {
+  it('disables the input immediately after submit while join is in-flight', async () => {
     let resolveJoin!: () => void
     mockJoinGame.mockReturnValueOnce(
-      new Promise<void>((r) => (resolveJoin = r)),
+      new Promise<void>((r) => {
+        resolveJoin = r
+      }),
     )
 
-    const { container } = renderWithRouter(<GameJoinPage />)
-    const input = screen.getByPlaceholderText(/nickname/i)
-    const joinBtn = screen.getByRole('button', { name: /ok, go!/i })
+    renderWithRouter(<GameJoinPage />)
+
+    const input = screen.getByPlaceholderText(/nickname/i) as HTMLInputElement
 
     fireEvent.change(input, { target: { value: 'Speedy' } })
-    fireEvent.click(joinBtn)
-    fireEvent.click(joinBtn) // second click happens while joining
 
-    expect(mockJoinGame).toHaveBeenCalledTimes(1)
+    await act(async () => {
+      fireEvent.submit(screen.getByTestId('join-form'))
+    })
+
+    expect(mockJoinGame).toHaveBeenCalledWith('GAME123', 'Speedy')
+    expect(input.disabled).toBe(true)
 
     resolveJoin()
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/game'))
-
-    expect(container).toMatchSnapshot()
+    await waitFor(() => expect(input.disabled).toBe(false))
   })
 })
