@@ -24,12 +24,9 @@ vi.mock('react-router-dom', async (orig) => {
   // @ts-ignore
   return { ...actual, useNavigate: () => h.navigate }
 })
+
 vi.mock('./message.utils.ts', () => ({
-  getMessage: () => 'Be nice and wait',
-  getNextMessage: (current: string) =>
-    current === 'Be nice and wait'
-      ? 'Get ready for questions!'
-      : 'Be nice and wait',
+  MESSAGES: ['Be nice and wait', 'Get ready for questions!'],
 }))
 
 import PlayerLobbyState from './PlayerLobbyState'
@@ -54,6 +51,7 @@ describe('PlayerLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     expect(screen.getByText('FrostyBear')).toBeInTheDocument()
     expect(screen.getByText('You’re in the waiting room')).toBeInTheDocument()
     expect(screen.getByText('Be nice and wait')).toBeInTheDocument()
@@ -71,10 +69,13 @@ describe('PlayerLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     const leaveBtn = document.querySelector(
       '#leave-game-button',
     ) as HTMLButtonElement
+
     fireEvent.click(leaveBtn)
+
     expect(screen.getByText('Confirm Leave Game')).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: 'Leave Game' }),
@@ -93,17 +94,20 @@ describe('PlayerLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     fireEvent.click(
       document.querySelector('#leave-game-button') as HTMLButtonElement,
     )
     fireEvent.click(screen.getByRole('button', { name: 'Leave Game' }))
+
     expect(h.leaveGame).toHaveBeenCalledWith('player-1')
     await waitFor(() => expect(h.navigate).toHaveBeenCalledWith('/'))
     expect(container).toMatchSnapshot()
   })
 
-  it('does nothing when gameID is undefined', async () => {
+  it('does nothing when gameID is undefined', () => {
     h.gameID = undefined
+
     const { container } = render(
       <MemoryRouter>
         <PlayerLobbyState
@@ -114,18 +118,21 @@ describe('PlayerLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     fireEvent.click(
       document.querySelector('#leave-game-button') as HTMLButtonElement,
     )
     fireEvent.click(screen.getByRole('button', { name: 'Leave Game' }))
+
     expect(h.leaveGame).not.toHaveBeenCalled()
     expect(h.navigate).not.toHaveBeenCalled()
     expect(container).toMatchSnapshot()
   })
 
-  it('does nothing when participant id is missing', async () => {
+  it('does nothing when participant id is missing', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     h.game = undefined as any
+
     const { container } = render(
       <MemoryRouter>
         <PlayerLobbyState
@@ -136,10 +143,12 @@ describe('PlayerLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     fireEvent.click(
       document.querySelector('#leave-game-button') as HTMLButtonElement,
     )
     fireEvent.click(screen.getByRole('button', { name: 'Leave Game' }))
+
     expect(h.leaveGame).not.toHaveBeenCalled()
     expect(h.navigate).not.toHaveBeenCalled()
     expect(container).toMatchSnapshot()
@@ -157,15 +166,10 @@ describe('PlayerLobbyState', () => {
       </MemoryRouter>,
     )
 
-    const messageContainer = document.querySelector('.messageContainer')
-    const messageElement = document.querySelector('.message.visible')
-
-    expect(messageContainer).toBeInTheDocument()
-    expect(messageElement).toBeInTheDocument()
     expect(screen.getByText('Be nice and wait')).toBeInTheDocument()
   })
 
-  it('rotates messages after timeout', async () => {
+  it('rotates messages after timeout', () => {
     vi.useFakeTimers()
 
     render(
@@ -179,30 +183,26 @@ describe('PlayerLobbyState', () => {
       </MemoryRouter>,
     )
 
-    // Initially shows first message
     expect(screen.getByText('Be nice and wait')).toBeInTheDocument()
 
-    // Fast-forward time to trigger message rotation
     act(() => {
-      vi.advanceTimersByTime(8000)
-    })
-
-    // Fast-forward through the animation timeouts
-    act(() => {
-      vi.advanceTimersByTime(200) // fade out
+      vi.advanceTimersByTime(8000) // interval tick
     })
 
     act(() => {
-      vi.advanceTimersByTime(300) // fade in
+      vi.advanceTimersByTime(200) // exit duration
     })
 
-    // Check that message has changed
+    act(() => {
+      vi.advanceTimersByTime(300) // enter duration
+    })
+
     expect(screen.getByText('Get ready for questions!')).toBeInTheDocument()
 
     vi.useRealTimers()
   })
 
-  it('cleans up interval on unmount', async () => {
+  it('cleans up timers on unmount', () => {
     vi.useFakeTimers()
 
     const { unmount } = render(
@@ -216,12 +216,12 @@ describe('PlayerLobbyState', () => {
       </MemoryRouter>,
     )
 
-    // Unmount component
     unmount()
 
-    // Advance timers - should not cause any errors
-    await act(async () => {
+    act(() => {
       vi.advanceTimersByTime(8000)
+      vi.advanceTimersByTime(200)
+      vi.advanceTimersByTime(300)
     })
 
     vi.useRealTimers()

@@ -1,0 +1,63 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RotatingMessage > applies container className and messageClassName 1`] = `
+<div>
+  <div
+    class="messageContainer outer"
+  >
+    <div
+      class="message visible inner"
+    >
+      Hello
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RotatingMessage > applies the animation stage class 1`] = `
+<div>
+  <div
+    class="messageContainer"
+  >
+    <div
+      class="message entering"
+    >
+      Hello
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RotatingMessage > renders message as plain text when renderMessage is not provided 1`] = `
+<div>
+  <div
+    class="messageContainer"
+  >
+    <div
+      class="message visible"
+    >
+      Hello world
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RotatingMessage > renders message using renderMessage when provided 1`] = `
+<div>
+  <div
+    class="messageContainer"
+  >
+    <div
+      class="message visible"
+    >
+      <span
+        data-testid="custom"
+      >
+        Hello world
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RotatingMessage > renders nothing when message is empty 1`] = `<div />`;
