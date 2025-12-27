@@ -213,3 +213,9 @@ If you are interested in using this project commercially, please
 contact the author to discuss licensing options.
 
 [See the LICENSE file for full terms.](./LICENSE)
+
+---
+
+## Contributing
+
+By submitting a pull request, you agree to the Contributor License Agreement in `CLA.md`.
