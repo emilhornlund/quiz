@@ -101,10 +101,11 @@ export const ParticipantPlayerSchema =
   SchemaFactory.createForClass(ParticipantPlayer)
 
 /**
+ * Convenience type for host participants.
  *
+ * Combines the base participant fields with host-specific properties.
  */
-export type Participant = ParticipantBase &
-  (ParticipantHost | ParticipantPlayer)
+export type ParticipantHostWithBase = ParticipantBase & ParticipantHost
 
 /**
  * Convenience type for player participants.
@@ -112,3 +113,10 @@ export type Participant = ParticipantBase &
  * Combines the base participant fields with player-specific properties.
  */
 export type ParticipantPlayerWithBase = ParticipantBase & ParticipantPlayer
+
+/**
+ * Represents a participant in a game.
+ *
+ * Discriminated union of host and player participants using the `type` field.
+ */
+export type Participant = ParticipantHostWithBase | ParticipantPlayerWithBase

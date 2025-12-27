@@ -7,6 +7,7 @@ import {
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import {
   CreateGameResponseDto,
+  GameHistoryBaseDto,
   GameParticipantPlayerDto,
   GameParticipantType,
   GameStatus,
@@ -27,6 +28,7 @@ import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import {
   getRedisPlayerParticipantAnswerKey,
+  isParticipantHost,
   isParticipantPlayer,
 } from '../../game-core/utils'
 import { GameEventPublisher } from '../../game-event/services'
@@ -136,21 +138,33 @@ export class GameService {
           )
         }
 
-        return {
+        const common: GameHistoryBaseDto = {
           id: gameDocument._id,
           name: gameDocument.name,
           mode: gameDocument.mode,
           status: gameDocument.status,
           imageCoverURL: gameDocument.quiz?.imageCoverURL,
           created: gameDocument.created,
-          ...(participant.type === GameParticipantType.HOST
-            ? { participantType: GameParticipantType.HOST }
-            : {
-                participantType: GameParticipantType.PLAYER,
-                rank: participant.rank,
-                score: participant.totalScore,
-              }),
         }
+
+        if (isParticipantHost(participant)) {
+          return {
+            ...common,
+            participantType: GameParticipantType.HOST,
+          }
+        } else if (isParticipantPlayer(participant)) {
+          return {
+            ...common,
+            participantType: GameParticipantType.PLAYER,
+            rank: participant.rank,
+            score: participant.totalScore,
+          }
+        }
+
+        throw new Error(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          `Unknown participant type: ${(participant as any).type}`,
+        )
       }),
       total,
       limit,

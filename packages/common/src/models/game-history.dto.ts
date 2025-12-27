@@ -3,10 +3,9 @@ import { GameParticipantType } from './game-participant-type.enum'
 import { GameStatus } from './game-status.enum'
 
 /**
- * Represents a summary of a previously played or hosted game.
- * Used for displaying a user's game history.
+ * Base properties shared by all game history entries.
  */
-export type GameHistoryDto = {
+export type GameHistoryBaseDto = {
   /**
    * The unique identifier of the game.
    */
@@ -33,55 +32,43 @@ export type GameHistoryDto = {
   imageCoverURL?: string
 
   /**
-   * The participant type associated with the user's role in the game (e.g., Host, Player).
-   */
-  participantType: GameParticipantType
-
-  /**
    * The date when the game was first created.
    */
   created: Date
-} & (
-  | {
-      /**
-       * The host participant type associated with the user's role in the game.
-       */
-      participantType: GameParticipantType.HOST
-    }
-  | {
-      /**
-       * The player participant type associated with the user's role in the game.
-       */
-      participantType: GameParticipantType.PLAYER
-
-      /**
-       * The final rank achieved by the participant in the game.
-       *
-       * For hosts, this value may be omitted or set to a default.
-       */
-      rank: number
-
-      /**
-       * The final score achieved by the participant in the game.
-       *
-       * For hosts, this value may be omitted or set to a default.
-       */
-      score: number
-    }
-)
+}
 
 /**
- * Data transfer object for game history host object.
+ * Represents a game history entry where the user was the host.
  */
-export type GameHistoryHostDto = Extract<
-  GameHistoryDto,
-  { participantType: GameParticipantType.HOST }
->
+export type GameHistoryHostDto = GameHistoryBaseDto & {
+  /**
+   * The participant type associated with the user's role in the game.
+   */
+  participantType: GameParticipantType.HOST
+}
 
 /**
- * Data transfer object for game history player object.
+ * Represents a game history entry where the user was a player.
  */
-export type GameHistoryPlayerDto = Extract<
-  GameHistoryDto,
-  { participantType: GameParticipantType.PLAYER }
->
+export type GameHistoryPlayerDto = GameHistoryBaseDto & {
+  /**
+   * The participant type associated with the user's role in the game.
+   */
+  participantType: GameParticipantType.PLAYER
+
+  /**
+   * The final rank achieved by the participant in the game.
+   */
+  rank: number
+
+  /**
+   * The final score achieved by the participant in the game.
+   */
+  score: number
+}
+
+/**
+ * Represents a summary of a previously played or hosted game.
+ * Used for displaying a user's game history.
+ */
+export type GameHistoryDto = GameHistoryHostDto | GameHistoryPlayerDto
