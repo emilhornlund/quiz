@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PageProminentIcon > matches snapshot 1`] = `
+<div
+  class="main"
+>
+  <div
+    class="float"
+  >
+    <img
+      alt="Klurigo logo"
+      class="image"
+      src="/assets/images/klurigo-icon.svg"
+    />
+  </div>
+</div>
+`;
