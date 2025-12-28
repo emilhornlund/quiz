@@ -140,8 +140,8 @@ const HomePage: FC = () => {
       <div className={styles.icon}>
         <PageProminentIcon src={KlurigoIcon} alt="Klurigo" />
       </div>
-      <div className={styles.title}>
-        <Typography variant="title" size="medium">
+      <div className={styles.hero}>
+        <Typography variant="hero" size="medium">
           Let’s play
         </Typography>
       </div>

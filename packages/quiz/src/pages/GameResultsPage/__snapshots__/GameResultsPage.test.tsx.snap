@@ -102,16 +102,16 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
           <div
             class="gameResultsPage"
           >
-            <div
-              class="typography subtitle full"
+            <h1
+              class="typography title full"
             >
               Classic Minimal
-            </div>
-            <div
+            </h1>
+            <p
               class="typography text full"
             >
               A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
-            </div>
+            </p>
             <div
               class="segmentedControl"
             >
@@ -558,16 +558,16 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
           <div
             class="gameResultsPage"
           >
-            <div
-              class="typography subtitle full"
+            <h1
+              class="typography title full"
             >
               Deferred Load
-            </div>
-            <div
+            </h1>
+            <p
               class="typography text full"
             >
               A quick look at how this game unfolded — see how players performed, how fast they answered, and who stood out.
-            </div>
+            </p>
             <div
               class="segmentedControl"
             >

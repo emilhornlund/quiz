@@ -48,16 +48,16 @@ exports[`HostGameBeginState > should render HostGameBeginState 1`] = `
               />
             </div>
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             Loading Game
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text small"
           >
             The game starts any second
-          </div>
+          </p>
           <div
             class="loadingSpinnerContainer"
             data-testid="loading-spinner"

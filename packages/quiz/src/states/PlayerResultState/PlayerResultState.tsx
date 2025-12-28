@@ -93,7 +93,7 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
             styles.correctnessBatch,
             showPosition ? styles.slideOutLeft : undefined,
           )}>
-          <Typography variant="subtitle">
+          <Typography variant="title">
             {correct ? 'Correct' : 'Incorrect'}
           </Typography>
 

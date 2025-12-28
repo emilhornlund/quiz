@@ -30,7 +30,7 @@ const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
 
   return (
     <Page align="start" width="medium" discover profile>
-      <Typography variant="subtitle">
+      <Typography variant="title">
         {items.length ? 'Game History' : "You Haven't Played Any Games Yet"}
       </Typography>
       <Typography variant="text">

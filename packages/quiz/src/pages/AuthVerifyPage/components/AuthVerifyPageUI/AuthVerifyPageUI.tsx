@@ -24,7 +24,7 @@ const AuthVerifyPageUI: FC<AuthVerifyPageUIProps> = ({
             <FontAwesomeIcon icon={faCheck} />
           </Badge>
 
-          <Typography variant="subtitle" size="medium">
+          <Typography variant="title" size="medium">
             Hooray! Your email’s all set!
           </Typography>
 
@@ -50,7 +50,7 @@ const AuthVerifyPageUI: FC<AuthVerifyPageUIProps> = ({
 
       {!verified && !error && (
         <>
-          <Typography variant="subtitle" size="small">
+          <Typography variant="title" size="medium">
             One moment… verifying your magic link!
           </Typography>
 
@@ -68,7 +68,7 @@ const AuthVerifyPageUI: FC<AuthVerifyPageUIProps> = ({
             <FontAwesomeIcon icon={faXmark} />
           </Badge>
 
-          <Typography variant="subtitle" size="small">
+          <Typography variant="title" size="medium">
             Oops! Something went wrong.
           </Typography>
 

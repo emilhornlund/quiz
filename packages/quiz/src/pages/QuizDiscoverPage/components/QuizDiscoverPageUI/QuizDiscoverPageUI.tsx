@@ -55,7 +55,7 @@ const QuizDiscoverPageUI: FC<QuizDiscoverPageUIProps> = ({
   onChangeSearchParams,
 }) => (
   <Page align="start" discover profile>
-    <Typography variant="subtitle">Discover Exciting Quizzes</Typography>
+    <Typography variant="title">Discover Exciting Quizzes</Typography>
     <Typography variant="text" size="medium">
       Dive into a world of engaging public quizzes. Explore, filter, and find
       the perfect quiz to host and share the fun!

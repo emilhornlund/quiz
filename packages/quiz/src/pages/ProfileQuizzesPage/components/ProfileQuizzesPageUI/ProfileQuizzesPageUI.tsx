@@ -65,7 +65,7 @@ const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
 
   return (
     <Page align="start" discover profile>
-      <Typography variant="subtitle">
+      <Typography variant="title">
         {quizzes.length || hasSearchFilter
           ? 'Your Quizzes'
           : "You Haven't Created Any Quizzes Yet"}

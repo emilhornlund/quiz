@@ -81,22 +81,22 @@ exports[`PlayerLobbyState > confirms leave, calls leaveGame with participant id 
           >
             FrostyBear
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             You’re in the waiting room
-          </div>
+          </h1>
           <div
             class="messageContainer"
           >
             <div
               class="message visible"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Be nice and wait
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -187,22 +187,22 @@ exports[`PlayerLobbyState > does nothing when gameID is undefined 1`] = `
           >
             FrostyBear
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             You’re in the waiting room
-          </div>
+          </h1>
           <div
             class="messageContainer"
           >
             <div
               class="message visible"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Be nice and wait
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -293,22 +293,22 @@ exports[`PlayerLobbyState > does nothing when participant id is missing 1`] = `
           >
             FrostyBear
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             You’re in the waiting room
-          </div>
+          </h1>
           <div
             class="messageContainer"
           >
             <div
               class="message visible"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Be nice and wait
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -401,22 +401,22 @@ exports[`PlayerLobbyState > opens confirm dialog when clicking Leave 1`] = `
           >
             FrostyBear
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             You’re in the waiting room
-          </div>
+          </h1>
           <div
             class="messageContainer"
           >
             <div
               class="message visible"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Be nice and wait
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -582,22 +582,22 @@ exports[`PlayerLobbyState > renders lobby with nickname, title and message 1`] =
           >
             FrostyBear
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             You’re in the waiting room
-          </div>
+          </h1>
           <div
             class="messageContainer"
           >
             <div
               class="message visible"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Be nice and wait
-              </div>
+              </p>
             </div>
           </div>
         </div>

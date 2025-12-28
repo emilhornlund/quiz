@@ -42,16 +42,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Google auth pro
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -244,16 +244,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -397,16 +397,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI for Local auth prov
           <div
             class="pageDivider"
           />
-          <div
+          <h2
             class="typography subtitle full"
           >
             Upgrade Your Password
-          </div>
-          <div
+          </h2>
+          <p
             class="typography text medium"
           >
             Enhance your account security with a fresh password—verify your current one, choose a new one, and confirm to complete the update.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -545,16 +545,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -746,16 +746,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -898,16 +898,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with prepopulated v
           <div
             class="pageDivider"
           />
-          <div
+          <h2
             class="typography subtitle full"
           >
             Upgrade Your Password
-          </div>
-          <div
+          </h2>
+          <p
             class="typography text medium"
           >
             Enhance your account security with a fresh password—verify your current one, choose a new one, and confirm to complete the update.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -1046,16 +1046,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -1267,16 +1267,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Shape your quiz identity
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Update your personal details to keep your profile up to date. Your information helps personalize your quiz experience and lets others recognize you during games.
-          </div>
+          </p>
           <form
             class="form"
           >
@@ -1439,16 +1439,16 @@ exports[`ProfileUserPageUI > should render ProfileUserPageUI with unverified ema
           <div
             class="pageDivider"
           />
-          <div
+          <h2
             class="typography subtitle full"
           >
             Upgrade Your Password
-          </div>
-          <div
+          </h2>
+          <p
             class="typography text medium"
           >
             Enhance your account security with a fresh password—verify your current one, choose a new one, and confirm to complete the update.
-          </div>
+          </p>
           <form
             class="form"
           >

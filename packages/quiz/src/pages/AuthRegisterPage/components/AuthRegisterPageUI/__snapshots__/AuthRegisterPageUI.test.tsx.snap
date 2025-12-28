@@ -42,16 +42,16 @@ exports[`AuthRegisterPageUI > renders default state 1`] = `
         <div
           class="contentInner"
         >
-          <div
+          <h1
             class="typography title medium"
           >
             Create your account
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text small"
           >
             Join the party — make an account in seconds.
-          </div>
+          </p>
           <form
             class="createUserForm"
           >
@@ -211,11 +211,11 @@ exports[`AuthRegisterPageUI > renders default state 1`] = `
             data-discover="true"
             href="/auth/login"
           >
-            <div
+            <a
               class="typography link small"
             >
               Got an account? Flash your credentials and come on in!
-            </div>
+            </a>
           </a>
         </div>
       </div>
@@ -266,16 +266,16 @@ exports[`AuthRegisterPageUI > renders loading state 1`] = `
         <div
           class="contentInner"
         >
-          <div
+          <h1
             class="typography title medium"
           >
             Create your account
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text small"
           >
             Join the party — make an account in seconds.
-          </div>
+          </p>
           <form
             class="createUserForm"
           >
@@ -432,11 +432,11 @@ exports[`AuthRegisterPageUI > renders loading state 1`] = `
             data-discover="true"
             href="/auth/login"
           >
-            <div
+            <a
               class="typography link small"
             >
               Got an account? Flash your credentials and come on in!
-            </div>
+            </a>
           </a>
         </div>
       </div>

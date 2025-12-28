@@ -42,7 +42,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
           onClick={handleCompletingGame}
         />
       }>
-      <Typography variant="subtitle">Podium</Typography>
+      <Typography variant="title">Podium</Typography>
       <Podium values={leaderboard} />
       <Leaderboard values={leaderboard} includePodium={false} />
     </GamePage>

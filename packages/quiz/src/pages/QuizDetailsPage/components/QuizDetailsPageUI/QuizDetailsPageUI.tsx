@@ -113,9 +113,7 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
       }
       discover
       profile>
-      <Typography variant="subtitle" size="medium">
-        {quiz.title}
-      </Typography>
+      <Typography variant="title">{quiz.title}</Typography>
 
       {quiz.description && (
         <Typography variant="text" size="medium">

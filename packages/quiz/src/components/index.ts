@@ -38,7 +38,11 @@ export type { SortableTableProps, SortableTableValue } from './SortableTable'
 export type { StreakBadgeProps } from './StreakBadge'
 export type { TextareaProps } from './Textarea'
 export type { TextFieldProps } from './TextField'
-export type { TypographyProps } from './Typography'
+export type {
+  TypographyVariant,
+  TypographySize,
+  TypographyProps,
+} from './Typography'
 export { default as Badge, getBadgePositionBackgroundColor } from './Badge'
 export {
   default as Button,
