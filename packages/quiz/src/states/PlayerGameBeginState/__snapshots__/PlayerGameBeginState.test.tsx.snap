@@ -38,10 +38,15 @@ exports[`PlayerGameBeginState > should render PlayerGameBeginState 1`] = `
           <div
             class="main"
           >
-            <img
-              alt="BellRing"
-              src="/src/assets/images/bell-ring-icon.svg"
-            />
+            <div
+              class="float"
+            >
+              <img
+                alt="BellRing"
+                class="image"
+                src="/src/assets/images/bell-ring-icon.svg"
+              />
+            </div>
           </div>
           <div
             class="main subtle"

@@ -7,7 +7,9 @@ const PageProminentIcon: FC<Pick<ImgHTMLAttributes<never>, 'src' | 'alt'>> = ({
   alt,
 }) => (
   <div className={styles.main}>
-    <img src={src} alt={alt} />
+    <div className={styles.float}>
+      <img className={styles.image} src={src} alt={alt} />
+    </div>
   </div>
 )
 

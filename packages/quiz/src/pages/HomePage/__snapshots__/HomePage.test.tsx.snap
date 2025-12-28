@@ -48,10 +48,15 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             <div
               class="main"
             >
-              <img
-                alt="Klurigo"
-                src="/src/assets/images/klurigo-icon.svg"
-              />
+              <div
+                class="float"
+              >
+                <img
+                  alt="Klurigo"
+                  class="image"
+                  src="/src/assets/images/klurigo-icon.svg"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -236,10 +241,15 @@ exports[`HomePage > renders the base layout and the rotating message container 1
             <div
               class="main"
             >
-              <img
-                alt="Klurigo"
-                src="/src/assets/images/klurigo-icon.svg"
-              />
+              <div
+                class="float"
+              >
+                <img
+                  alt="Klurigo"
+                  class="image"
+                  src="/src/assets/images/klurigo-icon.svg"
+                />
+              </div>
             </div>
           </div>
           <div
