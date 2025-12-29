@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions.tsx'
 
 import { ProfileQuizzesPageUI } from './components'

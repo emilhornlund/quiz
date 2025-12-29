@@ -3,7 +3,7 @@ import { type FC, type ReactNode, useCallback } from 'react'
 import { useMemo } from 'react'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { useAuthContext } from '../auth'
 
 import type { GameContextType } from './game-context.tsx'

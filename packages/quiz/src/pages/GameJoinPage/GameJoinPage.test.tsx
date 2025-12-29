@@ -11,7 +11,7 @@ vi.mock('react-router-dom', async () => {
 })
 
 const mockJoinGame = vi.fn()
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ joinGame: mockJoinGame }),
 }))
 

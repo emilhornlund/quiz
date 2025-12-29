@@ -16,7 +16,7 @@ const mockRefresh = vi.fn().mockResolvedValue({
   refreshToken: 'refreshed.refresh',
 })
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ revoke: mockRevoke, refresh: mockRefresh }),
 }))
 

@@ -147,7 +147,7 @@ vi.mock('../../utils/notification.ts', () => ({
   notifyError: (msg: string) => notifyErrorMock(msg),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({
     createQuiz: createQuizMock,
     updateQuiz: updateQuizMock,

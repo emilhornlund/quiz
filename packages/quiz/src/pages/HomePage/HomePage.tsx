@@ -5,8 +5,8 @@ import type { FC, FormEvent, MouseEvent } from 'react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { useQuizServiceClient } from '../../api'
 import { ApiError } from '../../api/api.utils.ts'
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
   IconButtonArrowRight,

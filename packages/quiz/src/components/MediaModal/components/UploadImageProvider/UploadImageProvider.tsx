@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../../../api'
 import config from '../../../../config.ts'
 import { classNames } from '../../../../utils/helpers.ts'
 import Dropzone from '../../../Dropzone'

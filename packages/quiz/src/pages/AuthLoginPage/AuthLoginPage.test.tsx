@@ -19,7 +19,7 @@ const h = vi.hoisted(() => ({
   sha256: vi.fn(async () => 'CODE_CHALLENGE_HASH'),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ login: h.login }),
 }))
 

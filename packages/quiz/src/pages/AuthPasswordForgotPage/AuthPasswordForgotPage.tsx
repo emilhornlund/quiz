@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 
 import type { AuthPasswordForgotFormFields } from './components'
 import { AuthPasswordForgotPageUI } from './components'

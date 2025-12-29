@@ -10,7 +10,7 @@ const h = vi.hoisted(() => ({
   navigate: vi.fn<NavigateFunction>(),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({
     sendPasswordResetEmail: h.sendPasswordResetEmail,
   }),

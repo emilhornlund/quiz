@@ -15,7 +15,7 @@ vi.mock('../../api/api.utils', () => ({
   isTokenExpired: () => h.expired,
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ resetPassword: h.resetPassword }),
 }))
 

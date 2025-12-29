@@ -15,7 +15,7 @@ vi.mock('../../context/auth', () => ({
 }))
 
 const quizServiceClientMock = vi.fn()
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => quizServiceClientMock(),
 }))
 

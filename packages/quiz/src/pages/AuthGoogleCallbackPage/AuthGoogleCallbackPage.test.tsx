@@ -15,7 +15,7 @@ const h = vi.hoisted(() => ({
   notifyError: vi.fn(),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ googleExchangeCode: h.googleExchangeCode }),
 }))
 vi.mock('react-router-dom', async (orig) => {

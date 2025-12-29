@@ -9,7 +9,7 @@ const h = vi.hoisted(() => ({
   navigate: vi.fn(),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ verifyEmail: h.verifyEmail }),
 }))
 

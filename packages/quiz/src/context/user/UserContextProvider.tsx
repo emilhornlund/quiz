@@ -3,7 +3,7 @@ import type { FC, ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 
 import type { UserContextType } from './UserContext.tsx'
 import { UserContext } from './UserContext.tsx'

@@ -3,7 +3,7 @@ import type { PaginatedMediaPhotoSearchDto } from '@quiz/common'
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import { useQuizServiceClient } from '../../../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../../../api'
 import { classNames } from '../../../../utils/helpers.ts'
 import Button from '../../../Button'
 import ResponsiveImage from '../../../ResponsiveImage'
