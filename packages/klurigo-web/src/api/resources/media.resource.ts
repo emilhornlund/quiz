@@ -1,0 +1,134 @@
+import type {
+  MediaUploadPhotoResponseDto,
+  PaginatedMediaPhotoSearchDto,
+} from '@klurigo/common'
+import { TokenScope, TokenType } from '@klurigo/common'
+
+import type { ApiClientCore } from '../api-client-core'
+import { parseQueryParams, resolveUrl } from '../api.utils.ts'
+
+/**
+ * Side-effect hooks used by `createMediaResource`.
+ *
+ * `uploadImage` needs direct access to an access token because it uses `XMLHttpRequest`
+ * rather than the shared `fetch` client core.
+ */
+export type MediaResourceDeps = {
+  /**
+   * Resolves the current token from storage/context.
+   */
+  getToken: (scope: TokenScope, type: TokenType) => string | undefined
+
+  /**
+   * Emits a success notification to the user.
+   *
+   * @param message - The user-facing message to display.
+   */
+  notifySuccess: (message: string) => void
+
+  /**
+   * Emits an error notification to the user.
+   *
+   * @param message - The user-facing message to display.
+   */
+  notifyError: (message: string) => void
+}
+
+/**
+ * Media API wrapper.
+ *
+ * Notes:
+ * - `uploadImage` uses `XMLHttpRequest` to provide progress callbacks during upload.
+ * - Other methods use the shared API client core.
+ *
+ * @param api - Shared API client core used for request execution where possible.
+ * @param deps - Side-effect callbacks and token access required for `XMLHttpRequest` uploads.
+ * @returns An object containing media-related API functions.
+ */
+export const createMediaResource = (
+  api: ApiClientCore,
+  deps: MediaResourceDeps,
+) => {
+  /**
+   * Searches for media photos based on an optional search term.
+   *
+   * @param search - An optional search string to filter photo results.
+   *
+   * @returns A promise that resolves to a paginated list of matching media photos.
+   */
+  const searchPhotos = (
+    search?: string,
+  ): Promise<PaginatedMediaPhotoSearchDto> =>
+    api.apiGet<PaginatedMediaPhotoSearchDto>(
+      `/media/photos${parseQueryParams({ search, offset: 0, limit: 50 })}`,
+    )
+
+  /**
+   * Uploads an image file and reports progress as a percentage.
+   *
+   * @param file - The image file to upload.
+   * @param onProgress - Progress callback receiving an integer percentage in the range 0–100.
+   * @returns A promise resolving to the uploaded image metadata.
+   */
+  const uploadImage = async (
+    file: File,
+    onProgress: (progress: number) => void,
+  ): Promise<MediaUploadPhotoResponseDto> => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const xhr = new XMLHttpRequest()
+      xhr.responseType = 'json'
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100)
+          onProgress(progress)
+        }
+      }
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          deps.notifySuccess('Upload complete! Your image is ready to use.')
+          resolve(xhr.response as MediaUploadPhotoResponseDto)
+        } else {
+          deps.notifyError(
+            `Upload failed (HTTP ${xhr.status}). Please try again.`,
+          )
+          reject(`Upload failed (HTTP ${xhr.status})`)
+        }
+      }
+
+      xhr.onerror = () => {
+        deps.notifyError(
+          'Upload failed — looks like the network blinked. Please try again.',
+        )
+        reject('Upload failed due to a network error')
+      }
+
+      xhr.open('POST', resolveUrl('/media/uploads/photos'))
+      const accessToken = deps.getToken(TokenScope.User, TokenType.Access)
+      if (accessToken) {
+        xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      }
+      xhr.send(formData)
+    })
+  }
+
+  /**
+   * Deletes an uploaded photo by its ID.
+   *
+   * @param photoId - The ID of the uploaded photo to delete.
+   *
+   * @returns A promise that resolves when the uploaded photo has been successfully deleted.
+   */
+  const deleteUploadedImage = (photoId: string): Promise<void> =>
+    api.apiDelete<void>(`/media/uploads/photos/${photoId}`)
+
+  return {
+    searchPhotos,
+    uploadImage,
+    deleteUploadedImage,
+  }
+}

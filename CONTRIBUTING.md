@@ -37,7 +37,7 @@ of your original work.
 
 ## Reporting Bugs
 
-Please open an [issue](https://github.com/emilhornlund/quiz/issues/new) with:
+Please open an [issue](https://github.com/emilhornlund/klurigo/issues/new) with:
 
 - A clear description of the problem
 - Steps to reproduce
@@ -46,7 +46,7 @@ Please open an [issue](https://github.com/emilhornlund/quiz/issues/new) with:
 
 ## Suggesting Features
 
-We welcome ideas! Submit an [issue](https://github.com/emilhornlund/quiz/issues/new) labeled `enhancement`, describing:
+We welcome ideas! Submit an [issue](https://github.com/emilhornlund/klurigo/issues/new) labeled `enhancement`, describing:
 
 - The problem you're trying to solve
 - A clear description of the proposed feature

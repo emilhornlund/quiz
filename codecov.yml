@@ -16,14 +16,14 @@ component_management:
       name: common
       paths:
         - packages/common/**
-    - component_id: quiz
-      name: quiz
+    - component_id: klurigo-web
+      name: klurigo-web
       paths:
-        - packages/quiz/**
-    - component_id: quiz-service
-      name: quiz-service
+        - packages/klurigo-web/**
+    - component_id: klurigo-service
+      name: klurigo-service
       paths:
-        - packages/quiz-service/**
+        - packages/klurigo-service/**
 
 coverage:
   status:

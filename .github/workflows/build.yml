@@ -49,20 +49,20 @@ jobs:
         run: yarn lint
 
       - name: Check Circular Dependencies
-        run: yarn workspace @quiz/quiz-service check-circular-deps
+        run: yarn workspace @klurigo/klurigo-service check-circular-deps
 
       - name: Test & Coverage
         run: yarn test:coverage
 
       - name: Install Playwright browsers
         if: ${{ inputs.run_e2e }}
-        run: yarn workspace @quiz/quiz playwright install --with-deps
+        run: yarn workspace @klurigo/klurigo-web playwright install --with-deps
 
       - name: E2E Tests
         if: ${{ inputs.run_e2e }}
         env:
           CI: 'true'
-        run: yarn workspace @quiz/quiz test:e2e
+        run: yarn workspace @klurigo/klurigo-web test:e2e
 
       - name: Docker compose down
         if: always()
@@ -73,14 +73,14 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: klurigo-sentry-artifacts
-          path: packages/quiz/dist/assets/**/*.map
+          path: packages/klurigo-web/dist/assets/**/*.map
 
       - name: Upload Klurigo Service artifacts for Sentry
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v6
         with:
           name: klurigo-service-sentry-artifacts
-          path: packages/quiz-service/dist/**/*.map
+          path: packages/klurigo-service/dist/**/*.map
 
       - name: Upload coverage (common)
         uses: codecov/codecov-action@v5
@@ -92,22 +92,22 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
-      - name: Upload coverage (quiz)
+      - name: Upload coverage (klurigo-web)
         uses: codecov/codecov-action@v5
         with:
-          files: ./packages/quiz/coverage/lcov.info
-          flags: quiz
-          name: quiz
+          files: ./packages/klurigo-web/coverage/lcov.info
+          flags: klurigo-web
+          name: klurigo-web
           disable_search: true
           fail_ci_if_error: true
           verbose: true
 
-      - name: Upload coverage (quiz-service)
+      - name: Upload coverage (klurigo-service)
         uses: codecov/codecov-action@v5
         with:
-          files: ./packages/quiz-service/coverage/lcov.info
-          flags: quiz-service
-          name: quiz-service
+          files: ./packages/klurigo-service/coverage/lcov.info
+          flags: klurigo-service
+          name: klurigo-service
           disable_search: true
           fail_ci_if_error: true
           verbose: true
