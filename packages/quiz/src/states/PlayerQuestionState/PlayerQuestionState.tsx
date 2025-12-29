@@ -53,9 +53,7 @@ const PlayerQuestionState: FC<PlayerQuestionStateProps> = ({
           totalScore={totalScore}
         />
       }>
-      <Typography variant="subtitle" size="medium">
-        {question.question}
-      </Typography>
+      <Typography variant="title">{question.question}</Typography>
 
       <div className={styles.fullHeight}>
         <QuestionAnswerPicker

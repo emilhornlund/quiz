@@ -60,13 +60,13 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             </div>
           </div>
           <div
-            class="title"
+            class="hero"
           >
-            <div
-              class="typography title medium"
+            <h1
+              class="typography hero medium"
             >
               Let’s play
-            </div>
+            </h1>
           </div>
           <div
             class="message"
@@ -74,11 +74,11 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             <div
               data-testid="rotating-message"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Ready to show off your skills? Let’s go!
-              </div>
+              </p>
             </div>
           </div>
           <div
@@ -180,11 +180,11 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             data-discover="true"
             href="/auth/login"
           >
-            <div
+            <a
               class="typography link small"
             >
               Want to create your own quiz? Log in to get started!
-            </div>
+            </a>
           </a>
         </div>
       </div>
@@ -253,13 +253,13 @@ exports[`HomePage > renders the base layout and the rotating message container 1
             </div>
           </div>
           <div
-            class="title"
+            class="hero"
           >
-            <div
-              class="typography title medium"
+            <h1
+              class="typography hero medium"
             >
               Let’s play
-            </div>
+            </h1>
           </div>
           <div
             class="message"
@@ -267,11 +267,11 @@ exports[`HomePage > renders the base layout and the rotating message container 1
             <div
               data-testid="rotating-message"
             >
-              <div
+              <p
                 class="typography text small"
               >
                 Ready to show off your skills? Let’s go!
-              </div>
+              </p>
             </div>
           </div>
           <form
@@ -330,11 +330,11 @@ exports[`HomePage > renders the base layout and the rotating message container 1
             data-discover="true"
             href="/auth/login"
           >
-            <div
+            <a
               class="typography link small"
             >
               Want to create your own quiz? Log in to get started!
-            </div>
+            </a>
           </a>
         </div>
       </div>

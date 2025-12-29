@@ -55,11 +55,11 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Podium
-          </div>
+          </h1>
           <div
             class="main"
           >
@@ -555,11 +555,11 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Podium
-          </div>
+          </h1>
           <div
             class="main"
           >
@@ -1063,11 +1063,11 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Podium
-          </div>
+          </h1>
           <div
             class="main"
           >
@@ -1571,11 +1571,11 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Podium
-          </div>
+          </h1>
           <div
             class="main"
           >
@@ -2132,11 +2132,11 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Podium
-          </div>
+          </h1>
           <div
             class="main"
           >

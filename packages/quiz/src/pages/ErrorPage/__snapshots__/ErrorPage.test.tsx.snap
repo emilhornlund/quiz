@@ -86,21 +86,21 @@ exports[`ErrorPage > should match snapshot 1`] = `
               />
             </svg>
           </div>
-          <div
+          <h1
             class="typography title medium"
           >
             Oops! Something went wrong.
-          </div>
-          <div
+          </h1>
+          <h2
             class="typography subtitle medium"
           >
             An unexpected error occurred.
-          </div>
-          <div
+          </h2>
+          <p
             class="typography text medium"
           >
             Please try refreshing the page or go back to the homepage.
-          </div>
+          </p>
         </div>
       </div>
     </div>

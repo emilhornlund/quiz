@@ -69,16 +69,16 @@ exports[`QuizDetailsPageUI > should render QuizDetailsPageUI 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             The Ultimate Geography Challenge
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Test your knowledge of world capitals, landmarks, and continents in this fun and educational geography quiz.
-          </div>
+          </p>
           <div
             class="container"
           >

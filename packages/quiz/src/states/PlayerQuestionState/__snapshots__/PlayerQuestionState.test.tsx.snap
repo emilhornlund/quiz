@@ -35,11 +35,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >
@@ -186,11 +186,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >
@@ -355,11 +355,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >
@@ -488,11 +488,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             What percentage of the earth's surface is covered by water?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >
@@ -649,11 +649,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             Rabbits can't vomit?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >
@@ -782,11 +782,11 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title full"
           >
             Who painted the Mono Lisa?
-          </div>
+          </h1>
           <div
             class="fullHeight"
           >

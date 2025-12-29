@@ -61,11 +61,11 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Skip me?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -300,11 +300,11 @@ exports[`HostQuestionState > does not render media when question type is Pin (ev
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Place the pin on the map
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -518,11 +518,11 @@ exports[`HostQuestionState > renders with audio media 1`] = `
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Audio clip question?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -772,11 +772,11 @@ exports[`HostQuestionState > renders with video media 1`] = `
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Video clip question?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -1026,11 +1026,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Who painted The Starry Night?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -1306,11 +1306,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Who painted The Starry Night?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -1606,11 +1606,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Who painted The Starry Night?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -1866,11 +1866,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 What percentage of the earth's surface is covered by water?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -2104,11 +2104,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Rabbits can't vomit?
-              </div>
+              </h1>
             </div>
           </div>
           <div
@@ -2343,11 +2343,11 @@ exports[`HostQuestionState > should render HostQuestionState with question type 
             <div
               class="column"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Who painted the Mono Lisa?
-              </div>
+              </h1>
             </div>
           </div>
           <div

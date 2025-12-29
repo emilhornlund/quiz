@@ -60,16 +60,16 @@ exports[`AuthVerifyPageUI > renders error state 1`] = `
               />
             </svg>
           </div>
-          <div
-            class="typography subtitle small"
+          <h1
+            class="typography title medium"
           >
             Oops! Something went wrong.
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             The supplied link is invalid or has expired.
-          </div>
+          </p>
         </div>
       </div>
     </div>
@@ -137,25 +137,25 @@ exports[`AuthVerifyPageUI > renders verified state (logged in) with home link 1`
               />
             </svg>
           </div>
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title medium"
           >
             Hooray! Your email’s all set!
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Welcome aboard the fun train. Let’s roll!
-          </div>
+          </p>
           <a
             data-discover="true"
             href="/"
           >
-            <div
+            <a
               class="typography link small"
             >
               Take me home
-            </div>
+            </a>
           </a>
         </div>
       </div>
@@ -224,25 +224,25 @@ exports[`AuthVerifyPageUI > renders verified state (not logged in) with login li
               />
             </svg>
           </div>
-          <div
-            class="typography subtitle medium"
+          <h1
+            class="typography title medium"
           >
             Hooray! Your email’s all set!
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text medium"
           >
             Welcome aboard the fun train. Let’s roll!
-          </div>
+          </p>
           <a
             data-discover="true"
             href="/auth/login"
           >
-            <div
+            <a
               class="typography link small"
             >
               Log in to get started!
-            </div>
+            </a>
           </a>
         </div>
       </div>
@@ -293,11 +293,11 @@ exports[`AuthVerifyPageUI > renders verifying state 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle small"
+          <h1
+            class="typography title medium"
           >
             One moment… verifying your magic link!
-          </div>
+          </h1>
           <div
             class="loadingSpinnerContainer"
             data-testid="loading-spinner"
@@ -306,11 +306,11 @@ exports[`AuthVerifyPageUI > renders verifying state 1`] = `
             <div />
             <div />
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Good things come to those who wait!
-          </div>
+          </p>
         </div>
       </div>
     </div>

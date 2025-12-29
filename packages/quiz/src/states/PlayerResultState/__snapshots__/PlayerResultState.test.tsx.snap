@@ -41,11 +41,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationEpic border"
                 style="outline-color: white; color: white;"
@@ -92,11 +92,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           >
             1000
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 1 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -473,11 +473,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationEpic border"
                 style="outline-color: white; color: white;"
@@ -513,11 +513,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           >
             900
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 2 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -894,11 +894,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationEpic border"
                 style="outline-color: white; color: white;"
@@ -945,11 +945,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             600
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 8 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -1326,11 +1326,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationEpic border"
                 style="outline-color: white; color: white;"
@@ -1377,11 +1377,11 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           >
             500
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 15 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -1758,11 +1758,11 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationMajor border"
                 style="outline-color: white; color: white;"
@@ -1798,11 +1798,11 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
           >
             800
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 3 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -2079,11 +2079,11 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationMajor border"
                 style="outline-color: white; color: white;"
@@ -2130,11 +2130,11 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
           >
             400
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 12 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -2411,11 +2411,11 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for inco
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Incorrect
-              </div>
+              </h1>
               <div
                 class="badge large border"
                 style="outline-color: white; color: white;"
@@ -2451,11 +2451,11 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for inco
           >
             0
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 20 - incorrect
-          </div>
+          </p>
         </div>
       </div>
     </div>
@@ -2548,11 +2548,11 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for simp
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large border"
                 style="outline-color: white; color: white;"
@@ -2588,11 +2588,11 @@ exports[`PlayerResultState > Celebration Logic > renders no celebration for simp
           >
             100
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 15 - correct
-          </div>
+          </p>
         </div>
       </div>
     </div>
@@ -2685,11 +2685,11 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationNormal border"
                 style="outline-color: white; color: white;"
@@ -2725,11 +2725,11 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           >
             200
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 10 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -2926,11 +2926,11 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationNormal border"
                 style="outline-color: white; color: white;"
@@ -2977,11 +2977,11 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           >
             300
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 8 - correct
-          </div>
+          </p>
           <div
             class="confettiContainer"
           >
@@ -3178,11 +3178,11 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Correct
-              </div>
+              </h1>
               <div
                 class="badge large celebrationEpic border"
                 style="outline-color: white; color: white;"
@@ -3229,11 +3229,11 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           >
             634
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 1 - correct
-          </div>
+          </p>
           <div
             class="pointsBehindIndicator"
           >
@@ -3621,11 +3621,11 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
             <div
               class="correctnessBatch"
             >
-              <div
-                class="typography subtitle full"
+              <h1
+                class="typography title full"
               >
                 Incorrect
-              </div>
+              </h1>
               <div
                 class="badge large border"
                 style="outline-color: white; color: white;"
@@ -3661,11 +3661,11 @@ exports[`PlayerResultState > renders incorrect result without behind indicator 1
           >
             50
           </div>
-          <div
+          <p
             class="typography text small"
           >
             Message for 7 - incorrect
-          </div>
+          </p>
         </div>
       </div>
     </div>

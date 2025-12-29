@@ -55,11 +55,11 @@ exports[`HostResultState > clicks Next to initiate leaderboard task 1`] = `
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Proceed?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -271,11 +271,11 @@ exports[`HostResultState > should render HostResultState with question type mult
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -621,11 +621,11 @@ exports[`HostResultState > should render HostResultState with question type mult
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -1051,11 +1051,11 @@ exports[`HostResultState > should render HostResultState with question type mult
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Who painted The Starry Night?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -1321,11 +1321,11 @@ exports[`HostResultState > should render HostResultState with question type pin 
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Where is the capital Stockholm located? Pin the answer on a map of Europe
-          </div>
+          </h1>
           <div
             class="pinQuestionResults"
             data-testid="pin-question-results"
@@ -1519,11 +1519,11 @@ exports[`HostResultState > should render HostResultState with question type puzz
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Sort these planets from closest to farthest from the Sun
-          </div>
+          </h1>
           <div
             class="puzzleQuestionResults"
           >
@@ -1915,11 +1915,11 @@ exports[`HostResultState > should render HostResultState with question type rang
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             What percentage of the earth's surface is covered by water?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -2312,11 +2312,11 @@ exports[`HostResultState > should render HostResultState with question type true
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Rabbits can't vomit?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"
@@ -2548,11 +2548,11 @@ exports[`HostResultState > should render HostResultState with question type type
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Who painted the Mono Lisa?
-          </div>
+          </h1>
           <div
             class="questionResults"
             data-testid="question-results"

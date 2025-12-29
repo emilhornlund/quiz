@@ -49,7 +49,7 @@ const HostLeaderboardState: FC<HostLeaderboardStateProps> = ({
           totalQuestions={totalQuestions}
         />
       }>
-      <Typography variant="subtitle">Leaderboard</Typography>
+      <Typography variant="title">Leaderboard</Typography>
       <Leaderboard values={leaderboard} />
     </GamePage>
   )

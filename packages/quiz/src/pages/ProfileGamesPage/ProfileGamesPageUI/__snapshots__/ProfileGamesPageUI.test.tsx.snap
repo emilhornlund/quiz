@@ -42,16 +42,16 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with no results 1
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             You Haven't Played Any Games Yet
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text full"
           >
             Once you play or host a game, it will appear here.
-          </div>
+          </p>
           <div
             class="gettingStarted"
           >
@@ -82,11 +82,11 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with no results 1
                 </span>
               </button>
             </div>
-            <div
+            <a
               class="typography link full"
             >
               or
-            </div>
+            </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
             >
@@ -164,16 +164,16 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with results 1`] 
         <div
           class="contentInner"
         >
-          <div
-            class="typography subtitle full"
+          <h1
+            class="typography title full"
           >
             Game History
-          </div>
-          <div
+          </h1>
+          <p
             class="typography text full"
           >
             Review your past games and track your performance.
-          </div>
+          </p>
           <div
             class="gameTable"
           >

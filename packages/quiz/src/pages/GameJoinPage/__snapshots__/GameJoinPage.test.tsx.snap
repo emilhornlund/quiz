@@ -79,20 +79,20 @@ exports[`GameJoinPage > disables the input while joining and re-enables after pr
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -218,20 +218,20 @@ exports[`GameJoinPage > does not submit when nickname is blank or whitespace 1`]
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -358,20 +358,20 @@ exports[`GameJoinPage > does nothing when gameID is missing 1`] = `
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -497,20 +497,20 @@ exports[`GameJoinPage > join button stays disabled until nickname is valid 1`] =
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -636,20 +636,20 @@ exports[`GameJoinPage > navigates back when clicking the back button 1`] = `
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -776,20 +776,20 @@ exports[`GameJoinPage > prefills nickname from user default and enables Join aft
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -915,20 +915,20 @@ exports[`GameJoinPage > renders title and message (via RotatingMessage) 1`] = `
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -1055,20 +1055,20 @@ exports[`GameJoinPage > starts with empty nickname when user has no default, kee
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -1195,20 +1195,20 @@ exports[`GameJoinPage > submits when the form is submitted (Enter key equivalent
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
@@ -1334,20 +1334,20 @@ exports[`GameJoinPage > submits with gameID and nickname and navigates to /game 
           <div
             data-testid="rotating-message"
           >
-            <div
+            <h1
               class="typography title medium"
             >
               Join the game
-            </div>
+            </h1>
           </div>
           <div
             data-testid="rotating-message"
           >
-            <div
+            <p
               class="typography text small"
             >
               Pick a nickname and jump in!
-            </div>
+            </p>
           </div>
           <form
             class="joinForm"
