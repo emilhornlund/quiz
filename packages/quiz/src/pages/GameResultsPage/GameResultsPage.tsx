@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
 import { useAuthContext } from '../../context/auth'
 

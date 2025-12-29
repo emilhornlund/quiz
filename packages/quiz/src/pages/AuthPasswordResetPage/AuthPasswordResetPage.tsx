@@ -2,8 +2,8 @@ import type { FC } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { useQuizServiceClient } from '../../api'
 import { isTokenExpired } from '../../api/api.utils'
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 
 import type { AuthPasswordResetFormFields } from './components'
 import { AuthPasswordResetPageUI } from './components'

@@ -10,8 +10,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
+import { useQuizServiceClient } from '../../api'
 import { ApiError } from '../../api/api.utils.ts'
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
 import type { AuthState, ScopePayload } from '../../models'
 
 import type { AuthContextType } from './auth-context.tsx'

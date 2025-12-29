@@ -20,7 +20,7 @@ import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
 import { notifyError } from '../../utils/notification.ts'
 import {

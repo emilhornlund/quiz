@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { notifyError } from '../../utils/notification.ts'
 import {
   GOOGLE_OAUTH_STORAGE_KEY,

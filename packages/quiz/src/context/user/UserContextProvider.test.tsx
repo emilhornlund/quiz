@@ -10,7 +10,7 @@ import UserContextProvider from './UserContextProvider'
 // Share a mock we can control in tests.
 const getUserProfileMock = vi.fn()
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({
     getUserProfile: getUserProfileMock,
   }),

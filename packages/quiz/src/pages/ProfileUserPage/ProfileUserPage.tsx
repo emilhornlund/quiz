@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
 import { useUserContext } from '../../context/user'
 import { trimToUndefined } from '../../utils/helpers.ts'

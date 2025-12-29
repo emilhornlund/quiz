@@ -1,0 +1,4 @@
+export * from './auth.resource'
+export * from './game.resource'
+export * from './media.resource'
+export * from './quiz.resource'

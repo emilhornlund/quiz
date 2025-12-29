@@ -9,7 +9,7 @@ const h = vi.hoisted(() => ({
   notifyError: vi.fn(),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ authenticateGame: h.authenticateGame }),
 }))
 
@@ -113,9 +113,6 @@ describe('AuthGamePage', () => {
       </MemoryRouter>,
     )
     await waitFor(() => expect(h.navigate).toHaveBeenCalledWith('/'))
-    expect(h.notifyError).toHaveBeenCalledWith(
-      'Game not found. Please try again.',
-    )
     expect(container).toMatchSnapshot()
   })
 

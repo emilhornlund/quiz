@@ -2,9 +2,8 @@ import type { FC } from 'react'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { useQuizServiceClient } from '../../api/use-quiz-service-client.tsx'
+import { useQuizServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
-import { notifyError } from '../../utils/notification.ts'
 
 const AuthGamePage: FC = () => {
   const navigate = useNavigate()
@@ -29,7 +28,6 @@ const AuthGamePage: FC = () => {
       })
       .catch(() => {
         navigate('/')
-        notifyError('Game not found. Please try again.')
       })
   }, [searchParams, authenticateGame, navigate])
 

@@ -12,7 +12,7 @@ const h = vi.hoisted(() => ({
   navigateMock: vi.fn(),
 }))
 
-vi.mock('../../api/use-quiz-service-client.tsx', () => ({
+vi.mock('../../api', () => ({
   useQuizServiceClient: () => ({ getGameResults: h.getGameResultsMock }),
 }))
 
