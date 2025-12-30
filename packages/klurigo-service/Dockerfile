@@ -20,9 +20,9 @@ COPY --from=build /app/package.json /app/yarn.lock ./
 # Copy node_modules directly, bypassing workspace issues
 COPY --from=build /app/node_modules ./node_modules
 
-# Replace symlink with the actual files for klurigo/common
-RUN rm -rf ./node_modules/klurigo/common
-COPY --from=build /app/packages/common ./node_modules/klurigo/common
+# Replace symlink with the actual files for @klurigo/common
+RUN rm -rf ./node_modules/@klurigo/common
+COPY --from=build /app/packages/common ./node_modules/@klurigo/common
 
 # Copy klurigo-service files
 COPY --from=build /app/packages/klurigo-service/package.json ./packages/klurigo-service/package.json
