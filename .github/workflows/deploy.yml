@@ -15,13 +15,13 @@ on:
     secrets:
       INFRA_REPO_PAT:
         required: true
-      QUIZ_PORTAINER_BETA_WEBHOOK:
+      KLURIGO_PORTAINER_BETA_WEBHOOK:
         required: false
-      QUIZ_PORTAINER_PRODUCTION_WEBHOOK:
+      KLURIGO_PORTAINER_PRODUCTION_WEBHOOK:
         required: false
-      QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK:
+      KLURIGO_SERVICE_PORTAINER_BETA_WEBHOOK:
         required: false
-      QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK:
+      KLURIGO_SERVICE_PORTAINER_PRODUCTION_WEBHOOK:
         required: false
 
 jobs:
@@ -35,12 +35,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: quiz
-            beta_webhook_secret: QUIZ_PORTAINER_BETA_WEBHOOK
-            prod_webhook_secret: QUIZ_PORTAINER_PRODUCTION_WEBHOOK
-          - service: quiz-service
-            beta_webhook_secret: QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK
-            prod_webhook_secret: QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK
+          - service: klurigo-web
+            beta_webhook_secret: KLURIGO_PORTAINER_BETA_WEBHOOK
+            prod_webhook_secret: KLURIGO_PORTAINER_PRODUCTION_WEBHOOK
+          - service: klurigo-service
+            beta_webhook_secret: KLURIGO_SERVICE_PORTAINER_BETA_WEBHOOK
+            prod_webhook_secret: KLURIGO_SERVICE_PORTAINER_PRODUCTION_WEBHOOK
 
     steps:
       - name: Checkout infra repo
@@ -79,34 +79,34 @@ jobs:
           git commit -am "deploy(${ENV}-${SVC}): ${TAG}"
           git push
 
-      - name: Notify Portainer (quiz, beta)
-        if: ${{ inputs.target_env == 'beta' && matrix.service == 'quiz' }}
+      - name: Notify Portainer (klurigo-web, beta)
+        if: ${{ inputs.target_env == 'beta' && matrix.service == 'klurigo-web' }}
         env:
-          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_BETA_WEBHOOK }}
+          PORTAINER_WEBHOOK: ${{ secrets.KLURIGO_PORTAINER_BETA_WEBHOOK }}
         run: |
           HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
-          echo "Portainer quiz (beta) returned HTTP ${HTTP_CODE}"
+          echo "Portainer klurigo-web (beta) returned HTTP ${HTTP_CODE}"
 
-      - name: Notify Portainer (quiz-service, beta)
-        if: ${{ inputs.target_env == 'beta' && matrix.service == 'quiz-service' }}
+      - name: Notify Portainer (klurigo-service, beta)
+        if: ${{ inputs.target_env == 'beta' && matrix.service == 'klurigo-service' }}
         env:
-          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_BETA_WEBHOOK }}
+          PORTAINER_WEBHOOK: ${{ secrets.KLURIGO_SERVICE_PORTAINER_BETA_WEBHOOK }}
         run: |
           HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
-          echo "Portainer quiz-service (beta) returned HTTP ${HTTP_CODE}"
+          echo "Portainer klurigo-service (beta) returned HTTP ${HTTP_CODE}"
 
-      - name: Notify Portainer (quiz, prod)
-        if: ${{ inputs.target_env == 'prod' && matrix.service == 'quiz' }}
+      - name: Notify Portainer (klurigo-web, prod)
+        if: ${{ inputs.target_env == 'prod' && matrix.service == 'klurigo-web' }}
         env:
-          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_PORTAINER_PRODUCTION_WEBHOOK }}
+          PORTAINER_WEBHOOK: ${{ secrets.KLURIGO_PORTAINER_PRODUCTION_WEBHOOK }}
         run: |
           HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
-          echo "Portainer quiz (prod) returned HTTP ${HTTP_CODE}"
+          echo "Portainer klurigo-web (prod) returned HTTP ${HTTP_CODE}"
 
-      - name: Notify Portainer (quiz-service, prod)
-        if: ${{ inputs.target_env == 'prod' && matrix.service == 'quiz-service' }}
+      - name: Notify Portainer (klurigo-service, prod)
+        if: ${{ inputs.target_env == 'prod' && matrix.service == 'klurigo-service' }}
         env:
-          PORTAINER_WEBHOOK: ${{ secrets.QUIZ_SERVICE_PORTAINER_PRODUCTION_WEBHOOK }}
+          PORTAINER_WEBHOOK: ${{ secrets.KLURIGO_SERVICE_PORTAINER_PRODUCTION_WEBHOOK }}
         run: |
           HTTP_CODE=$(curl --write-out "%{http_code}" --silent --request POST "${PORTAINER_WEBHOOK}")
-          echo "Portainer quiz (prod) returned HTTP ${HTTP_CODE}"
+          echo "Portainer klurigo-web (prod) returned HTTP ${HTTP_CODE}"

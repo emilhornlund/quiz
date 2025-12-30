@@ -1,4 +1,4 @@
-import { calculateRangeStep } from '@quiz/common'
+import { calculateRangeStep } from '@klurigo/common'
 
 import {
   BSONDocument,

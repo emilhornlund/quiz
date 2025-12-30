@@ -42,10 +42,10 @@ jobs:
       - name: Set paths & artifact names
         run: |
           if [ "${{ matrix.project }}" = "klurigo" ]; then
-            echo "SENTRY_SOURCEMAPS_PATH=packages/quiz/dist/assets" >> "$GITHUB_ENV"
+            echo "SENTRY_SOURCEMAPS_PATH=packages/klurigo-web/dist/assets" >> "$GITHUB_ENV"
             echo "SENTRY_ARTIFACT_NAME=klurigo-sentry-artifacts" >> "$GITHUB_ENV"
           else
-            echo "SENTRY_SOURCEMAPS_PATH=packages/quiz-service/dist" >> "$GITHUB_ENV"
+            echo "SENTRY_SOURCEMAPS_PATH=packages/klurigo-service/dist" >> "$GITHUB_ENV"
             echo "SENTRY_ARTIFACT_NAME=klurigo-service-sentry-artifacts" >> "$GITHUB_ENV"
           fi
 

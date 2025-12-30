@@ -1,12 +1,10 @@
-<img src="https://github.com/emilhornlund/quiz/blob/main/.github/screenshot.png" alt="klurigo banner" align="center" />
+<img src="https://github.com/emilhornlund/klurigo/blob/main/.github/screenshot.png" alt="klurigo banner" align="center" />
 
 # Klurigo – formerly “Quiz”
 
-[![Main](https://github.com/emilhornlund/quiz/actions/workflows/main.yml/badge.svg)](https://github.com/emilhornlund/quiz/actions/workflows/main.yml)
-[![codecov](https://codecov.io/gh/emilhornlund/quiz/graph/badge.svg?token=TO2S69Y1MZ)](https://codecov.io/gh/emilhornlund/quiz)
+[![Main](https://github.com/emilhornlund/klurigo/actions/workflows/main.yml/badge.svg)](https://github.com/emilhornlund/klurigo/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/emilhornlund/klurigo/graph/badge.svg?token=TO2S69Y1MZ)](https://codecov.io/gh/emilhornlund/klurigo)
 
-> **Branding update:** The game platform is now branded **Klurigo**, even though the repository, packages, and build artefacts still use the original *quiz* namespace.
->
 > • **Website:** [https://klurigo.com](https://klurigo.com) | **Public Beta:** [https://beta.klurigo.com](https://beta.klurigo.com)
 
 A full‑stack quiz game platform built with a modern monorepo setup. It features a shared type system, a NestJS backend, and a Vite‑powered React frontend.
@@ -34,11 +32,11 @@ Before you get started, make sure you have the following installed on your machi
 This project uses [Yarn Workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) to manage multiple packages:
 
 ```text
-quiz/
+klurigo/
 ├── packages/
 │   ├── common          # Shared models and utilities
-│   ├── quiz            # Frontend app (Vite + React)
-│   └── quiz-service    # Backend service (NestJS)
+│   └── klurigo-service # Backend service (NestJS)
+│   ├── klurigo-web     # Frontend app (Vite + React)
 ```
 
 ## Scripts
@@ -57,19 +55,19 @@ The root `package.json` contains orchestration scripts for development, building
 
 ## Packages
 
-### [`@quiz/common`](./packages/common)
+### [`@klurigo/common`](./packages/common)
 
 Shared models and validation logic between the backend and frontend.
 
 - Outputs both CommonJS and ESM modules.
-- Consumed by `@quiz/quiz` and `@quiz/quiz-service`.
+- Consumed by `@klurigo/klurigo-web` and `@klurigo/klurigo-service`.
 
 **Scripts:**
 
 - `yarn build` – Clean and compile.
 - `yarn lint` / `yarn lint:fix` – Lint the codebase.
 
-### [`@quiz/quiz`](./packages/quiz)
+### [`@klurigo/klurigo-web`](./packages/klurigo-web)
 
 Frontend application built with **React**, **Vite**, and **Storybook**.
 
@@ -88,14 +86,14 @@ Frontend application built with **React**, **Vite**, and **Storybook**.
 - `yarn storybook` / `build-storybook` – Start or build Storybook.
 - `yarn lint` / `lint:fix` – Lint the codebase.
 
-### [`@quiz/quiz-service`](./packages/quiz-service)
+### [`@klurigo/klurigo-service`](./packages/klurigo-service)
 
 Backend API built with **NestJS**, using SSE for real‑time updates.
 
 **Features:**
 
 - Game state and lifecycle management.
-- Shared types from `@quiz/common`.
+- Shared types from `@klurigo/common`.
 - Jest-based test suite.
 - Circular dependency detection.
 
@@ -115,10 +113,9 @@ Backend API built with **NestJS**, using SSE for real‑time updates.
 Clone the repo and install dependencies:
 
 ```sh
-git clone git@github.com:emilhornlund/quiz.git
-cd quiz
+git clone git@github.com:emilhornlund/klurigo.git
+cd klurigo
 yarn install
-yarn workspace @quiz/common build
 ```
 
 To start everything in dev mode:
@@ -130,14 +127,14 @@ yarn dev
 ### Running individual workspaces
 
 ```sh
-# Frontend
-yarn workspace @quiz/quiz dev
-
 # Backend
-yarn workspace @quiz/quiz-service dev
+yarn workspace @klurigo/klurigo-service dev
+
+# Frontend
+yarn workspace @klurigo/klurigo-web dev
 
 # Storybook
-yarn workspace @quiz/quiz storybook
+yarn workspace @klurigo/klurigo-web storybook
 ```
 
 ### Local infrastructure helpers
@@ -161,19 +158,19 @@ The frontend application includes end-to-end tests written with **Playwright**. 
 Playwright requires browser binaries to be installed once on your machine.
 
 ```sh
-yarn workspace @quiz/quiz playwright install
+yarn workspace @klurigo/klurigo-web playwright install
 ```
 
 On Linux (for example in CI), system dependencies may also be required:
 
 ```sh
-yarn workspace @quiz/quiz playwright install --with-deps
+yarn workspace @klurigo/klurigo-web playwright install --with-deps
 ```
 
 ### Run locally
 
 ```sh
-yarn workspace @quiz/quiz test:e2e
+yarn workspace @klurigo/klurigo-web test:e2e
 ```
 
 This will:

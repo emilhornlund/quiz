@@ -1,5 +1,5 @@
 {
-  "name": "quiz",
+  "name": "klurigo",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "workspaces": [
@@ -8,17 +8,17 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "clean": "yarn workspaces run clean",
-    "build": "concurrently \"yarn workspace @quiz/quiz-service build\" \"yarn workspace @quiz/quiz build\"",
-    "dev": "concurrently \"yarn quiz-service:dev\" \"yarn quiz:dev\" \"yarn quiz:storybook\"",
-    "quiz:dev": "yarn workspace @quiz/quiz dev",
-    "quiz:storybook": "yarn workspace @quiz/quiz storybook",
-    "quiz-service:dev": "yarn workspace @quiz/quiz-service dev",
-    "serve": "concurrently \"yarn workspace @quiz/quiz-service serve\" \"yarn workspace @quiz/quiz serve\"",
+    "clean": "concurrently \"yarn workspace @klurigo/common clean\" \"yarn workspace @klurigo/klurigo-service clean\" \"yarn workspace @klurigo/klurigo-web clean\"",
+    "build": "concurrently \"yarn workspace @klurigo/klurigo-service build\" \"yarn workspace @klurigo/klurigo-web build\"",
+    "dev": "concurrently \"yarn klurigo-service:dev\" \"yarn klurigo:dev\" \"yarn klurigo:storybook\"",
+    "klurigo:dev": "yarn workspace @klurigo/klurigo-web dev",
+    "klurigo:storybook": "yarn workspace @klurigo/klurigo-web storybook",
+    "klurigo-service:dev": "yarn workspace @klurigo/klurigo-service dev",
+    "serve": "concurrently \"yarn workspace @klurigo/klurigo-service serve\" \"yarn workspace @klurigo/klurigo-web serve\"",
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
-    "test": "concurrently --kill-others-on-fail \"yarn workspace @quiz/common test\" \"yarn workspace @quiz/quiz-service test\" \"yarn workspace @quiz/quiz test\"",
-    "test:coverage": "concurrently --kill-others-on-fail \"yarn workspace @quiz/common test:coverage\" \"yarn workspace @quiz/quiz-service test:coverage\" \"yarn workspace @quiz/quiz test:coverage\""
+    "test": "concurrently --kill-others-on-fail \"yarn workspace @klurigo/common test\" \"yarn workspace @klurigo/klurigo-service test\" \"yarn workspace @klurigo/klurigo-web test\"",
+    "test:coverage": "concurrently --kill-others-on-fail \"yarn workspace @klurigo/common test:coverage\" \"yarn workspace @klurigo/klurigo-service test:coverage\" \"yarn workspace @klurigo/klurigo-web test:coverage\""
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

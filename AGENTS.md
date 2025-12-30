@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This document defines **how AI agents and contributors are expected to work in the `quiz` monorepo**. Follow these instructions strictly to avoid breaking workspace assumptions, CI pipelines, or architectural constraints.
+This document defines **how AI agents and contributors are expected to work in the `klurigo` monorepo**. Follow these instructions strictly to avoid breaking workspace assumptions, CI pipelines, or architectural constraints.
 
 ---
 
@@ -9,9 +9,9 @@ This document defines **how AI agents and contributors are expected to work in t
 * **Monorepo**: Yarn workspaces
 * **Packages**:
 
-    * `@quiz/common` – shared domain models, enums, utilities
-    * `@quiz/quiz` – frontend (React + Vite + SCSS modules)
-    * `@quiz/quiz-service` – backend (NestJS)
+    * `@klurigo/common` – shared domain models, enums, utilities
+    * `@klurigo/klurigo-web` – frontend (React + Vite + SCSS modules)
+    * `@klurigo/klurigo-service` – backend (NestJS)
 
 All packages are built, linted, and tested **via the root workspace** unless explicitly stated otherwise.
 
@@ -45,26 +45,26 @@ Use these **only when scoping is required**.
 
 #### Common
 
-* `yarn workspace @quiz/common build`
-* `yarn workspace @quiz/common test`
-* `yarn workspace @quiz/common test:coverage`
+* `yarn workspace @klurigo/common build`
+* `yarn workspace @klurigo/common test`
+* `yarn workspace @klurigo/common test:coverage`
 
-#### Frontend (`@quiz/quiz`)
+#### Frontend (`@klurigo/klurigo-web`)
 
-* `yarn workspace @quiz/quiz dev`
-* `yarn workspace @quiz/quiz build`
-* `yarn workspace @quiz/quiz test`
-* `yarn workspace @quiz/quiz test:watch`
-* `yarn workspace @quiz/quiz test:coverage`
-* `yarn workspace @quiz/quiz storybook`
+* `yarn workspace @klurigo/klurigo-web dev`
+* `yarn workspace @klurigo/klurigo-web build`
+* `yarn workspace @klurigo/klurigo-web test`
+* `yarn workspace @klurigo/klurigo-web test:watch`
+* `yarn workspace @klurigo/klurigo-web test:coverage`
+* `yarn workspace @klurigo/klurigo-web storybook`
 
-#### Backend (`@quiz/quiz-service`)
+#### Backend (`@klurigo/klurigo-service`)
 
-* `yarn workspace @quiz/quiz-service dev`
-* `yarn workspace @quiz/quiz-service build`
-* `yarn workspace @quiz/quiz-service test`
-* `yarn workspace @quiz/quiz-service test:coverage`
-* `yarn workspace @quiz/quiz-service check-circular-deps`
+* `yarn workspace @klurigo/klurigo-service dev`
+* `yarn workspace @klurigo/klurigo-service build`
+* `yarn workspace @klurigo/klurigo-service test`
+* `yarn workspace @klurigo/klurigo-service test:coverage`
+* `yarn workspace @klurigo/klurigo-service check-circular-deps`
 
 ---
 
@@ -72,13 +72,13 @@ Use these **only when scoping is required**.
 
 * **Frontend**:
 
-    * `yarn workspace @quiz/quiz vitest run path/to/file.test.ts`
+    * `yarn workspace @klurigo/klurigo-web vitest run path/to/file.test.ts`
 * **Backend**:
 
-    * `yarn workspace @quiz/quiz-service jest path/to/file.spec.ts`
+    * `yarn workspace @klurigo/klurigo-service jest path/to/file.spec.ts`
 * **Common**:
 
-    * `yarn workspace @quiz/common jest path/to/file.spec.ts`
+    * `yarn workspace @klurigo/common jest path/to/file.spec.ts`
 
 ---
 
@@ -127,14 +127,14 @@ Do not reformat files unnecessarily.
 * Strong typing required
 * No framework-specific dependencies
 
-#### Backend (`quiz-service`)
+#### Backend (`klurigo-service`)
 
 * `any` allowed only when justified
 * Explicit return types optional
 * Prefer DTOs + validation decorators
 * Avoid circular dependencies and `forwardRef` unless unavoidable
 
-#### Frontend (`quiz`)
+#### Frontend (`klurigo-web`)
 
 * React components **must** have explicit return types
 * Prefer immutable patterns
@@ -157,7 +157,7 @@ Naming must reflect **domain intent**, not implementation details.
 
 ## Architecture Guidelines
 
-### Frontend (`@quiz/quiz`)
+### Frontend (`@klurigo/klurigo-web`)
 
 * React functional components only
 * Hooks + Context API
@@ -167,7 +167,7 @@ Naming must reflect **domain intent**, not implementation details.
 
 ---
 
-### Backend (`@quiz/quiz-service`)
+### Backend (`@klurigo/klurigo-service`)
 
 * NestJS modules with strict responsibility boundaries
 * Controllers must be thin
@@ -179,7 +179,7 @@ Circular dependencies are treated as architectural defects.
 
 ---
 
-### Common (`@quiz/common`)
+### Common (`@klurigo/common`)
 
 * Pure TypeScript only
 * No runtime dependencies on frontend or backend

@@ -34,9 +34,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: quiz
+          - service: klurigo-web
             sentry-project: klurigo
-          - service: quiz-service
+          - service: klurigo-service
             sentry-project: klurigo-service
     env:
       REGISTRY_HOST: emils-nuc-server:5000
