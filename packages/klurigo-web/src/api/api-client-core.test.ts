@@ -5,11 +5,24 @@ import { createApiClientCore } from './api-client-core'
 // eslint-disable-next-line import/order
 import type { ApiPostBody } from './api.utils'
 
-vi.mock('./api.utils', () => ({
-  isTokenExpired: vi.fn(),
-  parseResponseAndHandleError: vi.fn(),
-  resolveUrl: vi.fn((path: string) => `https://example.test${path}`),
-}))
+vi.mock('./api.utils', () => {
+  class ApiError extends Error {
+    status: number
+
+    constructor(message: string, status: number) {
+      super(message)
+      this.name = 'ApiError'
+      this.status = status
+    }
+  }
+
+  return {
+    ApiError,
+    isTokenExpired: vi.fn(),
+    parseResponseAndHandleError: vi.fn(),
+    resolveUrl: vi.fn((path: string) => `https://example.test${path}`),
+  }
+})
 
 import {
   isTokenExpired,
@@ -677,5 +690,527 @@ describe('createApiClientCore', () => {
     await expect(api.apiGet('/profile/user')).rejects.toBe(err)
     expect(setTokenPair).not.toHaveBeenCalled()
     expect(fetchCurrentUser).not.toHaveBeenCalled()
+  })
+
+  type FakeProgressEvent = {
+    lengthComputable: boolean
+    loaded: number
+    total: number
+  }
+
+  class FakeXMLHttpRequest {
+    static lastInstance: FakeXMLHttpRequest | undefined
+    static instances: FakeXMLHttpRequest[] = []
+
+    responseType: XMLHttpRequestResponseType = ''
+    response: unknown = undefined
+    status = 0
+
+    upload = {
+      onprogress: undefined as ((event: FakeProgressEvent) => void) | undefined,
+    }
+
+    onload: (() => void) | undefined
+    onerror: (() => void) | undefined
+    onabort: (() => void) | undefined
+
+    open = vi.fn()
+    setRequestHeader = vi.fn()
+    send = vi.fn()
+
+    constructor() {
+      FakeXMLHttpRequest.lastInstance = this
+      FakeXMLHttpRequest.instances.push(this)
+    }
+
+    triggerProgress(event: FakeProgressEvent) {
+      this.upload.onprogress?.(event)
+    }
+
+    triggerLoad(status: number, response: unknown) {
+      this.status = status
+      this.response = response
+      this.onload?.()
+    }
+
+    triggerError() {
+      this.onerror?.()
+    }
+
+    triggerAbort() {
+      this.onabort?.()
+    }
+  }
+
+  describe('createApiClientCore apiUpload', () => {
+    const flushMicrotasks = async () => {
+      await Promise.resolve()
+      await Promise.resolve()
+    }
+
+    beforeEach(() => {
+      vi.clearAllMocks()
+      FakeXMLHttpRequest.lastInstance = undefined
+      FakeXMLHttpRequest.instances = []
+
+      vi.stubGlobal(
+        'XMLHttpRequest',
+        FakeXMLHttpRequest as unknown as typeof XMLHttpRequest,
+      )
+
+      // Critical in jsdom: XMLHttpRequest is typically read from window
+      if (globalThis.window) {
+        vi.stubGlobal('window', {
+          ...globalThis.window,
+          XMLHttpRequest: FakeXMLHttpRequest,
+        } as unknown as Window & typeof globalThis)
+      }
+
+      class FakeFormData {
+        append = vi.fn()
+      }
+      vi.stubGlobal('FormData', FakeFormData as unknown as typeof FormData)
+    })
+
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    const waitForXhrInstance = async () => {
+      for (let i = 0; i < 10; i++) {
+        if (FakeXMLHttpRequest.lastInstance)
+          return FakeXMLHttpRequest.lastInstance
+        await Promise.resolve()
+      }
+      throw new Error(
+        'Expected XMLHttpRequest to be created, but none was created',
+      )
+    }
+
+    it('apiUpload opens POST to resolved URL, sets responseType to json, and resolves with xhr.response', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+            [TokenType.Refresh]: 'refresh.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const createFormData = vi.fn(() => new FormData())
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        createFormData,
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance
+      expect(xhr).toBeDefined()
+
+      expect(resolveUrl).toHaveBeenCalledWith('/media/uploads/photos')
+      expect(xhr!.open).toHaveBeenCalledWith(
+        'POST',
+        'https://example.test/media/uploads/photos',
+      )
+
+      expect(xhr!.responseType).toBe('json')
+      expect(createFormData).toHaveBeenCalledTimes(1)
+      expect(xhr!.send).toHaveBeenCalledTimes(1)
+
+      xhr!.triggerLoad(201, { id: 'p1' })
+      await expect(promise).resolves.toEqual({ id: 'p1' })
+    })
+
+    it('apiUpload sets Authorization header when access token exists', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+        'Authorization',
+        'Bearer access.token',
+      )
+
+      xhr.triggerLoad(200, { ok: true })
+      await expect(promise).resolves.toEqual({ ok: true })
+    })
+
+    it('apiUpload does not set Authorization header when no access token is available', async () => {
+      const { deps } = makeDeps()
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      expect(xhr.setRequestHeader).not.toHaveBeenCalled()
+
+      xhr.triggerLoad(200, { ok: true })
+      await expect(promise).resolves.toEqual({ ok: true })
+    })
+
+    it('apiUpload forwards progress only when lengthComputable is true and rounds percentage', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const onProgress = vi.fn()
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+        { onProgress },
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      xhr.triggerProgress({ lengthComputable: true, loaded: 1, total: 3 })
+      expect(onProgress).toHaveBeenCalledWith(33)
+
+      xhr.triggerProgress({ lengthComputable: false, loaded: 2, total: 3 })
+      expect(onProgress).toHaveBeenCalledTimes(1)
+
+      xhr.triggerLoad(200, { ok: true })
+      await expect(promise).resolves.toEqual({ ok: true })
+    })
+
+    it('apiUpload rejects on non-2xx status with ApiError containing the status', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      xhr.triggerLoad(500, { message: 'nope' })
+
+      await expect(promise).rejects.toMatchObject({ status: 500 })
+    })
+
+    it('apiUpload rejects on network error with ApiError status -1', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      xhr.triggerError()
+
+      await expect(promise).rejects.toMatchObject({ status: -1 })
+    })
+
+    it('apiUpload preemptively refreshes when access token is expired and uses refreshed token for upload', async () => {
+      const { deps, fetchImpl, setTokenPair } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'expired.access',
+            [TokenType.Refresh]: 'refresh.token',
+          },
+        },
+      })
+
+      ;(
+        isTokenExpired as unknown as ReturnType<typeof vi.fn>
+      ).mockImplementation((token: unknown) => token === 'expired.access')
+
+      const refreshResponse = makeResponse(200)
+      ;(fetchImpl as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+        refreshResponse,
+      )
+      ;(
+        parseResponseAndHandleError as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValueOnce({
+        accessToken: 'new.access',
+        refreshToken: 'new.refresh',
+      })
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      await flushMicrotasks()
+
+      expect(setTokenPair).toHaveBeenCalledWith(
+        TokenScope.User,
+        'new.access',
+        'new.refresh',
+      )
+
+      const xhr = await waitForXhrInstance()
+      expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+        'Authorization',
+        'Bearer new.access',
+      )
+
+      xhr.triggerLoad(201, { id: 'p1' })
+      await expect(promise).resolves.toEqual({ id: 'p1' })
+    })
+
+    it('apiUpload retries once on 401 by refreshing and re-uploading; createFormData is called twice', async () => {
+      const { deps, fetchImpl, setTokenPair } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+            [TokenType.Refresh]: 'refresh.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const refreshResponse = makeResponse(200)
+      ;(fetchImpl as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+        refreshResponse,
+      )
+      ;(
+        parseResponseAndHandleError as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValueOnce({
+        accessToken: 'new.access',
+        refreshToken: 'new.refresh',
+      })
+
+      const api = createApiClientCore(deps)
+
+      const createFormData = vi.fn(() => new FormData())
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        createFormData,
+      )
+
+      // wait for first XHR to exist
+      const xhr1 = await waitForXhrInstance()
+      expect(FakeXMLHttpRequest.instances).toHaveLength(1)
+
+      xhr1.triggerLoad(401, { message: 'unauthorized' })
+
+      await flushMicrotasks()
+      await flushMicrotasks() // one extra tick helps because it's: reject -> catch -> await refresh -> recurse -> create new XHR
+
+      expect(setTokenPair).toHaveBeenCalledWith(
+        TokenScope.User,
+        'new.access',
+        'new.refresh',
+      )
+
+      expect(FakeXMLHttpRequest.instances).toHaveLength(2)
+      expect(createFormData).toHaveBeenCalledTimes(2)
+
+      const xhr2 = FakeXMLHttpRequest.instances[1]!
+      xhr2.triggerLoad(201, { id: 'p2' })
+
+      await expect(promise).resolves.toEqual({ id: 'p2' })
+    })
+
+    it('apiUpload does not retry on 401 when refresh is disabled', async () => {
+      const { deps, fetchImpl, setTokenPair } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+            [TokenType.Refresh]: 'refresh.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+        { refresh: false },
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      xhr.triggerLoad(401, { message: 'unauthorized' })
+
+      await expect(promise).rejects.toMatchObject({ status: 401 })
+      expect(fetchImpl).not.toHaveBeenCalled()
+      expect(setTokenPair).not.toHaveBeenCalled()
+      expect(FakeXMLHttpRequest.instances).toHaveLength(1)
+    })
+
+    it('apiUpload does not preemptively refresh when an override token is provided', async () => {
+      const { deps, fetchImpl, setTokenPair } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'expired.access',
+            [TokenType.Refresh]: 'refresh.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        true,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+        { token: 'override.access' },
+      )
+
+      expect(fetchImpl).not.toHaveBeenCalled()
+      expect(setTokenPair).not.toHaveBeenCalled()
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+        'Authorization',
+        'Bearer override.access',
+      )
+
+      xhr.triggerLoad(201, { id: 'p1' })
+      await expect(promise).resolves.toEqual({ id: 'p1' })
+    })
+
+    it('apiUpload uses TokenScope.Game when provided and does not hydrate user on refresh', async () => {
+      const { deps, fetchImpl, fetchCurrentUser, setTokenPair } = makeDeps({
+        tokens: {
+          [TokenScope.Game]: {
+            [TokenType.Access]: 'expired.game.access',
+            [TokenType.Refresh]: 'game.refresh',
+          },
+        },
+      })
+
+      ;(
+        isTokenExpired as unknown as ReturnType<typeof vi.fn>
+      ).mockImplementation((token: unknown) => token === 'expired.game.access')
+
+      const refreshResponse = makeResponse(200)
+      ;(fetchImpl as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+        refreshResponse,
+      )
+      ;(
+        parseResponseAndHandleError as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValueOnce({
+        accessToken: 'new.game.access',
+        refreshToken: 'new.game.refresh',
+      })
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ id: string }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+        { scope: TokenScope.Game },
+      )
+
+      await flushMicrotasks()
+
+      expect(setTokenPair).toHaveBeenCalledWith(
+        TokenScope.Game,
+        'new.game.access',
+        'new.game.refresh',
+      )
+      expect(fetchCurrentUser).not.toHaveBeenCalled()
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+        'Authorization',
+        'Bearer new.game.access',
+      )
+
+      xhr.triggerLoad(201, { id: 'p1' })
+      await expect(promise).resolves.toEqual({ id: 'p1' })
+    })
+
+    it('apiUpload rejects on abort with ApiError status -1', async () => {
+      const { deps } = makeDeps({
+        tokens: {
+          [TokenScope.User]: {
+            [TokenType.Access]: 'access.token',
+          },
+        },
+      })
+
+      ;(isTokenExpired as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      )
+
+      const api = createApiClientCore(deps)
+
+      const promise = api.apiUpload<{ ok: boolean }>(
+        '/media/uploads/photos',
+        () => new FormData(),
+      )
+
+      const xhr = FakeXMLHttpRequest.lastInstance!
+      xhr.triggerAbort()
+
+      await expect(promise).rejects.toMatchObject({ status: -1 })
+    })
   })
 })

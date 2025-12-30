@@ -311,4 +311,185 @@ describe('useKlurigoServiceClient', () => {
     ).resolves.toEqual({ id: 'photo1' })
     expect(uploadImage).toHaveBeenCalledWith(file, onProgress)
   })
+
+  it('passes the same api core instance to all resource factories', () => {
+    renderHook(() => useKlurigoServiceClient())
+
+    expect(createAuthResource).toHaveBeenCalledWith(apiCore, expect.any(Object))
+    expect(createQuizResource).toHaveBeenCalledWith(apiCore, expect.any(Object))
+    expect(createGameResource).toHaveBeenCalledWith(apiCore, expect.any(Object))
+    expect(createMediaResource).toHaveBeenCalledWith(
+      apiCore,
+      expect.any(Object),
+    )
+  })
+
+  it('getToken returns undefined when requested token type is missing in the auth state', () => {
+    ;(useAuthContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      user: {
+        [TokenType.Access]: { token: 'user.access' },
+      } satisfies AuthState,
+      game: {
+        [TokenType.Refresh]: { token: 'game.refresh' },
+      } satisfies AuthState,
+      setTokenPair,
+    })
+
+    renderHook(() => useKlurigoServiceClient())
+
+    const deps = (createApiClientCore as unknown as ReturnType<typeof vi.fn>)
+      .mock.calls[0]?.[0] as {
+      getToken: (scope: TokenScope, type: TokenType) => string | undefined
+    }
+
+    expect(deps.getToken(TokenScope.User, TokenType.Refresh)).toBeUndefined()
+    expect(deps.getToken(TokenScope.Game, TokenType.Access)).toBeUndefined()
+  })
+
+  it('getToken returns undefined for an unknown scope value (defensive behavior)', () => {
+    renderHook(() => useKlurigoServiceClient())
+
+    const deps = (createApiClientCore as unknown as ReturnType<typeof vi.fn>)
+      .mock.calls[0]?.[0] as {
+      getToken: (scope: TokenScope, type: TokenType) => string | undefined
+    }
+
+    // Force an invalid scope at runtime; TS can’t prevent this in production.
+    expect(
+      deps.getToken('NOPE' as unknown as TokenScope, TokenType.Access),
+    ).toBeUndefined()
+  })
+
+  it('exposes last-spread-wins behavior when resources return the same key', () => {
+    const sharedFnA = vi.fn()
+    const sharedFnB = vi.fn()
+    const sharedFnC = vi.fn()
+    const sharedFnD = vi.fn()
+
+    ;(
+      createAuthResource as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      shared: sharedFnA,
+    })
+    ;(
+      createQuizResource as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      shared: sharedFnB,
+    })
+    ;(
+      createGameResource as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      shared: sharedFnC,
+    })
+    ;(
+      createMediaResource as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      shared: sharedFnD,
+    })
+
+    const { result } = renderHook(() => useKlurigoServiceClient())
+
+    // media is spread last: ...auth, ...quiz, ...game, ...media
+    expect((result.current as Record<string, unknown>)['shared']).toBe(
+      sharedFnD,
+    )
+  })
+
+  it('passes notification callbacks by reference to all resources (no re-creation)', () => {
+    renderHook(() => useKlurigoServiceClient())
+
+    expect(createAuthResource).toHaveBeenCalledWith(
+      apiCore,
+      expect.objectContaining({
+        notifySuccess,
+        notifyError,
+      }),
+    )
+
+    expect(createQuizResource).toHaveBeenCalledWith(
+      apiCore,
+      expect.objectContaining({
+        notifySuccess,
+        notifyError,
+      }),
+    )
+
+    expect(createGameResource).toHaveBeenCalledWith(
+      apiCore,
+      expect.objectContaining({
+        notifySuccess,
+        notifyError,
+      }),
+    )
+
+    const [, mediaDeps] = (
+      createMediaResource as unknown as ReturnType<typeof vi.fn>
+    ).mock.calls[0] as [
+      unknown,
+      { notifySuccess: unknown; notifyError: unknown },
+    ]
+
+    expect(mediaDeps.notifySuccess).toBe(notifySuccess)
+    expect(mediaDeps.notifyError).toBe(notifyError)
+  })
+
+  it('getToken function identity is stable across rerenders when auth context object references are stable', () => {
+    const authCtx = {
+      user: {
+        [TokenType.Access]: { token: 'user.access' },
+        [TokenType.Refresh]: { token: 'user.refresh' },
+      } satisfies AuthState,
+      game: {
+        [TokenType.Access]: { token: 'game.access' },
+        [TokenType.Refresh]: { token: 'game.refresh' },
+      } satisfies AuthState,
+      setTokenPair,
+    }
+
+    ;(useAuthContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      authCtx,
+    )
+
+    const { rerender } = renderHook(() => useKlurigoServiceClient())
+
+    const firstGetToken = (
+      createApiClientCore as unknown as ReturnType<typeof vi.fn>
+    ).mock.calls[0][0].getToken as unknown
+
+    rerender()
+
+    const secondGetToken = (
+      createApiClientCore as unknown as ReturnType<typeof vi.fn>
+    ).mock.calls[1][0].getToken as unknown
+
+    expect(secondGetToken).toBe(firstGetToken)
+  })
+
+  it('getToken function identity changes when auth context token references change', () => {
+    const { rerender } = renderHook(() => useKlurigoServiceClient())
+
+    const firstGetToken = (
+      createApiClientCore as unknown as ReturnType<typeof vi.fn>
+    ).mock.calls[0][0].getToken as unknown
+
+    ;(useAuthContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      user: {
+        [TokenType.Access]: { token: 'user.access.v2' },
+        [TokenType.Refresh]: { token: 'user.refresh.v2' },
+      } satisfies AuthState,
+      game: {
+        [TokenType.Access]: { token: 'game.access.v2' },
+        [TokenType.Refresh]: { token: 'game.refresh.v2' },
+      } satisfies AuthState,
+      setTokenPair,
+    })
+
+    rerender()
+
+    const secondGetToken = (
+      createApiClientCore as unknown as ReturnType<typeof vi.fn>
+    ).mock.calls[1][0].getToken as unknown
+
+    expect(secondGetToken).not.toBe(firstGetToken)
+  })
 })

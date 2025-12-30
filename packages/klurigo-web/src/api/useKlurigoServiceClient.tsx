@@ -42,9 +42,9 @@ export const useKlurigoServiceClient = () => {
     (scope: TokenScope, type: TokenType): string | undefined => {
       switch (scope) {
         case TokenScope.User:
-          return userAuth?.[type].token
+          return userAuth?.[type]?.token
         case TokenScope.Game:
-          return gameAuth?.[type].token
+          return gameAuth?.[type]?.token
       }
     },
     [userAuth, gameAuth],

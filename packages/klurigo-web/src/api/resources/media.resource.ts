@@ -5,7 +5,7 @@ import type {
 import { TokenScope, TokenType } from '@klurigo/common'
 
 import type { ApiClientCore } from '../api-client-core'
-import { parseQueryParams, resolveUrl } from '../api.utils'
+import { parseQueryParams } from '../api.utils'
 
 /**
  * Side-effect hooks used by `createMediaResource`.
@@ -74,46 +74,23 @@ export const createMediaResource = (
     file: File,
     onProgress: (progress: number) => void,
   ): Promise<MediaUploadPhotoResponseDto> => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData()
-      formData.append('file', file)
+    try {
+      const res = await api.apiUpload<MediaUploadPhotoResponseDto>(
+        '/media/uploads/photos',
+        () => {
+          const formData = new FormData()
+          formData.append('file', file)
+          return formData
+        },
+        { onProgress },
+      )
 
-      const xhr = new XMLHttpRequest()
-      xhr.responseType = 'json'
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const progress = Math.round((event.loaded / event.total) * 100)
-          onProgress(progress)
-        }
-      }
-
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          deps.notifySuccess('Upload complete! Your image is ready to use.')
-          resolve(xhr.response as MediaUploadPhotoResponseDto)
-        } else {
-          deps.notifyError(
-            `Upload failed (HTTP ${xhr.status}). Please try again.`,
-          )
-          reject(`Upload failed (HTTP ${xhr.status})`)
-        }
-      }
-
-      xhr.onerror = () => {
-        deps.notifyError(
-          'Upload failed — looks like the network blinked. Please try again.',
-        )
-        reject('Upload failed due to a network error')
-      }
-
-      xhr.open('POST', resolveUrl('/media/uploads/photos'))
-      const accessToken = deps.getToken(TokenScope.User, TokenType.Access)
-      if (accessToken) {
-        xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      }
-      xhr.send(formData)
-    })
+      deps.notifySuccess('Upload complete! Your image is ready to use.')
+      return res
+    } catch (err) {
+      deps.notifyError('Upload failed. Please try again.')
+      throw err
+    }
   }
 
   /**
