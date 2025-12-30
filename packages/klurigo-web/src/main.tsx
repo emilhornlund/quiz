@@ -191,7 +191,7 @@ const router = createBrowserRouter([
         element: (
           <button
             onClick={() => {
-              fetch(config.quizServiceUrl + '/debug-sentry', {
+              fetch(config.klurigoServiceUrl + '/debug-sentry', {
                 method: 'GET',
               }).finally(() => {
                 throw new Error('This is your first error from quiz!')

@@ -13,7 +13,7 @@ import { ConnectionStatus as ConnectionStatusValue } from './event-source.types.
  * the most recent **non-heartbeat** `GameEvent` and the current connection status.
  *
  * Behavior:
- * - Opens an `EventSource` to: `${config.quizServiceUrl}/games/${gameID}/events`.
+ * - Opens an `EventSource` to: `${config.klurigoServiceUrl}/games/${gameID}/events`.
  * - Sends `Authorization: Bearer <token>` via headers (using `EventSourcePolyfill`).
  * - Filters out `GameEventType.GameHeartbeat` messages (they do not update `gameEvent`).
  * - On error, retries with exponential backoff (1s, 2s, 4s, ... capped at 30s) up to 10 attempts.
@@ -83,7 +83,7 @@ export const useEventSource = (
       lastEventRef.current = undefined
 
       const eventSource = new EventSourcePolyfill(
-        `${config.quizServiceUrl}/games/${gameIdValue}/events`,
+        `${config.klurigoServiceUrl}/games/${gameIdValue}/events`,
         {
           headers: {
             Authorization: `Bearer ${tokenValue}`,

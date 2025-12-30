@@ -1,7 +1,7 @@
 #!/bin/sh
 
-set -xe : "${KLURIGO_SERVICE_PROXY?missing quiz service proxy}"
-set -xe : "${KLURIGO_SERVICE_IMAGES_PROXY?missing quiz service image proxy}"
+set -xe : "${KLURIGO_SERVICE_PROXY?missing klurigo service proxy}"
+set -xe : "${KLURIGO_SERVICE_IMAGES_PROXY?missing klurigo service image proxy}"
 
 set -xe : "${BASE_URL?missing base url}"
 set -xe : "${GOOGLE_CLIENT_ID?missing google client id}"

@@ -6,7 +6,7 @@ import { ConnectionStatus } from './event-source.types.ts'
 import { useEventSource } from './useEventSource'
 
 vi.mock('../config.ts', () => ({
-  default: { quizServiceUrl: 'http://klurigo-service.local' },
+  default: { klurigoServiceUrl: 'http://klurigo-service.local' },
 }))
 
 vi.mock('event-source-polyfill', () => {

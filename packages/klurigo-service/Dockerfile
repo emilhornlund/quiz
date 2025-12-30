@@ -7,7 +7,6 @@ COPY ../../ ./
 
 RUN yarn install --ignore-scripts --frozen-lockfile --modules-folder ./node_modules
 
-RUN yarn workspace @klurigo/common build
 RUN yarn workspace @klurigo/klurigo-service build
 
 # Optimize Stage

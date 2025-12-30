@@ -9,7 +9,7 @@ vi.mock('../utils/notification.ts', () => ({
   notifyError: vi.fn(),
 }))
 vi.mock('../config.ts', () => ({
-  default: { quizServiceUrl: 'https://api.example.com' },
+  default: { klurigoServiceUrl: 'https://api.example.com' },
 }))
 
 // eslint-disable-next-line import/order
@@ -41,26 +41,26 @@ const makeResponse = (opts: {
 describe('resolveUrl', () => {
   afterEach(() => {
     // reset base URL mock after each test
-    config.quizServiceUrl = 'https://api.example.com'
+    config.klurigoServiceUrl = 'https://api.example.com'
   })
 
   it('joins when base has no trailing slash and path has no leading slash', () => {
-    config.quizServiceUrl = 'https://api.example.com'
+    config.klurigoServiceUrl = 'https://api.example.com'
     expect(resolveUrl('v1/games')).toBe('https://api.example.com/v1/games')
   })
 
   it('does not duplicate slashes when both have slashes', () => {
-    config.quizServiceUrl = 'https://api.example.com/'
+    config.klurigoServiceUrl = 'https://api.example.com/'
     expect(resolveUrl('/v1/games')).toBe('https://api.example.com/v1/games')
   })
 
   it('works when only base has trailing slash', () => {
-    config.quizServiceUrl = 'https://api.example.com/'
+    config.klurigoServiceUrl = 'https://api.example.com/'
     expect(resolveUrl('v1/games')).toBe('https://api.example.com/v1/games')
   })
 
   it('works when only path has leading slash', () => {
-    config.quizServiceUrl = 'https://api.example.com'
+    config.klurigoServiceUrl = 'https://api.example.com'
     expect(resolveUrl('/v1/games')).toBe('https://api.example.com/v1/games')
   })
 })

@@ -3,9 +3,10 @@ import { loadEnv } from 'vite'
 
 const env = loadEnv('development', process.cwd(), '')
 const SERVER_PORT = env.SERVER_PORT || '3000'
-const QUIZ_SERVICE_PROXY = env.QUIZ_SERVICE_PROXY || 'http://localhost:8080/api'
+const KLURIGO_SERVICE_PROXY =
+  env.KLURIGO_SERVICE_PROXY || 'http://localhost:8080/api'
 
-const apiUrl = new URL(QUIZ_SERVICE_PROXY)
+const apiUrl = new URL(KLURIGO_SERVICE_PROXY)
 apiUrl.pathname = '/health'
 
 export default defineConfig({

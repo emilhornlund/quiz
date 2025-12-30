@@ -9,13 +9,13 @@ export default {
    * The base URL for the Quiz Service backend API.
    * All API requests are prefixed with this path.
    */
-  quizServiceUrl: import.meta.env.VITE_KLURIGO_SERVICE_URL as string,
+  klurigoServiceUrl: import.meta.env.VITE_KLURIGO_SERVICE_URL as string,
 
   /**
    * The base URL for accessing uploaded images hosted by the Quiz Service backend.
    * Used to load quiz-related media assets.
    */
-  quizServiceImagesUrl: import.meta.env
+  klurigoServiceImagesUrl: import.meta.env
     .VITE_KLURIGO_SERVICE_IMAGES_URL as string,
 
   /**

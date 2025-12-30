@@ -13,7 +13,6 @@ ENV VITE_SENTRY_DSN=$SENTRY_DSN
 ARG SENTRY_RELEASE
 ENV VITE_SENTRY_RELEASE=$SENTRY_RELEASE
 
-RUN yarn workspace @klurigo/common build
 RUN yarn workspace @klurigo/klurigo-web build --mode production
 
 # Production Stage
@@ -23,9 +22,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY --from=build /app/packages/quiz/dist /usr/share/nginx/html
-COPY --from=build /app/packages/quiz/nginx.conf.template /etc/nginx/nginx.conf.template
-COPY --from=build /app/packages/quiz/configure-environment.sh /docker-entrypoint.d/configure-environment.sh
+COPY --from=build /app/packages/klurigo-web/dist /usr/share/nginx/html
+COPY --from=build /app/packages/klurigo-web/nginx.conf.template /etc/nginx/nginx.conf.template
+COPY --from=build /app/packages/klurigo-web/configure-environment.sh /docker-entrypoint.d/configure-environment.sh
 
 RUN chmod +x /docker-entrypoint.d/configure-environment.sh
 

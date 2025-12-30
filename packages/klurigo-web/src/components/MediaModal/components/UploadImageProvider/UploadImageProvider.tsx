@@ -21,7 +21,7 @@ const UploadImageProvider: FC<UploadImageProviderProps> = ({ onChange }) => {
     uploadImage(file, (newProgress) => setProgress(newProgress))
       .then((response) =>
         onChange?.(
-          `${config.baseUrl}${config.quizServiceImagesUrl}/${response.filename}`,
+          `${config.baseUrl}${config.klurigoServiceImagesUrl}/${response.filename}`,
         ),
       )
       .finally(() => setProgress(undefined))
