@@ -5,12 +5,12 @@
 .pageDivider {
   display: flex;
   flex-direction: column;
-  border-width: helpers.pxToRem(1px);
-  border-style: solid;
-  border-color: colors.$white;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: growWidth 0.3s ease-out 0.1s both;
+    animation: growWidth 0.5s ease-out 0.1s both;
   }
 
   @include helpers.mobile {
@@ -24,8 +24,35 @@
   }
 
   @include helpers.desktop {
-    width: variables.$tablet-width;
+    width: variables.$desktop-width;
     margin: variables.$desktop-layout-gutter 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        colors.$white-1-40 15%,
+        colors.$white-1-70 50%,
+        colors.$white-1-40 85%,
+        transparent 100%
+    );
+
+    @include helpers.mobile {
+      height: helpers.pxToRem(1px);
+    }
+
+    @include helpers.tablet {
+      height: helpers.pxToRem(2px);
+    }
+
+    @include helpers.desktop {
+      height: helpers.pxToRem(2px);
+    }
   }
 }
 
