@@ -1,13 +1,18 @@
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
 import type { GameHistoryDto } from '@klurigo/common'
 import { GameStatus } from '@klurigo/common'
-import type { FC } from 'react'
+import { type FC, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Page, Pagination, Typography } from '../../../components'
+import {
+  Button,
+  Page,
+  PageDivider,
+  Pagination,
+  Typography,
+} from '../../../components'
 
 import GameTable from './components/GameTable'
-import styles from './ProfileGamesPageUI.module.scss'
 
 export interface ProfileGamesPageUIProps {
   items: GameHistoryDto[]
@@ -28,52 +33,74 @@ const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
 }) => {
   const navigate = useNavigate()
 
+  const isEmpty = useMemo(() => !items.length, [items])
+
+  if (isEmpty) {
+    return (
+      <Page align="start" width="medium" discover profile>
+        <Typography variant="title">No Games Yet</Typography>
+        <Typography variant="text">
+          Host live quizzes and play together with others. Your games will
+          appear here once you start.
+        </Typography>
+
+        <PageDivider />
+
+        <Typography variant="subtitle" size="medium">
+          Looking for something to play?
+        </Typography>
+        <Typography variant="text" size="medium">
+          Browse quizzes made by others and host a live game in seconds.
+        </Typography>
+        <Button
+          id="discover-quizzes-button"
+          type="button"
+          kind="primary"
+          size="small"
+          value="Discover quizzes"
+          icon={faMagnifyingGlass}
+          iconPosition="leading"
+          onClick={() => navigate('/discover')}
+        />
+
+        <PageDivider />
+
+        <Typography variant="subtitle" size="medium">
+          Want to make your own?
+        </Typography>
+        <Typography variant="text" size="medium">
+          Create a quiz in minutes and reuse it for future games.
+        </Typography>
+        <Button
+          id="create-quiz-button"
+          type="button"
+          kind="call-to-action"
+          size="small"
+          value="Create a quiz"
+          icon={faPlus}
+          iconPosition="leading"
+          onClick={() => navigate('/quiz/create')}
+        />
+      </Page>
+    )
+  }
+
   return (
     <Page align="start" width="medium" discover profile>
-      <Typography variant="title">
-        {items.length ? 'Game History' : "You Haven't Played Any Games Yet"}
-      </Typography>
+      <Typography variant="title">Game History</Typography>
+
       <Typography variant="text">
-        {items.length
-          ? 'Review your past games and track your performance.'
-          : 'Once you play or host a game, it will appear here.'}
+        Review your past games and track your performance.
       </Typography>
-      {!!items.length && (
-        <>
-          <GameTable items={items} onClick={onClick} />
-          <Pagination
-            total={total}
-            limit={limit}
-            offset={offset}
-            onChange={onChangePagination}
-          />
-        </>
-      )}
-      {!items.length && (
-        <div className={styles.gettingStarted}>
-          <Button
-            id="discover-quizzes-button"
-            type="button"
-            kind="primary"
-            size="small"
-            value="Discover Existing Quizzes"
-            icon={faMagnifyingGlass}
-            iconPosition="leading"
-            onClick={() => navigate('/discover')}
-          />
-          <Typography variant="link">or</Typography>
-          <Button
-            id="create-quiz-button"
-            type="button"
-            kind="call-to-action"
-            size="small"
-            value="Create New Quiz"
-            icon={faPlus}
-            iconPosition="leading"
-            onClick={() => navigate('/quiz/create')}
-          />
-        </div>
-      )}
+
+      <GameTable items={items} onClick={onClick} />
+
+      <Pagination
+        total={total}
+        limit={limit}
+        offset={offset}
+        onChange={onChangePagination}
+      />
     </Page>
   )
 }

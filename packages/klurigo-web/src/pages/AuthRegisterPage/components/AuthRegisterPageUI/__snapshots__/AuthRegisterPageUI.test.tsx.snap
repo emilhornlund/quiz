@@ -208,14 +208,11 @@ exports[`AuthRegisterPageUI > renders default state 1`] = `
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/login"
           >
-            <a
-              class="typography link small"
-            >
-              Got an account? Flash your credentials and come on in!
-            </a>
+            Got an account? Flash your credentials and come on in!
           </a>
         </div>
       </div>
@@ -429,14 +426,11 @@ exports[`AuthRegisterPageUI > renders loading state 1`] = `
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/login"
           >
-            <a
-              class="typography link small"
-            >
-              Got an account? Flash your credentials and come on in!
-            </a>
+            Got an account? Flash your credentials and come on in!
           </a>
         </div>
       </div>

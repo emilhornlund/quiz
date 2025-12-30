@@ -184,11 +184,11 @@ const AuthRegisterPageUI: FC<AuthRegisterPageUIProps> = ({
           disabled={!isFormValid || loading}
         />
       </form>
-      <Link to={'/auth/login'}>
-        <Typography variant="link" size="small">
+      <Typography variant="link" size="small" asChild>
+        <Link to={'/auth/login'}>
           Got an account? Flash your credentials and come on in!
-        </Typography>
-      </Link>
+        </Link>
+      </Typography>
     </Page>
   )
 }

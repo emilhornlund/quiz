@@ -148,14 +148,11 @@ exports[`AuthVerifyPageUI > renders verified state (logged in) with home link 1`
             Welcome aboard the fun train. Let’s roll!
           </p>
           <a
+            class="typography link small"
             data-discover="true"
             href="/"
           >
-            <a
-              class="typography link small"
-            >
-              Take me home
-            </a>
+            Take me home
           </a>
         </div>
       </div>
@@ -235,14 +232,11 @@ exports[`AuthVerifyPageUI > renders verified state (not logged in) with login li
             Welcome aboard the fun train. Let’s roll!
           </p>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/login"
           >
-            <a
-              class="typography link small"
-            >
-              Log in to get started!
-            </a>
+            Log in to get started!
           </a>
         </div>
       </div>

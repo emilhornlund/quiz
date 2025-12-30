@@ -176,15 +176,11 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             </div>
           </form>
           <a
-            class="link"
+            class="link typography link small"
             data-discover="true"
             href="/auth/login"
           >
-            <a
-              class="typography link small"
-            >
-              Want to create your own quiz? Log in to get started!
-            </a>
+            Want to create your own quiz? Log in to get started!
           </a>
         </div>
       </div>
@@ -326,15 +322,11 @@ exports[`HomePage > renders the base layout and the rotating message container 1
             </div>
           </form>
           <a
-            class="link"
+            class="link typography link small"
             data-discover="true"
             href="/auth/login"
           >
-            <a
-              class="typography link small"
-            >
-              Want to create your own quiz? Log in to get started!
-            </a>
+            Want to create your own quiz? Log in to get started!
           </a>
         </div>
       </div>

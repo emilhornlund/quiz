@@ -94,14 +94,11 @@ exports[`AuthLoginPageUI > enables submit when email and password are valid, the
               </div>
             </div>
             <a
+              class="typography link small"
               data-discover="true"
               href="/auth/password/forgot"
             >
-              <a
-                class="typography link small"
-              >
-                Forgot your password?
-              </a>
+              Forgot your password?
             </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction"
@@ -132,14 +129,11 @@ exports[`AuthLoginPageUI > enables submit when email and password are valid, the
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/register"
           >
-            <a
-              class="typography link small"
-            >
-              New here? Join the fun and create your account!
-            </a>
+            New here? Join the fun and create your account!
           </a>
           <div
             class="pageDivider"
@@ -276,14 +270,11 @@ exports[`AuthLoginPageUI > fires Google button handler 1`] = `
               </div>
             </div>
             <a
+              class="typography link small"
               data-discover="true"
               href="/auth/password/forgot"
             >
-              <a
-                class="typography link small"
-              >
-                Forgot your password?
-              </a>
+              Forgot your password?
             </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction"
@@ -315,14 +306,11 @@ exports[`AuthLoginPageUI > fires Google button handler 1`] = `
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/register"
           >
-            <a
-              class="typography link small"
-            >
-              New here? Join the fun and create your account!
-            </a>
+            New here? Join the fun and create your account!
           </a>
           <div
             class="pageDivider"
@@ -459,14 +447,11 @@ exports[`AuthLoginPageUI > keeps submit disabled when fields are invalid 1`] = `
               </div>
             </div>
             <a
+              class="typography link small"
               data-discover="true"
               href="/auth/password/forgot"
             >
-              <a
-                class="typography link small"
-              >
-                Forgot your password?
-              </a>
+              Forgot your password?
             </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction"
@@ -498,14 +483,11 @@ exports[`AuthLoginPageUI > keeps submit disabled when fields are invalid 1`] = `
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/register"
           >
-            <a
-              class="typography link small"
-            >
-              New here? Join the fun and create your account!
-            </a>
+            New here? Join the fun and create your account!
           </a>
           <div
             class="pageDivider"
@@ -642,14 +624,11 @@ exports[`AuthLoginPageUI > renders base UI with title, message and links 1`] = `
               </div>
             </div>
             <a
+              class="typography link small"
               data-discover="true"
               href="/auth/password/forgot"
             >
-              <a
-                class="typography link small"
-              >
-                Forgot your password?
-              </a>
+              Forgot your password?
             </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction"
@@ -681,14 +660,11 @@ exports[`AuthLoginPageUI > renders base UI with title, message and links 1`] = `
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/register"
           >
-            <a
-              class="typography link small"
-            >
-              New here? Join the fun and create your account!
-            </a>
+            New here? Join the fun and create your account!
           </a>
           <div
             class="pageDivider"
@@ -827,14 +803,11 @@ exports[`AuthLoginPageUI > respects loading state: disables inputs and button, s
               </div>
             </div>
             <a
+              class="typography link small"
               data-discover="true"
               href="/auth/password/forgot"
             >
-              <a
-                class="typography link small"
-              >
-                Forgot your password?
-              </a>
+              Forgot your password?
             </a>
             <div
               class="buttonInputContainer buttonInputKindCallToAction"
@@ -857,14 +830,11 @@ exports[`AuthLoginPageUI > respects loading state: disables inputs and button, s
             </div>
           </form>
           <a
+            class="typography link small"
             data-discover="true"
             href="/auth/register"
           >
-            <a
-              class="typography link small"
-            >
-              New here? Join the fun and create your account!
-            </a>
+            New here? Join the fun and create your account!
           </a>
           <div
             class="pageDivider"
