@@ -10,10 +10,10 @@
     "prepare": "husky",
     "clean": "concurrently \"yarn workspace @klurigo/common clean\" \"yarn workspace @klurigo/klurigo-service clean\" \"yarn workspace @klurigo/klurigo-web clean\"",
     "build": "concurrently \"yarn workspace @klurigo/klurigo-service build\" \"yarn workspace @klurigo/klurigo-web build\"",
-    "dev": "concurrently \"yarn klurigo-service:dev\" \"yarn klurigo:dev\" \"yarn klurigo:storybook\"",
-    "klurigo:dev": "yarn workspace @klurigo/klurigo-web dev",
-    "klurigo:storybook": "yarn workspace @klurigo/klurigo-web storybook",
+    "dev": "concurrently \"yarn klurigo-service:dev\" \"yarn klurigo-web:dev\"",
     "klurigo-service:dev": "yarn workspace @klurigo/klurigo-service dev",
+    "klurigo-web:dev": "wait-on http://localhost:8080/health && yarn workspace @klurigo/klurigo-web dev",
+    "klurigo-web:storybook": "yarn workspace @klurigo/klurigo-web storybook",
     "serve": "concurrently \"yarn workspace @klurigo/klurigo-service serve\" \"yarn workspace @klurigo/klurigo-web serve\"",
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
@@ -34,7 +34,8 @@
     "prettier": "^3.7.4",
     "rimraf": "^6.1.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0"
+    "typescript-eslint": "^8.51.0",
+    "wait-on": "^9.0.3"
   },
   "engines": {
     "node": ">=24 <25"
