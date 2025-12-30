@@ -36,7 +36,7 @@ export class ApiError extends Error {
  * @returns The full URL as a string, ensuring no duplicate or missing slashes.
  */
 export const resolveUrl = (path: string): string => {
-  const baseURL = config.quizServiceUrl
+  const baseURL = config.klurigoServiceUrl
   if (baseURL.endsWith('/') && path.startsWith('/')) {
     return `${baseURL}${path.substring(1)}`
   }
