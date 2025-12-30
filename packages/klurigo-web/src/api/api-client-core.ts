@@ -1,6 +1,6 @@
 import { TokenScope, TokenType } from '@klurigo/common'
 
-import type { ApiPostBody } from './api.utils'
+import { ApiError, type ApiPostBody } from './api.utils'
 import {
   isTokenExpired,
   parseResponseAndHandleError,
@@ -38,6 +38,23 @@ export type FetchOptions = {
    * Defaults to `true`.
    */
   refresh?: boolean
+}
+
+/**
+ * Options specific to `apiUpload`, which uses `XMLHttpRequest` for upload progress support.
+ */
+export type UploadOptions = FetchOptions & {
+  /**
+   * Called with integer percentage progress values in the range 0–100.
+   */
+  onProgress?: (progress: number) => void
+
+  /**
+   * Optional hook for customizing the XHR instance before sending.
+   *
+   * Use this sparingly (e.g., setting `withCredentials`, responseType overrides).
+   */
+  configureXhr?: (xhr: XMLHttpRequest) => void
 }
 
 /**
@@ -100,7 +117,7 @@ export type ApiClientCoreDeps = {
  * - No dependency on resource modules (avoids circular imports).
  *
  * @param deps - Runtime dependencies for token access, token persistence, and user hydration.
- * @returns A small client surface (`apiGet`, `apiPost`, `apiPut`, `apiPatch`, `apiDelete`) backed by `apiFetch`.
+ * @returns A small client surface (`apiGet`, `apiPost`, `apiPut`, `apiPatch`, `apiDelete`, `apiUpload`) backed by `apiFetch`.
  */
 export const createApiClientCore = (deps: ApiClientCoreDeps) => {
   const fetchImpl = deps.fetchImpl ?? fetch
@@ -191,8 +208,121 @@ export const createApiClientCore = (deps: ApiClientCoreDeps) => {
     return parseResponseAndHandleError<T>(response)
   }
 
+  /**
+   * Executes a multipart upload using `XMLHttpRequest` so the caller can track progress.
+   *
+   * Token behavior matches `apiFetch`:
+   * - Preemptively refreshes when the locally resolved token is expired (unless `options.token` is provided).
+   * - Retries once on HTTP 401 by refreshing and repeating the upload with the new access token.
+   *
+   * @param path - API path (e.g. `/media/uploads/photos`).
+   * @param createFormData - Factory that creates a fresh `FormData` instance for each attempt.
+   * @param options - Authentication, refresh control, and progress callbacks.
+   */
+  const apiUpload = async <T extends object>(
+    path: string,
+    createFormData: () => FormData,
+    options: UploadOptions = {},
+  ): Promise<T> => {
+    const overrideToken = options.token
+    const scope = options.scope ?? TokenScope.User
+    const shouldRefresh = options.refresh ?? true
+
+    let accessToken = overrideToken || deps.getToken(scope, TokenType.Access)
+    let refreshToken = deps.getToken(scope, TokenType.Refresh)
+
+    // 1) Preemptively refresh expired accessToken (skip if overridden token or refresh is disabled)
+    if (
+      !overrideToken &&
+      isTokenExpired(accessToken) &&
+      refreshToken &&
+      path !== '/auth/refresh' &&
+      shouldRefresh
+    ) {
+      const refreshed = await refreshViaFetch(scope, refreshToken)
+      accessToken = refreshed.accessToken
+      refreshToken = refreshed.refreshToken
+    }
+
+    const attempt = async (tokenForAttempt?: string): Promise<T> => {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+
+        xhr.responseType = 'json'
+        options.configureXhr?.(xhr)
+
+        if (options.onProgress) {
+          xhr.upload.onprogress = (event) => {
+            if (!event.lengthComputable) return
+            const progress = Math.round((event.loaded / event.total) * 100)
+            options.onProgress?.(progress)
+          }
+        }
+
+        const fail = (status: number, message: string) => {
+          reject(new ApiError(message, status))
+        }
+
+        xhr.onload = () => {
+          const status = xhr.status
+
+          if (status >= 200 && status < 300) {
+            resolve(xhr.response as T)
+            return
+          }
+
+          // Preserve status; message remains generic to avoid leaking server payload into UI layers.
+          // If you want to capture server-provided details, do it inside ApiError (if it supports it).
+          fail(status, 'Upload failed')
+        }
+
+        xhr.onerror = () => {
+          // Network error / CORS / DNS / etc.
+          fail(-1, 'Upload failed')
+        }
+
+        xhr.onabort = () => {
+          fail(-1, 'Upload aborted')
+        }
+
+        xhr.open('POST', resolveUrl(path))
+
+        if (tokenForAttempt && path !== '/auth/refresh') {
+          xhr.setRequestHeader('Authorization', `Bearer ${tokenForAttempt}`)
+        }
+
+        xhr.send(createFormData())
+      })
+    }
+
+    try {
+      return await attempt(accessToken)
+    } catch (err) {
+      const status = err instanceof ApiError ? err.status : -1
+
+      // 2) If 401 and we have a refreshToken (and not on the refresh path), try one refresh+retry
+      if (
+        status === 401 &&
+        refreshToken &&
+        path !== '/auth/refresh' &&
+        shouldRefresh
+      ) {
+        const refreshed = await refreshViaFetch(scope, refreshToken)
+        return apiUpload<T>(path, createFormData, {
+          ...options,
+          scope,
+          token: refreshed.accessToken,
+          refresh: false,
+        })
+      }
+
+      throw err
+    }
+  }
+
   return {
     apiFetch,
+
     apiGet: <T extends object | void>(
       path: string,
       options: FetchOptions = {},
@@ -221,6 +351,8 @@ export const createApiClientCore = (deps: ApiClientCoreDeps) => {
       requestBody?: ApiPostBody,
       options: FetchOptions = {},
     ) => apiFetch<T>('DELETE', path, requestBody, options),
+
+    apiUpload,
   }
 }
 
