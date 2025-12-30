@@ -2,9 +2,9 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { FC } from 'react'
 
-import { getPinColorColor } from './pin-utils.ts'
+import { getPinColorColor } from './pin-utils'
 import styles from './PinImage.module.scss'
-import { PinColor } from './types.ts'
+import { PinColor } from './types'
 
 interface PinProps {
   width: number

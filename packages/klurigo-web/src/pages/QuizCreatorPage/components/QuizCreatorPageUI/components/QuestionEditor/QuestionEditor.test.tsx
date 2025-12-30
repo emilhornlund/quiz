@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { ValidationResult } from '../../../../../../validation'
 
-import QuestionEditor from './QuestionEditor.tsx'
+import QuestionEditor from './QuestionEditor'
 
 type AnyValidation = ValidationResult<Record<string, unknown>>
 

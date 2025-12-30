@@ -1,2 +1,2 @@
-export type { TextFieldProps } from './TextField.tsx'
-export { default } from './TextField.tsx'
+export type { TextFieldProps } from './TextField'
+export { default } from './TextField'

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react'
 
-import type { DeviceType } from './device-size.types.ts'
-import { DeviceType as DeviceTypeValue } from './device-size.types.ts'
+import type { DeviceType } from './device-size.types'
+import { DeviceType as DeviceTypeValue } from './device-size.types'
 
 /**
  * React hook that determines the current `DeviceType` based on `window.innerWidth`.

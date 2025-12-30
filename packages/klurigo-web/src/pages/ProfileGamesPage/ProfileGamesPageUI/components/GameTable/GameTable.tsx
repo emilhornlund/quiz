@@ -15,7 +15,7 @@ import {
   Badge,
   getBadgePositionBackgroundColor,
 } from '../../../../../components'
-import { getBadgePositionTextColor } from '../../../../../components/Badge/badge-utils.ts'
+import { getBadgePositionTextColor } from '../../../../../components/Badge/badge-utils'
 import { GameModeLabels } from '../../../../../models'
 import colors from '../../../../../styles/colors.module.scss'
 import {

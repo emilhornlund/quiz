@@ -1,4 +1,4 @@
-import type { BadgeColor } from './Badge.tsx'
+import type { BadgeColor } from './Badge'
 
 export function getBadgePositionBackgroundColor(position: number): BadgeColor {
   switch (Math.max(position, 1)) {

@@ -1,7 +1,7 @@
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Button from './Button.tsx'
+import Button from './Button'
 
 const meta = {
   title: 'Inputs/Button',

@@ -9,7 +9,7 @@ import {
 } from '@klurigo/common'
 
 import type { ApiClientCore } from '../api-client-core'
-import { parseQueryParams } from '../api.utils.ts'
+import { parseQueryParams } from '../api.utils'
 
 /**
  * Side-effect hooks used by `createGameResource`.

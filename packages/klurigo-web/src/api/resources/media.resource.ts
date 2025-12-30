@@ -5,7 +5,7 @@ import type {
 import { TokenScope, TokenType } from '@klurigo/common'
 
 import type { ApiClientCore } from '../api-client-core'
-import { parseQueryParams, resolveUrl } from '../api.utils.ts'
+import { parseQueryParams, resolveUrl } from '../api.utils'
 
 /**
  * Side-effect hooks used by `createMediaResource`.

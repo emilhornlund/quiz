@@ -9,7 +9,7 @@ import type {
   QuizSettingsModel,
   QuizSettingsModelFieldChangeFunction,
   QuizSettingsValidationResult,
-} from './quiz-settings-data-source.types.ts'
+} from './quiz-settings-data-source.types'
 
 /**
  * Initial quiz settings state for the quiz editor.

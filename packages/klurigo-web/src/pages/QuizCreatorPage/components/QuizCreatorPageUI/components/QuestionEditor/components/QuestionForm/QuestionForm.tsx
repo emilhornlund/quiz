@@ -16,7 +16,7 @@ import {
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
-import { isValidNumber } from '../../../../../../../../utils/helpers.ts'
+import { isValidNumber } from '../../../../../../../../utils/helpers'
 import type {
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,

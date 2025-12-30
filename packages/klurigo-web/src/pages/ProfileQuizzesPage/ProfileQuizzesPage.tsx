@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions.tsx'
+import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions'
 
 import { ProfileQuizzesPageUI } from './components'
 

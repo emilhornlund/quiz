@@ -2,8 +2,8 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import { InfiniteScrollContainer, Typography } from '../../../components'
-import { DeviceType } from '../../../utils/device-size.types.ts'
-import { useDeviceSizeType } from '../../../utils/useDeviceSizeType.tsx'
+import { DeviceType } from '../../../utils/device-size.types'
+import { useDeviceSizeType } from '../../../utils/useDeviceSizeType'
 
 import styles from './QuestionTextPreview.module.scss'
 

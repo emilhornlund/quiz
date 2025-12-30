@@ -2,7 +2,7 @@ import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMemo } from 'react'
 
-import { DeviceType } from '../../utils/device-size.types.ts'
+import { DeviceType } from '../../utils/device-size.types'
 import { classNames } from '../../utils/helpers'
 import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 

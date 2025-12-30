@@ -1,2 +1,2 @@
-export * from './format.utils.ts'
-export * from './metric.utils.ts'
+export * from './format.utils'
+export * from './metric.utils'

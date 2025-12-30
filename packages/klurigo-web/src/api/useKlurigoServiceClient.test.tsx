@@ -12,7 +12,7 @@ vi.mock('../context/user', () => ({
   useUserContext: vi.fn(),
 }))
 
-vi.mock('../utils/notification.ts', () => ({
+vi.mock('../utils/notification', () => ({
   notifySuccess: vi.fn(),
   notifyError: vi.fn(),
 }))
@@ -30,7 +30,7 @@ vi.mock('./resources', () => ({
 
 const { useAuthContext } = await import('../context/auth')
 const { useUserContext } = await import('../context/user')
-const { notifyError, notifySuccess } = await import('../utils/notification.ts')
+const { notifyError, notifySuccess } = await import('../utils/notification')
 const { createApiClientCore } = await import('./api-client-core')
 const {
   createAuthResource,

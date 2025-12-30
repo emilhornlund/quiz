@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { FC } from 'react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
-import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
+import { withMockAuth } from '../../../../../.storybook/mockAuthContext'
 import type { QuizQuestionValidationResult } from '../../utils/QuestionDataSource'
 import { useQuestionDataSource } from '../../utils/QuestionDataSource'
 import type { QuizSettingsValidationResult } from '../../utils/QuizSettingsDataSource'

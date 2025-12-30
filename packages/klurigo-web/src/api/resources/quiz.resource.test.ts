@@ -5,7 +5,7 @@ import type { ApiClientCore } from '../api-client-core'
 import { createQuizResource } from './quiz.resource'
 import type { QuizResourceDeps } from './quiz.resource'
 
-vi.mock('../api.utils.ts', () => ({
+vi.mock('../api.utils', () => ({
   parseQueryParams: vi.fn((params: unknown) => {
     if (typeof params === 'object' && params) {
       const p = params as Record<string, unknown>

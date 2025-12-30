@@ -17,7 +17,7 @@ import { useGameContext } from '../../context/game'
 import { useUserContext } from '../../context/user'
 
 import styles from './GameJoinPage.module.scss'
-import { MESSAGES, TITLES } from './text.utils.ts'
+import { MESSAGES, TITLES } from './text.utils'
 
 const GameJoinPage: FC = () => {
   const navigate = useNavigate()

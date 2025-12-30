@@ -13,7 +13,7 @@ import type {
   QuizQuestionModel,
   QuizQuestionModelFieldChangeFunction,
   QuizQuestionValidationResult,
-} from './question-data-source.types.ts'
+} from './question-data-source.types'
 
 /**
  * Creates a deep copy of a value.

@@ -13,7 +13,7 @@ import {
 } from '../../components'
 import config from '../../config'
 import { useGameContext } from '../../context/game'
-import { classNames, extractUrl } from '../../utils/helpers.ts'
+import { classNames, extractUrl } from '../../utils/helpers'
 import GamePage from '../common/GamePage'
 
 import styles from './HostLobbyState.module.scss'

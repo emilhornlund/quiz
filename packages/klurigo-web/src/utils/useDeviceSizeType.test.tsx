@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { DeviceType } from './device-size.types.ts'
+import { DeviceType } from './device-size.types'
 import { useDeviceSizeType } from './useDeviceSizeType'
 
 const resizeWindow = (width: number) => {

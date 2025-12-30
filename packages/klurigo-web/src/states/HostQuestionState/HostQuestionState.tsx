@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react'
 
 import { IconButtonArrowRight, ProgressBar, Typography } from '../../components'
 import { useGameContext } from '../../context/game'
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import {
   GamePage,
   HostGameFooter,

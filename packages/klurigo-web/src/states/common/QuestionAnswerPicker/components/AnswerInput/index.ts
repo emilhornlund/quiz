@@ -1,2 +1,2 @@
-export type { AnswerInputProps } from './AnswerInput.tsx'
-export { default } from './AnswerInput.tsx'
+export type { AnswerInputProps } from './AnswerInput'
+export { default } from './AnswerInput'

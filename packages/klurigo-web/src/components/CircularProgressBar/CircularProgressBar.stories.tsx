@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import CircularProgressBar from './CircularProgressBar'
-import { CircularProgressBarKind, CircularProgressBarSize } from './types.ts'
+import { CircularProgressBarKind, CircularProgressBarSize } from './types'
 
 const meta = {
   component: CircularProgressBar,

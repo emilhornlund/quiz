@@ -30,14 +30,14 @@ vi.mock('react-router-dom', async (orig) => {
   return { ...actual, useNavigate: () => h.navigate }
 })
 
-vi.mock('../../config.ts', () => ({
+vi.mock('../../config', () => ({
   default: {
     googleClientId: 'TEST_CLIENT_ID',
     googleRedirectUri: 'https://app.example.com/auth/google/callback',
   },
 }))
 
-vi.mock('../../utils/oauth.ts', () => ({
+vi.mock('../../utils/oauth', () => ({
   generateRandomString: (len: number) => h.generateRandomString(len),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

@@ -13,7 +13,7 @@ const h = vi.hoisted(() => ({
   ),
 }))
 
-vi.mock('./message.utils.ts', () => ({
+vi.mock('./message.utils', () => ({
   getPositionMessage: h.getPositionMessage,
 }))
 

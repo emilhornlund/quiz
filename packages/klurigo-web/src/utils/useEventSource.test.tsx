@@ -2,10 +2,10 @@ import { GameEventType } from '@klurigo/common'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ConnectionStatus } from './event-source.types.ts'
+import { ConnectionStatus } from './event-source.types'
 import { useEventSource } from './useEventSource'
 
-vi.mock('../config.ts', () => ({
+vi.mock('../config', () => ({
   default: { klurigoServiceUrl: 'http://klurigo-service.local' },
 }))
 

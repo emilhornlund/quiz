@@ -26,7 +26,7 @@ import {
   isClassicRangeQuestion,
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
-} from './question-type.guard.ts'
+} from './question-type.guard'
 
 /**
  * Default points value for newly created questions.

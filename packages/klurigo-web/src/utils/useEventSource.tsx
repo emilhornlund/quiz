@@ -3,10 +3,10 @@ import { deepEqual, GameEventType, HEARTBEAT_INTERVAL } from '@klurigo/common'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import config from '../config.ts'
+import config from '../config'
 
-import type { ConnectionStatus } from './event-source.types.ts'
-import { ConnectionStatus as ConnectionStatusValue } from './event-source.types.ts'
+import type { ConnectionStatus } from './event-source.types'
+import { ConnectionStatus as ConnectionStatusValue } from './event-source.types'
 
 /**
  * Subscribes to server-sent events (SSE) for a given game and token, returning

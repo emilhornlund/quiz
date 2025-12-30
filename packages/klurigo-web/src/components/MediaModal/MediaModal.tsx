@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { useMemo, useState } from 'react'
 
 import { MediaTypeLabels } from '../../models'
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import Button from '../Button'
 import Modal from '../Modal'
 import SegmentedControl from '../SegmentedControl'

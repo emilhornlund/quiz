@@ -10,7 +10,7 @@ import type { FC } from 'react'
 import { useMemo, useState } from 'react'
 
 import { Button, Page, TextField } from '../../../../components'
-import { DeviceType } from '../../../../utils/device-size.types.ts'
+import { DeviceType } from '../../../../utils/device-size.types'
 import { useDeviceSizeType } from '../../../../utils/useDeviceSizeType'
 import type {
   QuizQuestionModel,

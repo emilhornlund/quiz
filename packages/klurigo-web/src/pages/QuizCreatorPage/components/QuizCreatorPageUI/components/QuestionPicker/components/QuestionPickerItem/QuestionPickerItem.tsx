@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from '../../../../../../../../components'
 import { QuestionTypeLabels } from '../../../../../../../../models'
-import { classNames } from '../../../../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../../../../utils/helpers'
 
 import styles from './QuestionPickerItem.module.scss'
 

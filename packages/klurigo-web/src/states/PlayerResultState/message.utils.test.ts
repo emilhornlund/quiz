@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { getPositionMessage, POSITION_MESSAGES } from './message.utils.ts'
+import { getPositionMessage, POSITION_MESSAGES } from './message.utils'
 
 describe('getPositionMessage', () => {
   afterEach(() => {

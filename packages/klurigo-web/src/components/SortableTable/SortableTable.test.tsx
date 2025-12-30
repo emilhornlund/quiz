@@ -17,7 +17,7 @@ vi.mock('./SortableTable.module.scss', () => ({
   },
 }))
 
-vi.mock('../../utils/helpers.ts', () => ({
+vi.mock('../../utils/helpers', () => ({
   classNames: (...cls: Array<string | undefined | null | false>) =>
     cls.filter(Boolean).join(' '),
 }))

@@ -8,7 +8,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { v4 as uuidv4 } from 'uuid'
 
-import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
+import { withMockAuth } from '../../../../../.storybook/mockAuthContext'
 
 import ProfileQuizzesPageUI from './ProfileQuizzesPageUI'
 

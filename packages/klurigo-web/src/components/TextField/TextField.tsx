@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { ChangeEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { DeviceType } from '../../utils/device-size.types.ts'
-import { classNames } from '../../utils/helpers.ts'
+import { DeviceType } from '../../utils/device-size.types'
+import { classNames } from '../../utils/helpers'
 import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import {
   isCallbackValid,

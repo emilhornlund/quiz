@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { generateRandomString, sha256 } from './oauth.ts'
+import { generateRandomString, sha256 } from './oauth'
 
 describe('generateRandomString()', () => {
   it('produces a hex string of default length (48 bytes → 96 hex chars)', () => {

@@ -8,7 +8,7 @@ import {
   Select,
 } from '../../../../../../../../../../../components'
 import { ImageRevealEffectLabels } from '../../../../../../../../../../../models'
-import { classNames } from '../../../../../../../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../../../../../../../utils/helpers'
 import type { QuizQuestionValidationResult } from '../../../../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../../../../validation-rules'
 

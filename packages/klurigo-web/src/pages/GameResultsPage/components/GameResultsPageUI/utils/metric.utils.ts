@@ -18,7 +18,7 @@ import { GameMode } from '@klurigo/common'
 
 import colors from '../../../../../styles/colors.module.scss'
 
-import { formatRoundedSeconds } from './format.utils.ts'
+import { formatRoundedSeconds } from './format.utils'
 
 /**
  * Calculates the percentage of correct answers for a given metric.

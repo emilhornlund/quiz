@@ -16,7 +16,7 @@ import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import { GamePage } from '../common'
 
-import { MESSAGES } from './message.utils.ts'
+import { MESSAGES } from './message.utils'
 
 /**
  * Props for the `PlayerLobbyState` component.

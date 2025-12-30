@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 
 import { SortableTable } from '../../../../components'
 import colors from '../../../../styles/colors.module.scss'
-import { classNames } from '../../../../utils/helpers.ts'
+import { classNames } from '../../../../utils/helpers'
 
 import styles from './PuzzleQuestionResults.module.scss'
 

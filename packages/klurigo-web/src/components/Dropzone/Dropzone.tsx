@@ -6,8 +6,8 @@ import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { classNames } from '../../utils/helpers.ts'
-import { notifyWarning } from '../../utils/notification.ts'
+import { classNames } from '../../utils/helpers'
+import { notifyWarning } from '../../utils/notification'
 import CircularProgressBar, {
   CircularProgressBarKind,
 } from '../CircularProgressBar'

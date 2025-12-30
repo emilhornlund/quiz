@@ -3,7 +3,7 @@ import { QuestionType } from '@klurigo/common'
 import type { FC } from 'react'
 import { useCallback, useMemo } from 'react'
 
-import { classNames } from '../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../utils/helpers'
 
 import styles from './AnswerPicker.module.scss'
 

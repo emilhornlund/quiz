@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import { ApiError } from '../../api/api.utils.ts'
+import { ApiError } from '../../api/api.utils'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
   IconButtonArrowRight,
@@ -17,7 +17,7 @@ import {
   Typography,
 } from '../../components'
 import { useAuthContext } from '../../context/auth'
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './HomePage.module.scss'
 

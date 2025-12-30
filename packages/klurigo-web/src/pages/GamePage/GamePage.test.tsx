@@ -59,7 +59,7 @@ const h = vi.hoisted(() => {
 
 vi.mock('@sentry/react', () => ({ setContext: h.setContextMock }))
 
-vi.mock('../../utils/notification.ts', () => ({
+vi.mock('../../utils/notification', () => ({
   notifySuccess: h.notifySuccess,
   notifyWarning: h.notifyWarning,
   notifyError: h.notifyError,
@@ -72,7 +72,7 @@ vi.mock('../../context/game', () => ({
   }),
 }))
 
-vi.mock('../../utils/useEventSource.tsx', () => ({
+vi.mock('../../utils/useEventSource', () => ({
   ConnectionStatus: h.ConnectionStatus,
   useEventSource: vi.fn(() => [h.control.event, h.control.status]),
 }))

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { GameContext } from './game-context.tsx'
+import { GameContext } from './game-context'
 
 /**
  * A custom hook for accessing the `GameContext`.

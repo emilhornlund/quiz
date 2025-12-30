@@ -5,7 +5,7 @@ import type {
   ValidationErrors,
   ValidationModel,
   ValidationRules,
-} from './validation-model.builder.types.ts'
+} from './validation-model.builder.types'
 
 /**
  * Determines whether a value should be considered "empty" for validation purposes.

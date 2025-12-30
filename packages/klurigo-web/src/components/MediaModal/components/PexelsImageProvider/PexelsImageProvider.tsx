@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { useState } from 'react'
 
 import { useKlurigoServiceClient } from '../../../../api'
-import { classNames } from '../../../../utils/helpers.ts'
+import { classNames } from '../../../../utils/helpers'
 import Button from '../../../Button'
 import ResponsiveImage from '../../../ResponsiveImage'
 import TextField from '../../../TextField'

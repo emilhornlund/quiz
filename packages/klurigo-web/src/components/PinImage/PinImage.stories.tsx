@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { FC } from 'react'
 import { useState } from 'react'
 
-import PinImage, { type PinImageProps } from './PinImage.tsx'
-import { PinColor } from './types.ts'
+import PinImage, { type PinImageProps } from './PinImage'
+import { PinColor } from './types'
 
 const PinImageStoryComponent: FC<PinImageProps> = (props) => {
   const [value, setValue] = useState<{ x: number; y: number } | undefined>(

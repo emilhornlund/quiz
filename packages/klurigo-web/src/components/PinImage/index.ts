@@ -1,4 +1,4 @@
-export type { PinImageProps } from './PinImage.tsx'
-export type { PinImagePosition, PinImageValue } from './types.ts'
-export { PinColor } from './types.ts'
-export { default } from './PinImage.tsx'
+export type { PinImageProps } from './PinImage'
+export type { PinImagePosition, PinImageValue } from './types'
+export { PinColor } from './types'
+export { default } from './PinImage'

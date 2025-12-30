@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildValidationModel } from './validation-model.builder.ts'
-import type { ValidationRules } from './validation-model.builder.types.ts'
+import { buildValidationModel } from './validation-model.builder'
+import type { ValidationRules } from './validation-model.builder.types'
 
 type TestModel = {
   title?: string

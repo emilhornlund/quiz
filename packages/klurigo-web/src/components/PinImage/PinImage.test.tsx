@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import PinImage from './PinImage'
-import { PinColor } from './types.ts'
+import { PinColor } from './types'
 
 describe('PinImage', () => {
   it('should render PinImage with default props', async () => {

@@ -1,8 +1,8 @@
 import { act, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { DeviceType } from '../../../utils/device-size.types.ts'
-import * as deviceHook from '../../../utils/useDeviceSizeType.tsx'
+import { DeviceType } from '../../../utils/device-size.types'
+import * as deviceHook from '../../../utils/useDeviceSizeType'
 
 import QuestionTextPreview from './QuestionTextPreview'
 

@@ -3,14 +3,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import config from '../../config.ts'
+import config from '../../config'
 import {
   generateRandomString,
   GOOGLE_OAUTH_STORAGE_KEY,
   GOOGLE_OAUTH_STORAGE_PKCE_VERIFIER_KEY,
   GOOGLE_OAUTH_STORAGE_STATE_KEY,
   sha256,
-} from '../../utils/oauth.ts'
+} from '../../utils/oauth'
 
 import type { LoginFormFields } from './components'
 import { AuthLoginPageUI } from './components'

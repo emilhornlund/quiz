@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './InfiniteScrollContainer.module.scss'
 

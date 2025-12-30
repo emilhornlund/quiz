@@ -6,7 +6,7 @@ import {
   GOOGLE_OAUTH_STORAGE_KEY,
   GOOGLE_OAUTH_STORAGE_PKCE_VERIFIER_KEY,
   GOOGLE_OAUTH_STORAGE_STATE_KEY,
-} from '../../utils/oauth.ts'
+} from '../../utils/oauth'
 
 const h = vi.hoisted(() => ({
   googleExchangeCode:
@@ -24,7 +24,7 @@ vi.mock('react-router-dom', async (orig) => {
   // @ts-ignore
   return { ...actual, useNavigate: () => h.navigate }
 })
-vi.mock('../../utils/notification.ts', () => ({
+vi.mock('../../utils/notification', () => ({
   notifyError: h.notifyError,
 }))
 

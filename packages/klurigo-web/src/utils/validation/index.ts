@@ -1,3 +1,3 @@
-export * from './field-validation.utils.ts'
-export * from './validation-model.builder.ts'
-export * from './validation-model.builder.types.ts'
+export * from './field-validation.utils'
+export * from './validation-model.builder'
+export * from './validation-model.builder.types'
