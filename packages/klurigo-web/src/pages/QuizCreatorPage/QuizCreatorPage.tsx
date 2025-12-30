@@ -16,7 +16,7 @@ import {
   QuizVisibility,
 } from '@klurigo/common'
 import { useQuery } from '@tanstack/react-query'
-import type { FC } from 'react'
+import { type FC, useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -105,17 +105,20 @@ const QuizCreatorPage: FC = () => {
     enabled: !!quizId && !!gameMode,
   })
 
+  const didHydrateQuestionsRef = useRef(false)
+
   useEffect(() => {
-    if (
-      gameMode &&
-      originalQuizQuestions &&
-      !isQuizQuestionsLoading &&
-      !isQuizQuestionsError
-    ) {
-      setQuestions(originalQuizQuestions)
-      selectQuestion(0)
-    }
+    if (!quizId) return
+    if (!gameMode) return
+    if (!originalQuizQuestions) return
+    if (isQuizQuestionsLoading || isQuizQuestionsError) return
+    if (didHydrateQuestionsRef.current) return
+
+    didHydrateQuestionsRef.current = true
+    setQuestions(originalQuizQuestions)
+    selectQuestion(0)
   }, [
+    quizId,
     gameMode,
     originalQuizQuestions,
     isQuizQuestionsLoading,
@@ -123,6 +126,10 @@ const QuizCreatorPage: FC = () => {
     setQuestions,
     selectQuestion,
   ])
+
+  useEffect(() => {
+    didHydrateQuestionsRef.current = false
+  }, [quizId])
 
   const handleAddQuestion = (): void => {
     if (gameMode === GameMode.Classic) {

@@ -621,4 +621,138 @@ describe('QuizCreatorPage', () => {
       await Promise.resolve()
     })
   })
+
+  it('hydrates questions only once per quizId', async () => {
+    mockQuizId = 'quiz-123'
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        visibility: QuizVisibility.Public,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.English,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
+    const loadedQuestions = [{ id: 'q1' }, { id: 'q2' }]
+
+    mockQuestionsQueryState = {
+      data: loadedQuestions,
+      isLoading: false,
+      isError: false,
+    }
+
+    const { rerender } = render(<QuizCreatorPage />)
+
+    await flushPromises()
+
+    expect(setQuestionsMock).toHaveBeenCalledTimes(1)
+    expect(setQuestionsMock).toHaveBeenCalledWith(loadedQuestions)
+    expect(selectQuestionMock).toHaveBeenCalledWith(0)
+
+    rerender(<QuizCreatorPage />)
+    await flushPromises()
+
+    expect(setQuestionsMock).toHaveBeenCalledTimes(1)
+    expect(selectQuestionMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not overwrite local question edits after initial hydration', async () => {
+    mockQuizId = 'quiz-123'
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        visibility: QuizVisibility.Public,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.English,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
+    const loadedQuestions = [{ id: 'q1' }, { id: 'q2' }]
+
+    mockQuestionsQueryState = {
+      data: loadedQuestions,
+      isLoading: false,
+      isError: false,
+    }
+
+    const { rerender } = render(<QuizCreatorPage />)
+
+    await flushPromises()
+
+    // First hydration call
+    expect(setQuestionsMock).toHaveBeenCalledTimes(1)
+    expect(setQuestionsMock.mock.calls[0]?.[0]).toBe(loadedQuestions)
+
+    const localQuestions = [...loadedQuestions, { id: 'q3-local' }]
+
+    act(() => {
+      latestUIProps?.onSetQuestions(localQuestions)
+    })
+
+    // This call is the local edit we just applied
+    expect(setQuestionsMock).toHaveBeenCalledTimes(2)
+    expect(setQuestionsMock.mock.calls[1]?.[0]).toEqual(localQuestions)
+
+    // Re-render should NOT trigger a new hydration back to loadedQuestions
+    rerender(<QuizCreatorPage />)
+    await flushPromises()
+
+    expect(setQuestionsMock).toHaveBeenCalledTimes(2)
+    expect(latestUIProps?.questions).toEqual(localQuestions)
+  })
+
+  it('rehydrates questions when quizId changes', async () => {
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        visibility: QuizVisibility.Public,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.English,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
+    const questionsQuiz1 = [{ id: 'q1' }]
+    const questionsQuiz2 = [{ id: 'q2' }]
+
+    mockQuizId = 'quiz-1'
+    mockQuestionsQueryState = {
+      data: questionsQuiz1,
+      isLoading: false,
+      isError: false,
+    }
+
+    const { rerender } = render(<QuizCreatorPage />)
+    await flushPromises()
+
+    expect(setQuestionsMock).toHaveBeenCalledTimes(1)
+    expect(setQuestionsMock.mock.calls[0]?.[0]).toBe(questionsQuiz1)
+
+    // Switch quizId + query payload
+    mockQuizId = 'quiz-2'
+    mockQuestionsQueryState = {
+      data: questionsQuiz2,
+      isLoading: false,
+      isError: false,
+    }
+
+    // Render once to trigger the [quizId] ref-reset effect
+    rerender(<QuizCreatorPage />)
+    await flushPromises()
+
+    // Render again so the hydrate effect runs with didHydrateQuestionsRef=false
+    rerender(<QuizCreatorPage />)
+    await flushPromises()
+
+    expect(setQuestionsMock).toHaveBeenCalledTimes(2)
+    expect(setQuestionsMock.mock.calls[1]?.[0]).toBe(questionsQuiz2)
+  })
 })
