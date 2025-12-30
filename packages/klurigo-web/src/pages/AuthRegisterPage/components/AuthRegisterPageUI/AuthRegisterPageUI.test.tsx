@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import AuthRegisterPageUI from './AuthRegisterPageUI'
 
-vi.mock('./text.utils.ts', () => ({
+vi.mock('./text.utils', () => ({
   getTitle: () => 'Create your account',
   getMessage: () => 'Join the party — make an account in seconds.',
 }))

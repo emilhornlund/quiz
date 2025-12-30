@@ -1,2 +1,2 @@
-export type { HostLobbyStateProps } from './HostLobbyState.tsx'
-export { default } from './HostLobbyState.tsx'
+export type { HostLobbyStateProps } from './HostLobbyState'
+export { default } from './HostLobbyState'

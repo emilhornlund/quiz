@@ -24,7 +24,7 @@ import type { FC } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import colors from '../../styles/colors.module.scss'
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './SortableTable.module.scss'
 

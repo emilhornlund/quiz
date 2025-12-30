@@ -2,7 +2,7 @@ import type { CountdownEvent } from '@klurigo/common'
 import type { FC } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './ProgressBar.module.scss'
 

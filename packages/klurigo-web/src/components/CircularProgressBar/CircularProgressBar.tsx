@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
-import { DeviceType } from '../../utils/device-size.types.ts'
+import { DeviceType } from '../../utils/device-size.types'
 import { classNames } from '../../utils/helpers'
 import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 

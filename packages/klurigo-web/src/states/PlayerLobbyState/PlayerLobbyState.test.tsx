@@ -25,7 +25,7 @@ vi.mock('react-router-dom', async (orig) => {
   return { ...actual, useNavigate: () => h.navigate }
 })
 
-vi.mock('./message.utils.ts', () => ({
+vi.mock('./message.utils', () => ({
   MESSAGES: ['Be nice and wait', 'Get ready for questions!'],
 }))
 

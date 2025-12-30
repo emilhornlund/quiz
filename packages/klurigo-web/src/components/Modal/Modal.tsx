@@ -11,7 +11,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import type { FC, ReactNode } from 'react'
 import { useId } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import Button from '../Button'
 
 import styles from './Modal.module.scss'

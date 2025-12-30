@@ -9,7 +9,7 @@ import {
   CircularProgressBarKind,
   CircularProgressBarSize,
 } from '../../../../../../../components'
-import { classNames } from '../../../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../../../utils/helpers'
 import styles from '../../../GameResultsPageUI.module.scss'
 
 export type TableItem = {

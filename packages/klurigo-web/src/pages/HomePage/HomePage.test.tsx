@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ApiError } from '../../api/api.utils.ts'
+import { ApiError } from '../../api/api.utils'
 
 import HomePage from './HomePage'
 

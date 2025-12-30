@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import CircularProgressBar from './CircularProgressBar'
-import { CircularProgressBarKind, CircularProgressBarSize } from './types.ts'
+import { CircularProgressBarKind, CircularProgressBarSize } from './types'
 
 describe('CircularProgressBar', () => {
   it('should render a CircularProgressBar with default props', async () => {

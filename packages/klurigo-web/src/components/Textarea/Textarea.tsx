@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { ChangeEvent, FC } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import { isCallbackValid, isValidString } from '../../utils/validation'
 
 import styles from './Textarea.module.scss'

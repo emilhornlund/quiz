@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
-import { parseNumber } from '../../utils/helpers.ts'
+import { parseNumber } from '../../utils/helpers'
 
 import ProfileGamesPageUI from './ProfileGamesPageUI'
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
-import { withMockAuth } from '../../../.storybook/mockAuthContext.tsx'
+import { withMockAuth } from '../../../.storybook/mockAuthContext'
 
 import GameJoinPage from './GameJoinPage'
 

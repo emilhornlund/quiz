@@ -2,9 +2,9 @@ import { AuthProvider } from '@klurigo/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
-import { withMockAuth } from '../../../../../.storybook/mockAuthContext.tsx'
+import { withMockAuth } from '../../../../../.storybook/mockAuthContext'
 
-import ProfileUserPageUI from './ProfileUserPageUI.tsx'
+import ProfileUserPageUI from './ProfileUserPageUI'
 
 const meta = {
   title: 'Pages/ProfileUserPage',

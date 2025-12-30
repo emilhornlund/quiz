@@ -20,20 +20,20 @@ import {
 import {
   classNames,
   trimToUndefined,
-} from '../../../../../../../../utils/helpers.ts'
+} from '../../../../../../../../utils/helpers'
 import type { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../validation-rules'
 
 import MediaQuestionField from './MediaQuestionField'
-import MultiChoiceOptions from './MultiChoiceOptions.tsx'
+import MultiChoiceOptions from './MultiChoiceOptions'
 import PinQuestionField, {
   type PinQuestionFieldProps,
 } from './PinQuestionField'
-import PuzzleValues from './PuzzleValues.tsx'
+import PuzzleValues from './PuzzleValues'
 import styles from './QuestionField.module.scss'
-import TrueFalseOptions from './TrueFalseOptions.tsx'
-import TypeAnswerOptions from './TypeAnswerOptions.tsx'
-import { QuestionFieldType } from './types.ts'
+import TrueFalseOptions from './TrueFalseOptions'
+import TypeAnswerOptions from './TypeAnswerOptions'
+import { QuestionFieldType } from './types'
 
 export type QuestionFieldProps = (
   | {

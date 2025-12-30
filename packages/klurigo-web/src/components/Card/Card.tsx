@@ -2,7 +2,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { FC, MouseEvent } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './Card.module.scss'
 

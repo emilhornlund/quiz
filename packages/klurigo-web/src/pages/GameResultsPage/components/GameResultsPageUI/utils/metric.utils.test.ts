@@ -14,7 +14,7 @@ import {
 const h = vi.hoisted(() => ({
   formatRoundedSeconds: vi.fn((ms: number) => `sec:${ms}`),
 }))
-vi.mock('./format.utils.ts', () => ({
+vi.mock('./format.utils', () => ({
   formatRoundedSeconds: h.formatRoundedSeconds,
 }))
 

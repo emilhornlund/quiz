@@ -4,7 +4,7 @@ import {
   isCallbackValid,
   isValidNumber,
   isValidString,
-} from './field-validation.utils.ts'
+} from './field-validation.utils'
 
 describe('isCallbackValid', () => {
   it('returns [true, undefined] when no callback is provided', () => {

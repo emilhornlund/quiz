@@ -6,7 +6,7 @@ import type { ApiClientCore } from '../api-client-core'
 import { createMediaResource } from './media.resource'
 import type { MediaResourceDeps } from './media.resource'
 
-vi.mock('../api.utils.ts', () => ({
+vi.mock('../api.utils', () => ({
   parseQueryParams: vi.fn(() => '?search=cat&offset=0&limit=50'),
   resolveUrl: vi.fn((path: string) => `https://example.test${path}`),
 }))

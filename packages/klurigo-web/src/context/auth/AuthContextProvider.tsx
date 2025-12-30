@@ -11,11 +11,11 @@ import { useNavigate } from 'react-router-dom'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useKlurigoServiceClient } from '../../api'
-import { ApiError } from '../../api/api.utils.ts'
+import { ApiError } from '../../api/api.utils'
 import type { AuthState, ScopePayload } from '../../models'
 
-import type { AuthContextType } from './auth-context.tsx'
-import { AuthContext } from './auth-context.tsx'
+import type { AuthContextType } from './auth-context'
+import { AuthContext } from './auth-context'
 
 /**
  * Allowed clock skew in seconds when evaluating token expiration.

@@ -13,7 +13,7 @@ vi.mock('../../models', () => ({
   },
 }))
 
-vi.mock('../../utils/helpers.ts', () => ({
+vi.mock('../../utils/helpers', () => ({
   classNames: (...parts: Array<string | undefined | false>) =>
     parts.filter(Boolean).join(' '),
 }))

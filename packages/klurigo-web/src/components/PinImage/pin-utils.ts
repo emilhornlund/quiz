@@ -1,6 +1,6 @@
 import colors from '../../styles/colors.module.scss'
 
-import { PinColor } from './types.ts'
+import { PinColor } from './types'
 
 const roundTo = (v: number, decimals: number) =>
   Math.round((v + Number.EPSILON) * Math.pow(10, decimals)) /

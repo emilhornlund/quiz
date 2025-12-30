@@ -3,7 +3,7 @@ import { QuestionImageRevealEffectType } from '@klurigo/common'
 import type { FC } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { classNames } from '../../../../utils/helpers.ts'
+import { classNames } from '../../../../utils/helpers'
 
 import styles from './ImageSquareEffect.module.scss'
 

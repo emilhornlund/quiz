@@ -25,7 +25,7 @@ import {
 } from '../../../../../components'
 import { GameModeLabels } from '../../../../../models'
 import { DATE_FORMATS, formatLocalDate } from '../../../../../utils/date.utils'
-import { classNames } from '../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../utils/helpers'
 import styles from '../GameResultsPageUI.module.scss'
 import {
   formatRoundedDuration,

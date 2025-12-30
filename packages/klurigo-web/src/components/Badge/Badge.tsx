@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 
 import colors from '../../styles/colors.module.scss'
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 
 import styles from './Badge.module.scss'
 

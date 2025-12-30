@@ -24,13 +24,13 @@ import {
   PlayerQuestionState,
   PlayerResultState,
 } from '../../states'
-import { ConnectionStatus } from '../../utils/event-source.types.ts'
+import { ConnectionStatus } from '../../utils/event-source.types'
 import {
   notifyError,
   notifySuccess,
   notifyWarning,
-} from '../../utils/notification.ts'
-import { useEventSource } from '../../utils/useEventSource.tsx'
+} from '../../utils/notification'
+import { useEventSource } from '../../utils/useEventSource'
 
 import styles from './GamePage.module.scss'
 

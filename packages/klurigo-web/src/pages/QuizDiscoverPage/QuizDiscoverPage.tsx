@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
 
 import { useKlurigoServiceClient } from '../../api'
-import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions.tsx'
+import { useQuizzesSearchOptions } from '../../utils/useQuizzesSearchOptions'
 
 import QuizDiscoverPageUI from './components/QuizDiscoverPageUI'
 

@@ -6,7 +6,7 @@ import type { ApiClientCore } from '../api-client-core'
 import { createGameResource } from './game.resource'
 import type { GameResourceDeps } from './game.resource'
 
-vi.mock('../api.utils.ts', () => ({
+vi.mock('../api.utils', () => ({
   parseQueryParams: vi.fn(() => '?limit=10&offset=20'),
 }))
 
@@ -318,7 +318,7 @@ describe('createGameResource', () => {
     const { api, apiGet } = makeApi()
     const { deps } = makeDeps()
 
-    const { parseQueryParams } = await import('../api.utils.ts')
+    const { parseQueryParams } = await import('../api.utils')
 
     const game = createGameResource(api, deps)
 

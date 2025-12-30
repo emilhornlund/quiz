@@ -8,7 +8,7 @@ import {
 import type { FC, FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import Button from '../Button'
 import TextField from '../TextField'
 

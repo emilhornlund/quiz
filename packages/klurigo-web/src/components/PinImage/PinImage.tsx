@@ -12,15 +12,15 @@ import {
   useState,
 } from 'react'
 
-import { DeviceType } from '../../utils/device-size.types.ts'
+import { DeviceType } from '../../utils/device-size.types'
 import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 import ResponsiveImage, { type ResponsiveImageProps } from '../ResponsiveImage'
 
-import { clamp01 } from './pin-utils.ts'
-import Pin from './Pin.tsx'
+import Pin from './Pin'
+import { clamp01 } from './pin-utils'
 import styles from './PinImage.module.scss'
-import type { PinImagePosition, PinImageValue } from './types.ts'
-import { PinColor } from './types.ts'
+import type { PinImagePosition, PinImageValue } from './types'
+import { PinColor } from './types'
 
 const toPinImagePosition = (
   value?: PinImageValue,

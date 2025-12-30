@@ -3,12 +3,12 @@ import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import { notifyError } from '../../utils/notification.ts'
+import { notifyError } from '../../utils/notification'
 import {
   GOOGLE_OAUTH_STORAGE_KEY,
   GOOGLE_OAUTH_STORAGE_PKCE_VERIFIER_KEY,
   GOOGLE_OAUTH_STORAGE_STATE_KEY,
-} from '../../utils/oauth.ts'
+} from '../../utils/oauth'
 
 import { AuthGoogleCallbackPageUI } from './components'
 

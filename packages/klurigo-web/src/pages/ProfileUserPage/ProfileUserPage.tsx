@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useKlurigoServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
 import { useUserContext } from '../../context/user'
-import { trimToUndefined } from '../../utils/helpers.ts'
+import { trimToUndefined } from '../../utils/helpers'
 
 import type { UpdateUserDetailsFormFields } from './components'
 import { ProfileUserPageUI } from './components'

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { classNames } from '../../utils/helpers.ts'
+import { classNames } from '../../utils/helpers'
 import StreakBadge from '../StreakBadge'
 
 import styles from './Leaderboard.module.scss'

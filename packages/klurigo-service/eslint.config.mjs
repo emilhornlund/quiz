@@ -57,6 +57,23 @@ export default [
           },
         },
       ],
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          ts: 'never',
+          tsx: 'never',
+        },
+      ],
+    },
+  },
+  {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
     },
   },
   pluginJs.configs.recommended,

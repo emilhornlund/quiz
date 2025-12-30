@@ -28,7 +28,7 @@ import type { FC } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 
 import { TextField } from '../../../../../../../../components'
-import { classNames } from '../../../../../../../../utils/helpers.ts'
+import { classNames } from '../../../../../../../../utils/helpers'
 import type { QuizQuestionValidationResult } from '../../../../../../utils/QuestionDataSource'
 import { getValidationErrorMessage } from '../../../../../../validation-rules'
 

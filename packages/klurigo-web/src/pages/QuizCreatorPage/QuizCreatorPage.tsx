@@ -22,7 +22,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
 import { LoadingSpinner, Page } from '../../components'
-import { notifyError } from '../../utils/notification.ts'
+import { notifyError } from '../../utils/notification'
 import {
   isClassicMultiChoiceQuestion,
   isClassicPinQuestion,

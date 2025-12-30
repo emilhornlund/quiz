@@ -8,7 +8,7 @@ import {
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { parseNumber } from './helpers.ts'
+import { parseNumber } from './helpers'
 
 type Sort = 'title' | 'created' | 'updated'
 type Order = 'asc' | 'desc'

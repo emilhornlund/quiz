@@ -30,7 +30,7 @@ vi.mock('../../context/user', () => ({
   }),
 }))
 
-vi.mock('./text.utils.ts', () => ({
+vi.mock('./text.utils', () => ({
   TITLES: ['Join the game', 'Another title'],
   MESSAGES: ['Pick a nickname and jump in!', 'Another message'],
 }))

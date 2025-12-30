@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { UserContext } from './UserContext.tsx'
+import { UserContext } from './UserContext'
 
 /**
  * Hook to access the user context.

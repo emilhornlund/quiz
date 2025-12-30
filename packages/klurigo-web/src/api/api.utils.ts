@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode'
 
-import config from '../config.ts'
-import { notifyError } from '../utils/notification.ts'
+import config from '../config'
+import { notifyError } from '../utils/notification'
 
 /**
  * Represents the structure of a POST body for API requests.

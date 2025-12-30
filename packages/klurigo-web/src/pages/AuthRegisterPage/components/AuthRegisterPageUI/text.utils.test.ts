@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { getMessage, getTitle, MESSAGES, TITLES } from './text.utils.ts'
+import { getMessage, getTitle, MESSAGES, TITLES } from './text.utils'
 
 describe('AuthRegister helpers', () => {
   afterEach(() => {

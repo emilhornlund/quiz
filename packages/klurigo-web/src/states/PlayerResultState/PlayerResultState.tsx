@@ -11,11 +11,11 @@ import {
   StreakBadge,
   Typography,
 } from '../../components'
-import { getBadgePositionTextColor } from '../../components/Badge/badge-utils.ts'
-import { classNames } from '../../utils/helpers.ts'
+import { getBadgePositionTextColor } from '../../components/Badge/badge-utils'
+import { classNames } from '../../utils/helpers'
 import { GamePage, PlayerGameFooter, PointsBehindIndicator } from '../common'
 
-import { getPositionMessage } from './message.utils.ts'
+import { getPositionMessage } from './message.utils'
 import styles from './PlayerResultState.module.scss'
 
 type CelebrationLevel = 'none' | 'normal' | 'major' | 'epic'

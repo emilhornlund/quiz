@@ -13,7 +13,7 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../models'
-import { classNames } from '../../../../utils/helpers.ts'
+import { classNames } from '../../../../utils/helpers'
 import Button from '../../../Button'
 import Modal from '../../../Modal'
 import Select from '../../../Select'

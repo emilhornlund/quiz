@@ -5,18 +5,18 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 vi.mock('jwt-decode', () => ({
   jwtDecode: vi.fn(),
 }))
-vi.mock('../utils/notification.ts', () => ({
+vi.mock('../utils/notification', () => ({
   notifyError: vi.fn(),
 }))
-vi.mock('../config.ts', () => ({
+vi.mock('../config', () => ({
   default: { klurigoServiceUrl: 'https://api.example.com' },
 }))
 
 // eslint-disable-next-line import/order
 import { jwtDecode } from 'jwt-decode'
 
-import config from '../config.ts'
-import { notifyError } from '../utils/notification.ts'
+import config from '../config'
+import { notifyError } from '../utils/notification'
 
 import {
   ApiError,

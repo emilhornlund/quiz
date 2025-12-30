@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 
 import { useAuthContext } from '../context/auth'
 import { useUserContext } from '../context/user'
-import { notifyError, notifySuccess } from '../utils/notification.ts'
+import { notifyError, notifySuccess } from '../utils/notification'
 
 import { createApiClientCore } from './api-client-core'
 import {

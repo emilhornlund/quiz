@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ApiError } from '../../api/api.utils.ts'
+import { ApiError } from '../../api/api.utils'
 
 import { AuthContext } from './auth-context'
 import AuthContextProvider from './AuthContextProvider'

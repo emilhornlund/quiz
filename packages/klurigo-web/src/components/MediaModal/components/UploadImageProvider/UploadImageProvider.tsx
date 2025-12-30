@@ -2,8 +2,8 @@ import type { FC } from 'react'
 import { useState } from 'react'
 
 import { useKlurigoServiceClient } from '../../../../api'
-import config from '../../../../config.ts'
-import { classNames } from '../../../../utils/helpers.ts'
+import config from '../../../../config'
+import { classNames } from '../../../../utils/helpers'
 import Dropzone from '../../../Dropzone'
 import styles from '../../MediaModal.module.scss'
 

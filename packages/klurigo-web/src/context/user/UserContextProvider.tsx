@@ -5,8 +5,8 @@ import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useKlurigoServiceClient } from '../../api'
 
-import type { UserContextType } from './UserContext.tsx'
-import { UserContext } from './UserContext.tsx'
+import type { UserContextType } from './UserContext'
+import { UserContext } from './UserContext'
 
 /**
  * Provides the current user profile to descendants.

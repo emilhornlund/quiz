@@ -6,8 +6,8 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import { useKlurigoServiceClient } from '../../api'
 import { useAuthContext } from '../auth'
 
-import type { GameContextType } from './game-context.tsx'
-import { GameContext } from './game-context.tsx'
+import type { GameContextType } from './game-context'
+import { GameContext } from './game-context'
 
 /**
  * Props for the `GameContextProvider` component.

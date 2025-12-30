@@ -143,7 +143,7 @@ vi.mock('react-router-dom', async () => {
   }
 })
 
-vi.mock('../../utils/notification.ts', () => ({
+vi.mock('../../utils/notification', () => ({
   notifyError: (msg: string) => notifyErrorMock(msg),
 }))
 

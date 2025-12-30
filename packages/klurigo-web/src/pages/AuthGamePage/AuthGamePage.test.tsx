@@ -20,7 +20,7 @@ vi.mock('react-router-dom', async (orig) => {
   return { ...actual, useNavigate: () => h.navigate }
 })
 
-vi.mock('../../utils/notification.ts', () => ({
+vi.mock('../../utils/notification', () => ({
   notifyError: h.notifyError,
 }))
 

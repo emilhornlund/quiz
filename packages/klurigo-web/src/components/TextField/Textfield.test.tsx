@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import TextField from './TextField.tsx'
+import TextField from './TextField'
 
 describe('TextField', () => {
   it('should render a TextField with type text', async () => {
