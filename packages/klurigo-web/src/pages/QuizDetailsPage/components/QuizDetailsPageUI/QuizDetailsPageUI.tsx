@@ -13,8 +13,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { QuizResponseDto } from '@klurigo/common'
-import { format } from 'date-fns'
-import { toZonedTime } from 'date-fns-tz'
 import type { FC } from 'react'
 import { useState } from 'react'
 
@@ -32,6 +30,7 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../models'
+import { DATE_FORMATS, formatLocalDate } from '../../../../utils/date.utils'
 
 import styles from './QuizDetailsPageUI.module.scss'
 
@@ -147,15 +146,15 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
         </div>
         <div
           className={styles.item}
-          title={`Created ${format(toZonedTime(quiz.created, 'UTC'), 'y-LL-dd HH:mm:ss')}`}>
+          title={`Created ${formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
           <FontAwesomeIcon icon={faCalendarPlus} />
-          {format(toZonedTime(quiz.created, 'UTC'), 'y-LL-dd HH:mm')}
+          {formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
         </div>
         <div
           className={styles.item}
-          title={`Updated ${format(toZonedTime(quiz.updated, 'UTC'), 'y-LL-dd HH:mm:ss')}`}>
+          title={`Updated ${formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
           <FontAwesomeIcon icon={faCalendarCheck} />
-          {format(toZonedTime(quiz.updated, 'UTC'), 'y-LL-dd HH:mm')}
+          {formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
         </div>
         <div className={styles.item}>
           <FontAwesomeIcon icon={faUser} />

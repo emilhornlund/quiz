@@ -48,6 +48,9 @@ export default defineConfig(({ mode }) => {
         reporter: ['text', 'lcov', 'html'],
         reportsDirectory: 'coverage',
       },
+      env: {
+        TZ: 'UTC',
+      },
     },
   }
 })

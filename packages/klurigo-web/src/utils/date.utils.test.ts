@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { formatTimeAgo } from './date.utils'
+import { DATE_FORMATS, formatLocalDate, formatTimeAgo } from './date.utils'
 
 const FIXED_NOW = new Date('2025-01-01T12:00:00.000Z')
 
@@ -85,5 +85,54 @@ describe('formatTimeAgo', () => {
       expect(formatTimeAgo(undefined)).toBe('NaN years ago')
       expect(formatTimeAgo('not-a-date')).toBe('NaN years ago')
     })
+  })
+})
+
+describe('formatLocalDate', () => {
+  const pad2 = (n: number) => String(n).padStart(2, '0')
+
+  const localDateTime = (date: Date) => {
+    const yyyy = String(date.getFullYear()).padStart(4, '0')
+    const mm = pad2(date.getMonth() + 1)
+    const dd = pad2(date.getDate())
+    const hh = pad2(date.getHours())
+    const min = pad2(date.getMinutes())
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`
+  }
+
+  const localDateTimeSeconds = (date: Date) => {
+    const yyyy = String(date.getFullYear()).padStart(4, '0')
+    const mm = pad2(date.getMonth() + 1)
+    const dd = pad2(date.getDate())
+    const hh = pad2(date.getHours())
+    const min = pad2(date.getMinutes())
+    const ss = pad2(date.getSeconds())
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+  }
+
+  it('formats Date instances in the browser timezone', () => {
+    const date = new Date('2025-12-05T13:33:58.983Z')
+
+    expect(formatLocalDate(date, DATE_FORMATS.DATE_TIME)).toBe(
+      localDateTime(date),
+    )
+  })
+
+  it('formats ISO 8601 strings in the browser timezone', () => {
+    const iso = '2025-12-05T13:33:58.983Z'
+    const date = new Date(iso)
+
+    expect(formatLocalDate(iso, DATE_FORMATS.DATE_TIME_SECONDS)).toBe(
+      localDateTimeSeconds(date),
+    )
+  })
+
+  it('produces identical output for Date and ISO string inputs representing the same instant', () => {
+    const date = new Date('2025-12-05T13:33:58.983Z')
+    const iso = '2025-12-05T13:33:58.983Z'
+
+    expect(formatLocalDate(date, DATE_FORMATS.DATE_TIME_SECONDS)).toBe(
+      formatLocalDate(iso, DATE_FORMATS.DATE_TIME_SECONDS),
+    )
   })
 })
