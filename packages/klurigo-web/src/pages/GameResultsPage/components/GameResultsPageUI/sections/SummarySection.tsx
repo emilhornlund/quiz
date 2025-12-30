@@ -15,8 +15,6 @@ import type {
   GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@klurigo/common'
 import { GameMode } from '@klurigo/common'
-import { format } from 'date-fns'
-import { toZonedTime } from 'date-fns-tz'
 import type { FC, ReactElement } from 'react'
 import { useMemo } from 'react'
 
@@ -26,6 +24,7 @@ import {
   CircularProgressBarSize,
 } from '../../../../../components'
 import { GameModeLabels } from '../../../../../models'
+import { DATE_FORMATS, formatLocalDate } from '../../../../../utils/date.utils'
 import { classNames } from '../../../../../utils/helpers.ts'
 import styles from '../GameResultsPageUI.module.scss'
 import {
@@ -180,7 +179,7 @@ const SummarySection: FC<SummarySectionProps> = ({
             </DetailsItem>
 
             <DetailsItem title="Date" icon={faCalendar}>
-              {format(toZonedTime(created, 'UTC'), 'y-LL-dd HH:mm')}
+              {formatLocalDate(created, DATE_FORMATS.DATE_TIME)}
             </DetailsItem>
 
             <DetailsItem title="Duration" icon={faClock}>

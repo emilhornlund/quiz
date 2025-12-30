@@ -1,3 +1,25 @@
+import { format } from 'date-fns'
+
+/**
+ * Canonical date/time format patterns used throughout the UI.
+ *
+ * These formats are intended for rendering dates in the browser's
+ * local timezone (i.e., the current environment timezone).
+ */
+export const DATE_FORMATS = {
+  DATE_TIME: 'yyyy-LL-dd HH:mm',
+  DATE_TIME_SECONDS: 'yyyy-LL-dd HH:mm:ss',
+  DATE_ONLY: 'yyyy-LL-dd',
+} as const
+
+/**
+ * Union type of all supported canonical date format patterns.
+ *
+ * Use this type to constrain formatting helpers to the patterns
+ * defined in `DATE_FORMATS`, ensuring consistent UI rendering.
+ */
+export type DateFormatPattern = (typeof DATE_FORMATS)[keyof typeof DATE_FORMATS]
+
 /**
  * Formats a past date as a human-friendly relative time string.
  *
@@ -46,4 +68,24 @@ export function formatTimeAgo(date?: Date | string): string {
   } else {
     return `${years} year${years !== 1 ? 's' : ''} ago`
   }
+}
+
+/**
+ * Formats a UTC timestamp for display in the browser's local timezone.
+ *
+ * Accepts either a Date instance or an ISO 8601 date string.
+ * The input value is assumed to represent a UTC point in time
+ * and is formatted using the environment's local timezone.
+ *
+ * @param value - UTC date value to format (Date instance or ISO 8601 string)
+ * @param pattern - Canonical date format pattern used for rendering
+ * @returns The formatted date string in the browser's local timezone
+ */
+export const formatLocalDate = (
+  value: Date | string,
+  pattern: DateFormatPattern,
+): string => {
+  const date = value instanceof Date ? value : new Date(value)
+
+  return format(date, pattern)
 }

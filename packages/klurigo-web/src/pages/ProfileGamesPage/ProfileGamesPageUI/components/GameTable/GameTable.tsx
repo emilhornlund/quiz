@@ -8,8 +8,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { GameHistoryDto } from '@klurigo/common'
 import { GameParticipantType, GameStatus } from '@klurigo/common'
-import { format } from 'date-fns'
-import { toZonedTime } from 'date-fns-tz'
 import type { FC, MouseEvent } from 'react'
 
 import Picture from '../../../../../assets/images/picture.svg'
@@ -20,7 +18,11 @@ import {
 import { getBadgePositionTextColor } from '../../../../../components/Badge/badge-utils.ts'
 import { GameModeLabels } from '../../../../../models'
 import colors from '../../../../../styles/colors.module.scss'
-import { formatTimeAgo } from '../../../../../utils/date.utils.ts'
+import {
+  DATE_FORMATS,
+  formatLocalDate,
+  formatTimeAgo,
+} from '../../../../../utils/date.utils'
 
 import styles from './GameTable.module.scss'
 
@@ -52,7 +54,8 @@ const GameTableItem: FC<GameTableItemProps> = ({ values, onClick }) => {
             <FontAwesomeIcon icon={faGamepad} color={colors.gray2} />
             {GameModeLabels[mode]}
           </span>
-          <span title={format(toZonedTime(created, 'UTC'), 'y-LL-dd HH:mm:ss')}>
+          <span
+            title={formatLocalDate(created, DATE_FORMATS.DATE_TIME_SECONDS)}>
             <FontAwesomeIcon icon={faClock} color={colors.gray2} />
             {formatTimeAgo(created)}
           </span>
