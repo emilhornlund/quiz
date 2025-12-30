@@ -184,4 +184,120 @@ describe('Typography', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
+
+  it('renders the child element when asChild=true (does not render its own Tag)', () => {
+    render(
+      <Typography variant="title" asChild>
+        <span>Child</span>
+      </Typography>,
+    )
+
+    const el = screen.getByText('Child')
+    expect(el.tagName.toLowerCase()).toBe('span')
+
+    expect(el).toHaveClass('typography')
+    expect(el).toHaveClass('title')
+    expect(el).toHaveClass('full')
+  })
+
+  it('merges child className with Typography classes when asChild=true', () => {
+    render(
+      <Typography variant="subtitle" size="small" asChild className="outer">
+        <span className="inner">Merged</span>
+      </Typography>,
+    )
+
+    const el = screen.getByText('Merged')
+    expect(el).toHaveClass('inner')
+    expect(el).toHaveClass('outer')
+
+    expect(el).toHaveClass('typography')
+    expect(el).toHaveClass('subtitle')
+    expect(el).toHaveClass('small')
+  })
+
+  it('forwards aria and data attributes onto the child element when asChild=true', () => {
+    render(
+      <Typography
+        variant="text"
+        asChild
+        aria-label="Label"
+        aria-hidden="true"
+        data-testid="child"
+        data-tracking-id="track">
+        <button type="button">Button</button>
+      </Typography>,
+    )
+
+    const el = screen.getByTestId('child')
+    expect(el.tagName.toLowerCase()).toBe('button')
+    expect(el).toHaveAttribute('aria-label', 'Label')
+    expect(el).toHaveAttribute('aria-hidden', 'true')
+    expect(el).toHaveAttribute('data-tracking-id', 'track')
+  })
+
+  it('forwards event handlers onto the child element when asChild=true', () => {
+    const onClick = vi.fn()
+    const onKeyDown = vi.fn()
+
+    render(
+      <Typography
+        variant="text"
+        asChild
+        onClick={onClick}
+        onKeyDown={onKeyDown}>
+        <div tabIndex={0}>Interactive</div>
+      </Typography>,
+    )
+
+    const el = screen.getByText('Interactive')
+    fireEvent.click(el)
+    expect(onClick).toHaveBeenCalledTimes(1)
+
+    fireEvent.keyDown(el, { key: 'Enter' })
+    expect(onKeyDown).toHaveBeenCalledTimes(1)
+  })
+
+  it('throws when asChild=true and children is not a valid React element', () => {
+    const renderInvalid = () =>
+      render(
+        <Typography variant="text" asChild>
+          {'Not an element'}
+        </Typography>,
+      )
+
+    expect(renderInvalid).toThrow(
+      'Typography with asChild expects a single valid React element child.',
+    )
+  })
+
+  it('allows composing with an <a> child to avoid nested anchors (single anchor in output)', () => {
+    const { container } = render(
+      <Typography variant="link" size="small" asChild>
+        <a href="/quiz/create">Create your own quiz</a>
+      </Typography>,
+    )
+
+    const anchors = container.querySelectorAll('a')
+    expect(anchors).toHaveLength(1)
+
+    const el = screen.getByText('Create your own quiz')
+    expect(el.tagName.toLowerCase()).toBe('a')
+    expect(el).toHaveAttribute('href', '/quiz/create')
+    expect(el).toHaveClass('typography')
+    expect(el).toHaveClass('link')
+    expect(el).toHaveClass('small')
+  })
+
+  it('matches snapshot for asChild composition', () => {
+    const { asFragment } = render(
+      <Typography variant="link" size="small" asChild className="outer">
+        <a href="/quiz/create" className="inner">
+          Create your own quiz
+        </a>
+      </Typography>,
+    )
+
+    expect(asFragment()).toMatchSnapshot()
+  })
 })

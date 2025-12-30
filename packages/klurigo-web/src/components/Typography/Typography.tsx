@@ -6,8 +6,10 @@ import type {
   JSX,
   KeyboardEventHandler,
   MouseEventHandler,
+  ReactElement,
   ReactNode,
 } from 'react'
+import { cloneElement, isValidElement } from 'react'
 
 import { classNames } from '../../utils/helpers'
 
@@ -68,6 +70,25 @@ type SharedProps = {
    * Content rendered inside the typography element.
    */
   children: ReactNode
+
+  /**
+   * Enables “slot” rendering by delegating the rendered element to the child.
+   *
+   * When enabled, Typography does not render its own semantic element. Instead,
+   * it clones the single React element provided as `children` and applies:
+   * - the resolved Typography class names (merged with the child’s className)
+   * - any forwarded props (ARIA, data-*, id, event handlers, etc.)
+   *
+   * This is primarily used to avoid invalid nested markup when composing with
+   * components that already render semantic elements (for example, `Link` from
+   * `react-router-dom`, which renders an `<a>`).
+   *
+   * Important:
+   * - `children` must be a single valid React element when `asChild` is `true`.
+   * - When `asChild` is enabled, Typography’s `variant` only affects styling
+   *   and not which element is rendered (the child controls the element).
+   */
+  asChild?: boolean
 
   /**
    * Optional additional CSS class names applied to the element.
@@ -192,6 +213,7 @@ const Typography: FC<TypographyProps> = (props) => {
     variant = 'text',
     size = 'full',
     children,
+    asChild,
     className,
     ...rest
   } = props
@@ -219,6 +241,21 @@ const Typography: FC<TypographyProps> = (props) => {
     size === 'full' ? styles.full : undefined,
     className,
   )
+
+  if (asChild) {
+    if (!isValidElement(children)) {
+      throw new Error(
+        'Typography with asChild expects a single valid React element child.',
+      )
+    }
+
+    const child = children as ReactElement<{ className?: string }>
+
+    return cloneElement(child, {
+      ...rest,
+      className: classNames(child.props.className, classes),
+    })
+  }
 
   return (
     <Tag {...rest} className={classes}>

@@ -45,75 +45,92 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with no results 1
           <h1
             class="typography title full"
           >
-            You Haven't Played Any Games Yet
+            No Games Yet
           </h1>
           <p
             class="typography text full"
           >
-            Once you play or host a game, it will appear here.
+            Host live quizzes and play together with others. Your games will appear here once you start.
           </p>
           <div
-            class="gettingStarted"
+            class="pageDivider"
+          />
+          <h2
+            class="typography subtitle medium"
           >
-            <div
-              class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+            Looking for something to play?
+          </h2>
+          <p
+            class="typography text medium"
+          >
+            Browse quizzes made by others and host a live game in seconds.
+          </p>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-discover-quizzes-button-button"
+              id="discover-quizzes-button"
+              name="discover-quizzes-button"
+              type="button"
             >
-              <button
-                data-testid="test-discover-quizzes-button-button"
-                id="discover-quizzes-button"
-                name="discover-quizzes-button"
-                type="button"
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-magnifying-glass"
+                data-icon="magnifying-glass"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
               >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-magnifying-glass"
-                  data-icon="magnifying-glass"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376C296.3 401.1 253.9 416 208 416 93.1 416 0 322.9 0 208S93.1 0 208 0 416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-                    fill="currentColor"
-                  />
-                </svg>
-                <span>
-                  Discover Existing Quizzes
-                </span>
-              </button>
-            </div>
-            <a
-              class="typography link full"
+                <path
+                  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376C296.3 401.1 253.9 416 208 416 93.1 416 0 322.9 0 208S93.1 0 208 0 416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Discover quizzes
+              </span>
+            </button>
+          </div>
+          <div
+            class="pageDivider"
+          />
+          <h2
+            class="typography subtitle medium"
+          >
+            Want to make your own?
+          </h2>
+          <p
+            class="typography text medium"
+          >
+            Create a quiz in minutes and reuse it for future games.
+          </p>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-create-quiz-button-button"
+              id="create-quiz-button"
+              name="create-quiz-button"
+              type="button"
             >
-              or
-            </a>
-            <div
-              class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
-            >
-              <button
-                data-testid="test-create-quiz-button-button"
-                id="create-quiz-button"
-                name="create-quiz-button"
-                type="button"
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-plus"
+                data-icon="plus"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 448 512"
               >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-plus"
-                  data-icon="plus"
-                  data-prefix="fas"
-                  role="img"
-                  viewBox="0 0 448 512"
-                >
-                  <path
-                    d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"
-                    fill="currentColor"
-                  />
-                </svg>
-                <span>
-                  Create New Quiz
-                </span>
-              </button>
-            </div>
+                <path
+                  d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Create a quiz
+              </span>
+            </button>
           </div>
         </div>
       </div>

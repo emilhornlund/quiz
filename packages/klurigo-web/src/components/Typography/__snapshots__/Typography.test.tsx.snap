@@ -1,5 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Typography > matches snapshot for asChild composition 1`] = `
+<DocumentFragment>
+  <a
+    class="inner typography link small outer"
+    href="/quiz/create"
+  >
+    Create your own quiz
+  </a>
+</DocumentFragment>
+`;
+
 exports[`Typography > matches snapshot for hero variant 1`] = `
 <DocumentFragment>
   <h1

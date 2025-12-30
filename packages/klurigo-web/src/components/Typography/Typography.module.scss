@@ -85,6 +85,7 @@
 
   &.link {
     font-weight: 400;
+    cursor: pointer;
 
     @include helpers.mobile {
       @include helpers.fontSize(variables.$mobile-link-font-size);

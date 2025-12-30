@@ -200,17 +200,17 @@ const HomePage: FC = () => {
         />
       </form>
       {isUserAuthenticated ? (
-        <Link to={'/quiz/create'} className={styles.link}>
-          <Typography variant="link" size="small">
+        <Typography variant="link" size="small" asChild>
+          <Link to={'/quiz/create'} className={styles.link}>
             Create your own quiz and challenge others!
-          </Typography>
-        </Link>
+          </Link>
+        </Typography>
       ) : (
-        <Link to={'/auth/login'} className={styles.link}>
-          <Typography variant="link" size="small">
+        <Typography variant="link" size="small" asChild>
+          <Link to={'/auth/login'} className={styles.link}>
             Want to create your own quiz? Log in to get started!
-          </Typography>
-        </Link>
+          </Link>
+        </Typography>
       )}
     </Page>
   )
