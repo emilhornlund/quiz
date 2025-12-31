@@ -12,6 +12,7 @@
 
   &.hero {
     font-weight: 900;
+    opacity: 0.95;
 
     @include helpers.mobile {
       line-height: 5rem;
@@ -31,6 +32,7 @@
 
   &.title {
     font-weight: 900;
+    opacity: 0.95;
 
     @include helpers.mobile {
       line-height: 3rem;
@@ -53,6 +55,7 @@
 
   &.subtitle {
     font-weight: 700;
+    opacity: 0.88;
 
     @include helpers.mobile {
       @include helpers.fontSize(variables.$mobile-subtitle-font-size);
@@ -69,6 +72,7 @@
 
   &.text {
     font-weight: 400;
+    opacity: 0.80;
 
     @include helpers.mobile {
       @include helpers.fontSize(variables.$mobile-text-font-size);
