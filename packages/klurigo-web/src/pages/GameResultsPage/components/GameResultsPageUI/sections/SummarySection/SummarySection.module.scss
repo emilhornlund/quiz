@@ -1,0 +1,290 @@
+@use '../../../../../../styles/colors';
+@use '../../../../../../styles/helpers';
+@use '../../../../../../styles/variables';
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @include helpers.mobile {
+    gap: variables.$mobile-layout-gutter;
+  }
+
+  @include helpers.tablet {
+    gap: variables.$tablet-layout-gutter;
+  }
+
+  @include helpers.desktop {
+    gap: variables.$desktop-layout-gutter;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    background-color: colors.$white;
+    color: colors.$gray-4;
+
+    @include helpers.mobile {
+      padding: variables.$mobile-narrow-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
+
+      @include helpers.fontSize(18px);
+    }
+
+    @include helpers.tablet {
+      padding: variables.$tablet-narrow-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
+
+      @include helpers.fontSize(20px);
+    }
+
+    @include helpers.desktop {
+      padding: variables.$desktop-narrow-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
+
+      @include helpers.fontSize(22px);
+    }
+
+    &.full {
+      grid-column: span 2;
+    }
+
+    &.progress {
+      display: flex;
+      flex-direction: row;
+
+      @include helpers.mobile {
+        column-gap: variables.$mobile-narrow-layout-gutter;
+      }
+
+      @include helpers.tablet {
+        column-gap: variables.$tablet-narrow-layout-gutter;
+      }
+
+      @include helpers.desktop {
+        column-gap: variables.$desktop-narrow-layout-gutter;
+      }
+
+      .text {
+        flex: 1;
+      }
+    }
+
+    &.details {
+      display: flex;
+      flex-direction: row;
+
+      @include helpers.mobile {
+        flex-direction: column;
+        gap: variables.$mobile-layout-gutter * 0.5;
+      }
+
+      @include helpers.tablet {
+        gap: variables.$tablet-layout-gutter;
+      }
+
+      @include helpers.desktop {
+        gap: variables.$desktop-layout-gutter;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
+
+        @include helpers.mobile {
+          gap: variables.$mobile-layout-gutter * 0.5;
+        }
+
+        @include helpers.tablet {
+          gap: variables.$tablet-layout-gutter * 0.5;
+        }
+
+        @include helpers.desktop {
+          gap: variables.$desktop-layout-gutter * 0.5;
+        }
+
+        .item {
+          display: grid;
+
+          @include helpers.mobile {
+            grid-template-columns: variables.$mobile-layout-gutter 1fr 1fr;
+            gap: variables.$mobile-layout-gutter;
+          }
+
+          @include helpers.tablet {
+            grid-template-columns: variables.$tablet-layout-gutter 1fr 1fr;
+            gap: variables.$tablet-layout-gutter * 0.5;
+          }
+
+          @include helpers.desktop {
+            grid-template-columns: variables.$desktop-layout-gutter 1fr 1fr;
+            gap: variables.$desktop-layout-gutter * 0.5;
+          }
+
+          .icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex: 1;
+
+            @include helpers.mobile {
+              column-gap: variables.$mobile-narrow-layout-gutter;
+            }
+
+            @include helpers.tablet {
+              column-gap: variables.$tablet-narrow-layout-gutter;
+            }
+
+            @include helpers.desktop {
+              column-gap: variables.$desktop-narrow-layout-gutter;
+            }
+          }
+
+          .value {
+            font-weight: bold;
+            white-space: nowrap;
+            text-align: right;
+          }
+        }
+      }
+
+      .separator {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include helpers.mobile {
+          display: none;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: helpers.pxToRem(1px);
+          background: linear-gradient(
+              to bottom,
+              transparent 0%,
+              rgba(0, 0, 0, 0.15) 15%,
+              rgba(0, 0, 0, 0.4) 50%,
+              rgba(0, 0, 0, 0.15) 85%,
+              transparent 100%
+          );
+        }
+      }
+    }
+
+    &.metric {
+      @include helpers.mobile {
+        row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+      }
+
+      @include helpers.tablet {
+        row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+      }
+
+      @include helpers.desktop {
+        row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+      }
+
+      .value {
+        font-weight: bold;
+        text-align: center;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(24px);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(26px);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(28px);
+        }
+      }
+
+      .nicknames {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        @include helpers.mobile {
+          gap: variables.$mobile-narrow-layout-gutter;
+        }
+        @include helpers.tablet {
+          gap: variables.$tablet-narrow-layout-gutter;
+        }
+        @include helpers.desktop {
+          gap: variables.$desktop-narrow-layout-gutter;
+        }
+
+        .nickname {
+          display: flex;
+          background-color: colors.$blue-1;
+          color: colors.$white;
+          justify-content: center;
+          align-items: center;
+
+          @include helpers.mobile {
+            height: helpers.pxToRem(30px);
+            border-radius: calc(30px / 2);
+            padding: 0 helpers.pxToRem(calc(30px / 2));
+
+            @include helpers.fontSize(18px);
+          }
+
+          @include helpers.tablet {
+            height: helpers.pxToRem(32px);
+            border-radius: calc(32px / 2);
+            padding: 0 helpers.pxToRem(calc(32px / 2));
+
+            @include helpers.fontSize(20px);
+          }
+
+          @include helpers.desktop {
+            height: helpers.pxToRem(34px);
+            border-radius: calc(34px / 2);
+            padding: 0 helpers.pxToRem(calc(34px / 2));
+
+            @include helpers.fontSize(22px);
+          }
+        }
+      }
+
+      .title {
+        text-transform: capitalize;
+        text-align: center;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(18px);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(20px);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(22px);
+        }
+      }
+    }
+  }
+}

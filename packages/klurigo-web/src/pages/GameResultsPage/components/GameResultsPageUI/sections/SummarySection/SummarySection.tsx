@@ -22,18 +22,22 @@ import {
   CircularProgressBar,
   CircularProgressBarKind,
   CircularProgressBarSize,
-} from '../../../../../components'
-import { GameModeLabels } from '../../../../../models'
-import { DATE_FORMATS, formatLocalDate } from '../../../../../utils/date.utils'
-import { classNames } from '../../../../../utils/helpers'
-import styles from '../GameResultsPageUI.module.scss'
+} from '../../../../../../components'
+import { GameModeLabels } from '../../../../../../models'
+import {
+  DATE_FORMATS,
+  formatLocalDate,
+} from '../../../../../../utils/date.utils'
+import { classNames } from '../../../../../../utils/helpers'
 import {
   formatRoundedDuration,
   formatRoundedSeconds,
   getAveragePrecision,
   getCorrectPercentage,
   getQuizDifficultyMessage,
-} from '../utils'
+} from '../../utils'
+
+import styles from './SummarySection.module.scss'
 
 export type Metric = { value: number; players: GameResultParticipantDto[] }
 

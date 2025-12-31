@@ -1,0 +1,252 @@
+@use '../../../../../../../styles/colors';
+@use '../../../../../../../styles/helpers';
+@use '../../../../../../../styles/variables';
+
+.table {
+  display: flex;
+  flex-direction: column;
+  color: colors.$gray-4;
+
+  @include helpers.mobile {
+    row-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+    @include helpers.fontSize(18px);
+  }
+
+  @include helpers.tablet {
+    row-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+    @include helpers.fontSize(20px);
+  }
+
+  @include helpers.desktop {
+    row-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+    @include helpers.fontSize(22px);
+  }
+
+  .tableRow {
+    display: flex;
+    flex-direction: column;
+    background-color: colors.$white;
+    cursor: pointer;
+
+    @include helpers.mobile {
+      padding: calc(#{variables.$mobile-layout-gutter} * 0.35) variables.$mobile-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
+    }
+
+    @include helpers.tablet {
+      padding: calc(#{variables.$tablet-layout-gutter} * 0.35) variables.$tablet-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
+    }
+
+    @include helpers.desktop {
+      padding: calc(#{variables.$desktop-layout-gutter} * 0.35) variables.$desktop-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      @include helpers.mobile {
+        column-gap: variables.$mobile-layout-gutter;
+      }
+
+      @include helpers.tablet {
+        column-gap: variables.$tablet-layout-gutter;
+      }
+
+      @include helpers.desktop {
+        column-gap: variables.$desktop-layout-gutter;
+      }
+
+      .badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: colors.$gray-1;
+        font-weight: bold;
+
+        @include helpers.mobile {
+          width: helpers.pxToRem(30px);
+          height: helpers.pxToRem(30px);
+        }
+
+        @include helpers.tablet {
+          width: helpers.pxToRem(34px);
+          height: helpers.pxToRem(34px);
+        }
+
+        @include helpers.desktop {
+          width: helpers.pxToRem(38px);
+          height: helpers.pxToRem(38px);
+        }
+      }
+
+      .value {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        flex-wrap: wrap;
+        flex: 1;
+
+        @include helpers.mobile {
+          column-gap: variables.$mobile-control-normal-layout-gutter;
+        }
+
+        @include helpers.tablet {
+          column-gap: variables.$tablet-control-normal-layout-gutter;
+        }
+
+        @include helpers.desktop {
+          column-gap: variables.$desktop-control-normal-layout-gutter;
+        }
+
+        .label {
+          font-weight: bold;
+          text-transform: uppercase;
+          background-color: colors.$blue-1;
+          color: colors.$white;
+
+          @include helpers.mobile {
+            padding: variables.$mobile-control-normal-layout-gutter * 0.5 variables.$mobile-control-normal-layout-gutter;
+            border-radius: variables.$mobile-control-normal-border-radius;
+
+            @include helpers.fontSize(variables.$mobile-control-small-font-size);
+          }
+
+          @include helpers.tablet {
+            padding: variables.$mobile-control-normal-layout-gutter * 0.5 variables.$mobile-control-normal-layout-gutter;
+            border-radius: variables.$mobile-control-normal-border-radius;
+
+            @include helpers.fontSize(variables.$mobile-control-small-font-size);
+          }
+
+          @include helpers.desktop {
+            padding: variables.$desktop-control-normal-layout-gutter * 0.5 variables.$desktop-control-normal-layout-gutter;
+            border-radius: variables.$desktop-control-normal-border-radius;
+
+            @include helpers.fontSize(variables.$desktop-control-small-font-size);
+          }
+        }
+      }
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transition: all 0.25s linear;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+
+      @include helpers.mobile {
+        column-gap: variables.$mobile-layout-gutter;
+        row-gap: calc(#{variables.$mobile-layout-gutter} * 0.5);
+
+        @include helpers.fontSize(16px);
+      }
+
+      @include helpers.tablet {
+        column-gap: variables.$tablet-layout-gutter;
+        row-gap: variables.$tablet-layout-gutter * 0.5;
+
+        @include helpers.fontSize(18px);
+      }
+
+      @include helpers.desktop {
+        column-gap: variables.$desktop-layout-gutter;
+        row-gap: calc(#{variables.$desktop-layout-gutter} * 0.5);
+
+        @include helpers.fontSize(20px);
+      }
+
+      &.active {
+        visibility: visible;
+        opacity: 1;
+        height: auto;
+
+        @include helpers.mobile {
+          padding-top: variables.$mobile-narrow-layout-gutter;
+        }
+
+        @include helpers.tablet {
+          padding-top: variables.$tablet-narrow-layout-gutter;
+        }
+
+        @include helpers.desktop {
+          padding-top: variables.$desktop-narrow-layout-gutter;
+        }
+      }
+
+      .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        @include helpers.mobile {
+          column-gap: variables.$mobile-narrow-layout-gutter;
+        }
+
+        @include helpers.tablet {
+          column-gap: variables.$tablet-narrow-layout-gutter;
+        }
+
+        @include helpers.desktop {
+          column-gap: variables.$desktop-narrow-layout-gutter;
+        }
+
+        .title {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+
+          @include helpers.mobile {
+            column-gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+          }
+
+          @include helpers.tablet {
+            column-gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+          }
+
+          @include helpers.desktop {
+            column-gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+          }
+        }
+
+        .value {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .tableSeparator {
+    position: relative;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(255, 255, 255, 0.4) 15%,
+          rgba(255, 255, 255, 0.7) 50%,
+          rgba(255, 255, 255, 0.4) 85%,
+          transparent 100%
+      );
+    }
+  }
+}

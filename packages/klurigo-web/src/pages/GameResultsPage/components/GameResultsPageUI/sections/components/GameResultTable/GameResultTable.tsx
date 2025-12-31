@@ -10,7 +10,8 @@ import {
   CircularProgressBarSize,
 } from '../../../../../../../components'
 import { classNames } from '../../../../../../../utils/helpers'
-import styles from '../../../GameResultsPageUI.module.scss'
+
+import styles from './GameResultTable.module.scss'
 
 export type TableItem = {
   type: 'table-row'

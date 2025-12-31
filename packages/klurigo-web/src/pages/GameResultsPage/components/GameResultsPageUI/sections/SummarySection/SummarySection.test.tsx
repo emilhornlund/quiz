@@ -15,7 +15,7 @@ const h = vi.hoisted(() => {
   }
 })
 
-vi.mock('../utils', () => ({
+vi.mock('../../utils', () => ({
   getCorrectPercentage: h.getCorrectPercentage,
   getAveragePrecision: h.getAveragePrecision,
   getQuizDifficultyMessage: h.getQuizDifficultyMessage,
