@@ -124,41 +124,53 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
 
       <div className={styles.details}>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faEye} />
-          {QuizVisibilityLabels[quiz.visibility]}
+          <FontAwesomeIcon icon={faEye} className={styles.icon} />
+          <span className={styles.value}>
+            {QuizVisibilityLabels[quiz.visibility]}
+          </span>
         </div>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faIcons} />
-          {QuizCategoryLabels[quiz.category]}
+          <FontAwesomeIcon icon={faIcons} className={styles.icon} />
+          <span className={styles.value}>
+            {QuizCategoryLabels[quiz.category]}
+          </span>
         </div>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faLanguage} />
-          {LanguageLabels[quiz.languageCode]}
+          <FontAwesomeIcon icon={faLanguage} className={styles.icon} />
+          <span className={styles.value}>
+            {LanguageLabels[quiz.languageCode]}
+          </span>
         </div>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faGamepad} />
-          {GameModeLabels[quiz.mode]}
+          <FontAwesomeIcon icon={faGamepad} className={styles.icon} />
+          <span className={styles.value}>{GameModeLabels[quiz.mode]}</span>
         </div>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faCircleQuestion} />
-          {quiz.numberOfQuestions}{' '}
-          {quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+          <FontAwesomeIcon icon={faCircleQuestion} className={styles.icon} />
+          <span className={styles.value}>
+            {quiz.numberOfQuestions}{' '}
+            {quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}
+          </span>
         </div>
         <div
           className={styles.item}
           title={`Created ${formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
-          <FontAwesomeIcon icon={faCalendarPlus} />
-          {formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
+          <FontAwesomeIcon icon={faCalendarPlus} className={styles.icon} />
+          <span className={styles.value}>
+            {formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
+          </span>
         </div>
         <div
           className={styles.item}
           title={`Updated ${formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
-          <FontAwesomeIcon icon={faCalendarCheck} />
-          {formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
+          <FontAwesomeIcon icon={faCalendarCheck} className={styles.icon} />
+          <span className={styles.value}>
+            {formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
+          </span>
         </div>
         <div className={styles.item}>
-          <FontAwesomeIcon icon={faUser} />
-          {quiz.author.name || 'N/A'}
+          <FontAwesomeIcon icon={faUser} className={styles.icon} />
+          <span className={styles.value}>{quiz.author.name || 'N/A'}</span>
         </div>
       </div>
 

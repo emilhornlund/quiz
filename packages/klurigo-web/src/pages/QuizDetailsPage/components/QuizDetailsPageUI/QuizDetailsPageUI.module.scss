@@ -4,46 +4,54 @@
 
 .details {
   display: grid;
-  border-style: solid;
-  border-color: colors.$white-1-50;
-  background-color: colors.$white-1-80;
+  background-color: colors.$white-1-15;
+  border: variables.$control-outside-border-width solid colors.$white-1-25;
 
   @include helpers.mobile {
     grid-template-columns: 1fr 1fr;
     gap: variables.$mobile-narrow-layout-gutter;
     width: 100%;
-    border-width: helpers.pxToRem(2px);
-    border-radius: variables.$mobile-narrow-layout-gutter;
+    border-radius: variables.$mobile-border-radius;
     padding: variables.$mobile-narrow-layout-gutter;
   }
 
   @include helpers.tablet {
     grid-template-columns: 1fr 1fr 1fr;
     gap: variables.$tablet-narrow-layout-gutter;
-    width: variables.$tablet-width;
-    border-width: helpers.pxToRem(3px);
-    border-radius: variables.$tablet-narrow-layout-gutter;
+    width: 100%;
+    border-radius: variables.$tablet-border-radius;
     padding: variables.$tablet-narrow-layout-gutter;
   }
 
   @include helpers.desktop {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: variables.$desktop-narrow-layout-gutter;
-    width: variables.$tablet-width;
-    border-width: helpers.pxToRem(4px);
-    border-radius: variables.$desktop-narrow-layout-gutter;
+    width: variables.$desktop-width * 0.85;
+    border-radius: variables.$desktop-border-radius;
     padding: variables.$desktop-narrow-layout-gutter;
   }
 
   .item {
     display: flex;
     flex-direction: column;
-    color: colors.$gray-4;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     align-items: center;
+
+    .icon, .value {
+      color: colors.$white;
+    }
+
+    .icon {
+      opacity: 0.95;
+    }
+
+    .value {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      opacity: 0.68;
+    }
 
     @include helpers.mobile {
       gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
@@ -54,13 +62,13 @@
     @include helpers.tablet {
       gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
 
-      @include helpers.fontSize(20px);
+      @include helpers.fontSize(18px);
     }
 
     @include helpers.desktop {
       gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
 
-      @include helpers.fontSize(18px);
+      @include helpers.fontSize(20px);
     }
   }
 }
