@@ -1,5 +1,5 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { FC } from 'react'
 import { useState } from 'react'
@@ -63,10 +63,14 @@ const GameResultTableRow: FC<TableItem> = ({
             progress={progress}
             kind={CircularProgressBarKind.Correct}
             size={CircularProgressBarSize.Small}
+            percentageColor="white"
           />
         </div>
         <div>
-          <FontAwesomeIcon icon={faChevronDown} color="black" />
+          <FontAwesomeIcon
+            icon={showDetails ? faChevronUp : faChevronDown}
+            color="white"
+          />
         </div>
       </div>
       <div
@@ -80,7 +84,7 @@ const GameResultTableRow: FC<TableItem> = ({
               {item.icon && (
                 <FontAwesomeIcon icon={item.icon} color={item.iconColor} />
               )}
-              {item.title}
+              <span>{item.title}</span>
             </div>
             <div className={styles.value}>{item.value}</div>
           </div>

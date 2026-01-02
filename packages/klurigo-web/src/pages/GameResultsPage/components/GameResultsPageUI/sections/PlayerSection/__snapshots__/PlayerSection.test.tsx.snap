@@ -48,7 +48,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -63,7 +63,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -85,7 +85,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -99,7 +101,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"
@@ -151,7 +155,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -166,7 +170,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -188,7 +192,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -202,7 +208,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"
@@ -254,7 +262,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -269,7 +277,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -291,7 +299,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -305,7 +315,9 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"
@@ -368,7 +380,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -383,7 +395,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -405,7 +417,9 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -419,7 +433,9 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"
@@ -471,7 +487,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -486,7 +502,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -508,7 +524,9 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -522,7 +540,9 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"
@@ -585,7 +605,7 @@ exports[`PlayerSection > toggles details for a row and shows detail items for Cl
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText black"
+                class="progressText white"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -600,7 +620,7 @@ exports[`PlayerSection > toggles details for a row and shows detail items for Cl
             <svg
               aria-hidden="true"
               class="svg-inline--fa fa-chevron-down"
-              color="black"
+              color="white"
               data-icon="chevron-down"
               data-prefix="fas"
               role="img"
@@ -622,7 +642,9 @@ exports[`PlayerSection > toggles details for a row and shows detail items for Cl
             <div
               class="title"
             >
-              Correct
+              <span>
+                Correct
+              </span>
             </div>
             <div
               class="value"
@@ -636,7 +658,9 @@ exports[`PlayerSection > toggles details for a row and shows detail items for Cl
             <div
               class="title"
             >
-              Fastest
+              <span>
+                Fastest
+              </span>
             </div>
             <div
               class="value"

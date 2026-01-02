@@ -2727,7 +2727,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 55.983181086970106;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -2742,7 +2742,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -2778,7 +2778,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Correct
+                        <span>
+                          Correct
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2806,7 +2808,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Incorrect
+                        <span>
+                          Incorrect
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2823,7 +2827,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -2834,7 +2838,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2862,7 +2868,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2890,7 +2898,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Longest correct streak
+                        <span>
+                          Longest correct streak
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2918,7 +2928,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Score
+                        <span>
+                          Score
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -2970,7 +2982,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 111.96636217394021;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -2985,7 +2997,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -3021,7 +3033,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Correct
+                        <span>
+                          Correct
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3049,7 +3063,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Incorrect
+                        <span>
+                          Incorrect
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3066,7 +3082,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -3077,7 +3093,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3105,7 +3123,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3133,7 +3153,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Longest correct streak
+                        <span>
+                          Longest correct streak
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3161,7 +3183,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Score
+                        <span>
+                          Score
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3322,7 +3346,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 0;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -3337,7 +3361,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -3373,7 +3397,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Correct
+                        <span>
+                          Correct
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3401,7 +3427,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Incorrect
+                        <span>
+                          Incorrect
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3418,7 +3446,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -3429,7 +3457,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3457,7 +3487,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3509,7 +3541,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -3524,7 +3556,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -3560,7 +3592,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Correct
+                        <span>
+                          Correct
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3588,7 +3622,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Incorrect
+                        <span>
+                          Incorrect
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3605,7 +3641,7 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -3616,7 +3652,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -3644,7 +3682,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5513,7 +5553,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -5528,7 +5568,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -5553,7 +5593,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -5564,7 +5604,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5592,7 +5634,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5620,7 +5664,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Longest correct streak
+                        <span>
+                          Longest correct streak
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5648,7 +5694,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Score
+                        <span>
+                          Score
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5700,7 +5748,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 67.85840131753953;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -5715,7 +5763,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -5740,7 +5788,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -5751,7 +5799,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5779,7 +5829,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5807,7 +5859,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Longest correct streak
+                        <span>
+                          Longest correct streak
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5835,7 +5889,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Score
+                        <span>
+                          Score
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -5996,7 +6052,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 50.89380098815465;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -6011,7 +6067,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -6036,7 +6092,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -6047,7 +6103,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -6075,7 +6133,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -6127,7 +6187,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                           style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
                         />
                         <text
-                          class="progressText black"
+                          class="progressText white"
                           dominant-baseline="middle"
                           text-anchor="middle"
                           x="50%"
@@ -6142,7 +6202,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                       <svg
                         aria-hidden="true"
                         class="svg-inline--fa fa-chevron-down"
-                        color="black"
+                        color="white"
                         data-icon="chevron-down"
                         data-prefix="fas"
                         role="img"
@@ -6167,7 +6227,7 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                         <svg
                           aria-hidden="true"
                           class="svg-inline--fa fa-circle-minus"
-                          color="gray2"
+                          color="blue2"
                           data-icon="circle-minus"
                           data-prefix="fas"
                           role="img"
@@ -6178,7 +6238,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Unanswered
+                        <span>
+                          Unanswered
+                        </span>
                       </div>
                       <div
                         class="value"
@@ -6206,7 +6268,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             fill="currentColor"
                           />
                         </svg>
-                        Average response time
+                        <span>
+                          Average response time
+                        </span>
                       </div>
                       <div
                         class="value"

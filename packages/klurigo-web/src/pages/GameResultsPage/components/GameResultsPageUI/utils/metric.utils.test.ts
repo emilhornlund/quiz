@@ -158,7 +158,7 @@ describe('buildPlayerSectionMetricDetails', () => {
     expect(details.find((d) => d.title === 'Score')?.value).toBe(420)
 
     expect(details.find((d) => d.title === 'Unanswered')?.iconColor).toBe(
-      colors.gray2,
+      colors.blue2,
     )
     expect(
       details.find((d) => d.title === 'Average response time')?.iconColor,
@@ -227,7 +227,7 @@ describe('buildQuestionSectionMetricDetails', () => {
     ).toBe('sec:4100')
 
     expect(details.find((d) => d.title === 'Unanswered')?.iconColor).toBe(
-      colors.gray2,
+      colors.blue2,
     )
     expect(
       details.find((d) => d.title === 'Average response time')?.iconColor,
