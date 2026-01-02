@@ -1446,6 +1446,23 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
           </div>
         </div>
       </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Most Accurate Player
+        </div>
+        <div
+          class="value"
+        >
+          NaN%
+        </div>
+        <div
+          class="nicknames"
+        />
+      </div>
     </div>
   </section>
 </div>
@@ -2193,6 +2210,23 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
             Dave
           </div>
         </div>
+      </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Precision Champion
+        </div>
+        <div
+          class="value"
+        >
+          NaN%
+        </div>
+        <div
+          class="nicknames"
+        />
       </div>
     </div>
   </section>

@@ -909,6 +909,29 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
                     </div>
                   </div>
                 </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Most Accurate Player
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    100%
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -1801,6 +1824,29 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
                     class="value"
                   >
                     2
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Precision Champion
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    80%
                   </div>
                   <div
                     class="nicknames"

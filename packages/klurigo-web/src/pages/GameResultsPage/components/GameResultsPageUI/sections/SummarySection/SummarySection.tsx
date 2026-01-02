@@ -13,12 +13,10 @@ import {
   GameMode,
   type GameResultClassicModeQuestionMetricDto,
   type GameResultDto,
-  type GameResultParticipantDto,
   type GameResultQuizDto,
   type GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@klurigo/common'
-import { type FC, type ReactElement, useState } from 'react'
-import { useMemo } from 'react'
+import { type FC, type ReactElement, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../../../../../api'
@@ -44,9 +42,14 @@ import {
   getQuizDifficultyMessage,
 } from '../../utils'
 
+import {
+  getFastestOverallPlayerMetric,
+  getLongestCorrectStreakMetric,
+  getMostAccuratePlayerMetric,
+  getPrecisionChampionMetric,
+  type Metric,
+} from './summary-section.metrics'
 import styles from './SummarySection.module.scss'
-
-export type Metric = { value: number; players: GameResultParticipantDto[] }
 
 const DetailsItem: FC<{
   title: string
@@ -137,31 +140,30 @@ const SummarySection: FC<SummarySectionProps> = ({
     [mode, questionMetrics],
   )
 
-  const averageResponseTimeMetric = useMemo<Metric>(() => {
-    const value = Math.min(
-      ...playerMetrics.map(({ averageResponseTime }) => averageResponseTime),
-    )
+  const averageResponseTimeMetric = useMemo<Metric | null>(
+    () => getFastestOverallPlayerMetric(playerMetrics),
+    [playerMetrics],
+  )
 
-    const players = playerMetrics
-      .filter(({ averageResponseTime }) => averageResponseTime === value)
-      .map(({ player }) => player)
-      .sort((a, b) => a.nickname.localeCompare(b.nickname))
+  const longestCorrectStreakMetric = useMemo<Metric | null>(
+    () => getLongestCorrectStreakMetric(playerMetrics),
+    [playerMetrics],
+  )
 
-    return { value, players }
-  }, [playerMetrics])
+  const mostAccuratePlayer = useMemo<Metric | null>(
+    () =>
+      getMostAccuratePlayerMetric({
+        mode,
+        playerMetrics,
+        numberOfQuestions,
+      }),
+    [mode, playerMetrics, numberOfQuestions],
+  )
 
-  const longestCorrectStreakMetric = useMemo<Metric>(() => {
-    const value = Math.max(
-      ...playerMetrics.map(({ longestCorrectStreak }) => longestCorrectStreak),
-    )
-
-    const players = playerMetrics
-      .filter(({ longestCorrectStreak }) => longestCorrectStreak === value)
-      .map(({ player }) => player)
-      .sort((a, b) => a.nickname.localeCompare(b.nickname))
-
-    return { value, players }
-  }, [playerMetrics])
+  const precisionChampion = useMemo<Metric | null>(
+    () => getPrecisionChampionMetric({ mode, playerMetrics }),
+    [mode, playerMetrics],
+  )
 
   const podiumValues = useMemo<PodiumValue[]>(() => {
     return playerMetrics
@@ -268,7 +270,7 @@ const SummarySection: FC<SummarySectionProps> = ({
           </div>
         </div>
 
-        {averageResponseTimeMetric.players.length > 0 && (
+        {averageResponseTimeMetric && (
           <MetricCard
             title="Fastest Overall Player"
             value={formatRoundedSeconds(averageResponseTimeMetric.value)}
@@ -278,11 +280,31 @@ const SummarySection: FC<SummarySectionProps> = ({
           />
         )}
 
-        {longestCorrectStreakMetric.players.length > 0 && (
+        {longestCorrectStreakMetric && (
           <MetricCard
             title="Longest Correct Streak"
             value={`${longestCorrectStreakMetric.value}`}
             nicknames={longestCorrectStreakMetric.players.map(
+              ({ nickname }) => nickname,
+            )}
+          />
+        )}
+
+        {mostAccuratePlayer && (
+          <MetricCard
+            title="Most Accurate Player"
+            value={`${mostAccuratePlayer.value}%`}
+            nicknames={mostAccuratePlayer.players.map(
+              ({ nickname }) => nickname,
+            )}
+          />
+        )}
+
+        {precisionChampion && (
+          <MetricCard
+            title="Precision Champion"
+            value={`${precisionChampion.value}%`}
+            nicknames={precisionChampion.players.map(
               ({ nickname }) => nickname,
             )}
           />
