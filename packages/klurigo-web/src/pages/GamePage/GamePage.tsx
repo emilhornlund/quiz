@@ -1,4 +1,4 @@
-import type { GameEvent } from '@klurigo/common'
+import { type GameEvent, GameParticipantType } from '@klurigo/common'
 import { deepEqual, GameEventType, GameStatus } from '@klurigo/common'
 import { setContext } from '@sentry/react'
 import type { FC } from 'react'
@@ -53,8 +53,14 @@ const GamePage: FC = () => {
 
   const { isUserAuthenticated, revokeGame } = useAuthContext()
 
-  const { gameID, gameToken, participantId, participantType, leaveGame } =
-    useGameContext()
+  const {
+    gameID,
+    gameToken,
+    participantId,
+    participantType,
+    leaveGame,
+    quitGame,
+  } = useGameContext()
 
   const [event, connectionStatus] = useEventSource(gameID, gameToken)
 
@@ -212,11 +218,22 @@ const GamePage: FC = () => {
   }, [lastNonLoadingEvent])
 
   const handleLeaveGame = () => {
-    if (blocker.state === 'blocked' && participantId && leaveGame) {
-      console.log('Leaving game...')
-      leaveGame(participantId).finally(() => {
-        blocker.proceed()
-      })
+    if (blocker.state === 'blocked') {
+      if (participantType === GameParticipantType.HOST && quitGame) {
+        console.log('Quitting game...')
+        quitGame().finally(() => {
+          blocker.proceed()
+        })
+      } else if (
+        participantType === GameParticipantType.PLAYER &&
+        participantId &&
+        leaveGame
+      ) {
+        console.log('Leaving game...')
+        leaveGame(participantId).finally(() => {
+          blocker.proceed()
+        })
+      }
     }
   }
 
@@ -225,9 +242,19 @@ const GamePage: FC = () => {
       {stateComponent}
       {isLoading && <LoadingOverlay />}
       {blocker.state === 'blocked' && (
-        <Modal title="Leave Game" open>
-          Leaving now will disconnect you from the game. Are you sure you want
-          to continue?
+        <Modal
+          title={
+            participantType === GameParticipantType.HOST
+              ? 'Quit Game'
+              : 'Leave Game'
+          }
+          open>
+          {participantType === GameParticipantType.HOST &&
+            'This will immediately end the game for all participants, and it cannot be resumed.'}
+
+          {participantType === GameParticipantType.PLAYER &&
+            'Leaving now will disconnect you from the game. Are you sure you want to continue?'}
+
           <div className={styles.leaveModalActionButtons}>
             <Button
               id="cancel-button"
@@ -239,7 +266,7 @@ const GamePage: FC = () => {
             <Button
               id="proceed-button"
               type="button"
-              kind="call-to-action"
+              kind="destructive"
               value="Proceed"
               onClick={handleLeaveGame}
             />

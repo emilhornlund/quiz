@@ -1,4 +1,4 @@
-import { GameEventType } from '@klurigo/common'
+import { GameEventType, GameParticipantType } from '@klurigo/common'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { Location } from 'react-router'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
@@ -29,16 +29,17 @@ const h = vi.hoisted(() => {
     proceedMock: vi.fn(),
     resetMock: vi.fn(),
     leaveGameMock: vi.fn(() => Promise.resolve()),
+    quitGameMock: vi.fn(() => Promise.resolve()),
     context: {
       gameID: 'game-123',
       gameToken: 'token-abc',
       participantId: 'p-1',
-      participantType: 'Player',
+      participantType: undefined as unknown as GameParticipantType,
     } as {
       gameID: string
       gameToken: string
       participantId: string
-      participantType: 'Player' | 'Host'
+      participantType: GameParticipantType
     },
     control: {
       event: null as unknown,
@@ -69,6 +70,7 @@ vi.mock('../../context/game', () => ({
   useGameContext: () => ({
     ...h.context,
     leaveGame: h.leaveGameMock,
+    quitGame: h.quitGameMock,
   }),
 }))
 
@@ -108,7 +110,8 @@ beforeEach(() => {
   h.context.gameID = 'game-123'
   h.context.gameToken = 'token-abc'
   h.context.participantId = 'p-1'
-  h.context.participantType = 'Player'
+  h.context.participantType = GameParticipantType.PLAYER
+  h.quitGameMock.mockClear()
 })
 
 afterEach(() => {
@@ -139,7 +142,7 @@ describe('GamePage (extended)', () => {
       expect.objectContaining({
         gameId: 'game-123',
         participantId: 'p-1',
-        participantType: 'Player',
+        participantType: GameParticipantType.PLAYER,
       }),
     )
     unmount()
@@ -218,8 +221,85 @@ describe('GamePage (extended)', () => {
     fireEvent.click(screen.getByRole('button', { name: /Proceed/i }))
     expect(h.leaveGameMock).toHaveBeenCalledWith('p-1')
 
+    await waitFor(() => expect(h.proceedMock).toHaveBeenCalled())
+
     await act(async () => Promise.resolve())
     expect(h.proceedMock).toHaveBeenCalled()
+
+    useBlockerSpy.mockRestore()
+  })
+
+  it('shows "Quit Game" modal for host and proceeds via quitGame', async () => {
+    const rrd = await import('react-router-dom')
+
+    const blocked = {
+      state: 'blocked',
+      proceed: h.proceedMock,
+      reset: h.resetMock,
+      location: makeLocation(),
+    } as unknown as ReturnType<typeof rrd.useBlocker>
+
+    const useBlockerSpy = vi.spyOn(rrd, 'useBlocker').mockReturnValue(blocked)
+
+    h.context.participantType = GameParticipantType.HOST
+
+    renderWithRouter()
+
+    expect(
+      screen.getByRole('dialog', { name: /Quit Game/i }),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(
+        /This will immediately end the game for all participants, and it cannot be resumed\./i,
+      ),
+    ).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Proceed/i }))
+
+    expect(h.quitGameMock).toHaveBeenCalledTimes(1)
+    expect(h.leaveGameMock).not.toHaveBeenCalled()
+
+    await waitFor(() => expect(h.proceedMock).toHaveBeenCalled())
+
+    useBlockerSpy.mockRestore()
+  })
+
+  it('shows "Leave Game" modal for player and proceeds via leaveGame(participantId)', async () => {
+    const rrd = await import('react-router-dom')
+
+    const blocked = {
+      state: 'blocked',
+      proceed: h.proceedMock,
+      reset: h.resetMock,
+      location: makeLocation(),
+    } as unknown as ReturnType<typeof rrd.useBlocker>
+
+    const useBlockerSpy = vi.spyOn(rrd, 'useBlocker').mockReturnValue(blocked)
+
+    h.context.participantType = GameParticipantType.PLAYER
+    h.context.participantId = 'p-1'
+
+    renderWithRouter()
+
+    expect(
+      screen.getByRole('dialog', { name: /Leave Game/i }),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(
+        /Leaving now will disconnect you from the game\. Are you sure you want to continue\?/i,
+      ),
+    ).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Cancel/i }))
+    expect(h.resetMock).toHaveBeenCalled()
+
+    fireEvent.click(screen.getByRole('button', { name: /Proceed/i }))
+    expect(h.leaveGameMock).toHaveBeenCalledWith('p-1')
+    expect(h.quitGameMock).not.toHaveBeenCalled()
+
+    await waitFor(() => expect(h.proceedMock).toHaveBeenCalled())
 
     useBlockerSpy.mockRestore()
   })
