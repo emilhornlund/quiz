@@ -96,6 +96,13 @@ const renderWithRouter = () => {
   return render(<RouterProvider router={router} />)
 }
 
+let navTick = 0
+
+const pokeRouter = async (router: ReturnType<typeof createMemoryRouter>) => {
+  navTick += 1
+  await router.navigate(`/?t=${navTick}`, { replace: true })
+}
+
 beforeEach(() => {
   h.control.event = null
   h.control.status = 'INITIALIZED'
@@ -112,6 +119,8 @@ beforeEach(() => {
   h.context.participantId = 'p-1'
   h.context.participantType = GameParticipantType.PLAYER
   h.quitGameMock.mockClear()
+
+  navTick = 0
 })
 
 afterEach(() => {
@@ -162,37 +171,161 @@ describe('GamePage (extended)', () => {
     expect(h.navigateMock).toHaveBeenCalledWith('/')
   })
 
-  it('emits reconnect → connected notifications', () => {
-    const { rerender } = renderWithRouter()
-    act(() => {
-      h.control.status = 'RECONNECTING'
-      rerender(
-        <RouterProvider
-          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
-            initialEntries: ['/'],
-          })}
-        />,
+  it('emits reconnect → connected notifications', async () => {
+    vi.useFakeTimers()
+    try {
+      const router = createMemoryRouter(
+        [{ path: '/', element: <GamePage /> }],
+        {
+          initialEntries: ['/'],
+        },
       )
-    })
-    expect(h.notifyWarning).toHaveBeenCalledWith('Reconnecting')
 
-    act(() => {
-      h.control.status = 'CONNECTED'
-      rerender(
-        <RouterProvider
-          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
-            initialEntries: ['/'],
-          })}
-        />,
-      )
-    })
-    expect(h.notifySuccess).toHaveBeenCalledWith('Connected')
+      render(<RouterProvider router={router} />)
+
+      await act(async () => {
+        h.control.status = 'RECONNECTING'
+        await pokeRouter(router)
+      })
+
+      expect(h.notifyWarning).not.toHaveBeenCalled()
+
+      await act(async () => {
+        vi.advanceTimersByTime(500)
+      })
+      expect(h.notifyWarning).toHaveBeenCalledWith('Reconnecting')
+
+      await act(async () => {
+        h.control.status = 'CONNECTED'
+        await pokeRouter(router)
+      })
+
+      await act(async () => {
+        vi.runAllTimers()
+      })
+      expect(h.notifySuccess).toHaveBeenCalledWith('Connected')
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
   })
 
-  it('emits error notification on RECONNECTING_FAILED', () => {
-    h.control.status = 'RECONNECTING_FAILED'
-    renderWithRouter()
-    expect(h.notifyError).toHaveBeenCalledWith('Reconnecting failed')
+  it('emits error notification on RECONNECTING_FAILED', async () => {
+    vi.useFakeTimers()
+    try {
+      h.control.status = 'RECONNECTING_FAILED'
+      renderWithRouter()
+
+      expect(h.notifyError).not.toHaveBeenCalled()
+
+      await act(async () => {
+        vi.advanceTimersByTime(500)
+      })
+
+      expect(h.notifyError).toHaveBeenCalledWith('Reconnecting failed')
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not emit reconnect notification for brief reconnect blip', async () => {
+    vi.useFakeTimers()
+    try {
+      const { rerender } = renderWithRouter()
+
+      act(() => {
+        h.control.status = 'RECONNECTING'
+        rerender(
+          <RouterProvider
+            router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+              initialEntries: ['/'],
+            })}
+          />,
+        )
+      })
+
+      await act(async () => {
+        vi.advanceTimersByTime(200)
+      })
+
+      act(() => {
+        h.control.status = 'CONNECTED'
+        rerender(
+          <RouterProvider
+            router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
+              initialEntries: ['/'],
+            })}
+          />,
+        )
+      })
+
+      await act(async () => {
+        vi.runAllTimers()
+      })
+
+      expect(h.notifyWarning).not.toHaveBeenCalled()
+      expect(h.notifySuccess).not.toHaveBeenCalled()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not emit error notification for brief reconnect failed blip', async () => {
+    vi.useFakeTimers()
+    try {
+      const router = createMemoryRouter(
+        [{ path: '/', element: <GamePage /> }],
+        {
+          initialEntries: ['/'],
+        },
+      )
+
+      render(<RouterProvider router={router} />)
+
+      await act(async () => {
+        h.control.status = 'RECONNECTING_FAILED'
+        await pokeRouter(router)
+      })
+
+      // Before the 500ms debounce elapses, we become connected
+      await act(async () => {
+        vi.advanceTimersByTime(200)
+      })
+
+      await act(async () => {
+        h.control.status = 'CONNECTED'
+        await pokeRouter(router)
+      })
+
+      await act(async () => {
+        vi.runAllTimers()
+      })
+
+      expect(h.notifyError).not.toHaveBeenCalled()
+      expect(h.notifySuccess).not.toHaveBeenCalled()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not emit "Connected" notification on initial connect', async () => {
+    vi.useFakeTimers()
+    try {
+      h.control.status = 'CONNECTED'
+      renderWithRouter()
+
+      await act(async () => {
+        vi.runAllTimers()
+      })
+
+      expect(h.notifySuccess).not.toHaveBeenCalled()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
   })
 
   it('shows blocker modal on blocked navigation and handles cancel/proceed', async () => {

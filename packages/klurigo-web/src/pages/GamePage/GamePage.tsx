@@ -67,7 +67,6 @@ const GamePage: FC = () => {
   const [lastNonLoadingEvent, setLastNonLoadingEvent] = useState<GameEvent>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const hasReconnectedRef = useRef<boolean>(false)
   const loadingTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -97,27 +96,56 @@ const GamePage: FC = () => {
     }
   }, [event, lastNonLoadingEvent])
 
+  const statusNotifyTimeoutRef = useRef<number | null>(null)
+  const lastNotifiedStatusRef = useRef<ConnectionStatus | null>(null)
+  const reconnectNotifiedRef = useRef(false)
+
   useEffect(() => {
-    switch (connectionStatus) {
-      case ConnectionStatus.CONNECTED:
-        if (hasReconnectedRef.current) {
-          hasReconnectedRef.current = false
-          notifySuccess('Connected')
-        }
-        break
+    if (statusNotifyTimeoutRef.current !== null) {
+      clearTimeout(statusNotifyTimeoutRef.current)
+      statusNotifyTimeoutRef.current = null
+    }
 
-      case ConnectionStatus.RECONNECTING:
-        hasReconnectedRef.current = true
-        notifyWarning('Reconnecting')
-        break
+    const notifyIfStillSame = (statusToNotify: ConnectionStatus) => {
+      if (lastNotifiedStatusRef.current === statusToNotify) return
+      lastNotifiedStatusRef.current = statusToNotify
 
-      case ConnectionStatus.RECONNECTING_FAILED:
-        hasReconnectedRef.current = true
-        notifyError('Reconnecting failed')
-        break
+      switch (statusToNotify) {
+        case ConnectionStatus.RECONNECTING:
+          reconnectNotifiedRef.current = true
+          notifyWarning('Reconnecting')
+          break
 
-      default:
-        break
+        case ConnectionStatus.RECONNECTING_FAILED:
+          reconnectNotifiedRef.current = true
+          notifyError('Reconnecting failed')
+          break
+
+        case ConnectionStatus.CONNECTED:
+          if (reconnectNotifiedRef.current) {
+            reconnectNotifiedRef.current = false
+            lastNotifiedStatusRef.current = null
+            notifySuccess('Connected')
+          }
+          break
+
+        default:
+          break
+      }
+    }
+
+    const delayMs = connectionStatus === ConnectionStatus.CONNECTED ? 0 : 500
+
+    statusNotifyTimeoutRef.current = window.setTimeout(() => {
+      notifyIfStillSame(connectionStatus)
+      statusNotifyTimeoutRef.current = null
+    }, delayMs)
+
+    return () => {
+      if (statusNotifyTimeoutRef.current !== null) {
+        clearTimeout(statusNotifyTimeoutRef.current)
+        statusNotifyTimeoutRef.current = null
+      }
     }
   }, [connectionStatus])
 
