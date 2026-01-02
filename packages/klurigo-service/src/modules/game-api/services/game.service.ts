@@ -141,11 +141,18 @@ export class GameService {
           )
         }
 
+        const status =
+          gameDocument.status === GameStatus.Completed ||
+          (gameDocument.status === GameStatus.Active &&
+            gameDocument.currentTask.type === TaskType.Podium)
+            ? GameStatus.Completed
+            : gameDocument.status
+
         const common: GameHistoryBaseDto = {
           id: gameDocument._id,
           name: gameDocument.name,
           mode: gameDocument.mode,
-          status: gameDocument.status,
+          status,
           imageCoverURL: gameDocument.quiz?.imageCoverURL,
           created: gameDocument.created,
         }

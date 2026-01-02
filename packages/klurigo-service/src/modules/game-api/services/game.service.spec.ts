@@ -1,9 +1,11 @@
+import { GameParticipantType, GameStatus } from '@klurigo/common'
 import { Logger } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Test } from '@nestjs/testing'
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis'
 
 import { GameRepository } from '../../game-core/repositories'
+import { TaskType } from '../../game-core/repositories/models/schemas'
 import { GameEventPublisher } from '../../game-event/services'
 import { GameTaskTransitionScheduler } from '../../game-task/services'
 import { QuizRepository } from '../../quiz/repositories'
@@ -16,6 +18,7 @@ describe(GameService.name, () => {
   let gameRepository: {
     find: jest.Mock
     delete: jest.Mock
+    findGamesByParticipantId: jest.Mock
   }
 
   let eventEmitter: {
@@ -28,6 +31,7 @@ describe(GameService.name, () => {
     gameRepository = {
       find: jest.fn(),
       delete: jest.fn(),
+      findGamesByParticipantId: jest.fn(),
     }
 
     eventEmitter = {
@@ -56,6 +60,305 @@ describe(GameService.name, () => {
 
   afterEach(() => {
     debugSpy.mockRestore()
+  })
+
+  describe('findGamesByParticipantId', () => {
+    it('calls repository with participantId, offset, and limit (explicit values)', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({ results: [], total: 0 })
+
+      await service.findGamesByParticipantId('p-1', 10, 25)
+
+      expect(gameRepository.findGamesByParticipantId).toHaveBeenCalledTimes(1)
+      expect(gameRepository.findGamesByParticipantId).toHaveBeenCalledWith(
+        'p-1',
+        10,
+        25,
+      )
+    })
+
+    it('uses default offset=0 and limit=5 when not provided', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({ results: [], total: 0 })
+
+      await service.findGamesByParticipantId('p-1')
+
+      expect(gameRepository.findGamesByParticipantId).toHaveBeenCalledTimes(1)
+      expect(gameRepository.findGamesByParticipantId).toHaveBeenCalledWith(
+        'p-1',
+        0,
+        5,
+      )
+    })
+
+    it('maps host participant to host history dto', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-1',
+              name: 'Game 1',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Lobby },
+              created: '2026-01-01T10:00:00.000Z',
+              quiz: { imageCoverURL: 'https://example.test/cover.png' },
+              participants: [
+                { participantId: 'p-host', type: GameParticipantType.HOST },
+              ],
+            },
+          ],
+          total: 1,
+        })
+
+      const result = await service.findGamesByParticipantId('p-host', 0, 5)
+
+      expect(result).toEqual({
+        results: [
+          {
+            id: 'g-1',
+            name: 'Game 1',
+            mode: 'Classic',
+            status: GameStatus.Active,
+            imageCoverURL: 'https://example.test/cover.png',
+            created: '2026-01-01T10:00:00.000Z',
+            participantType: GameParticipantType.HOST,
+          },
+        ],
+        total: 1,
+        limit: 5,
+        offset: 0,
+      })
+    })
+
+    it('maps player participant to player history dto including rank and score', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-2',
+              name: 'Game 2',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Lobby },
+              created: '2026-01-01T11:00:00.000Z',
+              quiz: { imageCoverURL: undefined },
+              participants: [
+                {
+                  participantId: 'p-1',
+                  type: GameParticipantType.PLAYER,
+                  rank: 3,
+                  totalScore: 420,
+                },
+              ],
+            },
+          ],
+          total: 1,
+        })
+
+      const result = await service.findGamesByParticipantId('p-1', 0, 5)
+
+      expect(result.results[0]).toEqual({
+        id: 'g-2',
+        name: 'Game 2',
+        mode: 'Classic',
+        status: GameStatus.Active,
+        imageCoverURL: undefined,
+        created: '2026-01-01T11:00:00.000Z',
+        participantType: GameParticipantType.PLAYER,
+        rank: 3,
+        score: 420,
+      })
+    })
+
+    it('forces status to Completed when game is Active and current task is Podium', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-3',
+              name: 'Game 3',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Podium },
+              created: '2026-01-01T12:00:00.000Z',
+              participants: [
+                { participantId: 'p-1', type: GameParticipantType.HOST },
+              ],
+            },
+          ],
+          total: 1,
+        })
+
+      const result = await service.findGamesByParticipantId('p-1', 0, 5)
+
+      expect(result.results[0]).toMatchObject({
+        id: 'g-3',
+        status: GameStatus.Completed,
+        participantType: GameParticipantType.HOST,
+      })
+    })
+
+    it('keeps status as Completed when repository returns Completed', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-4',
+              name: 'Game 4',
+              mode: 'Classic',
+              status: GameStatus.Completed,
+              currentTask: { type: TaskType.Podium },
+              created: '2026-01-01T13:00:00.000Z',
+              participants: [
+                {
+                  participantId: 'p-1',
+                  type: GameParticipantType.PLAYER,
+                  rank: 1,
+                  totalScore: 999,
+                },
+              ],
+            },
+          ],
+          total: 1,
+        })
+
+      const result = await service.findGamesByParticipantId('p-1', 0, 5)
+
+      expect(result.results[0]).toMatchObject({
+        id: 'g-4',
+        status: GameStatus.Completed,
+        participantType: GameParticipantType.PLAYER,
+        rank: 1,
+        score: 999,
+      })
+    })
+
+    it('throws when the participant is not present in a returned game', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-missing',
+              name: 'Missing',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Lobby },
+              created: '2026-01-01T14:00:00.000Z',
+              participants: [
+                {
+                  participantId: 'someone-else',
+                  type: GameParticipantType.HOST,
+                },
+              ],
+            },
+          ],
+          total: 1,
+        })
+
+      await expect(
+        service.findGamesByParticipantId('p-1', 0, 5),
+      ).rejects.toThrow(`Participant p-1 not found in game g-missing`)
+    })
+
+    it('throws when participant exists but has an unknown type', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-unknown',
+              name: 'Unknown',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Lobby },
+              created: '2026-01-01T15:00:00.000Z',
+              participants: [{ participantId: 'p-1', type: 'ALIEN' }],
+            },
+          ],
+          total: 1,
+        })
+
+      await expect(
+        service.findGamesByParticipantId('p-1', 0, 5),
+      ).rejects.toThrow(`Unknown participant type: ALIEN`)
+    })
+
+    it('maps multiple games and preserves total/limit/offset', async () => {
+      gameRepository.findGamesByParticipantId = jest
+        .fn()
+        .mockResolvedValueOnce({
+          results: [
+            {
+              _id: 'g-1',
+              name: 'Game 1',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Lobby },
+              created: '2026-01-01T10:00:00.000Z',
+              quiz: { imageCoverURL: 'https://example.test/c1.png' },
+              participants: [
+                { participantId: 'p-1', type: GameParticipantType.HOST },
+              ],
+            },
+            {
+              _id: 'g-2',
+              name: 'Game 2',
+              mode: 'Classic',
+              status: GameStatus.Active,
+              currentTask: { type: TaskType.Podium },
+              created: '2026-01-01T11:00:00.000Z',
+              quiz: { imageCoverURL: 'https://example.test/c2.png' },
+              participants: [
+                {
+                  participantId: 'p-1',
+                  type: GameParticipantType.PLAYER,
+                  rank: 2,
+                  totalScore: 200,
+                },
+              ],
+            },
+          ],
+          total: 123,
+        })
+
+      const result = await service.findGamesByParticipantId('p-1', 20, 2)
+
+      expect(result).toEqual({
+        results: [
+          {
+            id: 'g-1',
+            name: 'Game 1',
+            mode: 'Classic',
+            status: GameStatus.Active,
+            imageCoverURL: 'https://example.test/c1.png',
+            created: '2026-01-01T10:00:00.000Z',
+            participantType: GameParticipantType.HOST,
+          },
+          {
+            id: 'g-2',
+            name: 'Game 2',
+            mode: 'Classic',
+            status: GameStatus.Completed,
+            imageCoverURL: 'https://example.test/c2.png',
+            created: '2026-01-01T11:00:00.000Z',
+            participantType: GameParticipantType.PLAYER,
+            rank: 2,
+            score: 200,
+          },
+        ],
+        total: 123,
+        limit: 2,
+        offset: 20,
+      })
+    })
   })
 
   describe('deleteQuiz', () => {
