@@ -1,2 +1,1 @@
-export type { PodiumProps } from './Podium'
-export { default } from './Podium'
+export { default, type PodiumProps, type PodiumValue } from './Podium'

@@ -11,10 +11,12 @@ import {
   buildPlayerSectionMetricDetails,
   getAveragePrecision,
   getCorrectPercentage,
-} from '../utils'
-
-import type { TableItem, TableSeparator } from './components'
-import { GameResultTable } from './components'
+} from '../../utils'
+import {
+  GameResultTable,
+  type TableItem,
+  type TableSeparator,
+} from '../components'
 
 function getProgress(
   mode: GameMode,

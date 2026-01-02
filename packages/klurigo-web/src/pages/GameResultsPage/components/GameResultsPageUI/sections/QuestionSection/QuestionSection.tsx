@@ -10,9 +10,8 @@ import {
   buildQuestionSectionMetricDetails,
   getAveragePrecision,
   getCorrectPercentage,
-} from '../utils'
-
-import GameResultTable from './components/GameResultTable'
+} from '../../utils'
+import GameResultTable from '../components/GameResultTable'
 
 function getProgress(
   mode: GameMode,

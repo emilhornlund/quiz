@@ -99,7 +99,7 @@ export function buildPlayerSectionMetricDetails(
       title: 'Unanswered',
       value: metric.unanswered,
       icon: faMinusCircle,
-      iconColor: colors.gray2,
+      iconColor: colors.blue2,
     },
     {
       title: 'Average response time',
@@ -158,7 +158,7 @@ export function buildQuestionSectionMetricDetails(
       title: 'Unanswered',
       value: metric.unanswered,
       icon: faMinusCircle,
-      iconColor: colors.gray2,
+      iconColor: colors.blue2,
     },
     {
       title: 'Average response time',

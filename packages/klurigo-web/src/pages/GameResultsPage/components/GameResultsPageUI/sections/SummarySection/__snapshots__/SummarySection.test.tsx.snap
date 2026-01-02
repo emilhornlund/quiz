@@ -7,48 +7,45 @@ exports[`SummarySection > omits metric cards when playerMetrics has no data 1`] 
       class="cards"
     >
       <div
-        class="card full progress"
+        class="podiumWrapper"
       >
-        <svg
-          class="circularProgressBar correct medium"
-          height="100"
-          width="100"
-        >
-          <circle
-            class="circleBackground"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-width="10"
-          />
-          <circle
-            class="circleProgress"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-linecap="round"
-            stroke-width="10"
-            style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 0;"
-          />
-          <text
-            class="progressText"
-            dominant-baseline="middle"
-            text-anchor="middle"
-            x="50%"
-            y="50%"
-          >
-            100
-            %
-          </text>
-        </svg>
+        <div
+          data-testid="podium"
+        />
+      </div>
+      <div
+        class="card progress"
+      >
+        <div
+          data-testid="circular-progress"
+        />
         <div
           class="text"
         >
           Difficulty: 100%
         </div>
       </div>
+      <button
+        class="card hostGameButton"
+        disabled=""
+        id="host-game-button"
+        type="button"
+      >
+        <div
+          class="content"
+        >
+          <div
+            class="title"
+          >
+            Play again
+          </div>
+          <div
+            class="subtitle"
+          >
+            This quiz isn’t public yet. Ask the owner to make it public before hosting a live game.
+          </div>
+        </div>
+      </button>
       <div
         class="card full details"
       >
@@ -262,48 +259,61 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
       class="cards"
     >
       <div
-        class="card full progress"
+        class="podiumWrapper"
       >
-        <svg
-          class="circularProgressBar correct medium"
-          height="100"
-          width="100"
-        >
-          <circle
-            class="circleBackground"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-width="10"
-          />
-          <circle
-            class="circleProgress"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-linecap="round"
-            stroke-width="10"
-            style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 84.82300164692444;"
-          />
-          <text
-            class="progressText"
-            dominant-baseline="middle"
-            text-anchor="middle"
-            x="50%"
-            y="50%"
-          >
-            70
-            %
-          </text>
-        </svg>
+        <div
+          data-testid="podium"
+        />
+      </div>
+      <div
+        class="card progress"
+      >
+        <div
+          data-testid="circular-progress"
+        />
         <div
           class="text"
         >
           Difficulty: 70%
         </div>
       </div>
+      <button
+        class="card hostGameButton"
+        id="host-game-button"
+        type="button"
+      >
+        <div
+          class="content"
+        >
+          <div
+            class="title"
+          >
+            Play again
+          </div>
+          <div
+            class="subtitle"
+          >
+            Start a new live game with this quiz and invite others to join.
+          </div>
+        </div>
+        <div
+          class="icon"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-play"
+            data-icon="play"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M91.2 36.9c-12.4-6.8-27.4-6.5-39.6 .7S32 57.9 32 72l0 368c0 14.1 7.5 27.2 19.6 34.4s27.2 7.5 39.6 .7l336-184c12.8-7 20.8-20.5 20.8-35.1s-8-28.1-20.8-35.1l-336-184z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      </button>
       <div
         class="card full details"
       >
@@ -551,6 +561,23 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
           </div>
         </div>
       </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Most Accurate Player
+        </div>
+        <div
+          class="value"
+        >
+          NaN%
+        </div>
+        <div
+          class="nicknames"
+        />
+      </div>
     </div>
   </section>
 </div>
@@ -563,48 +590,45 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
       class="cards"
     >
       <div
-        class="card full progress"
+        class="podiumWrapper"
       >
-        <svg
-          class="circularProgressBar correct medium"
-          height="100"
-          width="100"
-        >
-          <circle
-            class="circleBackground"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-width="10"
-          />
-          <circle
-            class="circleProgress"
-            cx="50"
-            cy="50"
-            fill="transparent"
-            r="45"
-            stroke-linecap="round"
-            stroke-width="10"
-            style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 141.3716694115407;"
-          />
-          <text
-            class="progressText"
-            dominant-baseline="middle"
-            text-anchor="middle"
-            x="50%"
-            y="50%"
-          >
-            50
-            %
-          </text>
-        </svg>
+        <div
+          data-testid="podium"
+        />
+      </div>
+      <div
+        class="card progress"
+      >
+        <div
+          data-testid="circular-progress"
+        />
         <div
           class="text"
         >
           Difficulty: 50%
         </div>
       </div>
+      <button
+        class="card hostGameButton"
+        disabled=""
+        id="host-game-button"
+        type="button"
+      >
+        <div
+          class="content"
+        >
+          <div
+            class="title"
+          >
+            Play again
+          </div>
+          <div
+            class="subtitle"
+          >
+            This quiz isn’t public yet. Ask the owner to make it public before hosting a live game.
+          </div>
+        </div>
+      </button>
       <div
         class="card full details"
       >
@@ -851,6 +875,23 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
             Dave
           </div>
         </div>
+      </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Precision Champion
+        </div>
+        <div
+          class="value"
+        >
+          NaN%
+        </div>
+        <div
+          class="nicknames"
+        />
       </div>
     </div>
   </section>

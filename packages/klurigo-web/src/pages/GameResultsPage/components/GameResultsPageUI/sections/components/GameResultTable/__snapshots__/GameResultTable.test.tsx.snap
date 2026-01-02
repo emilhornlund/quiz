@@ -47,7 +47,7 @@ exports[`GameResultTable > does not crash when details are missing 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 152.68140296446393;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -61,15 +61,15 @@ exports[`GameResultTable > does not crash when details are missing 1`] = `
         <div>
           <svg
             aria-hidden="true"
-            class="svg-inline--fa fa-chevron-down"
-            color="black"
-            data-icon="chevron-down"
+            class="svg-inline--fa fa-chevron-up"
+            color="white"
+            data-icon="chevron-up"
             data-prefix="fas"
             role="img"
             viewBox="0 0 448 512"
           >
             <path
-              d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              d="M201.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 173.3 54.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
               fill="currentColor"
             />
           </svg>
@@ -130,7 +130,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -145,7 +145,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"
@@ -181,7 +181,9 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
                 fill="currentColor"
               />
             </svg>
-            Correct
+            <span>
+              Correct
+            </span>
           </div>
           <div
             class="value"
@@ -195,7 +197,9 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
           <div
             class="title"
           >
-            Fastest
+            <span>
+              Fastest
+            </span>
           </div>
           <div
             class="value"
@@ -247,7 +251,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -262,7 +266,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"
@@ -330,7 +334,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -345,7 +349,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"
@@ -381,7 +385,9 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
                 fill="currentColor"
               />
             </svg>
-            Correct
+            <span>
+              Correct
+            </span>
           </div>
           <div
             class="value"
@@ -395,7 +401,9 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
           <div
             class="title"
           >
-            Fastest
+            <span>
+              Fastest
+            </span>
           </div>
           <div
             class="value"
@@ -447,7 +455,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -462,7 +470,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"
@@ -530,7 +538,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -545,7 +553,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"
@@ -581,7 +589,9 @@ exports[`GameResultTable > renders one row per item 1`] = `
                 fill="currentColor"
               />
             </svg>
-            Correct
+            <span>
+              Correct
+            </span>
           </div>
           <div
             class="value"
@@ -595,7 +605,9 @@ exports[`GameResultTable > renders one row per item 1`] = `
           <div
             class="title"
           >
-            Fastest
+            <span>
+              Fastest
+            </span>
           </div>
           <div
             class="value"
@@ -647,7 +659,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText white"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -662,7 +674,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
           <svg
             aria-hidden="true"
             class="svg-inline--fa fa-chevron-down"
-            color="black"
+            color="white"
             data-icon="chevron-down"
             data-prefix="fas"
             role="img"

@@ -1,0 +1,636 @@
+import { GameMode, type GameResultDto, QuizVisibility } from '@klurigo/common'
+import { Test } from '@nestjs/testing'
+
+import { UserRepository } from '../../user/repositories'
+import { GameResultsNotFoundException } from '../exceptions'
+import { GameResultRepository } from '../repositories'
+import type {
+  GameResult,
+  PlayerMetric,
+  QuestionMetric,
+} from '../repositories/models/schemas'
+
+import { GameResultService } from './game-result.service'
+import { buildGameResultModel } from './utils/game-result.converter'
+
+jest.mock('./utils/game-result.converter', () => ({
+  buildGameResultModel: jest.fn(),
+}))
+
+type FindUserReturn = Awaited<ReturnType<UserRepository['findUserById']>>
+
+describe(GameResultService.name, () => {
+  let service: GameResultService
+  let gameResultRepository: jest.Mocked<GameResultRepository>
+  let userRepository: jest.Mocked<UserRepository>
+
+  const asPlayerMetric = (overrides: Partial<PlayerMetric>): PlayerMetric =>
+    ({
+      participantId: 'p-default',
+      nickname: 'Default',
+      rank: 0,
+      unanswered: 0,
+      averageResponseTime: 0,
+      longestCorrectStreak: 0,
+      score: 0,
+      correct: undefined,
+      incorrect: undefined,
+      averagePrecision: undefined,
+      ...overrides,
+    }) as unknown as PlayerMetric
+
+  const asQuestionMetric = (
+    overrides: Partial<QuestionMetric>,
+  ): QuestionMetric =>
+    ({
+      text: 'Q',
+      type: 'MultiChoice' as unknown as QuestionMetric['type'],
+      unanswered: 0,
+      averageResponseTime: 0,
+      correct: undefined,
+      incorrect: undefined,
+      averagePrecision: undefined,
+      ...overrides,
+    }) as unknown as QuestionMetric
+
+  const asGameResultDocument = (params: {
+    gameID?: string
+    name?: string
+    mode?: GameMode
+    quizId?: string
+    quizVisibility?: QuizVisibility
+    quizOwnerParticipantId?: string | undefined
+    hostParticipantId?: string
+    players?: PlayerMetric[]
+    questions?: QuestionMetric[]
+    hosted?: Date
+    completed?: Date
+  }) => {
+    const hosted = params.hosted ?? new Date('2026-01-02T09:00:00.000Z')
+    const completed = params.completed ?? new Date('2026-01-02T09:01:40.000Z') // +100s
+
+    return {
+      game: {
+        _id: params.gameID ?? 'g-1',
+        name: params.name ?? 'Game Name',
+        mode: params.mode ?? GameMode.Classic,
+        quiz: {
+          _id: params.quizId ?? 'q-1',
+          visibility: params.quizVisibility ?? QuizVisibility.Private,
+          owner: params.quizOwnerParticipantId
+            ? { _id: params.quizOwnerParticipantId }
+            : undefined,
+        },
+      },
+      hostParticipantId: params.hostParticipantId ?? 'host-1',
+      players: params.players ?? [],
+      questions: params.questions ?? [],
+      hosted,
+      completed,
+    }
+  }
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        GameResultService,
+        {
+          provide: GameResultRepository,
+          useValue: {
+            findGameResult: jest.fn(),
+            createGameResult: jest.fn(),
+          },
+        },
+        {
+          provide: UserRepository,
+          useValue: {
+            findUserById: jest.fn(),
+          },
+        },
+      ],
+    }).compile()
+
+    service = moduleRef.get(GameResultService)
+
+    gameResultRepository = moduleRef.get(
+      GameResultRepository,
+    ) as jest.Mocked<GameResultRepository>
+
+    userRepository = moduleRef.get(
+      UserRepository,
+    ) as jest.Mocked<UserRepository>
+
+    jest.clearAllMocks()
+  })
+
+  describe('getGameResult', () => {
+    it('throws GameResultsNotFoundException when the repository returns null', async () => {
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        null as unknown as GameResult,
+      )
+
+      await expect(
+        service.getGameResult('game-404', 'p-1'),
+      ).rejects.toBeInstanceOf(GameResultsNotFoundException)
+
+      expect(gameResultRepository.findGameResult).toHaveBeenCalledWith(
+        'game-404',
+      )
+      expect(userRepository.findUserById).not.toHaveBeenCalled()
+    })
+
+    it('throws GameResultsNotFoundException when the game result document is missing quiz', async () => {
+      const doc = asGameResultDocument({
+        mode: GameMode.Classic,
+        players: [
+          asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+        ],
+        questions: [asQuestionMetric({ text: 'Q1' })],
+      })
+
+      ;(doc.game as unknown as { quiz?: unknown }).quiz = undefined
+
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        doc as unknown as GameResult,
+      )
+
+      await expect(
+        service.getGameResult(doc.game._id, 'p-xyz'),
+      ).rejects.toBeInstanceOf(GameResultsNotFoundException)
+
+      expect(gameResultRepository.findGameResult).toHaveBeenCalledWith(
+        doc.game._id,
+      )
+      expect(userRepository.findUserById).not.toHaveBeenCalled()
+    })
+
+    it('throws GameResultsNotFoundException using the requested gameID when quiz is missing', async () => {
+      const requestedGameId = 'game-requested'
+
+      const doc = asGameResultDocument({ gameID: 'game-from-doc' })
+      ;(doc.game as unknown as { quiz?: unknown }).quiz = undefined
+
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        doc as unknown as GameResult,
+      )
+
+      await expect(
+        service.getGameResult(requestedGameId, 'p-1'),
+      ).rejects.toBeInstanceOf(GameResultsNotFoundException)
+
+      expect(gameResultRepository.findGameResult).toHaveBeenCalledWith(
+        requestedGameId,
+      )
+    })
+
+    it('maps base fields and uses host nickname fallback when user not found', async () => {
+      const doc = asGameResultDocument({
+        mode: GameMode.Classic,
+        players: [
+          asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+        ],
+        questions: [asQuestionMetric({ text: 'Q1' })],
+      })
+
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        doc as unknown as GameResult,
+      )
+      userRepository.findUserById.mockResolvedValueOnce(
+        undefined as unknown as FindUserReturn,
+      )
+
+      const result = await service.getGameResult(doc.game._id, 'p-xyz')
+
+      expect(userRepository.findUserById).toHaveBeenCalledWith(
+        doc.hostParticipantId,
+      )
+
+      expect(result).toMatchObject({
+        id: doc.game._id,
+        name: doc.game.name,
+        host: { id: doc.hostParticipantId, nickname: 'N/A' },
+        numberOfPlayers: 1,
+        numberOfQuestions: 1,
+        created: doc.hosted,
+      } satisfies Partial<GameResultDto>)
+
+      expect(result.duration).toBe(100)
+    })
+
+    describe('quiz canHostLiveGame flag', () => {
+      it('sets canHostLiveGame=true when participant is quiz owner', async () => {
+        const doc = asGameResultDocument({
+          quizVisibility: QuizVisibility.Private,
+          quizOwnerParticipantId: 'owner-1',
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({
+              participantId: 'owner-1',
+              rank: 1,
+              nickname: 'Owner',
+            }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'Host',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, 'owner-1')
+
+        expect(result.quiz).toEqual({
+          id: doc.game.quiz._id,
+          canHostLiveGame: true,
+        })
+      })
+
+      it('sets canHostLiveGame=true when quiz is public even if not owner', async () => {
+        const doc = asGameResultDocument({
+          quizVisibility: QuizVisibility.Public,
+          quizOwnerParticipantId: 'owner-1',
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'Host',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, 'not-owner')
+
+        expect(result.quiz).toEqual({
+          id: doc.game.quiz._id,
+          canHostLiveGame: true,
+        })
+      })
+
+      it('sets canHostLiveGame=false when quiz is private and participant is not owner', async () => {
+        const doc = asGameResultDocument({
+          quizVisibility: QuizVisibility.Private,
+          quizOwnerParticipantId: 'owner-1',
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'Host',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, 'not-owner')
+
+        expect(result.quiz).toEqual({
+          id: doc.game.quiz._id,
+          canHostLiveGame: false,
+        })
+      })
+
+      it('sets canHostLiveGame=true for public quiz even if quiz.owner is missing', async () => {
+        const doc = asGameResultDocument({
+          quizVisibility: QuizVisibility.Public,
+          quizOwnerParticipantId: undefined,
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'Host',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, 'anyone')
+
+        expect(result.quiz).toEqual({
+          id: doc.game.quiz._id,
+          canHostLiveGame: true,
+        })
+      })
+    })
+
+    describe('Classic mode mapping', () => {
+      it('filters player metrics to top 5 plus requesting participant, and sorts by rank', async () => {
+        const participantId = 'p-8'
+
+        const players: PlayerMetric[] = [
+          asPlayerMetric({
+            participantId: 'p-7',
+            nickname: 'P7',
+            rank: 7,
+            score: 70,
+            correct: 1,
+            incorrect: 2,
+          }),
+          asPlayerMetric({
+            participantId: 'p-2',
+            nickname: 'P2',
+            rank: 2,
+            score: 20,
+            correct: 2,
+            incorrect: 0,
+          }),
+          asPlayerMetric({
+            participantId: 'p-6',
+            nickname: 'P6',
+            rank: 6,
+            score: 60,
+            correct: 3,
+            incorrect: 1,
+          }),
+          asPlayerMetric({
+            participantId: 'p-1',
+            nickname: 'P1',
+            rank: 1,
+            score: 10,
+            correct: 4,
+            incorrect: 0,
+          }),
+          asPlayerMetric({
+            participantId: participantId,
+            nickname: 'Me',
+            rank: 8,
+            score: 80,
+            correct: 5,
+            incorrect: 5,
+          }),
+          asPlayerMetric({
+            participantId: 'p-5',
+            nickname: 'P5',
+            rank: 5,
+            score: 50,
+            correct: 0,
+            incorrect: 0,
+          }),
+          asPlayerMetric({
+            participantId: 'p-4',
+            nickname: 'P4',
+            rank: 4,
+            score: 40,
+            correct: 0,
+            incorrect: 0,
+          }),
+          asPlayerMetric({
+            participantId: 'p-3',
+            nickname: 'P3',
+            rank: 3,
+            score: 30,
+            correct: 0,
+            incorrect: 0,
+          }),
+        ]
+
+        const questions: QuestionMetric[] = [
+          asQuestionMetric({ text: 'Q1', correct: 3, incorrect: 2 }),
+          asQuestionMetric({
+            text: 'Q2',
+            correct: undefined,
+            incorrect: undefined,
+          }),
+        ]
+
+        const doc = asGameResultDocument({
+          mode: GameMode.Classic,
+          players,
+          questions,
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, participantId)
+
+        expect(result.mode).toBe(GameMode.Classic)
+
+        // Included ranks: 1..5 plus participant rank 8; excluded rank 6 and 7.
+        expect(result.playerMetrics.map((m) => m.player.id)).toEqual([
+          'p-1',
+          'p-2',
+          'p-3',
+          'p-4',
+          'p-5',
+          participantId,
+        ])
+
+        // Sorted by ascending rank.
+        expect(result.playerMetrics.map((m) => m.rank)).toEqual([
+          1, 2, 3, 4, 5, 8,
+        ])
+
+        // Classic-only fields present with safe defaults.
+        const me = result.playerMetrics.find(
+          (m) => m.player.id === participantId,
+        )
+        expect(me).toBeDefined()
+        expect(me && 'correct' in me ? me.correct : undefined).toBe(5)
+        expect(me && 'incorrect' in me ? me.incorrect : undefined).toBe(5)
+
+        expect(result.questionMetrics).toHaveLength(2)
+
+        const q1 = result.questionMetrics[0]
+        expect(q1).toMatchObject({ text: 'Q1', correct: 3, incorrect: 2 })
+
+        // Defaults: undefined -> 0
+        const q2 = result.questionMetrics[1]
+        expect(q2).toMatchObject({ text: 'Q2', correct: 0, incorrect: 0 })
+      })
+
+      it('does not include rank 0 unless it belongs to requesting participant', async () => {
+        const participantId = 'p-me'
+
+        const doc = asGameResultDocument({
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({
+              participantId: 'p-0',
+              nickname: 'NoRank',
+              rank: 0,
+            }),
+            asPlayerMetric({ participantId, nickname: 'Me', rank: 0 }),
+            asPlayerMetric({
+              participantId: 'p-1',
+              nickname: 'Rank1',
+              rank: 1,
+            }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, participantId)
+
+        const ids = result.playerMetrics.map((m) => m.player.id)
+
+        expect(ids).toHaveLength(2)
+        expect(ids).toContain(participantId)
+        expect(ids).toContain('p-1')
+        expect(ids).not.toContain('p-0')
+      })
+
+      it('uses 0 defaults for correct/incorrect when player metric values are undefined', async () => {
+        const doc = asGameResultDocument({
+          mode: GameMode.Classic,
+          players: [
+            asPlayerMetric({
+              participantId: 'p-1',
+              nickname: 'P1',
+              rank: 1,
+              correct: undefined,
+              incorrect: undefined,
+            }),
+          ],
+          questions: [asQuestionMetric({ text: 'Q1' })],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, 'p-any')
+
+        expect(result.playerMetrics).toHaveLength(1)
+        expect(result.playerMetrics[0]).toMatchObject({
+          player: { id: 'p-1', nickname: 'P1' },
+          rank: 1,
+          correct: 0,
+          incorrect: 0,
+        })
+      })
+    })
+
+    describe('Zero-to-One-Hundred mode mapping', () => {
+      it('maps averagePrecision with default 0 and applies the same filter/sort rules', async () => {
+        const participantId = 'p-9'
+
+        const doc = asGameResultDocument({
+          mode: GameMode.ZeroToOneHundred,
+          players: [
+            asPlayerMetric({
+              participantId: 'p-1',
+              nickname: 'P1',
+              rank: 1,
+              averagePrecision: 88,
+            }),
+            asPlayerMetric({
+              participantId: 'p-2',
+              nickname: 'P2',
+              rank: 2,
+              averagePrecision: undefined,
+            }),
+            asPlayerMetric({
+              participantId: 'p-6',
+              nickname: 'P6',
+              rank: 6,
+              averagePrecision: 10,
+            }),
+            asPlayerMetric({
+              participantId,
+              nickname: 'Me',
+              rank: 9,
+              averagePrecision: 42,
+            }),
+          ],
+          questions: [
+            asQuestionMetric({ text: 'Q1', averagePrecision: 50 }),
+            asQuestionMetric({ text: 'Q2', averagePrecision: undefined }),
+          ],
+        })
+
+        gameResultRepository.findGameResult.mockResolvedValueOnce(
+          doc as unknown as GameResult,
+        )
+        userRepository.findUserById.mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn)
+
+        const result = await service.getGameResult(doc.game._id, participantId)
+
+        expect(result.mode).toBe(GameMode.ZeroToOneHundred)
+
+        // Included: rank 1..5 (so 1 and 2) plus participant rank 9; excluded rank 6.
+        expect(result.playerMetrics.map((m) => m.player.id)).toEqual([
+          'p-1',
+          'p-2',
+          participantId,
+        ])
+        expect(result.playerMetrics.map((m) => m.rank)).toEqual([1, 2, 9])
+
+        const p2 = result.playerMetrics.find((m) => m.player.id === 'p-2')
+        expect(p2).toBeDefined()
+        expect(
+          p2 && 'averagePrecision' in p2 ? p2.averagePrecision : undefined,
+        ).toBe(0)
+
+        expect(result.questionMetrics).toHaveLength(2)
+        expect(result.questionMetrics[0]).toMatchObject({
+          text: 'Q1',
+          averagePrecision: 50,
+        })
+        expect(result.questionMetrics[1]).toMatchObject({
+          text: 'Q2',
+          averagePrecision: 0,
+        })
+      })
+    })
+  })
+
+  describe('createGameResult', () => {
+    it('builds a result model from the game document and persists it', async () => {
+      const gameDocument = {
+        _id: 'game-1',
+      } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
+
+      const built = { gameId: 'game-1' } as unknown as GameResult
+      const persisted = { _id: 'result-1' } as unknown as GameResult
+
+      ;(
+        buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
+      ).mockReturnValueOnce(
+        built as unknown as ReturnType<typeof buildGameResultModel>,
+      )
+
+      gameResultRepository.createGameResult.mockResolvedValueOnce(persisted)
+
+      const result = await service.createGameResult(gameDocument)
+
+      expect(buildGameResultModel).toHaveBeenCalledTimes(1)
+      expect(buildGameResultModel).toHaveBeenCalledWith(gameDocument)
+
+      expect(gameResultRepository.createGameResult).toHaveBeenCalledTimes(1)
+      expect(gameResultRepository.createGameResult).toHaveBeenCalledWith(built)
+
+      expect(result).toBe(persisted)
+    })
+  })
+})

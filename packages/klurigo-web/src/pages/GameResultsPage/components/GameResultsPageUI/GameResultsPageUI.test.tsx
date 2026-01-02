@@ -1,13 +1,20 @@
-import type { GameResultDto } from '@klurigo/common'
-import { GameMode, QuestionType } from '@klurigo/common'
+import { GameMode, type GameResultDto, QuestionType } from '@klurigo/common'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import GameResultsPageUI from './GameResultsPageUI'
 
 const CREATED_DATE = new Date('2025-01-01T12:00:00.000Z')
+
+beforeEach(() => {
+  vi.spyOn(Math, 'random').mockReturnValue(0.5)
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
 
 describe('GameResultsPageUI', () => {
   it('should render GameResultsPageUI for classic game mode', async () => {
@@ -18,6 +25,7 @@ describe('GameResultsPageUI', () => {
             id: uuidv4(),
             mode: GameMode.Classic,
             name: 'Classic Quiz Debug',
+            quiz: { id: 'quizId', canHostLiveGame: true },
             host: { id: uuidv4(), nickname: 'FrostyBear' },
             numberOfPlayers: 3,
             numberOfQuestions: 4,
@@ -106,6 +114,7 @@ describe('GameResultsPageUI', () => {
             id: uuidv4(),
             mode: GameMode.ZeroToOneHundred,
             name: '0-100 Quiz Debug',
+            quiz: { id: 'quizId', canHostLiveGame: false },
             host: { id: uuidv4(), nickname: 'FrostyBear' },
             numberOfPlayers: 3,
             numberOfQuestions: 4,
@@ -183,6 +192,7 @@ describe('GameResultsPageUI', () => {
     id: uuidv4(),
     mode: GameMode.Classic,
     name: 'Classic Minimal',
+    quiz: { id: 'quizId', canHostLiveGame: true },
     host: { id: uuidv4(), nickname: 'Hosty' },
     numberOfPlayers: 2,
     numberOfQuestions: 2,
@@ -234,6 +244,7 @@ describe('GameResultsPageUI', () => {
     id: uuidv4(),
     mode: GameMode.ZeroToOneHundred,
     name: '0-100 Minimal',
+    quiz: { id: 'quizId', canHostLiveGame: false },
     host: { id: uuidv4(), nickname: 'Hosty' },
     numberOfPlayers: 2,
     numberOfQuestions: 2,

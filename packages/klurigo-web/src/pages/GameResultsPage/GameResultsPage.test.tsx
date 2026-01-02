@@ -1,5 +1,4 @@
-import type { GameResultDto } from '@klurigo/common'
-import { GameMode, QuestionType } from '@klurigo/common'
+import { GameMode, type GameResultDto, QuestionType } from '@klurigo/common'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
@@ -39,6 +38,7 @@ const makeClassicResults = (name: string): ClassicResult => ({
   id: 'game-1',
   mode: GameMode.Classic,
   name,
+  quiz: { id: 'quizId', canHostLiveGame: true },
   host: { id: 'host-1', nickname: 'Hosty' },
   numberOfPlayers: 2,
   numberOfQuestions: 2,
@@ -90,6 +90,7 @@ const makeZ2HResults = (name: string): Z2HResult => ({
   id: 'game-1',
   mode: GameMode.ZeroToOneHundred,
   name,
+  quiz: { id: 'quizId', canHostLiveGame: false },
   host: { id: 'host-1', nickname: 'Hosty' },
   numberOfPlayers: 2,
   numberOfQuestions: 2,
@@ -152,6 +153,11 @@ const renderWithProviders = (initialEntry: string) => {
 beforeEach(() => {
   h.getGameResultsMock.mockReset()
   h.navigateMock.mockReset()
+  vi.spyOn(Math, 'random').mockReturnValue(0.5)
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 describe('GameResultsPage', () => {

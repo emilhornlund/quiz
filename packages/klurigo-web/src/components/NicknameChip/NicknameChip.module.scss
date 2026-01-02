@@ -1,6 +1,7 @@
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/animations';
+@use '../../styles/variables';
 
 .main {
   display: flex;
@@ -35,16 +36,8 @@
     @include helpers.fontSize(22px);
   }
 
-  // Enhanced hover transition
-  &:hover {
-    @media (prefers-reduced-motion: no-preference) {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .delete {
-      display: inline-flex;
-    }
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.15s ease;
   }
 
   // Animation states
@@ -67,7 +60,8 @@
   }
 
   &.subtle {
-    background-color: colors.$white-1-50;
+    background-color: colors.$white-1-15;
+    border: variables.$control-outside-border-width solid colors.$white-1-25;
     color: colors.$white;
   }
 
@@ -114,6 +108,27 @@
       @media (prefers-reduced-motion: no-preference) {
         background-color: colors.$black-1-75;
       }
+    }
+  }
+
+  // Enhanced hover transition
+  &:hover {
+    @media (prefers-reduced-motion: no-preference) {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+    }
+
+    &.subtle {
+      background-color: colors.$white-1-20;
+      border-color: colors.$white-1-40;
+      opacity: 0.9;
+    }
+
+    .delete {
+      display: inline-flex;
     }
   }
 }
