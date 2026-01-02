@@ -27,6 +27,7 @@ import {
 import { SkipThrottle } from '@nestjs/throttler'
 import { Observable } from 'rxjs'
 
+import { NoTimeout } from '../../../app/decorators'
 import {
   PrincipalId,
   RequiredAuthorities,
@@ -226,6 +227,7 @@ export class GameController {
    *
    * @returns A stream of events for SSE, each containing data in JSON format.
    */
+  @NoTimeout()
   @Sse('/:gameID/events')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

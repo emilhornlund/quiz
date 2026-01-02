@@ -20,6 +20,7 @@ import {
 } from '../../../app/shared/auth'
 import { User } from '../../user/repositories'
 import { GameRepository } from '../repositories'
+import { GameDocument } from '../repositories/models/schemas'
 
 /**
  * Guard to authorize access to game-related operations based on the participant type.
@@ -65,6 +66,8 @@ export class GameAuthGuard implements CanActivate {
       throw new BadRequestException()
     }
 
+    const game = await this.gameRepository.findGameByIDOrThrow(gameID, false)
+
     if (request.payload.scope === TokenScope.Game) {
       await this.verifyGameScopeOrThrow(
         gameID,
@@ -72,11 +75,7 @@ export class GameAuthGuard implements CanActivate {
         requiredParticipantType,
       )
     } else if (request.payload.scope === TokenScope.User) {
-      await this.verifyUserScopeOrThrow(
-        gameID,
-        request,
-        requiredParticipantType,
-      )
+      await this.verifyUserScopeOrThrow(game, request, requiredParticipantType)
     } else {
       throw new UnauthorizedException()
     }
@@ -117,19 +116,17 @@ export class GameAuthGuard implements CanActivate {
    *
    * Loads the game and validates that the authenticated user is a participant with the required role.
    *
-   * @param gameID - The UUID of the game to validate against.
+   * @param game - The UUID of the game to validate against.
    * @param request - The authenticated request containing the user's principal ID.
    * @param requiredParticipantType - Optional type of participant required to access the resource.
    * @throws {ForbiddenException} if the user is not a participant or has an invalid participant type.
    * @private
    */
   private async verifyUserScopeOrThrow(
-    gameID: string,
+    game: GameDocument,
     request: AuthGuardRequest<TokenDto, User>,
     requiredParticipantType?: GameParticipantType,
   ): Promise<void> {
-    const game = await this.gameRepository.findGameByIDOrThrow(gameID, false)
-
     const participant = game.participants.find(
       (participant) => participant.participantId === request.payload.sub,
     )
