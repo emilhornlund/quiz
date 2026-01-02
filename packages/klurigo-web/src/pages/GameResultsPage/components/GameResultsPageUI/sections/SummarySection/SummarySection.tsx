@@ -183,6 +183,7 @@ const SummarySection: FC<SummarySectionProps> = ({
         .then(({ id: gameId }) =>
           authenticateGame({ gameId }).then(() => navigate('/game')),
         )
+        .catch(() => undefined)
         .finally(() => setIsHostGameLoading(false))
     }
   }

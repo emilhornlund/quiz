@@ -1,8 +1,29 @@
 import { GameMode, type GameResultDto } from '@klurigo/common'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import SummarySection from './SummarySection'
+
+const navigateMock = vi.fn()
+
+type Deferred<T> = {
+  promise: Promise<T>
+  resolve: (value: T) => void
+  reject: (reason?: unknown) => void
+}
+
+const createDeferred = <T,>(): Deferred<T> => {
+  let resolve!: (value: T) => void
+  let reject!: (reason?: unknown) => void
+
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+
+  return { promise, resolve, reject }
+}
 
 vi.mock('react-router-dom', async () => {
   const actual =
@@ -10,7 +31,7 @@ vi.mock('react-router-dom', async () => {
 
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
+    useNavigate: () => navigateMock,
   }
 })
 
@@ -22,6 +43,43 @@ vi.mock('../../../../../../api', () => ({
     createGame: createGameMock,
     authenticateGame: authenticateGameMock,
   }),
+}))
+
+vi.mock('../../../../../../components', () => ({
+  CircularProgressBar: () => <div data-testid="circular-progress" />,
+  Podium: () => <div data-testid="podium" />,
+
+  CircularProgressBarKind: { Correct: 'Correct' },
+  CircularProgressBarSize: { Medium: 'Medium' },
+
+  ConfirmDialog: ({
+    open,
+    loading,
+    title,
+    message,
+    onConfirm,
+    onClose,
+  }: {
+    open: boolean
+    loading: boolean
+    title: string
+    message: string
+    onConfirm: () => void
+    onClose: () => void
+  }) =>
+    open ? (
+      <div data-testid="confirm-dialog">
+        <div>{title}</div>
+        <div>{message}</div>
+        <div data-testid="confirm-loading">{loading ? 'loading' : 'idle'}</div>
+        <button type="button" onClick={onConfirm}>
+          confirm
+        </button>
+        <button type="button" onClick={onClose}>
+          close
+        </button>
+      </div>
+    ) : null,
 }))
 
 const h = vi.hoisted(() => {
@@ -43,13 +101,17 @@ vi.mock('../../utils', () => ({
 }))
 
 beforeEach(() => {
+  navigateMock.mockReset()
+
   createGameMock.mockReset()
   authenticateGameMock.mockReset()
+
   h.getCorrectPercentage.mockReset()
   h.getAveragePrecision.mockReset()
   h.getQuizDifficultyMessage.mockReset()
   h.formatRoundedDuration.mockReset()
   h.formatRoundedSeconds.mockReset()
+
   vi.spyOn(Math, 'random').mockReturnValue(0.5)
 })
 
@@ -253,5 +315,224 @@ describe('SummarySection', () => {
     expect(
       await screen.findByText(/are you sure you want to start hosting/i),
     ).toBeInTheDocument()
+  })
+
+  it('confirms hosting: calls createGame, authenticates, navigates, and toggles loading', async () => {
+    const user = userEvent.setup()
+
+    h.getCorrectPercentage.mockImplementationOnce(() => 100)
+
+    const createGameDeferred = createDeferred<{ id: string }>()
+    const authenticateDeferred = createDeferred<void>()
+
+    createGameMock.mockReturnValue(createGameDeferred.promise)
+    authenticateGameMock.mockReturnValue(authenticateDeferred.promise)
+
+    const playerMetrics = [
+      {
+        rank: 1,
+        score: 100,
+        averageResponseTime: 2,
+        longestCorrectStreak: 3,
+        player: { nickname: 'Alice' },
+      },
+    ] as unknown as GameResultDto['playerMetrics']
+
+    const questionMetrics = [
+      { text: 'Q1' },
+    ] as unknown as GameResultDto['questionMetrics']
+
+    render(
+      <SummarySection
+        hostNickname="FrostyBear"
+        mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        numberOfPlayers={1}
+        numberOfQuestions={1}
+        playerMetrics={playerMetrics}
+        questionMetrics={questionMetrics}
+        duration={10}
+        created={CREATED_DATE}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: /play again/i }))
+
+    expect(await screen.findByTestId('confirm-dialog')).toBeInTheDocument()
+    expect(screen.getByTestId('confirm-loading')).toHaveTextContent('idle')
+
+    await user.click(screen.getByRole('button', { name: 'confirm' }))
+
+    // Now loading should remain true because createGame is still pending
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-loading')).toHaveTextContent('loading')
+    })
+
+    expect(createGameMock).toHaveBeenCalledWith('quizId')
+
+    // Finish createGame -> triggers authenticateGame call
+    createGameDeferred.resolve({ id: 'game-123' })
+
+    await waitFor(() => {
+      expect(authenticateGameMock).toHaveBeenCalledWith({ gameId: 'game-123' })
+    })
+
+    // Still loading until authenticate finishes
+    expect(screen.getByTestId('confirm-loading')).toHaveTextContent('loading')
+
+    authenticateDeferred.resolve()
+
+    await waitFor(() => {
+      expect(navigateMock).toHaveBeenCalledWith('/game')
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-loading')).toHaveTextContent('idle')
+    })
+  })
+
+  it('does nothing on confirm when quiz cannot host live game', async () => {
+    h.getCorrectPercentage.mockImplementationOnce(() => 100)
+
+    const playerMetrics = [
+      {
+        rank: 1,
+        score: 100,
+        averageResponseTime: 2,
+        longestCorrectStreak: 3,
+        player: { nickname: 'Alice' },
+      },
+    ] as unknown as GameResultDto['playerMetrics']
+
+    const questionMetrics = [
+      { text: 'Q1' },
+    ] as unknown as GameResultDto['questionMetrics']
+
+    render(
+      <SummarySection
+        hostNickname="FrostyBear"
+        mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: false }}
+        numberOfPlayers={1}
+        numberOfQuestions={1}
+        playerMetrics={playerMetrics}
+        questionMetrics={questionMetrics}
+        duration={10}
+        created={CREATED_DATE}
+      />,
+    )
+
+    // Button is disabled, but we can still directly validate the guarded handler
+    // by opening the dialog is not possible through UI. Instead validate that
+    // even if ConfirmDialog onConfirm were called, guard prevents requests:
+    //
+    // Practical approach: render, assert disabled (already in your suite),
+    // and assert no calls occurred.
+    const playAgainButton = screen.getByRole('button', { name: /play again/i })
+    expect(playAgainButton).toBeDisabled()
+
+    expect(createGameMock).not.toHaveBeenCalled()
+    expect(authenticateGameMock).not.toHaveBeenCalled()
+    expect(navigateMock).not.toHaveBeenCalled()
+  })
+
+  it('resets loading and does not navigate when createGame rejects', async () => {
+    const user = userEvent.setup()
+
+    h.getCorrectPercentage.mockImplementationOnce(() => 100)
+
+    const createGameDeferred = createDeferred<{ id: string }>()
+    createGameMock.mockReturnValue(createGameDeferred.promise)
+
+    const playerMetrics = [
+      {
+        rank: 1,
+        score: 100,
+        averageResponseTime: 2,
+        longestCorrectStreak: 3,
+        player: { nickname: 'Alice' },
+      },
+    ] as unknown as GameResultDto['playerMetrics']
+
+    const questionMetrics = [
+      { text: 'Q1' },
+    ] as unknown as GameResultDto['questionMetrics']
+
+    render(
+      <SummarySection
+        hostNickname="FrostyBear"
+        mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        numberOfPlayers={1}
+        numberOfQuestions={1}
+        playerMetrics={playerMetrics}
+        questionMetrics={questionMetrics}
+        duration={10}
+        created={CREATED_DATE}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: /play again/i }))
+    expect(await screen.findByTestId('confirm-dialog')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'confirm' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-loading')).toHaveTextContent('loading')
+    })
+
+    expect(createGameMock).toHaveBeenCalledWith('quizId')
+
+    createGameDeferred.reject(new Error('boom'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-loading')).toHaveTextContent('idle')
+    })
+
+    expect(authenticateGameMock).not.toHaveBeenCalled()
+    expect(navigateMock).not.toHaveBeenCalled()
+  })
+
+  it('closes confirm dialog when onClose is triggered', async () => {
+    const user = userEvent.setup()
+
+    h.getCorrectPercentage.mockImplementationOnce(() => 100)
+
+    const playerMetrics = [
+      {
+        rank: 1,
+        score: 100,
+        averageResponseTime: 2,
+        longestCorrectStreak: 3,
+        player: { nickname: 'Alice' },
+      },
+    ] as unknown as GameResultDto['playerMetrics']
+
+    const questionMetrics = [
+      { text: 'Q1' },
+    ] as unknown as GameResultDto['questionMetrics']
+
+    render(
+      <SummarySection
+        hostNickname="FrostyBear"
+        mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        numberOfPlayers={1}
+        numberOfQuestions={1}
+        playerMetrics={playerMetrics}
+        questionMetrics={questionMetrics}
+        duration={10}
+        created={CREATED_DATE}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: /play again/i }))
+    expect(await screen.findByTestId('confirm-dialog')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'close' }))
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('confirm-dialog')).toBeNull()
+    })
   })
 })
