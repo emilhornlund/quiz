@@ -1,4 +1,5 @@
 import { GameMode, type GameResultDto, QuizVisibility } from '@klurigo/common'
+import { Logger } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 
 import { UserRepository } from '../../user/repositories'
@@ -99,6 +100,7 @@ describe(GameResultService.name, () => {
           useValue: {
             findGameResult: jest.fn(),
             createGameResult: jest.fn(),
+            deleteMany: jest.fn(),
           },
         },
         {
@@ -631,6 +633,70 @@ describe(GameResultService.name, () => {
       expect(gameResultRepository.createGameResult).toHaveBeenCalledWith(built)
 
       expect(result).toBe(persisted)
+    })
+  })
+
+  describe('deleteByGameId', () => {
+    let logSpy: jest.SpyInstance | undefined
+
+    beforeEach(() => {
+      logSpy = jest
+        .spyOn(Logger.prototype, 'log')
+        .mockImplementation(() => undefined)
+    })
+
+    afterEach(() => {
+      logSpy?.mockRestore()
+    })
+
+    it('deletes game results by gameId and logs deleted count', async () => {
+      const gameId = 'game-123'
+      gameResultRepository.deleteMany.mockResolvedValueOnce(
+        3 as unknown as never,
+      )
+
+      await service.deleteByGameId(gameId)
+
+      expect(gameResultRepository.deleteMany).toHaveBeenCalledTimes(1)
+      expect(gameResultRepository.deleteMany).toHaveBeenCalledWith({
+        game: { _id: gameId },
+      })
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `Deleted '3' game results by their gameId '${gameId}'.`,
+      )
+    })
+
+    it('logs count 0 when nothing is deleted', async () => {
+      const gameId = 'game-0'
+      gameResultRepository.deleteMany.mockResolvedValueOnce(
+        0 as unknown as never,
+      )
+
+      await service.deleteByGameId(gameId)
+
+      expect(gameResultRepository.deleteMany).toHaveBeenCalledWith({
+        game: { _id: gameId },
+      })
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `Deleted '0' game results by their gameId '${gameId}'.`,
+      )
+    })
+
+    it('bubbles repository errors and does not log success message', async () => {
+      const gameId = 'game-fail'
+      gameResultRepository.deleteMany.mockRejectedValueOnce(
+        new Error('db down'),
+      )
+
+      await expect(service.deleteByGameId(gameId)).rejects.toThrow('db down')
+
+      expect(gameResultRepository.deleteMany).toHaveBeenCalledWith({
+        game: { _id: gameId },
+      })
+
+      expect(logSpy).not.toHaveBeenCalled()
     })
   })
 })

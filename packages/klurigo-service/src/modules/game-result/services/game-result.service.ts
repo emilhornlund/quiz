@@ -9,7 +9,7 @@ import {
   GameResultZeroToOneHundredModeQuestionMetricDto,
   QuizVisibility,
 } from '@klurigo/common'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 
 import { GameDocument } from '../../game-core/repositories/models/schemas'
 import { UserRepository } from '../../user/repositories'
@@ -28,6 +28,8 @@ import { buildGameResultModel } from './utils/game-result.converter'
  */
 @Injectable()
 export class GameResultService {
+  private readonly logger = new Logger(GameResultService.name)
+
   /**
    * Constructs a new GameResultService.
    *
@@ -132,6 +134,24 @@ export class GameResultService {
   public async createGameResult(game: GameDocument): Promise<GameResult> {
     const gameResult = buildGameResultModel(game)
     return this.gameResultRepository.createGameResult(gameResult)
+  }
+
+  /**
+   * Deletes all persisted game results associated with a specific game.
+   *
+   * This is typically invoked as part of cascade cleanup when a game is deleted.
+   *
+   * @param gameId - The ID of the deleted game whose game results should be removed.
+   * @returns Resolves when the delete operation has completed.
+   */
+  public async deleteByGameId(gameId: string): Promise<void> {
+    const deletedCount = await this.gameResultRepository.deleteMany({
+      game: { _id: gameId },
+    })
+
+    this.logger.log(
+      `Deleted '${deletedCount}' game results by their gameId '${gameId}'.`,
+    )
   }
 
   /**
