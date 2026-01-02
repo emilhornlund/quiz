@@ -8,6 +8,7 @@ import {
   createMockGameDocument,
   createMockGameHostParticipantDocument,
   createMockGamePlayerParticipantDocument,
+  createMockPodiumTaskDocument,
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
   offsetSeconds,
@@ -197,7 +198,7 @@ function buildFirstPageGameDocuments(user: User): Game[] {
       created: offsetSeconds(2),
     }),
     createMockGameDocument({
-      status: GameStatus.Completed,
+      status: GameStatus.Active,
       participants: [
         createMockGamePlayerParticipantDocument({
           participantId,
@@ -205,7 +206,7 @@ function buildFirstPageGameDocuments(user: User): Game[] {
           totalScore: 1337,
         }),
       ],
-      currentTask: createMockQuitTaskDocument(),
+      currentTask: createMockPodiumTaskDocument(),
       created: offsetSeconds(3),
     }),
     createMockGameDocument({
