@@ -20,6 +20,7 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import { Redis } from 'ioredis'
 
@@ -75,6 +76,7 @@ export class GameService {
    * @param gameTaskTransitionScheduler - Scheduler responsible for task transitions and time-based progression.
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
+   * @param eventEmitter - Emits application events (e.g., `game.deleted`) for cross-module cleanup.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
@@ -82,6 +84,7 @@ export class GameService {
     private readonly gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private readonly gameEventPublisher: GameEventPublisher,
     private readonly quizRepository: QuizRepository,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   /**
@@ -601,16 +604,30 @@ export class GameService {
   }
 
   /**
-   * Deletes all games that are associated with the given quiz ID.
+   * Deletes all games associated with a quiz.
    *
-   * @param {string} quizId - The unique identifier of the quiz.
-   * @returns {Promise<void>} - Confirms successful deletion of the games.
+   * @param quizId - The ID of the quiz whose games should be deleted.
+   * @returns Resolves when all matching games have been processed.
    */
   public async deleteQuiz(quizId: string): Promise<void> {
-    const deletedCount = await this.gameRepository.deleteGamesByQuizId(quizId)
-    this.logger.log(
-      `Deleted '${deletedCount}' games by their quizId '${quizId}'.`,
-    )
+    const games = await this.gameRepository.find({
+      quiz: { _id: quizId },
+    })
+
+    for (const game of games) {
+      try {
+        const deleted = await this.gameRepository.delete(game._id)
+        if (deleted) {
+          this.logger.debug(`Emitting deleted event for game '${game._id}'`)
+          this.eventEmitter.emit('game.deleted', { gameId: game._id })
+        }
+      } catch (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        error
+      ) {
+        //suppress error (logged by repository)
+      }
+    }
   }
 
   /**

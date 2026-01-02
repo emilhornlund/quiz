@@ -1,10 +1,12 @@
 import { Logger, Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { GameCoreModule } from '../game-core'
 import { UserModule } from '../user'
 
 import { GameResultController } from './controllers'
+import { GameResultListener } from './handlers'
 import { GameResultRepository } from './repositories'
 import { GameResult, GameResultSchema } from './repositories/models/schemas'
 import { GameResultService } from './services'
@@ -15,6 +17,7 @@ import { GameResultService } from './services'
  */
 @Module({
   imports: [
+    EventEmitterModule,
     GameCoreModule,
     MongooseModule.forFeature([
       {
@@ -25,7 +28,12 @@ import { GameResultService } from './services'
     UserModule,
   ],
   controllers: [GameResultController],
-  providers: [Logger, GameResultRepository, GameResultService],
+  providers: [
+    GameResultListener,
+    GameResultRepository,
+    GameResultService,
+    Logger,
+  ],
   exports: [GameResultService],
 })
 export class GameResultModule {}
