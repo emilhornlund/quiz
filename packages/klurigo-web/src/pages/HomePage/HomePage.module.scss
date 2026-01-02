@@ -85,14 +85,17 @@
 
     @include helpers.mobile {
       padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+      column-gap: variables.$mobile-narrow-layout-gutter;
       border-radius: variables.$mobile-border-radius;
     }
     @include helpers.tablet {
       padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+      column-gap: variables.$tablet-narrow-layout-gutter;
       border-radius: variables.$tablet-border-radius;
     }
     @include helpers.desktop {
       padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+      column-gap: variables.$desktop-narrow-layout-gutter;
       border-radius: variables.$desktop-border-radius;
     }
 
@@ -118,6 +121,7 @@
       .resumeGameContentTitle {
         font-weight: bold;
         opacity: 0.95;
+        color: colors.$white;
 
         @include helpers.mobile {
           @include helpers.fontSize(24px);
@@ -134,6 +138,7 @@
 
       .resumeGameContentSubtitle {
         opacity: 0.78;
+        color: colors.$white;
 
         @include helpers.mobile {
           @include helpers.fontSize(20px);
@@ -173,6 +178,7 @@
       align-items: center;
       background-color: colors.$white-1-15;
       border: variables.$control-outside-border-width solid colors.$white-1-25;
+      color: colors.$white;
 
       @include helpers.mobile {
         border-radius: calc(1.5rem / 2);
