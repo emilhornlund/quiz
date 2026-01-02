@@ -1,9 +1,28 @@
-import type { GameResultDto } from '@klurigo/common'
-import { GameMode } from '@klurigo/common'
+import { GameMode, type GameResultDto } from '@klurigo/common'
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import SummarySection from './SummarySection'
+
+vi.mock('react-router-dom', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
+
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+  }
+})
+
+const createGameMock = vi.fn()
+const authenticateGameMock = vi.fn()
+
+vi.mock('../../../../../../api', () => ({
+  useKlurigoServiceClient: () => ({
+    createGame: createGameMock,
+    authenticateGame: authenticateGameMock,
+  }),
+}))
 
 const h = vi.hoisted(() => {
   return {
@@ -24,11 +43,18 @@ vi.mock('../../utils', () => ({
 }))
 
 beforeEach(() => {
+  createGameMock.mockReset()
+  authenticateGameMock.mockReset()
   h.getCorrectPercentage.mockReset()
   h.getAveragePrecision.mockReset()
   h.getQuizDifficultyMessage.mockReset()
   h.formatRoundedDuration.mockReset()
   h.formatRoundedSeconds.mockReset()
+  vi.spyOn(Math, 'random').mockReturnValue(0.5)
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 const CREATED_DATE = new Date('2025-01-01T12:00:00.000Z')
@@ -40,11 +66,15 @@ describe('SummarySection', () => {
       .mockImplementationOnce(() => 80)
     const playerMetrics = [
       {
+        rank: 1,
+        score: 120,
         averageResponseTime: 3.2,
         longestCorrectStreak: 5,
         player: { nickname: 'Alice' },
       },
       {
+        rank: 2,
+        score: 90,
         averageResponseTime: 4.5,
         longestCorrectStreak: 7,
         player: { nickname: 'Bob' },
@@ -59,6 +89,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: true }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -91,6 +122,9 @@ describe('SummarySection', () => {
     expect(getValueFor('Players')).toBe(String(playerMetrics.length))
     expect(getValueFor('Questions')).toBe(String(questionMetrics.length))
 
+    const playAgainButton = screen.getByRole('button', { name: /play again/i })
+    expect(playAgainButton).toBeEnabled()
+
     expect(container).toMatchSnapshot()
   })
 
@@ -100,11 +134,15 @@ describe('SummarySection', () => {
       .mockImplementationOnce(() => 67)
     const playerMetrics = [
       {
+        rank: 1,
+        score: 120,
         averageResponseTime: 2.1,
         longestCorrectStreak: 2,
         player: { nickname: 'Carol' },
       },
       {
+        rank: 2,
+        score: 90,
         averageResponseTime: 2.7,
         longestCorrectStreak: 3,
         player: { nickname: 'Dave' },
@@ -119,6 +157,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.ZeroToOneHundred}
+        quiz={{ id: 'quizId', canHostLiveGame: false }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -144,6 +183,10 @@ describe('SummarySection', () => {
     expect(getValueFor('Players')).toBe(String(playerMetrics.length))
     expect(getValueFor('Questions')).toBe(String(questionMetrics.length))
 
+    const playAgainButton = screen.getByRole('button', { name: /play again/i })
+    expect(playAgainButton).toBeDisabled()
+    expect(screen.getByText(/this quiz isn’t public yet/i)).toBeInTheDocument()
+
     expect(container).toMatchSnapshot()
   })
 
@@ -158,6 +201,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: false }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -171,5 +215,43 @@ describe('SummarySection', () => {
     expect(screen.queryByText('Longest Correct Streak')).toBeNull()
 
     expect(container).toMatchSnapshot()
+  })
+
+  it('opens confirm dialog when clicking Play again if allowed', async () => {
+    h.getCorrectPercentage.mockImplementationOnce(() => 100)
+
+    const playerMetrics = [
+      {
+        rank: 1,
+        score: 100,
+        averageResponseTime: 2,
+        longestCorrectStreak: 3,
+        player: { nickname: 'Alice' },
+      },
+    ] as unknown as GameResultDto['playerMetrics']
+
+    const questionMetrics = [
+      { text: 'Q1' },
+    ] as unknown as GameResultDto['questionMetrics']
+
+    render(
+      <SummarySection
+        hostNickname="FrostyBear"
+        mode={GameMode.Classic}
+        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        numberOfPlayers={1}
+        numberOfQuestions={1}
+        playerMetrics={playerMetrics}
+        questionMetrics={questionMetrics}
+        duration={10}
+        created={CREATED_DATE}
+      />,
+    )
+
+    screen.getByRole('button', { name: /play again/i }).click()
+
+    expect(
+      await screen.findByText(/are you sure you want to start hosting/i),
+    ).toBeInTheDocument()
   })
 })

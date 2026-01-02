@@ -21,7 +21,13 @@
   .progressText {
     font-family: inherit;
     font-weight: bold;
-    fill: colors.$white;
+
+    &.white {
+      fill: colors.$white;
+    }
+    &.black {
+      fill: colors.$gray-4;
+    }
   }
 
   &.default {
@@ -30,9 +36,6 @@
     }
     .circleProgress {
       stroke: colors.$orange-2;
-    }
-    .progressText {
-      fill: colors.$white;
     }
   }
 
@@ -43,9 +46,6 @@
     .circleProgress {
       stroke: colors.$green-2;
     }
-    .progressText {
-      fill: colors.$gray-4;
-    }
   }
 
   &.secondary {
@@ -54,9 +54,6 @@
     }
     .circleProgress {
       stroke: colors.$blue-1;
-    }
-    .progressText {
-      fill: colors.$gray-2;
     }
   }
 

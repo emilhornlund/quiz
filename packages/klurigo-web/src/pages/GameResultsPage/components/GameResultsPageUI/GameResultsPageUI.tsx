@@ -74,6 +74,7 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({
         {selectedSection === GameResultSection.Summary && (
           <SummarySection
             mode={results.mode}
+            quiz={results.quiz}
             hostNickname={results.host.nickname || 'N/A'}
             numberOfPlayers={results.numberOfPlayers}
             numberOfQuestions={results.numberOfQuestions}

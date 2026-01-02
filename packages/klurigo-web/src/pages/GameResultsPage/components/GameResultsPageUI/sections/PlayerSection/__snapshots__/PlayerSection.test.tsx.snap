@@ -48,7 +48,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -151,7 +151,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -254,7 +254,7 @@ exports[`PlayerSection > renders rows for ZeroToOneHundred mode and uses getAver
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 98.39468191043233;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -368,7 +368,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -471,7 +471,7 @@ exports[`PlayerSection > renders rows with badges and nicknames for Classic mode
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -585,7 +585,7 @@ exports[`PlayerSection > toggles details for a row and shows detail items for Cl
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 42.411500823462205;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"

@@ -48,7 +48,7 @@ exports[`QuestionSection > renders rows for ZeroToOneHundred and uses getAverage
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -151,7 +151,7 @@ exports[`QuestionSection > renders rows for ZeroToOneHundred and uses getAverage
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -254,7 +254,7 @@ exports[`QuestionSection > renders rows for ZeroToOneHundred and uses getAverage
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 89.91238174573988;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -368,7 +368,7 @@ exports[`QuestionSection > renders rows with badges and question text for Classi
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -471,7 +471,7 @@ exports[`QuestionSection > renders rows with badges and question text for Classi
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"
@@ -585,7 +585,7 @@ exports[`QuestionSection > toggles details on row click and shows detail items 1
                 style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 33.92920065876976;"
               />
               <text
-                class="progressText"
+                class="progressText black"
                 dominant-baseline="middle"
                 text-anchor="middle"
                 x="50%"

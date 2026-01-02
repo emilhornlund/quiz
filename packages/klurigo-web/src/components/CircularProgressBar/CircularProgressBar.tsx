@@ -39,6 +39,7 @@ export interface CircularProgressBarProps {
   kind?: CircularProgressBarKind
   size?: CircularProgressBarSize
   showPercentage?: boolean
+  percentageColor?: 'white' | 'black'
 }
 
 const CircularProgressBar: FC<CircularProgressBarProps> = ({
@@ -46,6 +47,7 @@ const CircularProgressBar: FC<CircularProgressBarProps> = ({
   kind = CircularProgressBarKind.Default,
   size = CircularProgressBarSize.Medium,
   showPercentage = true,
+  percentageColor = 'black',
 }) => {
   const deviceType = useDeviceSizeType()
 
@@ -164,7 +166,11 @@ const CircularProgressBar: FC<CircularProgressBarProps> = ({
       {/* Center text */}
       {showPercentage && (
         <text
-          className={styles.progressText}
+          className={classNames(
+            styles.progressText,
+            percentageColor === 'white' ? styles.white : undefined,
+            percentageColor === 'black' ? styles.black : undefined,
+          )}
           x="50%"
           y="50%"
           dominantBaseline="middle"

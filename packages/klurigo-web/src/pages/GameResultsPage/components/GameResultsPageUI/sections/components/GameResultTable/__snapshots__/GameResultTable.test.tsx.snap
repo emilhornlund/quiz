@@ -47,7 +47,7 @@ exports[`GameResultTable > does not crash when details are missing 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 152.68140296446393;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -130,7 +130,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -247,7 +247,7 @@ exports[`GameResultTable > hides details by default and toggles them on row clic
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -330,7 +330,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -447,7 +447,7 @@ exports[`GameResultTable > renders badge and value, and sets title attribute on 
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -530,7 +530,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 30.53628059289281;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"
@@ -647,7 +647,7 @@ exports[`GameResultTable > renders one row per item 1`] = `
               style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 84.82300164692441;"
             />
             <text
-              class="progressText"
+              class="progressText black"
               dominant-baseline="middle"
               text-anchor="middle"
               x="50%"

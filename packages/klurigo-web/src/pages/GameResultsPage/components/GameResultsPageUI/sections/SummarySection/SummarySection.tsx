@@ -4,24 +4,31 @@ import {
   faCircleQuestion,
   faClock,
   faGamepad,
+  faPlay,
   faUser,
   faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import type {
-  GameResultClassicModeQuestionMetricDto,
-  GameResultDto,
-  GameResultParticipantDto,
-  GameResultZeroToOneHundredModeQuestionMetricDto,
+import {
+  GameMode,
+  type GameResultClassicModeQuestionMetricDto,
+  type GameResultDto,
+  type GameResultParticipantDto,
+  type GameResultQuizDto,
+  type GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@klurigo/common'
-import { GameMode } from '@klurigo/common'
-import type { FC, ReactElement } from 'react'
+import { type FC, type ReactElement, useState } from 'react'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { useKlurigoServiceClient } from '../../../../../../api'
 import {
   CircularProgressBar,
   CircularProgressBarKind,
   CircularProgressBarSize,
+  ConfirmDialog,
+  Podium,
+  type PodiumValue,
 } from '../../../../../../components'
 import { GameModeLabels } from '../../../../../../models'
 import {
@@ -75,6 +82,7 @@ const MetricCard: FC<{ title: string; value: string; nicknames: string[] }> = ({
 
 export interface SummarySectionProps {
   mode: GameMode
+  quiz: GameResultQuizDto
   hostNickname: string
   numberOfPlayers: number
   numberOfQuestions: number
@@ -86,6 +94,7 @@ export interface SummarySectionProps {
 
 const SummarySection: FC<SummarySectionProps> = ({
   mode,
+  quiz,
   hostNickname,
   numberOfPlayers,
   numberOfQuestions,
@@ -94,6 +103,14 @@ const SummarySection: FC<SummarySectionProps> = ({
   duration,
   created,
 }) => {
+  const navigate = useNavigate()
+
+  const { createGame, authenticateGame } = useKlurigoServiceClient()
+
+  const [showConfirmHostGameModal, setShowConfirmHostGameModal] =
+    useState<boolean>(false)
+  const [isHostGameLoading, setIsHostGameLoading] = useState<boolean>(false)
+
   const percentage = useMemo<number>(
     () =>
       Math.ceil(
@@ -146,19 +163,78 @@ const SummarySection: FC<SummarySectionProps> = ({
     return { value, players }
   }, [playerMetrics])
 
+  const podiumValues = useMemo<PodiumValue[]>(() => {
+    return playerMetrics
+      .sort((lhs, rhs) => lhs.rank - rhs.rank)
+      .slice(0, 3)
+      .map(({ rank, player, score }) => ({
+        position: rank,
+        nickname: player?.nickname ?? '',
+        score,
+      }))
+  }, [playerMetrics])
+
+  const handleCreateGame = (): void => {
+    if (quiz.canHostLiveGame) {
+      setIsHostGameLoading(true)
+      createGame(quiz.id)
+        .then(({ id: gameId }) =>
+          authenticateGame({ gameId }).then(() => navigate('/game')),
+        )
+        .finally(() => setIsHostGameLoading(false))
+    }
+  }
+
   return (
     <section>
       <div className={styles.cards}>
-        <div className={classNames(styles.card, styles.full, styles.progress)}>
+        <div className={styles.podiumWrapper}>
+          <Podium values={podiumValues} />
+        </div>
+
+        <div className={classNames(styles.card, styles.progress)}>
           <CircularProgressBar
             kind={CircularProgressBarKind.Correct}
             size={CircularProgressBarSize.Medium}
             progress={percentage}
+            percentageColor="white"
           />
           <div className={styles.text}>
             {getQuizDifficultyMessage(percentage)}
           </div>
         </div>
+
+        <button
+          id="host-game-button"
+          type="button"
+          className={classNames(styles.card, styles.hostGameButton)}
+          disabled={!quiz.canHostLiveGame}
+          onClick={() => setShowConfirmHostGameModal(true)}>
+          {quiz.canHostLiveGame ? (
+            <>
+              <div className={styles.content}>
+                <div className={styles.title}>Play again</div>
+                <div className={styles.subtitle}>
+                  Start a new live game with this quiz and invite others to
+                  join.
+                </div>
+              </div>
+              <div className={styles.icon}>
+                <FontAwesomeIcon icon={faPlay} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.content}>
+                <div className={styles.title}>Play again</div>
+                <div className={styles.subtitle}>
+                  This quiz isn’t public yet. Ask the owner to make it public
+                  before hosting a live game.
+                </div>
+              </div>
+            </>
+          )}
+        </button>
 
         <div className={classNames(styles.card, styles.full, styles.details)}>
           <div className={styles.column}>
@@ -212,6 +288,15 @@ const SummarySection: FC<SummarySectionProps> = ({
           />
         )}
       </div>
+
+      <ConfirmDialog
+        title="Host Game"
+        message="Are you sure you want to start hosting a new game? Players will be able to join as soon as the game starts."
+        open={showConfirmHostGameModal}
+        loading={isHostGameLoading}
+        onConfirm={handleCreateGame}
+        onClose={() => setShowConfirmHostGameModal(false)}
+      />
     </section>
   )
 }

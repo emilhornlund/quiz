@@ -20,7 +20,7 @@ export type { PageProps } from './Page'
 export type { PaginationProps } from './Pagination'
 export { PinColor } from './PinImage'
 export type { PinImagePosition, PinImageProps, PinImageValue } from './PinImage'
-export type { PodiumProps } from './Podium'
+export type { PodiumProps, PodiumValue } from './Podium'
 export type { ProgressBarProps } from './ProgressBar'
 export type { ProtectedRouteProps } from './ProtectedRoute'
 export type {

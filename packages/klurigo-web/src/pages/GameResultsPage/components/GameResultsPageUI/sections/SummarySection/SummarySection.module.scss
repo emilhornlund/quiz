@@ -2,6 +2,8 @@
 @use '../../../../../../styles/helpers';
 @use '../../../../../../styles/variables';
 
+$contrast-opacity: 0.80;
+
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -18,14 +20,36 @@
     gap: variables.$desktop-layout-gutter;
   }
 
+  .podiumWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    grid-column: span 2;
+
+    @include helpers.mobile {
+      margin-top: variables.$mobile-layout-gutter;
+    }
+
+    @include helpers.tablet {
+      margin-top: variables.$tablet-layout-gutter;
+    }
+
+    @include helpers.desktop {
+      margin-top: variables.$desktop-layout-gutter;
+    }
+  }
+
   .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
-    background-color: colors.$white;
-    color: colors.$gray-4;
+    background-color: colors.$white-1-15;
+    border: variables.$control-outside-border-width solid colors.$white-1-25;
+    color: colors.$white;
 
     @include helpers.mobile {
       padding: variables.$mobile-narrow-layout-gutter;
@@ -52,6 +76,10 @@
       grid-column: span 2;
     }
 
+    @include helpers.mobile() {
+      grid-column: span 2;
+    }
+
     &.progress {
       display: flex;
       flex-direction: row;
@@ -70,6 +98,170 @@
 
       .text {
         flex: 1;
+        opacity: $contrast-opacity;
+      }
+    }
+
+    &.hostGameButton {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      font-family: inherit;
+      height: 100%;
+      outline: none;
+
+      &:not(:disabled) {
+        cursor: pointer;
+      }
+
+      @include helpers.mobile {
+        padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+        column-gap: variables.$mobile-narrow-layout-gutter;
+      }
+
+      @include helpers.tablet {
+        padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+        column-gap: variables.$tablet-narrow-layout-gutter;
+      }
+
+      @include helpers.desktop {
+        padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+        column-gap: variables.$desktop-narrow-layout-gutter;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+
+        @include helpers.mobile {
+          row-gap: variables.$mobile-narrow-layout-gutter * 0.5;
+        }
+
+        @include helpers.tablet {
+          row-gap: variables.$tablet-narrow-layout-gutter * 0.5;
+        }
+
+        @include helpers.desktop {
+          row-gap: variables.$desktop-narrow-layout-gutter * 0.5;
+        }
+
+        .title {
+          font-weight: bold;
+          opacity: 0.95;
+
+          @include helpers.mobile {
+            @include helpers.fontSize(24px);
+          }
+
+          @include helpers.tablet {
+            @include helpers.fontSize(26px);
+          }
+
+          @include helpers.desktop {
+            @include helpers.fontSize(28px);
+          }
+        }
+
+        .subtitle {
+          opacity: 0.78;
+
+          @include helpers.mobile {
+            line-height: 1.3;
+            @include helpers.fontSize(20px);
+          }
+
+          @include helpers.tablet {
+            line-height: 1.35;
+            @include helpers.fontSize(22px);
+          }
+
+          @include helpers.desktop {
+            line-height: 1.4;
+            @include helpers.fontSize(24px);
+          }
+        }
+      }
+
+      .icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: colors.$white-1-15;
+        border: variables.$control-outside-border-width solid colors.$white-1-25;
+
+        @include helpers.mobile {
+          width: 2.1rem;
+          height: 2.1rem;
+          border-radius: calc(2.1rem / 2);
+        }
+        @include helpers.tablet {
+          width: 2.3rem;
+          height: 2.3rem;
+          border-radius: calc(2.3rem / 2);
+        }
+        @include helpers.desktop {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: calc(2.5rem / 2);
+        }
+
+        svg {
+          @include helpers.mobile {
+            @include helpers.fontSize(16px);
+          }
+          @include helpers.tablet {
+            @include helpers.fontSize(18px);
+          }
+          @include helpers.desktop {
+            @include helpers.fontSize(20px);
+          }
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition:
+          background-color 0.15s ease,
+          border-color 0.15s ease,
+          transform 0.15s ease;
+      }
+
+      &:hover,
+      &:focus-visible {
+        &:not(:disabled) {
+          background-color: colors.$white-1-20;
+
+          @media (prefers-reduced-motion: no-preference) {
+            transform: scale(1.05);
+          }
+
+          .content {
+            .title {
+              opacity: 1;
+            }
+
+            .subtitle {
+              opacity: 0.9;
+            }
+          }
+
+          .icon {
+            background-color: colors.$white-1-25;
+            border-color: colors.$white-1-40;
+
+            svg {
+              opacity: 1;
+            }
+          }
+        }
       }
     }
 
@@ -131,6 +323,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            opacity: $contrast-opacity;
           }
 
           .title {
@@ -138,6 +331,7 @@
             flex-direction: row;
             align-items: center;
             flex: 1;
+            opacity: $contrast-opacity;
 
             @include helpers.mobile {
               column-gap: variables.$mobile-narrow-layout-gutter;
@@ -180,9 +374,9 @@
           background: linear-gradient(
               to bottom,
               transparent 0%,
-              rgba(0, 0, 0, 0.15) 15%,
-              rgba(0, 0, 0, 0.4) 50%,
-              rgba(0, 0, 0, 0.15) 85%,
+              rgba(255, 255, 255, 0.15) 15%,
+              rgba(255, 255, 255, 0.4) 50%,
+              rgba(255, 255, 255, 0.15) 85%,
               transparent 100%
           );
         }
@@ -238,7 +432,8 @@
 
         .nickname {
           display: flex;
-          background-color: colors.$blue-1;
+          background-color: colors.$white-1-15;
+          border: variables.$control-outside-border-width solid colors.$white-1-25;
           color: colors.$white;
           justify-content: center;
           align-items: center;
@@ -266,12 +461,30 @@
 
             @include helpers.fontSize(22px);
           }
+
+          @media (prefers-reduced-motion: no-preference) {
+            transition:
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              transform 0.15s ease;
+          }
+
+          &:hover {
+            background-color: colors.$white-1-20;
+            border-color: colors.$white-1-40;
+            opacity: 0.9;
+
+            @media (prefers-reduced-motion: no-preference) {
+              transform: scale(1.05);
+            }
+          }
         }
       }
 
       .title {
         text-transform: capitalize;
         text-align: center;
+        opacity: $contrast-opacity;
 
         @include helpers.mobile {
           @include helpers.fontSize(18px);

@@ -26,7 +26,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with default 
       style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
@@ -65,7 +65,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with kind cor
       style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
@@ -104,7 +104,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with kind def
       style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
@@ -143,7 +143,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with size lar
       style="stroke-dasharray: 333.0088212805181; stroke-dashoffset: 116.55308744818132;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
@@ -182,7 +182,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with size med
       style="stroke-dasharray: 282.7433388230814; stroke-dashoffset: 98.96016858807849;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
@@ -221,7 +221,7 @@ exports[`CircularProgressBar > should render a CircularProgressBar with size sma
       style="stroke-dasharray: 169.64600329384882; stroke-dashoffset: 59.376101152847085;"
     />
     <text
-      class="progressText"
+      class="progressText black"
       dominant-baseline="middle"
       text-anchor="middle"
       x="50%"
