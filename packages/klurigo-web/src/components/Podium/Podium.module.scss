@@ -55,6 +55,16 @@
       position: relative;
       width: 100%;
 
+      @include helpers.mobile {
+        min-height: helpers.pxToRem(37px);
+      }
+      @include helpers.tablet {
+        min-height: helpers.pxToRem(45px);
+      }
+      @include helpers.desktop {
+        min-height: helpers.pxToRem(52px);
+      }
+
       .crown {
         $crown-size: helpers.pxToRem(48px);
         position: absolute;
