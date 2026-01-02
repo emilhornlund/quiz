@@ -20,9 +20,11 @@ import {
   ApiGameResultDurationProperty,
   ApiGameResultNumberOfPlayersProperty,
   ApiGameResultNumberOfQuestionsProperty,
+  ApiGameResultQuizProperty,
 } from '../../decorators/api'
 
 import { GameResultParticipantResponse } from './game-result-participant.response'
+import { GameResultQuizResponse } from './game-result-quiz.response'
 import { GameResultZeroToOneHundredModePlayerMetricResponse } from './game-result-zero-to-one-hundred-mode-player-metric-response'
 import { GameResultZeroToOneHundredModeQuestionMetricResponse } from './game-result-zero-to-one-hundred-mode-question-metric.response'
 
@@ -49,6 +51,15 @@ export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToO
    */
   @ApiGameNameProperty()
   name: string
+
+  /**
+   * The quiz associated with the completed game.
+   *
+   * Includes the quiz identifier and whether the caller can create a new live game
+   * based on this quiz.
+   */
+  @ApiGameResultQuizProperty()
+  quiz: GameResultQuizResponse
 
   /**
    * The participant who created and hosted the game.

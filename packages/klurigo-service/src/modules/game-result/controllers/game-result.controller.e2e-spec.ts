@@ -8,36 +8,43 @@ import {
 } from '@klurigo/common'
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
 import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
   buildMockSecondaryUser,
   buildMockTertiaryUser,
+  createMockClassicQuiz,
+  createMockZeroToOneHundredQuiz,
 } from '../../../../test-utils/data'
 import {
   closeTestApp,
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../../test-utils/utils'
-import { Game, TaskType } from '../../game-core/repositories/models/schemas'
-import { Quiz } from '../../quiz/repositories/models/schemas'
+import {
+  Game,
+  GameModel,
+  TaskType,
+} from '../../game-core/repositories/models/schemas'
+import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
-import { GameResult } from '../repositories/models/schemas'
+import { GameResult, GameResultModel } from '../repositories/models/schemas'
 
 describe('GameResultController (e2e)', () => {
   let app: INestApplication
-  let gameModel: Model<Game>
-  let gameResultModel: Model<GameResult>
+  let gameModel: GameModel
+  let gameResultModel: GameResultModel
   let userModel: UserModel
+  let quizModel: QuizModel
   let playerUser: User
 
   beforeEach(async () => {
     app = await createTestApp()
-    gameModel = app.get<Model<Game>>(getModelToken(Game.name))
-    gameResultModel = app.get<Model<GameResult>>(getModelToken(GameResult.name))
+    gameModel = app.get<GameModel>(getModelToken(Game.name))
+    gameResultModel = app.get<GameResultModel>(getModelToken(GameResult.name))
     userModel = app.get<UserModel>(getModelToken(User.name))
+    quizModel = app.get<QuizModel>(getModelToken(Quiz.name))
     playerUser = await userModel.create(buildMockSecondaryUser())
   })
 
@@ -52,9 +59,14 @@ describe('GameResultController (e2e)', () => {
       const { accessToken, user: hostUser } =
         await createDefaultUserAndAuthenticate(app)
 
+      const quiz = await quizModel.create(
+        createMockClassicQuiz({ owner: hostUser }),
+      )
+
       const game = await gameModel.create({
         ...buildMockClassicModeGame(hostUser, playerUser),
         _id: gameId,
+        quiz,
       })
 
       const gameResult = await gameResultModel.create(
@@ -70,6 +82,10 @@ describe('GameResultController (e2e)', () => {
             id: gameResult.game._id,
             name: 'Classic Quiz Debug',
             mode: GameMode.Classic,
+            quiz: {
+              id: quiz._id,
+              canHostLiveGame: true,
+            },
             host: {
               id: hostUser._id,
               nickname: 'FrostyBear',
@@ -191,9 +207,14 @@ describe('GameResultController (e2e)', () => {
 
       const hostUser = await userModel.create(buildMockTertiaryUser())
 
+      const quiz = await quizModel.create(
+        createMockClassicQuiz({ owner: hostUser }),
+      )
+
       const game = await gameModel.create({
         ...buildMockClassicModeGame(hostUser, playerUser),
         _id: gameId,
+        quiz,
       })
 
       const gameResult = await gameResultModel.create(
@@ -209,6 +230,10 @@ describe('GameResultController (e2e)', () => {
             id: gameResult.game._id,
             name: 'Classic Quiz Debug',
             mode: GameMode.Classic,
+            quiz: {
+              id: quiz._id,
+              canHostLiveGame: true,
+            },
             host: {
               id: hostUser._id,
               nickname: 'ShadowWhirlwind',
@@ -339,9 +364,14 @@ describe('GameResultController (e2e)', () => {
       const { accessToken, user: hostUser } =
         await createDefaultUserAndAuthenticate(app)
 
-      const game = await gameModel.create(
-        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+      const quiz = await quizModel.create(
+        createMockZeroToOneHundredQuiz({ owner: hostUser }),
       )
+
+      const game = await gameModel.create({
+        ...buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+        quiz,
+      })
 
       const gameResult = await gameResultModel.create(
         buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),
@@ -356,6 +386,10 @@ describe('GameResultController (e2e)', () => {
             id: gameResult.game._id,
             name: '0-100 Quiz Debug',
             mode: GameMode.ZeroToOneHundred,
+            quiz: {
+              id: quiz._id,
+              canHostLiveGame: true,
+            },
             host: {
               id: hostUser._id,
               nickname: 'FrostyBear',
@@ -466,9 +500,14 @@ describe('GameResultController (e2e)', () => {
 
       const hostUser = await userModel.create(buildMockTertiaryUser())
 
-      const game = await gameModel.create(
-        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+      const quiz = await quizModel.create(
+        createMockZeroToOneHundredQuiz({ owner: hostUser }),
       )
+
+      const game = await gameModel.create({
+        ...buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+        quiz,
+      })
 
       const gameResult = await gameResultModel.create(
         buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),
@@ -483,6 +522,10 @@ describe('GameResultController (e2e)', () => {
             id: gameResult.game._id,
             name: '0-100 Quiz Debug',
             mode: GameMode.ZeroToOneHundred,
+            quiz: {
+              id: quiz._id,
+              canHostLiveGame: true,
+            },
             host: {
               id: hostUser._id,
               nickname: 'ShadowWhirlwind',
@@ -605,9 +648,14 @@ describe('GameResultController (e2e)', () => {
 
       const hostUser = { _id: uuidv4() } as User
 
-      const game = await gameModel.create(
-        buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+      const quiz = await quizModel.create(
+        createMockZeroToOneHundredQuiz({ owner: hostUser }),
       )
+
+      const game = await gameModel.create({
+        ...buildMockZeroToOneHundredModeGame(hostUser, playerUser),
+        quiz,
+      })
 
       await gameResultModel.create(
         buildMockZeroToOneHundredModeGameResult(game, hostUser, playerUser),

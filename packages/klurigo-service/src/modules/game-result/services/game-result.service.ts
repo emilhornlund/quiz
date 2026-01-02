@@ -7,6 +7,7 @@ import {
   GameResultQuestionMetricDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
+  QuizVisibility,
 } from '@klurigo/common'
 import { Injectable } from '@nestjs/common'
 
@@ -64,7 +65,7 @@ export class GameResultService {
     }
 
     const {
-      game: { _id: id, name, mode },
+      game: { _id: id, name, mode, quiz },
       hostParticipantId,
       players,
       questions,
@@ -72,11 +73,20 @@ export class GameResultService {
       completed,
     } = gameResultDocument
 
+    if (!quiz) {
+      throw new GameResultsNotFoundException(gameID)
+    }
+
+    const isOwner = quiz.owner?._id === participantId
+    const isPublicQuiz = quiz.visibility === QuizVisibility.Public
+    const canHostLiveGame = isOwner || isPublicQuiz
+
     const hostUser = await this.userRepository.findUserById(hostParticipantId)
 
     return {
       id,
       name,
+      quiz: { id: quiz._id, canHostLiveGame },
       host: {
         id: hostParticipantId,
         nickname: hostUser?.defaultNickname || 'N/A',

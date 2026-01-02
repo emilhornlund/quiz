@@ -2,6 +2,29 @@ import { GameMode } from './game-mode.enum'
 import { QuestionType } from './question-type.enum'
 
 /**
+ * Describes the quiz metadata included in a game result response.
+ *
+ * This payload is intentionally minimal and includes only what is required to:
+ * - identify the quiz, and
+ * - determine whether the caller can create a new live game based on that quiz.
+ */
+export type GameResultQuizDto = {
+  /**
+   * The unique identifier of the quiz associated with the completed game.
+   */
+  readonly id: string
+
+  /**
+   * Indicates whether the caller can host a new live game based on this quiz.
+   *
+   * This is typically `true` when:
+   * - the caller is the quiz owner, or
+   * - the quiz is publicly visible.
+   */
+  readonly canHostLiveGame: boolean
+}
+
+/**
  * Represents the final results of a completed quiz game.
  *
  * This object includes metadata about the game session as well as detailed
@@ -17,6 +40,14 @@ export type GameResultDto = {
    * The name or title of the quiz.
    */
   readonly name: string
+
+  /**
+   * The quiz associated with the completed game.
+   *
+   * Contains the quiz identifier and information about whether the caller can
+   * create a new live game based on the quiz.
+   */
+  readonly quiz: GameResultQuizDto
 
   /**
    * The participant who created and hosted the game.

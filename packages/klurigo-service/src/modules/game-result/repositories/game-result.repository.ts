@@ -37,6 +37,16 @@ export class GameResultRepository extends BaseRepository<GameResult> {
       .populate([
         {
           path: 'game',
+          populate: [
+            {
+              path: 'quiz',
+              populate: [
+                {
+                  path: 'owner',
+                },
+              ],
+            },
+          ],
         },
       ])
   }

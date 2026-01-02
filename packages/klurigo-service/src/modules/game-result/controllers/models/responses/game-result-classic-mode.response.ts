@@ -20,11 +20,13 @@ import {
   ApiGameResultDurationProperty,
   ApiGameResultNumberOfPlayersProperty,
   ApiGameResultNumberOfQuestionsProperty,
+  ApiGameResultQuizProperty,
 } from '../../decorators/api'
 
 import { GameResultClassicModePlayerMetricResponse } from './game-result-classic-mode-player-metric.response'
 import { GameResultClassicModeQuestionMetricResponse } from './game-result-classic-mode-question-metric.response'
 import { GameResultParticipantResponse } from './game-result-participant.response'
+import { GameResultQuizResponse } from './game-result-quiz.response'
 
 /**
  * API response structure representing the final results of a completed game using the classic mode.
@@ -49,6 +51,15 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
    */
   @ApiGameNameProperty()
   name: string
+
+  /**
+   * The quiz associated with the completed game.
+   *
+   * Includes the quiz identifier and whether the caller can create a new live game
+   * based on this quiz.
+   */
+  @ApiGameResultQuizProperty()
+  quiz: GameResultQuizResponse
 
   /**
    * The participant who created and hosted the game.

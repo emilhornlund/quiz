@@ -607,3 +607,38 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
     ...(quiz ?? {}),
   }
 }
+
+export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
+  return {
+    _id: uuidv4(),
+    title: 'Trivia Battle',
+    description: 'A fun and engaging trivia quiz for all ages.',
+    mode: GameMode.ZeroToOneHundred,
+    visibility: QuizVisibility.Public,
+    category: QuizCategory.GeneralKnowledge,
+    imageCoverURL: 'https://example.com/question-cover-image.png',
+    languageCode: LanguageCode.English,
+    questions: [
+      {
+        type: QuestionType.Range,
+        text: 'Guess the temperature of the hottest day ever recorded.',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        min: 0,
+        max: 100,
+        margin: QuestionRangeAnswerMargin.None,
+        step: 1,
+        correct: 50,
+        points: 0,
+        duration: 30,
+        info: 'This is an info text displayed along the question result.',
+      },
+    ],
+    owner: { _id: uuidv4() } as User,
+    created: new Date(),
+    updated: new Date(),
+    ...(quiz ?? {}),
+  }
+}
