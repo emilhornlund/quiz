@@ -9,7 +9,7 @@ import type { Reflector } from '@nestjs/core'
 
 import { GameAuthGuard } from './game-auth.guard'
 
-describe('GameAuthGuard', () => {
+describe(GameAuthGuard.name, () => {
   const createExecutionContext = (request: unknown): ExecutionContext =>
     ({
       switchToHttp: () => ({
@@ -56,6 +56,41 @@ describe('GameAuthGuard', () => {
       await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
         BadRequestException,
       )
+      expect(gameRepository.findGameByIDOrThrow).not.toHaveBeenCalled()
+    })
+
+    it('propagates repository errors when the game does not exist', async () => {
+      ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(undefined)
+      const notFoundError = new Error('not-found')
+      gameRepository.findGameByIDOrThrow.mockRejectedValue(notFoundError)
+
+      const request = createRequest()
+      const context = createExecutionContext(request)
+
+      await expect(guard.canActivate(context)).rejects.toBe(notFoundError)
+      expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+        'game-1',
+        false,
+      )
+    })
+
+    it('does not evaluate token scope when game existence check fails', async () => {
+      ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(undefined)
+      gameRepository.findGameByIDOrThrow.mockRejectedValue(
+        new Error('not-found'),
+      )
+
+      const request = createRequest({
+        payload: { scope: TokenScope.User, sub: 'user-1' },
+      })
+      const context = createExecutionContext(request)
+
+      await expect(guard.canActivate(context)).rejects.toBeInstanceOf(Error)
+      expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledTimes(1)
+      expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+        'game-1',
+        false,
+      )
     })
 
     it('throws UnauthorizedException for unknown token scope', async () => {
@@ -64,6 +99,10 @@ describe('GameAuthGuard', () => {
 
       await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
         UnauthorizedException,
+      )
+      expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+        'game-1',
+        false,
       )
     })
 
@@ -76,6 +115,10 @@ describe('GameAuthGuard', () => {
       expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
         expect.anything(),
         ['handler', 'class'],
+      )
+      expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+        'game-1',
+        false,
       )
     })
 
@@ -95,6 +138,10 @@ describe('GameAuthGuard', () => {
         await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
           ForbiddenException,
         )
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
 
       it('throws ForbiddenException when requiredParticipantType does not match token participantType', async () => {
@@ -113,6 +160,10 @@ describe('GameAuthGuard', () => {
         await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
           ForbiddenException,
         )
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
 
       it('allows access when gameId matches and participant type matches (or not required)', async () => {
@@ -129,7 +180,10 @@ describe('GameAuthGuard', () => {
         const context = createExecutionContext(request)
 
         await expect(guard.canActivate(context)).resolves.toBe(true)
-        expect(gameRepository.findGameByIDOrThrow).not.toHaveBeenCalled()
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
 
       it('allows access when no participant type is required', async () => {
@@ -144,14 +198,17 @@ describe('GameAuthGuard', () => {
         const context = createExecutionContext(request)
 
         await expect(guard.canActivate(context)).resolves.toBe(true)
-        expect(gameRepository.findGameByIDOrThrow).not.toHaveBeenCalled()
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
     })
 
     describe('TokenScope.User', () => {
-      it('loads the game via repository with (gameID, false)', async () => {
+      it('loads the game via repository and validates participant membership', async () => {
         ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(undefined)
-        gameRepository.findGameByIDOrThrow.mockResolvedValue({
+        gameRepository.findGameByIDOrThrow.mockResolvedValueOnce({
           participants: [{ participantId: 'user-1', type: 'Player' }],
         })
 
@@ -161,6 +218,7 @@ describe('GameAuthGuard', () => {
         const context = createExecutionContext(request)
 
         await expect(guard.canActivate(context)).resolves.toBe(true)
+
         expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
           'game-1',
           false,
@@ -169,7 +227,7 @@ describe('GameAuthGuard', () => {
 
       it('throws ForbiddenException when user is not a participant', async () => {
         ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(undefined)
-        gameRepository.findGameByIDOrThrow.mockResolvedValue({
+        gameRepository.findGameByIDOrThrow.mockResolvedValueOnce({
           participants: [{ participantId: 'someone-else', type: 'Player' }],
         })
 
@@ -181,13 +239,18 @@ describe('GameAuthGuard', () => {
         await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
           ForbiddenException,
         )
+
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
 
       it('throws ForbiddenException when required participant type does not match participant.type', async () => {
         ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(
           'Host' as unknown as GameParticipantType,
         )
-        gameRepository.findGameByIDOrThrow.mockResolvedValue({
+        gameRepository.findGameByIDOrThrow.mockResolvedValueOnce({
           participants: [{ participantId: 'user-1', type: 'Player' }],
         })
 
@@ -199,13 +262,18 @@ describe('GameAuthGuard', () => {
         await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
           ForbiddenException,
         )
+
+        expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledWith(
+          'game-1',
+          false,
+        )
       })
 
       it('allows access when participant exists and matches required participant type', async () => {
         ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(
           'Player' as unknown as GameParticipantType,
         )
-        gameRepository.findGameByIDOrThrow.mockResolvedValue({
+        gameRepository.findGameByIDOrThrow.mockResolvedValueOnce({
           participants: [{ participantId: 'user-1', type: 'Player' }],
         })
 
@@ -219,7 +287,7 @@ describe('GameAuthGuard', () => {
 
       it('allows access when participant exists and no participant type is required', async () => {
         ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(undefined)
-        gameRepository.findGameByIDOrThrow.mockResolvedValue({
+        gameRepository.findGameByIDOrThrow.mockResolvedValueOnce({
           participants: [{ participantId: 'user-1', type: 'Player' }],
         })
 

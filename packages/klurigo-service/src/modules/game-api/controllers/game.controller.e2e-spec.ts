@@ -536,7 +536,7 @@ describe('GameController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Active game not found by id ${gameId}`,
+            message: `Game not found by id '${gameId}'`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -880,7 +880,7 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${unknownGameID}`,
+            `Game not found by id '${unknownGameID}'`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -1141,7 +1141,7 @@ describe('GameController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty(
             'message',
-            `Active game not found by id ${unknownGameID}`,
+            `Game not found by id '${unknownGameID}'`,
           )
           expect(res.body).toHaveProperty('status', 404)
           expect(res.body).toHaveProperty('timestamp')
@@ -1885,7 +1885,7 @@ describe('GameController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Active game not found by id ${gameId}`,
+            message: `Game not found by id '${gameId}'`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -2517,7 +2517,7 @@ describe('GameController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Active game not found by id ${gameId}`,
+            message: `Game not found by id '${gameId}'`,
             status: 404,
             timestamp: expect.anything(),
           })
@@ -2829,7 +2829,7 @@ describe('GameController (e2e)', () => {
         .expect(404)
         .expect((res) => {
           expect(res.body).toEqual({
-            message: `Active game not found by id ${gameId}`,
+            message: `Game not found by id '${gameId}'`,
             status: 404,
             timestamp: expect.anything(),
           })

@@ -4,7 +4,7 @@ import { BullModule } from '@nestjs/bullmq'
 import { CacheModule } from '@nestjs/cache-manager'
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
@@ -32,6 +32,7 @@ import { UserModule } from '../modules/user'
 import { EnvironmentVariables } from './config'
 import { AppController } from './controllers'
 import { AllExceptionsFilter } from './filters/all-exceptions.filter'
+import { TimeoutInterceptor } from './interceptors'
 import { ValidationPipe } from './pipes'
 
 const isProdEnv = process.env.NODE_ENV === 'production'
@@ -212,6 +213,10 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimeoutInterceptor,
     },
     ...(isTestEnv
       ? []

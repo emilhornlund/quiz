@@ -26,6 +26,7 @@ import {
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
 
+import { Timeout } from '../../../app/decorators'
 import { User } from '../../../modules/user/repositories'
 import {
   Principal,
@@ -104,6 +105,7 @@ export class MediaController {
    *
    * @returns An object containing the new filename of the uploaded and processed image.
    */
+  @Timeout(60_000)
   @Post('/uploads/photos')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
