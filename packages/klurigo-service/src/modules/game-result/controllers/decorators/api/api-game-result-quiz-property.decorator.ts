@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 
-import { GameResultQuizResponse } from '../../models/responses'
+import { GameResultQuizResponse } from '../../models/responses/game-result-quiz.response'
 
 /**
  * Decorator for documenting and validating the `quiz` property.
