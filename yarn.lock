@@ -4041,17 +4041,17 @@
   resolved "https://registry.yarnpkg.com/@svta/common-media-library/-/common-media-library-0.12.4.tgz#1533e7518e6e36952eab8325f11c4e986cea4d4b"
   integrity sha512-9EuOoaNmz7JrfGwjsrD9SxF9otU5TNMnbLu1yU4BeLK0W5cDxVXXR58Z89q9u2AnHjIctscjMTYdlqQ1gojTuw==
 
-"@tanstack/query-core@5.90.15":
-  version "5.90.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.90.15.tgz#fdeb7ab17281cdd13e6afa89a90735d48594c4f7"
-  integrity sha512-mInIZNUZftbERE+/Hbtswfse49uUQwch46p+27gP9DWJL927UjnaWEF2t3RMOqBcXbfMdcNkPe06VyUIAZTV1g==
+"@tanstack/query-core@5.90.16":
+  version "5.90.16"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.90.16.tgz#19a972c2ffbc47727ab6649028af1bee70e28cdf"
+  integrity sha512-MvtWckSVufs/ja463/K4PyJeqT+HMlJWtw6PrCpywznd2NSgO3m4KwO9RqbFqGg6iDE8vVMFWMeQI4Io3eEYww==
 
-"@tanstack/react-query@5.90.15":
-  version "5.90.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.90.15.tgz#350f7d8ff93a10eb92c5a23b063e577f7637fefd"
-  integrity sha512-uQvnDDcTOgJouNtAyrgRej+Azf0U5WDov3PXmHFUBc+t1INnAYhIlpZtCGNBLwCN41b43yO7dPNZu8xWkUFBwQ==
+"@tanstack/react-query@5.90.16":
+  version "5.90.16"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.90.16.tgz#76955d7027b5bff3d7f51163db7ea1c0bd430cb5"
+  integrity sha512-bpMGOmV4OPmif7TNMteU/Ehf/hoC0Kf98PDc0F4BZkFrEapRMEqI/V6YS0lyzwSV6PQpY1y4xxArUIfBW5LVxQ==
   dependencies:
-    "@tanstack/query-core" "5.90.15"
+    "@tanstack/query-core" "5.90.16"
 
 "@testing-library/dom@^10.4.1":
   version "10.4.1"
@@ -8098,10 +8098,10 @@ globals@^14.0.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-14.0.0.tgz#898d7413c29babcf6bafe56fcadded858ada724e"
   integrity sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==
 
-globals@^16.5.0:
-  version "16.5.0"
-  resolved "https://registry.yarnpkg.com/globals/-/globals-16.5.0.tgz#ccf1594a437b97653b2be13ed4d8f5c9f850cac1"
-  integrity sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==
+globals@^17.0.0:
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-17.0.0.tgz#a4196d9cfeb4d627ba165b4647b1f5853bf90a30"
+  integrity sha512-gv5BeD2EssA793rlFWVPMMCqefTlpusw6/2TbAVMy0FzcG8wKJn4O+NqJ4+XWmmwrayJgw5TzrmWjFgmz1XPqw==
 
 globalthis@^1.0.4:
   version "1.0.4"
@@ -10581,10 +10581,10 @@ mongodb@~7.0:
     bson "^7.0.0"
     mongodb-connection-string-url "^7.0.0"
 
-mongoose@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-9.1.0.tgz#805648b56d3149d26bacb0896e9745d54895f707"
-  integrity sha512-RVCApwqD6q+O3rsnypmiL1K5+mkN5DwA7BO5a5ofCKh/EZB9FKvcQ4EiqHNmRye3cXhz5DmQ/aVyfBFkXnUbrg==
+mongoose@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-9.1.1.tgz#2992a473d8e1bb9f69ff367a0ee15d0908462194"
+  integrity sha512-/CgKSAmjzgIj4o1FyWZIpQ2rmUQlhalwWd4l/Ht3XUVWscHRHev1TIwKz1ADNC5tHHyOQEaUDkEh0jI91c4Ydw==
   dependencies:
     kareem "3.0.0"
     mongodb "~7.0"
