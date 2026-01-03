@@ -648,4 +648,104 @@ describe('AuthContextProvider', () => {
     expect(ctx.isUserAuthenticated).toBe(true)
     expect(ctx.user?.ACCESS.token).toBe('refreshed.access.delayed')
   })
+
+  describe('revokeGame', () => {
+    it('revokeGame defaults to redirecting to `/`', async () => {
+      setLocalStorageAuth({
+        USER: undefined,
+        GAME: {
+          [TokenType.Access]: { token: 'g.acc', exp: expInFuture() },
+          [TokenType.Refresh]: { token: 'g.ref', exp: expInFuture() },
+        },
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let ctx: any
+      renderWithProvider((c) => (ctx = c))
+
+      await act(async () => {
+        await ctx.revokeGame()
+      })
+
+      await waitFor(() => {
+        expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
+        expect(mockNavigate).toHaveBeenCalledWith('/')
+        expect(ctx.game).toBeUndefined()
+      })
+    })
+
+    it('revokeGame({ redirect: false }) clears state without navigating', async () => {
+      setLocalStorageAuth({
+        USER: undefined,
+        GAME: {
+          [TokenType.Access]: { token: 'g.acc', exp: expInFuture() },
+          [TokenType.Refresh]: { token: 'g.ref', exp: expInFuture() },
+        },
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let ctx: any
+      renderWithProvider((c) => (ctx = c))
+
+      await act(async () => {
+        await ctx.revokeGame({ redirect: false })
+      })
+
+      await waitFor(() => {
+        expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
+        expect(ctx.game).toBeUndefined()
+      })
+
+      expect(mockNavigate).toHaveBeenCalledTimes(0)
+    })
+
+    it('revokeGame({ redirectTo }) navigates to the provided route', async () => {
+      setLocalStorageAuth({
+        USER: undefined,
+        GAME: {
+          [TokenType.Access]: { token: 'g.acc', exp: expInFuture() },
+          [TokenType.Refresh]: { token: 'g.ref', exp: expInFuture() },
+        },
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let ctx: any
+      renderWithProvider((c) => (ctx = c))
+
+      await act(async () => {
+        await ctx.revokeGame({ redirectTo: '/game/results/game-123' })
+      })
+
+      await waitFor(() => {
+        expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
+        expect(mockNavigate).toHaveBeenCalledWith('/game/results/game-123')
+        expect(ctx.game).toBeUndefined()
+      })
+    })
+
+    it('revokeGame({ redirectTo: whitespace }) does not navigate', async () => {
+      setLocalStorageAuth({
+        USER: undefined,
+        GAME: {
+          [TokenType.Access]: { token: 'g.acc', exp: expInFuture() },
+          [TokenType.Refresh]: { token: 'g.ref', exp: expInFuture() },
+        },
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let ctx: any
+      renderWithProvider((c) => (ctx = c))
+
+      await act(async () => {
+        await ctx.revokeGame({ redirectTo: '   ' })
+      })
+
+      await waitFor(() => {
+        expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
+        expect(ctx.game).toBeUndefined()
+      })
+
+      expect(mockNavigate).toHaveBeenCalledTimes(0)
+    })
+  })
 })
