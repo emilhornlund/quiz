@@ -91,7 +91,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.MultiChoice,
@@ -108,7 +110,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.MultiChoice,
@@ -125,7 +129,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -178,7 +184,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.MultiChoice,
@@ -195,7 +203,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -235,7 +245,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -275,7 +287,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.MultiChoice,
@@ -292,7 +306,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.MultiChoice,
@@ -309,7 +325,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -421,7 +439,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Range,
@@ -438,7 +458,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Range,
@@ -455,7 +477,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -499,7 +523,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Range,
@@ -516,7 +542,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -555,7 +583,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -594,7 +624,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Range,
@@ -611,7 +643,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Range,
@@ -628,7 +662,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -692,7 +728,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TrueFalse,
@@ -709,7 +747,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TrueFalse,
@@ -726,7 +766,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -769,7 +811,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -807,7 +851,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TrueFalse,
@@ -824,7 +870,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TrueFalse,
@@ -841,7 +889,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 3,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -902,7 +952,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TypeAnswer,
@@ -919,7 +971,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TypeAnswer,
@@ -936,7 +990,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -979,7 +1035,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1017,7 +1075,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1055,7 +1115,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TypeAnswer,
@@ -1072,7 +1134,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TypeAnswer,
@@ -1089,7 +1153,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 3,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1126,7 +1192,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.TypeAnswer,
@@ -1143,7 +1211,9 @@ describe('distribution', () => {
           totalScore: 200,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1178,7 +1248,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1216,7 +1288,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1300,7 +1374,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1317,7 +1393,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1334,7 +1412,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1378,7 +1458,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1395,7 +1477,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1412,7 +1496,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1451,7 +1537,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1468,7 +1556,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1485,7 +1575,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1523,7 +1615,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1562,7 +1656,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1579,7 +1675,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Pin,
@@ -1596,7 +1694,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1675,7 +1775,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 1,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Puzzle,
@@ -1692,7 +1794,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Puzzle,
@@ -1709,7 +1813,9 @@ describe('distribution', () => {
           totalScore: 100,
           position: 1,
           streak: 2,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1753,7 +1859,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Puzzle,
@@ -1770,7 +1878,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1809,7 +1919,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 
@@ -1848,7 +1960,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 1,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Puzzle,
@@ -1865,7 +1979,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 2,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
         {
           type: QuestionType.Puzzle,
@@ -1882,7 +1998,9 @@ describe('distribution', () => {
           totalScore: 0,
           position: 3,
           streak: 0,
-          responseTime: 0,
+          lastResponseTime: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
         },
       ]
 

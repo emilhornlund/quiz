@@ -51,6 +51,8 @@ export function updateParticipantsAndBuildLeaderboard(
         participant.rank = resultEntry.position
         participant.totalScore = resultEntry.totalScore
         participant.currentStreak = resultEntry.streak
+        participant.totalResponseTime = resultEntry.totalResponseTime
+        participant.responseCount = resultEntry.responseCount
       }
 
       return { participant, previousRank }

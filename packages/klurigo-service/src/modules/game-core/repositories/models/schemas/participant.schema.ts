@@ -92,6 +92,18 @@ export class ParticipantPlayer {
    */
   @Prop({ type: Number, required: true })
   currentStreak: number
+
+  /**
+   * The cumulative response time, in seconds, across all questions the player participated in (including timeouts).
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  totalResponseTime: number
+
+  /**
+   * The number of questions included in totalResponseTime (answered or timed out).
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  responseCount: number
 }
 
 /**

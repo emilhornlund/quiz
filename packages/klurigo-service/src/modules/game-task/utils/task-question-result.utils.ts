@@ -274,6 +274,8 @@ function buildQuestionResultTaskItem(
     nickname,
     totalScore: previousScore,
     currentStreak,
+    totalResponseTime: previousTotalResponseTime,
+    responseCount: previousResponseCount,
   } = participantPlayer
 
   const { type } = question
@@ -297,7 +299,14 @@ function buildQuestionResultTaskItem(
 
   const streak = correct ? currentStreak + 1 : 0
 
-  const responseTime = calculatePlayerResponseTime(question, presented, answer)
+  const lastResponseTime = calculatePlayerResponseTime(
+    question,
+    presented,
+    answer,
+  )
+  const totalResponseTime = previousTotalResponseTime + lastResponseTime
+
+  const responseCount = previousResponseCount + 1
 
   return {
     type,
@@ -309,7 +318,9 @@ function buildQuestionResultTaskItem(
     totalScore,
     position: 0,
     streak,
-    responseTime,
+    lastResponseTime,
+    totalResponseTime,
+    responseCount,
   }
 }
 

@@ -229,6 +229,8 @@ export class GameService {
           rank: 0,
           totalScore: 0,
           currentStreak: 0,
+          totalResponseTime: 0,
+          responseCount: 0,
           created: now,
           updated: now,
         })

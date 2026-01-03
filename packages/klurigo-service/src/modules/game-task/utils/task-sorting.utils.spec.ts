@@ -169,5 +169,7 @@ const MOCK_QUESTION_RESULT_ITEM: QuestionResultTaskItem = {
   totalScore: 0,
   position: 0,
   streak: 0,
-  responseTime: 0,
+  lastResponseTime: 0,
+  totalResponseTime: 0,
+  responseCount: 1,
 }

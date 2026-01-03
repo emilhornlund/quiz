@@ -462,14 +462,25 @@ export class QuestionResultTaskItem {
   streak: number
 
   /**
-   * The time, in seconds, it took the player to submit an answer after the
-   * question was presented.
-   *
-   * If the player did not submit an answer, this value equals the full
-   * question duration.
+   * The player’s response time for this question, in seconds. If the player
+   * did not submit an answer, this value equals the full question duration.
    */
-  @Prop({ type: Number, required: true })
-  responseTime: number
+  @Prop({ type: Number, required: true, default: 0 })
+  lastResponseTime: number
+
+  /**
+   * The cumulative response time, in seconds, across all questions included for this player up to this result.
+   *
+   * This value is the sum of lastResponseTime over responseCount questions
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  totalResponseTime: number
+
+  /**
+   * The number of questions included in totalResponseTime up to this result (answered or timed out).
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  responseCount: number
 }
 
 export const QuestionResultTaskItemSchema = SchemaFactory.createForClass(

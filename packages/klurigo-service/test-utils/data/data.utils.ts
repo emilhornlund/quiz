@@ -101,6 +101,8 @@ export function createMockGamePlayerParticipantDocument(
     rank: 0,
     totalScore: 0,
     currentStreak: 0,
+    totalResponseTime: 0,
+    responseCount: 0,
     updated: offsetSeconds(0),
     created: offsetSeconds(0),
     ...(participant ?? {}),
@@ -302,7 +304,9 @@ export function createMockQuestionResultTaskItemDocument(
     totalScore: 1337,
     position: 1,
     streak: 1,
-    responseTime: 0,
+    lastResponseTime: 0,
+    totalResponseTime: 0,
+    responseCount: 0,
     ...(taskItem ?? {}),
   }
 }
