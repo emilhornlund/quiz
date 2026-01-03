@@ -297,6 +297,8 @@ function buildQuestionResultTaskItem(
 
   const streak = correct ? currentStreak + 1 : 0
 
+  const responseTime = calculatePlayerResponseTime(question, presented, answer)
+
   return {
     type,
     playerId: participantId,
@@ -307,5 +309,38 @@ function buildQuestionResultTaskItem(
     totalScore,
     position: 0,
     streak,
+    responseTime,
   }
+}
+
+/**
+ * Calculates the player's response time in seconds.
+ *
+ * If the question was never presented, the full question duration is returned.
+ * If the player did not answer, the full question duration is returned.
+ *
+ * @param question - Question metadata including duration (in seconds)
+ * @param presented - Timestamp when the question was presented to the player
+ * @param answer - Player's submitted answer
+ * @returns Response time in seconds
+ */
+function calculatePlayerResponseTime(
+  question: QuestionDao,
+  presented?: Date,
+  answer?: QuestionTaskAnswer,
+): number {
+  const durationSeconds = question.duration
+
+  if (!presented) {
+    return durationSeconds
+  }
+
+  if (!answer?.created) {
+    return durationSeconds
+  }
+
+  const responseTimeSeconds =
+    (answer.created.getTime() - presented.getTime()) / 1000
+
+  return Math.max(0, Math.min(responseTimeSeconds, durationSeconds))
 }

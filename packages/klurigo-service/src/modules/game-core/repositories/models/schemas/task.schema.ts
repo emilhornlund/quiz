@@ -460,6 +460,16 @@ export class QuestionResultTaskItem {
 
   @Prop({ type: Number, required: true })
   streak: number
+
+  /**
+   * The time, in seconds, it took the player to submit an answer after the
+   * question was presented.
+   *
+   * If the player did not submit an answer, this value equals the full
+   * question duration.
+   */
+  @Prop({ type: Number, required: true })
+  responseTime: number
 }
 
 export const QuestionResultTaskItemSchema = SchemaFactory.createForClass(

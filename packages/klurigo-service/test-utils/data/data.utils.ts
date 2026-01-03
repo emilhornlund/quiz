@@ -302,6 +302,7 @@ export function createMockQuestionResultTaskItemDocument(
     totalScore: 1337,
     position: 1,
     streak: 1,
+    responseTime: 0,
     ...(taskItem ?? {}),
   }
 }

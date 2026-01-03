@@ -449,6 +449,7 @@ const buildQuestionResultTaskItem = (
     totalScore: overrides.totalScore ?? 0,
     position: overrides.position ?? 1,
     streak: overrides.streak ?? 0,
+    responseTime: overrides.responseTime ?? 0,
     ...overrides,
   }
 }
