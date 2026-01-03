@@ -1,8 +1,10 @@
-import { GameEventType, GameParticipantType } from '@klurigo/common'
+import { GameEventType, GameParticipantType, GameStatus } from '@klurigo/common'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { Location } from 'react-router'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { AuthContext, type AuthContextType } from '../../context/auth'
 
 import GamePage from './GamePage'
 
@@ -30,6 +32,7 @@ const h = vi.hoisted(() => {
     resetMock: vi.fn(),
     leaveGameMock: vi.fn(() => Promise.resolve()),
     quitGameMock: vi.fn(() => Promise.resolve()),
+    revokeGameMock: vi.fn(() => Promise.resolve()),
     context: {
       gameID: 'game-123',
       gameToken: 'token-abc',
@@ -89,11 +92,25 @@ vi.mock('react-router-dom', async () => {
   }
 })
 
-const renderWithRouter = () => {
-  const router = createMemoryRouter([{ path: '/', element: <GamePage /> }], {
-    initialEntries: ['/'],
-  })
-  return render(<RouterProvider router={router} />)
+const makeGamePageElement = (authValue?: AuthContextType) => (
+  <AuthContext.Provider
+    value={
+      authValue ??
+      ({
+        isUserAuthenticated: false,
+        revokeGame: h.revokeGameMock,
+      } as unknown as AuthContextType)
+    }>
+    <GamePage />
+  </AuthContext.Provider>
+)
+
+const renderWithRouter = (authValue?: AuthContextType) => {
+  const router = createMemoryRouter(
+    [{ path: '/', element: makeGamePageElement(authValue) }],
+    { initialEntries: ['/'] },
+  )
+  return { router, ...render(<RouterProvider router={router} />) }
 }
 
 let navTick = 0
@@ -119,6 +136,7 @@ beforeEach(() => {
   h.context.participantId = 'p-1'
   h.context.participantType = GameParticipantType.PLAYER
   h.quitGameMock.mockClear()
+  h.revokeGameMock.mockReset().mockResolvedValue(undefined)
 
   navTick = 0
 })
@@ -127,7 +145,7 @@ afterEach(() => {
   vi.clearAllMocks()
 })
 
-describe('GamePage (extended)', () => {
+describe('GamePage', () => {
   it('should render GamePage (snapshot)', async () => {
     const router = createMemoryRouter(
       [
@@ -165,10 +183,28 @@ describe('GamePage (extended)', () => {
     expect(h.setContextMock).toHaveBeenLastCalledWith('game', null)
   })
 
-  it('navigates to "/" on GameQuitEvent', () => {
+  it('revokes game and redirects to "/" on GameQuitEvent', () => {
     h.control.event = { type: GameEventType.GameQuitEvent }
     renderWithRouter()
-    expect(h.navigateMock).toHaveBeenCalledWith('/')
+    expect(h.revokeGameMock).toHaveBeenCalledWith({ redirectTo: '/' })
+  })
+
+  it('revokes game and redirects to results on completed GameQuitEvent for authenticated user', () => {
+    h.control.event = {
+      type: GameEventType.GameQuitEvent,
+      status: GameStatus.Completed,
+    } as unknown as { type: GameEventType; status: GameStatus }
+
+    const authValue = {
+      isUserAuthenticated: true,
+      revokeGame: h.revokeGameMock,
+    } as unknown as AuthContextType
+
+    renderWithRouter(authValue)
+
+    expect(h.revokeGameMock).toHaveBeenCalledWith({
+      redirectTo: `/game/results/${h.context.gameID}`,
+    })
   })
 
   it('emits reconnect → connected notifications', async () => {
@@ -438,7 +474,6 @@ describe('GamePage (extended)', () => {
   })
 
   it('shows loading overlay when GAME_LOADING event arrives and hides when non-loading event arrives', async () => {
-    // Start with a non-loading event
     h.control.event = {
       type: GameEventType.GameResultPlayer,
       player: {
@@ -448,32 +483,22 @@ describe('GamePage (extended)', () => {
       pagination: { current: 1, total: 10 },
     }
 
-    const { rerender } = renderWithRouter()
+    const { router } = renderWithRouter()
 
-    // Should show the result state initially
     expect(screen.getByText('Correct')).toBeInTheDocument()
     expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
 
-    // Change to loading event
     h.control.event = { type: GameEventType.GameLoading }
 
     await act(async () => {
-      rerender(
-        <RouterProvider
-          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
-            initialEntries: ['/'],
-          })}
-        />,
-      )
+      await pokeRouter(router)
     })
 
-    // Should show loading overlay
     await waitFor(() =>
       expect(screen.getByTestId('loading-overlay')).toBeInTheDocument(),
     )
-    expect(screen.getByText('Correct')).toBeInTheDocument() // Previous content should still be visible
+    expect(screen.getByText('Correct')).toBeInTheDocument()
 
-    // Change back to non-loading event (same as before)
     h.control.event = {
       type: GameEventType.GameResultPlayer,
       player: {
@@ -484,17 +509,12 @@ describe('GamePage (extended)', () => {
     }
 
     await act(async () => {
-      rerender(
-        <RouterProvider
-          router={createMemoryRouter([{ path: '/', element: <GamePage /> }], {
-            initialEntries: ['/'],
-          })}
-        />,
-      )
+      await pokeRouter(router)
     })
 
-    // Should hide loading overlay
-    expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument(),
+    )
     expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 

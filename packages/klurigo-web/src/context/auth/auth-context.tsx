@@ -4,6 +4,31 @@ import { createContext } from 'react'
 import type { AuthState } from '../../models'
 
 /**
+ * Options for revoking the game authentication state.
+ *
+ * Use `redirectTo` when you want to revoke and immediately navigate to a specific route.
+ * Use `redirect: false` when you want to revoke without navigation.
+ * If no options are provided, the default behavior is to navigate to `/`.
+ */
+export type RevokeGameOptions =
+  | {
+      /**
+       * Whether to navigate to `/` after revoking and clearing local auth state.
+       *
+       * Defaults to `true`.
+       */
+      redirect?: boolean
+    }
+  | {
+      /**
+       * A route to navigate to after revoking and clearing local auth state.
+       *
+       * When provided, this takes precedence over `redirect`.
+       */
+      redirectTo: string
+    }
+
+/**
  * AuthContextType defines the shape of authentication-related data
  * and actions available throughout the app.
  *
@@ -26,7 +51,7 @@ export type AuthContextType = {
     refreshToken: string,
   ) => void
   revokeUser: () => void
-  revokeGame: () => void
+  revokeGame: (options?: RevokeGameOptions) => void
 }
 
 /**

@@ -14,7 +14,7 @@ import { useKlurigoServiceClient } from '../../api'
 import { ApiError } from '../../api/api.utils'
 import type { AuthState, ScopePayload } from '../../models'
 
-import type { AuthContextType } from './auth-context'
+import type { AuthContextType, RevokeGameOptions } from './auth-context'
 import { AuthContext } from './auth-context'
 
 /**
@@ -269,26 +269,32 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   )
 
   /**
-   * Revokes the authentication token for the given scope via the API,
-   * then clears it from state and navigates home.
+   * Revokes the authentication token for the given scope.
    *
-   * If no token exists for the scope, it still clears any local state and navigates home.
+   * If no token exists for the scope, it still clears any local state and optionally redirects.
    *
    * @param scope - The TokenScope whose tokens should be revoked.
+   * @param redirectTo - A route to navigate to after revoking and clearing local auth state.
+   *   If omitted, no navigation is performed by this helper.
    */
   const revokeAuthToken = useCallback(
-    async (scope: TokenScope) => {
+    async (scope: TokenScope, redirectTo?: string) => {
       const token =
         authState[scope]?.ACCESS.token || authState[scope]?.REFRESH.token
 
       if (token) {
-        await revoke({ token }, scope).catch(() => {
+        try {
+          await revoke({ token }, scope)
+        } catch {
           // swallow exception
-        })
+        }
       }
 
       clearAuthState(scope)
-      navigate('/')
+
+      if (redirectTo && redirectTo.trim().length > 0) {
+        navigate(redirectTo)
+      }
     },
     [authState, clearAuthState, revoke, navigate],
   )
@@ -409,6 +415,34 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   }, [isMounted, getScopeState, refresh, handleSetTokenPair, clearAuthState])
 
   /**
+   * Revokes the game authentication state and optionally redirects the user.
+   *
+   * Default behavior is to navigate to `/` after revocation. Use `redirect: false`
+   * to revoke without navigation, or `redirectTo` to navigate to a specific route.
+   *
+   * @param options - Controls the post-revoke navigation behavior.
+   * @returns A promise that resolves once tokens are revoked (if present), local auth state is cleared,
+   *   and any requested navigation has been performed.
+   */
+  const handleRevokeGame = useCallback(
+    (options?: RevokeGameOptions) => {
+      if (!options) {
+        return revokeAuthToken(TokenScope.Game, '/')
+      }
+
+      if ('redirectTo' in options) {
+        return revokeAuthToken(TokenScope.Game, options.redirectTo)
+      }
+
+      return revokeAuthToken(
+        TokenScope.Game,
+        options.redirect === false ? undefined : '/',
+      )
+    },
+    [revokeAuthToken],
+  )
+
+  /**
    * Memoized value for the `AuthContext`, containing the current authentication state
    * and update functions.
    */
@@ -419,8 +453,8 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
       isUserAuthenticated,
       isGameAuthenticated,
       setTokenPair: handleSetTokenPair,
-      revokeUser: () => revokeAuthToken(TokenScope.User),
-      revokeGame: () => revokeAuthToken(TokenScope.Game),
+      revokeUser: () => revokeAuthToken(TokenScope.User, '/'),
+      revokeGame: handleRevokeGame,
     }),
     [
       authState.USER,
@@ -429,6 +463,7 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
       isGameAuthenticated,
       handleSetTokenPair,
       revokeAuthToken,
+      handleRevokeGame,
     ],
   )
 

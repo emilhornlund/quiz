@@ -4,7 +4,7 @@ import { setContext } from '@sentry/react'
 import type { FC } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { BlockerFunction } from 'react-router-dom'
-import { useBlocker, useNavigate } from 'react-router-dom'
+import { useBlocker } from 'react-router-dom'
 
 import { LoadingSpinner, Modal, Page } from '../../components'
 import Button from '../../components/Button'
@@ -49,8 +49,6 @@ const LoadingOverlay: FC = () => (
  * @returns A React component rendering the game state.
  */
 const GamePage: FC = () => {
-  const navigate = useNavigate()
-
   const { isUserAuthenticated, revokeGame } = useAuthContext()
 
   const {
@@ -164,19 +162,17 @@ const GamePage: FC = () => {
 
   useEffect(() => {
     if (event?.type === GameEventType.GameQuitEvent) {
-      revokeGame()
-
       if (
         event.status === GameStatus.Completed &&
         isUserAuthenticated &&
         gameID
       ) {
-        navigate(`/game/results/${gameID}`)
+        revokeGame({ redirectTo: `/game/results/${gameID}` })
       } else {
-        navigate('/')
+        revokeGame({ redirectTo: '/' })
       }
     }
-  }, [event, gameID, isUserAuthenticated, navigate, revokeGame])
+  }, [event, gameID, isUserAuthenticated, revokeGame])
 
   useEffect(() => {
     if (gameID && gameToken) {
