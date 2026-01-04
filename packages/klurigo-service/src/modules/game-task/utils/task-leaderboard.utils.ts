@@ -49,6 +49,9 @@ export function updateParticipantsAndBuildLeaderboard(
 
       if (resultEntry) {
         participant.rank = resultEntry.position
+        if (participant.rank > participant.worstRank) {
+          participant.worstRank = participant.rank
+        }
         participant.totalScore = resultEntry.totalScore
         participant.currentStreak = resultEntry.streak
         participant.totalResponseTime = resultEntry.totalResponseTime

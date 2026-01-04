@@ -466,6 +466,7 @@ const buildPlayerParticipant = (
     updated: new Date(),
     nickname: 'Player',
     rank: 0,
+    worstRank: 0,
     totalScore: 0,
     currentStreak: 0,
     totalResponseTime: 0,
