@@ -155,6 +155,15 @@ export interface GameResultPlayerMetricDto {
   readonly rank: number
 
   /**
+   * The net number of positions the player recovered by the end of the game,
+   * calculated as the difference between the worst rank reached during the game
+   * and the final rank.
+   *
+   * This value is never negative.
+   */
+  readonly comebackRankGain: number
+
+  /**
    * The total number of questions the player left unanswered.
    */
   readonly unanswered: number

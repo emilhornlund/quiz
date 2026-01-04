@@ -190,6 +190,7 @@ export class GameResultService {
       participantId: id,
       nickname,
       rank,
+      comebackRankGain,
       unanswered,
       averageResponseTime,
       longestCorrectStreak,
@@ -198,6 +199,7 @@ export class GameResultService {
     return {
       player: { id, nickname },
       rank,
+      comebackRankGain,
       unanswered,
       averageResponseTime,
       longestCorrectStreak,

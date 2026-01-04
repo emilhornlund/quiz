@@ -5,6 +5,7 @@ import { IsNumber, ValidateNested } from 'class-validator'
 
 import {
   ApiGameResultPlayerMetricAverageResponseTimeProperty,
+  ApiGameResultPlayerMetricComebackRankGainProperty,
   ApiGameResultPlayerMetricLongestCorrectStreakProperty,
   ApiGameResultPlayerMetricRankProperty,
   ApiGameResultPlayerMetricScoreProperty,
@@ -35,6 +36,12 @@ export class GameResultClassicModePlayerMetricResponse implements GameResultClas
    */
   @ApiGameResultPlayerMetricRankProperty()
   rank: number
+
+  /**
+   * The net number of positions the player recovered by the end of the game.
+   */
+  @ApiGameResultPlayerMetricComebackRankGainProperty()
+  comebackRankGain: number
 
   /**
    * The total number of questions the player answered correctly.

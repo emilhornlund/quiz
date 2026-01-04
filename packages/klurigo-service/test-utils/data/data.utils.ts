@@ -520,6 +520,7 @@ export function createMockGameResultPlayerMetric(
     participantId: MOCK_DEFAULT_PLAYER_ID,
     nickname: MOCK_DEFAULT_PLAYER_NICKNAME,
     rank: 0,
+    comebackRankGain: 0,
     correct: 0,
     incorrect: 0,
     unanswered: 0,
