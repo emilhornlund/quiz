@@ -325,33 +325,32 @@ function buildQuestionResultTaskItem(
 }
 
 /**
- * Calculates the player's response time in seconds.
+ * Calculates the player's response time in milliseconds.
  *
  * If the question was never presented, the full question duration is returned.
- * If the player did not answer, the full question duration is returned.
+ * If the player did not submit an answer, the full question duration is returned.
  *
  * @param question - Question metadata including duration (in seconds)
  * @param presented - Timestamp when the question was presented to the player
  * @param answer - Player's submitted answer
- * @returns Response time in seconds
+ * @returns Response time in milliseconds
  */
 function calculatePlayerResponseTime(
   question: QuestionDao,
   presented?: Date,
   answer?: QuestionTaskAnswer,
 ): number {
-  const durationSeconds = question.duration
+  const durationMs = question.duration * 1000
 
   if (!presented) {
-    return durationSeconds
+    return durationMs
   }
 
   if (!answer?.created) {
-    return durationSeconds
+    return durationMs
   }
 
-  const responseTimeSeconds =
-    (answer.created.getTime() - presented.getTime()) / 1000
+  const responseTimeMs = answer.created.getTime() - presented.getTime()
 
-  return Math.max(0, Math.min(responseTimeSeconds, durationSeconds))
+  return Math.max(0, Math.min(responseTimeMs, durationMs))
 }

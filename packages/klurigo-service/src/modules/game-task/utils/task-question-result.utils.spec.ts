@@ -100,8 +100,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -117,8 +117,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -130,8 +130,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],
@@ -195,8 +195,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 997,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -212,8 +212,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -225,8 +225,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],
@@ -290,8 +290,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -307,8 +307,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -320,8 +320,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],
@@ -387,8 +387,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -404,8 +404,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -417,8 +417,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],
@@ -482,8 +482,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 997,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -499,8 +499,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -512,8 +512,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],
@@ -579,8 +579,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
-              lastResponseTime: 1, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
-              totalResponseTime: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -596,8 +596,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
-              lastResponseTime: 2, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
-              totalResponseTime: 2,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
               responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
@@ -609,8 +609,8 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
-              lastResponseTime: 30, // question duration 30 seconds
-              totalResponseTime: 30,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
               responseCount: 1,
             }),
           ],

@@ -462,14 +462,14 @@ export class QuestionResultTaskItem {
   streak: number
 
   /**
-   * The player’s response time for this question, in seconds. If the player
+   * The player’s response time for this question, in milliseconds. If the player
    * did not submit an answer, this value equals the full question duration.
    */
   @Prop({ type: Number, required: true, default: 0 })
   lastResponseTime: number
 
   /**
-   * The cumulative response time, in seconds, across all questions included for this player up to this result.
+   * The cumulative response time, in milliseconds, across all questions included for this player up to this result.
    *
    * This value is the sum of lastResponseTime over responseCount questions
    */
