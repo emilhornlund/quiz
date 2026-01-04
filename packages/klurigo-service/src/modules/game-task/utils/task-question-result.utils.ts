@@ -29,8 +29,8 @@ import {
   isQuestionAnswerCorrect,
 } from './scoring'
 import {
-  compareSortClassicModeQuestionResultTaskItemByScore,
-  compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+  compareClassicModeQuestionResultTaskItemByScoreThenTime,
+  compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime,
 } from './task-sorting.utils'
 import { isQuestionResultTask, isQuestionTask } from './task-type-guards'
 
@@ -242,8 +242,11 @@ function buildQuestionResultTaskResults({
     })
     .sort((a, b) =>
       mode === GameMode.Classic
-        ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
-        : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
+        ? compareClassicModeQuestionResultTaskItemByScoreThenTime(a, b)
+        : compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+            a,
+            b,
+          ),
     )
     .map((item, index) => ({ ...item, position: index + 1 }))
 }

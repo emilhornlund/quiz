@@ -4,41 +4,25 @@ import { v4 as uuidv4 } from 'uuid'
 import { QuestionResultTaskItem } from '../../game-core/repositories/models/schemas'
 
 import {
-  compareSortClassicModeQuestionResultTaskItemByScore,
-  compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+  compareClassicModeQuestionResultTaskItemByScoreThenTime,
+  compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime,
 } from './task-sorting.utils'
 
 describe('Task Sorting Utils', () => {
-  describe('compareSortClassicModeQuestionResultTaskItemByScore', () => {
-    it('returns 0 when both items have the same totalScore', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
+  const buildItem = (
+    overrides: Partial<QuestionResultTaskItem>,
+  ): QuestionResultTaskItem => ({
+    ...MOCK_QUESTION_RESULT_ITEM,
+    playerId: `p-${uuidv4()}`,
+    ...overrides,
+  })
 
-      const result = compareSortClassicModeQuestionResultTaskItemByScore(
-        lhs,
-        rhs,
-      )
+  describe('compareClassicModeQuestionResultTaskItemByScoreThenTime', () => {
+    it('returns a negative value when lhs has a higher totalScore than rhs (score wins over time)', () => {
+      const lhs = buildItem({ totalScore: 200, totalResponseTime: 999999 })
+      const rhs = buildItem({ totalScore: 100, totalResponseTime: 1 })
 
-      expect(result).toBe(0)
-    })
-
-    it('returns a negative value when lhs has a higher totalScore than rhs (descending order)', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 200,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
-
-      const result = compareSortClassicModeQuestionResultTaskItemByScore(
+      const result = compareClassicModeQuestionResultTaskItemByScoreThenTime(
         lhs,
         rhs,
       )
@@ -46,17 +30,11 @@ describe('Task Sorting Utils', () => {
       expect(result).toBeLessThan(0)
     })
 
-    it('returns a positive value when lhs has a lower totalScore than rhs (descending order)', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 50,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
+    it('returns a positive value when lhs has a lower totalScore than rhs (score wins over time)', () => {
+      const lhs = buildItem({ totalScore: 50, totalResponseTime: 1 })
+      const rhs = buildItem({ totalScore: 100, totalResponseTime: 999999 })
 
-      const result = compareSortClassicModeQuestionResultTaskItemByScore(
+      const result = compareClassicModeQuestionResultTaskItemByScoreThenTime(
         lhs,
         rhs,
       )
@@ -64,92 +42,159 @@ describe('Task Sorting Utils', () => {
       expect(result).toBeGreaterThan(0)
     })
 
-    it('sorts QuestionResultTaskItem instances in descending order of totalScore', () => {
+    it('returns 0 when both totalScore and totalResponseTime are equal', () => {
+      const lhs = buildItem({ totalScore: 100, totalResponseTime: 2000 })
+      const rhs = buildItem({ totalScore: 100, totalResponseTime: 2000 })
+
+      const result = compareClassicModeQuestionResultTaskItemByScoreThenTime(
+        lhs,
+        rhs,
+      )
+
+      expect(result).toBe(0)
+    })
+
+    it('returns a negative value when scores tie and lhs is faster (lower totalResponseTime)', () => {
+      const lhs = buildItem({ totalScore: 100, totalResponseTime: 1000 })
+      const rhs = buildItem({ totalScore: 100, totalResponseTime: 2000 })
+
+      const result = compareClassicModeQuestionResultTaskItemByScoreThenTime(
+        lhs,
+        rhs,
+      )
+
+      expect(result).toBeLessThan(0)
+    })
+
+    it('returns a positive value when scores tie and lhs is slower (higher totalResponseTime)', () => {
+      const lhs = buildItem({ totalScore: 100, totalResponseTime: 3000 })
+      const rhs = buildItem({ totalScore: 100, totalResponseTime: 2000 })
+
+      const result = compareClassicModeQuestionResultTaskItemByScoreThenTime(
+        lhs,
+        rhs,
+      )
+
+      expect(result).toBeGreaterThan(0)
+    })
+
+    it('sorts by totalScore desc, then totalResponseTime asc when scores tie', () => {
       const items: QuestionResultTaskItem[] = [
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p1', totalScore: 50 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p2', totalScore: 150 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p3', totalScore: 150 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p4', totalScore: 0 },
+        buildItem({ playerId: 'p1', totalScore: 100, totalResponseTime: 3000 }),
+        buildItem({ playerId: 'p2', totalScore: 200, totalResponseTime: 9999 }),
+        buildItem({ playerId: 'p3', totalScore: 100, totalResponseTime: 1000 }),
+        buildItem({ playerId: 'p4', totalScore: 0, totalResponseTime: 1 }),
       ]
 
       const sorted = [...items].sort(
-        compareSortClassicModeQuestionResultTaskItemByScore,
+        compareClassicModeQuestionResultTaskItemByScoreThenTime,
       )
 
-      const scores = sorted.map((i) => i.totalScore)
-      expect(scores).toEqual([150, 150, 50, 0])
+      const ordered = sorted.map((i) => ({
+        playerId: i.playerId,
+        totalScore: i.totalScore,
+        totalResponseTime: i.totalResponseTime,
+      }))
+
+      expect(ordered).toEqual([
+        { playerId: 'p2', totalScore: 200, totalResponseTime: 9999 },
+        { playerId: 'p3', totalScore: 100, totalResponseTime: 1000 },
+        { playerId: 'p1', totalScore: 100, totalResponseTime: 3000 },
+        { playerId: 'p4', totalScore: 0, totalResponseTime: 1 },
+      ])
     })
   })
 
-  describe('compareZeroToOneHundredModeQuestionResultTaskItemByScore', () => {
-    it('returns 0 when both items have the same totalScore', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 42,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 42,
-      }
+  describe('compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime', () => {
+    it('returns a negative value when lhs has a lower totalScore than rhs (ascending)', () => {
+      const lhs = buildItem({ totalScore: 10, totalResponseTime: 999999 })
+      const rhs = buildItem({ totalScore: 20, totalResponseTime: 1 })
 
-      const result = compareZeroToOneHundredModeQuestionResultTaskItemByScore(
-        lhs,
-        rhs,
-      )
-
-      expect(result).toBe(0)
-    })
-
-    it('returns a positive value when lhs has a higher totalScore than rhs (ascending order)', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 200,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
-
-      const result = compareZeroToOneHundredModeQuestionResultTaskItemByScore(
-        lhs,
-        rhs,
-      )
-
-      expect(result).toBeGreaterThan(0)
-    })
-
-    it('returns a negative value when lhs has a lower totalScore than rhs (ascending order)', () => {
-      const lhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 50,
-      }
-      const rhs: QuestionResultTaskItem = {
-        ...MOCK_QUESTION_RESULT_ITEM,
-        totalScore: 100,
-      }
-
-      const result = compareZeroToOneHundredModeQuestionResultTaskItemByScore(
-        lhs,
-        rhs,
-      )
+      const result =
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+          lhs,
+          rhs,
+        )
 
       expect(result).toBeLessThan(0)
     })
 
-    it('sorts QuestionResultTaskItem instances in ascending order of totalScore', () => {
+    it('returns a positive value when lhs has a higher totalScore than rhs (ascending)', () => {
+      const lhs = buildItem({ totalScore: 50, totalResponseTime: 1 })
+      const rhs = buildItem({ totalScore: 10, totalResponseTime: 999999 })
+
+      const result =
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+          lhs,
+          rhs,
+        )
+
+      expect(result).toBeGreaterThan(0)
+    })
+
+    it('returns 0 when both totalScore and totalResponseTime are equal', () => {
+      const lhs = buildItem({ totalScore: 10, totalResponseTime: 2000 })
+      const rhs = buildItem({ totalScore: 10, totalResponseTime: 2000 })
+
+      const result =
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+          lhs,
+          rhs,
+        )
+
+      expect(result).toBe(0)
+    })
+
+    it('returns a negative value when scores tie and lhs is faster (lower totalResponseTime)', () => {
+      const lhs = buildItem({ totalScore: 10, totalResponseTime: 1000 })
+      const rhs = buildItem({ totalScore: 10, totalResponseTime: 2000 })
+
+      const result =
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+          lhs,
+          rhs,
+        )
+
+      expect(result).toBeLessThan(0)
+    })
+
+    it('returns a positive value when scores tie and lhs is slower (higher totalResponseTime)', () => {
+      const lhs = buildItem({ totalScore: 10, totalResponseTime: 3000 })
+      const rhs = buildItem({ totalScore: 10, totalResponseTime: 2000 })
+
+      const result =
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+          lhs,
+          rhs,
+        )
+
+      expect(result).toBeGreaterThan(0)
+    })
+
+    it('sorts by totalScore asc, then totalResponseTime asc when scores tie', () => {
       const items: QuestionResultTaskItem[] = [
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p1', totalScore: 50 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p2', totalScore: 150 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p3', totalScore: 150 },
-        { ...MOCK_QUESTION_RESULT_ITEM, playerId: 'p4', totalScore: 0 },
+        buildItem({ playerId: 'p1', totalScore: 10, totalResponseTime: 3000 }),
+        buildItem({ playerId: 'p2', totalScore: 0, totalResponseTime: 9999 }),
+        buildItem({ playerId: 'p3', totalScore: 10, totalResponseTime: 1000 }),
+        buildItem({ playerId: 'p4', totalScore: 50, totalResponseTime: 1 }),
       ]
 
       const sorted = [...items].sort(
-        compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+        compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime,
       )
 
-      const scores = sorted.map((i) => i.totalScore)
-      expect(scores).toEqual([0, 50, 150, 150])
+      const ordered = sorted.map((i) => ({
+        playerId: i.playerId,
+        totalScore: i.totalScore,
+        totalResponseTime: i.totalResponseTime,
+      }))
+
+      expect(ordered).toEqual([
+        { playerId: 'p2', totalScore: 0, totalResponseTime: 9999 },
+        { playerId: 'p3', totalScore: 10, totalResponseTime: 1000 },
+        { playerId: 'p1', totalScore: 10, totalResponseTime: 3000 },
+        { playerId: 'p4', totalScore: 50, totalResponseTime: 1 },
+      ])
     })
   })
 })
