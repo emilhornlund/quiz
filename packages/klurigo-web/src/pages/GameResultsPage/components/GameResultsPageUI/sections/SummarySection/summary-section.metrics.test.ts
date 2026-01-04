@@ -8,6 +8,7 @@ import type {
 import { describe, expect, it } from 'vitest'
 
 import {
+  getComebackRankGainMetric,
   getFastestOverallPlayerMetric,
   getLongestCorrectStreakMetric,
   getMostAccuratePlayerMetric,
@@ -25,6 +26,7 @@ const buildParticipant = (
 const buildClassicPlayerMetric = (args: {
   player: GameResultParticipantDto
   rank?: number
+  comebackRankGain?: number
   unanswered?: number
   averageResponseTime: number
   longestCorrectStreak: number
@@ -34,6 +36,7 @@ const buildClassicPlayerMetric = (args: {
 }): GameResultClassicModePlayerMetricDto => ({
   player: args.player,
   rank: args.rank ?? 1,
+  comebackRankGain: args.comebackRankGain ?? 0,
   unanswered: args.unanswered ?? 0,
   averageResponseTime: args.averageResponseTime,
   longestCorrectStreak: args.longestCorrectStreak,
@@ -45,6 +48,7 @@ const buildClassicPlayerMetric = (args: {
 const buildZeroToOneHundredPlayerMetric = (args: {
   player: GameResultParticipantDto
   rank?: number
+  comebackRankGain?: number
   unanswered?: number
   averageResponseTime: number
   longestCorrectStreak: number
@@ -53,6 +57,7 @@ const buildZeroToOneHundredPlayerMetric = (args: {
 }): GameResultZeroToOneHundredModePlayerMetricDto => ({
   player: args.player,
   rank: args.rank ?? 1,
+  comebackRankGain: args.comebackRankGain ?? 0,
   unanswered: args.unanswered ?? 0,
   averageResponseTime: args.averageResponseTime,
   longestCorrectStreak: args.longestCorrectStreak,
@@ -406,6 +411,138 @@ describe('summary-section.metrics', () => {
 
       expect(result?.value).toBe(90)
       expect(result?.players.map((p) => p.nickname)).toEqual(['Anna', 'Zoe'])
+    })
+  })
+
+  describe('getComebackRankGainMetric', () => {
+    it('returns null when there are no players', () => {
+      const result = getComebackRankGainMetric(
+        [] as unknown as GameResultDto['playerMetrics'],
+      )
+      expect(result).toBeNull()
+    })
+
+    it('returns the highest comeback rank gain and the matching player', () => {
+      const alice = buildParticipant('p1', 'Alice')
+      const bob = buildParticipant('p2', 'Bob')
+
+      const playerMetrics = [
+        buildClassicPlayerMetric({
+          player: alice,
+          averageResponseTime: 1200,
+          longestCorrectStreak: 2,
+          correct: 5,
+          comebackRankGain: 2,
+        }),
+        buildClassicPlayerMetric({
+          player: bob,
+          averageResponseTime: 900,
+          longestCorrectStreak: 3,
+          correct: 4,
+          comebackRankGain: 5,
+        }),
+      ] as unknown as GameResultDto['playerMetrics']
+
+      const result = getComebackRankGainMetric(playerMetrics)
+
+      expect(result).toEqual({
+        value: 5,
+        players: [bob],
+      })
+    })
+
+    it('returns all tied players, sorted by nickname', () => {
+      const zoe = buildParticipant('p1', 'Zoe')
+      const anna = buildParticipant('p2', 'Anna')
+      const bob = buildParticipant('p3', 'Bob')
+
+      const playerMetrics = [
+        buildClassicPlayerMetric({
+          player: zoe,
+          averageResponseTime: 700,
+          longestCorrectStreak: 1,
+          correct: 1,
+          comebackRankGain: 3,
+        }),
+        buildClassicPlayerMetric({
+          player: anna,
+          averageResponseTime: 700,
+          longestCorrectStreak: 2,
+          correct: 2,
+          comebackRankGain: 3,
+        }),
+        buildClassicPlayerMetric({
+          player: bob,
+          averageResponseTime: 900,
+          longestCorrectStreak: 3,
+          correct: 3,
+          comebackRankGain: 1,
+        }),
+      ] as unknown as GameResultDto['playerMetrics']
+
+      const result = getComebackRankGainMetric(playerMetrics)
+
+      expect(result?.value).toBe(3)
+      expect(result?.players.map((p) => p.nickname)).toEqual(['Anna', 'Zoe'])
+    })
+
+    it('does not mutate the input array order', () => {
+      const alice = buildParticipant('p1', 'Alice')
+      const bob = buildParticipant('p2', 'Bob')
+
+      const first = buildClassicPlayerMetric({
+        player: alice,
+        averageResponseTime: 1200,
+        longestCorrectStreak: 2,
+        correct: 5,
+        comebackRankGain: 1,
+      })
+      const second = buildClassicPlayerMetric({
+        player: bob,
+        averageResponseTime: 900,
+        longestCorrectStreak: 3,
+        correct: 4,
+        comebackRankGain: 2,
+      })
+
+      const playerMetrics = [
+        first,
+        second,
+      ] as unknown as GameResultDto['playerMetrics']
+
+      getComebackRankGainMetric(playerMetrics)
+
+      expect(playerMetrics[0]).toBe(first)
+      expect(playerMetrics[1]).toBe(second)
+    })
+
+    it('works with zero-to-one-hundred mode player metrics', () => {
+      const alice = buildParticipant('p1', 'Alice')
+      const bob = buildParticipant('p2', 'Bob')
+
+      const playerMetrics = [
+        buildZeroToOneHundredPlayerMetric({
+          player: alice,
+          averageResponseTime: 1200,
+          longestCorrectStreak: 2,
+          averagePrecision: 0.84,
+          comebackRankGain: 2,
+        }),
+        buildZeroToOneHundredPlayerMetric({
+          player: bob,
+          averageResponseTime: 900,
+          longestCorrectStreak: 3,
+          averagePrecision: 0.901,
+          comebackRankGain: 1,
+        }),
+      ] as unknown as GameResultDto['playerMetrics']
+
+      const result = getComebackRankGainMetric(playerMetrics)
+
+      expect(result).toEqual({
+        value: 2,
+        players: [alice],
+      })
     })
   })
 })

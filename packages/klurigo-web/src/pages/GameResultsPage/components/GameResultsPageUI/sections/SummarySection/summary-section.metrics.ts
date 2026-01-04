@@ -165,3 +165,30 @@ export const getPrecisionChampionMetric = (args: {
 
   return { value: Math.round(bestPrecision * 100), players }
 }
+
+/**
+ * Builds the "best comeback" metric based on `comebackRankGain`.
+ *
+ * Selects the highest `comebackRankGain` value across all players and returns
+ * the value along with the players who achieved it (ties included).
+ *
+ * @param playerMetrics - Final performance metrics for all players.
+ * @returns The metric value and tied players, or `null` when no meaningful comeback exists.
+ */
+export const getComebackRankGainMetric = (
+  playerMetrics: GameResultDto['playerMetrics'],
+): Metric | null => {
+  if (playerMetrics.length === 0) {
+    return null
+  }
+
+  const value = Math.max(...playerMetrics.map((m) => m.comebackRankGain))
+
+  const players = sortPlayersByNickname(
+    playerMetrics
+      .filter((m) => m.comebackRankGain === value)
+      .map((m) => m.player),
+  )
+
+  return { value, players }
+}

@@ -578,6 +578,23 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
           class="nicknames"
         />
       </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Biggest Comeback
+        </div>
+        <div
+          class="value"
+        >
+          NaN
+        </div>
+        <div
+          class="nicknames"
+        />
+      </div>
     </div>
   </section>
 </div>
@@ -888,6 +905,23 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
           class="value"
         >
           NaN%
+        </div>
+        <div
+          class="nicknames"
+        />
+      </div>
+      <div
+        class="card metric"
+      >
+        <div
+          class="title"
+        >
+          Biggest Comeback
+        </div>
+        <div
+          class="value"
+        >
+          NaN
         </div>
         <div
           class="nicknames"

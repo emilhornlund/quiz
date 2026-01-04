@@ -883,6 +883,29 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
                     </div>
                   </div>
                 </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -1749,6 +1772,29 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
                     class="value"
                   >
                     100%
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      ShadowCyborg
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
                   </div>
                   <div
                     class="nicknames"
@@ -2634,6 +2680,29 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     class="value"
                   >
                     100%
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
                   </div>
                   <div
                     class="nicknames"
@@ -4648,6 +4717,29 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     </div>
                   </div>
                 </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -5506,6 +5598,29 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     class="value"
                   >
                     80%
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
                   </div>
                   <div
                     class="nicknames"
@@ -7253,6 +7368,29 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     class="value"
                   >
                     80%
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
                   </div>
                   <div
                     class="nicknames"
