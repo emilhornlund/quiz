@@ -144,6 +144,7 @@ function buildPlayerMetrics(
           participantId: participantPlayer.participantId,
           nickname: participantPlayer.nickname,
           rank,
+          comebackRankGain: Math.max(0, participantPlayer.worstRank - rank),
           correct: mode === GameMode.Classic ? 0 : undefined,
           incorrect: mode === GameMode.Classic ? 0 : undefined,
           averagePrecision: mode === GameMode.ZeroToOneHundred ? 0 : undefined,
