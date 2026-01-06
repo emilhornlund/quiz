@@ -8,6 +8,7 @@ import {
   GameEventQuestionResultsTrueFalse,
   GameEventQuestionResultsTypeAnswer,
   GameEventType,
+  GameMode,
   GameResultHostEvent,
   QuestionMediaEvent,
   QuestionPinTolerance,
@@ -872,6 +873,7 @@ describe('Game Result Event Utils', () => {
       const result = buildGameResultPlayerEvent(game as never, player)
 
       expect(result.type).toBe(GameEventType.GameResultPlayer)
+      expect(result.game.mode).toBe(GameMode.Classic)
       expect(result.player.nickname).toBe('Alice')
       expect(result.player.score).toEqual({
         correct: true,
@@ -918,6 +920,7 @@ describe('Game Result Event Utils', () => {
       const result = buildGameResultPlayerEvent(game as never, player)
 
       expect(result.type).toBe(GameEventType.GameResultPlayer)
+      expect(result.game.mode).toBe(GameMode.Classic)
       expect(result.player.nickname).toBe('Bob')
       expect(result.player.score).toEqual({
         correct: false,
@@ -983,6 +986,7 @@ describe('Game Result Event Utils', () => {
       const result = buildGameResultPlayerEvent(game as never, currentPlayer)
 
       expect(result.type).toBe(GameEventType.GameResultPlayer)
+      expect(result.game.mode).toBe(GameMode.Classic)
       expect(result.player.nickname).toBe('Charlie')
 
       // Score should belong to the current player (Charlie)
@@ -1045,6 +1049,7 @@ describe('Game Result Event Utils', () => {
       const result = buildGameResultPlayerEvent(game as never, player)
 
       expect(result.type).toBe(GameEventType.GameResultPlayer)
+      expect(result.game.mode).toBe(GameMode.Classic)
       expect(result.player.nickname).toBe('Dana')
       expect(result.player.score).toEqual({
         correct: true,

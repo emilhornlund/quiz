@@ -307,6 +307,9 @@ export type GameResultPlayerEventBehind = {
 
 export type GameResultPlayerEvent = {
   type: GameEventType.GameResultPlayer
+  game: {
+    mode: GameMode
+  }
   player: {
     nickname: string
     score: GameResultPlayerEventScore

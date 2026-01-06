@@ -1,4 +1,4 @@
-import { GameEventType } from '@klurigo/common'
+import { GameEventType, GameMode } from '@klurigo/common'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 
@@ -19,6 +19,7 @@ export const Correct = {
   args: {
     event: {
       type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.Classic },
       player: {
         nickname: 'FrostyBear',
         score: {
@@ -45,6 +46,7 @@ export const Incorrect = {
   args: {
     event: {
       type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.Classic },
       player: {
         nickname: 'FrostyBear',
         score: {
@@ -56,6 +58,34 @@ export const Incorrect = {
         },
         behind: {
           points: 123,
+          nickname: 'WhiskerFox',
+        },
+      },
+      pagination: {
+        current: 1,
+        total: 20,
+      },
+    },
+  },
+} satisfies Story
+
+export const ZeroToOneHundred = {
+  name: 'Zero to one hundred',
+  args: {
+    event: {
+      type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.ZeroToOneHundred },
+      player: {
+        nickname: 'FrostyBear',
+        score: {
+          correct: true,
+          last: -10,
+          total: 24,
+          position: 1,
+          streak: 3,
+        },
+        behind: {
+          points: 12,
           nickname: 'WhiskerFox',
         },
       },
