@@ -46,6 +46,7 @@ const makeClassicResults = (name: string): ClassicResult => ({
     {
       player: { id: 'p1', nickname: 'Alice' },
       rank: 1,
+      comebackRankGain: 1,
       correct: 2,
       incorrect: 1,
       unanswered: 0,
@@ -56,6 +57,7 @@ const makeClassicResults = (name: string): ClassicResult => ({
     {
       player: { id: 'p2', nickname: 'Bob' },
       rank: 2,
+      comebackRankGain: 1,
       correct: 1,
       incorrect: 1,
       unanswered: 1,
@@ -98,6 +100,7 @@ const makeZ2HResults = (name: string): Z2HResult => ({
     {
       player: { id: 'p1', nickname: 'Carol' },
       rank: 1,
+      comebackRankGain: 1,
       averagePrecision: 0.8,
       unanswered: 0,
       averageResponseTime: 2100,
@@ -107,6 +110,7 @@ const makeZ2HResults = (name: string): Z2HResult => ({
     {
       player: { id: 'p2', nickname: 'Dave' },
       rank: 2,
+      comebackRankGain: 1,
       averagePrecision: 0.6,
       unanswered: 1,
       averageResponseTime: 2600,

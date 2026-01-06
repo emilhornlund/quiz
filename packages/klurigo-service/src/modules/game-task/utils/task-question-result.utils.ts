@@ -29,8 +29,8 @@ import {
   isQuestionAnswerCorrect,
 } from './scoring'
 import {
-  compareSortClassicModeQuestionResultTaskItemByScore,
-  compareZeroToOneHundredModeQuestionResultTaskItemByScore,
+  compareClassicModeQuestionResultTaskItemByScoreThenTime,
+  compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime,
 } from './task-sorting.utils'
 import { isQuestionResultTask, isQuestionTask } from './task-type-guards'
 
@@ -242,8 +242,11 @@ function buildQuestionResultTaskResults({
     })
     .sort((a, b) =>
       mode === GameMode.Classic
-        ? compareSortClassicModeQuestionResultTaskItemByScore(a, b)
-        : compareZeroToOneHundredModeQuestionResultTaskItemByScore(a, b),
+        ? compareClassicModeQuestionResultTaskItemByScoreThenTime(a, b)
+        : compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+            a,
+            b,
+          ),
     )
     .map((item, index) => ({ ...item, position: index + 1 }))
 }
@@ -274,6 +277,8 @@ function buildQuestionResultTaskItem(
     nickname,
     totalScore: previousScore,
     currentStreak,
+    totalResponseTime: previousTotalResponseTime,
+    responseCount: previousResponseCount,
   } = participantPlayer
 
   const { type } = question
@@ -297,6 +302,15 @@ function buildQuestionResultTaskItem(
 
   const streak = correct ? currentStreak + 1 : 0
 
+  const lastResponseTime = calculatePlayerResponseTime(
+    question,
+    presented,
+    answer,
+  )
+  const totalResponseTime = previousTotalResponseTime + lastResponseTime
+
+  const responseCount = previousResponseCount + 1
+
   return {
     type,
     playerId: participantId,
@@ -307,5 +321,39 @@ function buildQuestionResultTaskItem(
     totalScore,
     position: 0,
     streak,
+    lastResponseTime,
+    totalResponseTime,
+    responseCount,
   }
+}
+
+/**
+ * Calculates the player's response time in milliseconds.
+ *
+ * If the question was never presented, the full question duration is returned.
+ * If the player did not submit an answer, the full question duration is returned.
+ *
+ * @param question - Question metadata including duration (in seconds)
+ * @param presented - Timestamp when the question was presented to the player
+ * @param answer - Player's submitted answer
+ * @returns Response time in milliseconds
+ */
+function calculatePlayerResponseTime(
+  question: QuestionDao,
+  presented?: Date,
+  answer?: QuestionTaskAnswer,
+): number {
+  const durationMs = question.duration * 1000
+
+  if (!presented) {
+    return durationMs
+  }
+
+  if (!answer?.created) {
+    return durationMs
+  }
+
+  const responseTimeMs = answer.created.getTime() - presented.getTime()
+
+  return Math.max(0, Math.min(responseTimeMs, durationMs))
 }

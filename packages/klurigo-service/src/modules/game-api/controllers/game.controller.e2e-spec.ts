@@ -1470,6 +1470,9 @@ describe('GameController (e2e)', () => {
             lastScore: 900,
             totalScore: 900,
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -1483,6 +1486,9 @@ describe('GameController (e2e)', () => {
             lastScore: 800,
             totalScore: 800,
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -1519,6 +1525,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 997,
                 totalScore: 997,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: secondPlayerUser,
@@ -1592,6 +1601,9 @@ describe('GameController (e2e)', () => {
             lastScore: 997,
             totalScore: 997,
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -1605,6 +1617,9 @@ describe('GameController (e2e)', () => {
             lastScore: 993,
             totalScore: 993,
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -1641,6 +1656,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 983,
                 totalScore: 983,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: secondPlayerUser,
@@ -1714,6 +1732,9 @@ describe('GameController (e2e)', () => {
             lastScore: 983,
             totalScore: 983,
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -1727,6 +1748,9 @@ describe('GameController (e2e)', () => {
             lastScore: 967,
             totalScore: 967,
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -1768,6 +1792,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 983,
                 totalScore: 983,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: secondPlayerUser,
@@ -1850,6 +1877,9 @@ describe('GameController (e2e)', () => {
             lastScore: 983,
             totalScore: 983,
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -1863,6 +1893,9 @@ describe('GameController (e2e)', () => {
             lastScore: 967,
             totalScore: 967,
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -2000,6 +2033,9 @@ describe('GameController (e2e)', () => {
                   lastScore: 900,
                   totalScore: 900,
                   position: 1,
+                  lastResponseTime: 1000,
+                  totalResponseTime: 1000,
+                  responseCount: 1,
                 }),
                 buildIncorrectQuestionResultTaskItem({
                   user: secondPlayerUser,
@@ -2130,6 +2166,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(3),
             },
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -2141,6 +2180,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             },
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -2177,6 +2219,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 997,
                 totalScore: 997,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: secondPlayerUser,
@@ -2245,6 +2290,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(3),
             },
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -2256,6 +2304,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             },
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -2292,6 +2343,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 983,
                 totalScore: 983,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: secondPlayerUser,
@@ -2361,6 +2415,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(3),
             },
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -2372,6 +2429,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             },
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -2413,6 +2473,9 @@ describe('GameController (e2e)', () => {
                 lastScore: 983,
                 totalScore: 983,
                 position: 1,
+                lastResponseTime: 1000,
+                totalResponseTime: 1000,
+                responseCount: 1,
               }),
               buildIncorrectQuestionResultTaskItem({
                 user: playerUser,
@@ -2484,6 +2547,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(3),
             },
             position: 1,
+            lastResponseTime: 1000,
+            totalResponseTime: 1000,
+            responseCount: 1,
           }),
         ),
         toPlain(
@@ -2495,6 +2561,9 @@ describe('GameController (e2e)', () => {
               created: offsetSeconds(4),
             },
             position: 2,
+            lastResponseTime: 2000,
+            totalResponseTime: 2000,
+            responseCount: 1,
           }),
         ),
       ])
@@ -2632,6 +2701,9 @@ describe('GameController (e2e)', () => {
                   lastScore: 900,
                   totalScore: 900,
                   position: 1,
+                  lastResponseTime: 1000,
+                  totalResponseTime: 1000,
+                  responseCount: 1,
                 }),
                 buildIncorrectQuestionResultTaskItem({
                   user: secondPlayerUser,
@@ -2880,6 +2952,9 @@ function buildMultiChoiceQuestionGameDocument(options: {
           lastScore: 900,
           totalScore: 900,
           position: 1,
+          lastResponseTime: 1000,
+          totalResponseTime: 1000,
+          responseCount: 1,
         }),
         buildIncorrectQuestionResultTaskItem({
           user: options.users.secondPlayerUser,
@@ -2927,7 +3002,15 @@ function buildCorrectQuestionResultTaskItem(
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskPinAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer, 'playerId'>
-  } & Pick<QuestionResultTaskItem, 'lastScore' | 'totalScore' | 'position'>,
+  } & Pick<
+    QuestionResultTaskItem,
+    | 'lastScore'
+    | 'totalScore'
+    | 'position'
+    | 'lastResponseTime'
+    | 'totalResponseTime'
+    | 'responseCount'
+  >,
 ): QuestionResultTaskItem {
   return {
     type: options.answer.type,
@@ -2944,6 +3027,9 @@ function buildCorrectQuestionResultTaskItem(
     totalScore: options.totalScore,
     position: options.position,
     streak: 1,
+    lastResponseTime: options.lastResponseTime,
+    totalResponseTime: options.totalResponseTime,
+    responseCount: options.responseCount,
   }
 }
 
@@ -2957,7 +3043,12 @@ function buildIncorrectQuestionResultTaskItem(
       | Omit<QuestionTaskBaseAnswer & QuestionTaskTypeAnswerAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskPinAnswer, 'playerId'>
       | Omit<QuestionTaskBaseAnswer & QuestionTaskPuzzleAnswer, 'playerId'>
-  } & Partial<Pick<QuestionResultTaskItem, 'position'>>,
+  } & Partial<
+    Pick<
+      QuestionResultTaskItem,
+      'position' | 'lastResponseTime' | 'totalResponseTime' | 'responseCount'
+    >
+  >,
 ): QuestionResultTaskItem {
   return {
     type: options.answer.type,
@@ -2974,5 +3065,8 @@ function buildIncorrectQuestionResultTaskItem(
     totalScore: 0,
     position: options.position ?? 2,
     streak: 0,
+    lastResponseTime: options.lastResponseTime ?? 0,
+    totalResponseTime: options.totalResponseTime ?? 0,
+    responseCount: options.responseCount ?? 0,
   }
 }

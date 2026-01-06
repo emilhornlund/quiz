@@ -1,56 +1,96 @@
 import { QuestionResultTaskItem } from '../../game-core/repositories/models/schemas'
 
 /**
- * Compares two numbers for sorting in descending order.
+ * Compares two numeric values for sorting in descending order.
  *
- * @param {number} lhs - The left-hand number.
- * @param {number} rhs - The right-hand number.
+ * A higher value is considered better and will be ordered before a lower value.
  *
- * @returns {number} A positive value if `lhs` is less than `rhs`, a negative value if greater, or 0 if they are equal.
+ * @param lhs - The left-hand numeric value.
+ * @param rhs - The right-hand numeric value.
+ * @returns
+ * - A positive number if `lhs` should be ordered after `rhs`
+ * - A negative number if `lhs` should be ordered before `rhs`
+ * - `0` if both values are equal
  */
-function compareNumbers(lhs: number, rhs: number): number {
-  if (lhs < rhs) {
-    return 1
-  }
-  if (lhs > rhs) {
-    return -1
-  }
+function compareNumbersDesc(lhs: number, rhs: number): number {
+  if (lhs < rhs) return 1
+  if (lhs > rhs) return -1
   return 0
 }
 
 /**
- * Compares two question result task items by their total scores in Classic mode.
+ * Compares two numeric values for sorting in ascending order.
  *
- * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
- * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
+ * A lower value is considered better and will be ordered before a higher value.
  *
- * @returns {number} A positive value if `lhs` has a lower score, a negative value if higher, or 0 if they are equal.
+ * @param lhs - The left-hand numeric value.
+ * @param rhs - The right-hand numeric value.
+ * @returns
+ * - A positive number if `lhs` should be ordered after `rhs`
+ * - A negative number if `lhs` should be ordered before `rhs`
+ * - `0` if both values are equal
  */
-export function compareSortClassicModeQuestionResultTaskItemByScore(
-  lhs: QuestionResultTaskItem,
-  rhs: QuestionResultTaskItem,
-): number {
-  return compareNumbers(lhs.totalScore, rhs.totalScore)
+function compareNumbersAsc(lhs: number, rhs: number): number {
+  if (lhs < rhs) return -1
+  if (lhs > rhs) return 1
+  return 0
 }
 
 /**
- * Compares two question result task items by their total scores in ZeroToOneHundred mode.
+ * Compares two question result task items for ranking in Classic mode.
  *
- * @param {QuestionResultTaskItem} lhs - The first question result task item to compare.
- * @param {QuestionResultTaskItem} rhs - The second question result task item to compare.
+ * Sorting rules:
+ * 1. Players are ranked by `totalScore` in descending order (higher score ranks higher).
+ * 2. If multiple players have the same score, they are ranked by `totalResponseTime`
+ *    in ascending order (faster total response time ranks higher).
  *
- * @returns {number} A positive value if `lhs` has a higher score, a negative value if lower, or 0 if they are equal.
+ * This ensures a fair and deterministic ranking when scores are tied.
  *
- * @remarks
- * This reverses the sort order compared to Classic mode, sorting from lowest to highest.
+ * @param lhs - The first question result task item to compare.
+ * @param rhs - The second question result task item to compare.
+ * @returns
+ * - A negative number if `lhs` should rank higher than `rhs`
+ * - A positive number if `lhs` should rank lower than `rhs`
+ * - `0` if both items are considered equal for ranking
  */
-export function compareZeroToOneHundredModeQuestionResultTaskItemByScore(
+export function compareClassicModeQuestionResultTaskItemByScoreThenTime(
   lhs: QuestionResultTaskItem,
   rhs: QuestionResultTaskItem,
 ): number {
-  const base = compareSortClassicModeQuestionResultTaskItemByScore(lhs, rhs)
-  if (base === 0) {
-    return 0
+  const scoreCmp = compareNumbersDesc(lhs.totalScore, rhs.totalScore)
+  if (scoreCmp !== 0) {
+    return scoreCmp
   }
-  return base * -1 // sort scores from lowest to highest
+
+  return compareNumbersAsc(lhs.totalResponseTime, rhs.totalResponseTime)
+}
+
+/**
+ * Compares two question result task items for ranking in ZeroToOneHundred mode.
+ *
+ * Sorting rules:
+ * 1. Players are ranked by `totalScore` in ascending order (lower score ranks higher).
+ * 2. If multiple players have the same score, they are ranked by `totalResponseTime`
+ *    in ascending order (faster total response time ranks higher).
+ *
+ * This preserves the existing ZeroToOneHundred scoring semantics while introducing
+ * response-time–based tie-breaking for improved fairness.
+ *
+ * @param lhs - The first question result task item to compare.
+ * @param rhs - The second question result task item to compare.
+ * @returns
+ * - A negative number if `lhs` should rank higher than `rhs`
+ * - A positive number if `lhs` should rank lower than `rhs`
+ * - `0` if both items are considered equal for ranking
+ */
+export function compareZeroToOneHundredModeQuestionResultTaskItemByScoreThenTime(
+  lhs: QuestionResultTaskItem,
+  rhs: QuestionResultTaskItem,
+): number {
+  const scoreCmp = compareNumbersAsc(lhs.totalScore, rhs.totalScore)
+  if (scoreCmp !== 0) {
+    return scoreCmp
+  }
+
+  return compareNumbersAsc(lhs.totalResponseTime, rhs.totalResponseTime)
 }

@@ -60,7 +60,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockMultiChoiceQuestionDocument()],
+          questions: [createMockMultiChoiceQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskMultiChoiceAnswer({
@@ -96,10 +96,13 @@ describe('Task Question Result Utils', () => {
                 created: offsetSeconds(3),
               }),
               correct: true,
-              lastScore: 900,
-              totalScore: 900,
+              lastScore: 983,
+              totalScore: 983,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.MultiChoice,
@@ -114,6 +117,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.MultiChoice,
@@ -124,6 +130,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),
@@ -146,7 +155,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockRangeQuestionDocument()],
+          questions: [createMockRangeQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskRangeAnswer({
@@ -186,6 +195,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 997,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Range,
@@ -200,6 +212,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Range,
@@ -210,6 +225,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),
@@ -232,7 +250,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockTrueFalseQuestionDocument()],
+          questions: [createMockTrueFalseQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskTrueFalseAnswer({
@@ -272,6 +290,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.TrueFalse,
@@ -286,6 +307,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.TrueFalse,
@@ -296,6 +320,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),
@@ -318,7 +345,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockTypeAnswerQuestionDocument()],
+          questions: [createMockTypeAnswerQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskTypeAnswer({
@@ -360,6 +387,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.TypeAnswer,
@@ -374,6 +404,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.TypeAnswer,
@@ -384,6 +417,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),
@@ -406,7 +442,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockPinQuestionDocument()],
+          questions: [createMockPinQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskPinAnswer({
@@ -442,10 +478,13 @@ describe('Task Question Result Utils', () => {
                 created: offsetSeconds(3),
               }),
               correct: true,
-              lastScore: 980,
-              totalScore: 980,
+              lastScore: 997,
+              totalScore: 997,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Pin,
@@ -460,6 +499,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Pin,
@@ -470,6 +512,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),
@@ -492,7 +537,7 @@ describe('Task Question Result Utils', () => {
               participantId: PARTICIPANT_PLAYER_ID_03,
             }),
           ],
-          questions: [createMockPuzzleQuestionDocument()],
+          questions: [createMockPuzzleQuestionDocument({ duration: 30 })],
           currentTask: createMockQuestionTaskDocument({
             answers: [
               createMockQuestionTaskPuzzleAnswer({
@@ -534,6 +579,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 983,
               position: 1,
               streak: 1,
+              lastResponseTime: 1000, // presented after 2 seconds, answered in 3 seconds, e.g 1 second response time
+              totalResponseTime: 1000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Puzzle,
@@ -548,6 +596,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 2,
               streak: 0,
+              lastResponseTime: 2000, // presented after 2 seconds, answered in 4 seconds, e.g 2 seconds response time
+              totalResponseTime: 2000,
+              responseCount: 1,
             }),
             createMockQuestionResultTaskItemDocument({
               type: QuestionType.Puzzle,
@@ -558,6 +609,9 @@ describe('Task Question Result Utils', () => {
               totalScore: 0,
               position: 3,
               streak: 0,
+              lastResponseTime: 30000, // question duration 30 seconds
+              totalResponseTime: 30000,
+              responseCount: 1,
             }),
           ],
           created: expect.anything(),

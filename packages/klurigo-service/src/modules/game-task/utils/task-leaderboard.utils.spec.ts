@@ -449,6 +449,9 @@ const buildQuestionResultTaskItem = (
     totalScore: overrides.totalScore ?? 0,
     position: overrides.position ?? 1,
     streak: overrides.streak ?? 0,
+    lastResponseTime: overrides.lastResponseTime ?? 0,
+    totalResponseTime: overrides.totalResponseTime ?? 0,
+    responseCount: overrides.responseCount ?? 0,
     ...overrides,
   }
 }
@@ -463,8 +466,11 @@ const buildPlayerParticipant = (
     updated: new Date(),
     nickname: 'Player',
     rank: 0,
+    worstRank: 0,
     totalScore: 0,
     currentStreak: 0,
+    totalResponseTime: 0,
+    responseCount: 0,
     ...overrides,
   }
 }

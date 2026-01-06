@@ -1,5 +1,3 @@
-import { calculateRangeStep } from '@klurigo/common'
-
 import {
   BSONDocument,
   extractValue,
@@ -21,7 +19,7 @@ export function transformQuizDocument(document: BSONDocument): BSONDocument {
     description: extractValue<string>(document, {}, 'description'),
     mode: extractValueOrThrow<string>(document, {}, 'mode'),
     visibility: extractValueOrThrow<string>(document, {}, 'visibility'),
-    category: extractValue<string>(document, {}, 'category') || 'OTHER',
+    category: extractValueOrThrow<string>(document, {}, 'category'),
     imageCoverURL: extractValue<string>(document, {}, 'imageCoverURL'),
     languageCode: extractValueOrThrow<string>(document, {}, 'languageCode'),
     questions: buildQuizQuestions(document),
@@ -60,10 +58,8 @@ export function buildQuizQuestions(
         additional = {
           min,
           max,
-          step:
-            extractValue<number>(question, {}, 'step') ||
-            calculateRangeStep(min, max),
-          margin: extractValue<string>(question, {}, 'margin') || 'MEDIUM',
+          step: extractValueOrThrow<number>(question, {}, 'step'),
+          margin: extractValueOrThrow<string>(question, {}, 'margin'),
           correct: extractValueOrThrow<number>(question, {}, 'correct'),
         }
       }
@@ -74,25 +70,41 @@ export function buildQuizQuestions(
       }
       if (type === 'TYPE_ANSWER') {
         additional = {
-          options: extractValue<string[]>(question, {}, 'options') || [
-            extractValueOrThrow<string>(question, {}, 'correct').toLowerCase(),
-          ],
+          options: extractValueOrThrow<string[]>(question, {}, 'options'),
+        }
+      }
+      if (type === 'PIN') {
+        additional = {
+          imageURL: extractValueOrThrow<string>(question, {}, 'imageURL'),
+          positionX: extractValueOrThrow<string>(question, {}, 'positionX'),
+          positionY: extractValueOrThrow<string>(question, {}, 'positionY'),
+          tolerance: extractValueOrThrow<string>(question, {}, 'tolerance'),
+        }
+      }
+      if (type === 'PUZZLE') {
+        additional = {
+          values: extractValueOrThrow<string[]>(question, {}, 'values'),
         }
       }
       return {
         type,
         text: extractValueOrThrow<string>(question, {}, 'text', 'question'),
         media: ((media) => {
-          if (media) {
+          if (media && type !== 'PIN') {
+            const mediaType = extractValueOrThrow<string>(media, {}, 'type')
             return {
-              type: extractValueOrThrow<string>(media, {}, 'type'),
+              type: mediaType,
               url: extractValueOrThrow<string>(media, {}, 'url'),
+              ...(mediaType === 'IMAGE'
+                ? { effect: extractValue<string>(media, {}, 'effect') }
+                : {}),
             }
           }
           return null
         })(extractValue<BSONDocument>(question, {}, 'media')),
         points: extractValueOrThrow<number>(question, {}, 'points'),
         duration: extractValueOrThrow<number>(question, {}, 'duration'),
+        info: extractValue<number>(question, {}, 'info'),
         ...additional,
       }
     },

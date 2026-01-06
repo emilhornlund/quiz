@@ -932,6 +932,34 @@ exports[`GameResultsPage > loads and renders results when query succeeds 1`] = `
                     </div>
                   </div>
                 </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Alice
+                    </div>
+                    <div
+                      class="nickname"
+                    >
+                      Bob
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -1855,6 +1883,34 @@ exports[`GameResultsPage > shows loading before data resolves then renders UI 1`
                       class="nickname"
                     >
                       Carol
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card metric"
+                >
+                  <div
+                    class="title"
+                  >
+                    Biggest Comeback
+                  </div>
+                  <div
+                    class="value"
+                  >
+                    1
+                  </div>
+                  <div
+                    class="nicknames"
+                  >
+                    <div
+                      class="nickname"
+                    >
+                      Carol
+                    </div>
+                    <div
+                      class="nickname"
+                    >
+                      Dave
                     </div>
                   </div>
                 </div>

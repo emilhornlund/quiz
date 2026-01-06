@@ -43,6 +43,7 @@ import {
 } from '../../utils'
 
 import {
+  getComebackRankGainMetric,
   getFastestOverallPlayerMetric,
   getLongestCorrectStreakMetric,
   getMostAccuratePlayerMetric,
@@ -163,6 +164,11 @@ const SummarySection: FC<SummarySectionProps> = ({
   const precisionChampion = useMemo<Metric | null>(
     () => getPrecisionChampionMetric({ mode, playerMetrics }),
     [mode, playerMetrics],
+  )
+
+  const comebackRankGain = useMemo<Metric | null>(
+    () => getComebackRankGainMetric(playerMetrics),
+    [playerMetrics],
   )
 
   const podiumValues = useMemo<PodiumValue[]>(() => {
@@ -308,6 +314,14 @@ const SummarySection: FC<SummarySectionProps> = ({
             nicknames={precisionChampion.players.map(
               ({ nickname }) => nickname,
             )}
+          />
+        )}
+
+        {comebackRankGain && (
+          <MetricCard
+            title="Biggest Comeback"
+            value={`${comebackRankGain.value}`}
+            nicknames={comebackRankGain.players.map(({ nickname }) => nickname)}
           />
         )}
       </div>

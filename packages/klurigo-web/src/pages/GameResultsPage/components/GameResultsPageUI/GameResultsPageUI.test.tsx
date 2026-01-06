@@ -33,6 +33,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'ShadowCyborg' },
                 rank: 1,
+                comebackRankGain: 1,
                 correct: 4,
                 incorrect: 0,
                 unanswered: 0,
@@ -43,6 +44,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'ShadowWhirlwind' },
                 rank: 2,
+                comebackRankGain: 0,
                 correct: 3,
                 incorrect: 1,
                 unanswered: 0,
@@ -53,6 +55,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'WhiskerFox' },
                 rank: 3,
+                comebackRankGain: 0,
                 correct: 1,
                 incorrect: 1,
                 unanswered: 2,
@@ -122,6 +125,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'ShadowCyborg' },
                 rank: 1,
+                comebackRankGain: 1,
                 averagePrecision: 1,
                 unanswered: 0,
                 averageResponseTime: 4015,
@@ -131,6 +135,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'ShadowWhirlwind' },
                 rank: 2,
+                comebackRankGain: 0,
                 averagePrecision: 0.95,
                 unanswered: 0,
                 averageResponseTime: 10662,
@@ -140,6 +145,7 @@ describe('GameResultsPageUI', () => {
               {
                 player: { id: uuidv4(), nickname: 'WhiskerFox' },
                 rank: 3,
+                comebackRankGain: 0,
                 averagePrecision: 0.72,
                 unanswered: 1,
                 averageResponseTime: 27251,
@@ -200,6 +206,7 @@ describe('GameResultsPageUI', () => {
       {
         player: { id: uuidv4(), nickname: 'Alice' },
         rank: 1,
+        comebackRankGain: 1,
         correct: 2,
         incorrect: 1,
         unanswered: 0,
@@ -210,6 +217,7 @@ describe('GameResultsPageUI', () => {
       {
         player: { id: uuidv4(), nickname: 'Bob' },
         rank: 2,
+        comebackRankGain: 0,
         correct: 1,
         incorrect: 1,
         unanswered: 1,
@@ -252,6 +260,7 @@ describe('GameResultsPageUI', () => {
       {
         player: { id: uuidv4(), nickname: 'Carol' },
         rank: 1,
+        comebackRankGain: 1,
         averagePrecision: 0.8,
         unanswered: 0,
         averageResponseTime: 2100,
@@ -261,6 +270,7 @@ describe('GameResultsPageUI', () => {
       {
         player: { id: uuidv4(), nickname: 'Dave' },
         rank: 2,
+        comebackRankGain: 0,
         averagePrecision: 0.6,
         unanswered: 1,
         averageResponseTime: 2600,

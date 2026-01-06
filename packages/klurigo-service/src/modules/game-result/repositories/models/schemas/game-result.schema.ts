@@ -28,6 +28,19 @@ export class PlayerMetric {
   rank: number
 
   /**
+   * The net number of positions the player recovered by the end of the game,
+   * calculated as the difference between the worst rank reached during the game
+   * and the final rank.
+   *
+   * A higher value indicates a larger comeback.
+   *
+   * This value is never negative; players who did not improve their position
+   * have a rank gain of 0.
+   */
+  @Prop({ type: Number, required: true })
+  comebackRankGain: number
+
+  /**
    * The total number of questions the player answered correctly.
    */
   @Prop({ type: Number, required: false })

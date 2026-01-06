@@ -76,10 +76,22 @@ export class ParticipantPlayer {
   nickname: string
 
   /**
-   * The player's current rank in the game (1 = first place, etc.).
+   * The player's current rank in the game
+   * (1 = first place, higher numbers indicate worse positions).
    */
   @Prop({ type: Number, required: true })
   rank: number
+
+  /**
+   * The worst (lowest-performing) rank the player has held at any
+   * finalized leaderboard during the game.
+   *
+   * This value is updated only when a question is finalized and the
+   * leaderboard is recomputed, and is used to calculate comeback metrics
+   * by comparing it to the final rank.
+   */
+  @Prop({ type: Number, required: true })
+  worstRank: number
 
   /**
    * The total score accumulated by the player during the game.
@@ -92,6 +104,18 @@ export class ParticipantPlayer {
    */
   @Prop({ type: Number, required: true })
   currentStreak: number
+
+  /**
+   * The cumulative response time, in milliseconds, across all questions the player participated in (including timeouts).
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  totalResponseTime: number
+
+  /**
+   * The number of questions included in totalResponseTime (answered or timed out).
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  responseCount: number
 }
 
 /**

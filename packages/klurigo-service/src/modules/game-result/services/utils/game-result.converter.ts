@@ -77,8 +77,6 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
     hostParticipantId,
     players: buildPlayerMetrics(
       mode,
-      questions,
-      questionTasks,
       currentTask.leaderboard,
       questionResultTasks,
       playerParticipants,
@@ -99,8 +97,6 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
  * Builds player-specific metrics (e.g., correct answers, score, response times) for the final GameResult.
  *
  * @param mode - The game mode to determine which metrics to calculate.
- * @param questions - The list of questions in the game.
- * @param questionTasks - All tasks where questions were presented to players.
  * @param leaderboard - Final leaderboard data from the Podium task.
  * @param questionResultTasks - Tasks containing player answers and correctness for each question.
  * @param playerParticipants - All participants in the game with type PLAYER.
@@ -108,8 +104,6 @@ export function buildGameResultModel(gameDocument: GameDocument): GameResult {
  */
 function buildPlayerMetrics(
   mode: GameMode,
-  questions: QuestionDao[],
-  questionTasks: QuestionTaskWithBase[],
   leaderboard: LeaderboardTaskItem[],
   questionResultTasks: QuestionResultTaskWithBase[],
   playerParticipants: ParticipantPlayerWithBase[],
@@ -140,11 +134,6 @@ function buildPlayerMetrics(
               lastScore,
             ),
             unanswered: accumulator.unanswered + (answer ? 0 : 1),
-            averageResponseTime: calculateAverageResponseTimeByPlayer(
-              participantPlayer,
-              questionTasks,
-              questions,
-            ),
             longestCorrectStreak:
               streak > accumulator.longestCorrectStreak
                 ? streak
@@ -155,11 +144,15 @@ function buildPlayerMetrics(
           participantId: participantPlayer.participantId,
           nickname: participantPlayer.nickname,
           rank,
+          comebackRankGain: Math.max(0, participantPlayer.worstRank - rank),
           correct: mode === GameMode.Classic ? 0 : undefined,
           incorrect: mode === GameMode.Classic ? 0 : undefined,
           averagePrecision: mode === GameMode.ZeroToOneHundred ? 0 : undefined,
           unanswered: 0,
-          averageResponseTime: 0,
+          averageResponseTime: calculateAverageResponseTimeByPlayer(
+            participantPlayer.totalResponseTime,
+            participantPlayer.responseCount,
+          ),
           longestCorrectStreak: 0,
           score,
         },
@@ -356,47 +349,21 @@ function normalizeAveragePrecision(
 }
 
 /**
- * Calculates the average time taken by a specific player to respond to all questions.
- * If a player has not answered a question, the full duration of that question is used as a fallback.
+ * Calculates a player’s average response time, in seconds, across all counted questions.
  *
- * @param playerParticipant - The player whose response times should be calculated.
- * @param questionTasks - All tasks where questions were presented.
- * @param questions - The list of all questions in the game.
- * @returns The average response time in milliseconds.
+ * @param totalResponseTime - The cumulative response time, in seconds, across all counted questions (including timeouts).
+ * @param responseCount - The number of questions included in `totalResponseTime` (answered or timed out).
+ * @returns The average response time in seconds, or `0` when `responseCount` is `0`.
  */
 function calculateAverageResponseTimeByPlayer(
-  playerParticipant: ParticipantPlayerWithBase,
-  questionTasks: QuestionTaskWithBase[],
-  questions: QuestionDao[],
+  totalResponseTime: number,
+  responseCount: number,
 ): number {
-  const totalResponseTime = questionTasks
-    .map(({ presented, answers, questionIndex }) => {
-      const presentedTime = presented?.getTime()
+  if (responseCount <= 0) {
+    return 0
+  }
 
-      if (!presentedTime) {
-        throw new Error('Missing presented time')
-      }
-
-      const answerTime =
-        answers
-          .find(({ playerId }) => playerId === playerParticipant.participantId)
-          ?.created?.getTime() ||
-        presentedTime + questions[questionIndex].duration * 1000
-
-      return {
-        presentedTime,
-        answerTime,
-      }
-    })
-    .reduce(
-      (accumulator, { presentedTime, answerTime }) =>
-        accumulator + (answerTime - presentedTime),
-      0,
-    )
-
-  return questionTasks.length
-    ? Math.floor(totalResponseTime / questionTasks.length)
-    : 0
+  return Math.floor(totalResponseTime / responseCount)
 }
 
 /**
