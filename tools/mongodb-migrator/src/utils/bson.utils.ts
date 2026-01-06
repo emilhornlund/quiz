@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import { readFileSync, writeFileSync } from 'fs'
 
 import {
@@ -6,7 +5,6 @@ import {
   BSON,
   BSONRegExp,
   Decimal128,
-  EJSON,
   Long,
   ObjectId,
   Timestamp,
@@ -86,13 +84,53 @@ export function writeBsonDocuments(
 }
 
 /**
- * Computes a deterministic MD5 hex hash for any BSONValue by first converting
- * it to Extended JSON.
+ * Type guard for identifying plain BSON document objects.
  *
- * @param value - Any valid BSONValue (primitive, nested document, array, or BSON type).
- * @returns A hex-encoded MD5 hash string.
+ * Excludes arrays and `Date` instances.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a plain object suitable to treat as a `BSONDocument`.
  */
-export function hashBSON(value: BSONValue): string {
-  const ejson = EJSON.stringify(value)
-  return createHash('md5').update(ejson, 'utf8').digest('hex')
+const isPlainObject = (value: unknown): value is BSONDocument =>
+  typeof value === 'object' &&
+  value !== null &&
+  !Array.isArray(value) &&
+  !(value instanceof Date)
+
+/**
+ * Recursively removes `null` values from a BSON value.
+ *
+ * - `null` becomes `undefined` (caller may drop the field).
+ * - Arrays are cleaned element-wise and `undefined` entries are removed.
+ * - Plain objects are cleaned property-wise and `undefined` properties are removed.
+ * - All other values are returned unchanged.
+ *
+ * @param value - The BSON value to clean.
+ * @returns The cleaned BSON value, or `undefined` if the value should be removed.
+ */
+export const cleanBSONValue = (value: BSONValue): BSONValue | undefined => {
+  if (value === null) {
+    return undefined
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .map(cleanBSONValue)
+      .filter((v): v is BSONValue => v !== undefined)
+  }
+
+  if (isPlainObject(value)) {
+    const cleanedObject: BSONDocument = {}
+
+    for (const [key, childValue] of Object.entries(value)) {
+      const cleanedChild = cleanBSONValue(childValue)
+      if (cleanedChild !== undefined) {
+        cleanedObject[key] = cleanedChild
+      }
+    }
+
+    return cleanedObject
+  }
+
+  return value
 }

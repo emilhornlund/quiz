@@ -15,9 +15,13 @@
   "dependencies": {
     "bson": "^7.0.0",
     "commander": "^14.0.2",
+    "json-diff": "^1.0.6",
     "uuid": "^13.0.0"
   },
   "engines": {
     "node": ">=24 <25"
+  },
+  "devDependencies": {
+    "@types/json-diff": "^1.0.3"
   }
 }
