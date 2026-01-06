@@ -1,6 +1,6 @@
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import type { GameResultPlayerEvent } from '@klurigo/common'
+import { GameMode, type GameResultPlayerEvent } from '@klurigo/common'
 import type { FC } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -46,6 +46,7 @@ export interface PlayerResultStateProps {
 
 const PlayerResultState: FC<PlayerResultStateProps> = ({
   event: {
+    game: { mode },
     player: {
       nickname,
       score: { correct, last: lastScore, total: totalScore, position, streak },
@@ -57,11 +58,15 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
   const [showPosition, setShowPosition] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (mode === GameMode.ZeroToOneHundred) {
       setShowPosition(true)
-    }, 8000)
-    return () => clearTimeout(timer)
-  }, [])
+    } else {
+      const timer = setTimeout(() => {
+        setShowPosition(true)
+      }, 8000)
+      return () => clearTimeout(timer)
+    }
+  }, [mode])
 
   const message = useMemo(
     () => getPositionMessage(position, correct),
@@ -88,22 +93,24 @@ const PlayerResultState: FC<PlayerResultStateProps> = ({
           styles.contentContainer,
           showPosition ? styles.shrink : undefined,
         )}>
-        <div
-          className={classNames(
-            styles.correctnessBatch,
-            showPosition ? styles.slideOutLeft : undefined,
-          )}>
-          <Typography variant="title">
-            {correct ? 'Correct' : 'Incorrect'}
-          </Typography>
+        {mode === GameMode.Classic && (
+          <div
+            className={classNames(
+              styles.correctnessBatch,
+              showPosition ? styles.slideOutLeft : undefined,
+            )}>
+            <Typography variant="title">
+              {correct ? 'Correct' : 'Incorrect'}
+            </Typography>
 
-          <Badge
-            size="large"
-            backgroundColor={correct ? 'green' : 'red'}
-            celebration={correct ? celebrationLevel : 'none'}>
-            <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
-          </Badge>
-        </div>
+            <Badge
+              size="large"
+              backgroundColor={correct ? 'green' : 'red'}
+              celebration={correct ? celebrationLevel : 'none'}>
+              <FontAwesomeIcon icon={correct ? faCheck : faXmark} />
+            </Badge>
+          </div>
+        )}
 
         <div
           className={classNames(

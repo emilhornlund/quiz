@@ -1,4 +1,4 @@
-import { GameEventType } from '@klurigo/common'
+import { GameEventType, GameMode } from '@klurigo/common'
 import { render, screen } from '@testing-library/react'
 import { act } from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -33,6 +33,7 @@ describe('PlayerResultState', () => {
         <PlayerResultState
           event={{
             type: GameEventType.GameResultPlayer,
+            game: { mode: GameMode.Classic },
             player: {
               nickname: 'FrostyBear',
               score: {
@@ -64,6 +65,7 @@ describe('PlayerResultState', () => {
         <PlayerResultState
           event={{
             type: GameEventType.GameResultPlayer,
+            game: { mode: GameMode.Classic },
             player: {
               nickname: 'Radar',
               score: {
@@ -94,6 +96,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'Winner',
                 score: {
@@ -126,6 +129,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'StreakMaster',
                 score: {
@@ -158,6 +162,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'ThirdPlace',
                 score: {
@@ -190,6 +195,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'StreakBuilder',
                 score: {
@@ -222,6 +228,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'StreakStarter',
                 score: {
@@ -254,6 +261,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'TopTen',
                 score: {
@@ -286,6 +294,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'SimpleCorrect',
                 score: {
@@ -325,6 +334,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'WrongAnswer',
                 score: {
@@ -364,6 +374,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'SecondPlace',
                 score: {
@@ -396,6 +407,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'HighStreak',
                 score: {
@@ -438,6 +450,7 @@ describe('PlayerResultState', () => {
           <PlayerResultState
             event={{
               type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.Classic },
               player: {
                 nickname: 'TestPlayer',
                 score: {
@@ -480,6 +493,78 @@ describe('PlayerResultState', () => {
       expect(container.querySelector('.correctnessBatch')).toHaveClass(
         'slideOutLeft',
       )
+    })
+
+    it('ZeroToOneHundred shows position immediately and does not render correctness batch', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.ZeroToOneHundred },
+              player: {
+                nickname: 'ZTOHPlayer',
+                score: {
+                  correct: true,
+                  last: -10,
+                  total: 24,
+                  position: 1,
+                  streak: 3,
+                },
+              },
+              pagination: { current: 1, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      expect(container.querySelector('.correctnessBatch')).toBeNull()
+      expect(screen.queryByText('Correct')).toBeNull()
+      expect(screen.queryByText('Incorrect')).toBeNull()
+
+      const positionBatch = container.querySelector('.positionBatch')
+      expect(positionBatch).toBeInTheDocument()
+      expect(positionBatch).toHaveClass('slideInRight')
+      expect(positionBatch).not.toHaveClass('hidden')
+
+      expect(h.getPositionMessage).toHaveBeenCalledWith(1, true)
+    })
+
+    it('ZeroToOneHundred does not rely on the 8s timer to reveal position', () => {
+      const { container } = render(
+        <MemoryRouter>
+          <PlayerResultState
+            event={{
+              type: GameEventType.GameResultPlayer,
+              game: { mode: GameMode.ZeroToOneHundred },
+              player: {
+                nickname: 'ZTOHPlayer',
+                score: {
+                  correct: false,
+                  last: -5,
+                  total: 10,
+                  position: 7,
+                  streak: 0,
+                },
+              },
+              pagination: { current: 1, total: 20 },
+            }}
+          />
+        </MemoryRouter>,
+      )
+
+      const positionBatch = container.querySelector('.positionBatch')
+      expect(positionBatch).toBeInTheDocument()
+      expect(positionBatch).toHaveClass('slideInRight')
+      expect(positionBatch).not.toHaveClass('hidden')
+
+      act(() => {
+        vi.advanceTimersByTime(8000)
+      })
+
+      expect(container.querySelector('.correctnessBatch')).toBeNull()
+      expect(positionBatch).toHaveClass('slideInRight')
+      expect(positionBatch).not.toHaveClass('hidden')
     })
   })
 })

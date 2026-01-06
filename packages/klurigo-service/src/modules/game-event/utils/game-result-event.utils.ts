@@ -1,6 +1,7 @@
 import {
   GameEventQuestionResults,
   GameEventType,
+  GameMode,
   GameResultHostEvent,
   GameResultPlayerEvent,
   GameResultPlayerEventBehind,
@@ -273,7 +274,13 @@ function buildGameResultPlayerEventFromQuestionResultTask(
       }
     : undefined
 
-  return createGameResultPlayerEvent(nickname, score, pagination, behind)
+  return createGameResultPlayerEvent(
+    game.mode,
+    nickname,
+    score,
+    pagination,
+    behind,
+  )
 }
 
 /**
@@ -313,7 +320,7 @@ function buildFallbackGameResultPlayerEventForQuestionResultTask(
     questionResultTask,
   )
 
-  return createGameResultPlayerEvent(nickname, score, pagination)
+  return createGameResultPlayerEvent(game.mode, nickname, score, pagination)
 }
 
 /**
@@ -354,6 +361,7 @@ function buildGameResultPlayerEventFromLeaderboardOrPodiumTask(
  * This is a low-level factory used by higher-level builders to format the
  * final event payload consistently.
  *
+ * @param mode - The mode the game is played in.
  * @param nickname - Player nickname to include in the event.
  * @param score - Player score details for the current question and overall game.
  * @param pagination - Pagination metadata for the current question index.
@@ -361,6 +369,7 @@ function buildGameResultPlayerEventFromLeaderboardOrPodiumTask(
  * @returns A fully constructed player game result event.
  */
 function createGameResultPlayerEvent(
+  mode: GameMode,
   nickname: string,
   score: GameResultPlayerEventScore,
   pagination: PaginationEvent,
@@ -368,6 +377,7 @@ function createGameResultPlayerEvent(
 ): GameResultPlayerEvent {
   return {
     type: GameEventType.GameResultPlayer,
+    game: { mode },
     player: { nickname, score, behind },
     pagination,
   }

@@ -1,4 +1,9 @@
-import { GameEventType, GameParticipantType, GameStatus } from '@klurigo/common'
+import {
+  GameEventType,
+  GameMode,
+  GameParticipantType,
+  GameStatus,
+} from '@klurigo/common'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { Location } from 'react-router'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
@@ -476,6 +481,7 @@ describe('GamePage', () => {
   it('shows loading overlay when GAME_LOADING event arrives and hides when non-loading event arrives', async () => {
     h.control.event = {
       type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.Classic },
       player: {
         nickname: 'TestPlayer',
         score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
@@ -501,6 +507,7 @@ describe('GamePage', () => {
 
     h.control.event = {
       type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.Classic },
       player: {
         nickname: 'TestPlayer',
         score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
@@ -521,6 +528,7 @@ describe('GamePage', () => {
   it('does not re-render when same non-loading event arrives twice', async () => {
     const resultEvent = {
       type: GameEventType.GameResultPlayer,
+      game: { mode: GameMode.Classic },
       player: {
         nickname: 'TestPlayer',
         score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
