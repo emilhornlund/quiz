@@ -78,7 +78,7 @@ const QuestionTextPreview: FC<QuestionTextPreviewProps> = ({ text }) => {
       startDelayMs={1000}
       hAlign="center"
       vAlign="center">
-      <Typography variant="title" size="medium">
+      <Typography variant="hero" size="medium">
         {text}
       </Typography>
     </InfiniteScrollContainer>
