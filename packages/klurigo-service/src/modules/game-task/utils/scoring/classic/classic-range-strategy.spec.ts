@@ -169,7 +169,80 @@ describe('ClassicRangeScoringStrategy', () => {
         meta,
       )
 
-      expect(score).toBe(183)
+      expect(score).toBe(383)
+    })
+
+    describe('precision curve behavior', () => {
+      it('rewards closer answers more than farther answers within the margin (Medium margin)', () => {
+        const presented = new Date()
+        const correctValue = 50
+        const duration = 30
+        const points = 1000
+
+        const correct = buildCorrect(correctValue)
+        const meta = buildMeta(QuestionRangeAnswerMargin.Medium, 0, 100, 2)
+        const answerCreated = new Date(presented.getTime() + 5000) // 5 seconds
+
+        const scoreNear = strategy.calculateScore(
+          presented,
+          answerCreated,
+          duration,
+          points,
+          correct,
+          buildAnswer(52, answerCreated), // difference 2
+          meta,
+        )
+
+        const scoreMid = strategy.calculateScore(
+          presented,
+          answerCreated,
+          duration,
+          points,
+          correct,
+          buildAnswer(55, answerCreated), // difference 5
+          meta,
+        )
+
+        const scoreFar = strategy.calculateScore(
+          presented,
+          answerCreated,
+          duration,
+          points,
+          correct,
+          buildAnswer(59, answerCreated), // difference 9
+          meta,
+        )
+
+        expect(scoreNear).toBe(813)
+        expect(scoreMid).toBe(595)
+        expect(scoreFar).toBe(402)
+
+        expect(scoreNear).toBeGreaterThan(scoreMid)
+        expect(scoreMid).toBeGreaterThan(scoreFar)
+      })
+
+      it('still awards the floor precision at the margin boundary (Medium margin)', () => {
+        const presented = new Date()
+        const correctValue = 50
+        const duration = 30
+        const points = 1000
+
+        const correct = buildCorrect(correctValue)
+        const meta = buildMeta(QuestionRangeAnswerMargin.Medium, 0, 100, 2)
+        const answerCreated = new Date(presented.getTime() + 5000) // 5 seconds
+
+        const score = strategy.calculateScore(
+          presented,
+          answerCreated,
+          duration,
+          points,
+          correct,
+          buildAnswer(60, answerCreated), // boundary => linearPrecision 0
+          meta,
+        )
+
+        expect(score).toBe(383)
+      })
     })
 
     it('returns 0 for answers outside the margin', () => {
@@ -217,7 +290,55 @@ describe('ClassicRangeScoringStrategy', () => {
         meta,
       )
 
-      expect(score).toBe(183)
+      expect(score).toBe(383)
+    })
+
+    it('differentiates precision within Maximum margin (still uses precision curve)', () => {
+      const presented = new Date()
+      const correctValue = 50
+      const duration = 30
+      const points = 1000
+
+      const correct = buildCorrect(correctValue)
+      const meta = buildMeta(QuestionRangeAnswerMargin.Maximum, 0, 100, 2)
+      const answerCreated = new Date(presented.getTime() + 5000) // 5 seconds
+
+      const scorePerfect = strategy.calculateScore(
+        presented,
+        answerCreated,
+        duration,
+        points,
+        correct,
+        buildAnswer(50, answerCreated),
+        meta,
+      )
+
+      const scoreMid = strategy.calculateScore(
+        presented,
+        answerCreated,
+        duration,
+        points,
+        correct,
+        buildAnswer(75, answerCreated), // difference 25
+        meta,
+      )
+
+      const scoreEdge = strategy.calculateScore(
+        presented,
+        answerCreated,
+        duration,
+        points,
+        correct,
+        buildAnswer(100, answerCreated), // difference 50 => boundary for correct=50 when max=100
+        meta,
+      )
+
+      expect(scorePerfect).toBe(983)
+      expect(scoreMid).toBe(595)
+      expect(scoreEdge).toBe(383)
+
+      expect(scorePerfect).toBeGreaterThan(scoreMid)
+      expect(scoreMid).toBeGreaterThan(scoreEdge)
     })
 
     it('handles exact matches for None margin (full precision bonus)', () => {
