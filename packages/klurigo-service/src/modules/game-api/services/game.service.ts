@@ -56,7 +56,12 @@ import {
   PlayerNotUniqueException,
 } from '../exceptions'
 
-import { isGameFull, isNicknameUnique, isPlayerUnique } from './utils'
+import {
+  addPlayerParticipantToGame,
+  isGameFull,
+  isNicknameUnique,
+  isPlayerUnique,
+} from './utils'
 
 /**
  * Service for managing game operations such as creating games, handling tasks, and game lifecycles.
@@ -217,26 +222,10 @@ export class GameService {
       throw new NicknameNotUniqueException(nickname)
     }
 
-    const now = new Date()
-
     const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
       gameId,
-      async (currentDocument) => {
-        currentDocument.participants.push({
-          participantId,
-          type: GameParticipantType.PLAYER,
-          nickname,
-          rank: 0,
-          worstRank: 0,
-          totalScore: 0,
-          currentStreak: 0,
-          totalResponseTime: 0,
-          responseCount: 0,
-          created: now,
-          updated: now,
-        })
-        return currentDocument
-      },
+      async (currentDocument) =>
+        addPlayerParticipantToGame(currentDocument, participantId, nickname),
     )
 
     await this.gameEventPublisher.publish(savedGameDocument)
