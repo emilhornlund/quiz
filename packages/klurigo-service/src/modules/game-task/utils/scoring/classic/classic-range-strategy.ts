@@ -17,9 +17,33 @@ import {
  * This strategy:
  * - checks whether the submitted numeric value is within an allowed margin
  *   around the correct value
- * - combines a precision score with a time-based score from the Classic model
+ * - awards points using a combination of:
+ *   - a time-based score from the Classic model (20%)
+ *   - a precision-based score (80%) derived from distance to the correct value,
+ *     with a minimum precision floor and an exponent curve to emphasize closeness
  */
 export class ClassicRangeScoringStrategy extends BaseClassicScoringStrategy<QuestionType.Range> {
+  /**
+   * Minimum precision multiplier applied to correct Range answers.
+   *
+   * This prevents answers at the edge of the allowed margin from receiving ~0 precision points,
+   * while still rewarding closer answers more than farther answers.
+   */
+  protected readonly MIN_PRECISION_MULTIPLIER = 0.25
+
+  /**
+   * Exponent applied to the linear precision value to emphasize closeness.
+   *
+   * Values > 1 make near-perfect answers significantly more valuable than
+   * moderately close answers, while still preserving a minimum precision floor.
+   *
+   * Examples:
+   * - 1.0 → linear precision
+   * - 1.25 → subtle emphasis on closeness
+   * - 1.5 → clear emphasis on closeness (recommended)
+   */
+  protected readonly PRECISION_CURVE_EXPONENT = 1.5
+
   /**
    * Determines whether a Range answer is correct based on the configured margin.
    *
@@ -59,11 +83,16 @@ export class ClassicRangeScoringStrategy extends BaseClassicScoringStrategy<Ques
    * Calculates the score for a Classic Range answer.
    *
    * Scoring model:
-   * - 0 points if the answer is outside the allowed margin.
+   * - 0 points if the answer is outside the allowed margin or submitted after the time limit.
    * - 20% of the score comes from answering quickly (Classic time-based model).
-   * - 80% of the score comes from how close the answer is to the correct value:
-   *   - full 80% for an answer at the center
-   *   - linearly decreasing to 0 at the edge of the allowed radius
+   * - 80% of the score comes from precision:
+   *   - compute a linear precision value (1 at the correct value, 0 at the margin boundary)
+   *   - apply an exponent curve to emphasize closeness
+   *   - lift the result with a minimum precision floor so correct boundary answers still
+   *     receive a meaningful portion of the precision score
+   *
+   * Notes:
+   * - For `QuestionRangeAnswerMargin.None`, an exact match is required and awards full precision.
    *
    * @param presented When the question was shown to the player.
    * @param answered  When the player submitted the answer.
@@ -114,18 +143,23 @@ export class ClassicRangeScoringStrategy extends BaseClassicScoringStrategy<Ques
     )
 
     // distance from the correct value
-    const difference = Math.abs(correct.value - answer!.answer)
+    const difference = Math.abs(correct.value - answer.answer)
 
     // use the larger side in case bounds are asymmetric near edges
     const radius = Math.max(correct.value - lower, upper - correct.value)
 
-    // precision: 1 at the center, 0 at/ beyond the edge
-    const precisionMultiplier =
+    // linear precision: 1 at the correct value, 0 at the margin boundary
+    const linearPrecision =
       radius > 0
         ? Math.max(0, 1 - difference / radius)
-        : correct.value === answer!.answer
+        : correct.value === answer.answer
           ? 1
           : 0
+
+    const floor = this.MIN_PRECISION_MULTIPLIER
+    // apply curve + floor so closer answers score more while boundary-correct answers are not punished to ~0
+    const curved = Math.pow(linearPrecision, this.PRECISION_CURVE_EXPONENT)
+    const precisionMultiplier = floor + (1 - floor) * curved
 
     const precisionScore =
       points * precisionMultiplier * this.PRECISION_BASED_MULTIPLIER
