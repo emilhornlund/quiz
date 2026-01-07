@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { type CSSProperties, type FC } from 'react'
 import { useEffect, useState } from 'react'
 
 import styles from './Confetti.module.scss'
@@ -75,7 +75,11 @@ const Confetti: FC<ConfettiProps> = ({
   }
 
   return (
-    <div className={styles.confettiContainer}>
+    <div
+      className={styles.confettiContainer}
+      data-testid="confetti"
+      data-trigger={trigger}
+      data-intensity={intensity}>
       {particles.map((particle) => (
         <div
           key={particle.id}
@@ -87,7 +91,7 @@ const Confetti: FC<ConfettiProps> = ({
               '--random-duration': particle.duration,
               '--particle-color': particle.color,
               '--particle-size': `${particle.size}px`,
-            } as React.CSSProperties
+            } as CSSProperties
           }
         />
       ))}

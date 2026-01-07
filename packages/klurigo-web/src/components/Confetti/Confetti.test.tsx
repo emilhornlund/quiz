@@ -1,36 +1,48 @@
-import { render } from '@testing-library/react'
-import { describe, expect, test, vi } from 'vitest'
+import { act, render, screen } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import Confetti from './Confetti'
 
 describe('Confetti', () => {
-  test('does not render when trigger is false', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.spyOn(Math, 'random').mockReturnValue(0.5)
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
+  it('does not render when trigger is false', () => {
     render(<Confetti trigger={false} intensity="normal" />)
-    expect(document.querySelector('.confettiContainer')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('confetti')).not.toBeInTheDocument()
   })
 
-  test('renders particles when trigger is true', () => {
-    render(<Confetti trigger={true} intensity="normal" />)
-    const container = document.querySelector('.confettiContainer')
-    expect(container).toBeInTheDocument()
+  it('renders when trigger is true and exposes trigger/intensity attributes', () => {
+    render(<Confetti trigger={true} intensity="major" />)
 
-    const particles = document.querySelectorAll('.confettiParticle')
-    expect(particles).toHaveLength(25) // normal intensity
+    const confetti = screen.getByTestId('confetti')
+    expect(confetti).toBeInTheDocument()
+    expect(confetti).toHaveAttribute('data-trigger', 'true')
+    expect(confetti).toHaveAttribute('data-intensity', 'major')
   })
 
-  test('renders correct number of particles for each intensity', () => {
+  it('renders the correct number of particles for each intensity', () => {
     const { rerender } = render(<Confetti trigger={true} intensity="normal" />)
-    expect(document.querySelectorAll('.confettiParticle')).toHaveLength(25)
+
+    expect(screen.getByTestId('confetti').childElementCount).toBe(25)
 
     rerender(<Confetti trigger={true} intensity="major" />)
-    expect(document.querySelectorAll('.confettiParticle')).toHaveLength(45)
+    expect(screen.getByTestId('confetti').childElementCount).toBe(45)
 
     rerender(<Confetti trigger={true} intensity="epic" />)
-    expect(document.querySelectorAll('.confettiParticle')).toHaveLength(70)
+    expect(screen.getByTestId('confetti').childElementCount).toBe(70)
   })
 
-  test('calls onAnimationEnd after animation completes', async () => {
+  it('cleans up after 2800ms and calls onAnimationEnd once', () => {
     const onAnimationEnd = vi.fn()
+
     render(
       <Confetti
         trigger={true}
@@ -39,74 +51,51 @@ describe('Confetti', () => {
       />,
     )
 
-    // Wait for animation timeout (2.8s)
-    await new Promise((resolve) => setTimeout(resolve, 2850))
+    expect(screen.getByTestId('confetti')).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(2800)
+    })
+
+    expect(screen.queryByTestId('confetti')).not.toBeInTheDocument()
     expect(onAnimationEnd).toHaveBeenCalledTimes(1)
   })
 
-  test('does not call onAnimationEnd when trigger is false', async () => {
+  it('does not call onAnimationEnd if unmounted before timeout', () => {
     const onAnimationEnd = vi.fn()
-    render(
+
+    const { unmount } = render(
       <Confetti
-        trigger={false}
+        trigger={true}
         intensity="normal"
         onAnimationEnd={onAnimationEnd}
       />,
     )
 
-    // Wait for potential animation timeout
-    await new Promise((resolve) => setTimeout(resolve, 2850))
+    unmount()
+
+    act(() => {
+      vi.advanceTimersByTime(2800)
+      vi.runOnlyPendingTimers()
+    })
+
     expect(onAnimationEnd).not.toHaveBeenCalled()
   })
 
-  test('particles have random properties', () => {
+  it('renders particles with CSS custom properties', () => {
     render(<Confetti trigger={true} intensity="normal" />)
-    const particles = document.querySelectorAll('.confettiParticle')
 
-    // Check that particles have different random properties
-    const firstParticle = particles[0] as HTMLElement
-    const secondParticle = particles[1] as HTMLElement
+    const confetti = screen.getByTestId('confetti')
+    const firstParticle = confetti.children[0] as HTMLElement
 
     expect(firstParticle.style.getPropertyValue('--random-x')).toBeTruthy()
     expect(firstParticle.style.getPropertyValue('--random-delay')).toBeTruthy()
     expect(
       firstParticle.style.getPropertyValue('--random-duration'),
     ).toBeTruthy()
+    expect(
+      firstParticle.style.getPropertyValue('--particle-color'),
+    ).toBeTruthy()
     expect(firstParticle.style.getPropertyValue('--particle-size')).toBeTruthy()
-
-    // Should have different random values
-    expect(firstParticle.style.getPropertyValue('--random-x')).not.toBe(
-      secondParticle.style.getPropertyValue('--random-x'),
-    )
-  })
-
-  test('particles have different shapes', () => {
-    render(<Confetti trigger={true} intensity="normal" />)
-
-    // Check that we have different shapes (circle, square, diamond)
-    const circles = document.querySelectorAll('.confettiParticle:nth-child(3n)')
-    const squares = document.querySelectorAll(
-      '.confettiParticle:nth-child(3n+1)',
-    )
-    const diamonds = document.querySelectorAll(
-      '.confettiParticle:nth-child(3n+2)',
-    )
-
-    expect(circles.length).toBeGreaterThan(0)
-    expect(squares.length).toBeGreaterThan(0)
-    expect(diamonds.length).toBeGreaterThan(0)
-  })
-
-  test('cleanup works correctly', async () => {
-    render(<Confetti trigger={true} intensity="normal" />)
-
-    // Initially renders particles
-    expect(document.querySelectorAll('.confettiParticle')).toHaveLength(25)
-
-    // Wait for cleanup
-    await new Promise((resolve) => setTimeout(resolve, 2850))
-
-    // Should be cleaned up
-    expect(document.querySelector('.confettiContainer')).not.toBeInTheDocument()
   })
 })

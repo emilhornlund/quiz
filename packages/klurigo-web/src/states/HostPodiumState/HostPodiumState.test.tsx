@@ -21,8 +21,10 @@ let mathRandomSpy: ReturnType<typeof vi.spyOn>
 
 describe('HostPodiumState', () => {
   beforeEach(() => {
-    h.completeTask.mockClear()
-    h.completeTask.mockResolvedValue({} as never)
+    if (h.completeTask) {
+      h.completeTask.mockClear()
+      h.completeTask.mockResolvedValue({} as never)
+    }
 
     mathRandomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
   })
@@ -146,6 +148,23 @@ describe('HostPodiumState', () => {
       '#game-results-button',
     ) as HTMLButtonElement
     fireEvent.click(gameResultsBtn)
+    expect(container).toMatchSnapshot()
+  })
+
+  it('should render HostPodiumState with only one player', async () => {
+    const { container } = render(
+      <MemoryRouter>
+        <HostPodiumState
+          event={{
+            type: GameEventType.GamePodiumHost,
+            leaderboard: [
+              { position: 1, nickname: 'ShadowCyborg', score: 18456 },
+            ],
+          }}
+        />
+      </MemoryRouter>,
+    )
+
     expect(container).toMatchSnapshot()
   })
 })

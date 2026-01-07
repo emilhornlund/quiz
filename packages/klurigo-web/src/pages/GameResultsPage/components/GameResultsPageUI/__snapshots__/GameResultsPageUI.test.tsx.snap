@@ -249,6 +249,9 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for classic game mo
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
@@ -1165,6 +1168,9 @@ exports[`GameResultsPageUI > should render GameResultsPageUI for zero to one hun
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
@@ -2050,6 +2056,10 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             3
                           </div>
                           <div
+                            class="disabledOverlay"
+                            data-testid="podium-disabled-overlay-3"
+                          />
+                          <div
                             class="score"
                           />
                         </div>
@@ -2057,6 +2067,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
@@ -4076,6 +4089,10 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                             3
                           </div>
                           <div
+                            class="disabledOverlay"
+                            data-testid="podium-disabled-overlay-3"
+                          />
+                          <div
                             class="score"
                           />
                         </div>
@@ -4083,6 +4100,9 @@ exports[`GameResultsPageUI > shows Summary by default and switches to Players an
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
@@ -4984,6 +5004,10 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             3
                           </div>
                           <div
+                            class="disabledOverlay"
+                            data-testid="podium-disabled-overlay-3"
+                          />
+                          <div
                             class="score"
                           />
                         </div>
@@ -4991,6 +5015,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
@@ -6754,6 +6781,10 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                             3
                           </div>
                           <div
+                            class="disabledOverlay"
+                            data-testid="podium-disabled-overlay-3"
+                          />
+                          <div
                             class="score"
                           />
                         </div>
@@ -6761,6 +6792,9 @@ exports[`GameResultsPageUI > switches sections and shows 0 to 100 label in Summa
                     </div>
                     <div
                       class="confettiContainer"
+                      data-intensity="epic"
+                      data-testid="confetti"
+                      data-trigger="true"
                     >
                       <div
                         class="confettiParticle"
