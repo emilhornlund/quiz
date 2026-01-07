@@ -87,7 +87,7 @@ exports[`HostQuestionPreviewState > should render HostQuestionPreviewState 1`] =
                 class="block"
               >
                 <h1
-                  class="typography title medium"
+                  class="typography hero medium"
                 >
                   Who painted The Starry Night?
                 </h1>
