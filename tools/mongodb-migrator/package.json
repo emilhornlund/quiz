@@ -10,7 +10,8 @@
     "build": "tsc",
     "start": "ts-node src/index.ts",
     "lint": "eslint .",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "check-types": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "bson": "^7.0.0",

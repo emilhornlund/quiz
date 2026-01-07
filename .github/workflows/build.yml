@@ -45,6 +45,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Check types
+        run: yarn check-types
+
       - name: Lint
         run: yarn lint
 

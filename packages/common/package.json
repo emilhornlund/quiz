@@ -22,7 +22,8 @@
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "vitest --run",
-    "test:coverage": "vitest --run --coverage"
+    "test:coverage": "vitest --run --coverage",
+    "check-types": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.16",

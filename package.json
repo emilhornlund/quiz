@@ -18,7 +18,8 @@
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
     "test": "concurrently --kill-others-on-fail \"yarn workspace @klurigo/common test\" \"yarn workspace @klurigo/klurigo-service test\" \"yarn workspace @klurigo/klurigo-web test\"",
-    "test:coverage": "concurrently --kill-others-on-fail \"yarn workspace @klurigo/common test:coverage\" \"yarn workspace @klurigo/klurigo-service test:coverage\" \"yarn workspace @klurigo/klurigo-web test:coverage\""
+    "test:coverage": "concurrently --kill-others-on-fail \"yarn workspace @klurigo/common test:coverage\" \"yarn workspace @klurigo/klurigo-service test:coverage\" \"yarn workspace @klurigo/klurigo-web test:coverage\"",
+    "check-types": "yarn workspaces run check-types"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
