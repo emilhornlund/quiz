@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useKlurigoServiceClient } from '../../api'
 import UsersIcon from '../../assets/images/users-icon.svg'
 import {
+  CallToActionCard,
   IconButtonArrowLeft,
   IconButtonArrowRight,
   NicknameTextField,
@@ -13,6 +14,7 @@ import {
   RotatingMessage,
   Typography,
 } from '../../components'
+import { useAuthContext } from '../../context/auth'
 import { useGameContext } from '../../context/game'
 import { useUserContext } from '../../context/user'
 
@@ -21,6 +23,8 @@ import { MESSAGES, TITLES } from './text.utils'
 
 const GameJoinPage: FC = () => {
   const navigate = useNavigate()
+
+  const { isUserAuthenticated } = useAuthContext()
 
   const { currentUser } = useUserContext()
 
@@ -79,6 +83,14 @@ const GameJoinPage: FC = () => {
           </Typography>
         )}
       />
+
+      {!isUserAuthenticated && (
+        <CallToActionCard
+          title="Make every game count"
+          text="Anonymous play doesn’t keep history. Login to track stats, build quizzes, and host your own live games."
+          onClick={() => navigate('/auth/login')}
+        />
+      )}
 
       <form
         data-testid="join-form"

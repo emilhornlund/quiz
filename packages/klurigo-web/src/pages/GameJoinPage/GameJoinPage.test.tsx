@@ -15,6 +15,14 @@ vi.mock('../../api', () => ({
   useKlurigoServiceClient: () => ({ joinGame: mockJoinGame }),
 }))
 
+let providedIsUserAuthenticated = true
+
+vi.mock('../../context/auth', () => ({
+  useAuthContext: () => ({
+    isUserAuthenticated: providedIsUserAuthenticated,
+  }),
+}))
+
 let providedGameID: string | undefined = 'GAME123'
 let providedDefaultNickname: string | undefined = undefined
 
@@ -99,6 +107,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   providedGameID = 'GAME123'
   providedDefaultNickname = undefined
+  providedIsUserAuthenticated = true
   mockJoinGame.mockResolvedValue(undefined)
 })
 
@@ -293,5 +302,79 @@ describe('GameJoinPage', () => {
 
     resolveJoin()
     await waitFor(() => expect(input.disabled).toBe(false))
+  })
+
+  it('does not render the create-account call-to-action when the user is authenticated', () => {
+    providedIsUserAuthenticated = true
+    renderWithRouter(<GameJoinPage />)
+
+    expect(
+      screen.queryByRole('button', { name: /make every game count/i }),
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.queryByText(/create an account to save your results/i),
+    ).not.toBeInTheDocument()
+  })
+
+  it('renders the create-account call-to-action when the user is not authenticated', () => {
+    providedIsUserAuthenticated = false
+    renderWithRouter(<GameJoinPage />)
+
+    expect(
+      screen.getByText(/anonymous play doesn’t keep history/i),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(
+        /login to track stats, build quizzes, and host your own live games/i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('navigates to /auth/login when clicking the create-account call-to-action', () => {
+    providedIsUserAuthenticated = false
+    renderWithRouter(<GameJoinPage />)
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /make every game count/i }),
+    )
+
+    expect(mockNavigate).toHaveBeenCalledWith('/auth/login')
+  })
+
+  it('does not attempt to join the game when clicking the create-account call-to-action', () => {
+    providedIsUserAuthenticated = false
+    renderWithRouter(<GameJoinPage />)
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /make every game count/i }),
+    )
+
+    expect(mockJoinGame).not.toHaveBeenCalled()
+  })
+
+  it('still joins successfully when not authenticated (CTA present)', async () => {
+    providedIsUserAuthenticated = false
+
+    let resolveJoin!: () => void
+    mockJoinGame.mockReturnValueOnce(
+      new Promise<void>((r) => {
+        resolveJoin = r
+      }),
+    )
+
+    renderWithRouter(<GameJoinPage />)
+
+    fireEvent.change(screen.getByTestId('nickname-input'), {
+      target: { value: 'GuestUser' },
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /ok, go!/i }))
+
+    expect(mockJoinGame).toHaveBeenCalledWith('GAME123', 'GuestUser')
+
+    resolveJoin()
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/game'))
   })
 })

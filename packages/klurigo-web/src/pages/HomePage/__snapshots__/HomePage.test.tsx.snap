@@ -82,31 +82,31 @@ exports[`HomePage > renders the "Resume game" button if an active game exists 1`
             </div>
           </div>
           <div
-            class="resumeGameWrapper"
+            class="callToActionCard"
           >
             <button
-              class="resumeGameButton"
+              class="button"
               type="button"
             >
               <div
-                class="resumeGameSpacing"
-              />
-              <div
-                class="resumeGameContent"
+                class="content"
               >
                 <div
-                  class="resumeGameContentTitle"
+                  class="title"
                 >
+                  <div
+                    class="spacing"
+                  />
                   Resume game
                 </div>
                 <div
-                  class="resumeGameContentSubtitle"
+                  class="text"
                 >
                   Jump back in where you left off
                 </div>
               </div>
               <div
-                class="resumeGameIcon"
+                class="icon"
               >
                 <svg
                   aria-hidden="true"
