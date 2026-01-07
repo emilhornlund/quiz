@@ -18,8 +18,7 @@
     "check-circular-deps": "yarn madge --circular src/main.ts",
     "e2e:setup": "tsx scripts/e2e/setup.ts",
     "e2e:teardown": "tsx scripts/e2e/teardown.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "typecheck:tests": "tsc -p tsconfig.spec.json --noEmit"
+    "check-types": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.spec.json --noEmit"
   },
   "dependencies": {
     "@keyv/redis": "^5.1.5",
