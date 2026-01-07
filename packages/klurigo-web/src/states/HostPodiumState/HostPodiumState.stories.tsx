@@ -49,3 +49,24 @@ export const ThreePlayers = {
     },
   },
 } satisfies Story
+
+export const TwoPlayers = {
+  args: {
+    event: {
+      type: GameEventType.GamePodiumHost,
+      leaderboard: [
+        { position: 1, nickname: 'ShadowCyborg', score: 18456 },
+        { position: 2, nickname: 'Radar', score: 18398 },
+      ],
+    },
+  },
+} satisfies Story
+
+export const OnePlayer = {
+  args: {
+    event: {
+      type: GameEventType.GamePodiumHost,
+      leaderboard: [{ position: 1, nickname: 'ShadowCyborg', score: 18456 }],
+    },
+  },
+} satisfies Story

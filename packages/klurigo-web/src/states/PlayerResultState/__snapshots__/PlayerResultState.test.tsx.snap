@@ -99,6 +99,9 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           </p>
           <div
             class="confettiContainer"
+            data-intensity="epic"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -520,6 +523,9 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for po
           </p>
           <div
             class="confettiContainer"
+            data-intensity="epic"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -952,6 +958,9 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           </p>
           <div
             class="confettiContainer"
+            data-intensity="epic"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -1384,6 +1393,9 @@ exports[`PlayerResultState > Celebration Logic > renders epic celebration for st
           </p>
           <div
             class="confettiContainer"
+            data-intensity="epic"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -1805,6 +1817,9 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for p
           </p>
           <div
             class="confettiContainer"
+            data-intensity="major"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -2137,6 +2152,9 @@ exports[`PlayerResultState > Celebration Logic > renders major celebration for s
           </p>
           <div
             class="confettiContainer"
+            data-intensity="major"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -2732,6 +2750,9 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           </p>
           <div
             class="confettiContainer"
+            data-intensity="normal"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -2984,6 +3005,9 @@ exports[`PlayerResultState > Celebration Logic > renders normal celebration for 
           </p>
           <div
             class="confettiContainer"
+            data-intensity="normal"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"
@@ -3247,6 +3271,9 @@ exports[`PlayerResultState > renders correct result with behind indicator 1`] = 
           </div>
           <div
             class="confettiContainer"
+            data-intensity="epic"
+            data-testid="confetti"
+            data-trigger="true"
           >
             <div
               class="confettiParticle"

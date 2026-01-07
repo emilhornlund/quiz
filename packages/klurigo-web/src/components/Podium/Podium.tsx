@@ -1,6 +1,7 @@
 import type { CSSProperties, FC } from 'react'
 import { useMemo } from 'react'
 
+import { classNames } from '../../utils/helpers'
 import Confetti, { type ConfettiIntensity } from '../Confetti'
 import NicknameChip from '../NicknameChip'
 
@@ -18,6 +19,14 @@ export interface PodiumProps {
 
 interface StackProps extends PodiumValue {
   animationIndex: number
+}
+
+const getPositionClassNames = (position: number): string | undefined => {
+  let additional: string | undefined = undefined
+  if (position > 0 && position < 4) {
+    additional = styles[`position-${position}`]
+  }
+  return classNames(styles.position, additional)
 }
 
 type CelebrationLevel = 'none' | ConfettiIntensity
@@ -49,14 +58,18 @@ const Stack: FC<StackProps> = ({
     ))}
     <div className={styles.nickname}>
       {nickname && <NicknameChip value={nickname} />}
-      {position === 1 && <div className={styles.crown}>👑</div>}
+      {position === 1 && nickname && <div className={styles.crown}>👑</div>}
     </div>
     <div className={styles.stackContainer}>
-      <div className={styles.stack}>
-        <div
-          className={`${styles.position} ${styles[`position-${position}`] || ''}`}>
-          {position}
-        </div>
+      <div className={classNames(styles.stack)}>
+        <div className={getPositionClassNames(position)}>{position}</div>
+        {!nickname && (
+          <div
+            className={styles.disabledOverlay}
+            data-testid={`podium-disabled-overlay-${position}`}
+          />
+        )}
+
         <div className={styles.score}>{score}</div>
         {position === 1 && (
           <div className={styles.sparkleContainer}>

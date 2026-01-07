@@ -79,4 +79,68 @@ describe('Podium', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  it('should render disabled stacks when values are empty', () => {
+    const { container } = render(<Podium values={[]} />)
+
+    // All stacks should be disabled (no nicknames)
+    expect(screen.getByTestId('podium-disabled-overlay-1')).toBeInTheDocument()
+    expect(screen.getByTestId('podium-disabled-overlay-2')).toBeInTheDocument()
+    expect(screen.getByTestId('podium-disabled-overlay-3')).toBeInTheDocument()
+
+    // Should still show the three position labels
+    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText('3')).toBeInTheDocument()
+
+    // No winner crown without a nickname
+    expect(screen.queryByText('👑')).not.toBeInTheDocument()
+
+    expect(container).toMatchSnapshot()
+  })
+
+  it('should render confetti as epic celebration', () => {
+    render(<Podium values={[{ position: 1, nickname: 'A', score: 1 }]} />)
+
+    const confetti = screen.getByTestId('confetti')
+    expect(confetti).toHaveAttribute('data-trigger', 'true')
+    expect(confetti).toHaveAttribute('data-intensity', 'epic')
+  })
+
+  it('should show crown only for first place', () => {
+    render(
+      <Podium
+        values={[
+          { position: 1, nickname: 'First', score: 100 },
+          { position: 2, nickname: 'Second', score: 90 },
+          { position: 3, nickname: 'Third', score: 80 },
+        ]}
+      />,
+    )
+
+    // Crown is literal emoji in markup
+    expect(screen.getByText('👑')).toBeInTheDocument()
+    // Ensure only one crown exists
+    expect(screen.getAllByText('👑')).toHaveLength(1)
+  })
+
+  it('should render a disabled overlay for positions without a nickname', () => {
+    const { container } = render(
+      <Podium
+        values={[
+          { position: 1, nickname: 'First', score: 100 },
+          // position 2 is missing entirely
+          // position 3 is missing entirely
+        ]}
+      />,
+    )
+
+    expect(
+      screen.queryByTestId('podium-disabled-overlay-1'),
+    ).not.toBeInTheDocument()
+    expect(screen.getByTestId('podium-disabled-overlay-2')).toBeInTheDocument()
+    expect(screen.getByTestId('podium-disabled-overlay-3')).toBeInTheDocument()
+
+    expect(container).toMatchSnapshot()
+  })
 })
