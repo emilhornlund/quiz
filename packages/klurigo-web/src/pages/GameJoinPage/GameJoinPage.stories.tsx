@@ -7,7 +7,7 @@ import GameJoinPage from './GameJoinPage'
 
 const meta = {
   component: GameJoinPage,
-  decorators: [withRouter, withMockAuth],
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
   },
@@ -17,5 +17,11 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default = {
+  decorators: [withMockAuth],
+  args: {},
+} satisfies Story
+
+export const NotAuthenticated = {
+  decorators: [],
   args: {},
 } satisfies Story

@@ -1,7 +1,5 @@
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GAME_PIN_LENGTH, GAME_PIN_REGEX } from '@klurigo/common'
-import type { FC, FormEvent, MouseEvent } from 'react'
+import { type FC, type FormEvent } from 'react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -9,6 +7,7 @@ import { useKlurigoServiceClient } from '../../api'
 import { ApiError } from '../../api/api.utils'
 import KlurigoIcon from '../../assets/images/klurigo-icon.svg'
 import {
+  CallToActionCard,
   IconButtonArrowRight,
   Page,
   PageProminentIcon,
@@ -92,18 +91,14 @@ const HomePage: FC = () => {
    * Resumes an already active game session.
    *
    * Flow:
-   * - Prevents default button behavior.
    * - Requires an `activeGameId` to exist (should always be true if the resume CTA is visible).
    * - Calls `authenticateGame` to refresh/confirm the game session.
    * - Navigates to `/game` on success.
    * - If authentication fails with 401, revokes the current game token(s) to force a clean state.
    *
-   * @param event - The click event triggered by the "Resume game" button.
    * @throws Error if the handler runs without an active game id.
    */
-  const handleRejoinGame = (event: MouseEvent) => {
-    event.preventDefault()
-
+  const handleRejoinGame = () => {
     if (!activeGameId) {
       throw new Error('No active game was found')
     }
@@ -157,23 +152,11 @@ const HomePage: FC = () => {
       </div>
 
       {activeGameId && (
-        <div className={styles.resumeGameWrapper}>
-          <button
-            type="button"
-            className={styles.resumeGameButton}
-            onClick={handleRejoinGame}>
-            <div className={styles.resumeGameSpacing} />
-            <div className={styles.resumeGameContent}>
-              <div className={styles.resumeGameContentTitle}>Resume game</div>
-              <div className={styles.resumeGameContentSubtitle}>
-                Jump back in where you left off
-              </div>
-            </div>
-            <div className={styles.resumeGameIcon}>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </div>
-          </button>
-        </div>
+        <CallToActionCard
+          title="Resume game"
+          text="Jump back in where you left off"
+          onClick={handleRejoinGame}
+        />
       )}
 
       <form

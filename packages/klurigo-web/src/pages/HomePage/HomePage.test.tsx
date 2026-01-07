@@ -247,4 +247,152 @@ describe('HomePage', () => {
 
     expect(navigateMock).not.toHaveBeenCalled()
   })
+
+  it('keeps "Join the game" disabled until the Game PIN is valid', async () => {
+    renderHome()
+
+    const joinButton = screen.getByRole('button', { name: /join the game/i })
+    expect(joinButton).toBeDisabled()
+
+    await userEvent.type(screen.getByTestId('test-game-pin-textfield'), '123')
+    expect(joinButton).toBeDisabled()
+
+    await userEvent.clear(screen.getByTestId('test-game-pin-textfield'))
+    await userEvent.type(
+      screen.getByTestId('test-game-pin-textfield'),
+      '123456',
+    )
+    expect(joinButton).not.toBeDisabled()
+  })
+
+  it('does not navigate when clicking "Join the game" while disabled', async () => {
+    renderHome()
+
+    const joinButton = screen.getByRole('button', { name: /join the game/i })
+    expect(joinButton).toBeDisabled()
+
+    await userEvent.click(joinButton)
+
+    expect(navigateMock).not.toHaveBeenCalled()
+  })
+
+  it('navigates to /auth/game?pin=... when clicking "Join the game" with a valid pin', async () => {
+    renderHome()
+
+    await userEvent.type(
+      screen.getByTestId('test-game-pin-textfield'),
+      '123456',
+    )
+
+    const joinButton = screen.getByRole('button', { name: /join the game/i })
+    expect(joinButton).not.toBeDisabled()
+
+    await userEvent.click(joinButton)
+
+    expect(navigateMock).toHaveBeenCalledWith('/auth/game?pin=123456')
+  })
+
+  it('does not revoke the game token when "Resume game" fails with a non-401 ApiError', async () => {
+    const revokeGame = vi.fn()
+    const authenticateGame = vi
+      .fn()
+      .mockRejectedValue(new ApiError('Forbidden', 403))
+
+    authContextMock.mockReturnValue({
+      isUserAuthenticated: false,
+      game: {
+        ACCESS: {
+          gameId: 'game-123',
+        },
+      },
+      revokeGame,
+    })
+
+    quizServiceClientMock.mockReturnValue({ authenticateGame })
+
+    const preventUnhandled = (event: PromiseRejectionEvent) =>
+      event.preventDefault()
+    window.addEventListener('unhandledrejection', preventUnhandled)
+
+    renderHome()
+
+    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+
+    await waitFor(() => {
+      expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })
+    })
+
+    expect(revokeGame).not.toHaveBeenCalled()
+    expect(navigateMock).not.toHaveBeenCalledWith('/game')
+
+    window.removeEventListener('unhandledrejection', preventUnhandled)
+  })
+
+  it('does not revoke the game token when "Resume game" fails with a non-ApiError', async () => {
+    const revokeGame = vi.fn()
+    const authenticateGame = vi
+      .fn()
+      .mockRejectedValue(new Error('Network down'))
+
+    authContextMock.mockReturnValue({
+      isUserAuthenticated: false,
+      game: {
+        ACCESS: {
+          gameId: 'game-123',
+        },
+      },
+      revokeGame,
+    })
+
+    quizServiceClientMock.mockReturnValue({ authenticateGame })
+
+    const preventUnhandled = (event: PromiseRejectionEvent) =>
+      event.preventDefault()
+    window.addEventListener('unhandledrejection', preventUnhandled)
+
+    renderHome()
+
+    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+
+    await waitFor(() => {
+      expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })
+    })
+
+    expect(revokeGame).not.toHaveBeenCalled()
+    expect(navigateMock).not.toHaveBeenCalledWith('/game')
+
+    window.removeEventListener('unhandledrejection', preventUnhandled)
+  })
+
+  it('renders the unauthenticated link pointing to /auth/login', () => {
+    authContextMock.mockReturnValue({
+      isUserAuthenticated: false,
+      game: undefined,
+      revokeGame: vi.fn(),
+    })
+
+    renderHome()
+
+    const link = screen.getByRole('link', {
+      name: /want to create your own quiz\? log in to get started!/i,
+    })
+
+    expect(link).toHaveAttribute('href', '/auth/login')
+  })
+
+  it('renders the authenticated link pointing to /quiz/create', () => {
+    authContextMock.mockReturnValue({
+      isUserAuthenticated: true,
+      game: undefined,
+      revokeGame: vi.fn(),
+    })
+
+    renderHome()
+
+    const link = screen.getByRole('link', {
+      name: /create your own quiz and challenge others!/i,
+    })
+
+    expect(link).toHaveAttribute('href', '/quiz/create')
+  })
 })

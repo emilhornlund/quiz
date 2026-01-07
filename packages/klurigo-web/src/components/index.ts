@@ -1,5 +1,9 @@
 export type { BadgeProps, BadgeSize, BadgeColor } from './Badge'
 export type { ButtonProps } from './Button'
+export {
+  type CallToActionCardProps,
+  default as CallToActionCard,
+} from './CallToActionCard'
 export type { CardProps } from './Card'
 export type { CircularProgressBarProps } from './CircularProgressBar'
 export type { ConfettiProps, ConfettiIntensity } from './Confetti'
