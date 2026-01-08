@@ -1,8 +1,14 @@
 import { type GameEvent, GameParticipantType } from '@klurigo/common'
 import { deepEqual, GameEventType, GameStatus } from '@klurigo/common'
 import { setContext } from '@sentry/react'
-import type { FC } from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import type { BlockerFunction } from 'react-router-dom'
 import { useBlocker } from 'react-router-dom'
 
@@ -167,9 +173,9 @@ const GamePage: FC = () => {
         isUserAuthenticated &&
         gameID
       ) {
-        revokeGame({ redirectTo: `/game/results/${gameID}` })
+        void revokeGame({ redirectTo: `/game/results/${gameID}` })
       } else {
-        revokeGame({ redirectTo: '/' })
+        void revokeGame({ redirectTo: '/' })
       }
     }
   }, [event, gameID, isUserAuthenticated, revokeGame])

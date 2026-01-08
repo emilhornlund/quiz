@@ -105,9 +105,9 @@ const HomePage: FC = () => {
 
     authenticateGame({ gameId: activeGameId })
       .then(() => navigate('/game'))
-      .catch((error) => {
+      .catch(async (error) => {
         if (error instanceof ApiError && error.status === 401) {
-          revokeGame()
+          await revokeGame()
         }
       })
   }

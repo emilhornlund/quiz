@@ -5,7 +5,14 @@ import {
   faRightFromBracket,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import { useMemo, useRef, useState } from 'react'
+import {
+  type FC,
+  type ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '../../assets/images/avatar.svg'
@@ -28,12 +35,12 @@ export interface PageProps {
   profile?: boolean
   hideLogin?: boolean
   disableContentFadeAnimation?: boolean
-  header?: React.ReactNode
-  footer?: React.ReactNode
-  children: React.ReactNode | React.ReactNode[]
+  header?: ReactNode
+  footer?: ReactNode
+  children: ReactNode | ReactNode[]
 }
 
-const Page: React.FC<PageProps> = ({
+const Page: FC<PageProps> = ({
   width = 'full',
   height = 'normal',
   align = 'center',
@@ -63,6 +70,10 @@ const Page: React.FC<PageProps> = ({
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev)
 
+  const handleRevokeUser = useCallback(async () => {
+    await revokeUser()
+  }, [revokeUser])
+
   const profileMenuItems = useMemo(() => {
     if (!isUserAuthenticated || !profile) {
       return null
@@ -79,12 +90,12 @@ const Page: React.FC<PageProps> = ({
           Games
         </MenuItem>
         <MenuSeparator />
-        <MenuItem icon={faRightFromBracket} onClick={revokeUser}>
+        <MenuItem icon={faRightFromBracket} onClick={handleRevokeUser}>
           Logout
         </MenuItem>
       </>
     )
-  }, [profile, isUserAuthenticated, revokeUser])
+  }, [profile, isUserAuthenticated, handleRevokeUser])
 
   return (
     <div className={styles.main}>

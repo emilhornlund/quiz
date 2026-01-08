@@ -69,7 +69,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       await leaveGame(gameID, playerID)
 
       if (participantId === playerID) {
-        revokeGame()
+        await revokeGame()
       }
     },
     [gameID, participantId, leaveGame, revokeGame],

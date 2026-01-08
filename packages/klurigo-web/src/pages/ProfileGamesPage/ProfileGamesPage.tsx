@@ -45,7 +45,9 @@ const ProfileGamesPage: FC = () => {
   }
 
   useEffect(() => {
-    if (isError) navigate('/')
+    if (isError) {
+      navigate('/')
+    }
   }, [isError, navigate])
 
   if (isLoading || !data) {
