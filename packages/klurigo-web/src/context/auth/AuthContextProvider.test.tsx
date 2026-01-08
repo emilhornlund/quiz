@@ -220,7 +220,10 @@ describe('AuthContextProvider', () => {
 
     await waitFor(() => {
       expect(mockRevoke).toHaveBeenCalledWith({ token: 'u.acc' }, 'USER')
-      expect(mockNavigate).toHaveBeenCalledWith('/')
+      expect(mockNavigate).toHaveBeenCalledWith('/', {
+        replace: true,
+        flushSync: true,
+      })
       expect(ctx.user).toBeUndefined()
       expect(ctx.game).toBeTruthy()
     })
@@ -259,7 +262,10 @@ describe('AuthContextProvider', () => {
 
     await waitFor(() => {
       expect(mockRevoke).toHaveBeenCalledWith({ token: 'u.acc' }, 'USER')
-      expect(mockNavigate).toHaveBeenCalledWith('/')
+      expect(mockNavigate).toHaveBeenCalledWith('/', {
+        replace: true,
+        flushSync: true,
+      })
       expect(ctx.user).toBeUndefined()
       const persisted = JSON.parse(localStorage.getItem('auth') ?? '{}')
       expect(persisted.USER).toBeUndefined()
@@ -669,7 +675,10 @@ describe('AuthContextProvider', () => {
 
       await waitFor(() => {
         expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
-        expect(mockNavigate).toHaveBeenCalledWith('/')
+        expect(mockNavigate).toHaveBeenCalledWith('/', {
+          replace: true,
+          flushSync: true,
+        })
         expect(ctx.game).toBeUndefined()
       })
     })
@@ -718,7 +727,10 @@ describe('AuthContextProvider', () => {
 
       await waitFor(() => {
         expect(mockRevoke).toHaveBeenCalledWith({ token: 'g.acc' }, 'GAME')
-        expect(mockNavigate).toHaveBeenCalledWith('/game/results/game-123')
+        expect(mockNavigate).toHaveBeenCalledWith('/game/results/game-123', {
+          replace: true,
+          flushSync: true,
+        })
         expect(ctx.game).toBeUndefined()
       })
     })

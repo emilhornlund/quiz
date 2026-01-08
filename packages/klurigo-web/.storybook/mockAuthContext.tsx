@@ -49,8 +49,8 @@ const mockAuth: AuthContextType = {
   isUserAuthenticated: true,
   isGameAuthenticated: true,
   setTokenPair: () => undefined,
-  revokeUser: () => undefined,
-  revokeGame: () => undefined,
+  revokeUser: () => Promise.reject(),
+  revokeGame: () => Promise.reject(),
 }
 
 /**

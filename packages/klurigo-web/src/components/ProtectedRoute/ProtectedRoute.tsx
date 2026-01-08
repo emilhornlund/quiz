@@ -1,5 +1,5 @@
 import { TokenScope } from '@klurigo/common'
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 import { useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ import { useAuthContext } from '../../context/auth'
 export interface ProtectedRouteProps {
   scope?: TokenScope
   authenticated?: boolean
-  children: React.ReactNode
+  children: ReactNode
 }
 
 /**

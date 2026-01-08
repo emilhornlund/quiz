@@ -271,10 +271,15 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   /**
    * Revokes the authentication token for the given scope.
    *
-   * If no token exists for the scope, it still clears any local state and optionally redirects.
+   * If a token exists, it is revoked best-effort. When `redirectTo` is provided,
+   * navigation is performed *before* clearing local auth state to ensure the
+   * redirect is committed before any auth-guarded routes re-evaluate.
+   *
+   * If no token exists for the scope, local auth state is still cleared and
+   * navigation (if requested) is still performed.
    *
    * @param scope - The TokenScope whose tokens should be revoked.
-   * @param redirectTo - A route to navigate to after revoking and clearing local auth state.
+   * @param redirectTo - A route to navigate to before clearing local auth state.
    *   If omitted, no navigation is performed by this helper.
    */
   const revokeAuthToken = useCallback(
@@ -290,11 +295,14 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
         }
       }
 
-      clearAuthState(scope)
-
       if (redirectTo && redirectTo.trim().length > 0) {
-        navigate(redirectTo)
+        const result = navigate(redirectTo, { replace: true, flushSync: true })
+        if (result instanceof Promise) {
+          await result
+        }
       }
+
+      clearAuthState(scope)
     },
     [authState, clearAuthState, revoke, navigate],
   )
@@ -415,17 +423,18 @@ const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   }, [isMounted, getScopeState, refresh, handleSetTokenPair, clearAuthState])
 
   /**
-   * Revokes the game authentication state and optionally redirects the user.
+   * Revokes the Game-scope authentication state and optionally redirects the user.
    *
-   * Default behavior is to navigate to `/` after revocation. Use `redirect: false`
-   * to revoke without navigation, or `redirectTo` to navigate to a specific route.
+   * By default, revocation navigates to `/` before clearing local Game auth state.
+   * Use `redirect: false` to revoke without navigation, or `redirectTo` to navigate
+   * to a specific route.
    *
-   * @param options - Controls the post-revoke navigation behavior.
-   * @returns A promise that resolves once tokens are revoked (if present), local auth state is cleared,
-   *   and any requested navigation has been performed.
+   * @param options - Controls post-revoke navigation behavior.
+   * @returns A promise that resolves once any token revocation has completed,
+   *   navigation (if requested) has been committed, and local auth state has been cleared.
    */
   const handleRevokeGame = useCallback(
-    (options?: RevokeGameOptions) => {
+    async (options?: RevokeGameOptions): Promise<void> => {
       if (!options) {
         return revokeAuthToken(TokenScope.Game, '/')
       }
