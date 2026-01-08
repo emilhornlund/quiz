@@ -99,10 +99,12 @@ const QuizCreatorPage: FC = () => {
     data: originalQuizQuestions,
     isLoading: isQuizQuestionsLoading,
     isError: isQuizQuestionsError,
+    isFetchedAfterMount,
   } = useQuery({
     queryKey: ['quiz_questions', quizId],
     queryFn: () => getQuizQuestions(quizId as string),
     enabled: !!quizId && !!gameMode,
+    refetchOnMount: 'always',
   })
 
   const didHydrateQuestionsRef = useRef(false)
@@ -112,6 +114,10 @@ const QuizCreatorPage: FC = () => {
     if (!gameMode) return
     if (!originalQuizQuestions) return
     if (isQuizQuestionsLoading || isQuizQuestionsError) return
+
+    // Key part: do not hydrate from old cached data
+    if (!isFetchedAfterMount) return
+
     if (didHydrateQuestionsRef.current) return
 
     didHydrateQuestionsRef.current = true
@@ -123,6 +129,7 @@ const QuizCreatorPage: FC = () => {
     originalQuizQuestions,
     isQuizQuestionsLoading,
     isQuizQuestionsError,
+    isFetchedAfterMount,
     setQuestions,
     selectQuestion,
   ])

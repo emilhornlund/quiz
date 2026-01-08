@@ -31,6 +31,7 @@ type UseQueryResult<T> = {
   data?: T
   isLoading: boolean
   isError: boolean
+  isFetchedAfterMount?: boolean
 }
 
 type QuizSettings = {
@@ -217,8 +218,12 @@ vi.mock('./utils/QuestionDataSource', async () => {
   }
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const latestUseQueryArgs: any[] = []
+
 vi.mock('@tanstack/react-query', () => ({
   useQuery: (args: { queryKey: readonly unknown[]; enabled?: boolean }) => {
+    latestUseQueryArgs.push(args)
     const key = String(args.queryKey?.[0] ?? '')
     if (key === 'quiz') return mockQuizQueryState
     if (key === 'quiz_questions') return mockQuestionsQueryState
@@ -303,6 +308,7 @@ describe('QuizCreatorPage', () => {
       data: undefined,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: false,
     }
 
     setAllGuardsFalse()
@@ -355,6 +361,16 @@ describe('QuizCreatorPage', () => {
     })
   })
 
+  it('configures quiz_questions query with refetchOnMount=always', () => {
+    render(<QuizCreatorPage />)
+
+    const quizQuestionsCall = latestUseQueryArgs.find(
+      (a) => String(a.queryKey?.[0]) === 'quiz_questions',
+    )
+
+    expect(quizQuestionsCall?.refetchOnMount).toBe('always')
+  })
+
   it('when gameMode and originalQuizQuestions load, sets questions and selects question 0', async () => {
     mockQuizId = 'quiz-123'
 
@@ -376,6 +392,7 @@ describe('QuizCreatorPage', () => {
       data: loadedQuestions,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: true,
     }
 
     render(<QuizCreatorPage />)
@@ -642,6 +659,7 @@ describe('QuizCreatorPage', () => {
       data: loadedQuestions,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: true,
     }
 
     const { rerender } = render(<QuizCreatorPage />)
@@ -657,6 +675,37 @@ describe('QuizCreatorPage', () => {
 
     expect(setQuestionsMock).toHaveBeenCalledTimes(1)
     expect(selectQuestionMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not hydrate questions from cached query data when not fetched after mount', async () => {
+    mockQuizId = 'quiz-123'
+
+    mockQuizQueryState = {
+      data: {
+        mode: GameMode.Classic,
+        title: 'Loaded title',
+        visibility: QuizVisibility.Public,
+        category: QuizCategory.Other,
+        languageCode: LanguageCode.English,
+      },
+      isLoading: false,
+      isError: false,
+    }
+
+    const cachedQuestions = [{ id: 'q1' }, { id: 'q2' }]
+
+    mockQuestionsQueryState = {
+      data: cachedQuestions,
+      isLoading: false,
+      isError: false,
+      isFetchedAfterMount: false,
+    }
+
+    render(<QuizCreatorPage />)
+    await flushPromises()
+
+    expect(setQuestionsMock).not.toHaveBeenCalled()
+    expect(selectQuestionMock).not.toHaveBeenCalled()
   })
 
   it('does not overwrite local question edits after initial hydration', async () => {
@@ -679,6 +728,7 @@ describe('QuizCreatorPage', () => {
       data: loadedQuestions,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: true,
     }
 
     const { rerender } = render(<QuizCreatorPage />)
@@ -728,6 +778,7 @@ describe('QuizCreatorPage', () => {
       data: questionsQuiz1,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: true,
     }
 
     const { rerender } = render(<QuizCreatorPage />)
@@ -742,6 +793,7 @@ describe('QuizCreatorPage', () => {
       data: questionsQuiz2,
       isLoading: false,
       isError: false,
+      isFetchedAfterMount: true,
     }
 
     // Render once to trigger the [quizId] ref-reset effect
