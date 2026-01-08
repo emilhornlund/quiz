@@ -1,6 +1,6 @@
 root = true
 
-[*.{ts,tsx,js,jsx,mjs,json,css,scss}]
+[*.{ts,tsx,js,jsx,mjs,json,css,scss,md}]
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
