@@ -1,51 +1,40 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PinImage > should render PinImage with all props 1`] = `
+exports[`PinImage > matches snapshot 1`] = `
 <div>
   <div
-    class="container"
+    class="overlay"
+    style="cursor: grab;"
   >
     <div
-      class="centerOverlay"
-    >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`PinImage > should render PinImage with default props 1`] = `
-<div>
-  <div
-    class="container"
-  />
-</div>
-`;
-
-exports[`PinImage > should render PinImage with multiple pins 1`] = `
-<div>
-  <div
-    class="container"
-  >
+      data-disabled="false"
+      data-height="40"
+      data-testid="pin"
+      data-tolerance="0"
+      data-width="40"
+      data-x="0.1"
+      data-y="0.9"
+    />
     <div
-      class="centerOverlay"
-    >
-      <div
-        class="loadingSpinnerContainer"
-        data-testid="loading-spinner"
-      >
-        <div />
-        <div />
-        <div />
-      </div>
-    </div>
+      data-color="0"
+      data-disabled="false"
+      data-height="40"
+      data-testid="pin"
+      data-tolerance="0"
+      data-width="40"
+      data-x="0.5"
+      data-y="0.45"
+    />
+    <div
+      data-color="1"
+      data-disabled="false"
+      data-height="40"
+      data-testid="pin"
+      data-tolerance="0"
+      data-width="40"
+      data-x="0.3"
+      data-y="0.25"
+    />
   </div>
 </div>
 `;

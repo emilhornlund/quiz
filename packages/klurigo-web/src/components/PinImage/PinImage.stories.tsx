@@ -4,17 +4,19 @@ import type { FC } from 'react'
 import { useState } from 'react'
 
 import PinImage, { type PinImageProps } from './PinImage'
-import { PinColor } from './types'
+import { PinColor, type PinImageValue } from './types'
 
 const PinImageStoryComponent: FC<PinImageProps> = (props) => {
-  const [value, setValue] = useState<{ x: number; y: number } | undefined>(
-    props.value,
-  )
+  const [value, setValue] = useState<PinImageValue | undefined>(props.value)
 
   return (
     <div style={{ height: '100vh', display: 'flex', minHeight: 0 }}>
       <div style={{ flex: 1, minHeight: 0 }}>
-        <PinImage {...props} value={value} onChange={setValue} />
+        <PinImage
+          {...props}
+          value={value}
+          onChange={(pos) => setValue({ ...value, ...pos })}
+        />
       </div>
     </div>
   )

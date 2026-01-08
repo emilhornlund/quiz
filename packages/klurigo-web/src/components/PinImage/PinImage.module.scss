@@ -20,10 +20,6 @@
   touch-action: none;
   z-index: variables.$pin-image-z-index;
 
-  &:active .pin {
-    cursor: grabbing;
-  }
-
   /* The pin is centered via transform so size changes don't affect math */
   .pin {
     position: absolute;
@@ -35,6 +31,7 @@
     user-select: none;
     /* don't clip tolerance */
     overflow: visible;
+    pointer-events: none;
 
     /* Large translucent circle centered on the pin, *behind* the dot */
     .tolerance {

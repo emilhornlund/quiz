@@ -2,8 +2,10 @@ import {
   QUESTION_PIN_TOLERANCE_RADIUS,
   QuestionPinTolerance,
 } from '@klurigo/common'
-import type { FC, PointerEvent, ReactNode } from 'react'
 import {
+  type FC,
+  type PointerEvent,
+  type ReactNode,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -71,8 +73,9 @@ const PinImage: FC<PinImageProps> = ({
   useEffect(() => {
     const newInteractivePinPosition = toPinImagePosition(value)
     if (
-      interactivePinPosition?.x !== newInteractivePinPosition?.x &&
-      interactivePinPosition?.y !== newInteractivePinPosition?.y
+      newInteractivePinPosition &&
+      (interactivePinPosition?.x !== newInteractivePinPosition?.x ||
+        interactivePinPosition?.y !== newInteractivePinPosition?.y)
     ) {
       setInteractivePinPosition(newInteractivePinPosition)
     }
@@ -182,12 +185,13 @@ const PinImage: FC<PinImageProps> = ({
     startPx: { x: number; y: number }
   } | null>(null)
 
+  const [isDragging, setIsDragging] = useState(false)
+
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    const t = e.target as HTMLElement
-    if (![...t.classList].some((cls) => cls.includes('overlay'))) return
+    if (disabled || !interactivePinPosition) return
 
     const overlay = overlayRef.current
-    if (disabled || !interactivePinPosition || !overlay) return
+    if (!overlay) return
 
     const rect = overlay.getBoundingClientRect()
     dragRef.current = {
@@ -198,9 +202,20 @@ const PinImage: FC<PinImageProps> = ({
         y: interactivePinPosition.y * rect.height,
       },
     }
+
+    setIsDragging(true)
     ;(e.currentTarget as Element).setPointerCapture?.(e.pointerId)
     e.preventDefault()
   }
+
+  const stopDragging = (e: PointerEvent<HTMLDivElement>) => {
+    dragRef.current = null
+    setIsDragging(false)
+    ;(e.currentTarget as Element).releasePointerCapture?.(e.pointerId)
+  }
+
+  const onPointerUp = stopDragging
+  const onPointerCancel = stopDragging
 
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     if (disabled || !interactivePinPosition || !dragRef.current) return
@@ -228,12 +243,6 @@ const PinImage: FC<PinImageProps> = ({
     }
   }
 
-  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
-    if (disabled || !interactivePinPosition) return
-    dragRef.current = null
-    ;(e.currentTarget as Element).releasePointerCapture?.(e.pointerId)
-  }
-
   const getToleranceDiameterPx = useCallback(
     (tolerance?: QuestionPinTolerance) => {
       if (!overlaySize.w || !overlaySize.h || !tolerance) return 0
@@ -250,9 +259,18 @@ const PinImage: FC<PinImageProps> = ({
       <div
         ref={setOverlayNode}
         className={styles.overlay}
+        style={{
+          cursor:
+            disabled || !interactivePinPosition
+              ? 'default'
+              : isDragging
+                ? 'grabbing'
+                : 'grab',
+        }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}>
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}>
         {interactivePinPosition && (
           <Pin
             width={pinSizePx}
