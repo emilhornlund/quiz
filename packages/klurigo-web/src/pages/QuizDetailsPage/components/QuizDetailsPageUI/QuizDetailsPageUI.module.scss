@@ -2,73 +2,177 @@
 @use '../../../../styles/helpers';
 @use '../../../../styles/variables';
 
-.details {
-  display: grid;
-  background-color: colors.$white-1-15;
-  border: variables.$control-outside-border-width solid colors.$white-1-25;
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  height: 100%;
+  min-width: 0;
 
   @include helpers.mobile {
-    grid-template-columns: 1fr 1fr;
-    gap: variables.$mobile-narrow-layout-gutter;
+    row-gap: variables.$mobile-layout-gutter;
+    padding-bottom: variables.$mobile-layout-gutter;
     width: 100%;
-    border-radius: variables.$mobile-border-radius;
-    padding: variables.$mobile-narrow-layout-gutter;
   }
 
   @include helpers.tablet {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: variables.$tablet-narrow-layout-gutter;
+    row-gap: variables.$tablet-layout-gutter;
+    padding-bottom: variables.$tablet-layout-gutter;
     width: 100%;
-    border-radius: variables.$tablet-border-radius;
-    padding: variables.$tablet-narrow-layout-gutter;
   }
 
   @include helpers.desktop {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: variables.$desktop-narrow-layout-gutter;
+    row-gap: variables.$desktop-layout-gutter;
+    padding-bottom: variables.$desktop-layout-gutter;
     width: variables.$desktop-width * 0.85;
-    border-radius: variables.$desktop-border-radius;
-    padding: variables.$desktop-narrow-layout-gutter;
   }
 
-  .item {
+  .thumbnailContainer {
     display: flex;
     flex-direction: column;
-    text-align: center;
-    align-items: center;
-
-    .icon, .value {
-      color: colors.$white;
-    }
-
-    .icon {
-      opacity: 0.95;
-    }
-
-    .value {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 600;
-      opacity: 0.68;
-    }
 
     @include helpers.mobile {
-      gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
-
-      @include helpers.fontSize(16px);
+      width: 100%;
     }
 
     @include helpers.tablet {
-      gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
-
-      @include helpers.fontSize(18px);
+      width: 85%;
     }
 
     @include helpers.desktop {
-      gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+      width: 85%;
+    }
 
-      @include helpers.fontSize(20px);
+    .thumbnail {
+      @mixin thumbnail-size($height) {
+        height: $height;
+        aspect-ratio: 8 / 7;
+      }
+
+      @include helpers.mobile {
+        @include thumbnail-size(96px);
+      }
+
+      @include helpers.tablet {
+        @include thumbnail-size(127px);
+      }
+
+      @include helpers.desktop {
+        @include thumbnail-size(158px);
+      }
+
+      img {
+        display: block;
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        border: variables.$control-outside-border-width solid colors.$white;
+
+        @include helpers.mobile {
+          border-radius: variables.$mobile-border-radius;
+        }
+
+        @include helpers.tablet {
+          border-radius: variables.$tablet-border-radius;
+        }
+
+        @include helpers.desktop {
+          border-radius: variables.$desktop-border-radius;
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
+    }
+
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
+    }
+
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
+    }
+  }
+
+  .details {
+    display: grid;
+    background-color: colors.$white-1-15;
+    border: variables.$control-outside-border-width solid colors.$white-1-25;
+    margin-top: auto;
+    width: 100%;
+
+    @include helpers.mobile {
+      grid-template-columns: 1fr 1fr;
+      gap: variables.$mobile-narrow-layout-gutter;
+      border-radius: variables.$mobile-border-radius;
+      padding: variables.$mobile-narrow-layout-gutter;
+    }
+
+    @include helpers.tablet {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: variables.$tablet-narrow-layout-gutter;
+      border-radius: variables.$tablet-border-radius;
+      padding: variables.$tablet-narrow-layout-gutter;
+    }
+
+    @include helpers.desktop {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: variables.$desktop-narrow-layout-gutter;
+      border-radius: variables.$desktop-border-radius;
+      padding: variables.$desktop-narrow-layout-gutter;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      overflow: hidden;
+
+      .icon, .value {
+        color: colors.$white;
+        width: 100%;
+      }
+
+      .icon {
+        opacity: 0.95;
+      }
+
+      .value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+        opacity: 0.68;
+      }
+
+      @include helpers.mobile {
+        gap: calc(#{variables.$mobile-narrow-layout-gutter} * 0.5);
+
+        @include helpers.fontSize(16px);
+      }
+
+      @include helpers.tablet {
+        gap: calc(#{variables.$tablet-narrow-layout-gutter} * 0.5);
+
+        @include helpers.fontSize(18px);
+      }
+
+      @include helpers.desktop {
+        gap: calc(#{variables.$desktop-narrow-layout-gutter} * 0.5);
+
+        @include helpers.fontSize(20px);
+      }
     }
   }
 }
