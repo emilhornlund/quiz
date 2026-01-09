@@ -1,3 +1,4 @@
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import {
   faCalendarCheck,
   faCalendarPlus,
@@ -34,6 +35,17 @@ import { DATE_FORMATS, formatLocalDate } from '../../../../utils/date.utils'
 
 import styles from './QuizDetailsPageUI.module.scss'
 
+const DetailItem: FC<{
+  icon: IconDefinition
+  value: string
+  title?: string
+}> = ({ value, icon, title }) => (
+  <div className={styles.item} title={title ?? value}>
+    <FontAwesomeIcon icon={icon} className={styles.icon} />
+    <span className={styles.value}>{value}</span>
+  </div>
+)
+
 export interface QuizDetailsPageUIProps {
   quiz?: QuizResponseDto
   isOwner?: boolean
@@ -69,11 +81,19 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
   }
 
   return (
-    <Page
-      align="start"
-      height="full"
-      header={
-        <>
+    <Page align="start" height="full" noPadding discover profile>
+      <div className={styles.layout}>
+        <Typography variant="title" size="full">
+          {quiz.title}
+        </Typography>
+
+        {quiz.description && (
+          <Typography variant="text" size="medium">
+            {quiz.description}
+          </Typography>
+        )}
+
+        <div className={styles.actions}>
           {isOwner && (
             <>
               <Button
@@ -108,69 +128,43 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
             icon={faPlay}
             onClick={() => setShowConfirmHostGameModal(true)}
           />
-        </>
-      }
-      discover
-      profile>
-      <Typography variant="title">{quiz.title}</Typography>
+        </div>
 
-      {quiz.description && (
-        <Typography variant="text" size="medium">
-          {quiz.description}
-        </Typography>
-      )}
+        {quiz.imageCoverURL && (
+          <div className={styles.thumbnailContainer}>
+            <ResponsiveImage imageURL={quiz.imageCoverURL} />
+          </div>
+        )}
 
-      {quiz.imageCoverURL && <ResponsiveImage imageURL={quiz.imageCoverURL} />}
-
-      <div className={styles.details}>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faEye} className={styles.icon} />
-          <span className={styles.value}>
-            {QuizVisibilityLabels[quiz.visibility]}
-          </span>
-        </div>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faIcons} className={styles.icon} />
-          <span className={styles.value}>
-            {QuizCategoryLabels[quiz.category]}
-          </span>
-        </div>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faLanguage} className={styles.icon} />
-          <span className={styles.value}>
-            {LanguageLabels[quiz.languageCode]}
-          </span>
-        </div>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faGamepad} className={styles.icon} />
-          <span className={styles.value}>{GameModeLabels[quiz.mode]}</span>
-        </div>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faCircleQuestion} className={styles.icon} />
-          <span className={styles.value}>
-            {quiz.numberOfQuestions}{' '}
-            {quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}
-          </span>
-        </div>
-        <div
-          className={styles.item}
-          title={`Created ${formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
-          <FontAwesomeIcon icon={faCalendarPlus} className={styles.icon} />
-          <span className={styles.value}>
-            {formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
-          </span>
-        </div>
-        <div
-          className={styles.item}
-          title={`Updated ${formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME_SECONDS)}`}>
-          <FontAwesomeIcon icon={faCalendarCheck} className={styles.icon} />
-          <span className={styles.value}>
-            {formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
-          </span>
-        </div>
-        <div className={styles.item}>
-          <FontAwesomeIcon icon={faUser} className={styles.icon} />
-          <span className={styles.value}>{quiz.author.name || 'N/A'}</span>
+        <div className={styles.details}>
+          <DetailItem
+            icon={faEye}
+            value={QuizVisibilityLabels[quiz.visibility]}
+          />
+          <DetailItem
+            icon={faIcons}
+            value={QuizCategoryLabels[quiz.category]}
+          />
+          <DetailItem
+            icon={faLanguage}
+            value={LanguageLabels[quiz.languageCode]}
+          />
+          <DetailItem icon={faGamepad} value={GameModeLabels[quiz.mode]} />
+          <DetailItem
+            icon={faCircleQuestion}
+            value={`${quiz.numberOfQuestions} ${quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}`}
+          />
+          <DetailItem
+            icon={faCalendarPlus}
+            value={formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
+            title={`Created ${formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME_SECONDS)}`}
+          />
+          <DetailItem
+            icon={faCalendarCheck}
+            value={formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
+            title={`Updated ${formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME_SECONDS)}`}
+          />
+          <DetailItem icon={faUser} value={quiz.author.name || 'N/A'} />
         </div>
       </div>
 
