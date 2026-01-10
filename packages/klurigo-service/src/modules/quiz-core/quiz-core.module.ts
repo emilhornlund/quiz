@@ -12,7 +12,7 @@ import { Quiz, QuizSchema } from './repositories/models/schemas'
  * - `QuizRepository` for querying and mutating quiz aggregates (including questions).
  *
  * Exports:
- * - `QuizRepository` for use by higher-level modules (e.g. `QuizModule`) that orchestrate quiz workflows.
+ * - `QuizRepository` for use by higher-level modules (e.g. `QuizApiModule`) that orchestrate quiz workflows.
  */
 @Module({
   imports: [

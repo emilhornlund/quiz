@@ -14,7 +14,7 @@ import {
   ApiGameIdProperty,
   ApiGameNameProperty,
 } from '../../../../game-api/controllers/decorators/api'
-import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz-api/controllers/decorators/api'
 import {
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,

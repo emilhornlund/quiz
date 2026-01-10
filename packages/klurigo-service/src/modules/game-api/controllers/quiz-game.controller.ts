@@ -15,8 +15,8 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
-import { ApiQuizIdParam } from '../../quiz/controllers/decorators/api'
-import { RouteQuizIdParam } from '../../quiz/controllers/decorators/params'
+import { ApiQuizIdParam } from '../../quiz-api/controllers/decorators/api'
+import { RouteQuizIdParam } from '../../quiz-api/controllers/decorators/params'
 import { AuthorizedQuiz } from '../../quiz-core/decorators/auth'
 import { User } from '../../user/repositories'
 import { GameService } from '../services'

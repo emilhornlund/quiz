@@ -3,7 +3,7 @@ import {
   SubmitPuzzleQuestionAnswerRequestDto,
 } from '@klurigo/common'
 
-import { ApiQuestionPuzzleValuesProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuestionPuzzleValuesProperty } from '../../../../quiz-api/controllers/decorators/api'
 import { ApiGameQuestionTypeProperty } from '../../decorators/api'
 
 /**

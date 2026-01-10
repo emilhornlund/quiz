@@ -25,7 +25,7 @@ import { GameResultModule } from '../modules/game-result/game-result.module'
 import { GameTaskModule } from '../modules/game-task'
 import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
-import { QuizModule } from '../modules/quiz'
+import { QuizApiModule } from '../modules/quiz-api'
 import { QuizCoreModule } from '../modules/quiz-core'
 import { TokenModule } from '../modules/token'
 import { UserModule } from '../modules/user'
@@ -200,7 +200,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     GameTaskModule,
     HealthModule,
     MediaModule,
-    QuizModule,
+    QuizApiModule,
     QuizCoreModule,
     TokenModule,
     UserModule,

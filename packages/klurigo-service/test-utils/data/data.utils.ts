@@ -45,7 +45,7 @@ import {
   GameResult,
   PlayerMetric,
 } from '../../src/modules/game-result/repositories/models/schemas'
-import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz/services/utils'
+import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz-api/services/utils'
 import {
   BaseQuestionDao,
   QuestionDao,

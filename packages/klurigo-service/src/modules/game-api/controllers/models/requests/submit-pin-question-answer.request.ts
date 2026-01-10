@@ -6,7 +6,7 @@ import {
 import {
   ApiQuestionPinPositionXProperty,
   ApiQuestionPinPositionYProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../quiz-api/controllers/decorators/api'
 import { ApiGameQuestionTypeProperty } from '../../decorators/api'
 
 /**

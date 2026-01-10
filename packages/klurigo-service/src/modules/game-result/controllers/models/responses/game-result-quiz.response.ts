@@ -2,7 +2,7 @@ import { GameResultQuizDto } from '@klurigo/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsBoolean } from 'class-validator'
 
-import { ApiQuizIdProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuizIdProperty } from '../../../../quiz-api/controllers/decorators/api'
 
 /**
  * API response structure representing quiz metadata included in a game result.

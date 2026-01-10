@@ -4,7 +4,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { GameCoreModule } from '../game-core'
 import { GameEventModule } from '../game-event/game-event.module'
 import { GameTaskModule } from '../game-task'
-import { QuizModule } from '../quiz'
+import { QuizApiModule } from '../quiz-api'
 import { QuizCoreModule } from '../quiz-core'
 import { UserModule } from '../user'
 
@@ -26,7 +26,7 @@ import { GameService } from './services'
     GameCoreModule,
     GameEventModule,
     GameTaskModule,
-    QuizModule,
+    QuizApiModule,
     QuizCoreModule,
     UserModule,
   ],

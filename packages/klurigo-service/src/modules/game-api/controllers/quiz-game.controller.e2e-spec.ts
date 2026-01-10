@@ -14,7 +14,7 @@ import {
   createDefaultUserAndAuthenticate,
   createTestApp,
 } from '../../../../test-utils/utils'
-import { QuizService } from '../../quiz/services'
+import { QuizService } from '../../quiz-api/services'
 import { User, UserModel } from '../../user/repositories'
 
 describe('QuizGameController (e2e)', () => {

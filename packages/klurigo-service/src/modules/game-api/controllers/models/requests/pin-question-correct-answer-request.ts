@@ -4,7 +4,7 @@ import {
   ApiQuestionPinPositionXProperty,
   ApiQuestionPinPositionYProperty,
   ApiQuestionTypeProperty,
-} from '../../../../quiz/controllers/decorators/api'
+} from '../../../../quiz-api/controllers/decorators/api'
 
 /**
  * Request model for submitting the correct answer of a Pin question.

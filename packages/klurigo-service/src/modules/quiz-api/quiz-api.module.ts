@@ -35,4 +35,4 @@ import { QuizRatingService, QuizService } from './services'
   providers: [Logger, QuizRatingRepository, QuizRatingService, QuizService],
   exports: [QuizService],
 })
-export class QuizModule {}
+export class QuizApiModule {}
