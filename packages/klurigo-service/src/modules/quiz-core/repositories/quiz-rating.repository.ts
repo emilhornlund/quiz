@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { BaseRepository, buildSortObject } from '../../../app/shared/repository'
 import { User } from '../../user/repositories'
-import { QuizRatingNotFoundException } from '../exceptions'
 
 import { QuizRating, type QuizRatingModel } from './models/schemas'
 
@@ -146,17 +145,11 @@ export class QuizRatingRepository extends BaseRepository<QuizRating> {
     now: Date,
     stars: number,
     comment?: string,
-  ): Promise<QuizRating> {
-    const result = await this.quizRatingModel.findByIdAndUpdate(
+  ): Promise<QuizRating | null> {
+    return this.quizRatingModel.findByIdAndUpdate(
       quizRatingId,
       { stars, comment, updated: now },
       { new: true },
     )
-
-    if (!result) {
-      throw new QuizRatingNotFoundException(quizRatingId)
-    }
-
-    return result
   }
 }

@@ -37,8 +37,6 @@ import {
 } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 
-import { buildDefaultQuizRatingSummary } from './utils'
-
 /**
  * Service for managing quiz-related operations.
  */
@@ -308,7 +306,11 @@ export class QuizService {
       languageCode: quizRequest.languageCode,
       questions: QuizService.buildQuizQuestions(quizRequest),
       owner: user,
-      ratingSummary: buildDefaultQuizRatingSummary(),
+      ratingSummary: {
+        count: 0,
+        avg: 0,
+        stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+      },
       created,
       updated: created,
     }

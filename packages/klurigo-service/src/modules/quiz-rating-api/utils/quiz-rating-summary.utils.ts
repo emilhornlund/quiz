@@ -1,17 +1,4 @@
-import { QuizRatingSummary } from '../../../quiz-core/repositories/models/schemas'
-
-/**
- * Builds a default rating summary for a new quiz.
- *
- * This is persisted on the quiz document to support fast reads without aggregation.
- */
-export function buildDefaultQuizRatingSummary(): QuizRatingSummary {
-  return {
-    count: 0,
-    avg: 0,
-    stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
-  }
-}
+import { QuizRatingSummary } from '../../quiz-core/repositories/models/schemas'
 
 /**
  * Updates a quiz rating summary based on a rating change.

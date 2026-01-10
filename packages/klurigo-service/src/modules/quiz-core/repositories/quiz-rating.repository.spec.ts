@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { buildMockPrimaryUser } from '../../../../test-utils/data'
 import { buildSortObject } from '../../../app/shared/repository'
-import { QuizRatingNotFoundException } from '../exceptions'
 
 import { QuizRating } from './models/schemas'
 import { QuizRatingRepository } from './quiz-rating.repository'
@@ -387,7 +386,7 @@ describe(QuizRatingRepository.name, () => {
       expect(result).toBe(updated)
     })
 
-    it('throws QuizRatingNotFoundException when the rating does not exist', async () => {
+    it('returns null when the rating does not exist', async () => {
       const ratingId = 'missing-rating'
       const stars = 5
 
@@ -395,11 +394,7 @@ describe(QuizRatingRepository.name, () => {
 
       await expect(
         repository.updateQuizRating(ratingId, fixedNow, stars),
-      ).rejects.toBeInstanceOf(QuizRatingNotFoundException)
-
-      await expect(
-        repository.updateQuizRating(ratingId, fixedNow, stars),
-      ).rejects.toThrow(`Quiz rating was not found by id '${ratingId}'`)
+      ).resolves.toBeNull()
     })
 
     it('always sets updated timestamp to now', async () => {

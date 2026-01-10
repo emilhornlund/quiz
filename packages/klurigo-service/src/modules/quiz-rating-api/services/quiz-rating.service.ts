@@ -2,12 +2,11 @@ import { PaginatedQuizRatingDto, QuizRatingDto } from '@klurigo/common'
 import { Injectable, Logger } from '@nestjs/common'
 
 import { QuizRepository } from '../../quiz-core/repositories'
+import { QuizRatingRepository } from '../../quiz-core/repositories'
+import { QuizRating } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
-import { QuizRatingRepository } from '../repositories'
-import { QuizRating } from '../repositories/models/schemas'
-
-import { updateQuizRatingSummary } from './utils'
+import { updateQuizRatingSummary } from '../utils'
 
 /**
  * Service for managing quiz ratings and feedback.
@@ -123,7 +122,7 @@ export class QuizRatingService {
 
     const now = new Date()
 
-    const result: QuizRating = existingQuizRating
+    const result: QuizRating | null = existingQuizRating
       ? await this.quizRatingRepository.updateQuizRating(
           existingQuizRating._id,
           now,
@@ -137,6 +136,10 @@ export class QuizRatingService {
           stars,
           comment,
         )
+
+    if (!result) {
+      throw new QuizRatingByQuizAndAuthorNotFoundException(quizId, author._id)
+    }
 
     const ratingSummary = updateQuizRatingSummary({
       summary: existingQuiz.ratingSummary,

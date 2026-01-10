@@ -45,7 +45,6 @@ import {
   GameResult,
   PlayerMetric,
 } from '../../src/modules/game-result/repositories/models/schemas'
-import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz-api/services/utils'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -610,7 +609,11 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
-    ratingSummary: buildDefaultQuizRatingSummary(),
+    ratingSummary: {
+      count: 0,
+      avg: 0,
+      stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+    },
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),
@@ -646,7 +649,11 @@ export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
-    ratingSummary: buildDefaultQuizRatingSummary(),
+    ratingSummary: {
+      count: 0,
+      avg: 0,
+      stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+    },
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),

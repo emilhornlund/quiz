@@ -27,6 +27,7 @@ import { HealthModule } from '../modules/health'
 import { MediaModule } from '../modules/media'
 import { QuizApiModule } from '../modules/quiz-api'
 import { QuizCoreModule } from '../modules/quiz-core'
+import { QuizRatingApiModule } from '../modules/quiz-rating-api'
 import { TokenModule } from '../modules/token'
 import { UserModule } from '../modules/user'
 
@@ -202,6 +203,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
     MediaModule,
     QuizApiModule,
     QuizCoreModule,
+    QuizRatingApiModule,
     TokenModule,
     UserModule,
   ],

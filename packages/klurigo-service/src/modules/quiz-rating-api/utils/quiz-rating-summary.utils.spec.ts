@@ -1,7 +1,4 @@
-import {
-  buildDefaultQuizRatingSummary,
-  updateQuizRatingSummary,
-} from './quiz-rating-summary.utils'
+import { updateQuizRatingSummary } from './quiz-rating-summary.utils'
 
 describe('quiz-rating-summary.utils', () => {
   const baseSummary = () => ({
@@ -12,27 +9,6 @@ describe('quiz-rating-summary.utils', () => {
       number
     >,
     updated: undefined as Date | undefined,
-  })
-
-  describe(buildDefaultQuizRatingSummary.name, () => {
-    it('returns a clean default summary', () => {
-      expect(buildDefaultQuizRatingSummary()).toEqual({
-        count: 0,
-        avg: 0,
-        stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
-      })
-    })
-
-    it('returns a new object each call (no shared references)', () => {
-      const a = buildDefaultQuizRatingSummary()
-      const b = buildDefaultQuizRatingSummary()
-
-      expect(a).not.toBe(b)
-      expect(a.stars).not.toBe(b.stars)
-
-      a.stars['5'] = 999
-      expect(b.stars['5']).toBe(0)
-    })
   })
 
   describe(updateQuizRatingSummary.name, () => {

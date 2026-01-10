@@ -6,15 +6,14 @@ import {
   createMockClassicQuiz,
 } from '../../../../test-utils/data'
 import { QuizRepository } from '../../quiz-core/repositories'
+import { QuizRatingRepository } from '../../quiz-core/repositories'
+import { QuizRating } from '../../quiz-core/repositories/models/schemas'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
-import { QuizRatingRepository } from '../repositories'
-import { QuizRating } from '../repositories/models/schemas'
 
-// eslint-disable-next-line import/order
 import { QuizRatingService } from './quiz-rating.service'
 
-jest.mock('./utils', () => {
-  const actual = jest.requireActual('./utils')
+jest.mock('../utils', () => {
+  const actual = jest.requireActual('../utils')
   return {
     __esModule: true,
     ...actual,
@@ -22,7 +21,8 @@ jest.mock('./utils', () => {
   }
 })
 
-import { updateQuizRatingSummary } from './utils'
+// eslint-disable-next-line import/order
+import { updateQuizRatingSummary } from '../utils'
 
 describe(QuizRatingService.name, () => {
   let service: QuizRatingService
