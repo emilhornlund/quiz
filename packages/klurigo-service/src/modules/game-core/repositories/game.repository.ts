@@ -186,6 +186,30 @@ export class GameRepository extends BaseRepository<Game> {
   }
 
   /**
+   * Checks whether a participant has played at least one completed game for a specific quiz.
+   *
+   * This is used to enforce authorization rules for quiz-related operations (for example, allowing a user
+   * to rate a quiz only after they have participated in a completed game that used that quiz).
+   *
+   * @param quizId - The quiz id to match against `game.quiz._id`.
+   * @param participantId - The participant id to match against `participants.participantId`.
+   *
+   * @returns `true` if at least one completed game exists for the given quiz and participant; otherwise `false`.
+   */
+  public async hasCompletedGamesByQuizIdAndParticipantId(
+    quizId: string,
+    participantId: string,
+  ): Promise<boolean> {
+    const filter: QueryFilter<Game> = {
+      status: { $in: [GameStatus.Completed] },
+      'quiz._id': quizId,
+      'participants.participantId': participantId,
+    }
+
+    return this.exists(filter)
+  }
+
+  /**
    * Generates a unique 6-digit game PIN. It checks the database to ensure that no other active game
    * with the same PIN exists. If such a game exists, it keeps generating
    * new PINs until a unique one is found.
