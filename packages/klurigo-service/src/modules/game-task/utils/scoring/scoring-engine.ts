@@ -4,7 +4,7 @@ import {
   QuestionResultTaskCorrectAnswer,
   QuestionTaskAnswer,
 } from '../../../game-core/repositories/models/schemas'
-import { QuestionDao } from '../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz-core/repositories/models/schemas'
 import {
   isClassicMultiChoiceQuestion,
   isClassicPinQuestion,
@@ -13,7 +13,7 @@ import {
   isClassicTrueFalseQuestion,
   isClassicTypeAnswerQuestion,
   isZeroToOneHundredRangeQuestion,
-} from '../../../quiz/services/utils'
+} from '../../../quiz-core/utils'
 import { UnsupportedGameModeException } from '../../exceptions'
 import {
   isMultiChoiceAnswer,

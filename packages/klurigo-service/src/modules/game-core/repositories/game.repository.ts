@@ -6,7 +6,7 @@ import { MurLock } from 'murlock'
 
 import { BaseRepository } from '../../../app/shared/repository'
 import { buildLobbyTask, buildQuitTask } from '../../game-task/utils'
-import { Quiz } from '../../quiz/repositories/models/schemas'
+import { Quiz } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import {
   ActiveGameNotFoundByGamePINException,

@@ -4,7 +4,7 @@ import {
   QuestionResultTaskCorrectAnswer,
   QuestionTaskAnswer,
 } from '../../../game-core/repositories/models/schemas'
-import { QuestionDao } from '../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz-core/repositories/models/schemas'
 
 import { ClassicMultiChoiceScoringStrategy } from './classic/classic-multichoice-strategy'
 import {

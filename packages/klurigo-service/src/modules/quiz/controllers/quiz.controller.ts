@@ -30,12 +30,12 @@ import {
   RequiredAuthorities,
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
+import { AuthorizedQuiz } from '../../quiz-core/decorators/auth'
 import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
 import { ApiQuizIdParam } from './decorators/api'
-import { AuthorizedQuiz } from './decorators/auth'
 import { RouteQuizIdParam } from './decorators/params'
 import {
   PaginatedQuizResponse,

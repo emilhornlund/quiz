@@ -9,8 +9,7 @@ import {
 } from '../../../app/shared/repository'
 import { QuizNotFoundException } from '../exceptions'
 
-import type { QuizModel } from './models/schemas'
-import { Quiz } from './models/schemas'
+import { Quiz, type QuizModel } from './models/schemas'
 
 /**
  * Repository for accessing and manipulating quiz data.

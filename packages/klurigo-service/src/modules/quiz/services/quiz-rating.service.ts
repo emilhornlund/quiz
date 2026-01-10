@@ -1,9 +1,10 @@
 import { PaginatedQuizRatingDto, QuizRatingDto } from '@klurigo/common'
 import { Injectable, Logger } from '@nestjs/common'
 
+import { QuizRepository } from '../../quiz-core/repositories'
 import { User } from '../../user/repositories'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
-import { QuizRatingRepository, QuizRepository } from '../repositories'
+import { QuizRatingRepository } from '../repositories'
 import { QuizRating } from '../repositories/models/schemas'
 
 import { updateQuizRatingSummary } from './utils'

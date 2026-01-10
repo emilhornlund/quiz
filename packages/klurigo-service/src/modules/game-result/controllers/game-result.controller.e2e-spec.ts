@@ -27,7 +27,7 @@ import {
   GameModel,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
+import { Quiz, QuizModel } from '../../quiz-core/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { GameResult, GameResultModel } from '../repositories/models/schemas'
 

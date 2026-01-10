@@ -12,7 +12,7 @@ import {
   TaskType,
 } from '../../../game-core/repositories/models/schemas'
 import { IllegalTaskTypeException } from '../../../game-task/exceptions'
-import { QuestionDao } from '../../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../../quiz-core/repositories/models/schemas'
 import {
   GameResult,
   PlayerMetric,

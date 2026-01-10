@@ -1,4 +1,4 @@
-import { QuizRatingSummary } from '../../repositories/models/schemas'
+import { QuizRatingSummary } from '../../../quiz-core/repositories/models/schemas'
 
 /**
  * Builds a default rating summary for a new quiz.

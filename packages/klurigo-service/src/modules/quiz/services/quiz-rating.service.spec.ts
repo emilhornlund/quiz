@@ -5,8 +5,9 @@ import {
   buildMockPrimaryUser,
   createMockClassicQuiz,
 } from '../../../../test-utils/data'
+import { QuizRepository } from '../../quiz-core/repositories'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
-import { QuizRatingRepository, QuizRepository } from '../repositories'
+import { QuizRatingRepository } from '../repositories'
 import { QuizRating } from '../repositories/models/schemas'
 
 // eslint-disable-next-line import/order

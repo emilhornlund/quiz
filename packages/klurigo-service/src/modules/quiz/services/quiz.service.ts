@@ -23,8 +23,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { QueryFilter } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
-import { User } from '../../user/repositories'
-import { QuizRepository } from '../repositories'
+import { QuizRepository } from '../../quiz-core/repositories'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -35,7 +34,8 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-} from '../repositories/models/schemas'
+} from '../../quiz-core/repositories/models/schemas'
+import { User } from '../../user/repositories'
 
 import { buildDefaultQuizRatingSummary } from './utils'
 

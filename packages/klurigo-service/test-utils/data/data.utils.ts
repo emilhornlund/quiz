@@ -45,6 +45,7 @@ import {
   GameResult,
   PlayerMetric,
 } from '../../src/modules/game-result/repositories/models/schemas'
+import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz/services/utils'
 import {
   BaseQuestionDao,
   QuestionDao,
@@ -55,8 +56,7 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-} from '../../src/modules/quiz/repositories/models/schemas'
-import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz/services/utils'
+} from '../../src/modules/quiz-core/repositories/models/schemas'
 import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'

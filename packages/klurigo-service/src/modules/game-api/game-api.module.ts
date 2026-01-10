@@ -5,6 +5,7 @@ import { GameCoreModule } from '../game-core'
 import { GameEventModule } from '../game-event/game-event.module'
 import { GameTaskModule } from '../game-task'
 import { QuizModule } from '../quiz'
+import { QuizCoreModule } from '../quiz-core'
 import { UserModule } from '../user'
 
 import {
@@ -26,6 +27,7 @@ import { GameService } from './services'
     GameEventModule,
     GameTaskModule,
     QuizModule,
+    QuizCoreModule,
     UserModule,
   ],
   controllers: [GameController, QuizGameController, ProfileGameController],

@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/mongoose'
 import { v4 as uuidv4 } from 'uuid'
 
 import { closeTestApp, createTestApp } from '../../../../test-utils/utils'
-import { Quiz } from '../../quiz/repositories/models/schemas'
+import { Quiz } from '../../quiz-core/repositories/models/schemas'
 
 import { GameRepository } from './game.repository'
 import {

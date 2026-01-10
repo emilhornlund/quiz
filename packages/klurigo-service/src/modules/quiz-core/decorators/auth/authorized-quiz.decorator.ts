@@ -1,7 +1,7 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
 
-import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../../../../../app/shared/auth'
-import { QuizAuthGuard } from '../../../guards'
+import { AUTHORIZED_QUIZ_ALLOW_PUBLIC } from '../../../../app/shared/auth'
+import { QuizAuthGuard } from '../../guards'
 
 /**
  * Decorator for authorizing quiz-related requests.

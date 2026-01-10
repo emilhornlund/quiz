@@ -13,7 +13,7 @@ import type {
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
-} from '../../quiz/repositories/models/schemas'
+} from '../../quiz-core/repositories/models/schemas'
 
 import {
   createMultiChoiceQuestionResultDistribution,

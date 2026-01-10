@@ -9,7 +9,7 @@ import {
   QuestionRangeDao,
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
-} from '../../repositories/models/schemas'
+} from '../repositories/models/schemas'
 
 /**
  * Checks if the given game mode is `Classic` and the question is a `MultiChoice` question.

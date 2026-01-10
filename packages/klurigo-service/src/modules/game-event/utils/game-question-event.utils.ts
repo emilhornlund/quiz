@@ -28,7 +28,7 @@ import {
   isTrueFalseAnswer,
   isTypeAnswerAnswer,
 } from '../../game-task/utils/question-answer-type-guards'
-import { QuestionDao } from '../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../quiz-core/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -36,7 +36,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../quiz/services/utils'
+} from '../../quiz-core/utils'
 
 import { buildPaginationEventFromGameDocument } from './pagination-event.utils'
 import {
