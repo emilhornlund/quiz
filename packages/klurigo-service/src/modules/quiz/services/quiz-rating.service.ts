@@ -1,0 +1,175 @@
+import { PaginatedQuizRatingDto, QuizRatingDto } from '@klurigo/common'
+import { Injectable, Logger } from '@nestjs/common'
+
+import { User } from '../../user/repositories'
+import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
+import { QuizRatingRepository, QuizRepository } from '../repositories'
+import { QuizRating } from '../repositories/models/schemas'
+
+import { updateQuizRatingSummary } from './utils'
+
+/**
+ * Service for managing quiz ratings and feedback.
+ *
+ * Supports:
+ * - Retrieving ratings with pagination for quiz pages.
+ * - Retrieving a user's rating for a quiz.
+ * - Creating or updating a user's rating for a quiz.
+ * - Updating the quiz's aggregated rating summary for fast reads.
+ */
+@Injectable()
+export class QuizRatingService {
+  /**
+   * Creates a `QuizRatingService`.
+   *
+   * @param quizRepository - Repository for quiz persistence and updates.
+   * @param quizRatingRepository - Repository for rating persistence and queries.
+   * @param logger - Logger instance scoped to this service.
+   */
+  constructor(
+    private readonly quizRepository: QuizRepository,
+    private readonly quizRatingRepository: QuizRatingRepository,
+    private readonly logger: Logger = new Logger(QuizRatingService.name),
+  ) {}
+
+  /**
+   * Retrieves the rating left by a specific author for a specific quiz.
+   *
+   * @param quizId - The quiz identifier.
+   * @param author - The user (author) whose rating should be retrieved.
+   * @returns The rating DTO.
+   * @throws QuizRatingByQuizAndAuthorNotFoundException when no rating exists for the quiz and author.
+   */
+  public async findQuizRatingByQuizIdAndAuthor(
+    quizId: string,
+    author: User,
+  ): Promise<QuizRatingDto> {
+    const result = await this.quizRatingRepository.findQuizRatingByAuthor(
+      quizId,
+      author,
+    )
+
+    if (!result) {
+      throw new QuizRatingByQuizAndAuthorNotFoundException(quizId, author._id)
+    }
+
+    return QuizRatingService.toQuizRatingDto(result)
+  }
+
+  /**
+   * Retrieves ratings for a quiz with pagination and sorting.
+   *
+   * @param quizId - The quiz identifier.
+   * @param options - Pagination and sorting options.
+   * @returns Paginated rating DTOs.
+   */
+  public async findQuizRatingsWithPagination(
+    quizId: string,
+    options: {
+      offset?: number
+      limit?: number
+      sort?: {
+        field?: 'created' | 'updated'
+        order?: 'asc' | 'desc'
+      }
+      commentsOnly?: boolean
+    },
+  ): Promise<PaginatedQuizRatingDto> {
+    this.logger.debug(`Find quiz ratings for ${quizId}`)
+
+    const { results, total, limit, offset } =
+      await this.quizRatingRepository.findQuizRatingsWithPagination(
+        quizId,
+        options,
+      )
+
+    this.logger.debug(`Found ${total} quiz ratings for ${quizId}`)
+
+    return {
+      results: results.map(QuizRatingService.toQuizRatingDto),
+      total,
+      limit,
+      offset,
+    }
+  }
+
+  /**
+   * Creates or updates a user's rating for a quiz.
+   *
+   * If a rating already exists for `(quizId, author)`, it will be updated.
+   * Otherwise, a new rating document is created.
+   *
+   * The quiz's `ratingSummary` is updated accordingly.
+   *
+   * @param quizId - The quiz identifier.
+   * @param author - The user creating or updating the rating.
+   * @param stars - Star rating value (1–5).
+   * @param comment - Optional feedback comment.
+   * @returns The resulting rating DTO.
+   */
+  public async createOrUpdateQuizRating(
+    quizId: string,
+    author: User,
+    stars: number,
+    comment?: string,
+  ): Promise<QuizRatingDto> {
+    const existingQuiz = await this.quizRepository.findQuizByIdOrThrow(quizId)
+
+    const existingQuizRating =
+      await this.quizRatingRepository.findQuizRatingByAuthor(quizId, author)
+
+    const previousStars = existingQuizRating?.stars
+
+    const now = new Date()
+
+    const result: QuizRating = existingQuizRating
+      ? await this.quizRatingRepository.updateQuizRating(
+          existingQuizRating._id,
+          now,
+          stars,
+          comment,
+        )
+      : await this.quizRatingRepository.createQuizRating(
+          quizId,
+          author,
+          now,
+          stars,
+          comment,
+        )
+
+    const ratingSummary = updateQuizRatingSummary({
+      summary: existingQuiz.ratingSummary,
+      previousStars,
+      nextStars: stars,
+      updatedAt: now,
+    })
+
+    await this.quizRepository.updateQuiz(quizId, {
+      ...existingQuiz,
+      ratingSummary,
+    })
+
+    return QuizRatingService.toQuizRatingDto(result)
+  }
+
+  /**
+   * Maps a rating persistence model to a public DTO.
+   *
+   * @param quizRating - The rating document.
+   * @returns The mapped DTO.
+   */
+  private static toQuizRatingDto(quizRating: QuizRating): QuizRatingDto {
+    return {
+      id: quizRating._id,
+      quizId: quizRating.quizId,
+      stars: quizRating.stars,
+      comment: quizRating.comment,
+      author: {
+        id: quizRating.author._id,
+        nickname: quizRating.author.defaultNickname,
+      },
+      createdAt: quizRating.created,
+      updatedAt: quizRating.updated,
+    }
+  }
+}

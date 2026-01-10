@@ -26,6 +26,10 @@ import {
   QuestionTypeAnswerDao,
   QuestionTypeAnswerDaoSchema,
 } from './question.schema'
+import {
+  QuizRatingSummary,
+  QuizRatingSummarySchema,
+} from './quiz-rating-summary.schema'
 
 /**
  * Mongoose schema for the Quiz collection.
@@ -107,6 +111,23 @@ export class Quiz {
    */
   @Prop({ type: String, ref: 'User' })
   owner: User
+
+  /**
+   * Aggregated rating statistics for the quiz.
+   *
+   * Contains precomputed rating data such as average rating, total number
+   * of ratings, and star distribution to support fast reads.
+   */
+  @Prop({
+    type: QuizRatingSummarySchema,
+    required: true,
+    default: () => ({
+      count: 0,
+      avg: 0,
+      stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+    }),
+  })
+  ratingSummary: QuizRatingSummary
 
   /**
    * The date and time when the quiz was created.

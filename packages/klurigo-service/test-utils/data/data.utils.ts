@@ -56,6 +56,7 @@ import {
   QuestionTypeAnswerDao,
   Quiz,
 } from '../../src/modules/quiz/repositories/models/schemas'
+import { buildDefaultQuizRatingSummary } from '../../src/modules/quiz/services/utils'
 import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
@@ -609,6 +610,7 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    ratingSummary: buildDefaultQuizRatingSummary(),
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),
@@ -644,6 +646,7 @@ export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    ratingSummary: buildDefaultQuizRatingSummary(),
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),

@@ -37,6 +37,8 @@ import {
   Quiz,
 } from '../repositories/models/schemas'
 
+import { buildDefaultQuizRatingSummary } from './utils'
+
 /**
  * Service for managing quiz-related operations.
  */
@@ -306,6 +308,7 @@ export class QuizService {
       languageCode: quizRequest.languageCode,
       questions: QuizService.buildQuizQuestions(quizRequest),
       owner: user,
+      ratingSummary: buildDefaultQuizRatingSummary(),
       created,
       updated: created,
     }

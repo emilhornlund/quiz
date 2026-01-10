@@ -3,10 +3,23 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { ProfileQuizController, QuizController } from './controllers'
-import { QuizRepository } from './repositories'
-import { Quiz, QuizSchema } from './repositories/models/schemas'
-import { QuizService } from './services'
+import { QuizRatingRepository, QuizRepository } from './repositories'
+import {
+  Quiz,
+  QuizRating,
+  QuizRatingSchema,
+  QuizSchema,
+} from './repositories/models/schemas'
+import { QuizRatingService, QuizService } from './services'
 
+/**
+ * NestJS module for quiz functionality.
+ *
+ * Provides:
+ * - Quiz persistence and orchestration.
+ * - Quiz rating persistence and orchestration.
+ * - Controllers for quiz and profile-scoped quiz operations.
+ */
 @Module({
   imports: [
     EventEmitterModule,
@@ -15,10 +28,20 @@ import { QuizService } from './services'
         name: Quiz.name,
         schema: QuizSchema,
       },
+      {
+        name: QuizRating.name,
+        schema: QuizRatingSchema,
+      },
     ]),
   ],
   controllers: [QuizController, ProfileQuizController],
-  providers: [Logger, QuizService, QuizRepository],
-  exports: [QuizService, QuizRepository],
+  providers: [
+    Logger,
+    QuizRatingRepository,
+    QuizRatingService,
+    QuizRepository,
+    QuizService,
+  ],
+  exports: [QuizRepository, QuizService],
 })
 export class QuizModule {}
