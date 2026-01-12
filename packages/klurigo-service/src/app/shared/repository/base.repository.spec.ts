@@ -385,6 +385,32 @@ describe('BaseRepository', () => {
         error,
       )
     })
+
+    it('should apply populate when provided', async () => {
+      const id = '1'
+      const data: UpdateQuery<TestDocument> = { name: 'updated' }
+      const populate = { path: 'someRef' }
+
+      const mockDoc = {
+        _id: '1',
+        name: 'updated',
+        createdAt: new Date(),
+      } as HydratedDocument<TestDocument>
+
+      const queryLike = {
+        populate: jest.fn().mockReturnThis(),
+        then: jest.fn((resolve: (v: unknown) => unknown) =>
+          Promise.resolve(resolve(mockDoc)),
+        ),
+      }
+
+      mockModel.findByIdAndUpdate.mockReturnValue(queryLike as any)
+
+      const result = await repository.update(id, data, { populate })
+
+      expect(result).toEqual(mockDoc)
+      expect(queryLike.populate).toHaveBeenCalledWith(populate)
+    })
   })
 
   describe('updateMany', () => {

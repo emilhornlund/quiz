@@ -1,8 +1,32 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { Model, QueryFilter, UpdateQuery } from 'mongoose'
+import {
+  Model,
+  PopulateOptions,
+  Query,
+  QueryFilter,
+  UpdateQuery,
+} from 'mongoose'
 
 import { IBaseRepository } from './base-repository.interface'
 import { CreateInput } from './types'
+
+/**
+ * Options for repository update operations.
+ *
+ * Allows callers to opt into additional query behaviors (for example, populating
+ * referenced fields) while keeping the method signature stable as new options
+ * are introduced.
+ */
+export type UpdateOptions = {
+  /**
+   * Mongoose populate configuration applied to the updated document query.
+   *
+   * Accepts a single populate definition or an array of populate definitions.
+   * When omitted, no population is performed.
+   */
+  populate?: PopulateOptions | PopulateOptions[]
+}
+
 /**
  * Abstract base repository providing common CRUD operations
  */
@@ -116,15 +140,34 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   /**
-   * Update a document by ID
+   * Updates a document by its id and returns the updated document.
+   *
+   * Applies the repository's update operator normalization via `buildUpdateOps`,
+   * and uses `findByIdAndUpdate` with:
+   * - `new: true` to return the updated document
+   * - `runValidators: true` to validate the update against the schema
+   *
+   * @param id - The id of the document to update.
+   * @param data - The update payload to apply to the document.
+   * @param options - Additional update options (for example, populate configuration).
+   *
+   * @returns The updated document if found; otherwise `null`.
    */
-  async update(id: string, data: UpdateQuery<T>): Promise<T | null> {
+  async update(
+    id: string,
+    data: UpdateQuery<T>,
+    options: UpdateOptions = {},
+  ): Promise<T | null> {
     try {
       const updateOps = this.buildUpdateOps(data)
-      const document = await this.model.findByIdAndUpdate(id, updateOps, {
+
+      const query = this.model.findByIdAndUpdate(id, updateOps, {
         new: true,
         runValidators: true,
       })
+
+      const document = await this.applyPopulate(query, options.populate)
+
       if (document) {
         this.logger.log(`Updated ${this.modelName} document with id '${id}'`)
       } else {
@@ -132,6 +175,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
           `No ${this.modelName} document found with id '${id}' to update`,
         )
       }
+
       return document
     } catch (error) {
       this.logger.error(
@@ -140,6 +184,26 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       )
       throw error
     }
+  }
+
+  /**
+   * Applies optional populate configuration to a Mongoose query.
+   *
+   * Used to keep repository methods concise while supporting optional population
+   * of referenced fields on read/update queries.
+   *
+   * @param query - The Mongoose query to optionally populate.
+   * @param populate - Populate configuration to apply (single or multiple paths).
+   *
+   * @returns The same query instance, with population applied when provided.
+   * @private
+   */
+  private applyPopulate<R>(
+    query: Query<R, T>,
+    populate?: PopulateOptions | PopulateOptions[],
+  ): Query<R, T> {
+    if (!populate) return query
+    return query.populate(populate)
   }
 
   /**
