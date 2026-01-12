@@ -119,6 +119,7 @@ export class QuizRatingService {
       await this.quizRatingRepository.findQuizRatingByAuthor(quizId, author)
 
     const previousStars = existingQuizRating?.stars
+    const previousComment = existingQuizRating?.comment
 
     const now = new Date()
 
@@ -145,6 +146,8 @@ export class QuizRatingService {
       summary: existingQuiz.ratingSummary,
       previousStars,
       nextStars: stars,
+      previousComment,
+      nextComment: comment,
       updatedAt: now,
     })
 

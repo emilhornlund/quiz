@@ -35,6 +35,14 @@ export class QuizRatingSummary {
   stars: Record<'1' | '2' | '3' | '4' | '5', number>
 
   /**
+   * The number of ratings that include a non-empty comment.
+   *
+   * Used to show how many participants provided written feedback in addition to a star rating.
+   */
+  @Prop({ type: Number, required: true, default: 0 })
+  commentCount: number
+
+  /**
    * The date and time when the rating summary was last updated.
    *
    * Updated whenever an individual rating affecting the summary changes.

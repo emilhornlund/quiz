@@ -265,6 +265,7 @@ describe(QuizRatingService.name, () => {
           count: 0,
           avg: 0,
           stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+          commentCount: 0,
         },
       })
 
@@ -286,6 +287,7 @@ describe(QuizRatingService.name, () => {
         count: 1,
         avg: 4,
         stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 0 },
+        commentCount: 1,
         updated: fixedNow,
       })
 
@@ -322,6 +324,8 @@ describe(QuizRatingService.name, () => {
         summary: existingQuiz.ratingSummary,
         previousStars: undefined,
         nextStars: stars,
+        previousComment: undefined,
+        nextComment: comment,
         updatedAt: fixedNow,
       })
 
@@ -332,6 +336,7 @@ describe(QuizRatingService.name, () => {
           count: 1,
           avg: 4,
           stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 0 },
+          commentCount: 1,
           updated: fixedNow,
         },
       })
@@ -362,6 +367,7 @@ describe(QuizRatingService.name, () => {
           count: 10,
           avg: 3.5,
           stars: { '1': 1, '2': 2, '3': 3, '4': 2, '5': 2 },
+          commentCount: 7,
           updated: fixedNow,
         },
       })
@@ -392,6 +398,7 @@ describe(QuizRatingService.name, () => {
         count: 10,
         avg: 3.2,
         stars: { '1': 1, '2': 3, '3': 3, '4': 2, '5': 1 },
+        commentCount: 8,
         updated: fixedNow,
       })
 
@@ -416,6 +423,8 @@ describe(QuizRatingService.name, () => {
         summary: existingQuiz.ratingSummary,
         previousStars: 5,
         nextStars: 2,
+        previousComment: 'Old comment',
+        nextComment: comment,
         updatedAt: fixedNow,
       })
 
@@ -426,6 +435,7 @@ describe(QuizRatingService.name, () => {
           count: 10,
           avg: 3.2,
           stars: { '1': 1, '2': 3, '3': 3, '4': 2, '5': 1 },
+          commentCount: 8,
           updated: fixedNow,
         },
       })
@@ -452,6 +462,7 @@ describe(QuizRatingService.name, () => {
           count: 0,
           avg: 0,
           stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+          commentCount: 0,
         },
       })
 
@@ -484,6 +495,8 @@ describe(QuizRatingService.name, () => {
 
       const call = (updateQuizRatingSummary as jest.Mock).mock.calls[0]?.[0]
       expect(call.updatedAt).toEqual(fixedNow)
+      expect(call.previousComment).toBeUndefined()
+      expect(call.nextComment).toBeUndefined()
     })
   })
 })

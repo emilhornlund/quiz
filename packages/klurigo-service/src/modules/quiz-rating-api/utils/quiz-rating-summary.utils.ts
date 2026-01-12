@@ -1,38 +1,52 @@
 import { QuizRatingSummary } from '../../quiz-core/repositories/models/schemas'
 
+type Star = 1 | 2 | 3 | 4 | 5
+type StarKey = '1' | '2' | '3' | '4' | '5'
+
 /**
  * Updates a quiz rating summary based on a rating change.
  *
  * Supported flows:
  * - Create: `previousStars` is undefined and `nextStars` is provided.
  * - Update: both `previousStars` and `nextStars` are provided (and may differ).
- * - No-op: stars did not change (common when only the comment is updated).
+ * - No-op: neither stars nor comment presence changed (common when only `updatedAt` changes).
  *
  * Notes:
  * - Star inputs are clamped to 1..5.
  * - Bucket counts never underflow below 0.
- * - `avg` is recomputed from buckets and rounded to 1 decimal.
+ * - `count` and `avg` are recomputed from buckets, and `avg` is rounded to 1 decimal.
+ * - `commentCount` tracks how many ratings include a non-empty comment.
+ *
+ * @param args - Arguments describing the summary update:
+ * - `summary`: the current rating summary.
+ * - `previousStars`: the previous star value, if an existing rating is being updated.
+ * - `nextStars`: the new star value.
+ * - `previousComment`: the previous comment value, used to track comment presence changes.
+ * - `nextComment`: the new comment value, used to track comment presence changes.
+ * - `updatedAt`: optional timestamp for the summary `updated` field.
+ * @returns The updated rating summary, with updated star buckets, `count`, `avg`, `commentCount`, and `updated`.
  */
 export function updateQuizRatingSummary(args: {
   summary: QuizRatingSummary
   previousStars?: number
   nextStars: number
+  previousComment?: string | null
+  nextComment?: string | null
   updatedAt?: Date
 }): QuizRatingSummary {
   const updatedAt = args.updatedAt ?? new Date()
 
-  const clampStars = (value: number): 1 | 2 | 3 | 4 | 5 => {
-    if (value <= 1) return 1
-    if (value >= 5) return 5
-    return value as 1 | 2 | 3 | 4 | 5
-  }
-
-  const prev =
+  const prevStars =
     args.previousStars == null ? undefined : clampStars(args.previousStars)
-  const next = clampStars(args.nextStars)
+  const nextStars = clampStars(args.nextStars)
 
-  // No-op if stars didn't change (typical: comment-only update)
-  if (prev === next) {
+  const prevHasComment = hasComment(args.previousComment)
+  const nextHasComment = hasComment(args.nextComment)
+
+  const starsChanged = prevStars !== nextStars
+  const commentPresenceChanged = prevHasComment !== nextHasComment
+
+  if (!starsChanged && !commentPresenceChanged) {
     return {
       ...args.summary,
       updated: updatedAt,
@@ -40,29 +54,35 @@ export function updateQuizRatingSummary(args: {
   }
 
   const stars = { ...args.summary.stars }
+  let commentCount = args.summary.commentCount ?? 0
 
-  // Create path: increment count and bucket
-  if (prev == null) {
-    const nextKey = String(next) as keyof QuizRatingSummary['stars']
-    stars[nextKey] = (stars[nextKey] ?? 0) + 1
-
-    const count = (args.summary.count ?? 0) + 1
-    const { avg } = computeCountAndAvgFromBuckets(stars)
-
-    return {
-      count,
-      avg,
-      stars,
-      updated: updatedAt,
-    }
+  // Comment count delta (presence-based)
+  if (commentPresenceChanged) {
+    commentCount += nextHasComment ? 1 : -1
+    commentCount = Math.max(0, commentCount)
   }
 
-  // Update path: move one bucket entry between stars
-  const prevKey = String(prev) as keyof QuizRatingSummary['stars']
-  const nextKey = String(next) as keyof QuizRatingSummary['stars']
+  // Stars create/update
+  if (starsChanged) {
+    if (prevStars == null) {
+      // Create: add one rating to next bucket
+      incrementBucket(stars, nextStars)
 
-  stars[prevKey] = Math.max(0, (stars[prevKey] ?? 0) - 1)
-  stars[nextKey] = (stars[nextKey] ?? 0) + 1
+      const { count, avg } = computeCountAndAvgFromBuckets(stars)
+
+      return {
+        count,
+        avg,
+        stars,
+        commentCount,
+        updated: updatedAt,
+      }
+    }
+
+    // Update: move one rating between buckets
+    decrementBucket(stars, prevStars)
+    incrementBucket(stars, nextStars)
+  }
 
   const { count, avg } = computeCountAndAvgFromBuckets(stars)
 
@@ -70,8 +90,67 @@ export function updateQuizRatingSummary(args: {
     count,
     avg,
     stars,
+    commentCount,
     updated: updatedAt,
   }
+}
+
+/**
+ * Clamps a star value to the supported rating range (1–5).
+ *
+ * @param value - The star value to clamp.
+ * @returns A star value within the inclusive range 1–5.
+ */
+function clampStars(value: number): Star {
+  if (value <= 1) return 1
+  if (value >= 5) return 5
+  return value as Star
+}
+
+/**
+ * Converts a numeric star value to its corresponding bucket key.
+ *
+ * @param star - The star value (1–5).
+ * @returns The bucket key representing the star value (`'1'`..`'5'`).
+ */
+function toStarKey(star: Star): StarKey {
+  return String(star) as StarKey
+}
+
+/**
+ * Increments the bucket count for a given star value.
+ *
+ * @param stars - The star distribution buckets to mutate.
+ * @param star - The star bucket to increment.
+ */
+function incrementBucket(stars: QuizRatingSummary['stars'], star: Star): void {
+  const key = toStarKey(star)
+  stars[key] = (stars[key] ?? 0) + 1
+}
+
+/**
+ * Decrements the bucket count for a given star value.
+ *
+ * Bucket values are clamped to never underflow below 0.
+ *
+ * @param stars - The star distribution buckets to mutate.
+ * @param star - The star bucket to decrement.
+ */
+function decrementBucket(stars: QuizRatingSummary['stars'], star: Star): void {
+  const key = toStarKey(star)
+  stars[key] = Math.max(0, (stars[key] ?? 0) - 1)
+}
+
+/**
+ * Checks whether a comment value should be counted as a comment.
+ *
+ * A comment counts as present when it contains at least one non-whitespace character.
+ *
+ * @param value - The comment value to evaluate.
+ * @returns `true` if the comment is non-empty after trimming; otherwise `false`.
+ */
+function hasComment(value?: string | null): boolean {
+  return (value ?? '').trim().length > 0
 }
 
 /**
@@ -80,10 +159,16 @@ export function updateQuizRatingSummary(args: {
  * - `count` is the sum of all bucket values.
  * - `avg` is the weighted mean rounded to 1 decimal.
  * - Returns `{count: 0, avg: 0}` when there are no ratings.
+ *
+ * @param stars - The star distribution buckets (`'1'`..`'5'`).
+ * @returns An object containing:
+ * - `count`: the total number of ratings across all buckets.
+ * - `avg`: the weighted mean star rating rounded to 1 decimal.
  */
-function computeCountAndAvgFromBuckets(
-  stars: Record<'1' | '2' | '3' | '4' | '5', number>,
-): { count: number; avg: number } {
+function computeCountAndAvgFromBuckets(stars: Record<StarKey, number>): {
+  count: number
+  avg: number
+} {
   const c1 = stars['1'] ?? 0
   const c2 = stars['2'] ?? 0
   const c3 = stars['3'] ?? 0
