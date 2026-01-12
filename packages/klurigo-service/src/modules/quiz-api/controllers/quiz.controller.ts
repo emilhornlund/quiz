@@ -31,12 +31,14 @@ import {
   RequiresScopes,
 } from '../../authentication/controllers/decorators'
 import { AuthorizedQuiz } from '../../quiz-core/decorators/auth'
+import {
+  ApiQuizIdParam,
+  RouteQuizIdParam,
+} from '../../quiz-core/decorators/params'
 import { User } from '../../user/repositories'
 import { ParseQuizRequestPipe } from '../pipes'
 import { QuizService } from '../services'
 
-import { ApiQuizIdParam } from './decorators/api'
-import { RouteQuizIdParam } from './decorators/params'
 import {
   PaginatedQuizResponse,
   PublicQuizPageFilter,

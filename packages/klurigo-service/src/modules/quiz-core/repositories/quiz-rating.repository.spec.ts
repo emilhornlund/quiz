@@ -19,10 +19,11 @@ jest.mock('../../../app/shared/repository', () => {
     protected readonly model: unknown
     protected readonly entityName: string
 
-    // These are the two BaseRepository methods used by QuizRatingRepository
+    // BaseRepository methods used by QuizRatingRepository
     public findOne: jest.Mock
     public findWithPagination: jest.Mock
     public create: jest.Mock
+    public update: jest.Mock
 
     constructor(model: unknown, entityName: string) {
       this.model = model
@@ -30,6 +31,7 @@ jest.mock('../../../app/shared/repository', () => {
       this.findOne = jest.fn()
       this.findWithPagination = jest.fn()
       this.create = jest.fn()
+      this.update = jest.fn()
     }
   }
 
@@ -41,9 +43,7 @@ jest.mock('../../../app/shared/repository', () => {
 
 describe(QuizRatingRepository.name, () => {
   let repository: QuizRatingRepository
-  let quizRatingModel: {
-    findByIdAndUpdate: jest.Mock
-  } & Partial<Model<QuizRating>>
+  let quizRatingModel: Partial<Model<QuizRating>>
 
   const fixedNow = new Date('2026-01-10T12:00:00.000Z')
 
@@ -51,9 +51,7 @@ describe(QuizRatingRepository.name, () => {
     jest.useFakeTimers()
     jest.setSystemTime(fixedNow)
 
-    quizRatingModel = {
-      findByIdAndUpdate: jest.fn(),
-    }
+    quizRatingModel = {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -137,7 +135,7 @@ describe(QuizRatingRepository.name, () => {
       expect(buildSortObject).toHaveBeenCalledTimes(1)
       expect(buildSortObject).toHaveBeenCalledWith({
         field: 'updated',
-        direction: -1,
+        direction: 1,
       })
 
       expect(repository.findWithPagination).toHaveBeenCalledTimes(1)
@@ -242,7 +240,7 @@ describe(QuizRatingRepository.name, () => {
       expect(buildSortObject).toHaveBeenCalledTimes(1)
       expect(buildSortObject).toHaveBeenCalledWith({
         field: 'updated',
-        direction: -1,
+        direction: 1,
       })
     })
 
@@ -368,7 +366,7 @@ describe(QuizRatingRepository.name, () => {
         updated: fixedNow,
       } as unknown as QuizRating
 
-      quizRatingModel.findByIdAndUpdate.mockResolvedValue(updated)
+      ;(repository.update as jest.Mock).mockResolvedValue(updated)
 
       const result = await repository.updateQuizRating(
         ratingId,
@@ -377,11 +375,11 @@ describe(QuizRatingRepository.name, () => {
         comment,
       )
 
-      expect(quizRatingModel.findByIdAndUpdate).toHaveBeenCalledTimes(1)
-      expect(quizRatingModel.findByIdAndUpdate).toHaveBeenCalledWith(
+      expect(repository.update).toHaveBeenCalledTimes(1)
+      expect(repository.update).toHaveBeenCalledWith(
         ratingId,
         { stars, comment, updated: fixedNow },
-        { new: true },
+        { populate: { path: 'author' } },
       )
       expect(result).toBe(updated)
     })
@@ -390,29 +388,35 @@ describe(QuizRatingRepository.name, () => {
       const ratingId = 'missing-rating'
       const stars = 5
 
-      quizRatingModel.findByIdAndUpdate.mockResolvedValue(null)
+      ;(repository.update as jest.Mock).mockResolvedValue(null)
 
       await expect(
         repository.updateQuizRating(ratingId, fixedNow, stars),
       ).resolves.toBeNull()
+
+      expect(repository.update).toHaveBeenCalledTimes(1)
+      expect(repository.update).toHaveBeenCalledWith(
+        ratingId,
+        { stars, comment: undefined, updated: fixedNow },
+        { populate: { path: 'author' } },
+      )
     })
 
     it('always sets updated timestamp to now', async () => {
       const ratingId = 'rating-1'
-
       const now2 = new Date('2026-01-10T12:30:00.000Z')
       jest.setSystemTime(now2)
-
-      quizRatingModel.findByIdAndUpdate.mockResolvedValue({
+      ;(repository.update as jest.Mock).mockResolvedValue({
         _id: ratingId,
       } as unknown as QuizRating)
 
       await repository.updateQuizRating(ratingId, now2, 1, 'x')
 
-      expect(quizRatingModel.findByIdAndUpdate).toHaveBeenCalledWith(
+      expect(repository.update).toHaveBeenCalledTimes(1)
+      expect(repository.update).toHaveBeenCalledWith(
         ratingId,
         { stars: 1, comment: 'x', updated: now2 },
-        { new: true },
+        { populate: { path: 'author' } },
       )
     })
   })

@@ -83,3 +83,28 @@ export type PaginatedQuizRatingDto = {
    */
   readonly offset: number
 }
+
+/**
+ * DTO representing the payload for creating a quiz rating.
+ *
+ * Used when a participant submits a star rating (and optionally a comment) for a quiz they played.
+ */
+export type CreateQuizRatingDto = {
+  /**
+   * The star rating value for the quiz (1–5).
+   *
+   * Must be an integer between 1 and 5 (inclusive).
+   *
+   * Example: 5
+   */
+  readonly stars: number
+
+  /**
+   * Optional free-text feedback about the quiz.
+   *
+   * Intended for short comments. When provided, it should be a non-empty string.
+   *
+   * Example: "Great quiz—good pacing and fun questions."
+   */
+  readonly comment?: string
+}

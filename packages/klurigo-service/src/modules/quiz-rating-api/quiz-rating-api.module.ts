@@ -4,6 +4,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { GameCoreModule } from '../game-core'
 import { QuizCoreModule } from '../quiz-core'
 
+import { ProfileQuizRatingController } from './controllers/profile-quiz-rating.controller'
+import { QuizRatingController } from './controllers/quiz-rating.controller'
 import { QuizRatingService } from './services'
 
 /**
@@ -11,6 +13,7 @@ import { QuizRatingService } from './services'
  */
 @Module({
   imports: [EventEmitterModule, GameCoreModule, QuizCoreModule],
+  controllers: [QuizRatingController, ProfileQuizRatingController],
   providers: [Logger, QuizRatingService],
   exports: [],
 })

@@ -80,7 +80,7 @@ export class QuizRatingRepository extends BaseRepository<QuizRating> {
 
     const sort = buildSortObject({
       field: options?.sort?.field ?? 'updated',
-      direction: options?.sort?.order === 'asc' ? 1 : -1,
+      direction: (options?.sort?.order ?? 'asc') === 'asc' ? 1 : -1,
     })
 
     const findOptions = {
@@ -146,10 +146,10 @@ export class QuizRatingRepository extends BaseRepository<QuizRating> {
     stars: number,
     comment?: string,
   ): Promise<QuizRating | null> {
-    return this.quizRatingModel.findByIdAndUpdate(
+    return this.update(
       quizRatingId,
       { stars, comment, updated: now },
-      { new: true },
+      { populate: { path: 'author' } },
     )
   }
 }

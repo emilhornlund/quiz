@@ -137,6 +137,15 @@ export const QUIZ_DURATION_ALLOWED = [
   5, 10, 20, 30, 45, 60, 90, 120, 180, 240,
 ] as const
 
+/* Quiz Rating Stars */
+export const QUIZ_RATING_STARS_MIN = 1
+export const QUIZ_RATING_STARS_MAX = 5
+
+/* Quiz Rating Comment */
+export const QUIZ_RATING_COMMENT_MIN_LENGTH = 1
+export const QUIZ_RATING_COMMENT_MAX_LENGTH = 255
+export const QUIZ_RATING_COMMENT_REGEX = /^(?!\s*$).+/
+
 /* Player Link Code */
 export const PLAYER_LINK_CODE_REGEX = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/
 

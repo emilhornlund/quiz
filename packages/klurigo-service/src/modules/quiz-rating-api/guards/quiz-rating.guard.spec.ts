@@ -14,16 +14,17 @@ describe('QuizRatingGuard', () => {
   let guard: QuizRatingGuard
 
   type HasCompletedFn =
-    GameRepository['hasCompletedGamesByQuizIdAndParticipantId']
+    GameRepository['hasCompletedGamesByQuizIdAndPlayerParticipantId']
 
   const hasCompletedGamesByQuizIdAndParticipantId: jest.MockedFunction<HasCompletedFn> =
     jest.fn()
 
   const gameRepository: Pick<
     GameRepository,
-    'hasCompletedGamesByQuizIdAndParticipantId'
+    'hasCompletedGamesByQuizIdAndPlayerParticipantId'
   > = {
-    hasCompletedGamesByQuizIdAndParticipantId,
+    hasCompletedGamesByQuizIdAndPlayerParticipantId:
+      hasCompletedGamesByQuizIdAndParticipantId,
   }
 
   const buildContext = (request: unknown): ExecutionContext =>

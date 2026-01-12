@@ -62,7 +62,7 @@ export class QuizRatingGuard implements CanActivate {
     }
 
     const hasGames =
-      await this.gameRepository.hasCompletedGamesByQuizIdAndParticipantId(
+      await this.gameRepository.hasCompletedGamesByQuizIdAndPlayerParticipantId(
         quizId,
         request.user._id,
       )
