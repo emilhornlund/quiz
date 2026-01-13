@@ -5,6 +5,7 @@ import {
   GameResultDto,
   GameResultPlayerMetricDto,
   GameResultQuestionMetricDto,
+  GameResultRating,
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
   QuizVisibility,
@@ -12,7 +13,8 @@ import {
 import { Injectable, Logger } from '@nestjs/common'
 
 import { GameDocument } from '../../game-core/repositories/models/schemas'
-import { UserRepository } from '../../user/repositories'
+import { QuizRatingRepository } from '../../quiz-core/repositories'
+import { User, UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
 import {
@@ -34,10 +36,12 @@ export class GameResultService {
    * Constructs a new GameResultService.
    *
    * @param gameResultRepository - Repository for accessing stored game results.
+   * @param quizRatingRepository - Repository for retrieving quiz ratings authored by participants.
    * @param userRepository - Repository for accessing user data.
    */
   constructor(
     private readonly gameResultRepository: GameResultRepository,
+    private readonly quizRatingRepository: QuizRatingRepository,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -85,6 +89,11 @@ export class GameResultService {
 
     const hostUser = await this.userRepository.findUserById(hostParticipantId)
 
+    const participantUser =
+      await this.userRepository.findUserById(participantId)
+
+    const rating = await this.getQuizRating(quiz._id, participantUser)
+
     return {
       id,
       name,
@@ -121,6 +130,7 @@ export class GameResultService {
             ),
           }),
       duration: (completed.getTime() - created.getTime()) / 1000,
+      rating,
       created,
     }
   }
@@ -152,6 +162,39 @@ export class GameResultService {
     this.logger.log(
       `Deleted '${deletedCount}' game results by their gameId '${gameId}'.`,
     )
+  }
+
+  /**
+   * Retrieves the quiz rating authored by a specific participant, if it exists.
+   *
+   * If the participant user cannot be resolved, or if no rating exists for the quiz authored by that user,
+   * no rating is included in the game result.
+   *
+   * @param quizId - The quiz identifier to match against the rating's `quiz` reference.
+   * @param author - The participant user to match against the rating's author.
+   *
+   * @returns The rating (stars and optional comment) when a rating exists; otherwise `undefined`.
+   *
+   * @private
+   */
+  private async getQuizRating(
+    quizId: string,
+    author: User | null,
+  ): Promise<GameResultRating | undefined> {
+    if (!author) {
+      return undefined
+    }
+
+    const rating = await this.quizRatingRepository.findQuizRatingByAuthor(
+      quizId,
+      author,
+    )
+
+    if (!rating) {
+      return undefined
+    }
+
+    return { stars: rating.stars, comment: rating.comment }
   }
 
   /**

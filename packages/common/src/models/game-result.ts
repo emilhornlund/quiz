@@ -25,6 +25,23 @@ export type GameResultQuizDto = {
 }
 
 /**
+ * Represents a participant's rating for the quiz used in the completed game.
+ *
+ * Included when the requesting participant has submitted a rating for the quiz.
+ */
+export type GameResultRating = {
+  /**
+   * The star rating value for the quiz (1–5).
+   */
+  readonly stars: number
+
+  /**
+   * Optional free-text feedback about the quiz.
+   */
+  readonly comment?: string
+}
+
+/**
  * Represents the final results of a completed quiz game.
  *
  * This object includes metadata about the game session as well as detailed
@@ -69,6 +86,11 @@ export type GameResultDto = {
    * The duration in seconds the game session was active.
    */
   readonly duration: number
+
+  /**
+   * The participant's rating for the quiz, if the participant has rated it.
+   */
+  readonly rating?: GameResultRating
 
   /**
    * The date and time when the game session was created.

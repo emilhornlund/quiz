@@ -3,6 +3,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { GameCoreModule } from '../game-core'
+import { QuizCoreModule } from '../quiz-core'
 import { UserModule } from '../user'
 
 import { GameResultController } from './controllers'
@@ -25,6 +26,7 @@ import { GameResultService } from './services'
         schema: GameResultSchema,
       },
     ]),
+    QuizCoreModule,
     UserModule,
   ],
   controllers: [GameResultController],
