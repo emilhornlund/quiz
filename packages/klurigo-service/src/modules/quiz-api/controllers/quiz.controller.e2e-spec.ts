@@ -486,7 +486,10 @@ describe('QuizController (e2e)', () => {
             imageCoverURL: updatedData.imageCoverURL,
             languageCode: updatedData.languageCode,
             numberOfQuestions: updatedData.questions.length,
-            author: {}, //TODO fix this why is it underfined?
+            author: {
+              id: user._id,
+              name: user.defaultNickname,
+            },
             ratingSummary: {
               comments: 0,
               stars: 0,

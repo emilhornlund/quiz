@@ -112,7 +112,11 @@ export class QuizRepository extends BaseRepository<Quiz> {
    * @throws QuizNotFoundException If no quiz is found with the given ID.
    */
   public async updateQuiz(quizId: string, quiz: Partial<Quiz>): Promise<Quiz> {
-    const document = await this.update(quizId, { ...quiz, updated: new Date() })
+    const document = await this.update(
+      quizId,
+      { ...quiz, updated: new Date() },
+      { populate: { path: 'owner' } },
+    )
 
     if (!document) {
       throw new QuizNotFoundException(quizId)

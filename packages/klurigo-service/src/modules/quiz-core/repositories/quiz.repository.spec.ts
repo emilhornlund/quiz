@@ -228,10 +228,14 @@ describe('QuizRepository', () => {
       ).toHaveBeenCalledTimes(1)
       expect(
         (repo as unknown as { update: jest.Mock }).update,
-      ).toHaveBeenCalledWith(quizId, {
-        ...patch,
-        updated: new Date('2026-01-10T10:11:12.000Z'),
-      })
+      ).toHaveBeenCalledWith(
+        quizId,
+        {
+          ...patch,
+          updated: new Date('2026-01-10T10:11:12.000Z'),
+        },
+        { populate: { path: 'owner' } },
+      )
     })
 
     it('throws QuizNotFoundException when BaseRepository.update returns null', async () => {
@@ -246,10 +250,14 @@ describe('QuizRepository', () => {
 
       expect(
         (repo as unknown as { update: jest.Mock }).update,
-      ).toHaveBeenCalledWith(quizId, {
-        ...patch,
-        updated: new Date('2026-01-10T10:11:12.000Z'),
-      })
+      ).toHaveBeenCalledWith(
+        quizId,
+        {
+          ...patch,
+          updated: new Date('2026-01-10T10:11:12.000Z'),
+        },
+        { populate: { path: 'owner' } },
+      )
     })
   })
 
