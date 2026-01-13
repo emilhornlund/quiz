@@ -432,6 +432,10 @@ describe('QuizController (e2e)', () => {
               id: user._id,
               name: user.defaultNickname,
             },
+            ratingSummary: {
+              comments: 0,
+              stars: 0,
+            },
             created: created.toISOString(),
             updated: updated.toISOString(),
           })
@@ -482,7 +486,11 @@ describe('QuizController (e2e)', () => {
             imageCoverURL: updatedData.imageCoverURL,
             languageCode: updatedData.languageCode,
             numberOfQuestions: updatedData.questions.length,
-            author: {},
+            author: {}, //TODO fix this why is it underfined?
+            ratingSummary: {
+              comments: 0,
+              stars: 0,
+            },
             created: originalQuiz.created.toISOString(),
             updated: expect.any(String),
           })

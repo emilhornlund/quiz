@@ -21,6 +21,7 @@ import {
 } from '../decorators/api'
 
 import { QuizAuthorResponse } from './quiz-author.response'
+import { QuizRatingSummaryResponse } from './quiz-rating-summary.response'
 
 /**
  * Represents the response object for a quiz.
@@ -93,6 +94,20 @@ export class QuizResponse implements QuizResponseDto {
     type: QuizAuthorResponse,
   })
   author: QuizAuthorResponse
+
+  /**
+   * Aggregated rating information for the quiz.
+   *
+   * Includes the average star rating and the total number of comments.
+   */
+  @ApiProperty({
+    title: 'Rating Summary',
+    description:
+      'Aggregated rating information for the quiz, including average stars and comment count.',
+    required: true,
+    type: QuizRatingSummaryResponse,
+  })
+  readonly ratingSummary: QuizRatingSummaryResponse
 
   /**
    * The date and time when the quiz was created.

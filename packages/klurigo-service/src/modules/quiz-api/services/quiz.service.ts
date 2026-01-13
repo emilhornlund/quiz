@@ -566,6 +566,7 @@ export class QuizService {
       languageCode,
       questions,
       owner,
+      ratingSummary,
       created,
       updated,
     } = quiz
@@ -582,6 +583,10 @@ export class QuizService {
       author: {
         id: owner._id,
         name: owner.defaultNickname,
+      },
+      ratingSummary: {
+        stars: ratingSummary.avg,
+        comments: ratingSummary.commentCount,
       },
       created,
       updated,
