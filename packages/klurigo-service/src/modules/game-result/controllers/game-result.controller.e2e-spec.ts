@@ -92,6 +92,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             quiz: {
               id: quiz._id,
+              canRateQuiz: false,
               canHostLiveGame: true,
             },
             host: {
@@ -245,6 +246,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             quiz: {
               id: quiz._id,
+              canRateQuiz: true,
               canHostLiveGame: true,
             },
             host: {
@@ -407,6 +409,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             quiz: {
               id: quiz._id,
+              canRateQuiz: false,
               canHostLiveGame: true,
             },
             host: {
@@ -548,6 +551,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             quiz: {
               id: quiz._id,
+              canRateQuiz: true,
               canHostLiveGame: true,
             },
             host: {

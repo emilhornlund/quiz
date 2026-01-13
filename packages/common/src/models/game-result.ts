@@ -15,6 +15,14 @@ export type GameResultQuizDto = {
   readonly id: string
 
   /**
+   * Indicates whether the caller is allowed to submit a rating for this quiz.
+   *
+   * This flag is evaluated in the context of the requesting participant and is typically `false`
+   * for the quiz owner (owners cannot rate their own quizzes).
+   */
+  readonly canRateQuiz: boolean
+
+  /**
    * Indicates whether the caller can host a new live game based on this quiz.
    *
    * This is typically `true` when:

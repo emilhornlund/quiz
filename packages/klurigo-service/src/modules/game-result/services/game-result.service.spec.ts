@@ -268,6 +268,7 @@ describe(GameResultService.name, () => {
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: false,
           canHostLiveGame: true,
         })
       })
@@ -299,6 +300,7 @@ describe(GameResultService.name, () => {
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: true,
         })
       })
@@ -330,6 +332,7 @@ describe(GameResultService.name, () => {
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: false,
         })
       })
@@ -361,6 +364,7 @@ describe(GameResultService.name, () => {
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: true,
         })
       })

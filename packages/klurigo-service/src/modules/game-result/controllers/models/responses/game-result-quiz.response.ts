@@ -15,6 +15,23 @@ export class GameResultQuizResponse implements GameResultQuizDto {
   readonly id: string
 
   /**
+   * Indicates whether the caller is allowed to submit a rating for this quiz.
+   *
+   * This flag is evaluated in the context of the requesting participant and is typically `false`
+   * for the quiz owner (owners cannot rate their own quizzes).
+   */
+  @ApiProperty({
+    title: 'Can rate quiz',
+    description:
+      'Whether the caller is allowed to submit a rating for this quiz. Typically false for the quiz owner.',
+    example: true,
+    required: true,
+    type: Boolean,
+  })
+  @IsBoolean()
+  readonly canRateQuiz: boolean
+
+  /**
    * Indicates whether the caller can create a new live game based on this quiz.
    *
    * This is typically `true` when:

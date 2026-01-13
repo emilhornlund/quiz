@@ -85,6 +85,7 @@ export class GameResultService {
 
     const isOwner = quiz.owner?._id === participantId
     const isPublicQuiz = quiz.visibility === QuizVisibility.Public
+    const canRateQuiz = !isOwner
     const canHostLiveGame = isOwner || isPublicQuiz
 
     const hostUser = await this.userRepository.findUserById(hostParticipantId)
@@ -97,7 +98,7 @@ export class GameResultService {
     return {
       id,
       name,
-      quiz: { id: quiz._id, canHostLiveGame },
+      quiz: { id: quiz._id, canRateQuiz, canHostLiveGame },
       host: {
         id: hostParticipantId,
         nickname: hostUser?.defaultNickname || 'N/A',
