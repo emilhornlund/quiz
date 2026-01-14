@@ -1,10 +1,10 @@
-import { GameParticipantType, GameStatus } from '@klurigo/common'
+import { GameStatus } from '@klurigo/common'
 import type { QueryFilter } from 'mongoose'
 
 import { GameRepository } from './game.repository'
 import type { Game } from './models/schemas'
 
-describe('GameRepository.hasCompletedGamesByQuizIdAndPlayerParticipantId', () => {
+describe('GameRepository.hasCompletedGamesByQuizIdAndParticipantId', () => {
   let repository: GameRepository
   let existsMock: jest.MockedFunction<
     (filter: QueryFilter<Game>) => Promise<boolean>
@@ -26,22 +26,14 @@ describe('GameRepository.hasCompletedGamesByQuizIdAndPlayerParticipantId', () =>
     existsMock.mockResolvedValueOnce(true)
 
     await expect(
-      repository.hasCompletedGamesByQuizIdAndPlayerParticipantId(
-        'quiz-1',
-        'user-1',
-      ),
+      repository.hasCompletedGamesByQuizIdAndParticipantId('quiz-1', 'user-1'),
     ).resolves.toBe(true)
 
     expect(existsMock).toHaveBeenCalledTimes(1)
     expect(existsMock).toHaveBeenCalledWith({
       status: { $in: [GameStatus.Completed] },
       quiz: { _id: 'quiz-1' },
-      participants: {
-        $elemMatch: {
-          participantId: 'user-1',
-          type: GameParticipantType.PLAYER,
-        },
-      },
+      'participants.participantId': 'user-1',
     })
   })
 
@@ -49,22 +41,14 @@ describe('GameRepository.hasCompletedGamesByQuizIdAndPlayerParticipantId', () =>
     existsMock.mockResolvedValueOnce(false)
 
     await expect(
-      repository.hasCompletedGamesByQuizIdAndPlayerParticipantId(
-        'quiz-1',
-        'user-1',
-      ),
+      repository.hasCompletedGamesByQuizIdAndParticipantId('quiz-1', 'user-1'),
     ).resolves.toBe(false)
 
     expect(existsMock).toHaveBeenCalledTimes(1)
     expect(existsMock).toHaveBeenCalledWith({
       status: { $in: [GameStatus.Completed] },
       quiz: { _id: 'quiz-1' },
-      participants: {
-        $elemMatch: {
-          participantId: 'user-1',
-          type: GameParticipantType.PLAYER,
-        },
-      },
+      'participants.participantId': 'user-1',
     })
   })
 
@@ -72,22 +56,14 @@ describe('GameRepository.hasCompletedGamesByQuizIdAndPlayerParticipantId', () =>
     existsMock.mockRejectedValueOnce(new Error('db failed'))
 
     await expect(
-      repository.hasCompletedGamesByQuizIdAndPlayerParticipantId(
-        'quiz-1',
-        'user-1',
-      ),
+      repository.hasCompletedGamesByQuizIdAndParticipantId('quiz-1', 'user-1'),
     ).rejects.toThrow('db failed')
 
     expect(existsMock).toHaveBeenCalledTimes(1)
     expect(existsMock).toHaveBeenCalledWith({
       status: { $in: [GameStatus.Completed] },
       quiz: { _id: 'quiz-1' },
-      participants: {
-        $elemMatch: {
-          participantId: 'user-1',
-          type: GameParticipantType.PLAYER,
-        },
-      },
+      'participants.participantId': 'user-1',
     })
   })
 })

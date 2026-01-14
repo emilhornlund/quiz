@@ -1,4 +1,4 @@
-import { GameParticipantType, GameStatus } from '@klurigo/common'
+import { GameStatus } from '@klurigo/common'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, QueryFilter } from 'mongoose'
@@ -186,29 +186,24 @@ export class GameRepository extends BaseRepository<Game> {
   }
 
   /**
-   * Checks whether a player participant has played at least one completed game for a specific quiz.
+   * Checks whether a participant has played at least one completed game for a specific quiz.
    *
    * This is used to enforce authorization rules for quiz-related operations (for example, allowing a user
-   * to rate a quiz only after they have participated as a player in a completed game that used that quiz).
+   * to rate a quiz only after they have participated in a completed game that used that quiz).
    *
    * @param quizId - The quiz id to match against `game.quiz._id`.
-   * @param playerParticipantId - The participant id to match against a `participants` entry where `type` is `PLAYER`.
+   * @param participantId - The participant id to match against `participants.participantId`.
    *
-   * @returns `true` if at least one completed game exists for the given quiz and player participant; otherwise `false`.
+   * @returns `true` if at least one completed game exists for the given quiz and participant; otherwise `false`.
    */
-  public async hasCompletedGamesByQuizIdAndPlayerParticipantId(
+  public async hasCompletedGamesByQuizIdAndParticipantId(
     quizId: string,
-    playerParticipantId: string,
+    participantId: string,
   ): Promise<boolean> {
     const filter: QueryFilter<Game> = {
       status: { $in: [GameStatus.Completed] },
       quiz: { _id: quizId },
-      participants: {
-        $elemMatch: {
-          participantId: playerParticipantId,
-          type: GameParticipantType.PLAYER,
-        },
-      },
+      'participants.participantId': participantId,
     }
 
     return this.exists(filter)

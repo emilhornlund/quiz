@@ -2,11 +2,13 @@ import { GameStatus } from '@klurigo/common'
 import { INestApplication } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
 import supertest from 'supertest'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   buildMockPrimaryUser,
   buildMockQuizRating,
   buildMockSecondaryUser,
+  buildMockTertiaryUser,
   createMockClassicQuiz,
   createMockGameDocument,
   createMockGameHostParticipantDocument,
@@ -47,9 +49,12 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
 
   describe('/api/profile/quizzes/:quizId/ratings (PUT)', () => {
     let gameParticipantHostUserAccessToken: string
+    let gameParticipantHostUser: User
 
     let gameParticipantPlayerUser: User
     let gameParticipantPlayerUserAccessToken: string
+
+    let gameParticipantHostUserAndQuizOwnerAccessToken: string
 
     let quiz: Quiz
 
@@ -63,6 +68,7 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
         app,
         buildMockPrimaryUser(),
       )
+      gameParticipantHostUser = primaryAuthenticatedUser.user
       gameParticipantHostUserAccessToken = primaryAuthenticatedUser.accessToken
 
       const secondaryAuthenticatedUser = await createDefaultUserAndAuthenticate(
@@ -73,9 +79,16 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
       gameParticipantPlayerUserAccessToken =
         secondaryAuthenticatedUser.accessToken
 
+      const tertiaryAuthenticatedUser = await createDefaultUserAndAuthenticate(
+        app,
+        buildMockTertiaryUser(),
+      )
+      gameParticipantHostUserAndQuizOwnerAccessToken =
+        tertiaryAuthenticatedUser.accessToken
+
       quiz = await quizModel.create(
         createMockClassicQuiz({
-          owner: primaryAuthenticatedUser.user,
+          owner: tertiaryAuthenticatedUser.user,
         }),
       )
 
@@ -85,6 +98,9 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
           participants: [
             createMockGameHostParticipantDocument({
               participantId: primaryAuthenticatedUser.user._id,
+            }),
+            createMockGameHostParticipantDocument({
+              participantId: tertiaryAuthenticatedUser.user._id,
             }),
             createMockGamePlayerParticipantDocument({
               participantId: secondaryAuthenticatedUser.user._id,
@@ -123,6 +139,33 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
         })
     })
 
+    it('should create a rating when caller is a host participant not quiz owner', () => {
+      return supertest(app.getHttpServer())
+        .put(`/api/profile/quizzes/${quiz._id}/ratings`)
+        .set({
+          Authorization: `Bearer ${gameParticipantHostUserAccessToken}`,
+        })
+        .send({
+          stars,
+          comment,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            id: expect.any(String),
+            quizId: quiz._id,
+            stars,
+            comment,
+            author: {
+              id: gameParticipantHostUser._id,
+              nickname: gameParticipantHostUser.defaultNickname,
+            },
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+          })
+        })
+    })
+
     it('should create a rating without a comment when caller is a player participant', () => {
       return supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
@@ -148,10 +191,12 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
         })
     })
 
-    it('should return 403 when caller is a host participant', () => {
+    it('should return 403 when caller is a host participant and quiz owner', () => {
       return supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
-        .set({ Authorization: `Bearer ${gameParticipantHostUserAccessToken}` })
+        .set({
+          Authorization: `Bearer ${gameParticipantHostUserAndQuizOwnerAccessToken}`,
+        })
         .send({
           stars,
           comment,
@@ -279,6 +324,25 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
                 property: 'comment',
               },
             ],
+          })
+        })
+    })
+
+    it('should return 404 when quiz was not found', async () => {
+      const quizId = uuidv4()
+
+      return supertest(app.getHttpServer())
+        .put(`/api/profile/quizzes/${quizId}/ratings`)
+        .set({
+          Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
+        })
+        .send({ stars, comment })
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            message: `Quiz was not found by id '${quizId}'`,
+            status: 404,
+            timestamp: expect.any(String),
           })
         })
     })

@@ -7,6 +7,7 @@ import type { ExecutionContext } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 
 import { GameRepository } from '../../game-core/repositories'
+import { QuizRepository } from '../../quiz-core/repositories'
 
 import { QuizRatingGuard } from './quiz-rating.guard'
 
@@ -14,17 +15,26 @@ describe('QuizRatingGuard', () => {
   let guard: QuizRatingGuard
 
   type HasCompletedFn =
-    GameRepository['hasCompletedGamesByQuizIdAndPlayerParticipantId']
+    GameRepository['hasCompletedGamesByQuizIdAndParticipantId']
 
   const hasCompletedGamesByQuizIdAndParticipantId: jest.MockedFunction<HasCompletedFn> =
     jest.fn()
 
   const gameRepository: Pick<
     GameRepository,
-    'hasCompletedGamesByQuizIdAndPlayerParticipantId'
+    'hasCompletedGamesByQuizIdAndParticipantId'
   > = {
-    hasCompletedGamesByQuizIdAndPlayerParticipantId:
+    hasCompletedGamesByQuizIdAndParticipantId:
       hasCompletedGamesByQuizIdAndParticipantId,
+  }
+
+  type FindQuizByIdOrThrowFn = QuizRepository['findQuizByIdOrThrow']
+
+  const findQuizByIdOrThrow: jest.MockedFunction<FindQuizByIdOrThrowFn> =
+    jest.fn()
+
+  const quizRepository: Pick<QuizRepository, 'findQuizByIdOrThrow'> = {
+    findQuizByIdOrThrow,
   }
 
   const buildContext = (request: unknown): ExecutionContext =>
@@ -40,6 +50,10 @@ describe('QuizRatingGuard', () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         QuizRatingGuard,
+        {
+          provide: QuizRepository,
+          useValue: quizRepository,
+        },
         {
           provide: GameRepository,
           useValue: gameRepository,
@@ -60,6 +74,7 @@ describe('QuizRatingGuard', () => {
       UnauthorizedException,
     )
 
+    expect(findQuizByIdOrThrow).not.toHaveBeenCalled()
     expect(hasCompletedGamesByQuizIdAndParticipantId).not.toHaveBeenCalled()
   })
 
@@ -73,10 +88,34 @@ describe('QuizRatingGuard', () => {
       BadRequestException,
     )
 
+    expect(findQuizByIdOrThrow).not.toHaveBeenCalled()
+    expect(hasCompletedGamesByQuizIdAndParticipantId).not.toHaveBeenCalled()
+  })
+
+  it('throws ForbiddenException when user is the quiz owner', async () => {
+    findQuizByIdOrThrow.mockResolvedValueOnce({
+      owner: { _id: 'user-1' },
+    } as never)
+
+    const context = buildContext({
+      user: { _id: 'user-1' },
+      params: { quizId: 'quiz-1' },
+    })
+
+    await expect(guard.canActivate(context)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    )
+
+    expect(findQuizByIdOrThrow).toHaveBeenCalledTimes(1)
+    expect(findQuizByIdOrThrow).toHaveBeenCalledWith('quiz-1')
+
     expect(hasCompletedGamesByQuizIdAndParticipantId).not.toHaveBeenCalled()
   })
 
   it('throws ForbiddenException when user has no completed games for the quiz', async () => {
+    findQuizByIdOrThrow.mockResolvedValueOnce({
+      owner: { _id: 'owner-1' },
+    } as never)
     hasCompletedGamesByQuizIdAndParticipantId.mockResolvedValueOnce(false)
 
     const context = buildContext({
@@ -88,6 +127,9 @@ describe('QuizRatingGuard', () => {
       ForbiddenException,
     )
 
+    expect(findQuizByIdOrThrow).toHaveBeenCalledTimes(1)
+    expect(findQuizByIdOrThrow).toHaveBeenCalledWith('quiz-1')
+
     expect(hasCompletedGamesByQuizIdAndParticipantId).toHaveBeenCalledTimes(1)
     expect(hasCompletedGamesByQuizIdAndParticipantId).toHaveBeenCalledWith(
       'quiz-1',
@@ -96,6 +138,9 @@ describe('QuizRatingGuard', () => {
   })
 
   it('returns true when user has completed games for the quiz', async () => {
+    findQuizByIdOrThrow.mockResolvedValueOnce({
+      owner: { _id: 'owner-1' },
+    } as never)
     hasCompletedGamesByQuizIdAndParticipantId.mockResolvedValueOnce(true)
 
     const context = buildContext({
@@ -104,6 +149,9 @@ describe('QuizRatingGuard', () => {
     })
 
     await expect(guard.canActivate(context)).resolves.toBe(true)
+
+    expect(findQuizByIdOrThrow).toHaveBeenCalledTimes(1)
+    expect(findQuizByIdOrThrow).toHaveBeenCalledWith('quiz-1')
 
     expect(hasCompletedGamesByQuizIdAndParticipantId).toHaveBeenCalledTimes(1)
     expect(hasCompletedGamesByQuizIdAndParticipantId).toHaveBeenCalledWith(
