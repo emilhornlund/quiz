@@ -173,4 +173,39 @@ describe('parseQueryParams', () => {
     })
     expect(q).toBe('')
   })
+
+  it('returns empty string when params is undefined', () => {
+    const q = parseQueryParams(undefined)
+    expect(q).toBe('')
+  })
+
+  it('serializes boolean values', () => {
+    const q = parseQueryParams({
+      t: true,
+      f: false,
+    })
+    expect(q).toBe('?t=true&f=false')
+  })
+
+  it('keeps numeric zero', () => {
+    const q = parseQueryParams({
+      zero: 0,
+    })
+    expect(q).toBe('?zero=0')
+  })
+
+  it('keeps non-empty strings after trimming', () => {
+    const q = parseQueryParams({
+      a: '  x  ',
+    })
+    expect(q).toBe('?a=%20%20x%20%20')
+  })
+
+  it('encodes boolean-like and equals characters correctly', () => {
+    const q = parseQueryParams({
+      'k=v': 'a=b',
+      ok: true,
+    })
+    expect(q).toBe('?k%3Dv=a%3Db&ok=true')
+  })
 })

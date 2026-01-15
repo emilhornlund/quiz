@@ -5,17 +5,6 @@ import type { ApiClientCore } from '../api-client-core'
 import { createQuizResource } from './quiz.resource'
 import type { QuizResourceDeps } from './quiz.resource'
 
-vi.mock('../api.utils', () => ({
-  parseQueryParams: vi.fn((params: unknown) => {
-    if (typeof params === 'object' && params) {
-      const p = params as Record<string, unknown>
-      if (p.search !== undefined) return '?search=cat&limit=10&offset=20'
-      return '?limit=10&offset=20'
-    }
-    return ''
-  }),
-}))
-
 const makeApi = (): {
   api: ApiClientCore
   apiGet: ReturnType<typeof vi.fn>
@@ -284,5 +273,112 @@ describe('createQuizResource', () => {
     expect(deps.notifyError).toHaveBeenCalledWith(
       'We couldn’t load the quiz questions. Please try again.',
     )
+  })
+
+  it('getQuizRatings calls apiGet with query params and returns response', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = { items: [], limit: 10, offset: 20, total: 0 }
+    apiGet.mockResolvedValue(res)
+
+    await expect(
+      quiz.getQuizRatings('q1', {
+        sort: 'updated',
+        order: 'desc',
+        limit: 10,
+        offset: 20,
+        commentsOnly: true,
+      }),
+    ).resolves.toBe(res)
+
+    expect(apiGet).toHaveBeenCalledWith(
+      '/quizzes/q1/ratings?sort=updated&order=desc&limit=10&offset=20&commentsOnly=true',
+    )
+    expect(deps.notifyError).not.toHaveBeenCalled()
+  })
+
+  it('getQuizRatings notifies error and rethrows on failure', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const err = new Error('fail')
+    apiGet.mockRejectedValue(err)
+
+    await expect(
+      quiz.getQuizRatings('q1', {
+        sort: 'updated',
+        order: 'desc',
+        limit: 10,
+        offset: 20,
+        commentsOnly: true,
+      }),
+    ).rejects.toBe(err)
+
+    expect(deps.notifyError).toHaveBeenCalledWith(
+      'We couldn’t load quiz ratings right now. Please try again.',
+    )
+  })
+
+  it('createOrUpdateQuizRating calls apiPut with payload and returns response', async () => {
+    const { api, apiPut } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const response = {
+      id: 'r1',
+    } as unknown as import('@klurigo/common').QuizRatingDto
+
+    apiPut.mockResolvedValue(response)
+
+    await expect(quiz.createOrUpdateQuizRating('q1', 5, 'Nice!')).resolves.toBe(
+      response,
+    )
+
+    expect(apiPut).toHaveBeenCalledWith('/profile/quizzes/q1/ratings', {
+      stars: 5,
+      comment: 'Nice!',
+    })
+    expect(deps.notifyError).not.toHaveBeenCalled()
+    expect(deps.notifySuccess).not.toHaveBeenCalled()
+  })
+
+  it('createOrUpdateQuizRating sends undefined comment when omitted', async () => {
+    const { api, apiPut } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const response = {
+      id: 'r1',
+    } as unknown as import('@klurigo/common').QuizRatingDto
+
+    apiPut.mockResolvedValue(response)
+
+    await expect(quiz.createOrUpdateQuizRating('q1', 4)).resolves.toBe(response)
+
+    expect(apiPut).toHaveBeenCalledWith('/profile/quizzes/q1/ratings', {
+      stars: 4,
+      comment: undefined,
+    })
+  })
+
+  it('createOrUpdateQuizRating notifies error and rethrows on failure', async () => {
+    const { api, apiPut } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const err = new Error('fail')
+    apiPut.mockRejectedValue(err)
+
+    await expect(quiz.createOrUpdateQuizRating('q1', 5, 'Nice!')).rejects.toBe(
+      err,
+    )
+
+    expect(deps.notifyError).toHaveBeenCalledWith(
+      'We couldn’t save your rating right now. Please try again.',
+    )
+    expect(deps.notifySuccess).not.toHaveBeenCalled()
   })
 })

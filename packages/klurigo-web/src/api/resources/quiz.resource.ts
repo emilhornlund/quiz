@@ -1,8 +1,10 @@
-import type {
-  PaginatedQuizResponseDto,
-  QuestionDto,
-  QuizRequestDto,
-  QuizResponseDto,
+import {
+  type PaginatedQuizRatingDto,
+  type PaginatedQuizResponseDto,
+  type QuestionDto,
+  type QuizRatingDto,
+  type QuizRequestDto,
+  type QuizResponseDto,
 } from '@klurigo/common'
 
 import type { ApiClientCore } from '../api-client-core'
@@ -180,6 +182,72 @@ export const createQuizResource = (
       throw error
     })
 
+  /**
+   * Retrieves a paginated list of ratings for a specific quiz.
+   *
+   * Supports sorting, ordering, pagination, and filtering to only include ratings
+   * that contain written comments.
+   *
+   * @param quizId - The ID of the quiz to retrieve ratings for.
+   * @param options - Query options controlling sorting, pagination, and filtering.
+   * @param options.sort - Field to sort ratings by (`created` or `updated`).
+   * @param options.order - Sort order (`asc` or `desc`).
+   * @param options.limit - Maximum number of ratings to retrieve per page.
+   * @param options.offset - Number of ratings to skip before starting retrieval.
+   * @param options.commentsOnly - When true, only ratings with comments are returned.
+   *
+   * @returns A promise resolving to a paginated list of quiz ratings.
+   */
+  const getQuizRatings = (
+    quizId: string,
+    options?: {
+      sort?: 'updated' | 'created'
+      order?: 'asc' | 'desc'
+      limit?: number
+      offset?: number
+      commentsOnly?: boolean
+    },
+  ): Promise<PaginatedQuizRatingDto> =>
+    api
+      .apiGet<PaginatedQuizRatingDto>(
+        `/quizzes/${quizId}/ratings${parseQueryParams(options)}`,
+      )
+      .catch((error) => {
+        deps.notifyError(
+          'We couldn’t load quiz ratings right now. Please try again.',
+        )
+        throw error
+      })
+
+  /**
+   * Creates or updates the current user's rating for a quiz.
+   *
+   * If the user has already rated the quiz, the existing rating is updated.
+   * Otherwise, a new rating is created.
+   *
+   * @param quizId - The ID of the quiz being rated.
+   * @param stars - The star rating value (1–5).
+   * @param comment - Optional free-text feedback about the quiz.
+   *
+   * @returns A promise resolving to the created or updated quiz rating.
+   */
+  const createOrUpdateQuizRating = (
+    quizId: string,
+    stars: number,
+    comment?: string,
+  ): Promise<QuizRatingDto> =>
+    api
+      .apiPut<QuizRatingDto>(`/profile/quizzes/${quizId}/ratings`, {
+        stars,
+        comment,
+      })
+      .catch((error) => {
+        deps.notifyError(
+          'We couldn’t save your rating right now. Please try again.',
+        )
+        throw error
+      })
+
   return {
     getProfileQuizzes,
     createQuiz,
@@ -188,5 +256,7 @@ export const createQuizResource = (
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
+    getQuizRatings,
+    createOrUpdateQuizRating,
   }
 }
