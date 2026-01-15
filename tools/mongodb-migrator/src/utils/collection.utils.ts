@@ -10,6 +10,7 @@ import {
   transformQuizDocument,
   transformTokenDocument,
 } from '../transformers'
+import { transformQuizRatingDocument } from '../transformers/quiz-rating.transformers'
 
 import {
   BSONDocument,
@@ -20,6 +21,7 @@ import {
 import {
   COLLECTION_NAME_GAME_RESULTS,
   COLLECTION_NAME_GAMES,
+  COLLECTION_NAME_QUIZ_RATINGS,
   COLLECTION_NAME_QUIZZES,
   COLLECTION_NAME_TOKENS,
   COLLECTION_NAME_USERS,
@@ -582,6 +584,7 @@ export function printCollectionsDiff(collections: CollectionsRecord) {
     // COLLECTION_NAME_GAMES,
     // COLLECTION_NAME_GAME_RESULTS,
     // COLLECTION_NAME_QUIZZES,
+    // COLLECTION_NAME_QUIZ_RATINGS,
     // COLLECTION_NAME_TOKENS,
     // COLLECTION_NAME_USERS,
   ]
@@ -625,6 +628,8 @@ export function writeCollections(
       console.log(
         `✔ ${name} → ${collection.documents.length} (${collection.originalDocuments.length}) documents written`,
       )
+    } else {
+      console.log(`✔ ${name} → 0 (0) documents written`)
     }
   })
 }
@@ -649,6 +654,8 @@ function transformDocument(
         return transformGameDocument(originalDocument)
       case COLLECTION_NAME_QUIZZES:
         return transformQuizDocument(originalDocument)
+      case COLLECTION_NAME_QUIZ_RATINGS:
+        return transformQuizRatingDocument(originalDocument)
       case COLLECTION_NAME_USERS:
         return transformPlayerOrUserDocument(originalDocument)
       case COLLECTION_NAME_TOKENS:
@@ -712,6 +719,46 @@ function getCollectionMetadataObject(
           },
         ],
         uuid: '0c009d9f2fbe4b63b7a001305017bc16',
+        collectionName,
+        type: 'collection',
+      }
+
+    case COLLECTION_NAME_QUIZ_RATINGS:
+      return {
+        indexes: [
+          {
+            v: { $numberInt: '2' },
+            key: { _id: { $numberInt: '1' } },
+            name: '_id_',
+          },
+          {
+            v: { $numberInt: '2' },
+            key: { quizId: { $numberInt: '1' } },
+            name: 'quizId_1',
+          },
+          {
+            v: { $numberInt: '2' },
+            key: { author: { $numberInt: '1' } },
+            name: 'author_1',
+          },
+          {
+            v: { $numberInt: '2' },
+            key: { quizId: { $numberInt: '1' }, author: { $numberInt: '1' } },
+            name: 'quizId_1_author_1',
+            unique: true,
+          },
+          {
+            v: { $numberInt: '2' },
+            key: { quizId: { $numberInt: '1' }, created: { $numberInt: '-1' } },
+            name: 'quizId_1_created_-1',
+          },
+          {
+            v: { $numberInt: '2' },
+            key: { author: { $numberInt: '1' }, created: { $numberInt: '-1' } },
+            name: 'author_1_created_-1',
+          },
+        ],
+        uuid: '118d5d9cc37a440b9607abfc543c79ab',
         collectionName,
         type: 'collection',
       }
