@@ -1,5 +1,5 @@
 import {
-  GameResultRating,
+  GameResultRatingDto,
   QUIZ_RATING_STARS_MAX,
   QUIZ_RATING_STARS_MIN,
 } from '@klurigo/common'
@@ -10,7 +10,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
  *
  * Includes the submitted star rating and an optional free-text comment.
  */
-export class GameResultRatingResponse implements GameResultRating {
+export class GameResultRatingResponse implements GameResultRatingDto {
   /**
    * The star rating value for the quiz (1–5).
    */

@@ -37,7 +37,7 @@ export type GameResultQuizDto = {
  *
  * Included when the requesting participant has submitted a rating for the quiz.
  */
-export type GameResultRating = {
+export type GameResultRatingDto = {
   /**
    * The star rating value for the quiz (1–5).
    */
@@ -98,7 +98,7 @@ export type GameResultDto = {
   /**
    * The participant's rating for the quiz, if the participant has rated it.
    */
-  readonly rating?: GameResultRating
+  readonly rating?: GameResultRatingDto
 
   /**
    * The date and time when the game session was created.

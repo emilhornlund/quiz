@@ -5,7 +5,7 @@ import {
   GameResultDto,
   GameResultPlayerMetricDto,
   GameResultQuestionMetricDto,
-  GameResultRating,
+  GameResultRatingDto,
   GameResultZeroToOneHundredModePlayerMetricDto,
   GameResultZeroToOneHundredModeQuestionMetricDto,
   QuizVisibility,
@@ -181,7 +181,7 @@ export class GameResultService {
   private async getQuizRating(
     quizId: string,
     author: User | null,
-  ): Promise<GameResultRating | undefined> {
+  ): Promise<GameResultRatingDto | undefined> {
     if (!author) {
       return undefined
     }
