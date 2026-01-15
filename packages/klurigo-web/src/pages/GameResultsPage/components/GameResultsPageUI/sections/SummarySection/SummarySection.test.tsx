@@ -151,7 +151,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: true }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -219,7 +219,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.ZeroToOneHundred}
-        quiz={{ id: 'quizId', canHostLiveGame: false }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: false }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -263,7 +263,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: false }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: false }}
         numberOfPlayers={2}
         numberOfQuestions={2}
         playerMetrics={playerMetrics}
@@ -302,7 +302,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: true }}
         numberOfPlayers={1}
         numberOfQuestions={1}
         playerMetrics={playerMetrics}
@@ -348,7 +348,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: true }}
         numberOfPlayers={1}
         numberOfQuestions={1}
         playerMetrics={playerMetrics}
@@ -414,7 +414,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: false }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: false }}
         numberOfPlayers={1}
         numberOfQuestions={1}
         playerMetrics={playerMetrics}
@@ -464,7 +464,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: true }}
         numberOfPlayers={1}
         numberOfQuestions={1}
         playerMetrics={playerMetrics}
@@ -518,7 +518,7 @@ describe('SummarySection', () => {
       <SummarySection
         hostNickname="FrostyBear"
         mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canHostLiveGame: true }}
+        quiz={{ id: 'quizId', canRateQuiz: false, canHostLiveGame: true }}
         numberOfPlayers={1}
         numberOfQuestions={1}
         playerMetrics={playerMetrics}

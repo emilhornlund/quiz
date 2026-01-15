@@ -29,6 +29,7 @@ export const Classic = {
       name: 'Classic Quiz Debug',
       quiz: {
         id: '9a7381e5-6c9f-42a8-b6c9-e2e42a095e12',
+        canRateQuiz: false,
         canHostLiveGame: true,
       },
       host: { id: uuidv4(), nickname: 'FrostyBear' },
@@ -169,6 +170,7 @@ export const ZeroToOneHundred = {
       name: '0-100 Quiz Debug',
       quiz: {
         id: '9a7381e5-6c9f-42a8-b6c9-e2e42a095e12',
+        canRateQuiz: false,
         canHostLiveGame: false,
       },
       host: { id: uuidv4(), nickname: 'FrostyBear' },
