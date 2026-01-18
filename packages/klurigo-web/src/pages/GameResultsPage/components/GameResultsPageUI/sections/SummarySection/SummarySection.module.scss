@@ -2,7 +2,7 @@
 @use '../../../../../../styles/helpers';
 @use '../../../../../../styles/variables';
 
-$contrast-opacity: 0.80;
+$contrast-opacity: 0.8;
 
 .cards {
   display: grid;
@@ -54,22 +54,16 @@ $contrast-opacity: 0.80;
     @include helpers.mobile {
       padding: variables.$mobile-narrow-layout-gutter;
       border-radius: variables.$mobile-border-radius;
-
-      @include helpers.fontSize(18px);
     }
 
     @include helpers.tablet {
       padding: variables.$tablet-narrow-layout-gutter;
       border-radius: variables.$tablet-border-radius;
-
-      @include helpers.fontSize(20px);
     }
 
     @include helpers.desktop {
       padding: variables.$desktop-narrow-layout-gutter;
       border-radius: variables.$desktop-border-radius;
-
-      @include helpers.fontSize(22px);
     }
 
     &.full {
@@ -98,7 +92,26 @@ $contrast-opacity: 0.80;
 
       .text {
         flex: 1;
+        font-weight: normal;
         opacity: $contrast-opacity;
+
+        @include helpers.mobile {
+          line-height: 1.3;
+
+          @include helpers.fontSize(20px);
+        }
+
+        @include helpers.tablet {
+          line-height: 1.35;
+
+          @include helpers.fontSize(22px);
+        }
+
+        @include helpers.desktop {
+          line-height: 1.4;
+
+          @include helpers.fontSize(24px);
+        }
       }
     }
 
@@ -120,17 +133,20 @@ $contrast-opacity: 0.80;
       }
 
       @include helpers.mobile {
-        padding: variables.$mobile-narrow-layout-gutter variables.$mobile-layout-gutter;
+        padding: variables.$mobile-narrow-layout-gutter
+          variables.$mobile-layout-gutter;
         column-gap: variables.$mobile-narrow-layout-gutter;
       }
 
       @include helpers.tablet {
-        padding: variables.$tablet-narrow-layout-gutter variables.$tablet-layout-gutter;
+        padding: variables.$tablet-narrow-layout-gutter
+          variables.$tablet-layout-gutter;
         column-gap: variables.$tablet-narrow-layout-gutter;
       }
 
       @include helpers.desktop {
-        padding: variables.$desktop-narrow-layout-gutter variables.$desktop-layout-gutter;
+        padding: variables.$desktop-narrow-layout-gutter
+          variables.$desktop-layout-gutter;
         column-gap: variables.$desktop-narrow-layout-gutter;
       }
 
@@ -324,6 +340,18 @@ $contrast-opacity: 0.80;
             justify-content: center;
             align-items: center;
             opacity: $contrast-opacity;
+
+            @include helpers.mobile {
+              @include helpers.fontSize(16px);
+            }
+
+            @include helpers.tablet {
+              @include helpers.fontSize(18px);
+            }
+
+            @include helpers.desktop {
+              @include helpers.fontSize(20px);
+            }
           }
 
           .title {
@@ -335,14 +363,17 @@ $contrast-opacity: 0.80;
 
             @include helpers.mobile {
               column-gap: variables.$mobile-narrow-layout-gutter;
+              @include helpers.fontSize(16px);
             }
 
             @include helpers.tablet {
               column-gap: variables.$tablet-narrow-layout-gutter;
+              @include helpers.fontSize(18px);
             }
 
             @include helpers.desktop {
               column-gap: variables.$desktop-narrow-layout-gutter;
+              @include helpers.fontSize(20px);
             }
           }
 
@@ -350,6 +381,18 @@ $contrast-opacity: 0.80;
             font-weight: bold;
             white-space: nowrap;
             text-align: right;
+
+            @include helpers.mobile {
+              @include helpers.fontSize(16px);
+            }
+
+            @include helpers.tablet {
+              @include helpers.fontSize(18px);
+            }
+
+            @include helpers.desktop {
+              @include helpers.fontSize(20px);
+            }
           }
         }
       }
@@ -372,12 +415,12 @@ $contrast-opacity: 0.80;
           bottom: 0;
           width: helpers.pxToRem(1px);
           background: linear-gradient(
-              to bottom,
-              transparent 0%,
-              rgba(255, 255, 255, 0.15) 15%,
-              rgba(255, 255, 255, 0.4) 50%,
-              rgba(255, 255, 255, 0.15) 85%,
-              transparent 100%
+            to bottom,
+            transparent 0%,
+            rgba(255, 255, 255, 0.15) 15%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.15) 85%,
+            transparent 100%
           );
         }
       }
@@ -433,7 +476,8 @@ $contrast-opacity: 0.80;
         .nickname {
           display: flex;
           background-color: colors.$white-1-15;
-          border: variables.$control-outside-border-width solid colors.$white-1-25;
+          border: variables.$control-outside-border-width solid
+            colors.$white-1-25;
           color: colors.$white;
           justify-content: center;
           align-items: center;
@@ -496,6 +540,141 @@ $contrast-opacity: 0.80;
 
         @include helpers.desktop {
           @include helpers.fontSize(22px);
+        }
+      }
+    }
+
+    &.rating {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: variables.$mobile-layout-gutter;
+
+      @include helpers.tablet {
+        gap: variables.$tablet-layout-gutter;
+      }
+
+      @include helpers.desktop {
+        gap: variables.$desktop-narrow-layout-gutter;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: variables.$mobile-layout-gutter;
+        position: relative;
+
+        @include helpers.tablet {
+          gap: variables.$tablet-layout-gutter;
+        }
+
+        @include helpers.desktop {
+          gap: variables.$desktop-narrow-layout-gutter;
+        }
+
+        .title {
+          font-weight: bold;
+          opacity: 0.95;
+
+          @include helpers.mobile {
+            @include helpers.fontSize(24px);
+          }
+
+          @include helpers.tablet {
+            @include helpers.fontSize(26px);
+          }
+
+          @include helpers.desktop {
+            @include helpers.fontSize(28px);
+          }
+        }
+
+        .stars {
+          display: flex;
+          justify-content: center;
+          gap: calc(#{variables.$mobile-layout-gutter} * 0.5);
+
+          @include helpers.tablet {
+            gap: calc(#{variables.$tablet-layout-gutter} * 0.5);
+          }
+
+          @include helpers.desktop {
+            gap: calc(#{variables.$desktop-layout-gutter} * 0.5);
+          }
+
+          .starButton {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: colors.$white;
+
+            @include helpers.mobile {
+              @include helpers.fontSize(24px);
+            }
+
+            @include helpers.tablet {
+              @include helpers.fontSize(28px);
+            }
+
+            @include helpers.desktop {
+              @include helpers.fontSize(32px);
+            }
+
+            &:disabled {
+              color: colors.$white-1-25;
+              cursor: default;
+            }
+
+            &.active {
+              color: colors.$yellow-2;
+
+              &:hover {
+                color: colors.$yellow-1;
+              }
+            }
+
+            &:hover {
+              &:not(:disabled) {
+                &:not(.active) {
+                  color: colors.$white-1-70;
+                }
+              }
+            }
+
+            &:focus-visible {
+              &:not(:disabled) {
+                outline: 2px solid colors.$yellow-2;
+                outline-offset: 2px;
+              }
+            }
+          }
+        }
+
+        .comment {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+
+      .disabledMessage {
+        text-align: center;
+        opacity: $contrast-opacity;
+
+        @include helpers.mobile {
+          @include helpers.fontSize(14px);
+        }
+
+        @include helpers.tablet {
+          @include helpers.fontSize(16px);
+        }
+
+        @include helpers.desktop {
+          @include helpers.fontSize(18px);
         }
       }
     }

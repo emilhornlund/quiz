@@ -14,7 +14,7 @@ exports[`SummarySection > omits metric cards when playerMetrics has no data 1`] 
         />
       </div>
       <div
-        class="card progress"
+        class="card full progress"
       >
         <div
           data-testid="circular-progress"
@@ -24,6 +24,35 @@ exports[`SummarySection > omits metric cards when playerMetrics has no data 1`] 
         >
           Difficulty: 100%
         </div>
+      </div>
+      <div
+        data-testid="rating-card"
+      >
+        <div
+          data-testid="rating-can-rate"
+        >
+          false
+        </div>
+        <div
+          data-testid="rating-stars"
+        >
+          unset
+        </div>
+        <div
+          data-testid="rating-comment"
+        />
+        <button
+          data-testid="rating-set-stars"
+          type="button"
+        >
+          set-stars
+        </button>
+        <button
+          data-testid="rating-set-comment"
+          type="button"
+        >
+          set-comment
+        </button>
       </div>
       <button
         class="card hostGameButton"
@@ -266,7 +295,7 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
         />
       </div>
       <div
-        class="card progress"
+        class="card full progress"
       >
         <div
           data-testid="circular-progress"
@@ -276,6 +305,35 @@ exports[`SummarySection > renders Classic summary, uses getCorrectPercentage, sh
         >
           Difficulty: 70%
         </div>
+      </div>
+      <div
+        data-testid="rating-card"
+      >
+        <div
+          data-testid="rating-can-rate"
+        >
+          false
+        </div>
+        <div
+          data-testid="rating-stars"
+        >
+          unset
+        </div>
+        <div
+          data-testid="rating-comment"
+        />
+        <button
+          data-testid="rating-set-stars"
+          type="button"
+        >
+          set-stars
+        </button>
+        <button
+          data-testid="rating-set-comment"
+          type="button"
+        >
+          set-comment
+        </button>
       </div>
       <button
         class="card hostGameButton"
@@ -614,7 +672,7 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
         />
       </div>
       <div
-        class="card progress"
+        class="card full progress"
       >
         <div
           data-testid="circular-progress"
@@ -624,6 +682,35 @@ exports[`SummarySection > renders ZeroToOneHundred summary and uses getAveragePr
         >
           Difficulty: 50%
         </div>
+      </div>
+      <div
+        data-testid="rating-card"
+      >
+        <div
+          data-testid="rating-can-rate"
+        >
+          false
+        </div>
+        <div
+          data-testid="rating-stars"
+        >
+          unset
+        </div>
+        <div
+          data-testid="rating-comment"
+        />
+        <button
+          data-testid="rating-set-stars"
+          type="button"
+        >
+          set-stars
+        </button>
+        <button
+          data-testid="rating-set-comment"
+          type="button"
+        >
+          set-comment
+        </button>
       </div>
       <button
         class="card hostGameButton"
