@@ -1,17 +1,16 @@
 import { GameEventType, MediaType, QuestionType } from '@klurigo/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  completeTask: vi.fn().mockResolvedValue(undefined),
+  hasCompleteTask: true,
 }))
 
 vi.mock('../../context/game', () => ({
   useGameContext: () => ({
-    completeTask: h.completeTask,
+    completeTask: h.hasCompleteTask ? h.completeTask : undefined,
   }),
 }))
 
@@ -23,7 +22,9 @@ describe('HostQuestionState', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(now))
-    h.completeTask.mockClear()
+    h.hasCompleteTask = true
+    h.completeTask.mockReset()
+    h.completeTask.mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -309,7 +310,12 @@ describe('HostQuestionState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Skip and calls completeTask', () => {
+  it('clicks Skip and calls completeTask', async () => {
+    let resolve!: () => void
+    h.completeTask.mockImplementation(
+      () => new Promise<void>((r) => (resolve = r)),
+    )
+
     const { container } = render(
       <MemoryRouter>
         <HostQuestionState
@@ -332,9 +338,22 @@ describe('HostQuestionState', () => {
         />
       </MemoryRouter>,
     )
+
     const skip = container.querySelector('#skip-button') as HTMLButtonElement
-    fireEvent.click(skip)
+
+    act(() => {
+      fireEvent.click(skip)
+    })
+
     expect(h.completeTask).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolve()
+      await Promise.resolve()
+      vi.runOnlyPendingTimers()
+      await Promise.resolve()
+    })
+
     expect(container).toMatchSnapshot()
   })
 

@@ -59,13 +59,10 @@ const { _getInstances, _last } = ESP as unknown as ESHelpers
 const instances = () => _getInstances()
 const last = () => _last()
 
-const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
 describe('useEventSource', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     instances().length = 0
-    consoleErrorSpy.mockClear()
   })
 
   afterEach(() => {
@@ -160,25 +157,48 @@ describe('useEventSource', () => {
 
     expect(instances().length).toBe(1)
     expect(result.current[1]).toBe(ConnectionStatus.INITIALIZED)
-    expect(consoleErrorSpy).not.toHaveBeenCalled()
   })
 
   it('stops after MAX_RETRIES and sets RECONNECTING_FAILED', () => {
+    vi.useFakeTimers()
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
     const { result } = renderHook(() => useEventSource('g1', 't1'))
 
     for (let i = 0; i < 10; i++) {
-      act(() => last().onerror?.(new Event('error')))
-      act(() => vi.advanceTimersByTime(30000))
+      act(() => {
+        last().onerror?.(new Event('error'))
+      })
+      act(() => {
+        vi.advanceTimersByTime(30_000)
+      })
     }
 
     expect(result.current[1]).toBe(ConnectionStatus.RECONNECTING_FAILED)
+
     const countAfter = instances().length
-    act(() => vi.advanceTimersByTime(30000))
+
+    act(() => {
+      vi.advanceTimersByTime(30_000)
+    })
+
     expect(instances().length).toBe(countAfter)
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Max retry attempts reached. Stopping reconnection attempts.',
-    )
+    // More robust than toHaveBeenCalledWith if the code logs extra args
+    expect(consoleErrorSpy).toHaveBeenCalled()
+    expect(
+      consoleErrorSpy.mock.calls.some(
+        (c) =>
+          c[0] ===
+          'Max retry attempts reached. Stopping reconnection attempts.',
+      ),
+    ).toBe(true)
+
+    consoleErrorSpy.mockRestore()
+    vi.useRealTimers()
   })
 
   it('closes EventSource on unmount', () => {

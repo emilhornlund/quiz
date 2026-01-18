@@ -1,6 +1,6 @@
 import { TokenScope, TokenType } from '@klurigo/common'
 import { act, cleanup, render, waitFor } from '@testing-library/react'
-import { useContext, useEffect } from 'react'
+import { type FC, type ReactNode, useContext, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -49,8 +49,8 @@ vi.mock('jwt-decode', () => ({
 
 // --- Test helpers ---
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function renderWithProvider(capture: (ctx: any) => void, ui?: React.ReactNode) {
-  const Probe: React.FC = () => {
+function renderWithProvider(capture: (ctx: any) => void, ui?: ReactNode) {
+  const Probe: FC = () => {
     const ctx = useContext(AuthContext)
     useEffect(() => {
       capture(ctx)
@@ -111,6 +111,15 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  try {
+    vi.getTimerCount()
+    vi.runOnlyPendingTimers()
+    vi.clearAllTimers()
+  } catch {
+    // Real timers active -> nothing to drain/clear
+  } finally {
+    vi.useRealTimers()
+  }
   cleanup()
 })
 

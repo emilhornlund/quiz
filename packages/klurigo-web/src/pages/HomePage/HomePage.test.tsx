@@ -164,6 +164,8 @@ describe('HomePage', () => {
   })
 
   it('clicking "Resume game" authenticates the game and navigates to /game on success', async () => {
+    const user = userEvent.setup()
+
     const authenticateGame = vi.fn().mockResolvedValue(undefined)
 
     authContextMock.mockReturnValue({
@@ -180,7 +182,7 @@ describe('HomePage', () => {
 
     renderHome()
 
-    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+    await user.click(screen.getByRole('button', { name: /resume game/i }))
 
     await waitFor(() => {
       expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })
@@ -189,6 +191,8 @@ describe('HomePage', () => {
   })
 
   it('clicking "Resume game" revokes the game token on 401 ApiError', async () => {
+    const user = userEvent.setup()
+
     const revokeGame = vi.fn()
     const authenticateGame = vi
       .fn()
@@ -212,7 +216,7 @@ describe('HomePage', () => {
 
     renderHome()
 
-    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+    await user.click(screen.getByRole('button', { name: /resume game/i }))
 
     await waitFor(() => {
       expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })
@@ -223,10 +227,12 @@ describe('HomePage', () => {
   })
 
   it('submitting the join form navigates to /auth/game?pin=... when a pin is present', async () => {
+    const user = userEvent.setup()
+
     renderHome()
 
     const input = screen.getByPlaceholderText('Game PIN') as HTMLInputElement
-    await userEvent.type(input, '123456')
+    await user.type(input, '123456')
 
     const form = input.closest('form')
     expect(form).not.toBeNull()
@@ -249,50 +255,52 @@ describe('HomePage', () => {
   })
 
   it('keeps "Join the game" disabled until the Game PIN is valid', async () => {
+    const user = userEvent.setup()
+
     renderHome()
 
     const joinButton = screen.getByRole('button', { name: /join the game/i })
     expect(joinButton).toBeDisabled()
 
-    await userEvent.type(screen.getByTestId('test-game-pin-textfield'), '123')
+    await user.type(screen.getByTestId('test-game-pin-textfield'), '123')
     expect(joinButton).toBeDisabled()
 
-    await userEvent.clear(screen.getByTestId('test-game-pin-textfield'))
-    await userEvent.type(
-      screen.getByTestId('test-game-pin-textfield'),
-      '123456',
-    )
+    await user.clear(screen.getByTestId('test-game-pin-textfield'))
+    await user.type(screen.getByTestId('test-game-pin-textfield'), '123456')
     expect(joinButton).not.toBeDisabled()
   })
 
   it('does not navigate when clicking "Join the game" while disabled', async () => {
+    const user = userEvent.setup()
+
     renderHome()
 
     const joinButton = screen.getByRole('button', { name: /join the game/i })
     expect(joinButton).toBeDisabled()
 
-    await userEvent.click(joinButton)
+    await user.click(joinButton)
 
     expect(navigateMock).not.toHaveBeenCalled()
   })
 
   it('navigates to /auth/game?pin=... when clicking "Join the game" with a valid pin', async () => {
+    const user = userEvent.setup()
+
     renderHome()
 
-    await userEvent.type(
-      screen.getByTestId('test-game-pin-textfield'),
-      '123456',
-    )
+    await user.type(screen.getByTestId('test-game-pin-textfield'), '123456')
 
     const joinButton = screen.getByRole('button', { name: /join the game/i })
     expect(joinButton).not.toBeDisabled()
 
-    await userEvent.click(joinButton)
+    await user.click(joinButton)
 
     expect(navigateMock).toHaveBeenCalledWith('/auth/game?pin=123456')
   })
 
   it('does not revoke the game token when "Resume game" fails with a non-401 ApiError', async () => {
+    const user = userEvent.setup()
+
     const revokeGame = vi.fn()
     const authenticateGame = vi
       .fn()
@@ -316,7 +324,7 @@ describe('HomePage', () => {
 
     renderHome()
 
-    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+    await user.click(screen.getByRole('button', { name: /resume game/i }))
 
     await waitFor(() => {
       expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })
@@ -329,6 +337,8 @@ describe('HomePage', () => {
   })
 
   it('does not revoke the game token when "Resume game" fails with a non-ApiError', async () => {
+    const user = userEvent.setup()
+
     const revokeGame = vi.fn()
     const authenticateGame = vi
       .fn()
@@ -352,7 +362,7 @@ describe('HomePage', () => {
 
     renderHome()
 
-    await userEvent.click(screen.getByRole('button', { name: /resume game/i }))
+    await user.click(screen.getByRole('button', { name: /resume game/i }))
 
     await waitFor(() => {
       expect(authenticateGame).toHaveBeenCalledWith({ gameId: 'game-123' })

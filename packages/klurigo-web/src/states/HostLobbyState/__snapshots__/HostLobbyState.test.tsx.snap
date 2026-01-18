@@ -30,18 +30,26 @@ exports[`HostLobbyState > clicks Start when players exist and calls completeTask
         >
           <button
             data-testid="test-start-game-button-button"
-            disabled=""
             id="start-game-button"
             name="start-game-button"
             type="button"
           >
-            <div
-              class="loadingSpinner"
+            <span>
+              Start
+            </span>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-right"
+              data-icon="arrow-right"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
             >
-              <div />
-              <div />
-              <div />
-            </div>
+              <path
+                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                fill="currentColor"
+              />
+            </svg>
           </button>
         </div>
       </div>
@@ -216,18 +224,26 @@ exports[`HostLobbyState > opens confirm dialog when starting with no players, th
         >
           <button
             data-testid="test-start-game-button-button"
-            disabled=""
             id="start-game-button"
             name="start-game-button"
             type="button"
           >
-            <div
-              class="loadingSpinner"
+            <span>
+              Start
+            </span>
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-arrow-right"
+              data-icon="arrow-right"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
             >
-              <div />
-              <div />
-              <div />
-            </div>
+              <path
+                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                fill="currentColor"
+              />
+            </svg>
           </button>
         </div>
       </div>
@@ -333,10 +349,10 @@ exports[`HostLobbyState > opens confirm dialog when starting with no players, th
       tabindex="0"
     />
     <div
-      aria-labelledby="_r_23_"
+      aria-labelledby="_r_25_"
       class="modalContainer sizeNormal"
       data-floating-ui-focusable=""
-      id="_r_21_"
+      id="_r_23_"
       role="dialog"
       tabindex="-1"
     >
@@ -345,7 +361,7 @@ exports[`HostLobbyState > opens confirm dialog when starting with no players, th
       >
         <div
           class="title"
-          id="_r_23_"
+          id="_r_25_"
         >
           Start Game Without Players?
         </div>

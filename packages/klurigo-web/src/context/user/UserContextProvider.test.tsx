@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { UserContextType } from './UserContext'
@@ -67,7 +67,9 @@ describe('UserContextProvider', () => {
     const getCtx = renderWithCapture()
     getUserProfileMock.mockResolvedValueOnce(PROFILE_A)
 
-    await getCtx().fetchCurrentUser('token-1')
+    await act(async () => {
+      await getCtx().fetchCurrentUser('token-1')
+    })
 
     await waitFor(() => {
       expect(getCtx().currentUser).toEqual(PROFILE_A)
@@ -80,12 +82,14 @@ describe('UserContextProvider', () => {
     const getCtx = renderWithCapture()
     getUserProfileMock.mockResolvedValueOnce(PROFILE_A)
 
-    // Fire multiple calls rapidly with the same token.
-    await Promise.all([
-      getCtx().fetchCurrentUser('token-dup'),
-      getCtx().fetchCurrentUser('token-dup'),
-      getCtx().fetchCurrentUser('token-dup'),
-    ])
+    await act(async () => {
+      // Fire multiple calls rapidly with the same token.
+      await Promise.all([
+        getCtx().fetchCurrentUser('token-dup'),
+        getCtx().fetchCurrentUser('token-dup'),
+        getCtx().fetchCurrentUser('token-dup'),
+      ])
+    })
 
     await waitFor(() => {
       expect(getCtx().currentUser).toEqual(PROFILE_A)
@@ -97,7 +101,10 @@ describe('UserContextProvider', () => {
     const getCtx = renderWithCapture()
     getUserProfileMock.mockResolvedValueOnce(PROFILE_A)
 
-    await getCtx().fetchCurrentUser('token-1')
+    await act(async () => {
+      await getCtx().fetchCurrentUser('token-1')
+    })
+
     await waitFor(() => {
       expect(getCtx().currentUser).toEqual(PROFILE_A)
     })
@@ -105,7 +112,14 @@ describe('UserContextProvider', () => {
 
     // After completion, inflight should be cleared -> next call issues a new request.
     getUserProfileMock.mockResolvedValueOnce(PROFILE_A)
-    await getCtx().fetchCurrentUser('token-1')
+
+    await act(async () => {
+      await getCtx().fetchCurrentUser('token-1')
+    })
+
+    await waitFor(() => {
+      expect(getCtx().currentUser).toEqual(PROFILE_A)
+    })
 
     expect(getUserProfileMock).toHaveBeenCalledTimes(2)
   })
@@ -116,10 +130,12 @@ describe('UserContextProvider', () => {
       t === 'tA' ? Promise.resolve(PROFILE_A) : Promise.resolve(PROFILE_B),
     )
 
-    await Promise.all([
-      getCtx().fetchCurrentUser('tA'),
-      getCtx().fetchCurrentUser('tB'),
-    ])
+    await act(async () => {
+      await Promise.all([
+        getCtx().fetchCurrentUser('tA'),
+        getCtx().fetchCurrentUser('tB'),
+      ])
+    })
 
     await waitFor(() => {
       // Last write wins (depends on resolution order) — assert at least that one completed.
@@ -135,12 +151,16 @@ describe('UserContextProvider', () => {
 
     // Seed a value first to ensure it gets cleared on error.
     getUserProfileMock.mockResolvedValueOnce(PROFILE_A)
-    await getCtx().fetchCurrentUser('ok')
+    await act(async () => {
+      await getCtx().fetchCurrentUser('ok')
+    })
     await waitFor(() => expect(getCtx().currentUser).toEqual(PROFILE_A))
 
     // Now fail a fetch and ensure it clears.
     getUserProfileMock.mockRejectedValueOnce(new Error('boom'))
-    await getCtx().fetchCurrentUser('bad')
+    await act(async () => {
+      await getCtx().fetchCurrentUser('bad')
+    })
 
     await waitFor(() => {
       expect(getCtx().currentUser).toBeUndefined()
@@ -150,25 +170,22 @@ describe('UserContextProvider', () => {
   it('returns a resolved promise immediately when a same-token request is already in-flight', async () => {
     const getCtx = renderWithCapture()
 
-    // Create a pending promise to keep the first call "in-flight".
-    let resolveFirst!: () => void
+    let resolveFirst!: (value: typeof PROFILE_A) => void
     const first = new Promise<typeof PROFILE_A>((resolve) => {
-      resolveFirst = () => resolve(PROFILE_A)
+      resolveFirst = resolve
     })
     getUserProfileMock.mockReturnValueOnce(first)
 
     const p1 = getCtx().fetchCurrentUser('t-inflight')
-    const p2 = getCtx().fetchCurrentUser('t-inflight') // should dedupe and resolve quickly
+    const p2 = getCtx().fetchCurrentUser('t-inflight')
 
-    // Second call should not trigger a second fetch.
     expect(getUserProfileMock).toHaveBeenCalledTimes(1)
 
-    // Resolve the first request.
-    resolveFirst()
-    await Promise.all([p1, p2])
-
-    await waitFor(() => {
-      expect(getCtx().currentUser).toEqual(PROFILE_A)
+    await act(async () => {
+      resolveFirst(PROFILE_A)
+      await Promise.all([p1, p2])
     })
+
+    expect(getCtx().currentUser).toEqual(PROFILE_A)
   })
 })
