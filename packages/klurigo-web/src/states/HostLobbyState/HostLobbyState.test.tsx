@@ -1,5 +1,6 @@
 import { GameEventType } from '@klurigo/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -84,21 +85,28 @@ describe('HostLobbyState', () => {
   })
 
   it('clicks Start when players exist and calls completeTask', async () => {
+    const user = userEvent.setup()
+
     const { container } = render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <HostLobbyState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     const start = container.querySelector(
       '#start-game-button',
     ) as HTMLButtonElement
-    fireEvent.click(start)
+
+    await user.click(start)
+
     expect(h.completeTask).toHaveBeenCalledTimes(1)
     expect(container).toMatchSnapshot()
   })
 
   it('opens confirm dialog when starting with no players, then confirms and calls completeTask', async () => {
+    const user = userEvent.setup()
+
     const { container } = render(
       <MemoryRouter>
         <HostLobbyState
@@ -116,52 +124,81 @@ describe('HostLobbyState', () => {
         />
       </MemoryRouter>,
     )
+
     const start = container.querySelector(
       '#start-game-button',
     ) as HTMLButtonElement
-    fireEvent.click(start)
+    await user.click(start)
+
     expect(screen.getByText('Start Game Without Players?')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Start Game' }))
+
+    await user.click(screen.getByRole('button', { name: 'Start Game' }))
+
     expect(h.completeTask).toHaveBeenCalledTimes(1)
     expect(container).toMatchSnapshot()
   })
 
   it('opens remove player dialog and confirms removal, calling leaveGame with player id', async () => {
+    vi.useFakeTimers()
+
     const { container } = render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <HostLobbyState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     const aliceNode = screen.getByText('Alice')
     const aliceChip =
       aliceNode.closest('div')?.querySelector('button') ??
       (aliceNode.parentElement?.querySelector('button') as HTMLButtonElement)
-    fireEvent.click(aliceChip as HTMLButtonElement)
+
+    act(() => {
+      fireEvent.click(aliceChip as HTMLButtonElement)
+    })
+
     expect(screen.getByText('Confirm Remove Player')).toBeInTheDocument()
-    expect(screen.getByText('Remove Player')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Remove Player' }))
-    // Wait for shake animation to complete before leaveGame is called
-    await new Promise((resolve) => setTimeout(resolve, 600))
+
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Player' }))
+    })
+
+    act(() => {
+      vi.advanceTimersByTime(600)
+      vi.runOnlyPendingTimers()
+    })
+
+    // If leaveGame is invoked in a promise continuation after the timeout callback
+    await act(async () => {
+      await Promise.resolve()
+    })
+
     expect(h.leaveGame).toHaveBeenCalledTimes(1)
     expect(h.leaveGame).toHaveBeenCalledWith('p1')
     expect(container).toMatchSnapshot()
+
+    vi.useRealTimers()
   })
 
   it('does not call leaveGame when gameID is undefined', async () => {
+    const user = userEvent.setup()
     h.gameID = undefined
+
     render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <HostLobbyState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     const bobNode = screen.getByText('Bob')
     const bobChip =
       bobNode.closest('div')?.querySelector('button') ??
       (bobNode.parentElement?.querySelector('button') as HTMLButtonElement)
-    fireEvent.click(bobChip as HTMLButtonElement)
-    fireEvent.click(screen.getByRole('button', { name: 'Remove Player' }))
+
+    await user.click(bobChip as HTMLButtonElement)
+    await user.click(screen.getByRole('button', { name: 'Remove Player' }))
+
     expect(h.leaveGame).not.toHaveBeenCalled()
   })
 
@@ -176,10 +213,7 @@ describe('HostLobbyState', () => {
   })
 
   it('displays player counter with zero players', () => {
-    const noPlayersEvent = {
-      ...sampleEvent,
-      players: [],
-    }
+    const noPlayersEvent = { ...sampleEvent, players: [] }
     render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

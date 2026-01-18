@@ -1,5 +1,6 @@
 import { GameEventType } from '@klurigo/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -18,9 +19,7 @@ describe('HostLeaderboardState', () => {
         <HostLeaderboardState
           event={{
             type: GameEventType.GameLeaderboardHost,
-            game: {
-              pin: '123456',
-            },
+            game: { pin: '123456' },
             leaderboard: [
               {
                 position: 1,
@@ -83,6 +82,7 @@ describe('HostLeaderboardState', () => {
         <HostLeaderboardState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     expect(screen.getByText('Leaderboard')).toBeInTheDocument()
     expect(screen.getByText('ShadowCyborg')).toBeInTheDocument()
     expect(screen.getByText('Radar')).toBeInTheDocument()
@@ -90,31 +90,50 @@ describe('HostLeaderboardState', () => {
   })
 
   it('clicks Next and calls completeTask', async () => {
+    const user = userEvent.setup()
+
     let resolve!: () => void
     contextCompleteTask = vi.fn(() => new Promise<void>((r) => (resolve = r)))
+
     const { container } = render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <HostLeaderboardState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     const next = container.querySelector('#next-button') as HTMLButtonElement
-    fireEvent.click(next)
+
+    // Click triggers state update -> userEvent is act-wrapped for the interaction part.
+    await user.click(next)
+
     expect(contextCompleteTask).toHaveBeenCalledTimes(1)
-    resolve()
+
+    // Resolving the promise likely triggers another setState in HostLeaderboardState.
+    await act(async () => {
+      resolve()
+      // Ensure any await chain continuations flush in the same act scope.
+      await Promise.resolve()
+    })
+
     expect(container).toMatchSnapshot()
   })
 
   it('clicks Next when completeTask is undefined', async () => {
+    const user = userEvent.setup()
     contextCompleteTask = undefined
+
     const { container } = render(
       <MemoryRouter>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <HostLeaderboardState event={sampleEvent as any} />
       </MemoryRouter>,
     )
+
     const next = container.querySelector('#next-button') as HTMLButtonElement
-    fireEvent.click(next)
+
+    await user.click(next)
+
     expect(container).toMatchSnapshot()
   })
 })

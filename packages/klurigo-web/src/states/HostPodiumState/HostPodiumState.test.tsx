@@ -1,37 +1,28 @@
 import { GameEventType } from '@klurigo/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  completeTask: vi.fn().mockResolvedValue(undefined),
+  hasCompleteTask: true,
 }))
 
 vi.mock('../../context/game', () => ({
   useGameContext: () => ({
-    completeTask: h.completeTask,
+    completeTask: h.hasCompleteTask ? h.completeTask : undefined,
   }),
 }))
 
 import HostPodiumState from './HostPodiumState'
 
-let mathRandomSpy: ReturnType<typeof vi.spyOn>
-
 describe('HostPodiumState', () => {
   beforeEach(() => {
-    if (h.completeTask) {
-      h.completeTask.mockClear()
-      h.completeTask.mockResolvedValue({} as never)
-    }
+    h.hasCompleteTask = true
+    h.completeTask.mockReset()
+    h.completeTask.mockResolvedValue(undefined)
 
-    mathRandomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
-  })
-
-  afterEach(() => {
-    mathRandomSpy.mockRestore()
-    vi.clearAllMocks()
+    vi.spyOn(Math, 'random').mockReturnValue(0.5)
   })
 
   it('should render HostPodiumState', async () => {
@@ -103,6 +94,11 @@ describe('HostPodiumState', () => {
   })
 
   it('clicks Game Results and calls completeTask', async () => {
+    let resolve!: () => void
+    h.completeTask.mockImplementation(
+      () => new Promise<void>((r) => (resolve = r)),
+    )
+
     const { container } = render(
       <MemoryRouter>
         <HostPodiumState
@@ -121,14 +117,24 @@ describe('HostPodiumState', () => {
     const gameResultsBtn = container.querySelector(
       '#game-results-button',
     ) as HTMLButtonElement
-    fireEvent.click(gameResultsBtn)
+
+    act(() => {
+      fireEvent.click(gameResultsBtn)
+    })
+
     expect(h.completeTask).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolve()
+      await Promise.resolve()
+    })
+
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Game Results when completeTask is undefined', async () => {
-    // @ts-expect-error undefined
-    h.completeTask = undefined
+  it('clicks Game Results when completeTask is undefined', () => {
+    h.hasCompleteTask = false
+
     const { container } = render(
       <MemoryRouter>
         <HostPodiumState
@@ -147,7 +153,11 @@ describe('HostPodiumState', () => {
     const gameResultsBtn = container.querySelector(
       '#game-results-button',
     ) as HTMLButtonElement
-    fireEvent.click(gameResultsBtn)
+
+    act(() => {
+      fireEvent.click(gameResultsBtn)
+    })
+
     expect(container).toMatchSnapshot()
   })
 

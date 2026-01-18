@@ -4,20 +4,14 @@ import {
   QuestionPinTolerance,
   QuestionType,
 } from '@klurigo/common'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const h = vi.hoisted(() => ({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  addCorrectAnswer: vi.fn<[], Promise<void>>().mockResolvedValue(),
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  deleteCorrectAnswer: vi.fn<[], Promise<void>>().mockResolvedValue(),
+  completeTask: vi.fn().mockResolvedValue(undefined),
+  addCorrectAnswer: vi.fn().mockResolvedValue(undefined),
+  deleteCorrectAnswer: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock('../../context/game', () => ({
@@ -55,9 +49,14 @@ function findActionButtonForAnswer(answerText: string, actionWords: RegExp) {
 
 describe('HostResultState', () => {
   beforeEach(() => {
-    h.completeTask.mockClear()
-    h.addCorrectAnswer.mockClear()
-    h.deleteCorrectAnswer.mockClear()
+    h.completeTask.mockReset()
+    h.completeTask.mockResolvedValue(undefined)
+
+    h.addCorrectAnswer.mockReset()
+    h.addCorrectAnswer.mockResolvedValue(undefined)
+
+    h.deleteCorrectAnswer.mockReset()
+    h.deleteCorrectAnswer.mockResolvedValue(undefined)
   })
 
   it('should render HostResultState with question type multi-choice and two answers', () => {
@@ -351,7 +350,12 @@ describe('HostResultState', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('clicks Next to initiate leaderboard task', () => {
+  it('clicks Next to initiate leaderboard task', async () => {
+    let resolve!: () => void
+    h.completeTask.mockImplementation(
+      () => new Promise<void>((r) => (resolve = r)),
+    )
+
     const { container } = render(
       <MemoryRouter>
         <HostResultState
@@ -373,12 +377,27 @@ describe('HostResultState', () => {
     )
 
     const next = container.querySelector('#next-button') as HTMLButtonElement
-    fireEvent.click(next)
+
+    act(() => {
+      fireEvent.click(next)
+    })
+
     expect(h.completeTask).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolve()
+      await Promise.resolve()
+    })
+
     expect(container).toMatchSnapshot()
   })
 
   it('marks an incorrect option as correct via QuestionResults UI', async () => {
+    let resolve!: () => void
+    h.addCorrectAnswer.mockImplementation(
+      () => new Promise<void>((r) => (resolve = r)),
+    )
+
     render(
       <MemoryRouter>
         <HostResultState
@@ -409,14 +428,28 @@ describe('HostResultState', () => {
       /(add|mark|set|correct)/i,
     )
     expect(btn).toBeTruthy()
-    fireEvent.click(btn as HTMLButtonElement)
+
+    act(() => {
+      fireEvent.click(btn as HTMLButtonElement)
+    })
 
     expect(h.addCorrectAnswer).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolve()
+      await Promise.resolve()
+    })
+
     const arg = h.addCorrectAnswer.mock.calls[0][0]
     expect(arg).toBeTruthy()
   })
 
   it('removes an already-correct option via QuestionResults UI', async () => {
+    let resolve!: () => void
+    h.deleteCorrectAnswer.mockImplementation(
+      () => new Promise<void>((r) => (resolve = r)),
+    )
+
     render(
       <MemoryRouter>
         <HostResultState
@@ -447,9 +480,18 @@ describe('HostResultState', () => {
       /(remove|unset|unmark|delete)/i,
     )
     expect(btn).toBeTruthy()
-    fireEvent.click(btn as HTMLButtonElement)
+
+    act(() => {
+      fireEvent.click(btn as HTMLButtonElement)
+    })
 
     expect(h.deleteCorrectAnswer).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      resolve()
+      await Promise.resolve()
+    })
+
     const arg = h.deleteCorrectAnswer.mock.calls[0][0]
     expect(arg).toBeTruthy()
   })

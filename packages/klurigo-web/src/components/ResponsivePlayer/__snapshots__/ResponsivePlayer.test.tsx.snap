@@ -1,9 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ResponsiveImage > should render ResponsiveImage with props 1`] = `
+exports[`ResponsivePlayer > should render ResponsivePlayer with props 1`] = `
 <div>
   <div
     class="playerWrapper"
-  />
+  >
+    <div
+      data-testid="react-player"
+    />
+  </div>
 </div>
 `;

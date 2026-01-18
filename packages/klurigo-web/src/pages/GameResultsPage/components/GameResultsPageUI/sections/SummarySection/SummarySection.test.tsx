@@ -280,6 +280,8 @@ describe('SummarySection', () => {
   })
 
   it('opens confirm dialog when clicking Play again if allowed', async () => {
+    const user = userEvent.setup()
+
     h.getCorrectPercentage.mockImplementationOnce(() => 100)
 
     const playerMetrics = [
@@ -310,7 +312,7 @@ describe('SummarySection', () => {
       />,
     )
 
-    screen.getByRole('button', { name: /play again/i }).click()
+    await user.click(screen.getByRole('button', { name: /play again/i }))
 
     expect(
       await screen.findByText(/are you sure you want to start hosting/i),

@@ -1,20 +1,18 @@
 import type { CountdownEvent } from '@klurigo/common'
-import { render } from '@testing-library/react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, render } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import ProgressBar from './ProgressBar'
 
 describe('ProgressBar', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
   afterEach(() => {
-    vi.runOnlyPendingTimers()
+    vi.restoreAllMocks()
     vi.useRealTimers()
   })
 
   it('should render a ProgressBar with initial progress', () => {
+    vi.useFakeTimers()
+
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -22,6 +20,11 @@ describe('ProgressBar', () => {
     }
 
     const { container } = render(<ProgressBar countdown={countdown} />)
+
+    // If the component sets state from an interval/effect, flush the immediate tick safely.
+    act(() => {
+      vi.runOnlyPendingTimers()
+    })
 
     expect(container).toMatchSnapshot()
   })
@@ -138,15 +141,17 @@ describe('ProgressBar', () => {
   })
 
   it('should cleanup interval on unmount', () => {
+    vi.useFakeTimers()
+
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
       serverTime: '2023-01-01T00:00:00.000Z',
     }
 
-    const { unmount } = render(<ProgressBar countdown={countdown} />)
+    const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval')
 
-    const clearIntervalSpy = vi.spyOn(global, 'clearInterval')
+    const { unmount } = render(<ProgressBar countdown={countdown} />)
 
     unmount()
 
@@ -154,28 +159,33 @@ describe('ProgressBar', () => {
   })
 
   it('should set up interval when valid countdown provided', () => {
+    vi.useFakeTimers()
+
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
       serverTime: '2023-01-01T00:00:00.000Z',
     }
 
-    const setIntervalSpy = vi.spyOn(global, 'setInterval')
+    const setIntervalSpy = vi.spyOn(globalThis, 'setInterval')
+
     render(<ProgressBar countdown={countdown} />)
 
     expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 100)
   })
 
   it('should clear existing interval when countdown changes', () => {
+    vi.useFakeTimers()
+
     const initialCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
       serverTime: '2023-01-01T00:00:00.000Z',
     }
 
-    const { rerender } = render(<ProgressBar countdown={initialCountdown} />)
+    const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval')
 
-    const clearIntervalSpy = vi.spyOn(global, 'clearInterval')
+    const { rerender } = render(<ProgressBar countdown={initialCountdown} />)
 
     const newCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:01:00.000Z',

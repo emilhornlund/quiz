@@ -121,6 +121,8 @@ const makePlayer = (id: string, nickname: string): GameParticipantPlayerDto =>
   // This matches the typical shape used in the app (id/nickname).
   ({ id, nickname })
 
+const never = () => new Promise<never>(() => {})
+
 describe('PlayerManagementModal', () => {
   beforeEach(() => {
     vi.useRealTimers()
@@ -140,7 +142,7 @@ describe('PlayerManagementModal', () => {
 
   it('renders the Modal title and static message when open=true', () => {
     mockedUseGameContext.mockReturnValue({
-      getPlayers: vi.fn().mockResolvedValue([]),
+      getPlayers: vi.fn().mockReturnValue(never()),
       leaveGame: vi.fn(),
     } as unknown as ReturnType<typeof useGameContext>)
 
@@ -387,19 +389,22 @@ describe('PlayerManagementModal', () => {
     const onClose = vi.fn()
 
     mockedUseGameContext.mockReturnValue({
-      getPlayers: vi.fn().mockResolvedValue([]),
+      getPlayers: vi.fn().mockReturnValue(never()),
       leaveGame: vi.fn(),
     } as unknown as ReturnType<typeof useGameContext>)
 
     render(<PlayerManagementModal open onClose={onClose} />)
 
-    fireEvent.click(screen.getByTestId('modal-close'))
+    act(() => {
+      fireEvent.click(screen.getByTestId('modal-close'))
+    })
+
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
   it('matches snapshot (modal open, before players load)', () => {
     mockedUseGameContext.mockReturnValue({
-      getPlayers: vi.fn().mockResolvedValue([makePlayer('p1', 'Alice')]),
+      getPlayers: vi.fn().mockReturnValue(never()),
       leaveGame: vi.fn(),
     } as unknown as ReturnType<typeof useGameContext>)
 
