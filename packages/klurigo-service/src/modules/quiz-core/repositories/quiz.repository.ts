@@ -126,6 +126,41 @@ export class QuizRepository extends BaseRepository<Quiz> {
   }
 
   /**
+   * Replaces an existing quiz by merging the provided payload on top of the persisted
+   * quiz, then writing the result with findOneAndReplace.
+   *
+   * Performs a full document replacement using repository `replace` semantics.
+   * The provided quiz data is merged on top of the persisted quiz document and the
+   * resulting replacement is written using `findOneAndReplace`.
+   *
+   * This method does not explicitly modify quiz timestamps (for example `updated`).
+   * Any timestamp behavior must be handled by schema configuration (for example
+   * Mongoose timestamps) or higher-level services.
+   *
+   * The `owner` relation is populated before returning the replaced document.
+   *
+   * If no quiz with the given id exists, a {@link QuizNotFoundException} is thrown.
+   *
+   * @param quizId - The id of the quiz to replace.
+   * @param quiz - Partial quiz data applied on top of the persisted quiz document.
+   *
+   * @returns The replaced quiz document with populated owner.
+   *
+   * @throws QuizNotFoundException when no quiz exists with the given id.
+   */
+  public async replaceQuiz(quizId: string, quiz: Partial<Quiz>): Promise<Quiz> {
+    const document = await this.replace(quizId, quiz, {
+      populate: { path: 'owner' },
+    })
+
+    if (!document) {
+      throw new QuizNotFoundException(quizId)
+    }
+
+    return document
+  }
+
+  /**
    * Deletes a quiz by ID.
    *
    * @param quizId - The unique identifier of the quiz to delete.

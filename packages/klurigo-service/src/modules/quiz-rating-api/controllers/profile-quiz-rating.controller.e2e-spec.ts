@@ -25,6 +25,7 @@ import {
   QuizModel,
   QuizRating,
   QuizRatingModel,
+  QuizRatingSummary,
 } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 
@@ -89,6 +90,19 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
       quiz = await quizModel.create(
         createMockClassicQuiz({
           owner: tertiaryAuthenticatedUser.user,
+          ratingSummary: {
+            count: 1,
+            avg: 5,
+            stars: {
+              '1': 0,
+              '2': 0,
+              '3': 0,
+              '4': 0,
+              '5': 1,
+            },
+            commentCount: 1,
+            updated: new Date(),
+          },
         }),
       )
 
@@ -112,8 +126,8 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
       )
     })
 
-    it('should create a rating when caller is a player participant', () => {
-      return supertest(app.getHttpServer())
+    it('should create a rating when caller is a player participant', async () => {
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -137,10 +151,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             updatedAt: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 2,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 2,
+        },
+        commentCount: 2,
+        updated: expect.anything(),
+      })
     })
 
-    it('should create a rating when caller is a host participant not quiz owner', () => {
-      return supertest(app.getHttpServer())
+    it('should create a rating when caller is a host participant not quiz owner', async () => {
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantHostUserAccessToken}`,
@@ -164,10 +192,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             updatedAt: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 2,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 2,
+        },
+        commentCount: 2,
+        updated: expect.anything(),
+      })
     })
 
-    it('should create a rating without a comment when caller is a player participant', () => {
-      return supertest(app.getHttpServer())
+    it('should create a rating without a comment when caller is a player participant', async () => {
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -189,10 +231,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             updatedAt: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 2,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 2,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
-    it('should return 403 when caller is a host participant and quiz owner', () => {
-      return supertest(app.getHttpServer())
+    it('should return 403 when caller is a host participant and quiz owner', async () => {
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantHostUserAndQuizOwnerAccessToken}`,
@@ -209,6 +265,20 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             timestamp: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 1,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
     it('should update the existing rating when caller is the rating author', async () => {
@@ -226,7 +296,7 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
       const updatedStars = 3
       const updatedComment = 'Solid, but a couple of questions were tricky.'
 
-      return supertest(app.getHttpServer())
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -250,6 +320,20 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             updatedAt: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 3,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 1,
+          '4': 0,
+          '5': 0,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
     it('should update the existing rating and clear the comment when comment is undefined', async () => {
@@ -266,7 +350,7 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
 
       const updatedStars = 3
 
-      return supertest(app.getHttpServer())
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -290,10 +374,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             updatedAt: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 3,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 1,
+          '4': 0,
+          '5': 0,
+        },
+        commentCount: 0,
+        updated: expect.anything(),
+      })
     })
 
-    it('should return 400 when payload validation fails', () => {
-      return supertest(app.getHttpServer())
+    it('should return 400 when payload validation fails', async () => {
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -326,12 +424,26 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             ],
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 1,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
     it('should return 404 when quiz was not found', async () => {
       const quizId = uuidv4()
 
-      return supertest(app.getHttpServer())
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quizId}/ratings`)
         .set({
           Authorization: `Bearer ${gameParticipantPlayerUserAccessToken}`,
@@ -345,10 +457,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             timestamp: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 1,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
     it('should return 401 when Authorization header is missing', async () => {
-      return supertest(app.getHttpServer())
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .send({ stars, comment })
         .expect(401)
@@ -359,10 +485,24 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             timestamp: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 1,
+        },
+        commentCount: 1,
+        updated: expect.anything(),
+      })
     })
 
     it('should return 401 when bearer token is invalid', async () => {
-      return supertest(app.getHttpServer())
+      await supertest(app.getHttpServer())
         .put(`/api/profile/quizzes/${quiz._id}/ratings`)
         .send({ stars, comment })
         .set({ Authorization: 'Bearer XXX' })
@@ -374,6 +514,53 @@ describe(`${ProfileQuizRatingController.name} (e2e)`, () => {
             timestamp: expect.any(String),
           })
         })
+
+      await assertQuizRatingSummary({
+        count: 1,
+        avg: 5,
+        stars: {
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 1,
+        },
+        commentCount: 1,
+      })
     })
+
+    async function assertQuizRatingSummary(
+      expected: Partial<QuizRatingSummary>,
+    ): Promise<void> {
+      const actual = await quizModel.findById(quiz._id).lean().exec()
+      const summary = actual?.ratingSummary
+
+      expect(summary).toBeDefined()
+
+      // Shape check so we fail loudly if something is missing.
+      expect(summary).toEqual(
+        expect.objectContaining({
+          count: expect.any(Number),
+          avg: expect.any(Number),
+          stars: {
+            '1': expect.any(Number),
+            '2': expect.any(Number),
+            '3': expect.any(Number),
+            '4': expect.any(Number),
+            '5': expect.any(Number),
+          },
+          commentCount: expect.any(Number),
+          updated: expect.anything(),
+        }),
+      )
+
+      // Now validate only what the test claims to care about.
+      expect(summary).toEqual(expect.objectContaining(expected))
+
+      // If expected includes stars, validate those keys precisely (don’t allow partial star maps)
+      if (expected.stars) {
+        expect(summary?.stars).toEqual(expected.stars)
+      }
+    }
   })
 })

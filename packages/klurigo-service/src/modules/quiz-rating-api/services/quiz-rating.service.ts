@@ -1,5 +1,6 @@
 import { PaginatedQuizRatingDto, QuizRatingDto } from '@klurigo/common'
 import { Injectable, Logger } from '@nestjs/common'
+import { MurLock } from 'murlock'
 
 import { QuizRepository } from '../../quiz-core/repositories'
 import { QuizRatingRepository } from '../../quiz-core/repositories'
@@ -107,6 +108,7 @@ export class QuizRatingService {
    * @param comment - Optional feedback comment.
    * @returns The resulting rating DTO.
    */
+  @MurLock(5000, 'quiz_rating', 'quizId')
   public async createOrUpdateQuizRating(
     quizId: string,
     author: User,
@@ -151,7 +153,7 @@ export class QuizRatingService {
       updatedAt: now,
     })
 
-    await this.quizRepository.updateQuiz(quizId, {
+    await this.quizRepository.replaceQuiz(quizId, {
       ...existingQuiz,
       ratingSummary,
     })

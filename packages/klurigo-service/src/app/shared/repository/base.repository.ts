@@ -28,6 +28,13 @@ export type UpdateOptions = {
 }
 
 /**
+ * Plain object representation used for safe merging and replacement document construction.
+ *
+ * This type is intentionally broad to support arbitrary document shapes while avoiding `any`.
+ */
+type PlainObject = Record<string, unknown>
+
+/**
  * Abstract base repository providing common CRUD operations
  */
 @Injectable()
@@ -232,6 +239,79 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   /**
+   * Replaces a document by its id and returns the replaced document.
+   *
+   * Uses full replacement semantics via `findOneAndReplace`, but first loads the existing
+   * document to ensure a baseline exists. The replacement payload is created by:
+   * - converting the existing document into a plain object baseline,
+   * - normalizing the incoming payload into a plain object,
+   * - merging baseline + incoming while enforcing repository-level invariants,
+   * - casting through the model to normalize embedded schemas and discriminators.
+   *
+   * Repository-level invariants enforced by this method:
+   * - `_id` is forced to match the provided id (incoming values are ignored),
+   * - internal Mongoose version key (`__v`) is removed to avoid persisting version state.
+   *
+   * No domain-specific fields (for example timestamps like `created`/`updated`) are interpreted
+   * or modified here. Such behavior must be handled by schema configuration (for example
+   * Mongoose timestamps) or higher-level services.
+   *
+   * @param id - The id of the document to replace.
+   * @param data - The replacement payload applied on top of the existing persisted document.
+   * @param options - Additional replace options (for example, populate configuration).
+   *
+   * @returns The replaced document if found; otherwise `null`.
+   */
+  public async replace(
+    id: string,
+    data: Partial<T>,
+    options: UpdateOptions = {},
+  ): Promise<T | null> {
+    try {
+      const existing = await this.model.findById(id).exec()
+
+      if (!existing) {
+        this.logger.warn(
+          `No ${this.modelName} document found with id '${id}' to replace`,
+        )
+        return null
+      }
+
+      const base = existing.toObject(this.getRepositoryObjectOptions())
+      const incoming = this.normalizeToPlainObject(data)
+
+      const merged = this.buildReplacementDocument(id, base, incoming)
+
+      const casted = new this.model(merged)
+      const replacement = casted.toObject(this.getRepositoryObjectOptions())
+
+      const query = this.model.findOneAndReplace({ _id: id }, replacement, {
+        new: true,
+        runValidators: true,
+        overwriteDiscriminatorKey: true,
+      })
+
+      const document = await this.applyPopulate(query, options.populate)
+
+      if (document) {
+        this.logger.log(`Replaced ${this.modelName} document with id '${id}'`)
+      } else {
+        this.logger.warn(
+          `No ${this.modelName} document found with id '${id}' to replace (document disappeared between load and replace)`,
+        )
+      }
+
+      return document
+    } catch (error) {
+      this.logger.error(
+        `Error replacing ${this.modelName} document with id '${id}':`,
+        error,
+      )
+      throw error
+    }
+  }
+
+  /**
    * Delete a document by ID
    */
   async delete(id: string): Promise<boolean> {
@@ -330,5 +410,119 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       ...(Object.keys($set).length > 0 ? { $set } : {}),
       ...(Object.keys($unset).length > 0 ? { $unset } : {}),
     }
+  }
+
+  /**
+   * Returns the object conversion options used when converting documents to plain objects.
+   *
+   * Uses `depopulate` to ensure referenced documents are represented by their ids,
+   * disables version key and disables virtuals/getters to avoid persisting derived fields.
+   *
+   * @returns Object conversion options applied to `toObject()` in repository operations.
+   * @private
+   */
+  private getRepositoryObjectOptions(): {
+    depopulate: true
+    versionKey: false
+    virtuals: false
+    getters: false
+  } {
+    return {
+      depopulate: true,
+      versionKey: false,
+      virtuals: false,
+      getters: false,
+    }
+  }
+
+  /**
+   * Normalizes an input value into a plain object suitable for merging and replacement.
+   *
+   * If the value is a Mongoose document or subdocument, `toJSON()` is used when available
+   * to obtain a plain representation. Non-object inputs and non-plain objects return `{}`.
+   *
+   * @param value - The value to normalize.
+   * @returns A plain object representation of the value, or an empty object when unsupported.
+   * @private
+   */
+  private normalizeToPlainObject(value: unknown): PlainObject {
+    if (!value || typeof value !== 'object') return {}
+
+    if (this.hasToJSON(value)) {
+      const json = value.toJSON()
+      return this.isPlainObject(json) ? json : {}
+    }
+
+    if (this.isPlainObject(value)) return value
+
+    return {}
+  }
+
+  /**
+   * Builds the final replacement document payload for `findOneAndReplace`.
+   *
+   * Merges the current persisted document (`base`) with the incoming payload (`incoming`)
+   * using full-replacement semantics, then enforces repository-level invariants:
+   * - `_id` is forced to match the provided id (incoming values are ignored),
+   * - internal Mongoose version key (`__v`) is removed to avoid persisting version state.
+   *
+   * No domain-specific fields (for example timestamps like `created`/`updated` or business
+   * properties) are interpreted or modified here. Such behavior must be handled by schema
+   * configuration (for example Mongoose timestamps) or by higher-level services.
+   *
+   * @param id - The id of the document being replaced.
+   * @param base - Plain object representation of the persisted document.
+   * @param incoming - Plain object representation of the incoming replacement payload.
+   * @returns The merged replacement payload suitable for `findOneAndReplace`.
+   * @private
+   */
+  private buildReplacementDocument(
+    id: string,
+    base: PlainObject,
+    incoming: PlainObject,
+  ): PlainObject {
+    const merged: PlainObject = {
+      ...base,
+      ...incoming,
+      _id: id, // enforce immutable id
+    }
+
+    delete merged['__v'] // strip mongoose internal version key
+
+    return merged
+  }
+
+  /**
+   * Type guard for values that provide a `toJSON()` method.
+   *
+   * Used to detect Mongoose documents/subdocuments (and similar objects) that can be
+   * converted into a plain JSON-compatible representation.
+   *
+   * @param value - The object to check.
+   * @returns `true` when the value has a callable `toJSON()` method.
+   * @private
+   */
+  private hasToJSON(value: object): value is { toJSON: () => unknown } {
+    return (
+      'toJSON' in value &&
+      typeof (value as { toJSON?: unknown }).toJSON === 'function'
+    )
+  }
+
+  /**
+   * Type guard for plain objects (non-null, non-array).
+   *
+   * Used to ensure merge inputs are safe plain objects and not arrays or class instances.
+   *
+   * @param value - The value to check.
+   * @returns `true` when the value is a plain object.
+   * @private
+   */
+  private isPlainObject(value: unknown): value is PlainObject {
+    if (typeof value !== 'object' || value === null) return false
+    if (Array.isArray(value)) return false
+
+    const proto = Object.getPrototypeOf(value)
+    return proto === Object.prototype || proto === null
   }
 }

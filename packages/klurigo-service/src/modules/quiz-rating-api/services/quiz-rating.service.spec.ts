@@ -9,27 +9,25 @@ import { QuizRepository } from '../../quiz-core/repositories'
 import { QuizRatingRepository } from '../../quiz-core/repositories'
 import { QuizRating } from '../../quiz-core/repositories/models/schemas'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
+import { updateQuizRatingSummary } from '../utils'
 
 import { QuizRatingService } from './quiz-rating.service'
 
-jest.mock('../utils', () => {
-  const actual = jest.requireActual('../utils')
-  return {
-    __esModule: true,
-    ...actual,
-    updateQuizRatingSummary: jest.fn(),
-  }
-})
-
-// eslint-disable-next-line import/order
-import { updateQuizRatingSummary } from '../utils'
+// Avoid depending on MurLock implementation details in a unit test.
+// We only want to test the business logic inside `clean()`.
+jest.mock('murlock', () => ({
+  MurLock:
+    () =>
+    (_target: unknown, _propertyKey: string, descriptor: PropertyDescriptor) =>
+      descriptor,
+}))
 
 describe(QuizRatingService.name, () => {
   let service: QuizRatingService
 
   let quizRepository: {
     findQuizByIdOrThrow: jest.Mock
-    updateQuiz: jest.Mock
+    replaceQuiz: jest.Mock
   }
 
   let quizRatingRepository: {
@@ -51,7 +49,7 @@ describe(QuizRatingService.name, () => {
 
     quizRepository = {
       findQuizByIdOrThrow: jest.fn(),
-      updateQuiz: jest.fn(),
+      replaceQuiz: jest.fn(),
     }
 
     quizRatingRepository = {
@@ -283,13 +281,6 @@ describe(QuizRatingService.name, () => {
       })
 
       quizRatingRepository.createQuizRating.mockResolvedValue(createdRating)
-      ;(updateQuizRatingSummary as jest.Mock).mockReturnValue({
-        count: 1,
-        avg: 4,
-        stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 0 },
-        commentCount: 1,
-        updated: fixedNow,
-      })
 
       const result = await service.createOrUpdateQuizRating(
         quizId,
@@ -319,8 +310,9 @@ describe(QuizRatingService.name, () => {
       )
       expect(quizRatingRepository.updateQuizRating).not.toHaveBeenCalled()
 
-      expect(updateQuizRatingSummary).toHaveBeenCalledTimes(1)
-      expect(updateQuizRatingSummary).toHaveBeenCalledWith({
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const expectedSummary = updateQuizRatingSummary({
         summary: existingQuiz.ratingSummary,
         previousStars: undefined,
         nextStars: stars,
@@ -329,16 +321,9 @@ describe(QuizRatingService.name, () => {
         updatedAt: fixedNow,
       })
 
-      expect(quizRepository.updateQuiz).toHaveBeenCalledTimes(1)
-      expect(quizRepository.updateQuiz).toHaveBeenCalledWith(quizId, {
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledWith(quizId, {
         ...existingQuiz,
-        ratingSummary: {
-          count: 1,
-          avg: 4,
-          stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 0 },
-          commentCount: 1,
-          updated: fixedNow,
-        },
+        ratingSummary: expectedSummary,
       })
 
       expect(result).toEqual({
@@ -394,13 +379,6 @@ describe(QuizRatingService.name, () => {
         existingRating,
       )
       quizRatingRepository.updateQuizRating.mockResolvedValue(updatedRating)
-      ;(updateQuizRatingSummary as jest.Mock).mockReturnValue({
-        count: 10,
-        avg: 3.2,
-        stars: { '1': 1, '2': 3, '3': 3, '4': 2, '5': 1 },
-        commentCount: 8,
-        updated: fixedNow,
-      })
 
       const result = await service.createOrUpdateQuizRating(
         quizId,
@@ -418,26 +396,20 @@ describe(QuizRatingService.name, () => {
       )
       expect(quizRatingRepository.createQuizRating).not.toHaveBeenCalled()
 
-      expect(updateQuizRatingSummary).toHaveBeenCalledTimes(1)
-      expect(updateQuizRatingSummary).toHaveBeenCalledWith({
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const expectedSummary = updateQuizRatingSummary({
         summary: existingQuiz.ratingSummary,
-        previousStars: 5,
-        nextStars: 2,
-        previousComment: 'Old comment',
+        previousStars: existingRating.stars,
+        nextStars: stars,
+        previousComment: existingRating.comment,
         nextComment: comment,
         updatedAt: fixedNow,
       })
 
-      expect(quizRepository.updateQuiz).toHaveBeenCalledTimes(1)
-      expect(quizRepository.updateQuiz).toHaveBeenCalledWith(quizId, {
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledWith(quizId, {
         ...existingQuiz,
-        ratingSummary: {
-          count: 10,
-          avg: 3.2,
-          stars: { '1': 1, '2': 3, '3': 3, '4': 2, '5': 1 },
-          commentCount: 8,
-          updated: fixedNow,
-        },
+        ratingSummary: expectedSummary,
       })
 
       expect(result).toEqual({
@@ -451,7 +423,338 @@ describe(QuizRatingService.name, () => {
       })
     })
 
-    it('does not call updateQuizRatingSummary with a new Date instance different from system time', async () => {
+    it('updates stars only when comment remains present (commentCount unchanged)', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser({
+        _id: 'user-1',
+        defaultNickname: 'Emil',
+      })
+
+      const existingQuiz = createMockClassicQuiz({
+        _id: quizId,
+        ratingSummary: {
+          count: 2,
+          avg: 3.0,
+          stars: { '1': 0, '2': 1, '3': 0, '4': 1, '5': 0 },
+          commentCount: 1,
+          updated: fixedNow,
+        },
+      })
+
+      const existingRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 4,
+        comment: 'Hard',
+      })
+
+      const updatedRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 2,
+        comment: 'Hard',
+        updated: fixedNow,
+      })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(
+        existingRating,
+      )
+      quizRatingRepository.updateQuizRating.mockResolvedValue(updatedRating)
+
+      await service.createOrUpdateQuizRating(
+        quizId,
+        author as unknown as any,
+        2,
+        'Hard',
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: existingRating.stars,
+        nextStars: 2,
+        previousComment: existingRating.comment,
+        nextComment: 'Hard',
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
+    })
+
+    it('decrements commentCount when comment is removed (present -> absent) without changing stars', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser({
+        _id: 'user-1',
+        defaultNickname: 'Emil',
+      })
+
+      const existingQuiz = createMockClassicQuiz({
+        _id: quizId,
+        ratingSummary: {
+          count: 2,
+          avg: 4.5,
+          stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 1 },
+          commentCount: 2,
+          updated: fixedNow,
+        },
+      })
+
+      const existingRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 5,
+        comment: 'Great',
+      })
+
+      const updatedRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 5,
+        comment: undefined,
+        updated: fixedNow,
+      })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(
+        existingRating,
+      )
+      quizRatingRepository.updateQuizRating.mockResolvedValue(updatedRating)
+
+      await service.createOrUpdateQuizRating(
+        quizId,
+        author as unknown as any,
+        5,
+        undefined,
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: existingRating.stars,
+        nextStars: 5,
+        previousComment: existingRating.comment,
+        nextComment: undefined,
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
+    })
+
+    it('increments commentCount when comment is added (absent -> present) without changing stars', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser({
+        _id: 'user-1',
+        defaultNickname: 'Emil',
+      })
+
+      const existingQuiz = createMockClassicQuiz({
+        _id: quizId,
+        ratingSummary: {
+          count: 1,
+          avg: 2,
+          stars: { '1': 0, '2': 1, '3': 0, '4': 0, '5': 0 },
+          commentCount: 0,
+          updated: fixedNow,
+        },
+      })
+
+      const existingRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 2,
+        comment: undefined,
+      })
+
+      const updatedRating = createRating({
+        _id: 'rating-1',
+        quizId,
+        author,
+        stars: 2,
+        comment: 'Nice',
+        updated: fixedNow,
+      })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(
+        existingRating,
+      )
+      quizRatingRepository.updateQuizRating.mockResolvedValue(updatedRating)
+
+      await service.createOrUpdateQuizRating(
+        quizId,
+        author as unknown as any,
+        2,
+        'Nice',
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: existingRating.stars,
+        nextStars: 2,
+        previousComment: existingRating.comment,
+        nextComment: 'Nice',
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
+    })
+
+    it('treats whitespace-only comment as absent for commentCount', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser({
+        _id: 'user-1',
+        defaultNickname: 'Emil',
+      })
+
+      const existingQuiz = createMockClassicQuiz({
+        _id: quizId,
+        ratingSummary: {
+          count: 1,
+          avg: 4,
+          stars: { '1': 0, '2': 0, '3': 0, '4': 1, '5': 0 },
+          commentCount: 0,
+          updated: fixedNow,
+        },
+      })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(null)
+
+      const createdRating = createRating({
+        _id: 'rating-new',
+        quizId,
+        author,
+        stars: 4,
+        comment: '   ',
+        created: fixedNow,
+        updated: fixedNow,
+      })
+
+      quizRatingRepository.createQuizRating.mockResolvedValue(createdRating)
+
+      await service.createOrUpdateQuizRating(
+        quizId,
+        author as unknown as any,
+        4,
+        '   ',
+      )
+
+      expect(quizRepository.findQuizByIdOrThrow).toHaveBeenCalledWith(quizId)
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: undefined,
+        nextStars: 4,
+        previousComment: undefined,
+        nextComment: '   ',
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
+    })
+
+    it('uses the same `now` timestamp for rating write and summary.updated', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser()
+
+      const existingQuiz = createMockClassicQuiz({
+        _id: quizId,
+        ratingSummary: {
+          count: 0,
+          avg: 0,
+          stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+          commentCount: 0,
+        },
+      })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(null)
+
+      const createdRating = createRating({
+        _id: 'rating-new',
+        quizId,
+        author,
+        stars: 1,
+        comment: undefined,
+        created: fixedNow,
+        updated: fixedNow,
+      })
+
+      quizRatingRepository.createQuizRating.mockResolvedValue(createdRating)
+
+      await service.createOrUpdateQuizRating(
+        quizId,
+        author as unknown as any,
+        1,
+      )
+
+      expect(quizRatingRepository.createQuizRating).toHaveBeenCalledWith(
+        quizId,
+        author,
+        fixedNow,
+        1,
+        undefined,
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: undefined,
+        nextStars: 1,
+        previousComment: undefined,
+        nextComment: undefined,
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
+    })
+
+    it('throws when the repository returns null (and does not update quiz)', async () => {
+      const quizId = 'quiz-1'
+      const author = buildMockPrimaryUser({ _id: 'user-1' })
+
+      const existingQuiz = createMockClassicQuiz({ _id: quizId })
+
+      quizRepository.findQuizByIdOrThrow.mockResolvedValue(existingQuiz)
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValue(null)
+      quizRatingRepository.createQuizRating.mockResolvedValue(null)
+
+      await expect(
+        service.createOrUpdateQuizRating(
+          quizId,
+          author as unknown as any,
+          5,
+          'Nice',
+        ),
+      ).rejects.toBeInstanceOf(QuizRatingByQuizAndAuthorNotFoundException)
+
+      expect(quizRepository.replaceQuiz).not.toHaveBeenCalled()
+    })
+
+    it('uses system time (`now`) consistently for repository write and summary.updated', async () => {
       const quizId = 'quiz-1'
       const author = buildMockPrimaryUser()
       const stars = 1
@@ -480,12 +783,6 @@ describe(QuizRatingService.name, () => {
       })
 
       quizRatingRepository.createQuizRating.mockResolvedValue(createdRating)
-      ;(updateQuizRatingSummary as jest.Mock).mockImplementation(
-        (args: any) => ({
-          ...args.summary,
-          updated: args.updatedAt,
-        }),
-      )
 
       await service.createOrUpdateQuizRating(
         quizId,
@@ -493,10 +790,28 @@ describe(QuizRatingService.name, () => {
         stars,
       )
 
-      const call = (updateQuizRatingSummary as jest.Mock).mock.calls[0]?.[0]
-      expect(call.updatedAt).toEqual(fixedNow)
-      expect(call.previousComment).toBeUndefined()
-      expect(call.nextComment).toBeUndefined()
+      expect(quizRatingRepository.createQuizRating).toHaveBeenCalledWith(
+        quizId,
+        author,
+        fixedNow,
+        stars,
+        undefined,
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+
+      const [, updatedQuiz] = quizRepository.replaceQuiz.mock.calls[0]
+
+      const expectedSummary = updateQuizRatingSummary({
+        summary: existingQuiz.ratingSummary,
+        previousStars: undefined,
+        nextStars: stars,
+        previousComment: undefined,
+        nextComment: undefined,
+        updatedAt: fixedNow,
+      })
+
+      expect(updatedQuiz.ratingSummary).toEqual(expectedSummary)
     })
   })
 })
