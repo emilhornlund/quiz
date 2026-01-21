@@ -55,7 +55,7 @@ import {
   QuestionTrueFalseDao,
   QuestionTypeAnswerDao,
   Quiz,
-} from '../../src/modules/quiz/repositories/models/schemas'
+} from '../../src/modules/quiz-core/repositories/models/schemas'
 import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
@@ -609,6 +609,12 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    ratingSummary: {
+      count: 0,
+      avg: 0,
+      stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+      commentCount: 0,
+    },
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),
@@ -644,6 +650,12 @@ export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    ratingSummary: {
+      count: 0,
+      avg: 0,
+      stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+      commentCount: 0,
+    },
     created: new Date(),
     updated: new Date(),
     ...(quiz ?? {}),

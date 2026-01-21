@@ -8,7 +8,7 @@ import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import { GameEventPublisher } from '../../game-event/services'
 import { GameTaskTransitionScheduler } from '../../game-task/services'
-import { QuizRepository } from '../../quiz/repositories'
+import { QuizRepository } from '../../quiz-core/repositories'
 
 import { GameService } from './game.service'
 

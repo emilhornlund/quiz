@@ -33,7 +33,26 @@ describe('BaseRepository', () => {
   let mockLoggerError: jest.SpyInstance
 
   beforeEach(() => {
-    mockModel = {
+    // Each `new model()` must return a NEW instance, otherwise tests become flaky.
+    // We also need a deterministic way to control what `toObject()` returns for the casted doc.
+    const plannedToObjectReturns: Array<Record<string, unknown>> = []
+
+    const ctor = jest.fn(() => ({
+      toObject: jest.fn(() => {
+        const next = plannedToObjectReturns.shift()
+        if (!next) {
+          throw new Error(
+            'Test did not preload __planToObjectReturns for model().toObject()',
+          )
+        }
+        return next
+      }),
+    }))
+
+    Object.assign(ctor, {
+      // expose plan so tests can preload what the next `toObject()` call should return
+      __planToObjectReturns: plannedToObjectReturns,
+
       findById: jest.fn(),
       findOne: jest.fn(),
       find: jest.fn(),
@@ -44,8 +63,10 @@ describe('BaseRepository', () => {
       updateMany: jest.fn(),
       findByIdAndDelete: jest.fn(),
       deleteMany: jest.fn(),
-    } as unknown as unknown as jest.Mocked<Model<TestDocument>>
+      findOneAndReplace: jest.fn(),
+    })
 
+    mockModel = ctor as unknown as jest.Mocked<Model<TestDocument>>
     repository = new TestRepository(mockModel)
 
     mockLoggerDebug = jest
@@ -385,6 +406,32 @@ describe('BaseRepository', () => {
         error,
       )
     })
+
+    it('should apply populate when provided', async () => {
+      const id = '1'
+      const data: UpdateQuery<TestDocument> = { name: 'updated' }
+      const populate = { path: 'someRef' }
+
+      const mockDoc = {
+        _id: '1',
+        name: 'updated',
+        createdAt: new Date(),
+      } as HydratedDocument<TestDocument>
+
+      const queryLike = {
+        populate: jest.fn().mockReturnThis(),
+        then: jest.fn((resolve: (v: unknown) => unknown) =>
+          Promise.resolve(resolve(mockDoc)),
+        ),
+      }
+
+      mockModel.findByIdAndUpdate.mockReturnValue(queryLike as any)
+
+      const result = await repository.update(id, data, { populate })
+
+      expect(result).toEqual(mockDoc)
+      expect(queryLike.populate).toHaveBeenCalledWith(populate)
+    })
   })
 
   describe('updateMany', () => {
@@ -424,6 +471,276 @@ describe('BaseRepository', () => {
       await expect(repository.updateMany(filter, data)).rejects.toThrow(error)
       expect(mockLoggerError).toHaveBeenCalledWith(
         'Error updating Test documents:',
+        error,
+      )
+    })
+  })
+
+  describe('replace', () => {
+    const id = '1'
+
+    const createExecQuery = <T>(value: T) => ({
+      exec: jest.fn().mockResolvedValue(value),
+    })
+
+    const createThenableQuery = <T>(value: T) => ({
+      populate: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue(value),
+      then: jest.fn((resolve: (v: T) => unknown) =>
+        Promise.resolve(resolve(value)),
+      ),
+    })
+
+    const baseCreated = new Date('2026-01-01T11:00:00.000Z')
+
+    const baseDocObject: Record<string, unknown> = {
+      _id: id,
+      name: 'base',
+      age: 10,
+      created: baseCreated,
+      createdAt: baseCreated,
+      __v: 7,
+    }
+
+    const makeExistingDoc = (obj: Record<string, unknown>) =>
+      ({
+        toObject: jest.fn((options?: { versionKey?: boolean }) => {
+          if (options?.versionKey === false) {
+            //eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { __v, ...rest } = obj
+            return rest
+          }
+          return obj
+        }),
+      }) as unknown as HydratedDocument<TestDocument>
+
+    it('returns null and logs warn when no document exists', async () => {
+      mockModel.findById.mockReturnValueOnce(
+        createExecQuery(null) as unknown as ReturnType<
+          Model<TestDocument>['findById']
+        >,
+      )
+
+      const result = await repository.replace(id, {
+        name: 'incoming',
+      } as Partial<TestDocument>)
+
+      expect(result).toBeNull()
+      expect(mockLoggerWarn).toHaveBeenCalledWith(
+        `No Test document found with id '${id}' to replace`,
+      )
+      expect((mockModel as any).findOneAndReplace).not.toHaveBeenCalled()
+    })
+
+    it('replaces using merged payload, enforces _id, and removes __v', async () => {
+      const existing = makeExistingDoc(baseDocObject)
+
+      mockModel.findById.mockReturnValueOnce(
+        createExecQuery(existing) as unknown as ReturnType<
+          Model<TestDocument>['findById']
+        >,
+      )
+
+      const replacedDoc = {
+        _id: id,
+        name: 'after',
+        createdAt: baseCreated,
+      } as unknown as TestDocument
+
+      const queryLike = createThenableQuery(replacedDoc)
+
+      ;(mockModel as any).findOneAndReplace.mockReturnValueOnce(
+        queryLike as unknown as ReturnType<
+          Model<TestDocument>['findOneAndReplace']
+        >,
+      )
+      const plan = (mockModel as any).__planToObjectReturns as Array<
+        Record<string, unknown>
+      >
+
+      // This is what the casted document's `toObject()` should return (version key removed).
+      plan.push({
+        _id: id,
+        name: 'incoming',
+        age: 10,
+        created: baseCreated,
+        createdAt: baseCreated,
+      })
+
+      const result = await repository.replace(id, {
+        name: 'incoming',
+        _id: 'attempted-overwrite',
+      } as unknown as Partial<TestDocument>)
+
+      const ctorMock = mockModel as unknown as jest.Mock
+
+      const lastCall = ctorMock.mock.calls[ctorMock.mock.calls.length - 1] as [
+        Record<string, unknown>,
+      ]
+
+      const [constructedArg] = lastCall
+
+      expect(constructedArg.__v).toBeUndefined()
+      expect(constructedArg._id).toBe(id)
+
+      expect(result).toEqual(replacedDoc)
+
+      const [filterArg, replacementArg, optionsArg] = (mockModel as any)
+        .findOneAndReplace.mock.calls[0] as [
+        { _id: string },
+        Record<string, unknown>,
+        Record<string, unknown>,
+      ]
+
+      expect(filterArg).toEqual({ _id: id })
+      expect(optionsArg).toEqual({
+        new: true,
+        runValidators: true,
+        overwriteDiscriminatorKey: true,
+      })
+
+      expect(replacementArg._id).toBe(id)
+      expect(replacementArg.__v).toBeUndefined()
+      expect(replacementArg.name).toBe('incoming')
+      expect(replacementArg.age).toBe(10)
+
+      expect(mockLoggerLog).toHaveBeenCalledWith(
+        `Replaced Test document with id '${id}'`,
+      )
+    })
+
+    it('uses toJSON() when provided on the incoming payload', async () => {
+      const existing = makeExistingDoc(baseDocObject)
+
+      mockModel.findById.mockReturnValueOnce(
+        createExecQuery(existing) as unknown as ReturnType<
+          Model<TestDocument>['findById']
+        >,
+      )
+
+      const replacedDoc = { _id: id } as unknown as TestDocument
+      ;(mockModel as any).findOneAndReplace.mockReturnValueOnce(
+        createThenableQuery(replacedDoc) as unknown as ReturnType<
+          Model<TestDocument>['findOneAndReplace']
+        >,
+      )
+      const plan = (mockModel as any).__planToObjectReturns as Array<
+        Record<string, unknown>
+      >
+
+      plan.push({
+        ...baseDocObject,
+        _id: id,
+        name: 'json-name',
+        age: 99,
+        created: baseCreated,
+        updated: new Date('2026-01-19T18:00:00.000Z'),
+        // IMPORTANT: do not include __v in the casted output
+        __v: undefined,
+      })
+
+      const incoming = {
+        toJSON: () => ({ name: 'json-name', age: 99 }),
+      }
+
+      await repository.replace(id, incoming as unknown as Partial<TestDocument>)
+
+      const [, replacementArg] = (mockModel as any).findOneAndReplace.mock
+        .calls[0] as [unknown, Record<string, unknown>]
+
+      expect(replacementArg.name).toBe('json-name')
+      expect(replacementArg.age).toBe(99)
+    })
+
+    it('applies populate when provided', async () => {
+      const existing = makeExistingDoc(baseDocObject)
+
+      mockModel.findById.mockReturnValueOnce(
+        createExecQuery(existing) as unknown as ReturnType<
+          Model<TestDocument>['findById']
+        >,
+      )
+
+      const replacedDoc = { _id: id } as unknown as TestDocument
+      const queryLike = createThenableQuery(replacedDoc)
+
+      ;(mockModel as any).findOneAndReplace.mockReturnValueOnce(
+        queryLike as unknown as ReturnType<
+          Model<TestDocument>['findOneAndReplace']
+        >,
+      )
+      const plan = (mockModel as any).__planToObjectReturns as Array<
+        Record<string, unknown>
+      >
+
+      plan.push({
+        ...baseDocObject,
+        _id: id,
+        name: 'incoming',
+        created: baseCreated,
+        updated: new Date('2026-01-19T18:00:00.000Z'),
+        // omit __v
+      })
+
+      const populate = { path: 'someRef' }
+
+      await repository.replace(
+        id,
+        { name: 'incoming' } as Partial<TestDocument>,
+        { populate },
+      )
+
+      expect(queryLike.populate).toHaveBeenCalledWith(populate)
+    })
+
+    it('logs and rethrows when findById fails', async () => {
+      const error = new Error('findById failed')
+
+      mockModel.findById.mockReturnValueOnce({
+        exec: jest.fn().mockRejectedValue(error),
+      } as unknown as ReturnType<Model<TestDocument>['findById']>)
+
+      await expect(
+        repository.replace(id, { name: 'incoming' } as Partial<TestDocument>),
+      ).rejects.toThrow(error)
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        `Error replacing Test document with id '${id}':`,
+        error,
+      )
+    })
+
+    it('logs and rethrows when findOneAndReplace throws synchronously', async () => {
+      const existing = makeExistingDoc(baseDocObject)
+
+      mockModel.findById.mockReturnValueOnce(
+        createExecQuery(existing) as unknown as ReturnType<
+          Model<TestDocument>['findById']
+        >,
+      )
+      const plan = (mockModel as any).__planToObjectReturns as Array<
+        Record<string, unknown>
+      >
+
+      plan.push({
+        ...baseDocObject,
+        _id: id,
+        name: 'incoming',
+        created: baseCreated,
+        updated: new Date('2026-01-19T18:00:00.000Z'),
+      })
+
+      const error = new Error('replace failed')
+      ;(mockModel as any).findOneAndReplace.mockImplementationOnce(() => {
+        throw error
+      })
+
+      await expect(
+        repository.replace(id, { name: 'incoming' } as Partial<TestDocument>),
+      ).rejects.toThrow(error)
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        `Error replacing Test document with id '${id}':`,
         error,
       )
     })

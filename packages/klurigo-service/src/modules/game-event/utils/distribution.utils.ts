@@ -29,7 +29,7 @@ import {
   QuestionPinWithBase,
   QuestionPuzzleWithBase,
   QuestionRangeWithBase,
-} from '../../quiz/repositories/models/schemas'
+} from '../../quiz-core/repositories/models/schemas'
 
 /**
  * Creates the answer distribution for a MultiChoice question result event.

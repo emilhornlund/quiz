@@ -53,7 +53,7 @@ import {
   QuestionTaskTypeAnswerAnswer,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { QuizService } from '../../quiz/services'
+import { QuizService } from '../../quiz-api/services'
 import { User, UserModel } from '../../user/repositories'
 import { GameService } from '../services'
 

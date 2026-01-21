@@ -24,6 +24,34 @@ export function transformQuizDocument(document: BSONDocument): BSONDocument {
     languageCode: extractValueOrThrow<string>(document, {}, 'languageCode'),
     questions: buildQuizQuestions(document),
     owner: extractValueOrThrow<string>(document, {}, 'owner'),
+    ratingSummary: ((ratingSummary) => {
+      if (ratingSummary) {
+        return {
+          count: extractValueOrThrow<number>(document, {}, 'count'),
+          avg: extractValueOrThrow<number>(document, {}, 'avg'),
+          stars: {
+            '1': extractValueOrThrow<number>(document, {}, 'ratingSummary.1'),
+            '2': extractValueOrThrow<number>(document, {}, 'ratingSummary.2'),
+            '3': extractValueOrThrow<number>(document, {}, 'ratingSummary.3'),
+            '4': extractValueOrThrow<number>(document, {}, 'ratingSummary.4'),
+            '5': extractValueOrThrow<number>(document, {}, 'ratingSummary.5'),
+          },
+          commentCount: extractValueOrThrow<number>(
+            document,
+            {},
+            'commentCount',
+          ),
+          updated: toDate(extractValue<string>(ratingSummary, {}, 'updated')),
+        }
+      }
+      return {
+        count: 0,
+        avg: 0,
+        stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+        commentCount: 0,
+        updated: null,
+      }
+    })(extractValue<BSONDocument>(document, {}, 'ratingSummary')),
     updated: toDate(extractValueOrThrow<string>(document, {}, 'updated')),
     created: toDate(extractValueOrThrow<string>(document, {}, 'created')),
   }

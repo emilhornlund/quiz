@@ -13,7 +13,7 @@ import {
   TaskType,
 } from '../../game-core/repositories/models/schemas'
 import { isParticipantPlayer } from '../../game-core/utils'
-import { QuestionDao } from '../../quiz/repositories/models/schemas'
+import { QuestionDao } from '../../quiz-core/repositories/models/schemas'
 import {
   isMultiChoiceQuestion,
   isPinQuestion,
@@ -21,7 +21,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../quiz/services/utils'
+} from '../../quiz-core/utils'
 import { IllegalTaskTypeException } from '../exceptions'
 
 import {

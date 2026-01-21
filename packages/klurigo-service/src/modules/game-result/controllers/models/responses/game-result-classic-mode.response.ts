@@ -14,19 +14,21 @@ import {
   ApiGameIdProperty,
   ApiGameNameProperty,
 } from '../../../../game-api/controllers/decorators/api'
-import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz-api/controllers/decorators/api'
 import {
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
   ApiGameResultNumberOfPlayersProperty,
   ApiGameResultNumberOfQuestionsProperty,
   ApiGameResultQuizProperty,
+  ApiGameResultRatingProperty,
 } from '../../decorators/api'
 
 import { GameResultClassicModePlayerMetricResponse } from './game-result-classic-mode-player-metric.response'
 import { GameResultClassicModeQuestionMetricResponse } from './game-result-classic-mode-question-metric.response'
 import { GameResultParticipantResponse } from './game-result-participant.response'
 import { GameResultQuizResponse } from './game-result-quiz.response'
+import { GameResultRatingResponse } from './game-result-rating.response'
 
 /**
  * API response structure representing the final results of a completed game using the classic mode.
@@ -123,6 +125,12 @@ export class GameResultClassicModeResponse implements GameResultClassicModeDto {
    */
   @ApiGameResultDurationProperty()
   duration: number
+
+  /**
+   * The participant’s rating for the quiz, if the participant has rated it.
+   */
+  @ApiGameResultRatingProperty()
+  readonly rating?: GameResultRatingResponse
 
   /**
    * The date and time when the game session was created.

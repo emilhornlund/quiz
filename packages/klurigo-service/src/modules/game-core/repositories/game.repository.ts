@@ -6,7 +6,7 @@ import { MurLock } from 'murlock'
 
 import { BaseRepository } from '../../../app/shared/repository'
 import { buildLobbyTask, buildQuitTask } from '../../game-task/utils'
-import { Quiz } from '../../quiz/repositories/models/schemas'
+import { Quiz } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 import {
   ActiveGameNotFoundByGamePINException,
@@ -183,6 +183,30 @@ export class GameRepository extends BaseRepository<Game> {
       results: result.documents as GameDocument[],
       total: result.total,
     }
+  }
+
+  /**
+   * Checks whether a participant has played at least one completed game for a specific quiz.
+   *
+   * This is used to enforce authorization rules for quiz-related operations (for example, allowing a user
+   * to rate a quiz only after they have participated in a completed game that used that quiz).
+   *
+   * @param quizId - The quiz id to match against `game.quiz._id`.
+   * @param participantId - The participant id to match against `participants.participantId`.
+   *
+   * @returns `true` if at least one completed game exists for the given quiz and participant; otherwise `false`.
+   */
+  public async hasCompletedGamesByQuizIdAndParticipantId(
+    quizId: string,
+    participantId: string,
+  ): Promise<boolean> {
+    const filter: QueryFilter<Game> = {
+      status: { $in: [GameStatus.Completed] },
+      quiz: { _id: quizId },
+      'participants.participantId': participantId,
+    }
+
+    return this.exists(filter)
   }
 
   /**

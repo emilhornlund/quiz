@@ -14,17 +14,19 @@ import {
   ApiGameIdProperty,
   ApiGameNameProperty,
 } from '../../../../game-api/controllers/decorators/api'
-import { ApiGameModeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiGameModeProperty } from '../../../../quiz-api/controllers/decorators/api'
 import {
   ApiGameResultCreatedProperty,
   ApiGameResultDurationProperty,
   ApiGameResultNumberOfPlayersProperty,
   ApiGameResultNumberOfQuestionsProperty,
   ApiGameResultQuizProperty,
+  ApiGameResultRatingProperty,
 } from '../../decorators/api'
 
 import { GameResultParticipantResponse } from './game-result-participant.response'
 import { GameResultQuizResponse } from './game-result-quiz.response'
+import { GameResultRatingResponse } from './game-result-rating.response'
 import { GameResultZeroToOneHundredModePlayerMetricResponse } from './game-result-zero-to-one-hundred-mode-player-metric-response'
 import { GameResultZeroToOneHundredModeQuestionMetricResponse } from './game-result-zero-to-one-hundred-mode-question-metric.response'
 
@@ -123,6 +125,12 @@ export class GameResultZeroToOneHundredModeResponse implements GameResultZeroToO
    */
   @ApiGameResultDurationProperty()
   duration: number
+
+  /**
+   * The participant’s rating for the quiz, if the participant has rated it.
+   */
+  @ApiGameResultRatingProperty()
+  readonly rating?: GameResultRatingResponse
 
   /**
    * The date and time when the game session was created.

@@ -12,6 +12,7 @@ import supertest from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
+  buildMockQuizRating,
   buildMockSecondaryUser,
   buildMockTertiaryUser,
   createMockClassicQuiz,
@@ -27,7 +28,12 @@ import {
   GameModel,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { Quiz, QuizModel } from '../../quiz/repositories/models/schemas'
+import {
+  Quiz,
+  QuizModel,
+  QuizRating,
+  QuizRatingModel,
+} from '../../quiz-core/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { GameResult, GameResultModel } from '../repositories/models/schemas'
 
@@ -37,6 +43,7 @@ describe('GameResultController (e2e)', () => {
   let gameResultModel: GameResultModel
   let userModel: UserModel
   let quizModel: QuizModel
+  let quizRatingModel: QuizRatingModel
   let playerUser: User
 
   beforeEach(async () => {
@@ -45,6 +52,7 @@ describe('GameResultController (e2e)', () => {
     gameResultModel = app.get<GameResultModel>(getModelToken(GameResult.name))
     userModel = app.get<UserModel>(getModelToken(User.name))
     quizModel = app.get<QuizModel>(getModelToken(Quiz.name))
+    quizRatingModel = app.get<QuizRatingModel>(getModelToken(QuizRating.name))
     playerUser = await userModel.create(buildMockSecondaryUser())
   })
 
@@ -84,6 +92,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             quiz: {
               id: quiz._id,
+              canRateQuiz: false,
               canHostLiveGame: true,
             },
             host: {
@@ -237,6 +246,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.Classic,
             quiz: {
               id: quiz._id,
+              canRateQuiz: true,
               canHostLiveGame: true,
             },
             host: {
@@ -399,6 +409,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             quiz: {
               id: quiz._id,
+              canRateQuiz: false,
               canHostLiveGame: true,
             },
             host: {
@@ -540,6 +551,7 @@ describe('GameResultController (e2e)', () => {
             mode: GameMode.ZeroToOneHundred,
             quiz: {
               id: quiz._id,
+              canRateQuiz: true,
               canHostLiveGame: true,
             },
             host: {
@@ -660,6 +672,52 @@ describe('GameResultController (e2e)', () => {
             ],
             duration: 57.077,
             created: gameResult.hosted.toISOString(),
+          })
+        })
+    })
+
+    it('should succeed in retrieving game results including rating when participant has rated the quiz', async () => {
+      const gameId = uuidv4()
+
+      const { accessToken, user: playerUser } =
+        await createDefaultUserAndAuthenticate(app)
+
+      const hostUser = await userModel.create(buildMockTertiaryUser())
+
+      const quiz = await quizModel.create(
+        createMockClassicQuiz({ owner: hostUser }),
+      )
+
+      await quizRatingModel.create(
+        buildMockQuizRating({
+          quizId: quiz._id,
+          author: playerUser,
+          stars: 5,
+          comment: 'Nice quiz',
+          created: new Date(),
+          updated: new Date(),
+        }),
+      )
+
+      const game = await gameModel.create({
+        ...buildMockClassicModeGame(hostUser, playerUser),
+        _id: gameId,
+        quiz,
+      })
+
+      await gameResultModel.create(
+        buildMockClassicModeGameResult(game, hostUser, playerUser),
+      )
+
+      return supertest(app.getHttpServer())
+        .get(`/api/games/${game._id}/results`)
+        .set({ Authorization: `Bearer ${accessToken}` })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.rating).toBeDefined()
+          expect(res.body.rating).toEqual({
+            stars: 5,
+            comment: 'Nice quiz',
           })
         })
     })

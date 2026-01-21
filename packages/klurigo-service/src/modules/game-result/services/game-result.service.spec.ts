@@ -2,6 +2,7 @@ import { GameMode, type GameResultDto, QuizVisibility } from '@klurigo/common'
 import { Logger } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 
+import { QuizRatingRepository } from '../../quiz-core/repositories'
 import { UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
@@ -23,6 +24,7 @@ type FindUserReturn = Awaited<ReturnType<UserRepository['findUserById']>>
 describe(GameResultService.name, () => {
   let service: GameResultService
   let gameResultRepository: jest.Mocked<GameResultRepository>
+  let quizRatingRepository: jest.Mocked<QuizRatingRepository>
   let userRepository: jest.Mocked<UserRepository>
 
   const asPlayerMetric = (overrides: Partial<PlayerMetric>): PlayerMetric =>
@@ -104,6 +106,12 @@ describe(GameResultService.name, () => {
           },
         },
         {
+          provide: QuizRatingRepository,
+          useValue: {
+            findQuizRatingByAuthor: jest.fn(),
+          },
+        },
+        {
           provide: UserRepository,
           useValue: {
             findUserById: jest.fn(),
@@ -117,6 +125,10 @@ describe(GameResultService.name, () => {
     gameResultRepository = moduleRef.get(
       GameResultRepository,
     ) as jest.Mocked<GameResultRepository>
+
+    quizRatingRepository = moduleRef.get(
+      QuizRatingRepository,
+    ) as jest.Mocked<QuizRatingRepository>
 
     userRepository = moduleRef.get(
       UserRepository,
@@ -197,15 +209,19 @@ describe(GameResultService.name, () => {
       gameResultRepository.findGameResult.mockResolvedValueOnce(
         doc as unknown as GameResult,
       )
-      userRepository.findUserById.mockResolvedValueOnce(
-        undefined as unknown as FindUserReturn,
-      )
+      userRepository.findUserById
+        .mockResolvedValueOnce(undefined as unknown as FindUserReturn) // host user
+        .mockResolvedValueOnce(undefined as unknown as FindUserReturn) // participant user
 
       const result = await service.getGameResult(doc.game._id, 'p-xyz')
 
-      expect(userRepository.findUserById).toHaveBeenCalledWith(
+      expect(userRepository.findUserById).toHaveBeenNthCalledWith(
+        1,
         doc.hostParticipantId,
       )
+      expect(userRepository.findUserById).toHaveBeenNthCalledWith(2, 'p-xyz')
+
+      expect(quizRatingRepository.findQuizRatingByAuthor).not.toHaveBeenCalled()
 
       expect(result).toMatchObject({
         id: doc.game._id,
@@ -217,6 +233,7 @@ describe(GameResultService.name, () => {
       } satisfies Partial<GameResultDto>)
 
       expect(result.duration).toBe(100)
+      expect(result.rating).toBeUndefined()
     })
 
     describe('quiz canHostLiveGame flag', () => {
@@ -238,14 +255,20 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'Host',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'Host',
+          } as unknown as FindUserReturn)
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, 'owner-1')
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: false,
           canHostLiveGame: true,
         })
       })
@@ -264,14 +287,20 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'Host',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'Host',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, 'not-owner')
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: true,
         })
       })
@@ -290,14 +319,20 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'Host',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'Host',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, 'not-owner')
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: false,
         })
       })
@@ -316,14 +351,20 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'Host',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'Host',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, 'anyone')
 
         expect(result.quiz).toEqual({
           id: doc.game.quiz._id,
+          canRateQuiz: true,
           canHostLiveGame: true,
         })
       })
@@ -418,9 +459,14 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'HostNick',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'HostNick',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, participantId)
 
@@ -483,9 +529,14 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'HostNick',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'HostNick',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, participantId)
 
@@ -515,9 +566,14 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'HostNick',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'HostNick',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, 'p-any')
 
@@ -572,9 +628,14 @@ describe(GameResultService.name, () => {
         gameResultRepository.findGameResult.mockResolvedValueOnce(
           doc as unknown as GameResult,
         )
-        userRepository.findUserById.mockResolvedValueOnce({
-          defaultNickname: 'HostNick',
-        } as unknown as FindUserReturn)
+        userRepository.findUserById
+          .mockResolvedValueOnce({
+            defaultNickname: 'HostNick',
+          } as unknown as FindUserReturn) // host
+          .mockResolvedValueOnce({ _id: 'u-1' } as unknown as FindUserReturn) // participant
+        quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce(
+          null as unknown as never,
+        )
 
         const result = await service.getGameResult(doc.game._id, participantId)
 
@@ -604,6 +665,70 @@ describe(GameResultService.name, () => {
           averagePrecision: 0,
         })
       })
+    })
+
+    it('does not query rating when participant user is not found', async () => {
+      const doc = asGameResultDocument({
+        mode: GameMode.Classic,
+        players: [
+          asPlayerMetric({ participantId: 'p-1', rank: 1, nickname: 'A' }),
+        ],
+        questions: [asQuestionMetric({ text: 'Q1' })],
+      })
+
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        doc as unknown as GameResult,
+      )
+
+      userRepository.findUserById
+        .mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn) // host
+        .mockResolvedValueOnce(undefined as unknown as FindUserReturn) // participant
+
+      const result = await service.getGameResult(doc.game._id, 'p-missing')
+
+      expect(quizRatingRepository.findQuizRatingByAuthor).not.toHaveBeenCalled()
+      expect(result.rating).toBeUndefined()
+    })
+
+    it('includes rating when participant has rated the quiz', async () => {
+      const participantId = 'p-1'
+
+      const doc = asGameResultDocument({
+        mode: GameMode.Classic,
+        players: [asPlayerMetric({ participantId, rank: 1, nickname: 'A' })],
+        questions: [asQuestionMetric({ text: 'Q1' })],
+      })
+
+      gameResultRepository.findGameResult.mockResolvedValueOnce(
+        doc as unknown as GameResult,
+      )
+
+      const participantUser = { _id: 'u-1' } as unknown as FindUserReturn
+
+      userRepository.findUserById
+        .mockResolvedValueOnce({
+          defaultNickname: 'HostNick',
+        } as unknown as FindUserReturn) // host
+        .mockResolvedValueOnce(participantUser) // participant
+
+      quizRatingRepository.findQuizRatingByAuthor.mockResolvedValueOnce({
+        stars: 4,
+        comment: 'Nice quiz',
+      } as unknown as never)
+
+      const result = await service.getGameResult(doc.game._id, participantId)
+
+      expect(quizRatingRepository.findQuizRatingByAuthor).toHaveBeenCalledTimes(
+        1,
+      )
+      expect(quizRatingRepository.findQuizRatingByAuthor).toHaveBeenCalledWith(
+        doc.game.quiz._id,
+        participantUser,
+      )
+
+      expect(result.rating).toEqual({ stars: 4, comment: 'Nice quiz' })
     })
   })
 

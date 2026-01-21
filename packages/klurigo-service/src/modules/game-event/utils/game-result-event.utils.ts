@@ -30,7 +30,7 @@ import {
   isRangeQuestion,
   isTrueFalseQuestion,
   isTypeAnswerQuestion,
-} from '../../quiz/services/utils'
+} from '../../quiz-core/utils'
 
 import {
   createMultiChoiceQuestionResultDistribution,

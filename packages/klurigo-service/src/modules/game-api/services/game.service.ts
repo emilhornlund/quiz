@@ -48,7 +48,7 @@ import {
   isTypeAnswerCorrectAnswer,
 } from '../../game-task/utils/question-answer-type-guards'
 import { isQuestionResultTask } from '../../game-task/utils/task-type-guards'
-import { QuizRepository } from '../../quiz/repositories'
+import { QuizRepository } from '../../quiz-core/repositories'
 import { User } from '../../user/repositories'
 import {
   GameFullException,

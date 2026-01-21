@@ -134,6 +134,29 @@ export interface QuizAuthorResponseDto {
 }
 
 /**
+ * DTO representing aggregated rating information for a quiz.
+ *
+ * Contains the current average star rating and the total number of comments submitted.
+ */
+export type QuizRatingSummaryDto = {
+  /**
+   * The average star rating for the quiz.
+   *
+   * Value is between 1 and 5 (inclusive) when at least one rating exists.
+   *
+   * @example 4.6
+   */
+  readonly stars: number
+
+  /**
+   * The total number of ratings that include a comment.
+   *
+   * @example 12
+   */
+  readonly comments: number
+}
+
+/**
  * Data transfer object for quiz responses.
  */
 export interface QuizResponseDto {
@@ -186,6 +209,13 @@ export interface QuizResponseDto {
    * The author of the quiz.
    */
   author: QuizAuthorResponseDto
+
+  /**
+   * Aggregated rating information for the quiz.
+   *
+   * Includes the average star rating and the total number of comments.
+   */
+  readonly ratingSummary: QuizRatingSummaryDto
 
   /**
    * The date and time when the quiz was created.

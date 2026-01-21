@@ -7,7 +7,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger'
 import { IsString, MaxLength, MinLength } from 'class-validator'
 
-import { ApiQuestionTypeProperty } from '../../../../quiz/controllers/decorators/api'
+import { ApiQuestionTypeProperty } from '../../../../quiz-api/controllers/decorators/api'
 
 /**
  * Request model for submitting a correct answer to a TypeAnswer question.

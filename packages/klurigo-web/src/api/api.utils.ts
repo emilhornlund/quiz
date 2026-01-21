@@ -95,23 +95,26 @@ export const isTokenExpired = (token: string | undefined): boolean => {
  * Encodes each key-value pair for safe URL transmission.
  *
  * @param params - An object containing query parameters where keys are strings
- *                 and values can be strings, numbers, or undefined.
+ *                 and values can be strings, numbers, booleans, or undefined.
  * @returns A formatted query string starting with `?` if there are valid parameters,
  *          otherwise returns an empty string.
  */
 export function parseQueryParams(
-  params: Record<string, string | number | undefined>,
+  params?: Record<string, string | number | boolean | undefined>,
 ): string {
+  if (!params) {
+    return ''
+  }
+
   const parsed = Object.entries(params)
     .filter(
-      ([key, value]) =>
-        key !== undefined &&
+      ([, value]) =>
         value !== undefined &&
         !(typeof value === 'string' && value.trim().length === 0),
     )
-    .map((components) =>
-      (components as (string | number)[]).map(encodeURIComponent).join('='),
-    )
+    .map(([key, value]) => {
+      return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+    })
     .join('&')
 
   return parsed.length ? `?${parsed}` : ''

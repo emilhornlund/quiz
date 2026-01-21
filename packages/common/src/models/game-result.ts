@@ -15,6 +15,14 @@ export type GameResultQuizDto = {
   readonly id: string
 
   /**
+   * Indicates whether the caller is allowed to submit a rating for this quiz.
+   *
+   * This flag is evaluated in the context of the requesting participant and is typically `false`
+   * for the quiz owner (owners cannot rate their own quizzes).
+   */
+  readonly canRateQuiz: boolean
+
+  /**
    * Indicates whether the caller can host a new live game based on this quiz.
    *
    * This is typically `true` when:
@@ -22,6 +30,23 @@ export type GameResultQuizDto = {
    * - the quiz is publicly visible.
    */
   readonly canHostLiveGame: boolean
+}
+
+/**
+ * Represents a participant's rating for the quiz used in the completed game.
+ *
+ * Included when the requesting participant has submitted a rating for the quiz.
+ */
+export type GameResultRatingDto = {
+  /**
+   * The star rating value for the quiz (1–5).
+   */
+  readonly stars: number
+
+  /**
+   * Optional free-text feedback about the quiz.
+   */
+  readonly comment?: string
 }
 
 /**
@@ -69,6 +94,11 @@ export type GameResultDto = {
    * The duration in seconds the game session was active.
    */
   readonly duration: number
+
+  /**
+   * The participant's rating for the quiz, if the participant has rated it.
+   */
+  readonly rating?: GameResultRatingDto
 
   /**
    * The date and time when the game session was created.
