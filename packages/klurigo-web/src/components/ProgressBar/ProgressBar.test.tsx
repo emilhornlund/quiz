@@ -1,35 +1,41 @@
 import type { CountdownEvent } from '@klurigo/common'
 import { act, render } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ProgressBar from './ProgressBar'
 
 describe('ProgressBar', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-    vi.useRealTimers()
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2023-01-01T00:00:00.000Z'))
   })
 
-  it('should render a ProgressBar with initial progress', () => {
-    vi.useFakeTimers()
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
 
+  const flushEffects = async () => {
+    await act(async () => {
+      // flush React effects without advancing timers
+    })
+  }
+
+  it('should render a ProgressBar with initial progress', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
-      serverTime: '2023-01-01T00:00:30.000Z',
+      serverTime: '2023-01-01T00:00:31.000Z',
     }
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    // If the component sets state from an interval/effect, flush the immediate tick safely.
-    act(() => {
-      vi.runOnlyPendingTimers()
-    })
+    await flushEffects()
 
     expect(container).toMatchSnapshot()
   })
 
-  it('should render without styling when disableStyling is true', () => {
+  it('should render without styling when disableStyling is true', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -40,7 +46,9 @@ describe('ProgressBar', () => {
       <ProgressBar countdown={countdown} disableStyling={true} />,
     )
 
-    const track = container.querySelector('.track')
+    await flushEffects()
+
+    const track = container.querySelector('.track') as HTMLElement
     expect(track).not.toHaveClass(
       'safe',
       'caution',
@@ -50,7 +58,7 @@ describe('ProgressBar', () => {
     )
   })
 
-  it('should render with 0 progress when countdown has expired', () => {
+  it('should render with 0 progress when countdown has expired', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -59,10 +67,12 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
+    await flushEffects()
+
     expect(container).toMatchSnapshot()
   })
 
-  it('should render with full progress when countdown just started', () => {
+  it('should render with full progress when countdown just started', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -71,10 +81,12 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
+    await flushEffects()
+
     expect(container).toMatchSnapshot()
   })
 
-  it('should render with 0 progress when dates are invalid', () => {
+  it('should render with 0 progress when dates are invalid', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: 'invalid-date',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -83,25 +95,29 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
+    await flushEffects()
+
     expect(container).toMatchSnapshot()
   })
 
-  it('should not render with pulse class when progress is greater than 0.1', () => {
+  it('should not render with pulse class when progress is greater than 0.1', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
-      serverTime: '2023-01-01T00:00:30.000Z',
+      serverTime: '2023-01-01T00:00:20.000Z',
     }
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
     expect(progressBar).toHaveClass('safe')
     expect(progressBar).not.toHaveClass('pulse')
     expect(container).toMatchSnapshot()
   })
 
-  it('should handle countdown prop changes', () => {
+  it('should handle countdown prop changes', async () => {
     const initialCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -112,8 +128,11 @@ describe('ProgressBar', () => {
       <ProgressBar countdown={initialCountdown} />,
     )
 
-    let progressBar = container.querySelector('.track')
-    expect(progressBar).toHaveStyle('width: 50%')
+    await flushEffects()
+
+    let progressBar = container.querySelector('.track') as HTMLElement
+    const initialPct = Number(progressBar.style.width.replace('%', ''))
+    expect(initialPct).toBeCloseTo(50, 2)
 
     const newCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
@@ -123,11 +142,14 @@ describe('ProgressBar', () => {
 
     rerender(<ProgressBar countdown={newCountdown} />)
 
-    progressBar = container.querySelector('.track')
-    expect(progressBar).toHaveStyle('width: 75%')
+    await flushEffects()
+
+    progressBar = container.querySelector('.track') as HTMLElement
+    const pct = Number(progressBar.style.width.replace('%', ''))
+    expect(pct).toBeCloseTo(75, 2)
   })
 
-  it('should handle zero total duration', () => {
+  it('should render 0% when duration is zero', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:00:00.000Z',
@@ -136,13 +158,14 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
-    expect(progressBar).toHaveStyle('width: 100%')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
+    const pct = Number(progressBar.style.width.replace('%', ''))
+    expect(pct).toBeCloseTo(0, 2)
   })
 
   it('should cleanup interval on unmount', () => {
-    vi.useFakeTimers()
-
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -158,9 +181,7 @@ describe('ProgressBar', () => {
     expect(clearIntervalSpy).toHaveBeenCalled()
   })
 
-  it('should set up interval when valid countdown provided', () => {
-    vi.useFakeTimers()
-
+  it('should set up interval when valid countdown provided', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -171,12 +192,12 @@ describe('ProgressBar', () => {
 
     render(<ProgressBar countdown={countdown} />)
 
+    await flushEffects()
+
     expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 100)
   })
 
-  it('should clear existing interval when countdown changes', () => {
-    vi.useFakeTimers()
-
+  it('should clear existing interval when countdown changes', async () => {
     const initialCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -187,6 +208,8 @@ describe('ProgressBar', () => {
 
     const { rerender } = render(<ProgressBar countdown={initialCountdown} />)
 
+    await flushEffects()
+
     const newCountdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:01:00.000Z',
       expiryTime: '2023-01-01T00:02:00.000Z',
@@ -195,23 +218,27 @@ describe('ProgressBar', () => {
 
     rerender(<ProgressBar countdown={newCountdown} />)
 
+    await flushEffects()
+
     expect(clearIntervalSpy).toHaveBeenCalled()
   })
 
-  it('should render with safe class when progress is 50% or above', () => {
+  it('should render with safe class when progress is 50% or above', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
-      serverTime: '2023-01-01T00:00:30.000Z',
+      serverTime: '2023-01-01T00:00:20.000Z',
     }
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
     expect(progressBar).toHaveClass('safe')
   })
 
-  it('should render with caution class when progress is between 20-50%', () => {
+  it('should render with caution class when progress is between 20-50%', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -220,24 +247,28 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
     expect(progressBar).toHaveClass('caution')
   })
 
-  it('should render with urgent class when progress is between 10-20%', () => {
+  it('should render with urgent class when progress is between 10-20%', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
-      serverTime: '2023-01-01T00:00:50.000Z',
+      serverTime: '2023-01-01T00:00:52.000Z',
     }
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
     expect(progressBar).toHaveClass('urgent')
   })
 
-  it('should render with critical class when progress is below 10%', () => {
+  it('should render with critical class when progress is below 10%', async () => {
     const countdown: CountdownEvent = {
       initiatedTime: '2023-01-01T00:00:00.000Z',
       expiryTime: '2023-01-01T00:01:00.000Z',
@@ -246,7 +277,31 @@ describe('ProgressBar', () => {
 
     const { container } = render(<ProgressBar countdown={countdown} />)
 
-    const progressBar = container.querySelector('.track')
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
     expect(progressBar).toHaveClass('pulse', 'critical')
+  })
+
+  it('updates progress over time via interval', async () => {
+    const countdown: CountdownEvent = {
+      initiatedTime: '2023-01-01T00:00:00.000Z',
+      expiryTime: '2023-01-01T00:01:00.000Z',
+      serverTime: '2023-01-01T00:00:00.000Z',
+    }
+
+    const { container } = render(<ProgressBar countdown={countdown} />)
+    await flushEffects()
+
+    const progressBar = container.querySelector('.track') as HTMLElement
+    const startPct = Number(progressBar.style.width.replace('%', ''))
+    expect(startPct).toBeCloseTo(100, 2)
+
+    act(() => {
+      vi.advanceTimersByTime(1000)
+    })
+
+    const afterPct = Number(progressBar.style.width.replace('%', ''))
+    expect(afterPct).toBeLessThan(startPct)
   })
 })

@@ -147,7 +147,7 @@ exports[`HostQuestionState > clicks Skip and calls completeTask 1`] = `
           >
             <div
               class="track safe"
-              style="width: 99.66666666666667%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
+              style="width: 99.67%; transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;"
             />
           </div>
         </div>

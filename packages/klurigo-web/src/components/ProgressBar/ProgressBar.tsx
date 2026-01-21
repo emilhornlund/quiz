@@ -37,15 +37,24 @@ const ProgressBar: FC<ProgressBarProps> = ({
       return
     }
 
-    setInitiatedTime(tmpInitiatedTime)
-
-    const tmpClientToServerOffset = serverTime - Date.now()
-    setClientToServerOffset(tmpClientToServerOffset)
+    const clientNow = Date.now()
+    const tmpClientToServerOffset = serverTime - clientNow
     const tmpTotalDuration = expiryTime - tmpInitiatedTime
+
+    setInitiatedTime(tmpInitiatedTime)
+    setClientToServerOffset(tmpClientToServerOffset)
     setTotalDuration(tmpTotalDuration)
 
-    const now = Date.now() + tmpClientToServerOffset
+    // Use the SAME clientNow to eliminate drift.
+    const now = clientNow + tmpClientToServerOffset // exactly == serverTime
     const elapsed = now - tmpInitiatedTime
+
+    // duration is zero or negative → countdown already finished
+    if (tmpTotalDuration <= 0) {
+      setProgress(0)
+      return
+    }
+
     const initialProgress = Math.max(1 - elapsed / tmpTotalDuration, 0)
     setProgress(initialProgress)
   }, [countdown])
@@ -84,6 +93,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
     return styles.critical
   }
 
+  const clamped = Math.max(Math.min(1, progress), 0)
+  const widthPct = (clamped * 100).toFixed(2)
+
   return (
     <div className={styles.progressBar}>
       <div
@@ -93,7 +105,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
           !disableStyling && progress < 0.1 ? styles.pulse : undefined,
         )}
         style={{
-          width: `${Math.max(Math.min(1, progress), 0) * 100}%`,
+          width: `${widthPct}%`,
           transition:
             'width 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease',
         }}
