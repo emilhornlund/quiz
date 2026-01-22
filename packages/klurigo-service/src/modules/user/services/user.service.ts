@@ -75,12 +75,16 @@ export class UserService {
       )
       if (isPasswordCorrect) {
         return user
+      } else {
+        this.logger.debug(
+          `Failed to verify user credentials, incorrect password for email '${email}'.`,
+        )
       }
+    } else {
+      this.logger.debug(
+        `Unable to verify user credentials since provider is not '${AuthProvider.Local}'.`,
+      )
     }
-
-    this.logger.debug(
-      `Unable to verify user credentials since provider is not '${AuthProvider.Local}'.`,
-    )
 
     throw new BadCredentialsException()
   }
