@@ -335,6 +335,9 @@ export type GameLeaderboardHostEvent = {
 
 export type GamePodiumHostEvent = {
   type: GameEventType.GamePodiumHost
+  game: {
+    name: string
+  }
   leaderboard: { position: number; nickname: string; score: number }[]
 }
 

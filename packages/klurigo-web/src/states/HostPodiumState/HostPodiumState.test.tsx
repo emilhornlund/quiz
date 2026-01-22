@@ -31,6 +31,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'ShadowCyborg', score: 18456 },
               { position: 2, nickname: 'Radar', score: 18398 },
@@ -57,6 +60,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'ShadowCyborg', score: 18456 },
               { position: 2, nickname: 'Radar', score: 18398 },
@@ -76,6 +82,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'Alpha', score: 100 },
               { position: 2, nickname: 'Beta', score: 90 },
@@ -86,7 +95,7 @@ describe('HostPodiumState', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText('Podium')).toBeInTheDocument()
+    expect(screen.getByText('Trivia Battle')).toBeInTheDocument()
     expect(screen.getByText('Alpha')).toBeInTheDocument()
     expect(screen.getByText('Beta')).toBeInTheDocument()
     expect(screen.getByText('Gamma')).toBeInTheDocument()
@@ -104,6 +113,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'Alpha', score: 100 },
               { position: 2, nickname: 'Beta', score: 90 },
@@ -140,6 +152,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'Alpha', score: 100 },
               { position: 2, nickname: 'Beta', score: 90 },
@@ -167,6 +182,9 @@ describe('HostPodiumState', () => {
         <HostPodiumState
           event={{
             type: GameEventType.GamePodiumHost,
+            game: {
+              name: 'Trivia Battle',
+            },
             leaderboard: [
               { position: 1, nickname: 'ShadowCyborg', score: 18456 },
             ],

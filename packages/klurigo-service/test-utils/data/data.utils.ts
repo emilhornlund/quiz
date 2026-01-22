@@ -60,10 +60,12 @@ import { User } from '../../src/modules/user/repositories'
 
 import { offsetSeconds } from './helpers.utils'
 
+export const MOCK_DEFAULT_GAME_NAME = 'Trivia Battle'
+
 export function createMockGameDocument(game?: Partial<Game>): Game {
   return {
     _id: uuidv4(),
-    name: 'Trivia Battle',
+    name: MOCK_DEFAULT_GAME_NAME,
     mode: GameMode.Classic,
     status: GameStatus.Active,
     pin: '123456',

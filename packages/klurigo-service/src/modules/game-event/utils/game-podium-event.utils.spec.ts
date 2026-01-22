@@ -8,6 +8,7 @@ import {
   createMockGameDocument,
   createMockLeaderboardTaskItem,
   createMockPodiumTaskDocument,
+  MOCK_DEFAULT_GAME_NAME,
 } from '../../../../test-utils/data'
 import { LeaderboardTaskItem } from '../../game-core/repositories/models/schemas'
 
@@ -26,6 +27,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expectLeaderboard(actual as GamePodiumHostEvent, 5)
     })
 
@@ -40,6 +42,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expectLeaderboard(actual as GamePodiumHostEvent, 5)
     })
 
@@ -53,6 +56,7 @@ describe('Game Podium Event Utils', () => {
 
       const actual = buildGamePodiumHostEvent(gameDocument as never)
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expectLeaderboard(actual as GamePodiumHostEvent, 0)
     })
 
@@ -67,6 +71,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expectLeaderboard(actual as GamePodiumHostEvent, 3)
     })
 
@@ -81,6 +86,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expectLeaderboard(actual as GamePodiumHostEvent, 1)
     })
 
@@ -116,6 +122,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expect(actual.leaderboard).toHaveLength(3)
       expect(actual.leaderboard[0]).toEqual({
         position: 1,
@@ -132,6 +139,37 @@ describe('Game Podium Event Utils', () => {
         nickname: 'Player3',
         score: 800,
       })
+    })
+
+    it('should include the game name in the event', () => {
+      const gameDocument = createMockGameDocument({
+        name: 'Custom Trivia Night',
+        currentTask: createMockPodiumTaskDocument({
+          status: 'active',
+          leaderboard: buildLeaderboard(3),
+        }),
+      })
+
+      const actual = buildGamePodiumHostEvent(gameDocument as never)
+
+      expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual('Custom Trivia Night')
+      expectLeaderboard(actual as GamePodiumHostEvent, 3)
+    })
+
+    it('should include game name with leaderboard of 5 players', () => {
+      const gameDocument = createMockGameDocument({
+        currentTask: createMockPodiumTaskDocument({
+          status: 'active',
+          leaderboard: buildLeaderboard(5),
+        }),
+      })
+
+      const actual = buildGamePodiumHostEvent(gameDocument as never)
+
+      expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
+      expectLeaderboard(actual as GamePodiumHostEvent, 5)
     })
 
     it('should handle players with zero streaks correctly', () => {
@@ -154,6 +192,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expect(actual.leaderboard[0].score).toEqual(1000)
     })
 
@@ -177,6 +216,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expect(actual.leaderboard[0].score).toEqual(1500)
     })
 
@@ -206,6 +246,7 @@ describe('Game Podium Event Utils', () => {
       const actual = buildGamePodiumHostEvent(gameDocument as never)
 
       expect(actual.type).toEqual(GameEventType.GamePodiumHost)
+      expect(actual.game.name).toEqual(MOCK_DEFAULT_GAME_NAME)
       expect(actual.leaderboard[0].score).toEqual(1234.5)
       expect(actual.leaderboard[1].score).toEqual(987.3)
     })
