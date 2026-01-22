@@ -15,6 +15,9 @@ export function buildGamePodiumHostEvent(
 ): GamePodiumHostEvent {
   return {
     type: GameEventType.GamePodiumHost,
+    game: {
+      name: game.name,
+    },
     leaderboard: game.currentTask.leaderboard
       .slice(0, 5)
       .map(({ position, nickname, score }) => ({

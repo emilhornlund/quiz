@@ -66,7 +66,7 @@ exports[`HostPodiumState > clicks Game Results and calls completeTask 1`] = `
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"
@@ -569,7 +569,7 @@ exports[`HostPodiumState > clicks Game Results when completeTask is undefined 1`
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"
@@ -1080,7 +1080,7 @@ exports[`HostPodiumState > renders subtitle and leaderboard entries 1`] = `
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"
@@ -1591,7 +1591,7 @@ exports[`HostPodiumState > should render HostPodiumState 1`] = `
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"
@@ -2155,7 +2155,7 @@ exports[`HostPodiumState > should render HostPodiumState with only one player 1`
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"
@@ -2658,7 +2658,7 @@ exports[`HostPodiumState > should render HostPodiumState without a full leaderbo
           <h1
             class="typography title full"
           >
-            Podium
+            Trivia Battle
           </h1>
           <div
             class="main"

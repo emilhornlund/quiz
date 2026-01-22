@@ -16,7 +16,7 @@ export interface HostPodiumStateProps {
 }
 
 const HostPodiumState: FC<HostPodiumStateProps> = ({
-  event: { leaderboard },
+  event: { game, leaderboard },
 }) => {
   const [isCompletingGame, setIsCompletingGame] = useState<boolean>(false)
 
@@ -42,7 +42,7 @@ const HostPodiumState: FC<HostPodiumStateProps> = ({
           onClick={handleCompletingGame}
         />
       }>
-      <Typography variant="title">Podium</Typography>
+      <Typography variant="title">{game.name}</Typography>
       <Podium values={leaderboard} />
       <Leaderboard values={leaderboard} includePodium={false} />
     </GamePage>

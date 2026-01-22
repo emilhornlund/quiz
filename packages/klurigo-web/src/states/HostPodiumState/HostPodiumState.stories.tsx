@@ -21,6 +21,9 @@ export const Default = {
   args: {
     event: {
       type: GameEventType.GamePodiumHost,
+      game: {
+        name: 'Trivia Battle',
+      },
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456 },
         { position: 2, nickname: 'Radar', score: 18398 },
@@ -41,6 +44,9 @@ export const ThreePlayers = {
   args: {
     event: {
       type: GameEventType.GamePodiumHost,
+      game: {
+        name: 'Trivia Battle',
+      },
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456 },
         { position: 2, nickname: 'Radar', score: 18398 },
@@ -54,6 +60,9 @@ export const TwoPlayers = {
   args: {
     event: {
       type: GameEventType.GamePodiumHost,
+      game: {
+        name: 'Trivia Battle',
+      },
       leaderboard: [
         { position: 1, nickname: 'ShadowCyborg', score: 18456 },
         { position: 2, nickname: 'Radar', score: 18398 },
@@ -66,6 +75,9 @@ export const OnePlayer = {
   args: {
     event: {
       type: GameEventType.GamePodiumHost,
+      game: {
+        name: 'Trivia Battle',
+      },
       leaderboard: [{ position: 1, nickname: 'ShadowCyborg', score: 18456 }],
     },
   },
