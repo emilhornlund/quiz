@@ -24,6 +24,10 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRedis } from '@nestjs-modules/ioredis'
 import { Redis } from 'ioredis'
 
+import {
+  GamePlayerJoinEvent,
+  GamePlayerJoinEventKey,
+} from '../../../app/shared/event/game-join.event'
 import { PlayerNotFoundException } from '../../game-core/exceptions'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
@@ -229,6 +233,36 @@ export class GameService {
     )
 
     await this.gameEventPublisher.publish(savedGameDocument)
+
+    this.emitGamePlayerJoinEvent(gameId, participantId, nickname)
+  }
+
+  /**
+   * Emits a `game.player.join` event after a participant has successfully joined a game.
+   *
+   * The event is best-effort: failures are deliberately suppressed to avoid breaking
+   * the primary join flow due to non-critical side-effects (e.g., profile updates).
+   *
+   * @param gameId - The ID of the game that the participant joined.
+   * @param participantId - The ID of the participant (user) that joined the game.
+   * @param nickname - The nickname used by the participant when joining the game.
+   * @private
+   */
+  private emitGamePlayerJoinEvent(
+    gameId: string,
+    participantId: string,
+    nickname: string,
+  ) {
+    try {
+      this.logger.debug(`Emitting player join event for game '${gameId}'`)
+      const event: GamePlayerJoinEvent = { gameId, participantId, nickname }
+      this.eventEmitter.emit(GamePlayerJoinEventKey, event)
+    } catch (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      error
+    ) {
+      //suppress error (logged by repository)
+    }
   }
 
   /**

@@ -4,6 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Test } from '@nestjs/testing'
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis'
 
+import { GamePlayerJoinEventKey } from '../../../app/shared/event/game-join.event'
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import { GameEventPublisher } from '../../game-event/services'
@@ -19,6 +20,8 @@ describe(GameService.name, () => {
     find: jest.Mock
     delete: jest.Mock
     findGamesByParticipantId: jest.Mock
+    findGameByIDOrThrow: jest.Mock
+    findAndSaveWithLock: jest.Mock
   }
 
   let eventEmitter: {
@@ -32,6 +35,8 @@ describe(GameService.name, () => {
       find: jest.fn(),
       delete: jest.fn(),
       findGamesByParticipantId: jest.fn(),
+      findGameByIDOrThrow: jest.fn(),
+      findAndSaveWithLock: jest.fn(),
     }
 
     eventEmitter = {
@@ -448,6 +453,47 @@ describe(GameService.name, () => {
       expect(gameRepository.delete).not.toHaveBeenCalled()
       expect(eventEmitter.emit).not.toHaveBeenCalled()
       expect(debugSpy).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('joinGame', () => {
+    beforeEach(() => {
+      gameRepository.findGameByIDOrThrow = jest.fn().mockResolvedValue({
+        _id: 'game-123',
+        participants: [],
+      })
+      gameRepository.findAndSaveWithLock = jest.fn().mockResolvedValue({
+        _id: 'game-123',
+        participants: [],
+      })
+      ;(
+        service as unknown as { gameEventPublisher: { publish: jest.Mock } }
+      ).gameEventPublisher = {
+        publish: jest.fn().mockResolvedValue(undefined),
+      }
+    })
+
+    it('emits game.player.join event with correct key and payload', async () => {
+      await service.joinGame('game-123', 'participant-456', 'TestNickname')
+
+      expect(eventEmitter.emit).toHaveBeenCalledTimes(1)
+      expect(eventEmitter.emit).toHaveBeenCalledWith(GamePlayerJoinEventKey, {
+        gameId: 'game-123',
+        participantId: 'participant-456',
+        nickname: 'TestNickname',
+      })
+    })
+
+    it('completes successfully when event emission throws', async () => {
+      eventEmitter.emit.mockImplementation(() => {
+        throw new Error('Event emission failed')
+      })
+
+      await expect(
+        service.joinGame('game-123', 'participant-456', 'TestNickname'),
+      ).resolves.toBeUndefined()
+
+      expect(eventEmitter.emit).toHaveBeenCalledTimes(1)
     })
   })
 })
