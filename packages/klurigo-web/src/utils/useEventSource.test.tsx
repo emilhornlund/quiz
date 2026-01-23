@@ -87,7 +87,7 @@ describe('useEventSource', () => {
     expect(last().init).toMatchObject({
       headers: {
         Authorization: 'Bearer t1',
-        'Content-Type': 'application/json',
+        Accept: 'text/event-stream',
       },
     })
   })

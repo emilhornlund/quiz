@@ -140,21 +140,21 @@ describe('GameEventSubscriber', () => {
     expect(logger.error).toHaveBeenCalled()
   })
 
-  test('emits heartbeat every 30s and stops after destroy', async () => {
+  test('emits heartbeat every 15s and stops after destroy', async () => {
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
 
     // No immediate emit
     expect(emitSpy).not.toHaveBeenCalled()
 
-    // First heartbeat at 30s
-    jest.advanceTimersByTime(30_000)
+    // First heartbeat at 15s
+    jest.advanceTimersByTime(15_000)
     expect(emitSpy).toHaveBeenCalledWith('event', {
       event: { type: GameEventType.GameHeartbeat },
     })
 
     // Destroy and ensure no more heartbeats
     service.onModuleDestroy()
-    jest.advanceTimersByTime(60_000)
+    jest.advanceTimersByTime(30_000)
     // still only the first heartbeat call
     expect(
       emitSpy.mock.calls.filter(
