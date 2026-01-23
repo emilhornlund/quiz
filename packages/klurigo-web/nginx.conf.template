@@ -54,7 +54,8 @@ http {
     }
 
     location ~ ^/klurigo-service/api/games/[^/]+/events$ {
-      proxy_pass ${KLURIGO_SERVICE_PROXY}/;
+      proxy_pass ${KLURIGO_SERVICE_PROXY};
+      rewrite ^/klurigo-service(/api/.*)$ $1 break;
 
       proxy_http_version 1.1;
       proxy_set_header Connection "";
