@@ -7,25 +7,24 @@
   flex-direction: column;
   flex: 1;
   padding: 2%;
-  overflow: hidden;
 
   .grid {
     display: grid;
     flex: 1;
+    min-height: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
 
     @include helpers.mobile {
       gap: variables.$mobile-medium-layout-gutter;
-      grid-template-columns: 1fr;
     }
 
     @include helpers.tablet {
       gap: variables.$tablet-medium-layout-gutter;
-      grid-template-columns: 1fr 1fr;
     }
 
     @include helpers.desktop {
       gap: variables.$desktop-medium-layout-gutter;
-      grid-template-columns: 1fr 1fr;
     }
 
     .answerButton {
