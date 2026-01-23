@@ -53,6 +53,25 @@ http {
       proxy_pass https://o4509486568374272.ingest.de.sentry.io/api/4509667094298704/envelope/;
     }
 
+    location ~ ^/klurigo-service/api/games/[^/]+/events$ {
+      proxy_pass ${KLURIGO_SERVICE_PROXY}/;
+
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+
+      proxy_buffering off;
+      proxy_cache off;
+      proxy_request_buffering off;
+
+      proxy_read_timeout 1h;
+      proxy_send_timeout 1h;
+
+      gzip off;
+
+      add_header Cache-Control "no-cache";
+      add_header X-Accel-Buffering no;
+    }
+
     location /klurigo-service/api/ {
       proxy_pass ${KLURIGO_SERVICE_PROXY}/;
 

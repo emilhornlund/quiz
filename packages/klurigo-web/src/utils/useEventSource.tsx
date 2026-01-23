@@ -87,9 +87,9 @@ export const useEventSource = (
         {
           headers: {
             Authorization: `Bearer ${tokenValue}`,
-            'Content-Type': 'application/json',
+            Accept: 'text/event-stream',
           },
-          heartbeatTimeout: HEARTBEAT_INTERVAL * 1.5,
+          heartbeatTimeout: HEARTBEAT_INTERVAL * 3,
         },
       )
 
