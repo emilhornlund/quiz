@@ -1,4 +1,8 @@
-import { GameEventType, GameParticipantType } from '@klurigo/common'
+import {
+  GameEventType,
+  GameParticipantType,
+  HEARTBEAT_INTERVAL,
+} from '@klurigo/common'
 import { MessageEvent } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import type { Redis } from 'ioredis'
@@ -45,12 +49,12 @@ describe('GameEventSubscriber', () => {
 
     // Base redis mock + a dedicated subscriber connection
     redisSubscriber = {
-      subscribe: jest.fn((_, cb) => {
-        // simulate successful subscribe
-        cb?.(null as any, 1)
-        return Promise.resolve(1) as any
-      }),
+      subscribe: jest.fn().mockResolvedValue(1),
       on: jest.fn(),
+      off: jest.fn(),
+      unsubscribe: jest.fn().mockResolvedValue(1),
+      quit: jest.fn().mockResolvedValue('OK'),
+      disconnect: jest.fn(),
     } as any
 
     redis = {
@@ -112,24 +116,25 @@ describe('GameEventSubscriber', () => {
     ...overrides,
   })
 
-  test('wires Redis subscription on init and handles messages/errors', async () => {
+  it('wires Redis subscription on init and handles messages/errors', async () => {
     await service.onModuleInit()
 
     expect(redis.duplicate).toHaveBeenCalledTimes(1)
-    expect(redisSubscriber.subscribe).toHaveBeenCalledWith(
-      'events',
-      expect.any(Function),
-    )
+    expect(redisSubscriber.subscribe).toHaveBeenCalledWith('events')
 
     // Extract message handler registered via on('message')
     const onMessage = redisSubscriber.on.mock.calls.find(
       (c) => c[0] === 'message',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     )?.[1] as Function
+    expect(onMessage).toBeDefined()
+
     const onError = redisSubscriber.on.mock.calls.find(
       (c) => c[0] === 'error',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     )?.[1] as Function
+    expect(onError).toBeDefined()
+
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
 
     const distributed = { playerId: 'p1', event: { type: 'ANY' } }
@@ -140,37 +145,155 @@ describe('GameEventSubscriber', () => {
     expect(logger.error).toHaveBeenCalled()
   })
 
-  test('emits heartbeat every 15s and stops after destroy', async () => {
+  it('onModuleInit ignores invalid JSON messages and logs warn', async () => {
+    await service.onModuleInit()
+
+    const onMessage = redisSubscriber.on.mock.calls.find(
+      (c) => c[0] === 'message',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    )?.[1] as Function
+    expect(onMessage).toBeDefined()
+
+    onMessage('events', '{not valid json')
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Ignoring invalid JSON on Redis Pub/Sub channel:',
+      ),
+      expect.any(String),
+    )
+  })
+
+  it('onModuleInit ignores malformed messages missing event and logs warn', async () => {
+    await service.onModuleInit()
+
+    const onMessage = redisSubscriber.on.mock.calls.find(
+      (c) => c[0] === 'message',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    )?.[1] as Function
+    expect(onMessage).toBeDefined()
+
+    onMessage('events', JSON.stringify({ playerId: 'p1' }))
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Ignoring malformed distributed event (missing event property).',
+    )
+  })
+
+  it('onModuleInit logs error and rethrows when Redis subscribe fails', async () => {
+    redisSubscriber.subscribe.mockRejectedValueOnce(new Error('subscribe down'))
+
+    await expect(service.onModuleInit()).rejects.toThrow('subscribe down')
+
+    expect(logger.error).toHaveBeenCalledWith(
+      'Failed to subscribe to Redis channel "events": subscribe down',
+      expect.any(String),
+    )
+  })
+
+  it('emits heartbeats while a subscription is active and stops after unsubscribe', async () => {
+    const doc = buildGameDoc()
+    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: true })
+
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
 
-    // No immediate emit
-    expect(emitSpy).not.toHaveBeenCalled()
+    const stream$ = await service.subscribe('game-1', 'p1')
+    const sub = stream$.subscribe()
 
-    // First heartbeat at 15s
-    jest.advanceTimersByTime(15_000)
+    jest.advanceTimersByTime(HEARTBEAT_INTERVAL)
     expect(emitSpy).toHaveBeenCalledWith('event', {
       event: { type: GameEventType.GameHeartbeat },
     })
 
-    // Destroy and ensure no more heartbeats
-    service.onModuleDestroy()
-    jest.advanceTimersByTime(30_000)
-    // still only the first heartbeat call
-    expect(
-      emitSpy.mock.calls.filter(
-        (c) => c[1]?.event?.type === GameEventType.GameHeartbeat,
-      ),
-    ).toHaveLength(1)
+    sub.unsubscribe()
+
+    emitSpy.mockClear()
+    jest.advanceTimersByTime(HEARTBEAT_INTERVAL)
+    expect(emitSpy).not.toHaveBeenCalled()
   })
 
-  test('subscribe throws when participant not found', async () => {
+  it('keeps heartbeat running until the last concurrent connection unsubscribes', async () => {
+    const doc = buildGameDoc()
+    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: true })
+
+    const emitSpy = jest.spyOn(eventEmitter, 'emit')
+
+    const stream1$ = await service.subscribe('game-1', 'p1')
+    const sub1 = stream1$.subscribe()
+
+    const stream2$ = await service.subscribe('game-1', 'p1')
+    const sub2 = stream2$.subscribe()
+
+    jest.advanceTimersByTime(HEARTBEAT_INTERVAL)
+    expect(
+      emitSpy.mock.calls.filter(
+        (c) =>
+          c[0] === 'event' && c[1]?.event?.type === GameEventType.GameHeartbeat,
+      ),
+    ).toHaveLength(1)
+
+    sub1.unsubscribe()
+
+    emitSpy.mockClear()
+    jest.advanceTimersByTime(HEARTBEAT_INTERVAL)
+    expect(
+      emitSpy.mock.calls.filter(
+        (c) =>
+          c[0] === 'event' && c[1]?.event?.type === GameEventType.GameHeartbeat,
+      ),
+    ).toHaveLength(1)
+
+    sub2.unsubscribe()
+
+    emitSpy.mockClear()
+    jest.advanceTimersByTime(HEARTBEAT_INTERVAL)
+    expect(emitSpy).not.toHaveBeenCalled()
+  })
+
+  it('onModuleDestroy unsubscribes, quits, and removes Redis listeners', async () => {
+    await service.onModuleInit()
+
+    await service.onModuleDestroy()
+
+    expect(redisSubscriber.off).toHaveBeenCalledWith(
+      'message',
+      expect.any(Function),
+    )
+    expect(redisSubscriber.off).toHaveBeenCalledWith(
+      'error',
+      expect.any(Function),
+    )
+    expect(redisSubscriber.unsubscribe).toHaveBeenCalledWith('events')
+    expect(redisSubscriber.quit).toHaveBeenCalled()
+    expect(redisSubscriber.disconnect).not.toHaveBeenCalled()
+  })
+
+  it('onModuleDestroy logs warn and disconnects if Redis shutdown throws', async () => {
+    await service.onModuleInit()
+
+    redisSubscriber.unsubscribe.mockRejectedValueOnce(new Error('unsub fail'))
+
+    await service.onModuleDestroy()
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Error while shutting down Redis subscriber: unsub fail',
+      ),
+      expect.any(String),
+    )
+    expect(redisSubscriber.disconnect).toHaveBeenCalled()
+  })
+
+  it('subscribe throws when participant not found', async () => {
     gameRepository.findGameByIDOrThrow.mockResolvedValue(buildGameDoc())
     await expect(service.subscribe('game-1', 'missing')).rejects.toBeInstanceOf(
       PlayerNotFoundException,
     )
   })
 
-  test('subscribe (PLAYER) returns initial event and filters subsequent events by playerId', async () => {
+  it('subscribe (PLAYER) returns initial event and filters subsequent events by playerId', async () => {
     const doc = buildGameDoc({
       currentTask: { type: TaskType.Question }, // so player metadata is merged
     })
@@ -206,10 +329,9 @@ describe('GameEventSubscriber', () => {
       { type: 'BROADCAST' },
     ])
 
-    // Active players should be cleaned up
-    // (accessing private for test purposes)
-    const activePlayers: Set<string> = (service as any).activePlayers
-    expect(activePlayers.has('p1')).toBe(false)
+    const counts: Map<string, number> = (service as any)
+      .connectionCountsByParticipantId
+    expect(counts.has('p1')).toBe(false)
 
     // Ensure metadata builders were used
     expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
@@ -222,7 +344,25 @@ describe('GameEventSubscriber', () => {
     )
   })
 
-  test('subscribe (HOST) uses buildHostGameEvent and still filters by playerId', async () => {
+  it('subscribe filters out undefined events emitted on the local channel', async () => {
+    const doc = buildGameDoc()
+    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: 'player' })
+
+    const stream$ = await service.subscribe('game-1', 'p1')
+    const resultsPromise = firstValueFrom(stream$.pipe(take(2), toArray()))
+
+    eventEmitter.emit('event', undefined)
+    eventEmitter.emit('event', { playerId: 'p1', event: { type: 'OK' } })
+
+    const results = await resultsPromise
+    expect(results.map((e) => JSON.parse(e.data as any))).toEqual([
+      { initial: 'player' },
+      { type: 'OK' },
+    ])
+  })
+
+  it('subscribe (HOST) uses buildHostGameEvent and still filters by playerId', async () => {
     const doc = buildGameDoc()
     gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
     ;(buildHostGameEvent as jest.Mock).mockReturnValue({
@@ -241,7 +381,7 @@ describe('GameEventSubscriber', () => {
     expect(buildPlayerGameEvent).not.toHaveBeenCalled()
   })
 
-  test('subscribe tolerates build* error and still relays future events', async () => {
+  it('subscribe tolerates build* error and still relays future events', async () => {
     const doc = buildGameDoc()
     gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
     ;(buildHostGameEvent as jest.Mock).mockImplementation(() => {
@@ -251,13 +391,14 @@ describe('GameEventSubscriber', () => {
     const stream$ = await service.subscribe('game-1', 'host')
 
     // Collect next two events we emit ourselves (no initial because builder throws)
-    const resultsPromise = firstValueFrom(stream$.pipe(take(2), toArray()))
+    const resultsPromise = firstValueFrom(stream$.pipe(take(3), toArray()))
 
     eventEmitter.emit('event', { playerId: 'host', event: { type: 'A' } })
-    eventEmitter.emit('event', { event: { type: 'B' } }) // broadcast
+    eventEmitter.emit('event', { event: { type: 'B' } })
 
     const results = await resultsPromise
     expect(results.map((e) => JSON.parse(e.data as any))).toEqual([
+      { type: GameEventType.GameHeartbeat },
       { type: 'A' },
       { type: 'B' },
     ])

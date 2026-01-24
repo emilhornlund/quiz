@@ -34,10 +34,18 @@ import {
 describe('GameEventPublisher', () => {
   let redis: jest.Mocked<Redis>
   let service: GameEventPublisher
-  let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
+  let logger: {
+    debug: jest.Mock
+    warn: jest.Mock
+    error: jest.Mock
+  }
 
   beforeEach(() => {
-    logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() }
+    logger = {
+      debug: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+    }
 
     redis = {
       lrange: jest.fn().mockResolvedValue([]),
@@ -84,7 +92,7 @@ describe('GameEventPublisher', () => {
     ...overrides,
   })
 
-  test('publish sends events for host and player with base metadata (non-question)', async () => {
+  it('publish sends events for host and player with base metadata (non-question)', async () => {
     const doc = buildGameDoc()
     ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       hostInit: true,
@@ -129,13 +137,15 @@ describe('GameEventPublisher', () => {
     )
 
     // Logger: should log for each publish
-    expect(logger.log).toHaveBeenCalledWith('Published event for playerId: p1')
-    expect(logger.log).toHaveBeenCalledWith(
+    expect(logger.debug).toHaveBeenCalledWith(
+      'Published event for playerId: p1',
+    )
+    expect(logger.debug).toHaveBeenCalledWith(
       'Published event for playerId: host',
     )
   })
 
-  test('publish (Question task) merges player question metadata', async () => {
+  it('publish (Question task) merges player question metadata', async () => {
     const doc = buildGameDoc({ currentTask: { type: TaskType.Question } })
     ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       hostQ: true,
@@ -163,7 +173,7 @@ describe('GameEventPublisher', () => {
     )
   })
 
-  test('publish continues when a builder throws, logging warn', async () => {
+  it('publish continues when a builder throws, logging warn', async () => {
     const doc = buildGameDoc()
     // Fail for host, succeed for player
     ;(buildHostGameEvent as jest.Mock).mockImplementation(() => {
@@ -183,7 +193,7 @@ describe('GameEventPublisher', () => {
     expect(msg).toEqual({ playerId: 'p1', event: { ok: true } })
   })
 
-  test('publishParticipantEvent is a no-op when event is undefined', async () => {
+  it('publishParticipantEvent is a no-op when event is undefined', async () => {
     const participant = {
       participantId: 'p1',
       type: GameParticipantType.PLAYER,
@@ -193,10 +203,10 @@ describe('GameEventPublisher', () => {
     await service.publishParticipantEvent(participant as any, undefined)
 
     expect(redis.publish).not.toHaveBeenCalled()
-    expect(logger.log).not.toHaveBeenCalled()
+    expect(logger.debug).not.toHaveBeenCalled()
   })
 
-  test('publishParticipantEvent publishes a distributed event and logs', async () => {
+  it('publishParticipantEvent publishes a distributed event and logs', async () => {
     const participant = {
       participantId: 'p1',
       type: GameParticipantType.PLAYER,
@@ -211,10 +221,12 @@ describe('GameEventPublisher', () => {
     const [channel, message] = redis.publish.mock.calls[0] as [string, string]
     expect(channel).toBe('events')
     expect(JSON.parse(message)).toEqual({ playerId: 'p1', event })
-    expect(logger.log).toHaveBeenCalledWith('Published event for playerId: p1')
+    expect(logger.debug).toHaveBeenCalledWith(
+      'Published event for playerId: p1',
+    )
   })
 
-  test('publish logs error if redis.publish rejects', async () => {
+  it('publish logs error if redis.publish rejects', async () => {
     redis.publish.mockRejectedValueOnce(new Error('redis down'))
 
     const participant = {
@@ -231,5 +243,61 @@ describe('GameEventPublisher', () => {
       'Error publishing event:',
       expect.any(Error),
     )
+  })
+
+  it('publish does not publish when there are no participants', async () => {
+    const doc = buildGameDoc({ participants: [] })
+
+    await service.publish(doc as GameDocument)
+
+    expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
+    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalledWith(
+      [],
+      {},
+      [],
+    )
+    expect(redis.publish).not.toHaveBeenCalled()
+    expect(logger.debug).not.toHaveBeenCalled()
+    expect(logger.warn).not.toHaveBeenCalled()
+  })
+
+  it('publish skips publishing when builder returns undefined event', async () => {
+    const doc = buildGameDoc()
+    ;(buildHostGameEvent as jest.Mock).mockReturnValue(undefined)
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ ok: true })
+
+    await service.publish(doc as GameDocument)
+
+    expect(redis.publish).toHaveBeenCalledTimes(1)
+    const msg = JSON.parse(redis.publish.mock.calls[0][1] as string)
+    expect(msg).toEqual({ playerId: 'p1', event: { ok: true } })
+  })
+
+  it('publish rejects if metadata tuple builder throws before per-participant publishing', async () => {
+    const doc = buildGameDoc()
+    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock).mockImplementation(
+      () => {
+        throw new Error('tuple boom')
+      },
+    )
+
+    await expect(service.publish(doc as GameDocument)).rejects.toThrow(
+      'tuple boom',
+    )
+
+    expect(redis.publish).not.toHaveBeenCalled()
+    expect(logger.warn).not.toHaveBeenCalled()
+  })
+
+  it('publishDistributedEvent logs "Published event for all players" when playerId is undefined', async () => {
+    const event = { event: { type: 'AnyEventType' } } as any
+
+    await (service as any).publishDistributedEvent(event)
+
+    expect(redis.publish).toHaveBeenCalledTimes(1)
+    const [channel, message] = redis.publish.mock.calls[0] as [string, string]
+    expect(channel).toBe('events')
+    expect(JSON.parse(message)).toEqual(event)
+    expect(logger.debug).toHaveBeenCalledWith('Published event for all players')
   })
 })
