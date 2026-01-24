@@ -114,7 +114,13 @@ export const useEventSource = (
       }
 
       eventSource.onerror = () => {
-        if (instanceId !== instanceIdRef.current || isShuttingDownRef.current) {
+        if (instanceId !== instanceIdRef.current) return
+
+        // Treat reload/navigation/background teardown as expected.
+        if (
+          isShuttingDownRef.current ||
+          document.visibilityState === 'hidden'
+        ) {
           return
         }
 
@@ -155,6 +161,22 @@ export const useEventSource = (
       cleanupEventSource()
     }
   }, [cleanupEventSource, createEventSource, gameID, token])
+
+  useEffect(() => {
+    const shutdown = () => {
+      isShuttingDownRef.current = true
+      cleanupEventSource()
+    }
+
+    // pagehide fires on reload, navigation, and bfcache transitions (better than beforeunload)
+    window.addEventListener('pagehide', shutdown)
+    window.addEventListener('beforeunload', shutdown)
+
+    return () => {
+      window.removeEventListener('pagehide', shutdown)
+      window.removeEventListener('beforeunload', shutdown)
+    }
+  }, [cleanupEventSource])
 
   return [gameEvent, connectionStatus]
 }
