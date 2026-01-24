@@ -53,10 +53,7 @@ http {
       proxy_pass https://o4509486568374272.ingest.de.sentry.io/api/4509667094298704/envelope/;
     }
 
-    location ~ ^/klurigo-service/api/games/[^/]+/events$ {
-      proxy_pass ${KLURIGO_SERVICE_PROXY};
-      rewrite ^/klurigo-service(/api/.*)$ $1 break;
-
+    location ~ ^/klurigo-service/api(?<events_path>/games/[^/]+/events)$ {
       proxy_http_version 1.1;
       proxy_set_header Connection "";
 
@@ -71,6 +68,12 @@ http {
 
       add_header Cache-Control "no-cache";
       add_header X-Accel-Buffering no;
+
+      # Build the full upstream URL using the existing env var:
+      # KLURIGO_SERVICE_PROXY = http://klurigo-service:8080/api
+      # events_path          = /games/<id>/events
+      set $sse_target ${KLURIGO_SERVICE_PROXY}$events_path$is_args$args;
+      proxy_pass $sse_target;
     }
 
     location /klurigo-service/api/ {
