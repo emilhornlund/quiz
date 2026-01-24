@@ -1,4 +1,4 @@
-import { GameEventType } from '@klurigo/common'
+import { GameEventType, HEARTBEAT_INTERVAL } from '@klurigo/common'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -58,11 +58,18 @@ const { _getInstances, _last } = ESP as unknown as ESHelpers
 
 const instances = () => _getInstances()
 const last = () => _last()
+const setVisibilityState = (state: DocumentVisibilityState) => {
+  Object.defineProperty(document, 'visibilityState', {
+    value: state,
+    configurable: true,
+  })
+}
 
 describe('useEventSource', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     instances().length = 0
+    setVisibilityState('visible')
   })
 
   afterEach(() => {
@@ -96,7 +103,7 @@ describe('useEventSource', () => {
     renderHook(() => useEventSource('g1', 't1'))
 
     expect(last().init).toMatchObject({
-      heartbeatTimeout: 30000 * 1.5,
+      heartbeatTimeout: HEARTBEAT_INTERVAL * 3,
     })
   })
 
@@ -228,5 +235,117 @@ describe('useEventSource', () => {
 
     rerender({ gid: 'g2', tkn: 't2' })
     expect(instances().length).toBe(3)
+  })
+
+  it('closes EventSource on pagehide and does not reconnect on subsequent errors', () => {
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
+    const current = last()
+
+    act(() => {
+      window.dispatchEvent(new Event('pagehide'))
+    })
+
+    expect(current.close).toHaveBeenCalledTimes(1)
+    expect(current.onopen).toBeNull()
+    expect(current.onmessage).toBeNull()
+    expect(current.onerror).toBeNull()
+
+    act(() => current.onerror?.(new Event('error')))
+    expect(result.current[1]).toBe(ConnectionStatus.INITIALIZED)
+
+    act(() => vi.runAllTimers())
+    expect(instances().length).toBe(1)
+  })
+
+  it('closes EventSource on beforeunload and does not reconnect', () => {
+    renderHook(() => useEventSource('g1', 't1'))
+    const current = last()
+
+    act(() => {
+      window.dispatchEvent(new Event('beforeunload'))
+    })
+
+    expect(current.close).toHaveBeenCalledTimes(1)
+
+    act(() => current.onerror?.(new Event('error')))
+    act(() => vi.runAllTimers())
+
+    expect(instances().length).toBe(1)
+  })
+
+  it('ignores onerror when document is hidden', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
+    const current = last()
+
+    setVisibilityState('hidden')
+
+    act(() => current.onerror?.(new Event('error')))
+
+    expect(result.current[1]).toBe(ConnectionStatus.INITIALIZED)
+
+    act(() => vi.runAllTimers())
+    expect(instances().length).toBe(1)
+
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      'Connection error, retrying...',
+    )
+
+    consoleErrorSpy.mockRestore()
+  })
+
+  it('registers and unregisters page lifecycle listeners', () => {
+    const addSpy = vi.spyOn(window, 'addEventListener')
+    const removeSpy = vi.spyOn(window, 'removeEventListener')
+
+    const { unmount } = renderHook(() => useEventSource('g1', 't1'))
+
+    expect(addSpy).toHaveBeenCalledWith('pagehide', expect.any(Function))
+    expect(addSpy).toHaveBeenCalledWith('beforeunload', expect.any(Function))
+
+    unmount()
+
+    expect(removeSpy).toHaveBeenCalledWith('pagehide', expect.any(Function))
+    expect(removeSpy).toHaveBeenCalledWith('beforeunload', expect.any(Function))
+
+    addSpy.mockRestore()
+    removeSpy.mockRestore()
+  })
+
+  it('ignores events from stale instances after reconnect', () => {
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
+    const first = last()
+
+    act(() => first.onerror?.(new Event('error')))
+    act(() => vi.advanceTimersByTime(1000))
+    const second = last()
+
+    act(() => first.onopen?.(new Event('open')))
+    expect(result.current[1]).not.toBe(ConnectionStatus.CONNECTED)
+
+    act(() => second.onopen?.(new Event('open')))
+    expect(result.current[1]).toBe(ConnectionStatus.CONNECTED)
+  })
+
+  it('does not update state when the same non-heartbeat event is received twice', () => {
+    const { result } = renderHook(() => useEventSource('g1', 't1'))
+    act(() => last().onopen?.(new Event('open')))
+
+    const eventPayload = { type: 'SomethingElse', payload: 123 }
+
+    act(() => {
+      last().onmessage?.({ data: JSON.stringify(eventPayload) } as MessageEvent)
+    })
+
+    const firstEventRef = result.current[0]
+
+    act(() => {
+      last().onmessage?.({ data: JSON.stringify(eventPayload) } as MessageEvent)
+    })
+
+    expect(result.current[0]).toBe(firstEventRef)
   })
 })
