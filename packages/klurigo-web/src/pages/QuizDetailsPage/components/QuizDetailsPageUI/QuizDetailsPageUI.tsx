@@ -3,12 +3,14 @@ import {
   faCalendarCheck,
   faCalendarPlus,
   faCircleQuestion,
+  faCommentDots,
   faEye,
   faGamepad,
   faIcons,
   faLanguage,
   faPen,
   faPlay,
+  faStar,
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -31,6 +33,7 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../models'
+import colors from '../../../../styles/colors.module.scss'
 import { DATE_FORMATS, formatLocalDate } from '../../../../utils/date.utils'
 
 import styles from './QuizDetailsPageUI.module.scss'
@@ -128,6 +131,25 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
             icon={faPlay}
             onClick={() => setShowConfirmHostGameModal(true)}
           />
+        </div>
+
+        <div className={styles.misc}>
+          <div className={styles.column}>
+            <FontAwesomeIcon
+              icon={faStar}
+              color={colors.yellow2}
+              className={styles.icon}
+            />
+            <span className={styles.value}>{quiz.ratingSummary.stars}</span>
+          </div>
+          <div className={styles.column}>
+            <FontAwesomeIcon
+              icon={faCommentDots}
+              color={colors.white}
+              className={styles.icon}
+            />
+            <span className={styles.value}>{quiz.ratingSummary.comments}</span>
+          </div>
         </div>
 
         {quiz.imageCoverURL && (
