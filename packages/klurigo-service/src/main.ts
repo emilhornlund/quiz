@@ -9,7 +9,11 @@ import { EnvironmentVariables } from './app/config'
 import { configureApp } from './app/utils'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    ...(process.env.NODE_ENV === 'production'
+      ? { logger: ['fatal', 'error', 'warn', 'log'] }
+      : {}),
+  })
   configureApp(app)
 
   const config = new DocumentBuilder()

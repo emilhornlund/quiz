@@ -36,11 +36,18 @@ export class GameEventPublisher {
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
   /**
-   * Publishes game events to relevant players for a given game document.
+   * Publishes game events to all participants for the provided game document.
    *
-   * @param {GameDocument} document - The game document whose events are to be published.
+   * The publisher builds a participant-specific `GameEvent` payload and emits it via Redis Pub/Sub
+   * so that all service instances can relay the event to connected SSE clients.
    *
-   * @returns {Promise<void>} A promise that resolves once the events are published.
+   * Notes:
+   * - Events are published per participant to support participant-specific views (e.g. host vs player).
+   * - The method awaits publication for all participants before resolving.
+   *
+   * @param document - The game document to publish an update for.
+   *
+   * @returns A promise that resolves once events for all participants have been published.
    */
   public async publish(document: GameDocument): Promise<void> {
     const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
@@ -54,10 +61,9 @@ export class GameEventPublisher {
     )
 
     await Promise.all(
-      document.participants.map((participant) => {
+      document.participants.map(async (participant) => {
         try {
-          this.publishParticipantEvent(
-            participant,
+          const event =
             participant.type === GameParticipantType.HOST
               ? buildHostGameEvent(document, metaData)
               : buildPlayerGameEvent(document, participant, {
@@ -65,8 +71,9 @@ export class GameEventPublisher {
                   ...(document.currentTask.type === TaskType.Question
                     ? toPlayerQuestionPlayerEventMetaData(answers, participant)
                     : {}),
-                }),
-          )
+                })
+
+          await this.publishParticipantEvent(participant, event)
         } catch (error) {
           const { message, stack } = error as Error
           this.logger.warn(
@@ -79,12 +86,12 @@ export class GameEventPublisher {
   }
 
   /**
-   * Publishes a game event for a specified participant.
-
-   * @param {Participant} participant - The participant for whom the event published for.
-   * @param {GameEvent} event - The event to be published.
+   * Publishes a game event for a single participant.
    *
-   * @returns {Promise<void>} A promise that resolves once the event is published.
+   * @param participant - The participant the event should be delivered to.
+   * @param event - The event payload to publish. If omitted, nothing is published.
+   *
+   * @returns A promise that resolves once the event has been published (or immediately if `event` is undefined).
    */
   public async publishParticipantEvent(
     participant: Participant,
@@ -101,7 +108,9 @@ export class GameEventPublisher {
   /**
    * Publishes a distributed event to the Redis Pub/Sub channel.
    *
-   * @param {DistributedEvent} event - The event to be published.
+   * This message is consumed by subscribers in all running service instances and relayed to local SSE streams.
+   *
+   * @param event - The distributed event containing the participant routing key and the game event payload.
    *
    * @private
    */
@@ -112,9 +121,9 @@ export class GameEventPublisher {
       const message = JSON.stringify(event)
       await this.redis.publish(REDIS_PUBSUB_CHANNEL, message)
       if (event.playerId) {
-        this.logger.log(`Published event for playerId: ${event.playerId}`)
+        this.logger.debug(`Published event for playerId: ${event.playerId}`)
       } else {
-        this.logger.log('Published event for all players')
+        this.logger.debug('Published event for all players')
       }
     } catch (error) {
       this.logger.error('Error publishing event:', error)

@@ -25,7 +25,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger'
 import { SkipThrottle } from '@nestjs/throttler'
-import { Observable } from 'rxjs'
+import { from, Observable } from 'rxjs'
+import { mergeMap } from 'rxjs/operators'
 
 import { NoTimeout } from '../../../app/decorators'
 import {
@@ -217,15 +218,17 @@ export class GameController {
   }
 
   /**
-   * Retrieves a stream of game-related events for a specific game.
+   * Retrieves a Server-Sent Events (SSE) stream of game events for the specified game.
    *
-   * Participants receive both general and participant-specific game events, including
-   * heartbeat events for connection monitoring and game updates relevant to the subscribed game.
+   * The stream includes:
+   * - A best-effort initial snapshot event describing the current game state for the participant.
+   * - Subsequent real-time updates published by the game event system.
+   * - Heartbeat events to keep the connection alive and help clients/proxies detect stale connections.
    *
-   * @param participantId - The unique identifier of the participant requesting the stream.
-   * @param gameId - The unique identifier of the game to subscribe to.
+   * @param participantId - The authenticated participant ID requesting the stream.
+   * @param gameId - The ID of the game to subscribe to.
    *
-   * @returns A stream of events for SSE, each containing data in JSON format.
+   * @returns An observable SSE stream where each message `data` contains JSON-encoded game event payloads.
    */
   @NoTimeout()
   @Sse('/:gameID/events')
@@ -258,11 +261,13 @@ export class GameController {
   @AuthorizedGame()
   @ApiGameIdParam()
   @SkipThrottle()
-  public async getEventStream(
+  public getEventStream(
     @PrincipalId() participantId: string,
     @RouteGameIdParam() gameId: string,
-  ): Promise<Observable<MessageEvent>> {
-    return this.gameEventSubscriber.subscribe(gameId, participantId)
+  ): Observable<MessageEvent> {
+    return from(this.gameEventSubscriber.subscribe(gameId, participantId)).pipe(
+      mergeMap((stream) => stream),
+    )
   }
 
   /**
