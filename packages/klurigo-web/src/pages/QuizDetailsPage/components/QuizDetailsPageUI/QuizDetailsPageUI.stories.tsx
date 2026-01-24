@@ -39,7 +39,7 @@ export const Default = {
       languageCode: LanguageCode.English,
       numberOfQuestions: 14,
       author: { id: uuidv4(), name: 'FrostyBear' },
-      ratingSummary: { stars: 0, comments: 0 },
+      ratingSummary: { stars: 4.6, comments: 13 },
       created: new Date(),
       updated: new Date(),
     },
