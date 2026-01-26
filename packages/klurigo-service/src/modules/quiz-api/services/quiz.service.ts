@@ -306,6 +306,17 @@ export class QuizService {
       languageCode: quizRequest.languageCode,
       questions: QuizService.buildQuizQuestions(quizRequest),
       owner: user,
+      gameplaySummary: {
+        count: 0,
+        totalPlayerCount: 0,
+        totalClassicCorrectCount: 0,
+        totalClassicIncorrectCount: 0,
+        totalClassicUnansweredCount: 0,
+        totalZeroToOneHundredPrecisionSum: 0,
+        totalZeroToOneHundredAnsweredCount: 0,
+        totalZeroToOneHundredUnansweredCount: 0,
+        updated: new Date(),
+      },
       ratingSummary: {
         count: 0,
         avg: 0,

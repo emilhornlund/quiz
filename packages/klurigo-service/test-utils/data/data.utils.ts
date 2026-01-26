@@ -44,6 +44,7 @@ import {
 import {
   GameResult,
   PlayerMetric,
+  QuestionMetric,
 } from '../../src/modules/game-result/repositories/models/schemas'
 import {
   BaseQuestionDao,
@@ -533,6 +534,38 @@ export function createMockGameResultPlayerMetric(
   }
 }
 
+export function createMockClassicGameResultQuestionMetric(
+  questionMetric?: Partial<Omit<QuestionMetric, 'averagePrecision'>>,
+): QuestionMetric {
+  return {
+    text: 'What is capital of France?',
+    type: QuestionType.MultiChoice,
+    correct: 0,
+    incorrect: 0,
+    unanswered: 0,
+    averageResponseTime: 0,
+    averagePrecision: undefined,
+    ...(questionMetric ?? {}),
+  }
+}
+
+export function createMockZeroToOneHundredGameResultQuestionMetric(
+  questionMetric?: Partial<
+    Omit<QuestionMetric, 'type' | 'correct' | 'incorrect'>
+  >,
+): QuestionMetric {
+  return {
+    text: 'Guess the temperature of the hottest day ever recorded.',
+    type: QuestionType.Range,
+    correct: undefined,
+    incorrect: undefined,
+    averagePrecision: 0,
+    unanswered: 0,
+    averageResponseTime: 0,
+    ...(questionMetric ?? {}),
+  }
+}
+
 export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
   return {
     _id: uuidv4(),
@@ -611,6 +644,16 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    gameplaySummary: {
+      count: 0,
+      totalPlayerCount: 0,
+      totalClassicCorrectCount: 0,
+      totalClassicIncorrectCount: 0,
+      totalClassicUnansweredCount: 0,
+      totalZeroToOneHundredPrecisionSum: 0,
+      totalZeroToOneHundredAnsweredCount: 0,
+      totalZeroToOneHundredUnansweredCount: 0,
+    },
     ratingSummary: {
       count: 0,
       avg: 0,
@@ -652,6 +695,16 @@ export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    gameplaySummary: {
+      count: 0,
+      totalPlayerCount: 0,
+      totalClassicCorrectCount: 0,
+      totalClassicIncorrectCount: 0,
+      totalClassicUnansweredCount: 0,
+      totalZeroToOneHundredPrecisionSum: 0,
+      totalZeroToOneHundredAnsweredCount: 0,
+      totalZeroToOneHundredUnansweredCount: 0,
+    },
     ratingSummary: {
       count: 0,
       avg: 0,
