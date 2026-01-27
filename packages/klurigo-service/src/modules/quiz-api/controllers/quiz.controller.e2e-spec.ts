@@ -6,11 +6,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   buildMockSecondaryUser,
+  createMockClassicQuiz,
   createMockClassicQuizRequestDto,
   createMockZeroToOneHundredQuizRequestDto,
 } from '../../../../test-utils/data'
 import { createDefaultUserAndAuthenticate } from '../../../../test-utils/utils'
 import { closeTestApp, createTestApp } from '../../../../test-utils/utils'
+import { Quiz, QuizModel } from '../../quiz-core/repositories/models/schemas'
 import { User, UserModel } from '../../user/repositories'
 import { QuizService } from '../services'
 
@@ -23,11 +25,13 @@ const updatedData = createMockZeroToOneHundredQuizRequestDto({
 describe('QuizController (e2e)', () => {
   let app: INestApplication
   let quizService: QuizService
+  let quizModel: QuizModel
   let userModel: UserModel
 
   beforeEach(async () => {
     app = await createTestApp()
     quizService = app.get(QuizService)
+    quizModel = app.get<QuizModel>(getModelToken(Quiz.name))
     userModel = app.get<UserModel>(getModelToken(User.name))
   })
 
@@ -432,6 +436,10 @@ describe('QuizController (e2e)', () => {
               id: user._id,
               name: user.defaultNickname,
             },
+            gameplaySummary: {
+              count: 0,
+              totalPlayerCount: 0,
+            },
             ratingSummary: {
               comments: 0,
               stars: 0,
@@ -468,16 +476,48 @@ describe('QuizController (e2e)', () => {
     it('should succeed in updating an existing quiz', async () => {
       const { accessToken, user } = await createDefaultUserAndAuthenticate(app)
 
-      const originalQuiz = await quizService.createQuiz(originalData, user)
+      const now = new Date()
+
+      const originalQuiz = await quizModel.create(
+        createMockClassicQuiz({
+          owner: user,
+          gameplaySummary: {
+            count: 2,
+            totalPlayerCount: 12,
+            totalClassicCorrectCount: 10,
+            totalClassicIncorrectCount: 30,
+            totalClassicUnansweredCount: 60,
+            totalZeroToOneHundredPrecisionSum: 0,
+            totalZeroToOneHundredAnsweredCount: 0,
+            totalZeroToOneHundredUnansweredCount: 0,
+            lastPlayedAt: now,
+          },
+          ratingSummary: {
+            count: 1,
+            avg: 5,
+            stars: {
+              '1': 0,
+              '2': 0,
+              '3': 0,
+              '4': 0,
+              '5': 1,
+            },
+            commentCount: 1,
+            updated: now,
+          },
+          created: now,
+          updated: now,
+        }),
+      )
 
       return supertest(app.getHttpServer())
-        .put(`/api/quizzes/${originalQuiz.id}`)
+        .put(`/api/quizzes/${originalQuiz._id}`)
         .set({ Authorization: `Bearer ${accessToken}` })
         .send(updatedData)
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual({
-            id: originalQuiz.id,
+            id: originalQuiz._id,
             title: updatedData.title,
             mode: updatedData.mode,
             visibility: updatedData.visibility,
@@ -490,11 +530,17 @@ describe('QuizController (e2e)', () => {
               id: user._id,
               name: user.defaultNickname,
             },
-            ratingSummary: {
-              comments: 0,
-              stars: 0,
+            gameplaySummary: {
+              count: 2,
+              totalPlayerCount: 12,
+              difficultyPercentage: 0.78,
+              lastPlayed: now.toISOString(),
             },
-            created: originalQuiz.created.toISOString(),
+            ratingSummary: {
+              stars: 5,
+              comments: 1,
+            },
+            created: now.toISOString(),
             updated: expect.any(String),
           })
         })

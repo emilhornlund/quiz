@@ -21,6 +21,7 @@ import {
 } from '../decorators/api'
 
 import { QuizAuthorResponse } from './quiz-author.response'
+import { QuizGameplaySummaryResponse } from './quiz-gameplay-summary.response'
 import { QuizRatingSummaryResponse } from './quiz-rating-summary.response'
 
 /**
@@ -94,6 +95,17 @@ export class QuizResponse implements QuizResponseDto {
     type: QuizAuthorResponse,
   })
   author: QuizAuthorResponse
+
+  /**
+   * Aggregated gameplay statistics for the quiz.
+   */
+  @ApiProperty({
+    title: 'Gameplay Summary',
+    description: 'Aggregated gameplay statistics for the quiz.',
+    required: true,
+    type: QuizGameplaySummaryResponse,
+  })
+  readonly gameplaySummary: QuizGameplaySummaryResponse
 
   /**
    * Aggregated rating information for the quiz.

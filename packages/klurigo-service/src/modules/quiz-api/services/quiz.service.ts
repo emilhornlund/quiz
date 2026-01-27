@@ -37,6 +37,8 @@ import {
 } from '../../quiz-core/repositories/models/schemas'
 import { User } from '../../user/repositories'
 
+import { toQuizGameplaySummaryDifficultyPercentage } from './utils'
+
 /**
  * Service for managing quiz-related operations.
  */
@@ -577,6 +579,7 @@ export class QuizService {
       languageCode,
       questions,
       owner,
+      gameplaySummary,
       ratingSummary,
       created,
       updated,
@@ -594,6 +597,13 @@ export class QuizService {
       author: {
         id: owner._id,
         name: owner.defaultNickname,
+      },
+      gameplaySummary: {
+        count: gameplaySummary.count,
+        totalPlayerCount: gameplaySummary.totalPlayerCount,
+        lastPlayed: gameplaySummary.lastPlayedAt,
+        difficultyPercentage:
+          toQuizGameplaySummaryDifficultyPercentage(gameplaySummary),
       },
       ratingSummary: {
         stars: ratingSummary.avg,
