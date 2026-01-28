@@ -21,12 +21,8 @@ import { Command } from 'commander'
 
 import {
   cleanCollections,
-  filterTokens,
   parseCollections,
-  patchGameLeaderboardTasks,
-  patchGameParticipants,
-  patchGameQuestionResultTasks,
-  patchGameResults,
+  patchQuizGameplaySummaries,
   printCollectionsDiff,
   writeCollections,
 } from './utils'
@@ -63,11 +59,7 @@ const bsonFiles = readdirSync(inputDir)
   .filter((f) => /^[^.].*\.bson$/.test(f))
 
 let collections = parseCollections(inputDir, bsonFiles)
-collections = patchGameQuestionResultTasks(collections)
-collections = patchGameLeaderboardTasks(collections)
-collections = patchGameParticipants(collections)
-collections = patchGameResults(collections)
-collections = filterTokens(collections)
+collections = patchQuizGameplaySummaries(collections)
 collections = cleanCollections(collections)
 printCollectionsDiff(collections)
 writeCollections(outputDir, collections)

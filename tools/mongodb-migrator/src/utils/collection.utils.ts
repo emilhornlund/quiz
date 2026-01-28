@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-import { isDefined } from '@klurigo/common'
+import { GameMode, isDefined } from '@klurigo/common'
 import { diffString } from 'json-diff'
 
 import {
@@ -26,7 +26,7 @@ import {
   COLLECTION_NAME_TOKENS,
   COLLECTION_NAME_USERS,
 } from './constants'
-import { toDate } from './date.utils'
+import { toDateOrThrow } from './date.utils'
 import { extractValue, extractValueOrThrow } from './extract-value.utils'
 import { JSONObject, writeJSONObject } from './json.utils'
 
@@ -87,447 +87,233 @@ export function parseCollections(
 }
 
 /**
- * Patches `QUESTION_RESULT` task result items inside `games` by backfilling response-time related fields.
+ * Patches `quizzes` by backfilling a derived `gameplaySummary` when it is missing.
  *
- * For each `QUESTION_RESULT` task result entry, this patch ensures:
- * - `lastResponseTime` exists (derived from the corresponding `QUESTION` task answer timestamp, or the full question duration if unanswered).
- * - `totalResponseTime` exists (cumulative sum of `lastResponseTime` over the game).
- * - `responseCount` exists (number of answered questions counted so far).
+ * For each quiz document without `gameplaySummary`, this patch:
+ * - Finds all `games` referencing the quiz (by `games.quiz === quizzes._id`).
+ * - Finds all `game_results` for those games (by `game_results.game === games._id`).
+ * - Sorts matching `game_results` by `completed` ascending.
+ * - Aggregates per-game metrics into an overall `gameplaySummary` on the quiz:
+ *   - `count`: number of completed games included in the aggregation.
+ *   - `totalPlayerCount`: sum of players across all included game results.
+ *   - Classic totals:
+ *     - `totalClassicCorrectCount`
+ *     - `totalClassicIncorrectCount`
+ *     - `totalClassicUnansweredCount`
+ *   - ZeroToOneHundred totals:
+ *     - `totalZeroToOneHundredPrecisionSum` (weighted by attempted answers per question)
+ *     - `totalZeroToOneHundredAnsweredCount`
+ *     - `totalZeroToOneHundredUnansweredCount`
+ *   - `lastPlayedAt` and `updated`: set to the most recent aggregated `completed` timestamp.
  *
- * This patch operates in-order over `previousTasks`, assuming `QUESTION` is followed by its matching `QUESTION_RESULT`.
+ * Notes:
+ * - If a quiz already has a `gameplaySummary`, it is left untouched.
+ * - This patch assumes `games.quiz` is stored as an ID string; other shapes should be normalized earlier.
  *
- * @param collections - The parsed collections record containing the `games` collection.
- * @returns The same collections record with patched `games` documents.
+ * @param collections - Parsed collections containing `quizzes`, `games`, and `game_results`.
+ * @returns The same collections record with patched `quizzes` documents.
  */
-export function patchGameQuestionResultTasks(
+export function patchQuizGameplaySummaries(
   collections: CollectionsRecord,
 ): CollectionsRecord {
-  collections[COLLECTION_NAME_GAMES].documents = collections[
-    COLLECTION_NAME_GAMES
-  ].documents.map((gameDoc) => {
-    const questionDurations = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
+  collections[COLLECTION_NAME_QUIZZES].documents = collections[
+    COLLECTION_NAME_QUIZZES
+  ].documents.map((quizDoc) => {
+    const gameplaySummary = extractValue<BSONDocument>(
+      quizDoc,
       {},
-      'questions',
-    ).map((question) => extractValueOrThrow<number>(question, {}, 'duration'))
-
-    const previousTasks = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
-      {},
-      'previousTasks',
+      'gameplaySummary',
     )
+    if (!gameplaySummary) {
+      const quizId = extractValueOrThrow<string>(quizDoc, {}, '_id')
 
-    let lastQuestion: {
-      questionIndex: number
-      presented: Date
-      answers: { playerId: string; created: Date }[]
-    } | null = null
+      const games = collections[COLLECTION_NAME_GAMES].documents.filter(
+        (gameDoc) =>
+          quizId === extractValueOrThrow<string>(gameDoc, {}, 'quiz'),
+      )
 
-    let lastResults: BSONDocument[] | null = null
-
-    for (const task of previousTasks) {
-      const type = extractValueOrThrow<string>(task, {}, 'type')
-
-      if (type === 'QUESTION') {
-        const presented = toDate(extractValue<string>(task, {}, 'presented'))
-        if (!presented) {
-          throw new Error('Presented date not found')
-        }
-        lastQuestion = {
-          questionIndex: extractValueOrThrow<number>(task, {}, 'questionIndex'),
-          presented,
-          answers: extractValueOrThrow<BSONDocument[]>(task, {}, 'answers').map(
-            (answer) => {
-              const created = toDate(
-                extractValueOrThrow<string>(answer, {}, 'created'),
-              )
-              if (!created) {
-                throw new Error('No created date found in answer')
-              }
-              return {
-                playerId: extractValueOrThrow<string>(answer, {}, 'playerId'),
-                created,
-              }
-            },
+      const gameResults = collections[COLLECTION_NAME_GAME_RESULTS].documents
+        .filter((gameResultDoc) =>
+          games.some(
+            (gameDoc) =>
+              extractValueOrThrow<string>(gameDoc, {}, '_id') ===
+              extractValueOrThrow<string>(gameResultDoc, {}, 'game'),
           ),
-        }
-      } else if (type === 'QUESTION_RESULT') {
-        const questionIndex = extractValueOrThrow<number>(
-          task,
-          {},
-          'questionIndex',
         )
-
-        if (!lastQuestion || lastQuestion.questionIndex !== questionIndex) {
-          throw new Error('Unknown question index')
-        }
-
-        const results = extractValueOrThrow<BSONDocument[]>(task, {}, 'results')
-
-        for (const result of results) {
-          const playerId = extractValueOrThrow<string>(result, {}, 'playerId')
-
-          const lastResponseTime = extractValue<number>(
-            result,
-            {},
-            'lastResponseTime',
-          )
-          if (!isDefined(lastResponseTime)) {
-            const answer = lastQuestion.answers.find(
-              (p) => p.playerId === playerId,
-            )
-            if (answer) {
-              result.lastResponseTime =
-                answer.created.getTime() - lastQuestion.presented.getTime()
-            } else {
-              result.lastResponseTime = questionDurations[questionIndex] * 1000
-            }
-          }
-
-          const lastResult = lastResults?.find((lastResult) => {
-            return (
-              extractValueOrThrow<string>(lastResult, {}, 'playerId') ===
-              playerId
-            )
-          })
-
-          const totalResponseTime = extractValue<number>(
-            result,
-            {},
-            'totalResponseTime',
-          )
-          if (!isDefined(totalResponseTime)) {
-            const nextLastResponseTime = extractValueOrThrow<number>(
-              result,
-              {},
-              'lastResponseTime',
-            )
-
-            if (lastResult) {
-              const lastTotalResponseTime = extractValueOrThrow<number>(
-                lastResult,
-                {},
-                'totalResponseTime',
-              )
-              result.totalResponseTime =
-                lastTotalResponseTime + nextLastResponseTime
-            } else {
-              result.totalResponseTime = nextLastResponseTime
-            }
-          }
-
-          const responseCount = extractValue<number>(
-            result,
-            {},
-            'responseCount',
-          )
-          if (!isDefined(responseCount)) {
-            if (lastResult) {
-              const lastResponseCount = extractValueOrThrow<number>(
-                lastResult,
-                {},
-                'responseCount',
-              )
-              result.responseCount = lastResponseCount + 1
-            } else {
-              result.responseCount = 1
-            }
-          }
-        }
-
-        lastResults = results
-      }
-    }
-
-    return gameDoc
-  })
-
-  return collections
-}
-
-/**
- * Patches `LEADERBOARD` tasks inside `games` by backfilling `previousPosition` for each leaderboard item.
- *
- * If an item is missing `previousPosition`, it is derived from the last seen leaderboard positions:
- * - If a previous position exists and is > 0, that value is used.
- * - Otherwise, `previousPosition` is set to `null`.
- *
- * @param collections - The parsed collections record containing the `games` collection.
- * @returns The same collections record with patched `games` documents.
- */
-export function patchGameLeaderboardTasks(
-  collections: CollectionsRecord,
-): CollectionsRecord {
-  collections[COLLECTION_NAME_GAMES].documents = collections[
-    COLLECTION_NAME_GAMES
-  ].documents.map((gameDoc) => {
-    const previousTasks = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
-      {},
-      'previousTasks',
-    )
-
-    let lastLeaderboard: { playerId: string; position: number }[] | null = null
-
-    for (const task of previousTasks) {
-      const type = extractValueOrThrow<string>(task, {}, 'type')
-      if (type === 'LEADERBOARD') {
-        const leaderboard = extractValueOrThrow<BSONDocument[]>(
-          task,
-          {},
-          'leaderboard',
+        .sort(
+          (a, b) =>
+            toDateOrThrow(
+              extractValueOrThrow<string>(a, {}, 'completed'),
+            ).getTime() -
+            toDateOrThrow(
+              extractValueOrThrow<string>(b, {}, 'completed'),
+            ).getTime(),
         )
-        for (const item of leaderboard) {
-          if (!isDefined(extractValue<number>(item, {}, 'previousPosition'))) {
-            const lastPreviousPosition =
-              lastLeaderboard?.find(
-                (p) =>
-                  p.playerId ===
-                  extractValueOrThrow<string>(item, {}, 'playerId'),
-              )?.position || null
+        .map((gameResultDoc) => {
+          const gameDoc = collections[COLLECTION_NAME_GAMES].documents.filter(
+            (gameDoc) =>
+              extractValueOrThrow<string>(gameDoc, {}, '_id') ===
+              extractValueOrThrow<string>(gameResultDoc, {}, 'game'),
+          )?.[0]
 
-            item.previousPosition =
-              isDefined(lastPreviousPosition) && lastPreviousPosition > 0
-                ? lastPreviousPosition
-                : null
+          if (!gameDoc) {
+            throw new Error('Game does not exist')
           }
-        }
 
-        lastLeaderboard = leaderboard.map((p) => {
+          const gameMode = extractValueOrThrow<string>(gameDoc, {}, 'mode')
+
+          const players = extractValueOrThrow<BSONDocument[]>(
+            gameResultDoc,
+            {},
+            'players',
+          )
+
+          const questions = extractValueOrThrow<BSONDocument[]>(
+            gameResultDoc,
+            {},
+            'questions',
+          )
+
+          const aggregatedClassicTotals =
+            gameMode === GameMode.Classic
+              ? (questions.reduce(
+                  (acc, q) => ({
+                    correct:
+                      extractValueOrThrow<number>(acc, {}, 'correct') +
+                      (extractValue<number>(q, {}, 'correct') ?? 0),
+                    incorrect:
+                      extractValueOrThrow<number>(acc, {}, 'incorrect') +
+                      (extractValue<number>(q, {}, 'incorrect') ?? 0),
+                    unanswered:
+                      extractValueOrThrow<number>(acc, {}, 'unanswered') +
+                      (extractValue<number>(q, {}, 'unanswered') ?? 0),
+                  }),
+                  { correct: 0, incorrect: 0, unanswered: 0 },
+                ) as { correct: number; incorrect: number; unanswered: number })
+              : { correct: 0, incorrect: 0, unanswered: 0 }
+
+          const aggregatedZeroToOneHundredTotals =
+            gameMode === GameMode.ZeroToOneHundred
+              ? (questions.reduce(
+                  (acc, q) => {
+                    const unanswered = extractValueOrThrow<number>(
+                      q,
+                      {},
+                      'unanswered',
+                    )
+                    const attempted = Math.max(0, players.length - unanswered)
+
+                    const precisionSum =
+                      attempted > 0 && isDefined(q.averagePrecision)
+                        ? extractValueOrThrow<number>(acc, {}, 'precisionSum') +
+                          extractValueOrThrow<number>(
+                            q,
+                            {},
+                            'averagePrecision',
+                          ) *
+                            attempted
+                        : extractValueOrThrow<number>(acc, {}, 'precisionSum')
+
+                    return {
+                      precisionSum,
+                      answeredCount:
+                        extractValueOrThrow<number>(acc, {}, 'answeredCount') +
+                        attempted,
+                      unansweredCount:
+                        extractValueOrThrow<number>(
+                          acc,
+                          {},
+                          'unansweredCount',
+                        ) + unanswered,
+                    }
+                  },
+                  { precisionSum: 0, answeredCount: 0, unansweredCount: 0 },
+                ) as {
+                  precisionSum: number
+                  answeredCount: number
+                  unansweredCount: number
+                })
+              : { precisionSum: 0, answeredCount: 0, unansweredCount: 0 }
+
           return {
-            playerId: extractValueOrThrow<string>(p, {}, 'playerId'),
-            position: extractValueOrThrow<number>(p, {}, 'position'),
+            players,
+            ...aggregatedClassicTotals,
+            ...aggregatedZeroToOneHundredTotals,
+            completed: toDateOrThrow(
+              extractValueOrThrow<string>(gameResultDoc, {}, 'completed'),
+            ) as Date,
           }
         })
-      }
-    }
 
-    return gameDoc
-  })
-
-  return collections
-}
-
-/**
- * Patches `participants` inside `games` by backfilling aggregated participant metrics derived from tasks.
- *
- * For each `PLAYER` participant, this patch ensures:
- * - `worstRank` exists (maximum `position` observed across all `QUESTION_RESULT` tasks).
- * - `totalResponseTime` exists (taken from the final observed `QUESTION_RESULT` result entry).
- * - `responseCount` exists (taken from the final observed `QUESTION_RESULT` result entry).
- *
- * @param collections - The parsed collections record containing the `games` collection.
- * @returns The same collections record with patched `games` documents.
- */
-export function patchGameParticipants(
-  collections: CollectionsRecord,
-): CollectionsRecord {
-  collections[COLLECTION_NAME_GAMES].documents = collections[
-    COLLECTION_NAME_GAMES
-  ].documents.map((gameDoc) => {
-    const previousTasks = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
-      {},
-      'previousTasks',
-    )
-
-    const participants = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
-      {},
-      'participants',
-    )
-
-    let worstRanks: { playerId: string; rank: number }[] = []
-
-    let lastQuestionResults:
-      | { playerId: string; totalResponseTime: number; responseCount: number }[]
-      | null = null
-
-    for (const task of previousTasks) {
-      if (extractValueOrThrow<string>(task, {}, 'type') === 'QUESTION_RESULT') {
-        const results = extractValueOrThrow<BSONDocument[]>(task, {}, 'results')
-
-        worstRanks = results.reduce((prev, current) => {
-          const playerId = extractValueOrThrow<string>(current, {}, 'playerId')
-          const rank = extractValueOrThrow<number>(current, {}, 'position')
-
-          const existing = prev.find((p) => p.playerId === playerId)
-
-          if (existing) {
-            existing.rank = Math.max(existing.rank, rank)
-          } else {
-            prev.push({ playerId, rank })
-          }
-
-          return prev
-        }, worstRanks)
-
-        lastQuestionResults = results.map((result) => ({
-          playerId: extractValueOrThrow<string>(result, {}, 'playerId'),
-          totalResponseTime: extractValueOrThrow<number>(
-            result,
+      quizDoc.gameplaySummary = gameResults.reduce(
+        (gameplaySummary: BSONDocument, gameResult, currentIndex) => {
+          const prevTotalPlayerCount = extractValueOrThrow<number>(
+            gameplaySummary,
             {},
-            'totalResponseTime',
-          ),
-          responseCount: extractValueOrThrow<number>(
-            result,
-            {},
-            'responseCount',
-          ),
-        }))
-      }
-    }
-
-    if (!lastQuestionResults) {
-      throw new Error('No question result task found')
-    }
-
-    for (const participant of participants) {
-      const type = extractValueOrThrow<string>(participant, {}, 'type')
-      if (type === 'PLAYER') {
-        const participantId = extractValueOrThrow<string>(
-          participant,
-          {},
-          'participantId',
-        )
-
-        if (!isDefined(extractValue<number>(participant, {}, 'worstRank'))) {
-          const worstRank = worstRanks?.find(
-            (item) => item.playerId === participantId,
-          )?.rank
-          if (!isDefined(worstRank)) {
-            throw new Error('No worst rank found.')
-          }
-          participant.worstRank = worstRank
-        }
-
-        if (
-          !isDefined(extractValue<number>(participant, {}, 'totalResponseTime'))
-        ) {
-          const totalResponseTime = lastQuestionResults.find(
-            (result) => result.playerId === participantId,
-          )?.totalResponseTime
-          if (!isDefined(totalResponseTime)) {
-            throw new Error('No total response time found for participant')
-          }
-          participant.totalResponseTime = totalResponseTime
-        }
-
-        if (
-          !isDefined(extractValue<number>(participant, {}, 'responseCount'))
-        ) {
-          const responseCount = lastQuestionResults.find(
-            (result) => result.playerId === participantId,
-          )?.responseCount
-          if (!isDefined(responseCount)) {
-            throw new Error('No response count found for participant')
-          }
-          participant.responseCount = responseCount
-        }
-      }
-    }
-
-    return gameDoc
-  })
-
-  return collections
-}
-
-/**
- * Patches `game_results` player metrics by backfilling derived fields that depend on the final game state.
- *
- * Currently this patch ensures:
- * - `comebackRankGain` exists per player, computed as `max(0, worstRank - rank)` using the corresponding game participants.
- *
- * @param collections - The parsed collections record containing `games` and `game_results`.
- * @returns The same collections record with patched `game_results` documents.
- */
-export function patchGameResults(
-  collections: CollectionsRecord,
-): CollectionsRecord {
-  collections[COLLECTION_NAME_GAME_RESULTS].documents = collections[
-    COLLECTION_NAME_GAME_RESULTS
-  ].documents.map((gameResultDoc) => {
-    const gameDoc = collections[COLLECTION_NAME_GAMES].documents.find(
-      (gameDoc) =>
-        extractValueOrThrow<string>(gameDoc, {}, '_id') ===
-        extractValueOrThrow<string>(gameResultDoc, {}, 'game'),
-    )
-
-    if (!gameDoc) {
-      throw new Error('No game document found.')
-    }
-
-    const participants = extractValueOrThrow<BSONDocument[]>(
-      gameDoc,
-      {},
-      'participants',
-    )
-      .filter((p) => extractValueOrThrow<string>(p, {}, 'type') === 'PLAYER')
-      .map((p) => ({
-        participantId: extractValueOrThrow<string>(p, {}, 'participantId'),
-        rank: extractValueOrThrow<number>(p, {}, 'rank'),
-        worstRank: extractValueOrThrow<number>(p, {}, 'worstRank'),
-      }))
-
-    const players = extractValueOrThrow<BSONDocument[]>(
-      gameResultDoc,
-      {},
-      'players',
-    )
-
-    for (const player of players) {
-      if (!isDefined(extractValue<number>(player, {}, 'comebackRankGain'))) {
-        const participantId = extractValueOrThrow<string>(
-          player,
-          {},
-          'participantId',
-        )
-        const participant = participants.find(
-          (p) => p.participantId === participantId,
-        )
-        if (isDefined(participant)) {
-          player.comebackRankGain = Math.max(
-            0,
-            participant.worstRank - participant.rank,
+            'totalPlayerCount',
           )
-        } else {
-          player.comebackRankGain = 0
-        }
-      }
+
+          const nextPlayerCount = gameResult.players.length
+
+          return {
+            ...gameplaySummary,
+            count: currentIndex + 1,
+            totalPlayerCount: prevTotalPlayerCount + nextPlayerCount,
+            totalClassicCorrectCount:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalClassicCorrectCount',
+              ) + gameResult.correct,
+            totalClassicIncorrectCount:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalClassicIncorrectCount',
+              ) + gameResult.incorrect,
+            totalClassicUnansweredCount:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalClassicUnansweredCount',
+              ) + gameResult.unanswered,
+            totalZeroToOneHundredPrecisionSum:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalZeroToOneHundredPrecisionSum',
+              ) + gameResult.precisionSum,
+            totalZeroToOneHundredAnsweredCount:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalZeroToOneHundredAnsweredCount',
+              ) + gameResult.answeredCount,
+            totalZeroToOneHundredUnansweredCount:
+              extractValueOrThrow<number>(
+                gameplaySummary,
+                {},
+                'totalZeroToOneHundredUnansweredCount',
+              ) + gameResult.unansweredCount,
+            lastPlayedAt: gameResult.completed,
+            updated: gameResult.completed,
+          }
+        },
+        {
+          count: 0,
+          totalPlayerCount: 0,
+          totalClassicCorrectCount: 0,
+          totalClassicIncorrectCount: 0,
+          totalClassicUnansweredCount: 0,
+          totalZeroToOneHundredPrecisionSum: 0,
+          totalZeroToOneHundredAnsweredCount: 0,
+          totalZeroToOneHundredUnansweredCount: 0,
+          lastPlayedAt: null,
+          updated: null,
+        },
+      )
     }
-
-    return gameResultDoc
-  })
-
-  return collections
-}
-
-/**
- * Filters the `tokens` collection to only include non-expired tokens.
- *
- * Tokens are dropped if:
- * - `expiresAt` is missing or invalid.
- * - `expiresAt` is in the past.
- *
- * @param collections - The parsed collections record containing `tokens`.
- * @returns The same collections record with `tokens` documents filtered.
- */
-export function filterTokens(
-  collections: CollectionsRecord,
-): CollectionsRecord {
-  const now = new Date()
-
-  collections[COLLECTION_NAME_TOKENS].documents = collections[
-    COLLECTION_NAME_TOKENS
-  ].documents.filter((tokenDoc) => {
-    const expiresAt = extractValue<unknown>(tokenDoc, {}, 'expiresAt')
-
-    if (!(expiresAt instanceof Date)) {
-      return false
-    }
-
-    return expiresAt.getTime() > now.getTime()
+    return quizDoc
   })
 
   return collections

@@ -24,34 +24,72 @@ export function transformQuizDocument(document: BSONDocument): BSONDocument {
     languageCode: extractValueOrThrow<string>(document, {}, 'languageCode'),
     questions: buildQuizQuestions(document),
     owner: extractValueOrThrow<string>(document, {}, 'owner'),
-    ratingSummary: ((ratingSummary) => {
-      if (ratingSummary) {
+    gameplaySummary: ((gameplaySummary: BSONDocument | null) => {
+      if (gameplaySummary) {
         return {
-          count: extractValueOrThrow<number>(document, {}, 'count'),
-          avg: extractValueOrThrow<number>(document, {}, 'avg'),
-          stars: {
-            '1': extractValueOrThrow<number>(document, {}, 'ratingSummary.1'),
-            '2': extractValueOrThrow<number>(document, {}, 'ratingSummary.2'),
-            '3': extractValueOrThrow<number>(document, {}, 'ratingSummary.3'),
-            '4': extractValueOrThrow<number>(document, {}, 'ratingSummary.4'),
-            '5': extractValueOrThrow<number>(document, {}, 'ratingSummary.5'),
-          },
-          commentCount: extractValueOrThrow<number>(
-            document,
+          count: extractValueOrThrow<number>(gameplaySummary, {}, 'count'),
+          totalPlayerCount: extractValueOrThrow<number>(
+            gameplaySummary,
             {},
-            'commentCount',
+            'totalPlayerCount',
           ),
-          updated: toDate(extractValue<string>(ratingSummary, {}, 'updated')),
+          totalClassicCorrectCount: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalClassicCorrectCount',
+          ),
+          totalClassicIncorrectCount: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalClassicIncorrectCount',
+          ),
+          totalClassicUnansweredCount: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalClassicUnansweredCount',
+          ),
+          totalZeroToOneHundredPrecisionSum: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalZeroToOneHundredPrecisionSum',
+          ),
+          totalZeroToOneHundredAnsweredCount: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalZeroToOneHundredAnsweredCount',
+          ),
+          totalZeroToOneHundredUnansweredCount: extractValueOrThrow<number>(
+            gameplaySummary,
+            {},
+            'totalZeroToOneHundredUnansweredCount',
+          ),
+          lastPlayedAt: toDate(
+            extractValue<string>(gameplaySummary, {}, 'lastPlayedAt'),
+          ),
+          updated: toDate(extractValue<string>(gameplaySummary, {}, 'updated')),
         }
       }
-      return {
-        count: 0,
-        avg: 0,
-        stars: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
-        commentCount: 0,
-        updated: null,
-      }
-    })(extractValue<BSONDocument>(document, {}, 'ratingSummary')),
+      return null
+    })(extractValue<BSONDocument>(document, {}, 'gameplaySummary')),
+    ratingSummary: {
+      count: extractValueOrThrow<number>(document, {}, 'ratingSummary.count'),
+      avg: extractValueOrThrow<number>(document, {}, 'ratingSummary.avg'),
+      stars: {
+        '1': extractValueOrThrow<number>(document, {}, 'ratingSummary.stars.1'),
+        '2': extractValueOrThrow<number>(document, {}, 'ratingSummary.stars.2'),
+        '3': extractValueOrThrow<number>(document, {}, 'ratingSummary.stars.3'),
+        '4': extractValueOrThrow<number>(document, {}, 'ratingSummary.stars.4'),
+        '5': extractValueOrThrow<number>(document, {}, 'ratingSummary.stars.5'),
+      },
+      commentCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'ratingSummary.commentCount',
+      ),
+      updated: toDate(
+        extractValue<string>(document, {}, 'ratingSummary.updated'),
+      ),
+    },
     updated: toDate(extractValueOrThrow<string>(document, {}, 'updated')),
     created: toDate(extractValueOrThrow<string>(document, {}, 'created')),
   }
