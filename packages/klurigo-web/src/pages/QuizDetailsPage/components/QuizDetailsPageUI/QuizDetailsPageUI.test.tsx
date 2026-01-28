@@ -119,7 +119,7 @@ const makeQuiz = (overrides: Partial<any> = {}) => ({
     count: 5,
     totalPlayerCount: 42,
     difficultyPercentage: 0.48,
-    lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+    lastPlayed: new Date(created.getTime() - 1000 * 60 * 60 * 24 * 5),
   },
   ratingSummary: { stars: 0, comments: 0 },
   created,
@@ -214,7 +214,18 @@ describe('QuizDetailsPageUI', () => {
   it('renders author name or N/A when missing', () => {
     renderUI({ quiz: makeQuiz({ author: { id: 'a', name: '' } }) })
 
-    expect(screen.getByText('N/A')).toBeInTheDocument()
+    // Find all DetailItems and look for the one containing user icon
+    const allDetailItems = screen
+      .getAllByRole('generic')
+      .filter((el) => el.classList.contains('item'))
+
+    // Find the author DetailItem by looking for user icon within it
+    const authorDetailItem = allDetailItems.find((item) =>
+      item.querySelector('[data-icon="user"]'),
+    )
+
+    expect(authorDetailItem).toBeInTheDocument()
+    expect(authorDetailItem).toHaveTextContent('N/A')
   })
 
   it('opens and closes Host Game confirm dialog; confirm triggers onHostGame', () => {
@@ -276,5 +287,478 @@ describe('QuizDetailsPageUI', () => {
       'data-destructive',
       'true',
     )
+  })
+
+  describe('Gameplay Summary Details', () => {
+    it('renders rating display with stars value or N/A', () => {
+      renderUI({
+        quiz: makeQuiz({ ratingSummary: { stars: 4.5, comments: 10 } }),
+      })
+
+      const ratingItem = screen.getByTitle('Average rating')
+      expect(ratingItem).toBeInTheDocument()
+      expect(ratingItem).toHaveTextContent('4.5')
+    })
+
+    it('renders N/A for rating when stars is 0', () => {
+      renderUI({ quiz: makeQuiz({ ratingSummary: { stars: 0, comments: 0 } }) })
+
+      const ratingItem = screen.getByTitle('Average rating')
+      expect(ratingItem).toBeInTheDocument()
+      expect(ratingItem).toHaveTextContent('N/A')
+    })
+
+    it('renders total plays with "times" suffix when count > 0', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 15,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.48,
+          },
+        }),
+      })
+
+      const playsItem = screen.getByTitle('Total plays')
+      expect(playsItem).toBeInTheDocument()
+      expect(playsItem).toHaveTextContent('15 times')
+    })
+
+    it('renders N/A for total plays when count is 0', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 0,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.48,
+          },
+        }),
+      })
+
+      const playsItem = screen.getByTitle('Total plays')
+      expect(playsItem).toBeInTheDocument()
+      expect(playsItem).toHaveTextContent('N/A')
+    })
+
+    it('renders total players with correct value', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 128,
+            difficultyPercentage: 0.48,
+          },
+        }),
+      })
+
+      const playersItem = screen.getByTitle('Total players')
+      expect(playersItem).toBeInTheDocument()
+      expect(playersItem).toHaveTextContent('128')
+    })
+
+    it('renders N/A for total players when totalPlayerCount is 0', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 0,
+            difficultyPercentage: 0.48,
+          },
+        }),
+      })
+
+      const playersItem = screen.getByTitle('Total players')
+      expect(playersItem).toBeInTheDocument()
+      expect(playersItem).toHaveTextContent('N/A')
+    })
+
+    it('renders estimated difficulty using toDifficultyLabel utility', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.75,
+          },
+        }),
+      })
+
+      const difficultyItem = screen.getByTitle('Estimated difficulty')
+      expect(difficultyItem).toBeInTheDocument()
+      expect(difficultyItem).toHaveTextContent('Extreme')
+    })
+
+    it('renders N/A for difficulty when difficultyPercentage is invalid', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 42,
+            difficultyPercentage: NaN,
+          },
+        }),
+      })
+
+      const difficultyItem = screen.getByTitle('Estimated difficulty')
+      expect(difficultyItem).toBeInTheDocument()
+      expect(difficultyItem).toHaveTextContent('N/A')
+    })
+
+    it('renders last played date when available', () => {
+      const lastPlayed = new Date('2025-01-15T10:30:00.000Z')
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.48,
+            lastPlayed,
+          },
+        }),
+      })
+
+      const lastPlayedItem = screen.getByTitle(/Last played/)
+      expect(lastPlayedItem).toBeInTheDocument()
+      expect(lastPlayedItem).toHaveAttribute(
+        'title',
+        'Last played 2025-01-15 10:30:00',
+      )
+      expect(lastPlayedItem).toHaveTextContent('2025-01-15 10:30')
+    })
+
+    it('renders N/A for last played when date is missing', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.48,
+          },
+        }),
+      })
+
+      const lastPlayedItem = screen.getByTitle('Never played')
+      expect(lastPlayedItem).toBeInTheDocument()
+      expect(lastPlayedItem).toHaveTextContent('N/A')
+    })
+  })
+
+  describe('Edge Cases and Boundary Values', () => {
+    it('handles missing gameplaySummary gracefully', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      renderUI({ quiz: makeQuiz({ gameplaySummary: undefined } as any) })
+
+      // Should render N/A for all gameplay-related fields
+      expect(screen.getByTitle('Total plays')).toHaveTextContent('N/A')
+      expect(screen.getByTitle('Total players')).toHaveTextContent('N/A')
+      expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent('N/A')
+      expect(screen.getByTitle('Never played')).toHaveTextContent('N/A')
+    })
+
+    it('handles partially missing gameplaySummary fields', () => {
+      renderUI({
+        quiz: makeQuiz({
+          gameplaySummary: {
+            count: 0,
+            totalPlayerCount: 0,
+            difficultyPercentage: undefined,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
+        }),
+      })
+
+      expect(screen.getByTitle('Total plays')).toHaveTextContent('N/A')
+      expect(screen.getByTitle('Total players')).toHaveTextContent('N/A')
+      expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent('N/A')
+    })
+
+    describe('Difficulty Boundary Values', () => {
+      it('displays Easy for boundary values 0 to 0.2499', () => {
+        const testCases = [0, 0.1, 0.24, 0.2499]
+
+        testCases.forEach((difficulty) => {
+          const renderResult = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Easy',
+          )
+          renderResult.unmount()
+        })
+      })
+
+      it('displays Medium for boundary values 0.25 to 0.4999', () => {
+        const testCases = [0.25, 0.3, 0.4, 0.4999]
+
+        testCases.forEach((difficulty) => {
+          const { unmount } = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Medium',
+          )
+          unmount()
+        })
+      })
+
+      it('displays Hard for boundary values 0.5 to 0.7499', () => {
+        const testCases = [0.5, 0.6, 0.7, 0.7499]
+
+        testCases.forEach((difficulty) => {
+          const { unmount } = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Hard',
+          )
+          unmount()
+        })
+      })
+
+      it('displays Extreme for boundary values 0.75 to 1', () => {
+        const testCases = [0.75, 0.8, 0.9, 1]
+
+        testCases.forEach((difficulty) => {
+          const { unmount } = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Extreme',
+          )
+          unmount()
+        })
+      })
+
+      it('clamps extreme difficulty values', () => {
+        const testCases = [-1, Number.NEGATIVE_INFINITY]
+
+        testCases.forEach((difficulty) => {
+          const { unmount } = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Easy',
+          )
+          unmount()
+        })
+
+        const extremeHighCases = [2, Number.POSITIVE_INFINITY]
+
+        extremeHighCases.forEach((difficulty) => {
+          const renderResult = renderUI({
+            quiz: makeQuiz({
+              gameplaySummary: {
+                count: 1,
+                totalPlayerCount: 1,
+                difficultyPercentage: difficulty,
+              },
+            }),
+          })
+
+          expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent(
+            'Extreme',
+          )
+          renderResult.unmount()
+        })
+      })
+    })
+  })
+
+  describe('Component Structure and Layout', () => {
+    it('does not render legacy misc rating layout', () => {
+      renderUI()
+
+      // Old layout should not exist
+      expect(screen.queryByTestId('misc')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('column')).not.toBeInTheDocument()
+
+      // Should not find old star/comment rating displays
+      const allIcons = screen.getAllByRole('img', { hidden: true })
+      const starIcons = allIcons.filter(
+        (icon) => icon.getAttribute('data-icon') === 'star',
+      )
+      const commentIcons = allIcons.filter(
+        (icon) => icon.getAttribute('data-icon') === 'comment-dots',
+      )
+
+      // Should only have the new rating star, not the old layout stars
+      const ratingStar = starIcons.find(
+        (icon) =>
+          icon.closest('.item')?.getAttribute('title') === 'Average rating',
+      )
+      expect(ratingStar).toBeInTheDocument()
+      expect(commentIcons).toHaveLength(0)
+    })
+
+    it('renders correct number of DetailItems', () => {
+      renderUI()
+
+      const allDetailItems = screen
+        .getAllByRole('generic')
+        .filter((el: HTMLElement) => el.classList.contains('item'))
+
+      // Should have: visibility, category, language, mode, questions, author, created, rating, plays, players, difficulty, lastPlayed
+      expect(allDetailItems).toHaveLength(12)
+    })
+
+    it('renders all DetailItems within details container', () => {
+      renderUI()
+
+      const allElements = screen.getAllByRole('generic')
+      const detailsContainer = Array.from(allElements).find((el: HTMLElement) =>
+        el.classList.contains('details'),
+      )
+      expect(detailsContainer).toBeInTheDocument()
+
+      const detailItems = detailsContainer?.querySelectorAll('.item')
+      expect(detailItems).toHaveLength(12)
+    })
+
+    it('renders all expected icons in DetailItems', () => {
+      renderUI()
+
+      const expectedIcons = [
+        'eye', // visibility
+        'icons', // category
+        'language', // language
+        'gamepad', // mode
+        'circle-question', // questions
+        'user', // author
+        'calendar-plus', // created
+        'star', // rating
+        'circle-play', // plays
+        'users', // players
+        'gauge-high', // difficulty
+        'clock', // last played
+      ]
+
+      const allIcons = screen.getAllByRole('img', { hidden: true })
+      expectedIcons.forEach((iconName) => {
+        const icon = Array.from(allIcons).find(
+          (img) => img.getAttribute('data-icon') === iconName,
+        )
+        expect(icon).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('Accessibility', () => {
+    it('provides appropriate title attributes for all DetailItems', () => {
+      renderUI()
+
+      const expectedTitles = [
+        'Public', // visibility
+        'General Knowledge', // category
+        'English', // language
+        'Classic', // mode
+        '14 Questions', // questions
+        'FrostyBear', // author
+        expect.stringContaining('Created'), // created date
+        'Average rating', // rating
+        'Total plays', // plays
+        'Total players', // players
+        'Estimated difficulty', // difficulty
+        expect.stringContaining('Last played'), // last played
+      ]
+
+      expectedTitles.forEach((title) => {
+        if (typeof title === 'string') {
+          expect(screen.getByTitle(title)).toBeInTheDocument()
+        } else {
+          // For matchers like expect.stringContaining()
+          const detailItems = screen
+            .getAllByRole('generic')
+            .filter(
+              (el: HTMLElement) =>
+                el.classList.contains('item') && el.getAttribute('title'),
+            )
+          const matchingItem = detailItems.find((item: HTMLElement) => {
+            const titleAttr = item.getAttribute('title') || ''
+            // Extract the expected substring from the matcher
+            return (
+              titleAttr.includes('Created') || titleAttr.includes('Last played')
+            )
+          })
+          expect(matchingItem).toBeDefined()
+        }
+      })
+    })
+
+    it('provides informative tooltips for date fields', () => {
+      const created = new Date('2025-02-14T15:31:14.000Z')
+      const lastPlayed = new Date('2025-01-10T09:15:30.000Z')
+
+      renderUI({
+        quiz: makeQuiz({
+          created,
+          gameplaySummary: {
+            count: 5,
+            totalPlayerCount: 42,
+            difficultyPercentage: 0.48,
+            lastPlayed,
+          },
+        }),
+      })
+
+      const createdItem = screen.getByTitle(/Created/)
+      expect(createdItem.getAttribute('title')).toBe(
+        'Created 2025-02-14 15:31:14',
+      )
+
+      const lastPlayedItem = screen.getByTitle(/Last played/)
+      expect(lastPlayedItem.getAttribute('title')).toBe(
+        'Last played 2025-01-10 09:15:30',
+      )
+    })
+
+    it('provides descriptive titles for accessibility', () => {
+      renderUI()
+
+      // Check that interactive elements have descriptive titles
+      const playsItem = screen.getByTitle('Total plays')
+      const playersItem = screen.getByTitle('Total players')
+      const difficultyItem = screen.getByTitle('Estimated difficulty')
+      const ratingItem = screen.getByTitle('Average rating')
+
+      expect(playsItem.getAttribute('title')).toBe('Total plays')
+      expect(playersItem.getAttribute('title')).toBe('Total players')
+      expect(difficultyItem.getAttribute('title')).toBe('Estimated difficulty')
+      expect(ratingItem.getAttribute('title')).toBe('Average rating')
+    })
   })
 })

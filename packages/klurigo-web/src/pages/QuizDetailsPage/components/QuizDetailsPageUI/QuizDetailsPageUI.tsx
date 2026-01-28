@@ -1,11 +1,12 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import {
-  faCalendarCheck,
   faCalendarPlus,
+  faCirclePlay,
   faCircleQuestion,
-  faCommentDots,
+  faClock,
   faEye,
   faGamepad,
+  faGaugeHigh,
   faIcons,
   faLanguage,
   faPen,
@@ -13,6 +14,7 @@ import {
   faStar,
   faTrash,
   faUser,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { QuizResponseDto } from '@klurigo/common'
@@ -33,8 +35,8 @@ import {
   QuizCategoryLabels,
   QuizVisibilityLabels,
 } from '../../../../models'
-import colors from '../../../../styles/colors.module.scss'
 import { DATE_FORMATS, formatLocalDate } from '../../../../utils/date.utils'
+import { toDifficultyLabel } from '../../../../utils/quiz.utils'
 
 import styles from './QuizDetailsPageUI.module.scss'
 
@@ -133,25 +135,6 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
           />
         </div>
 
-        <div className={styles.misc}>
-          <div className={styles.column}>
-            <FontAwesomeIcon
-              icon={faStar}
-              color={colors.yellow2}
-              className={styles.icon}
-            />
-            <span className={styles.value}>{quiz.ratingSummary.stars}</span>
-          </div>
-          <div className={styles.column}>
-            <FontAwesomeIcon
-              icon={faCommentDots}
-              color={colors.white}
-              className={styles.icon}
-            />
-            <span className={styles.value}>{quiz.ratingSummary.comments}</span>
-          </div>
-        </div>
-
         {quiz.imageCoverURL && (
           <div className={styles.thumbnailContainer}>
             <ResponsiveImage imageURL={quiz.imageCoverURL} />
@@ -176,17 +159,55 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
             icon={faCircleQuestion}
             value={`${quiz.numberOfQuestions} ${quiz.numberOfQuestions === 1 ? 'Question' : 'Questions'}`}
           />
+          <DetailItem icon={faUser} value={quiz.author.name || 'N/A'} />
           <DetailItem
             icon={faCalendarPlus}
             value={formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME)}
             title={`Created ${formatLocalDate(quiz.created, DATE_FORMATS.DATE_TIME_SECONDS)}`}
           />
           <DetailItem
-            icon={faCalendarCheck}
-            value={formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME)}
-            title={`Updated ${formatLocalDate(quiz.updated, DATE_FORMATS.DATE_TIME_SECONDS)}`}
+            icon={faStar}
+            value={`${quiz.ratingSummary.stars || 'N/A'}`}
+            title="Average rating"
           />
-          <DetailItem icon={faUser} value={quiz.author.name || 'N/A'} />
+          <DetailItem
+            icon={faCirclePlay}
+            value={
+              quiz.gameplaySummary?.count > 0
+                ? `${quiz.gameplaySummary.count} times`
+                : 'N/A'
+            }
+            title="Total plays"
+          />
+          <DetailItem
+            icon={faUsers}
+            value={`${quiz.gameplaySummary?.totalPlayerCount || 'N/A'}`}
+            title="Total players"
+          />
+          <DetailItem
+            icon={faGaugeHigh}
+            value={
+              toDifficultyLabel(quiz.gameplaySummary?.difficultyPercentage) ||
+              'N/A'
+            }
+            title="Estimated difficulty"
+          />
+          <DetailItem
+            icon={faClock}
+            value={
+              quiz.gameplaySummary?.lastPlayed
+                ? formatLocalDate(
+                    quiz.gameplaySummary.lastPlayed,
+                    DATE_FORMATS.DATE_TIME,
+                  )
+                : 'N/A'
+            }
+            title={
+              quiz.gameplaySummary?.lastPlayed
+                ? `Last played ${formatLocalDate(quiz.gameplaySummary.lastPlayed, DATE_FORMATS.DATE_TIME_SECONDS)}`
+                : 'Never played'
+            }
+          />
         </div>
       </div>
 
