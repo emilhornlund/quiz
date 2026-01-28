@@ -115,6 +115,12 @@ const makeQuiz = (overrides: Partial<any> = {}) => ({
     id: 'db8d4c90-bfc2-4c2e-93cc-8f1c7eda34ec',
     name: 'FrostyBear',
   },
+  gameplaySummary: {
+    count: 5,
+    totalPlayerCount: 42,
+    difficultyPercentage: 0.48,
+    lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+  },
   ratingSummary: { stars: 0, comments: 0 },
   created,
   updated,
