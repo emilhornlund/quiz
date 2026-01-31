@@ -8,10 +8,7 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import {
-  getRedisPlayerParticipantAnswerKey,
-  isParticipantPlayer,
-} from '../../game-core/utils'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'

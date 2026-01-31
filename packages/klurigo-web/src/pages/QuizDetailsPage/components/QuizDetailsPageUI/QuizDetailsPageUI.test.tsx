@@ -444,17 +444,6 @@ describe('QuizDetailsPageUI', () => {
   })
 
   describe('Edge Cases and Boundary Values', () => {
-    it('handles missing gameplaySummary gracefully', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      renderUI({ quiz: makeQuiz({ gameplaySummary: undefined } as any) })
-
-      // Should render N/A for all gameplay-related fields
-      expect(screen.getByTitle('Total plays')).toHaveTextContent('N/A')
-      expect(screen.getByTitle('Total players')).toHaveTextContent('N/A')
-      expect(screen.getByTitle('Estimated difficulty')).toHaveTextContent('N/A')
-      expect(screen.getByTitle('Never played')).toHaveTextContent('N/A')
-    })
-
     it('handles partially missing gameplaySummary fields', () => {
       renderUI({
         quiz: makeQuiz({

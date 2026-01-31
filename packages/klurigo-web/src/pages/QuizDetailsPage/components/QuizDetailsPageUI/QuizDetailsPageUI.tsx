@@ -173,7 +173,7 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
           <DetailItem
             icon={faCirclePlay}
             value={
-              quiz.gameplaySummary?.count > 0
+              quiz.gameplaySummary.count > 0
                 ? `${quiz.gameplaySummary.count} times`
                 : 'N/A'
             }
