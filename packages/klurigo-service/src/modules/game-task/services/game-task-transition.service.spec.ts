@@ -293,7 +293,7 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.currentTask).toBe(podiumTask)
     })
 
-    it('question result completed builds podium and does not create game result when no players exist', async () => {
+    it('question result completed builds podium and creates game result when last question and no players exist', async () => {
       const task = createMockQuestionResultTaskDocument({ status: 'completed' })
       const host = createMockGameHostParticipantDocument()
 
@@ -323,7 +323,15 @@ describe('GameTaskTransitionService', () => {
 
       await callback!(gameDoc as never)
 
-      expect(gameResultService.createGameResult).not.toHaveBeenCalled()
+      expect(gameDoc.previousTasks).toContain(task)
+      expect(buildPodiumTask).toHaveBeenCalledWith(
+        gameDoc as never,
+        leaderboardItems as never,
+      )
+      expect(buildLeaderboardTask).not.toHaveBeenCalled()
+      expect(gameResultService.createGameResult).toHaveBeenCalledWith(
+        gameDoc as never,
+      )
       expect(gameDoc.currentTask).toBe(podiumTask)
     })
 
@@ -383,7 +391,7 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.status).toBe(GameStatus.Completed)
     })
 
-    it('podium completed transitions to quit and sets status Expired when no players exist', async () => {
+    it('podium completed transitions to quit and sets status Completed when no players exist', async () => {
       const podium = createMockPodiumTaskDocument({ status: 'completed' })
       const host = createMockGameHostParticipantDocument()
 
@@ -407,7 +415,7 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.previousTasks).toContain(podium)
       expect(buildQuitTask).toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(quitTask)
-      expect(gameDoc.status).toBe(GameStatus.Expired)
+      expect(gameDoc.status).toBe(GameStatus.Completed)
     })
 
     it('returns undefined for unsupported task type/status combinations', () => {

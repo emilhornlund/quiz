@@ -1034,7 +1034,7 @@ describe('GameController (e2e)', () => {
       const actual = await gameModel.findById(gameId)
       expect(actual).toBeDefined()
       expect(actual!.currentTask.type).toEqual(TaskType.Quit)
-      expect(actual!.status).toEqual(GameStatus.Expired)
+      expect(actual!.status).toEqual(GameStatus.Completed)
     })
 
     it('should fail in completing the current task if its current status is pending', async () => {

@@ -2,7 +2,10 @@ import { GameMode, type GameResultDto, QuizVisibility } from '@klurigo/common'
 import { Logger } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 
-import { QuizRatingRepository } from '../../quiz-core/repositories'
+import {
+  QuizRatingRepository,
+  QuizRepository,
+} from '../../quiz-core/repositories'
 import { UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
@@ -14,9 +17,14 @@ import type {
 
 import { GameResultService } from './game-result.service'
 import { buildGameResultModel } from './utils/game-result.converter'
+import { aggregateQuizGameplaySummary } from './utils/quiz-gameplay-summary.utils'
 
 jest.mock('./utils/game-result.converter', () => ({
   buildGameResultModel: jest.fn(),
+}))
+
+jest.mock('./utils/quiz-gameplay-summary.utils', () => ({
+  aggregateQuizGameplaySummary: jest.fn(),
 }))
 
 type FindUserReturn = Awaited<ReturnType<UserRepository['findUserById']>>
@@ -25,6 +33,7 @@ describe(GameResultService.name, () => {
   let service: GameResultService
   let gameResultRepository: jest.Mocked<GameResultRepository>
   let quizRatingRepository: jest.Mocked<QuizRatingRepository>
+  let quizRepository: jest.Mocked<QuizRepository>
   let userRepository: jest.Mocked<UserRepository>
 
   const asPlayerMetric = (overrides: Partial<PlayerMetric>): PlayerMetric =>
@@ -112,6 +121,13 @@ describe(GameResultService.name, () => {
           },
         },
         {
+          provide: QuizRepository,
+          useValue: {
+            findQuizByIdOrThrow: jest.fn(),
+            replaceQuiz: jest.fn(),
+          },
+        },
+        {
           provide: UserRepository,
           useValue: {
             findUserById: jest.fn(),
@@ -129,6 +145,10 @@ describe(GameResultService.name, () => {
     quizRatingRepository = moduleRef.get(
       QuizRatingRepository,
     ) as jest.Mocked<QuizRatingRepository>
+
+    quizRepository = moduleRef.get(
+      QuizRepository,
+    ) as jest.Mocked<QuizRepository>
 
     userRepository = moduleRef.get(
       UserRepository,
@@ -733,13 +753,25 @@ describe(GameResultService.name, () => {
   })
 
   describe('createGameResult', () => {
-    it('builds a result model from the game document and persists it', async () => {
+    it('builds a result model from the game document, persists it, aggregates gameplay summary, and updates the quiz', async () => {
+      const completed = new Date('2026-01-26T09:00:00.000Z')
+
       const gameDocument = {
         _id: 'game-1',
+        mode: GameMode.Classic,
+        quiz: { _id: 'quiz-1' },
       } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
 
       const built = { gameId: 'game-1' } as unknown as GameResult
-      const persisted = { _id: 'result-1' } as unknown as GameResult
+      const persisted = { _id: 'result-1', completed } as unknown as GameResult
+
+      const quiz = {
+        _id: 'quiz-1',
+        gameplaySummary: { count: 1 },
+        name: 'My quiz',
+      } as unknown as { _id: string; gameplaySummary: unknown; name: string }
+
+      const updatedGameplaySummary = { count: 2 }
 
       ;(
         buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
@@ -749,6 +781,15 @@ describe(GameResultService.name, () => {
 
       gameResultRepository.createGameResult.mockResolvedValueOnce(persisted)
 
+      quizRepository.findQuizByIdOrThrow.mockResolvedValueOnce(quiz as never)
+      ;(
+        aggregateQuizGameplaySummary as jest.MockedFunction<
+          typeof aggregateQuizGameplaySummary
+        >
+      ).mockReturnValueOnce(updatedGameplaySummary as never)
+
+      quizRepository.replaceQuiz.mockResolvedValueOnce(undefined as never)
+
       const result = await service.createGameResult(gameDocument)
 
       expect(buildGameResultModel).toHaveBeenCalledTimes(1)
@@ -757,7 +798,167 @@ describe(GameResultService.name, () => {
       expect(gameResultRepository.createGameResult).toHaveBeenCalledTimes(1)
       expect(gameResultRepository.createGameResult).toHaveBeenCalledWith(built)
 
+      expect(quizRepository.findQuizByIdOrThrow).toHaveBeenCalledTimes(1)
+      expect(quizRepository.findQuizByIdOrThrow).toHaveBeenCalledWith('quiz-1')
+
+      expect(aggregateQuizGameplaySummary).toHaveBeenCalledTimes(1)
+      expect(aggregateQuizGameplaySummary).toHaveBeenCalledWith(
+        quiz.gameplaySummary,
+        persisted,
+        GameMode.Classic,
+        completed,
+      )
+
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledWith('quiz-1', {
+        ...quiz,
+        gameplaySummary: updatedGameplaySummary,
+      })
+
       expect(result).toBe(persisted)
+    })
+
+    it('uses the persisted gameResult.completed (not the game document) when aggregating', async () => {
+      const completedFromResult = new Date('2026-01-26T09:00:00.000Z')
+
+      const gameDocument = {
+        _id: 'game-1',
+        mode: GameMode.Classic,
+        quiz: { _id: 'quiz-1' },
+        completed: new Date('1999-01-01T00:00:00.000Z'),
+      } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
+
+      const built = { gameId: 'game-1' } as unknown as GameResult
+      const persisted = {
+        _id: 'result-1',
+        completed: completedFromResult,
+      } as unknown as GameResult
+
+      const quiz = {
+        _id: 'quiz-1',
+        gameplaySummary: { count: 1 },
+      } as unknown as { _id: string; gameplaySummary: unknown }
+
+      ;(
+        buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
+      ).mockReturnValueOnce(
+        built as unknown as ReturnType<typeof buildGameResultModel>,
+      )
+      gameResultRepository.createGameResult.mockResolvedValueOnce(persisted)
+      quizRepository.findQuizByIdOrThrow.mockResolvedValueOnce(quiz as never)
+      ;(
+        aggregateQuizGameplaySummary as jest.MockedFunction<
+          typeof aggregateQuizGameplaySummary
+        >
+      ).mockReturnValueOnce({ count: 2 } as never)
+      quizRepository.replaceQuiz.mockResolvedValueOnce(undefined as never)
+
+      await service.createGameResult(gameDocument)
+
+      expect(aggregateQuizGameplaySummary).toHaveBeenCalledWith(
+        quiz.gameplaySummary,
+        persisted,
+        GameMode.Classic,
+        completedFromResult,
+      )
+    })
+
+    it('propagates errors from createGameResult and does not attempt quiz updates', async () => {
+      const gameDocument = {
+        _id: 'game-1',
+        mode: GameMode.Classic,
+        quiz: { _id: 'quiz-1' },
+      } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
+
+      const built = { gameId: 'game-1' } as unknown as GameResult
+
+      ;(
+        buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
+      ).mockReturnValueOnce(
+        built as unknown as ReturnType<typeof buildGameResultModel>,
+      )
+
+      const err = new Error('db down')
+      gameResultRepository.createGameResult.mockRejectedValueOnce(err)
+
+      await expect(service.createGameResult(gameDocument)).rejects.toThrow(
+        'db down',
+      )
+
+      expect(quizRepository.findQuizByIdOrThrow).not.toHaveBeenCalled()
+      expect(aggregateQuizGameplaySummary).not.toHaveBeenCalled()
+      expect(quizRepository.replaceQuiz).not.toHaveBeenCalled()
+    })
+
+    it('propagates errors from findQuizByIdOrThrow and does not call aggregate or replace', async () => {
+      const completed = new Date('2026-01-26T09:00:00.000Z')
+
+      const gameDocument = {
+        _id: 'game-1',
+        mode: GameMode.Classic,
+        quiz: { _id: 'quiz-1' },
+      } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
+
+      const built = { gameId: 'game-1' } as unknown as GameResult
+      const persisted = { _id: 'result-1', completed } as unknown as GameResult
+
+      ;(
+        buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
+      ).mockReturnValueOnce(
+        built as unknown as ReturnType<typeof buildGameResultModel>,
+      )
+      gameResultRepository.createGameResult.mockResolvedValueOnce(persisted)
+
+      const err = new Error('quiz not found')
+      quizRepository.findQuizByIdOrThrow.mockRejectedValueOnce(err)
+
+      await expect(service.createGameResult(gameDocument)).rejects.toThrow(
+        'quiz not found',
+      )
+
+      expect(aggregateQuizGameplaySummary).not.toHaveBeenCalled()
+      expect(quizRepository.replaceQuiz).not.toHaveBeenCalled()
+    })
+
+    it('propagates errors from replaceQuiz after aggregating', async () => {
+      const completed = new Date('2026-01-26T09:00:00.000Z')
+
+      const gameDocument = {
+        _id: 'game-1',
+        mode: GameMode.Classic,
+        quiz: { _id: 'quiz-1' },
+      } as unknown as import('../../game-core/repositories/models/schemas').GameDocument
+
+      const built = { gameId: 'game-1' } as unknown as GameResult
+      const persisted = { _id: 'result-1', completed } as unknown as GameResult
+
+      const quiz = {
+        _id: 'quiz-1',
+        gameplaySummary: { count: 1 },
+      } as unknown as { _id: string; gameplaySummary: unknown }
+
+      ;(
+        buildGameResultModel as jest.MockedFunction<typeof buildGameResultModel>
+      ).mockReturnValueOnce(
+        built as unknown as ReturnType<typeof buildGameResultModel>,
+      )
+      gameResultRepository.createGameResult.mockResolvedValueOnce(persisted)
+      quizRepository.findQuizByIdOrThrow.mockResolvedValueOnce(quiz as never)
+      ;(
+        aggregateQuizGameplaySummary as jest.MockedFunction<
+          typeof aggregateQuizGameplaySummary
+        >
+      ).mockReturnValueOnce({ count: 2 } as never)
+
+      const err = new Error('write failed')
+      quizRepository.replaceQuiz.mockRejectedValueOnce(err)
+
+      await expect(service.createGameResult(gameDocument)).rejects.toThrow(
+        'write failed',
+      )
+
+      expect(aggregateQuizGameplaySummary).toHaveBeenCalledTimes(1)
+      expect(quizRepository.replaceQuiz).toHaveBeenCalledTimes(1)
     })
   })
 

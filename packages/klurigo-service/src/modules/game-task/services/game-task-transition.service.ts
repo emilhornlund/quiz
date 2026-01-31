@@ -8,10 +8,7 @@ import {
   QuestionTaskAnswer,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import {
-  getRedisPlayerParticipantAnswerKey,
-  isParticipantPlayer,
-} from '../../game-core/utils'
+import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
@@ -204,9 +201,7 @@ export class GameTaskTransitionService {
         gameDocument,
         leaderboardTaskItems,
       )
-      if (gameDocument.participants.filter(isParticipantPlayer).length > 0) {
-        await this.gameResultService.createGameResult(gameDocument)
-      }
+      await this.gameResultService.createGameResult(gameDocument)
     }
   }
 
@@ -255,10 +250,7 @@ export class GameTaskTransitionService {
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
     gameDocument.currentTask = buildQuitTask()
-    gameDocument.status =
-      gameDocument.participants.filter(isParticipantPlayer).length > 0
-        ? GameStatus.Completed
-        : GameStatus.Expired
+    gameDocument.status = GameStatus.Completed
   }
 
   /**

@@ -27,6 +27,10 @@ import {
   QuestionTypeAnswerDaoSchema,
 } from './question.schema'
 import {
+  QuizGameplaySummary,
+  QuizGameplaySummarySchema,
+} from './quiz-gameplay-summary.schema'
+import {
   QuizRatingSummary,
   QuizRatingSummarySchema,
 } from './quiz-rating-summary.schema'
@@ -111,6 +115,25 @@ export class Quiz {
    */
   @Prop({ type: String, ref: 'User' })
   owner: User
+
+  /**
+   * Aggregated gameplay statistics for the quiz across completed games.
+   */
+  @Prop({
+    type: QuizGameplaySummarySchema,
+    required: true,
+    default: () => ({
+      count: 0,
+      totalPlayerCount: 0,
+      totalClassicCorrectCount: 0,
+      totalClassicIncorrectCount: 0,
+      totalClassicUnansweredCount: 0,
+      totalZeroToOneHundredPrecisionSum: 0,
+      totalZeroToOneHundredAnsweredCount: 0,
+      totalZeroToOneHundredUnansweredCount: 0,
+    }),
+  })
+  gameplaySummary: QuizGameplaySummary
 
   /**
    * Aggregated rating statistics for the quiz.

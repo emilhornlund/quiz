@@ -44,6 +44,7 @@ import {
 import {
   GameResult,
   PlayerMetric,
+  QuestionMetric,
 } from '../../src/modules/game-result/repositories/models/schemas'
 import {
   BaseQuestionDao,
@@ -533,6 +534,38 @@ export function createMockGameResultPlayerMetric(
   }
 }
 
+export function createMockClassicGameResultQuestionMetric(
+  questionMetric?: Partial<Omit<QuestionMetric, 'averagePrecision'>>,
+): QuestionMetric {
+  return {
+    text: 'What is capital of France?',
+    type: QuestionType.MultiChoice,
+    correct: 0,
+    incorrect: 0,
+    unanswered: 0,
+    averageResponseTime: 0,
+    averagePrecision: undefined,
+    ...(questionMetric ?? {}),
+  }
+}
+
+export function createMockZeroToOneHundredGameResultQuestionMetric(
+  questionMetric?: Partial<
+    Omit<QuestionMetric, 'type' | 'correct' | 'incorrect'>
+  >,
+): QuestionMetric {
+  return {
+    text: 'Guess the temperature of the hottest day ever recorded.',
+    type: QuestionType.Range,
+    correct: undefined,
+    incorrect: undefined,
+    averagePrecision: 0,
+    unanswered: 0,
+    averageResponseTime: 0,
+    ...(questionMetric ?? {}),
+  }
+}
+
 export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
   return {
     _id: uuidv4(),
@@ -609,8 +642,41 @@ export function createMockClassicQuiz(quiz?: Partial<Quiz>): Quiz {
         points: 1000,
         duration: 30,
       },
+      {
+        type: QuestionType.Pin,
+        text: 'Where is the Eiffel Tower located in Paris? Pin the answer on a map of Paris',
+        imageURL: 'https://example.com/question-image.png',
+        positionX: 0.5,
+        positionY: 0.5,
+        tolerance: QuestionPinTolerance.Medium,
+        points: 1000,
+        duration: 30,
+        info: 'This is an info text displayed along the question result.',
+      },
+      {
+        type: QuestionType.Puzzle,
+        text: 'Sort the oldest cities in Europe',
+        media: {
+          type: MediaType.Image,
+          url: 'https://example.com/question-image.png',
+        },
+        values: ['Athens', 'Argos', 'Plovdiv', 'Lisbon'],
+        points: 1000,
+        duration: 30,
+        info: 'This is an info text displayed along the question result.',
+      },
     ],
     owner: { _id: uuidv4() } as User,
+    gameplaySummary: {
+      count: 0,
+      totalPlayerCount: 0,
+      totalClassicCorrectCount: 0,
+      totalClassicIncorrectCount: 0,
+      totalClassicUnansweredCount: 0,
+      totalZeroToOneHundredPrecisionSum: 0,
+      totalZeroToOneHundredAnsweredCount: 0,
+      totalZeroToOneHundredUnansweredCount: 0,
+    },
     ratingSummary: {
       count: 0,
       avg: 0,
@@ -652,6 +718,16 @@ export function createMockZeroToOneHundredQuiz(quiz?: Partial<Quiz>): Quiz {
       },
     ],
     owner: { _id: uuidv4() } as User,
+    gameplaySummary: {
+      count: 0,
+      totalPlayerCount: 0,
+      totalClassicCorrectCount: 0,
+      totalClassicIncorrectCount: 0,
+      totalClassicUnansweredCount: 0,
+      totalZeroToOneHundredPrecisionSum: 0,
+      totalZeroToOneHundredAnsweredCount: 0,
+      totalZeroToOneHundredUnansweredCount: 0,
+    },
     ratingSummary: {
       count: 0,
       avg: 0,

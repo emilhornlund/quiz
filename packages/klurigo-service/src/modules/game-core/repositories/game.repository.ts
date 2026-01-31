@@ -310,16 +310,4 @@ export class GameRepository extends BaseRepository<Game> {
       },
     ])
   }
-
-  /**
-   * Deletes all games that are associated with the given quiz ID.
-   *
-   * @param {string} quizId - The unique identifier of the quiz.
-   * @returns {Promise<number>} - The number of deleted game documents.
-   */
-  public async deleteGamesByQuizId(quizId: string): Promise<number> {
-    return this.deleteMany({
-      quiz: { _id: quizId },
-    })
-  }
 }

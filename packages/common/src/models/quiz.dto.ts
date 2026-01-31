@@ -134,6 +134,40 @@ export interface QuizAuthorResponseDto {
 }
 
 /**
+ * Aggregated gameplay statistics for a quiz across all completed games.
+ *
+ * The backend maintains these aggregates when games are completed to avoid
+ * expensive re-aggregation on read.
+ */
+export type QuizGameplaySummaryDto = {
+  /**
+   * Number of completed games played using this quiz.
+   */
+  readonly count: number
+
+  /**
+   * Sum of player counts across all completed games for this quiz.
+   */
+  readonly totalPlayerCount: number
+
+  /**
+   * Optional difficulty estimate derived from gameplay statistics.
+   *
+   * Scale:
+   * - 0 = very easy
+   * - 1 = very difficult
+   */
+  readonly difficultyPercentage?: number
+
+  /**
+   * Timestamp of the most recently completed game using this quiz.
+   *
+   * Undefined when the quiz has not yet been played.
+   */
+  readonly lastPlayed?: Date
+}
+
+/**
  * DTO representing aggregated rating information for a quiz.
  *
  * Contains the current average star rating and the total number of comments submitted.
@@ -209,6 +243,11 @@ export interface QuizResponseDto {
    * The author of the quiz.
    */
   author: QuizAuthorResponseDto
+
+  /**
+   * Aggregated gameplay statistics for the quiz.
+   */
+  readonly gameplaySummary: QuizGameplaySummaryDto
 
   /**
    * Aggregated rating information for the quiz.

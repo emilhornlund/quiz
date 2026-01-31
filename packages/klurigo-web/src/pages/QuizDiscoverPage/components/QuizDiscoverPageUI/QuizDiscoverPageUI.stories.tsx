@@ -41,6 +41,12 @@ export const Default = {
         languageCode: LanguageCode.English,
         numberOfQuestions: 14,
         author: { id: uuidv4(), name: 'FrostyBear' },
+        gameplaySummary: {
+          count: 12,
+          totalPlayerCount: 148,
+          difficultyPercentage: 0.18,
+          lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
+        },
         ratingSummary: { stars: 0, comments: 0 },
         created: new Date(),
         updated: new Date(),
@@ -56,6 +62,12 @@ export const Default = {
         languageCode: LanguageCode.English,
         numberOfQuestions: 20,
         author: { id: PlayerID, name: 'FrostyBear' },
+        gameplaySummary: {
+          count: 7,
+          totalPlayerCount: 64,
+          difficultyPercentage: 0.42,
+          lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), // 1 week ago
+        },
         ratingSummary: { stars: 0, comments: 0 },
         created: new Date(),
         updated: new Date(),
@@ -71,6 +83,12 @@ export const Default = {
         languageCode: LanguageCode.English,
         numberOfQuestions: 16,
         author: { id: uuidv4(), name: 'FrostyBear' },
+        gameplaySummary: {
+          count: 3,
+          totalPlayerCount: 19,
+          difficultyPercentage: 0.71,
+          lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21), // 3 weeks ago
+        },
         ratingSummary: { stars: 0, comments: 0 },
         created: new Date(),
         updated: new Date(),
@@ -86,6 +104,12 @@ export const Default = {
         languageCode: LanguageCode.English,
         numberOfQuestions: 28,
         author: { id: uuidv4(), name: 'FrostyBear' },
+        gameplaySummary: {
+          count: 1,
+          totalPlayerCount: 6,
+          difficultyPercentage: 0.88,
+          lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 45), // 1.5 months ago
+        },
         ratingSummary: { stars: 0, comments: 0 },
         created: new Date(),
         updated: new Date(),
@@ -101,6 +125,12 @@ export const Default = {
         languageCode: LanguageCode.English,
         numberOfQuestions: 24,
         author: { id: PlayerID, name: 'FrostyBear' },
+        gameplaySummary: {
+          count: 12,
+          totalPlayerCount: 148,
+          difficultyPercentage: 0.18,
+          lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
+        },
         ratingSummary: { stars: 0, comments: 0 },
         created: new Date(),
         updated: new Date(),

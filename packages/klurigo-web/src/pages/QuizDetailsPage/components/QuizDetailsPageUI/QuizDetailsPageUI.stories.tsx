@@ -39,6 +39,12 @@ export const Default = {
       languageCode: LanguageCode.English,
       numberOfQuestions: 14,
       author: { id: uuidv4(), name: 'FrostyBear' },
+      gameplaySummary: {
+        count: 5,
+        totalPlayerCount: 42,
+        difficultyPercentage: 0.48,
+        lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+      },
       ratingSummary: { stars: 4.6, comments: 13 },
       created: new Date(),
       updated: new Date(),

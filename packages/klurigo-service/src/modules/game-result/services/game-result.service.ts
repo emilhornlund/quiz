@@ -13,7 +13,10 @@ import {
 import { Injectable, Logger } from '@nestjs/common'
 
 import { GameDocument } from '../../game-core/repositories/models/schemas'
-import { QuizRatingRepository } from '../../quiz-core/repositories'
+import {
+  QuizRatingRepository,
+  QuizRepository,
+} from '../../quiz-core/repositories'
 import { User, UserRepository } from '../../user/repositories'
 import { GameResultsNotFoundException } from '../exceptions'
 import { GameResultRepository } from '../repositories'
@@ -24,6 +27,7 @@ import {
 } from '../repositories/models/schemas'
 
 import { buildGameResultModel } from './utils/game-result.converter'
+import { aggregateQuizGameplaySummary } from './utils/quiz-gameplay-summary.utils'
 
 /**
  * Service for retrieving and formatting quiz game results.
@@ -37,11 +41,13 @@ export class GameResultService {
    *
    * @param gameResultRepository - Repository for accessing stored game results.
    * @param quizRatingRepository - Repository for retrieving quiz ratings authored by participants.
+   * @param quizRepository - Repository for accessing and updating quizzes, including persisting aggregated gameplay summary metrics.
    * @param userRepository - Repository for accessing user data.
    */
   constructor(
     private readonly gameResultRepository: GameResultRepository,
     private readonly quizRatingRepository: QuizRatingRepository,
+    private readonly quizRepository: QuizRepository,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -139,12 +145,32 @@ export class GameResultService {
   /**
    * Creates and persists a game result for the provided game document.
    *
+   * Persists the game result first, then aggregates the quiz `gameplaySummary` using the
+   * completed game result and persists the updated quiz.
+   *
    * @param game - The completed game document used to build the persisted result model.
    * @returns The persisted game result document.
    */
   public async createGameResult(game: GameDocument): Promise<GameResult> {
-    const gameResult = buildGameResultModel(game)
-    return this.gameResultRepository.createGameResult(gameResult)
+    const gameResult = await this.gameResultRepository.createGameResult(
+      buildGameResultModel(game),
+    )
+
+    const quiz = await this.quizRepository.findQuizByIdOrThrow(game.quiz._id)
+
+    const updatedGameplaySummary = aggregateQuizGameplaySummary(
+      quiz.gameplaySummary,
+      gameResult,
+      game.mode,
+      gameResult.completed,
+    )
+
+    await this.quizRepository.replaceQuiz(game.quiz._id, {
+      ...quiz,
+      gameplaySummary: updatedGameplaySummary,
+    })
+
+    return gameResult
   }
 
   /**
