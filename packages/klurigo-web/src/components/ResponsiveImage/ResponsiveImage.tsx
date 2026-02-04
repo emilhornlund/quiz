@@ -23,6 +23,7 @@ export type ResponsiveImageProps = {
   alt?: string
   revealEffect?: RevealEffect
   noBorder?: boolean
+  fit?: 'contain' | 'width'
   children?: ReactNode | ReactNode[]
 }
 
@@ -33,6 +34,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   imageURL,
   alt,
   noBorder = false,
+  fit = 'contain',
   revealEffect,
   children,
 }) => {
@@ -103,13 +105,26 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     if (cw <= 0 && ch <= 0) return undefined
 
     const { w: iw, h: ih } = intrinsic
-    const rw = cw > 0 ? cw / iw : Number.POSITIVE_INFINITY
-    const rh = ch > 0 ? ch / ih : Number.POSITIVE_INFINITY
-    const s = Math.min(rw, rh)
 
-    if (!Number.isFinite(s) || s <= 0) return undefined
-    return { w: iw * s, h: ih * s }
-  }, [phase, containerSize, intrinsic])
+    let s: number | undefined
+
+    if (fit === 'width') {
+      // Full width = derive size from width (fallback to height if width is unknown)
+      if (cw > 0) s = cw / iw
+      else if (ch > 0) s = ch / ih
+    } else {
+      // "Contain" behavior (fit inside available box)
+      const rw = cw > 0 ? cw / iw : Number.POSITIVE_INFINITY
+      const rh = ch > 0 ? ch / ih : Number.POSITIVE_INFINITY
+      s = Math.min(rw, rh)
+    }
+
+    if (!s || !Number.isFinite(s) || s <= 0) return undefined
+
+    const w = Math.max(1, Math.round(iw * s))
+    const h = Math.max(1, Math.round(ih * s))
+    return { w, h }
+  }, [phase, containerSize, intrinsic, fit])
 
   const blurStyle = useImageBlurEffect(box, revealEffect?.countdown, {
     endAt: 0.1,
@@ -120,7 +135,11 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
       {phase === 'ready' && displaySrc && box && (
         <div
           className={noBorder ? styles.boxNoBorder : styles.box}
-          style={{ width: box.w, height: box.h }}>
+          style={
+            fit === 'width'
+              ? { width: '100%', height: box.h }
+              : { width: box.w, height: box.h }
+          }>
           {(revealEffect?.type === QuestionImageRevealEffectType.Square3x3 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square8x8) && (

@@ -255,7 +255,10 @@ const PinImage: FC<PinImageProps> = ({
   )
 
   return (
-    <ResponsiveImage imageURL={imageURL} alt={alt}>
+    <ResponsiveImage
+      imageURL={imageURL}
+      alt={alt}
+      fit={deviceType === DeviceType.Mobile ? 'width' : 'contain'}>
       <div
         ref={setOverlayNode}
         className={styles.overlay}
