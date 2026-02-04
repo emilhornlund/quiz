@@ -10,6 +10,16 @@
   text-align: center;
   color: white;
 
+  &.textFitEnabled {
+    font-size: var(--fitted-font-size) !important;
+    line-height: var(--fitted-line-height) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines, 2);
+  }
+
   &.hero {
     font-weight: 900;
     opacity: 0.95;
@@ -35,7 +45,7 @@
     opacity: 0.95;
 
     @include helpers.mobile {
-      line-height: 3rem;
+      line-height: 2rem;
 
       @include helpers.fontSize(variables.$mobile-title-font-size);
     }
@@ -58,14 +68,17 @@
     opacity: 0.88;
 
     @include helpers.mobile {
+      line-height: 2rem;
       @include helpers.fontSize(variables.$mobile-subtitle-font-size);
     }
 
     @include helpers.tablet {
+      line-height: 3rem;
       @include helpers.fontSize(variables.$tablet-subtitle-font-size);
     }
 
     @include helpers.desktop {
+      line-height: 4rem;
       @include helpers.fontSize(variables.$desktop-subtitle-font-size);
     }
   }
@@ -75,14 +88,17 @@
     opacity: 0.80;
 
     @include helpers.mobile {
+      line-height: 1.5rem;
       @include helpers.fontSize(variables.$mobile-text-font-size);
     }
 
     @include helpers.tablet {
+      line-height: 2rem;
       @include helpers.fontSize(variables.$tablet-text-font-size);
     }
 
     @include helpers.desktop {
+      line-height: 2.5rem;
       @include helpers.fontSize(variables.$desktop-text-font-size);
     }
   }
@@ -92,14 +108,17 @@
     cursor: pointer;
 
     @include helpers.mobile {
+      line-height: 1.5rem;
       @include helpers.fontSize(variables.$mobile-link-font-size);
     }
 
     @include helpers.tablet {
+      line-height: 1.75rem;
       @include helpers.fontSize(variables.$tablet-link-font-size);
     }
 
     @include helpers.desktop {
+      line-height: 2rem;
       @include helpers.fontSize(variables.$desktop-link-font-size);
     }
   }

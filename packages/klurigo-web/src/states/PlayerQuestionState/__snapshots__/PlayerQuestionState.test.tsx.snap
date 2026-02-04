@@ -35,14 +35,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            Who painted The Starry Night?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              Who painted The Starry Night?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -181,14 +181,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            Who painted The Starry Night?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              Who painted The Starry Night?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -345,14 +345,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            Who painted The Starry Night?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              Who painted The Starry Night?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -473,14 +473,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            What percentage of the earth's surface is covered by water?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              What percentage of the earth's surface is covered by water?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -500,40 +500,49 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                       value="50"
                     />
                     <div
-                      class="inputGroup"
+                      class="inputContainer"
                     >
                       <div
-                        class="inputContainer"
+                        class="textFieldInputContainer textFieldInputKindPrimary"
                       >
-                        <div
-                          class="textFieldInputContainer textFieldInputKindPrimary"
+                        <input
+                          class="textfield"
+                          data-testid="test-slider-input-textfield"
+                          id="slider-input"
+                          max="100"
+                          min="0"
+                          name="slider-input"
+                          type="number"
+                          value="50"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="buttonInputContainer buttonInputKindCallToAction"
+                    >
+                      <button
+                        data-testid="test-submit-button-button"
+                        id="submit-button"
+                        name="submit-button"
+                        type="submit"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="svg-inline--fa fa-rocket"
+                          data-icon="rocket"
+                          data-prefix="fas"
+                          role="img"
+                          viewBox="0 0 512 512"
                         >
-                          <input
-                            class="textfield"
-                            data-testid="test-slider-input-textfield"
-                            id="slider-input"
-                            max="100"
-                            min="0"
-                            name="slider-input"
-                            type="number"
-                            value="50"
+                          <path
+                            d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                            fill="currentColor"
                           />
-                        </div>
-                      </div>
-                      <div
-                        class="buttonInputContainer buttonInputKindPrimary"
-                      >
-                        <button
-                          data-testid="test-submit-button-button"
-                          id="submit-button"
-                          name="submit-button"
-                          type="submit"
-                        >
-                          <span>
-                            Submit
-                          </span>
-                        </button>
-                      </div>
+                        </svg>
+                        <span>
+                          Submit My Answer
+                        </span>
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -629,14 +638,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            Rabbits can't vomit?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              Rabbits can't vomit?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -757,14 +766,14 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
         <div
           class="contentInner"
         >
-          <h1
-            class="typography title full"
-          >
-            Who painted the Mono Lisa?
-          </h1>
           <div
             class="fullHeight"
           >
+            <h1
+              class="typography title full"
+            >
+              Who painted the Mono Lisa?
+            </h1>
             <div
               class="questionAnswerPicker"
             >
@@ -814,7 +823,7 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                       </div>
                     </div>
                     <div
-                      class="buttonInputContainer buttonInputKindPrimary"
+                      class="buttonInputContainer buttonInputKindCallToAction"
                     >
                       <button
                         data-testid="test-submit-button-button"
@@ -823,8 +832,21 @@ exports[`PlayerQuestionState > should render PlayerQuestionState with question t
                         name="submit-button"
                         type="submit"
                       >
+                        <svg
+                          aria-hidden="true"
+                          class="svg-inline--fa fa-rocket"
+                          data-icon="rocket"
+                          data-prefix="fas"
+                          role="img"
+                          viewBox="0 0 512 512"
+                        >
+                          <path
+                            d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                            fill="currentColor"
+                          />
+                        </svg>
                         <span>
-                          Submit
+                          Submit My Answer
                         </span>
                       </button>
                     </div>

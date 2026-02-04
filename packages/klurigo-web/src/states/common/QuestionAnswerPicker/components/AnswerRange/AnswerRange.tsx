@@ -1,3 +1,4 @@
+import { faRocket } from '@fortawesome/free-solid-svg-icons'
 import type { GameQuestionPlayerAnswerEvent } from '@klurigo/common'
 import type { ChangeEvent, FC, FormEvent } from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -79,25 +80,25 @@ const AnswerRange: FC<AnswerRangeProps> = ({
             disabled={disabled}
             onChange={handleSliderChange}
           />
-          <div className={styles.inputGroup}>
-            <TextField
-              id="slider-input"
-              type="number"
-              min={min}
-              max={max}
-              value={value}
-              onChange={(newValue) => setValue(newValue as number)}
-              onValid={setValid}
-              disabled={disabled}
-              required
-            />
-            <Button
-              id="submit-button"
-              type="submit"
-              value="Submit"
-              disabled={disabled || !valid}
-            />
-          </div>
+          <TextField
+            id="slider-input"
+            type="number"
+            min={min}
+            max={max}
+            value={value}
+            onChange={(newValue) => setValue(newValue as number)}
+            onValid={setValid}
+            disabled={disabled}
+            required
+          />
+          <Button
+            id="submit-button"
+            type="submit"
+            kind="call-to-action"
+            icon={faRocket}
+            disabled={disabled || !valid}>
+            Submit My Answer
+          </Button>
         </form>
       </div>
     </div>

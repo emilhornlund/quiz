@@ -144,7 +144,9 @@ describe('AnswerInput', () => {
       render(<AnswerInput interactive loading={false} onSubmit={onSubmit} />)
 
       const input = screen.getByRole('textbox')
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
 
       await user.type(input, 'test answer')
       await user.click(submitButton)
@@ -234,7 +236,9 @@ describe('AnswerInput', () => {
     it('should disable submit button when input is empty', () => {
       render(<AnswerInput interactive loading={false} onSubmit={onSubmit} />)
 
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
       expect(submitButton).toBeDisabled()
     })
 
@@ -244,7 +248,9 @@ describe('AnswerInput', () => {
       render(<AnswerInput interactive loading={false} onSubmit={onSubmit} />)
 
       const input = screen.getByRole('textbox')
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
 
       // Initially disabled
       expect(submitButton).toBeDisabled()
@@ -259,7 +265,9 @@ describe('AnswerInput', () => {
     it('should disable submit button when loading', () => {
       render(<AnswerInput interactive loading={true} onSubmit={onSubmit} />)
 
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
       expect(submitButton).toBeDisabled()
     })
 
@@ -268,7 +276,9 @@ describe('AnswerInput', () => {
         <AnswerInput interactive={false} loading={false} onSubmit={onSubmit} />,
       )
 
-      const submitButton = screen.queryByRole('button', { name: 'Submit' })
+      const submitButton = screen.queryByRole('button', {
+        name: 'Submit My Answer',
+      })
       expect(submitButton).not.toBeInTheDocument()
     })
 
@@ -287,7 +297,9 @@ describe('AnswerInput', () => {
         />,
       )
 
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
       expect(submitButton).toBeDisabled()
     })
   })
@@ -473,7 +485,9 @@ describe('AnswerInput', () => {
       )
 
       const input = screen.getByRole('textbox')
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
 
       expect(input).toBeDisabled()
       expect(submitButton).toBeDisabled()
@@ -485,7 +499,9 @@ describe('AnswerInput', () => {
       render(<AnswerInput interactive loading={false} onSubmit={onSubmit} />)
 
       const input = screen.getByRole('textbox')
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = screen.getByRole('button', {
+        name: 'Submit My Answer',
+      })
 
       await user.type(input, 'test')
 

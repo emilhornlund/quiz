@@ -15,32 +15,19 @@
 
     form {
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      flex: 1;
 
       @include helpers.mobile {
-        flex-direction: column;
         gap: variables.$mobile-narrow-layout-gutter;
       }
 
       @include helpers.tablet {
-        flex-direction: row;
-        align-items: center;
         gap: variables.$tablet-narrow-layout-gutter;
-
-        div:first-child {
-          flex: 1;
-        }
       }
 
       @include helpers.desktop {
-        flex-direction: row;
-        align-items: center;
         gap: variables.$desktop-narrow-layout-gutter;
-
-        div:first-child {
-          flex: 1;
-        }
       }
     }
   }

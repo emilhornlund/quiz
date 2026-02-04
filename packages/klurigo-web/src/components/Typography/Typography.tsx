@@ -2,6 +2,7 @@ import type {
   AnchorHTMLAttributes,
   AriaAttributes,
   AriaRole,
+  CSSProperties,
   FC,
   JSX,
   KeyboardEventHandler,
@@ -9,10 +10,11 @@ import type {
   ReactElement,
   ReactNode,
 } from 'react'
-import { cloneElement, isValidElement } from 'react'
+import { cloneElement, isValidElement, useCallback, useRef } from 'react'
 
 import { classNames } from '../../utils/helpers'
 
+import { useTextFit } from './hooks'
 import styles from './Typography.module.scss'
 
 /**
@@ -72,7 +74,16 @@ type SharedProps = {
   children: ReactNode
 
   /**
-   * Enables “slot” rendering by delegating the rendered element to the child.
+   * Maximum number of lines allowed before text is shrunk to fit.
+   *
+   * When provided, enables dynamic font-size adjustment using the useTextFit hook.
+   * The Typography component will automatically shrink the font size from the variant's
+   * maximum (defined in SCSS) down to a minimum of 12px to fit within the specified lines.
+   */
+  maxLines?: number
+
+  /**
+   * Enables "slot" rendering by delegating the rendered element to the child.
    *
    * When enabled, Typography does not render its own semantic element. Instead,
    * it clones the single React element provided as `children` and applies:
@@ -215,8 +226,48 @@ const Typography: FC<TypographyProps> = (props) => {
     children,
     asChild,
     className,
+    maxLines,
     ...rest
   } = props
+
+  const elementRef = useRef<HTMLElement | null>(null)
+
+  const setElementRef = useCallback((node: HTMLElement | null) => {
+    elementRef.current = node
+  }, [])
+
+  // Extract text content for measurement
+  const textContent =
+    typeof children === 'string'
+      ? children
+      : typeof children === 'number'
+        ? String(children)
+        : ''
+
+  // Apply text fitting if maxLines is provided
+  // Hook must be called unconditionally (React rules)
+  const fittedResult = useTextFit(
+    elementRef,
+    variant,
+    textContent,
+    maxLines ?? 0,
+  )
+
+  // Create inline style for font-size and line-height override
+  // Only apply when text actually needs fitting (fittedResult is not null and values are valid)
+  const inlineStyle =
+    fittedResult !== null &&
+    maxLines &&
+    isFinite(fittedResult.fontSize) &&
+    isFinite(fittedResult.lineHeight) &&
+    fittedResult.fontSize > 0 &&
+    fittedResult.lineHeight > 0
+      ? ({
+          '--fitted-font-size': `${fittedResult.fontSize}px`,
+          '--fitted-line-height': `${fittedResult.lineHeight}px`,
+          '--max-lines': maxLines,
+        } as CSSProperties)
+      : undefined
 
   /**
    * The semantic HTML element to render for the selected variant.
@@ -239,26 +290,39 @@ const Typography: FC<TypographyProps> = (props) => {
     size === 'small' ? styles.small : undefined,
     size === 'medium' ? styles.medium : undefined,
     size === 'full' ? styles.full : undefined,
+    inlineStyle !== undefined ? styles.textFitEnabled : undefined,
     className,
   )
 
   if (asChild) {
     if (!isValidElement(children)) {
       throw new Error(
-        'Typography with asChild expects a single valid React element child.',
+        'Typography with `asChild` expects a single valid React element as its child.',
       )
     }
 
-    const child = children as ReactElement<{ className?: string }>
+    // Only attach ref to intrinsic elements (e.g., 'span', 'div', 'h1').
+    const isIntrinsic = typeof children.type === 'string'
+
+    type ChildProps = {
+      className?: string
+      style?: CSSProperties
+    }
+
+    const child = children as ReactElement<ChildProps>
 
     return cloneElement(child, {
       ...rest,
+      ...(isIntrinsic ? { ref: setElementRef } : {}),
       className: classNames(child.props.className, classes),
+      style: inlineStyle
+        ? { ...child.props.style, ...inlineStyle }
+        : child.props.style,
     })
   }
 
   return (
-    <Tag {...rest} className={classes}>
+    <Tag {...rest} ref={setElementRef} className={classes} style={inlineStyle}>
       {children}
     </Tag>
   )

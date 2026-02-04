@@ -17,46 +17,55 @@ exports[`AnswerRange > renders interactive mode with initial midpoint and disabl
           type="range"
           value="50"
         />
-        <div
-          class="inputGroup"
-        >
-          <div>
-            <input
-              data-testid="tf-input"
-              id="slider-input"
-              max="100"
-              min="0"
-              type="number"
-              value="50"
-            />
-            <button
-              data-testid="tf-valid"
-              type="button"
-            >
-              make-valid
-            </button>
-            <button
-              data-testid="tf-invalid"
-              type="button"
-            >
-              make-invalid
-            </button>
-          </div>
-          <div
-            class="buttonInputContainer buttonInputKindPrimary"
+        <div>
+          <input
+            data-testid="tf-input"
+            id="slider-input"
+            max="100"
+            min="0"
+            type="number"
+            value="50"
+          />
+          <button
+            data-testid="tf-valid"
+            type="button"
           >
-            <button
-              data-testid="test-submit-button-button"
-              disabled=""
-              id="submit-button"
-              name="submit-button"
-              type="submit"
+            make-valid
+          </button>
+          <button
+            data-testid="tf-invalid"
+            type="button"
+          >
+            make-invalid
+          </button>
+        </div>
+        <div
+          class="buttonInputContainer buttonInputKindCallToAction"
+        >
+          <button
+            data-testid="test-submit-button-button"
+            disabled=""
+            id="submit-button"
+            name="submit-button"
+            type="submit"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-rocket"
+              data-icon="rocket"
+              data-prefix="fas"
+              role="img"
+              viewBox="0 0 512 512"
             >
-              <span>
-                Submit
-              </span>
-            </button>
-          </div>
+              <path
+                d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+                fill="currentColor"
+              />
+            </svg>
+            <span>
+              Submit My Answer
+            </span>
+          </button>
         </div>
       </form>
     </div>

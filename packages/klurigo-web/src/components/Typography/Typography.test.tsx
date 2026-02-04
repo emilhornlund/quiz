@@ -266,8 +266,8 @@ describe('Typography', () => {
         </Typography>,
       )
 
-    expect(renderInvalid).toThrow(
-      'Typography with asChild expects a single valid React element child.',
+    expect(renderInvalid).toThrowError(
+      'Typography with `asChild` expects a single valid React element',
     )
   })
 

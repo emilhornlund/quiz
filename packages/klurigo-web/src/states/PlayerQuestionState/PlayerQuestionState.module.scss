@@ -9,4 +9,16 @@
   width: 100%;
   min-height: 0;
   overflow: auto;
+
+  @include helpers.mobile {
+    gap: variables.$mobile-layout-gutter;
+  }
+
+  @include helpers.tablet {
+    gap: variables.$tablet-layout-gutter;
+  }
+
+  @include helpers.desktop {
+    gap: variables.$desktop-layout-gutter;
+  }
 }

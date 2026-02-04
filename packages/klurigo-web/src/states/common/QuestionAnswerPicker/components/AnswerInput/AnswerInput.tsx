@@ -1,3 +1,4 @@
+import { faRocket } from '@fortawesome/free-solid-svg-icons'
 import type { GameQuestionPlayerAnswerEvent } from '@klurigo/common'
 import {
   QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH,
@@ -95,9 +96,11 @@ const AnswerInput: FC<AnswerInputProps> = ({
           <Button
             id="submit-button"
             type="submit"
-            value="Submit"
-            disabled={disabled || !valid}
-          />
+            kind="call-to-action"
+            icon={faRocket}
+            disabled={disabled || !valid}>
+            Submit My Answer
+          </Button>
         </form>
       </div>
     </div>
