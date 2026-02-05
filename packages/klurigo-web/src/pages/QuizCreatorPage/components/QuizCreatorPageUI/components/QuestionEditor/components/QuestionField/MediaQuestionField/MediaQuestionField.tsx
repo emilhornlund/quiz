@@ -96,6 +96,7 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                 kind="destructive"
                 size="small"
                 value="Delete"
+                hideValue="mobile"
                 icon={faTrash}
                 onClick={handleDelete}
               />
@@ -105,6 +106,7 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                 kind="call-to-action"
                 size="small"
                 value="Replace"
+                hideValue="mobile"
                 icon={faRetweet}
                 onClick={() => setShowMediaModal(true)}
               />
@@ -115,6 +117,7 @@ const MediaQuestionField: FC<MediaQuestionFieldProps> = ({
                   kind="primary"
                   size="small"
                   value="Image Effect"
+                  hideValue="mobile"
                   icon={faWandMagicSparkles}
                   onClick={() => setShowImageEffectModal(true)}
                 />
