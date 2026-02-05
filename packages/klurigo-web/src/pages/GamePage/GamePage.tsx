@@ -68,6 +68,7 @@ const GamePage: FC = () => {
 
   const [event, connectionStatus] = useEventSource(gameID, gameToken)
 
+  const lastNonLoadingEventRef = useRef<GameEvent | undefined>(undefined)
   const [lastNonLoadingEvent, setLastNonLoadingEvent] = useState<GameEvent>()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -77,28 +78,29 @@ const GamePage: FC = () => {
     if (!event) return
 
     if (event.type === GameEventType.GameLoading) {
-      // Clear any existing timeout
       if (loadingTimeoutRef.current !== null) {
         clearTimeout(loadingTimeoutRef.current)
+        loadingTimeoutRef.current = null
       }
 
-      // Add 500ms delay to prevent flashing
       loadingTimeoutRef.current = window.setTimeout(() => {
         setIsLoading(true)
       }, 500)
-    } else {
-      // Clear any existing timeout
-      if (loadingTimeoutRef.current !== null) {
-        clearTimeout(loadingTimeoutRef.current)
-      }
-
-      setIsLoading(false)
-      // Only update if this is a different non-loading event
-      if (!deepEqual(event, lastNonLoadingEvent)) {
-        setLastNonLoadingEvent(event)
-      }
+      return
     }
-  }, [event, lastNonLoadingEvent])
+
+    if (loadingTimeoutRef.current !== null) {
+      clearTimeout(loadingTimeoutRef.current)
+      loadingTimeoutRef.current = null
+    }
+
+    setIsLoading(false)
+
+    if (!deepEqual(event, lastNonLoadingEventRef.current)) {
+      lastNonLoadingEventRef.current = event
+      setLastNonLoadingEvent(event)
+    }
+  }, [event])
 
   const statusNotifyTimeoutRef = useRef<number | null>(null)
   const lastNotifiedStatusRef = useRef<ConnectionStatus | null>(null)
@@ -198,6 +200,7 @@ const GamePage: FC = () => {
       // Cleanup loading timeout
       if (loadingTimeoutRef.current !== null) {
         clearTimeout(loadingTimeoutRef.current)
+        loadingTimeoutRef.current = null
       }
     }
   }, [])
@@ -235,15 +238,7 @@ const GamePage: FC = () => {
       case GameEventType.GamePodiumHost:
         return <HostPodiumState event={eventToRender} />
       default:
-        // Show LoadingSpinner only if we have no previous event
-        if (!lastNonLoadingEvent) {
-          return (
-            <Page hideLogin>
-              <LoadingSpinner />
-            </Page>
-          )
-        }
-        return null // No content if we have a previous event but no current one
+        return null
     }
   }, [lastNonLoadingEvent])
 
@@ -267,10 +262,22 @@ const GamePage: FC = () => {
     }
   }
 
+  const hasState = !!lastNonLoadingEvent
+  const showInitialLoading = !hasState
+  const showOverlayLoading = isLoading && hasState
+
+  if (showInitialLoading) {
+    return (
+      <Page hideLogin>
+        <LoadingSpinner />
+      </Page>
+    )
+  }
+
   return (
     <>
       {stateComponent}
-      {isLoading && <LoadingOverlay />}
+      {showOverlayLoading && <LoadingOverlay />}
       {blocker.state === 'blocked' && (
         <Modal
           title={
