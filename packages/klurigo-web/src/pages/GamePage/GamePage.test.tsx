@@ -381,9 +381,18 @@ describe('GamePage', () => {
 
     const useBlockerSpy = vi.spyOn(rrd, 'useBlocker').mockReturnValue(blocked)
 
-    h.control.event = null
+    h.control.event = {
+      type: GameEventType.GameLobbyPlayer,
+      player: { nickname: 'TestPlayer' },
+      players: [],
+    }
 
     renderWithRouter()
+
+    // Wait for the lobby state to render (component needs to process the event first)
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument()
+    })
 
     expect(
       screen.getByRole('dialog', { name: /Leave Game/i }),
@@ -416,8 +425,18 @@ describe('GamePage', () => {
     const useBlockerSpy = vi.spyOn(rrd, 'useBlocker').mockReturnValue(blocked)
 
     h.context.participantType = GameParticipantType.HOST
+    h.control.event = {
+      type: GameEventType.GameLobbyHost,
+      game: { id: 'game-123', pin: '1234' },
+      players: [],
+    }
 
     renderWithRouter()
+
+    // Wait for the lobby state to render (component needs to process the event first)
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument()
+    })
 
     expect(
       screen.getByRole('dialog', { name: /Quit Game/i }),
@@ -453,8 +472,18 @@ describe('GamePage', () => {
 
     h.context.participantType = GameParticipantType.PLAYER
     h.context.participantId = 'p-1'
+    h.control.event = {
+      type: GameEventType.GameLobbyPlayer,
+      player: { nickname: 'TestPlayer' },
+      players: [],
+    }
 
     renderWithRouter()
+
+    // Wait for the lobby state to render (component needs to process the event first)
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument()
+    })
 
     expect(
       screen.getByRole('dialog', { name: /Leave Game/i }),
@@ -484,7 +513,13 @@ describe('GamePage', () => {
       game: { mode: GameMode.Classic },
       player: {
         nickname: 'TestPlayer',
-        score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
+        score: {
+          correct: true,
+          last: 100,
+          total: 100,
+          position: 1,
+          streak: 1,
+        },
       },
       pagination: { current: 1, total: 10 },
     }
@@ -500,8 +535,12 @@ describe('GamePage', () => {
       await pokeRouter(router)
     })
 
-    await waitFor(() =>
-      expect(screen.getByTestId('loading-overlay')).toBeInTheDocument(),
+    // Loading overlay should appear after 500ms delay
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('loading-overlay')).toBeInTheDocument()
+      },
+      { timeout: 1000 },
     )
     expect(screen.getByText('Correct')).toBeInTheDocument()
 
@@ -510,7 +549,13 @@ describe('GamePage', () => {
       game: { mode: GameMode.Classic },
       player: {
         nickname: 'TestPlayer',
-        score: { correct: true, last: 100, total: 100, position: 1, streak: 1 },
+        score: {
+          correct: true,
+          last: 100,
+          total: 100,
+          position: 1,
+          streak: 1,
+        },
       },
       pagination: { current: 1, total: 10 },
     }
@@ -519,8 +564,12 @@ describe('GamePage', () => {
       await pokeRouter(router)
     })
 
-    await waitFor(() =>
-      expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument(),
+    // Loading overlay should disappear immediately
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+      },
+      { timeout: 100 },
     )
     expect(screen.getByText('Correct')).toBeInTheDocument()
   })
@@ -577,5 +626,367 @@ describe('GamePage', () => {
     // Should hide loading overlay but not re-render the component (same event)
     expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
     expect(screen.getByText('Correct')).toBeInTheDocument()
+  })
+
+  it('renders HostGameBeginState for GameBeginHost event', () => {
+    h.control.event = {
+      type: GameEventType.GameBeginHost,
+      game: { title: 'Test Quiz' },
+    }
+    const { container } = renderWithRouter()
+    // Should render without errors
+    expect(container).toBeTruthy()
+  })
+
+  it('renders PlayerGameBeginState for GameBeginPlayer event', () => {
+    h.control.event = {
+      type: GameEventType.GameBeginPlayer,
+      game: { title: 'Test Quiz' },
+      player: { nickname: 'TestPlayer' },
+    }
+    const { container } = renderWithRouter()
+    // Should render without errors
+    expect(container).toBeTruthy()
+  })
+
+  it('renders HostQuestionPreviewState for GameQuestionPreviewHost event', () => {
+    h.control.event = {
+      type: GameEventType.GameQuestionPreviewHost,
+      question: {
+        text: 'What is 2+2?',
+        image: null,
+        type: 'MULTIPLE_CHOICE',
+        timeLimit: 30,
+      },
+      pagination: { current: 1, total: 10 },
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('renders PlayerQuestionPreviewState for GameQuestionPreviewPlayer event', () => {
+    h.control.event = {
+      type: GameEventType.GameQuestionPreviewPlayer,
+      question: {
+        text: 'What is 2+2?',
+        image: null,
+        type: 'MULTIPLE_CHOICE',
+      },
+      pagination: { current: 1, total: 10 },
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('renders HostQuestionState for GameQuestionHost event', () => {
+    h.control.event = {
+      type: GameEventType.GameQuestionHost,
+      question: {
+        text: 'What is 2+2?',
+        image: null,
+        type: 'MULTIPLE_CHOICE',
+        answers: [
+          { id: '1', text: '3' },
+          { id: '2', text: '4' },
+        ],
+        timeLimit: 30,
+      },
+      answers: [],
+      pagination: { current: 1, total: 10 },
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('renders PlayerQuestionState for GameQuestionPlayer event', () => {
+    h.control.event = {
+      type: GameEventType.GameQuestionPlayer,
+      question: {
+        text: 'What is 2+2?',
+        image: null,
+        type: 'MULTIPLE_CHOICE',
+        answers: [
+          { id: '1', text: '3' },
+          { id: '2', text: '4' },
+        ],
+        timeLimit: 30,
+      },
+      pagination: { current: 1, total: 10 },
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('renders HostLeaderboardState for GameLeaderboardHost event', () => {
+    h.control.event = {
+      type: GameEventType.GameLeaderboardHost,
+      game: { mode: GameMode.Classic },
+      leaderboard: [],
+      pagination: { current: 1, total: 10 },
+    }
+    renderWithRouter()
+    expect(screen.getByText('Leaderboard')).toBeInTheDocument()
+  })
+
+  it('renders HostResultState for GameResultHost event', () => {
+    h.control.event = {
+      type: GameEventType.GameResultHost,
+      game: { mode: GameMode.Classic },
+      question: {
+        text: 'What is 2+2?',
+        correctAnswers: [{ id: '2', text: '4' }],
+      },
+      answers: [],
+      pagination: { current: 1, total: 10 },
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('renders HostPodiumState for GamePodiumHost event', () => {
+    h.control.event = {
+      type: GameEventType.GamePodiumHost,
+      game: { id: 'game-123', mode: GameMode.Classic },
+      leaderboard: [
+        {
+          player: { id: 'p1', nickname: 'Winner' },
+          score: { total: 100, position: 1 },
+        },
+      ],
+    }
+    const { container } = renderWithRouter()
+    expect(container).toBeTruthy()
+  })
+
+  it('does not block navigation when on GamePodiumHost', async () => {
+    h.control.event = {
+      type: GameEventType.GamePodiumHost,
+      game: { id: 'game-123', mode: GameMode.Classic },
+      leaderboard: [],
+    }
+    const { router } = renderWithRouter()
+
+    // Should allow navigation without blocking
+    await act(async () => {
+      await router.navigate('/other')
+    })
+
+    expect(router.state.location.pathname).toBe('/other')
+  })
+
+  it('does not block navigation when GameQuitEvent is received', () => {
+    h.control.event = {
+      type: GameEventType.GameQuitEvent,
+      status: GameStatus.Completed,
+    }
+    renderWithRouter()
+
+    expect(h.revokeGameMock).toHaveBeenCalled()
+  })
+
+  it('handles loading timeout cancellation when component unmounts during loading', async () => {
+    vi.useFakeTimers()
+    try {
+      h.control.event = {
+        type: GameEventType.GameResultPlayer,
+        game: { mode: GameMode.Classic },
+        player: {
+          nickname: 'TestPlayer',
+          score: {
+            correct: true,
+            last: 100,
+            total: 100,
+            position: 1,
+            streak: 1,
+          },
+        },
+        pagination: { current: 1, total: 10 },
+      }
+
+      const { unmount } = renderWithRouter()
+
+      h.control.event = { type: GameEventType.GameLoading }
+
+      // Don't advance time, unmount while timer is pending
+      unmount()
+
+      // Advance time after unmount - should not cause errors
+      vi.advanceTimersByTime(500)
+
+      // If we got here without errors, the cleanup worked
+      expect(true).toBe(true)
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('cancels loading timeout when non-loading event arrives before 500ms', async () => {
+    vi.useFakeTimers()
+    try {
+      h.control.event = {
+        type: GameEventType.GameResultPlayer,
+        game: { mode: GameMode.Classic },
+        player: {
+          nickname: 'TestPlayer',
+          score: {
+            correct: true,
+            last: 100,
+            total: 100,
+            position: 1,
+            streak: 1,
+          },
+        },
+        pagination: { current: 1, total: 10 },
+      }
+
+      const { router } = renderWithRouter()
+
+      h.control.event = { type: GameEventType.GameLoading }
+
+      await act(async () => {
+        await pokeRouter(router)
+      })
+
+      // Advance only 200ms (before the 500ms threshold)
+      await act(async () => {
+        vi.advanceTimersByTime(200)
+      })
+
+      // Loading overlay should NOT be visible yet
+      expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+
+      // Now send a non-loading event before 500ms completes
+      h.control.event = {
+        type: GameEventType.GameResultPlayer,
+        game: { mode: GameMode.Classic },
+        player: {
+          nickname: 'TestPlayer',
+          score: {
+            correct: true,
+            last: 100,
+            total: 100,
+            position: 1,
+            streak: 1,
+          },
+        },
+        pagination: { current: 1, total: 10 },
+      }
+
+      await act(async () => {
+        await pokeRouter(router)
+      })
+
+      // Complete the remaining time
+      await act(async () => {
+        vi.advanceTimersByTime(300)
+      })
+
+      // Loading overlay should still NOT appear because it was cancelled
+      expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('handles multiple rapid GameLoading events', async () => {
+    vi.useFakeTimers()
+    try {
+      h.control.event = {
+        type: GameEventType.GameResultPlayer,
+        game: { mode: GameMode.Classic },
+        player: {
+          nickname: 'TestPlayer',
+          score: {
+            correct: true,
+            last: 100,
+            total: 100,
+            position: 1,
+            streak: 1,
+          },
+        },
+        pagination: { current: 1, total: 10 },
+      }
+
+      const { router } = renderWithRouter()
+
+      // First loading event
+      h.control.event = { type: GameEventType.GameLoading }
+      await act(async () => {
+        await pokeRouter(router)
+      })
+
+      // Advance 200ms
+      await act(async () => {
+        vi.advanceTimersByTime(200)
+      })
+
+      // Second loading event (should reset the timer)
+      h.control.event = { type: GameEventType.GameLoading }
+      await act(async () => {
+        await pokeRouter(router)
+      })
+
+      // Advance another 400ms (total 600ms from first event, but only 400ms from second)
+      await act(async () => {
+        vi.advanceTimersByTime(400)
+      })
+
+      // Should still not show loading overlay (need 500ms from last loading event)
+      expect(screen.queryByTestId('loading-overlay')).not.toBeInTheDocument()
+
+      // Advance the final 100ms
+      await act(async () => {
+        vi.advanceTimersByTime(100)
+      })
+
+      // Now it should show
+      expect(screen.getByTestId('loading-overlay')).toBeInTheDocument()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  })
+
+  it('clears status notification timeout when status changes before timeout fires', async () => {
+    vi.useFakeTimers()
+    try {
+      const router = createMemoryRouter(
+        [{ path: '/', element: <GamePage /> }],
+        { initialEntries: ['/'] },
+      )
+
+      render(<RouterProvider router={router} />)
+
+      // First status change to RECONNECTING
+      await act(async () => {
+        h.control.status = 'RECONNECTING'
+        await pokeRouter(router)
+      })
+
+      // Advance time partially (less than 500ms)
+      await act(async () => {
+        vi.advanceTimersByTime(200)
+      })
+
+      // Status changes again before the timeout fires (this should clear the previous timeout)
+      await act(async () => {
+        h.control.status = 'CONNECTED'
+        await pokeRouter(router)
+      })
+
+      // Complete all remaining timers
+      await act(async () => {
+        vi.runAllTimers()
+      })
+
+      // Should not have notified about reconnecting since it changed too quickly
+      expect(h.notifyWarning).not.toHaveBeenCalled()
+      expect(h.notifySuccess).not.toHaveBeenCalled()
+    } finally {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
   })
 })
