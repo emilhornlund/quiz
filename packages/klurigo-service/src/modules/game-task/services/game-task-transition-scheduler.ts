@@ -44,6 +44,22 @@ export class GameTaskTransitionScheduler extends WorkerHost {
   }
 
   /**
+   * Sets the transition timing fields for the current task based on the provided delay.
+   *
+   * @param gameDocument - The game document to update.
+   * @param delay - The delay in milliseconds for the transition.
+   *
+   * @private
+   */
+  private setTransitionTiming(gameDocument: GameDocument, delay: number): void {
+    const now = new Date()
+    gameDocument.currentTask.currentTransitionInitiated = now
+    gameDocument.currentTask.currentTransitionExpires = new Date(
+      now.getTime() + delay,
+    )
+  }
+
+  /**
    * Initiates the scheduling process for transitioning the current task
    * of the provided game document based on its type and status.
    * Handles existing scheduled transitions appropriately.
@@ -87,11 +103,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       const savedGameDocument = await this.gameRepository.findAndSaveWithLock(
         gameID,
         async (doc) => {
-          const now = new Date()
-          doc.currentTask.currentTransitionInitiated = now
-          doc.currentTask.currentTransitionExpires = delay
-            ? new Date(now.getTime() + delay)
-            : undefined
+          this.setTransitionTiming(doc, delay)
           return doc
         },
       )
@@ -172,12 +184,23 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       updatedGameDocument = await this.gameRepository.findAndSaveWithLock(
         _id,
         async (doc) => {
+          const taskTypeBefore = doc.currentTask.type
+
           if (nextStatus) {
             doc.currentTask.status = nextStatus
           }
           if (callback) {
             await callback(doc)
           }
+
+          // If callback changed the task type, we need to set timing fields for the new task
+          const taskTypeAfter = doc.currentTask.type
+          if (taskTypeBefore !== taskTypeAfter) {
+            const delay =
+              this.gameTaskTransitionService.getTaskTransitionDelay(doc)
+            this.setTransitionTiming(doc, delay)
+          }
+
           return doc
         },
       )
