@@ -1,18 +1,18 @@
 import { GameEvent, GameParticipantType } from '@klurigo/common'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRedis } from '@nestjs-modules/ioredis'
-import { Redis } from 'ioredis'
+import Redis from 'ioredis'
 
+import { GameAnswerRepository } from '../../game-core/repositories'
 import {
   GameDocument,
   Participant,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
-  toBaseQuestionTaskEventMetaDataTuple,
+  toGameEventMetaData,
   toPlayerQuestionPlayerEventMetaData,
 } from '../utils'
 
@@ -32,8 +32,12 @@ export class GameEventPublisher {
    * Constructs an instance of GameEventPublisher.
    *
    * @param redis - Redis instance for Pub/Sub operations.
+   * @param gameAnswerRepository - Repository used to retrieve current-question answers when building game event metadata.
    */
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  constructor(
+    @InjectRedis() private readonly redis: Redis,
+    private readonly gameAnswerRepository: GameAnswerRepository,
+  ) {}
 
   /**
    * Publishes game events to all participants for the provided game document.
@@ -50,15 +54,11 @@ export class GameEventPublisher {
    * @returns A promise that resolves once events for all participants have been published.
    */
   public async publish(document: GameDocument): Promise<void> {
-    const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
-      await this.redis.lrange(
-        getRedisPlayerParticipantAnswerKey(document._id),
-        0,
-        -1,
-      ),
-      {},
-      document.participants,
+    const answers = await this.gameAnswerRepository.findAllAnswersByGameId(
+      document._id,
     )
+
+    const metaData = toGameEventMetaData(answers, {}, document.participants)
 
     await Promise.all(
       document.participants.map(async (participant) => {

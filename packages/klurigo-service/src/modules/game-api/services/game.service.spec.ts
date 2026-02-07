@@ -1,11 +1,14 @@
-import { GameParticipantType, GameStatus } from '@klurigo/common'
+import { GameParticipantType, GameStatus, QuestionType } from '@klurigo/common'
 import { Logger } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Test } from '@nestjs/testing'
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis'
 
 import { GamePlayerJoinEventKey } from '../../../app/shared/event/game-join.event'
-import { GameRepository } from '../../game-core/repositories'
+import {
+  GameAnswerRepository,
+  GameRepository,
+} from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import { GameEventPublisher } from '../../game-event/services'
 import { GameTaskTransitionScheduler } from '../../game-task/services'
@@ -24,6 +27,12 @@ describe(GameService.name, () => {
     findAndSaveWithLock: jest.Mock
   }
 
+  let gameAnswerRepository: {
+    submitOnce: jest.Mock
+    findAllAnswersByGameId: jest.Mock
+    clear: jest.Mock
+  }
+
   let eventEmitter: {
     emit: jest.Mock
   }
@@ -39,6 +48,12 @@ describe(GameService.name, () => {
       findAndSaveWithLock: jest.fn(),
     }
 
+    gameAnswerRepository = {
+      submitOnce: jest.fn(),
+      findAllAnswersByGameId: jest.fn(),
+      clear: jest.fn(),
+    }
+
     eventEmitter = {
       emit: jest.fn(),
     }
@@ -47,6 +62,7 @@ describe(GameService.name, () => {
       providers: [
         GameService,
         { provide: GameRepository, useValue: gameRepository },
+        { provide: GameAnswerRepository, useValue: gameAnswerRepository },
         { provide: QuizRepository, useValue: {} },
         { provide: GameTaskTransitionScheduler, useValue: {} },
         { provide: GameEventPublisher, useValue: {} },
@@ -494,6 +510,124 @@ describe(GameService.name, () => {
       ).resolves.toBeUndefined()
 
       expect(eventEmitter.emit).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('submitQuestionAnswer', () => {
+    let gameTaskTransitionScheduler: { scheduleTaskTransition: jest.Mock }
+    let gameEventPublisher: { publish: jest.Mock }
+
+    beforeEach(() => {
+      gameTaskTransitionScheduler = {
+        scheduleTaskTransition: jest.fn().mockResolvedValue(undefined),
+      }
+      gameEventPublisher = {
+        publish: jest.fn().mockResolvedValue(undefined),
+      }
+      ;(
+        service as unknown as {
+          gameTaskTransitionScheduler: { scheduleTaskTransition: jest.Mock }
+        }
+      ).gameTaskTransitionScheduler = gameTaskTransitionScheduler
+      ;(
+        service as unknown as { gameEventPublisher: { publish: jest.Mock } }
+      ).gameEventPublisher = gameEventPublisher
+    })
+
+    it('schedules transition when answerCount equals playerCount', async () => {
+      const gameDoc = {
+        _id: 'game-1',
+        currentTask: { type: TaskType.Question, status: 'active' },
+        participants: [
+          { participantId: 'p1', type: GameParticipantType.PLAYER },
+          { participantId: 'p2', type: GameParticipantType.PLAYER },
+          { participantId: 'host', type: GameParticipantType.HOST },
+        ],
+      }
+      gameRepository.findGameByIDOrThrow.mockResolvedValue(gameDoc)
+      gameAnswerRepository.submitOnce.mockResolvedValue({
+        accepted: true,
+        answerCount: 2,
+      })
+
+      await service.submitQuestionAnswer('game-1', 'p1', {
+        type: QuestionType.MultiChoice,
+        optionIndex: 1,
+      } as any)
+
+      expect(gameAnswerRepository.submitOnce).toHaveBeenCalledWith(
+        'game-1',
+        expect.objectContaining({ playerId: 'p1' }),
+        2,
+      )
+      expect(
+        gameTaskTransitionScheduler.scheduleTaskTransition,
+      ).toHaveBeenCalledWith(gameDoc)
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
+    })
+
+    it('publishes event when answerCount does not equal playerCount', async () => {
+      const gameDoc = {
+        _id: 'game-1',
+        currentTask: { type: TaskType.Question, status: 'active' },
+        participants: [
+          { participantId: 'p1', type: GameParticipantType.PLAYER },
+          { participantId: 'p2', type: GameParticipantType.PLAYER },
+          { participantId: 'p3', type: GameParticipantType.PLAYER },
+          { participantId: 'host', type: GameParticipantType.HOST },
+        ],
+      }
+      gameRepository.findGameByIDOrThrow.mockResolvedValue(gameDoc)
+      gameAnswerRepository.submitOnce.mockResolvedValue({
+        accepted: true,
+        answerCount: 1,
+      })
+
+      await service.submitQuestionAnswer('game-1', 'p1', {
+        type: QuestionType.MultiChoice,
+        optionIndex: 2,
+      } as any)
+
+      expect(gameAnswerRepository.submitOnce).toHaveBeenCalledWith(
+        'game-1',
+        expect.objectContaining({ playerId: 'p1' }),
+        3,
+      )
+      expect(gameEventPublisher.publish).toHaveBeenCalledWith(gameDoc)
+      expect(
+        gameTaskTransitionScheduler.scheduleTaskTransition,
+      ).not.toHaveBeenCalled()
+    })
+
+    it('throws BadRequestException when repository rejects submission', async () => {
+      const gameDoc = {
+        _id: 'game-1',
+        currentTask: { type: TaskType.Question, status: 'active' },
+        participants: [
+          { participantId: 'p1', type: GameParticipantType.PLAYER },
+        ],
+      }
+      gameRepository.findGameByIDOrThrow.mockResolvedValue(gameDoc)
+      gameAnswerRepository.submitOnce.mockRejectedValue(
+        new Error('Redis connection failed'),
+      )
+
+      await expect(
+        service.submitQuestionAnswer('game-1', 'p1', {
+          type: QuestionType.MultiChoice,
+          optionIndex: 1,
+        } as any),
+      ).rejects.toThrow('Redis connection failed')
+
+      expect(gameAnswerRepository.submitOnce).toHaveBeenCalledWith(
+        'game-1',
+        expect.objectContaining({ playerId: 'p1' }),
+        1,
+      )
+      expect(
+        gameTaskTransitionScheduler.scheduleTaskTransition,
+      ).not.toHaveBeenCalled()
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
     })
   })
 })

@@ -9,28 +9,22 @@ import type { Redis } from 'ioredis'
 import { firstValueFrom, take, toArray } from 'rxjs'
 
 import { PlayerNotFoundException } from '../../game-core/exceptions'
+import { GameAnswerRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
-  toBaseQuestionTaskEventMetaDataTuple,
+  toGameEventMetaData,
   toPlayerQuestionPlayerEventMetaData,
 } from '../utils'
 
 import { GameEventSubscriber } from './game-event.subscriber'
 
 // ---- Mocks ----
-jest.mock('../../game-core/utils', () => ({
-  getRedisPlayerParticipantAnswerKey: jest.fn(() => 'ans:key'),
-}))
-
-// eslint-disable-next-line import/order
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-
 jest.mock('../utils', () => ({
   buildHostGameEvent: jest.fn(),
   buildPlayerGameEvent: jest.fn(),
-  toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
+  toGameEventMetaData: jest.fn(),
   toPlayerQuestionPlayerEventMetaData: jest.fn(),
 }))
 
@@ -38,6 +32,7 @@ describe('GameEventSubscriber', () => {
   let redis: jest.Mocked<Redis>
   let redisSubscriber: jest.Mocked<Redis>
   let gameRepository: any
+  let gameAnswerRepository: jest.Mocked<GameAnswerRepository>
   let eventEmitter: EventEmitter2
   let service: GameEventSubscriber
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
@@ -67,17 +62,20 @@ describe('GameEventSubscriber', () => {
       findGameByIDOrThrow: jest.fn(),
     }
 
+    gameAnswerRepository = {
+      findAllAnswersByGameId: jest.fn().mockResolvedValue([]),
+      submitOnce: jest.fn(),
+      clear: jest.fn(),
+    } as any
+
     eventEmitter = new EventEmitter2()
 
     // Reset util mocks per test
     ;(buildHostGameEvent as jest.Mock).mockReset()
     ;(buildPlayerGameEvent as jest.Mock).mockReset()
-    ;(getRedisPlayerParticipantAnswerKey as jest.Mock)
+    ;(toGameEventMetaData as jest.Mock)
       .mockReset()
-      .mockReturnValue('ans:key')
-    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
-      .mockReset()
-      .mockReturnValue([[], { meta: true }])
+      .mockReturnValue({ meta: true })
     ;(toPlayerQuestionPlayerEventMetaData as jest.Mock)
       .mockReset()
       .mockReturnValue({ pmeta: true })
@@ -85,6 +83,7 @@ describe('GameEventSubscriber', () => {
     service = new GameEventSubscriber(
       redis as unknown as Redis,
       gameRepository,
+      gameAnswerRepository,
       eventEmitter,
     )
 
@@ -334,8 +333,10 @@ describe('GameEventSubscriber', () => {
     expect(counts.has('p1')).toBe(false)
 
     // Ensure metadata builders were used
-    expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
-    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalled()
+    expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+      'game-1',
+    )
+    expect(toGameEventMetaData).toHaveBeenCalled()
     expect(toPlayerQuestionPlayerEventMetaData).toHaveBeenCalled()
     expect(buildPlayerGameEvent).toHaveBeenCalledWith(
       doc,
@@ -403,5 +404,29 @@ describe('GameEventSubscriber', () => {
       { type: 'B' },
     ])
     expect(logger.warn).toHaveBeenCalled()
+  })
+
+  it('subscribe falls back to heartbeat when gameAnswerRepository.findAllAnswersByGameId fails during initial snapshot', async () => {
+    const doc = buildGameDoc()
+    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameAnswerRepository.findAllAnswersByGameId.mockRejectedValue(
+      new Error('Repository failed'),
+    )
+
+    const stream$ = await service.subscribe('game-1', 'host')
+    const resultsPromise = firstValueFrom(stream$.pipe(take(1)))
+
+    const result = await resultsPromise
+    expect(JSON.parse(result.data as any)).toEqual({
+      type: GameEventType.GameHeartbeat,
+    })
+
+    expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+      'game-1',
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Error building initial event for participant'),
+      expect.any(String),
+    )
   })
 })

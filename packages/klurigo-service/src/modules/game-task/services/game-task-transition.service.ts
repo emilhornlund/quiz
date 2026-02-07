@@ -1,15 +1,11 @@
 import { GameStatus } from '@klurigo/common'
 import { Injectable } from '@nestjs/common'
-import { InjectRedis } from '@nestjs-modules/ioredis'
-import { Redis } from 'ioredis'
 
+import { GameAnswerRepository } from '../../game-core/repositories'
 import {
   GameDocument,
-  QuestionTaskAnswer,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 import {
@@ -36,12 +32,11 @@ export class GameTaskTransitionService {
   /**
    * Constructs the GameTaskTransitionService.
    *
-   * @param redis - The Redis instance used for answer synchronization and task coordination.
+   * @param gameAnswerRepository - Repository responsible for reading and clearing current-question answers from Redis.
    * @param gameResultService - Service responsible for creating and retrieving persisted game results.
    */
   constructor(
-    @InjectRedis()
-    private readonly redis: Redis,
+    private readonly gameAnswerRepository: GameAnswerRepository,
     private readonly gameResultService: GameResultService,
   ) {}
 
@@ -151,15 +146,11 @@ export class GameTaskTransitionService {
       )
     }
 
-    const answers: QuestionTaskAnswer[] = (
-      await this.redis.lrange(
-        getRedisPlayerParticipantAnswerKey(gameDocument._id),
-        0,
-        -1,
-      )
-    ).map(toQuestionTaskAnswerFromString)
+    const answers = await this.gameAnswerRepository.findAllAnswersByGameId(
+      gameDocument._id,
+    )
 
-    await this.redis.del(getRedisPlayerParticipantAnswerKey(gameDocument._id))
+    await this.gameAnswerRepository.clear(gameDocument._id)
 
     gameDocument.currentTask.answers = answers
     gameDocument.previousTasks.push(gameDocument.currentTask)
