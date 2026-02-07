@@ -1,38 +1,33 @@
 import { GameParticipantType } from '@klurigo/common'
 import type { Redis } from 'ioredis'
 
+import { GameAnswerRepository } from '../../game-core/repositories'
 import {
   GameDocument,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
 
-// eslint-disable-next-line import/order
 import { GameEventPublisher } from './game-event.publisher'
 
 // ---- Mocks ----
-jest.mock('../../game-core/utils', () => ({
-  getRedisPlayerParticipantAnswerKey: jest.fn(() => 'ans:key'),
-}))
-
-// eslint-disable-next-line import/order
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
-
 jest.mock('../utils', () => ({
   buildHostGameEvent: jest.fn(),
   buildPlayerGameEvent: jest.fn(),
-  toBaseQuestionTaskEventMetaDataTuple: jest.fn(),
+  toGameEventMetaData: jest.fn(),
   toPlayerQuestionPlayerEventMetaData: jest.fn(),
 }))
 
+// eslint-disable-next-line import/order
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
-  toBaseQuestionTaskEventMetaDataTuple,
+  toGameEventMetaData,
   toPlayerQuestionPlayerEventMetaData,
 } from '../utils'
 
 describe('GameEventPublisher', () => {
   let redis: jest.Mocked<Redis>
+  let gameAnswerRepository: jest.Mocked<GameAnswerRepository>
   let service: GameEventPublisher
   let logger: {
     debug: jest.Mock
@@ -52,26 +47,34 @@ describe('GameEventPublisher', () => {
       publish: jest.fn().mockResolvedValue(1),
     } as any
 
+    gameAnswerRepository = {
+      findAllAnswersByGameId: jest.fn().mockResolvedValue([]),
+      submitOnce: jest.fn(),
+      clear: jest.fn(),
+    } as any
+
     // Reset util mocks
     ;(buildHostGameEvent as jest.Mock).mockReset()
     ;(buildPlayerGameEvent as jest.Mock).mockReset()
-    ;(getRedisPlayerParticipantAnswerKey as jest.Mock)
+    ;(toGameEventMetaData as jest.Mock)
       .mockReset()
-      .mockReturnValue('ans:key')
-    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock)
-      .mockReset()
-      .mockReturnValue([[], { meta: true }])
+      .mockReturnValue({ meta: true })
     ;(toPlayerQuestionPlayerEventMetaData as jest.Mock)
       .mockReset()
       .mockReturnValue({ pmeta: true })
 
-    service = new GameEventPublisher(redis as unknown as Redis)
+    service = new GameEventPublisher(
+      redis as unknown as Redis,
+      gameAnswerRepository,
+    )
     // Override internal logger for assertions (same trick as previous tests)
     ;(service as any).logger = logger
   })
 
   afterEach(() => {
     jest.clearAllMocks()
+    // Reset repository mocks after clearAllMocks
+    gameAnswerRepository.findAllAnswersByGameId.mockResolvedValue([])
   })
 
   const buildGameDoc = (overrides: Partial<any> = {}) => ({
@@ -104,12 +107,10 @@ describe('GameEventPublisher', () => {
     await service.publish(doc as GameDocument)
 
     // Collected answers & metadata
-    expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
-    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalledWith(
-      [],
-      {},
-      doc.participants,
+    expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+      'game-1',
     )
+    expect(toGameEventMetaData).toHaveBeenCalledWith([], {}, doc.participants)
     // No question-specific metadata for Lobby
     expect(toPlayerQuestionPlayerEventMetaData).not.toHaveBeenCalled()
 
@@ -250,12 +251,10 @@ describe('GameEventPublisher', () => {
 
     await service.publish(doc as GameDocument)
 
-    expect(getRedisPlayerParticipantAnswerKey).toHaveBeenCalledWith('game-1')
-    expect(toBaseQuestionTaskEventMetaDataTuple).toHaveBeenCalledWith(
-      [],
-      {},
-      [],
+    expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+      'game-1',
     )
+    expect(toGameEventMetaData).toHaveBeenCalledWith([], {}, [])
     expect(redis.publish).not.toHaveBeenCalled()
     expect(logger.debug).not.toHaveBeenCalled()
     expect(logger.warn).not.toHaveBeenCalled()
@@ -273,16 +272,14 @@ describe('GameEventPublisher', () => {
     expect(msg).toEqual({ playerId: 'p1', event: { ok: true } })
   })
 
-  it('publish rejects if metadata tuple builder throws before per-participant publishing', async () => {
+  it('publish rejects if metadata builder throws before per-participant publishing', async () => {
     const doc = buildGameDoc()
-    ;(toBaseQuestionTaskEventMetaDataTuple as jest.Mock).mockImplementation(
-      () => {
-        throw new Error('tuple boom')
-      },
-    )
+    ;(toGameEventMetaData as jest.Mock).mockImplementation(() => {
+      throw new Error('metadata boom')
+    })
 
     await expect(service.publish(doc as GameDocument)).rejects.toThrow(
-      'tuple boom',
+      'metadata boom',
     )
 
     expect(redis.publish).not.toHaveBeenCalled()
@@ -299,5 +296,21 @@ describe('GameEventPublisher', () => {
     expect(channel).toBe('events')
     expect(JSON.parse(message)).toEqual(event)
     expect(logger.debug).toHaveBeenCalledWith('Published event for all players')
+  })
+
+  it('publish rejects when gameAnswerRepository.findAllAnswersByGameId fails', async () => {
+    const doc = buildGameDoc()
+    gameAnswerRepository.findAllAnswersByGameId.mockRejectedValue(
+      new Error('Repository failed'),
+    )
+
+    await expect(service.publish(doc as GameDocument)).rejects.toThrow(
+      'Repository failed',
+    )
+
+    expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+      'game-1',
+    )
+    expect(redis.publish).not.toHaveBeenCalled()
   })
 })

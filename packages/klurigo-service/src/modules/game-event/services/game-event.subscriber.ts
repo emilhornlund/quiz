@@ -18,13 +18,15 @@ import { concat, finalize, fromEvent, Observable, of } from 'rxjs'
 import { filter, map } from 'rxjs/operators'
 
 import { PlayerNotFoundException } from '../../game-core/exceptions'
-import { GameRepository } from '../../game-core/repositories'
+import {
+  GameAnswerRepository,
+  GameRepository,
+} from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
-import { getRedisPlayerParticipantAnswerKey } from '../../game-core/utils'
 import {
   buildHostGameEvent,
   buildPlayerGameEvent,
-  toBaseQuestionTaskEventMetaDataTuple,
+  toGameEventMetaData,
   toPlayerQuestionPlayerEventMetaData,
 } from '../utils'
 
@@ -63,11 +65,13 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    *
    * @param redis - The primary Redis client used for queries and for duplicating a dedicated Pub/Sub subscriber connection.
    * @param gameRepository - Repository used to validate games and participants before opening an SSE stream.
+   * @param gameAnswerRepository - Repository used to retrieve current-question answers for building initial snapshot events.
    * @param eventEmitter - Local event emitter used to broadcast distributed events to all SSE subscriptions within this instance.
    */
   constructor(
     @InjectRedis() private readonly redis: Redis,
     private readonly gameRepository: GameRepository,
+    private readonly gameAnswerRepository: GameAnswerRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.redisSubscriber = redis.duplicate()
@@ -266,7 +270,6 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    * @throws {PlayerNotFoundException} If the participant does not exist in the game.
    * @throws {ActiveGameNotFoundByIDException} If the game does not exist or cannot be loaded.
    */
-
   public async subscribe(
     gameId: string,
     participantId: string,
@@ -293,15 +296,11 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
     // so clients know the stream is alive.
     const initialEvent = await (async (): Promise<DistributedEvent> => {
       try {
-        const [answers, metaData] = toBaseQuestionTaskEventMetaDataTuple(
-          await this.redis.lrange(
-            getRedisPlayerParticipantAnswerKey(document._id),
-            0,
-            -1,
-          ),
-          {},
-          document.participants,
+        const answers = await this.gameAnswerRepository.findAllAnswersByGameId(
+          document._id,
         )
+
+        const metaData = toGameEventMetaData(answers, {}, document.participants)
 
         return {
           playerId: participantId,

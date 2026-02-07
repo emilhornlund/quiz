@@ -8,7 +8,6 @@ import {
   Participant,
   ParticipantPlayerWithBase,
   QuestionTaskAnswer,
-  QuestionTaskBaseAnswer,
 } from '../../game-core/repositories/models/schemas'
 import { GameEventMetaData } from '../models'
 
@@ -61,118 +60,30 @@ export function toQuestionTaskAnswer(
 }
 
 /**
- * Deserializes a string to create a `QuestionTaskAnswer` object.
+ * Computes game event metadata related to answer submissions for the current question.
  *
- * @param serializedValue - The serialized string representation of a question task answer.
+ * The function populates:
+ * - `currentAnswerSubmissions` based on the number of stored answers.
+ * - `totalAnswerSubmissions` based on the number of player participants (host excluded).
  *
- * @returns {QuestionTaskAnswer} The deserialized `QuestionTaskAnswer` object.
+ * @param answers - Answers currently submitted for the active question.
+ * @param metaData - Existing metadata to merge into.
+ * @param participants - All game participants used to compute total expected submissions.
+ * @returns Merged metadata including submission counters.
  */
-export function toQuestionTaskAnswerFromString(
-  serializedValue: string,
-): QuestionTaskAnswer {
-  const deserializedValue = JSON.parse(serializedValue)
 
-  const base: QuestionTaskBaseAnswer = {
-    type: deserializedValue.type as QuestionType,
-    playerId: deserializedValue.playerId as string,
-    created: new Date(deserializedValue.created as Date),
-  }
-
-  let answer: string | string[] | number | boolean = ''
-
-  switch (deserializedValue.type) {
-    case QuestionType.MultiChoice:
-      answer = deserializedValue.answer as number
-      break
-    case QuestionType.Range:
-      answer = deserializedValue.answer as number
-      break
-    case QuestionType.TrueFalse:
-      answer = deserializedValue.answer as boolean
-      break
-    case QuestionType.TypeAnswer:
-      answer = deserializedValue.answer as string
-      break
-    case QuestionType.Pin:
-      answer = deserializedValue.answer as string
-      break
-    case QuestionType.Puzzle:
-      answer = deserializedValue.answer as string[]
-      break
-    default:
-      throw new Error(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        `Unsupported question type '${deserializedValue.type as any}'`,
-      )
-  }
-
-  return { ...base, answer }
-}
-
-/**
- * Converts serialized answers and participant information into metadata and answers.
- *
- * @param serializedAnswers - An array of serialized answers retrieved from Redis.
- * @param metaData - Partial metadata containing current and total submissions.
- * @param participants - The list of game participants, used to calculate submission-related metadata.
- *
- * @returns A tuple containing deserialized answers and metadata.
- */
-export function toBaseQuestionTaskEventMetaDataTuple(
-  serializedAnswers: string[],
+export function toGameEventMetaData(
+  answers: QuestionTaskAnswer[],
   metaData: Partial<GameEventMetaData>,
   participants: Participant[],
-): [QuestionTaskAnswer[], Partial<GameEventMetaData>] {
-  const answers = serializedAnswers.map((serializedValue) => {
-    const deserializedValue = JSON.parse(serializedValue)
-
-    const base: QuestionTaskBaseAnswer = {
-      type: deserializedValue.type as QuestionType,
-      playerId: deserializedValue.playerId as string,
-      created: new Date(deserializedValue.created as Date),
-    }
-
-    let answer: string | string[] | number | boolean = ''
-
-    switch (deserializedValue.type) {
-      case QuestionType.MultiChoice:
-        answer = deserializedValue.answer as number
-        break
-      case QuestionType.Range:
-        answer = deserializedValue.answer as number
-        break
-      case QuestionType.TrueFalse:
-        answer = deserializedValue.answer as boolean
-        break
-      case QuestionType.TypeAnswer:
-        answer = deserializedValue.answer as string
-        break
-      case QuestionType.Pin:
-        answer = deserializedValue.answer as string
-        break
-      case QuestionType.Puzzle:
-        answer = deserializedValue.answer as string[]
-        break
-      default:
-        throw new Error(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          `Unsupported question type '${deserializedValue.type as any}'`,
-        )
-    }
-
-    return { ...base, answer }
-  })
-
-  return [
-    answers,
-    {
-      ...metaData,
-      currentAnswerSubmissions: serializedAnswers.length,
-      totalAnswerSubmissions: participants.filter(
-        (participant) => participant.type === GameParticipantType.PLAYER,
-      ).length,
-    },
-  ]
+): Partial<GameEventMetaData> {
+  return {
+    ...metaData,
+    currentAnswerSubmissions: answers.length,
+    totalAnswerSubmissions: participants.filter(
+      (participant) => participant.type === GameParticipantType.PLAYER,
+    ).length,
+  }
 }
 
 /**

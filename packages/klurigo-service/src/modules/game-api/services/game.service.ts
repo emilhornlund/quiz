@@ -29,13 +29,12 @@ import {
   GamePlayerJoinEventKey,
 } from '../../../app/shared/event/game-join.event'
 import { PlayerNotFoundException } from '../../game-core/exceptions'
-import { GameRepository } from '../../game-core/repositories'
-import { TaskType } from '../../game-core/repositories/models/schemas'
 import {
-  getRedisPlayerParticipantAnswerKey,
-  isParticipantHost,
-  isParticipantPlayer,
-} from '../../game-core/utils'
+  GameAnswerRepository,
+  GameRepository,
+} from '../../game-core/repositories'
+import { TaskType } from '../../game-core/repositories/models/schemas'
+import { isParticipantHost, isParticipantPlayer } from '../../game-core/utils'
 import { GameEventPublisher } from '../../game-event/services'
 import {
   buildGameQuitEvent,
@@ -82,6 +81,7 @@ export class GameService {
    *
    * @param redis - The Redis instance used for answer synchronization and task coordination.
    * @param gameRepository - Repository responsible for reading and persisting game documents.
+   * @param gameAnswerRepository - Repository responsible for storing and retrieving current-question answers in Redis.
    * @param gameTaskTransitionScheduler - Scheduler responsible for task transitions and time-based progression.
    * @param gameEventPublisher - Service responsible for publishing game events to clients.
    * @param quizRepository - Repository for accessing and modifying quiz documents.
@@ -90,6 +90,7 @@ export class GameService {
   constructor(
     @InjectRedis() private readonly redis: Redis,
     private readonly gameRepository: GameRepository,
+    private readonly gameAnswerRepository: GameAnswerRepository,
     private readonly gameTaskTransitionScheduler: GameTaskTransitionScheduler,
     private readonly gameEventPublisher: GameEventPublisher,
     private readonly quizRepository: QuizRepository,
@@ -394,57 +395,22 @@ export class GameService {
       )
     }
 
-    let hasAlreadyAnswered = false
-
-    try {
-      hasAlreadyAnswered =
-        (
-          await this.redis.lrange(
-            getRedisPlayerParticipantAnswerKey(gameID),
-            0,
-            -1,
-          )
-        )
-          .map((value) => JSON.parse(value))
-          .filter((value) => value.playerId === playerId).length > 0
-    } catch (error) {
-      this.logger.error('Failed to submit question answer', error)
-      throw new BadRequestException('Failed to submit question answer')
-    }
-
-    if (hasAlreadyAnswered) {
-      throw new BadRequestException('Answer already provided')
-    }
-
-    let currentAnswerCount = 0
-    const serializedValue = JSON.stringify(answer)
-
-    try {
-      currentAnswerCount = await this.redis.rpush(
-        getRedisPlayerParticipantAnswerKey(gameID),
-        serializedValue,
-      )
-    } catch (error) {
-      this.logger.error('Failed to submit question answer', error)
-      throw new BadRequestException('Failed to submit question answer')
-    }
-
     const playerCount = gameDocument.participants.filter(
       (participant) => participant.type === GameParticipantType.PLAYER,
     ).length
 
-    try {
-      await this.redis.ltrim(
-        getRedisPlayerParticipantAnswerKey(gameID),
-        0,
-        playerCount - 1,
-      )
-    } catch (error) {
-      this.logger.error('Failed to submit question answer', error)
-      throw new BadRequestException('Failed to submit question answer')
+    const result = await this.gameAnswerRepository.submitOnce(
+      gameID,
+      answer,
+      playerCount,
+    )
+
+    if (!result.accepted) {
+      throw new BadRequestException('Answer already provided')
     }
 
-    if (currentAnswerCount === playerCount) {
+    // determine if all players have submitted an answer after accepting the current submission
+    if (result.answerCount === playerCount) {
       await this.gameTaskTransitionScheduler.scheduleTaskTransition(
         gameDocument,
       )

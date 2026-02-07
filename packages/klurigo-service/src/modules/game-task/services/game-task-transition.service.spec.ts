@@ -1,5 +1,4 @@
 import { GameStatus } from '@klurigo/common'
-import type { Redis } from 'ioredis'
 
 import {
   createMockGameDocument,
@@ -13,23 +12,14 @@ import {
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
 } from '../../../../test-utils/data'
-import {
-  getRedisPlayerParticipantAnswerKey,
-  isParticipantPlayer,
-} from '../../game-core/utils'
+import { GameAnswerRepository } from '../../game-core/repositories'
+import { isParticipantPlayer } from '../../game-core/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 
 import { GameTaskTransitionService } from './game-task-transition.service'
 
 jest.mock('../../game-core/utils')
-
-jest.mock('../../game-event/utils', () => ({
-  toQuestionTaskAnswerFromString: jest.fn(),
-}))
-
-// eslint-disable-next-line import/order
-import { toQuestionTaskAnswerFromString } from '../../game-event/utils'
 
 jest.mock('../utils', () => ({
   buildQuestionTask: jest.fn(),
@@ -50,37 +40,34 @@ import {
   updateParticipantsAndBuildLeaderboard,
 } from '../utils'
 
-const mockGetRedisPlayerParticipantAnswerKey =
-  getRedisPlayerParticipantAnswerKey as jest.MockedFunction<
-    typeof getRedisPlayerParticipantAnswerKey
-  >
 const mockIsParticipantPlayer = isParticipantPlayer as jest.MockedFunction<
   typeof isParticipantPlayer
 >
 
 describe('GameTaskTransitionService', () => {
   let service: GameTaskTransitionService
-  let redis: jest.Mocked<Redis>
+  let gameAnswerRepository: jest.Mocked<GameAnswerRepository>
   let gameResultService: jest.Mocked<GameResultService>
   let logger: { log: jest.Mock; warn: jest.Mock; error: jest.Mock }
 
   beforeEach(() => {
     logger = { log: jest.fn(), warn: jest.fn(), error: jest.fn() }
 
-    redis = {
-      lrange: jest.fn().mockResolvedValue([]),
-      del: jest.fn().mockResolvedValue(1),
-    } as unknown as jest.Mocked<Redis>
+    gameAnswerRepository = {
+      findAllAnswersByGameId: jest.fn().mockResolvedValue([]),
+      clear: jest.fn().mockResolvedValue(undefined),
+      submitOnce: jest.fn(),
+    } as unknown as jest.Mocked<GameAnswerRepository>
 
     gameResultService = {
       createGameResult: jest.fn().mockResolvedValue({} as never),
     } as unknown as jest.Mocked<GameResultService>
 
-    service = new GameTaskTransitionService(redis, gameResultService)
+    service = new GameTaskTransitionService(
+      gameAnswerRepository,
+      gameResultService,
+    )
     ;(service as any).logger = logger
-
-    mockGetRedisPlayerParticipantAnswerKey.mockReset()
-    mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:answer:key')
 
     mockIsParticipantPlayer.mockReset()
     mockIsParticipantPlayer.mockReturnValue(true)
@@ -161,7 +148,7 @@ describe('GameTaskTransitionService', () => {
       ).toBeUndefined()
     })
 
-    it('question completed reads answers from Redis, clears key, stores answers, and transitions to question result task', async () => {
+    it('question completed reads answers from repository, clears answers, stores them, and transitions to question result task', async () => {
       const task = createMockQuestionTaskDocument({
         status: 'completed',
         questionIndex: 0,
@@ -172,18 +159,14 @@ describe('GameTaskTransitionService', () => {
         questions: [createMockMultiChoiceQuestionDocument()],
       })
 
-      mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
-
-      redis.lrange.mockResolvedValue(['answer-1', 'answer-2'])
-
       const parsedAnswers = [
         { participantId: 'p1' },
         { participantId: 'p2' },
       ] as any[]
-      ;(toQuestionTaskAnswerFromString as jest.Mock)
-        .mockReset()
-        .mockReturnValueOnce(parsedAnswers[0])
-        .mockReturnValueOnce(parsedAnswers[1])
+
+      gameAnswerRepository.findAllAnswersByGameId.mockResolvedValue(
+        parsedAnswers,
+      )
 
       const nextTask = createMockQuestionResultTaskDocument({
         status: 'pending',
@@ -197,9 +180,10 @@ describe('GameTaskTransitionService', () => {
 
       await callback!(gameDoc as never)
 
-      expect(redis.lrange).toHaveBeenCalledWith('redis:key:game-1', 0, -1)
-      expect(toQuestionTaskAnswerFromString).toHaveBeenCalledTimes(2)
-      expect(redis.del).toHaveBeenCalledWith('redis:key:game-1')
+      expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
+        'game-1',
+      )
+      expect(gameAnswerRepository.clear).toHaveBeenCalledWith('game-1')
 
       expect((task as any).answers).toEqual(parsedAnswers)
       expect(gameDoc.previousTasks).toContain(task)
@@ -632,8 +616,8 @@ describe('GameTaskTransitionService', () => {
     })
   })
 
-  describe('Redis integration and error handling', () => {
-    it('question completed: propagates Redis lrange failure and does not delete key or transition', async () => {
+  describe('Repository integration and error handling', () => {
+    it('question completed: propagates repository findAllAnswersByGameId failure and does not clear or transition', async () => {
       const task = createMockQuestionTaskDocument({
         status: 'completed',
         questionIndex: 0,
@@ -644,22 +628,23 @@ describe('GameTaskTransitionService', () => {
         questions: [createMockMultiChoiceQuestionDocument()],
       })
 
-      mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
-      redis.lrange.mockRejectedValue(new Error('Redis connection failed'))
+      gameAnswerRepository.findAllAnswersByGameId.mockRejectedValue(
+        new Error('Repository connection failed'),
+      )
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
 
       await expect(callback!(gameDoc as never)).rejects.toThrow(
-        'Redis connection failed',
+        'Repository connection failed',
       )
 
-      expect(redis.del).not.toHaveBeenCalled()
+      expect(gameAnswerRepository.clear).not.toHaveBeenCalled()
       expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
 
-    it('question completed: propagates Redis del failure and does not transition task', async () => {
+    it('question completed: propagates repository clear failure and does not transition task', async () => {
       const task = createMockQuestionTaskDocument({
         status: 'completed',
         questionIndex: 0,
@@ -670,27 +655,25 @@ describe('GameTaskTransitionService', () => {
         questions: [createMockMultiChoiceQuestionDocument()],
       })
 
-      mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
-      redis.lrange.mockResolvedValue(['answer-1'])
-      ;(toQuestionTaskAnswerFromString as jest.Mock)
-        .mockReset()
-        .mockReturnValue({
-          participantId: 'p1',
-        } as any)
-      redis.del.mockRejectedValue(new Error('Redis delete failed'))
+      gameAnswerRepository.findAllAnswersByGameId.mockResolvedValue([
+        { participantId: 'p1' } as any,
+      ])
+      gameAnswerRepository.clear.mockRejectedValue(
+        new Error('Repository clear failed'),
+      )
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
 
       await expect(callback!(gameDoc as never)).rejects.toThrow(
-        'Redis delete failed',
+        'Repository clear failed',
       )
 
       expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
 
-    it('question completed: propagates parse failure and does not delete key or transition', async () => {
+    it('question completed: propagates deserialization failure from repository and does not clear or transition', async () => {
       const task = createMockQuestionTaskDocument({
         status: 'completed',
         questionIndex: 0,
@@ -701,20 +684,18 @@ describe('GameTaskTransitionService', () => {
         questions: [createMockMultiChoiceQuestionDocument()],
       })
 
-      mockGetRedisPlayerParticipantAnswerKey.mockReturnValue('redis:key:game-1')
-      redis.lrange.mockResolvedValue(['malformed'])
-      ;(toQuestionTaskAnswerFromString as jest.Mock)
-        .mockReset()
-        .mockImplementation(() => {
-          throw new Error('Invalid JSON')
-        })
+      gameAnswerRepository.findAllAnswersByGameId.mockRejectedValue(
+        new Error('Invalid JSON stored for game game-1 answers'),
+      )
 
       const callback = service.getTaskTransitionCallback(gameDoc as never)
       expect(callback).toBeDefined()
 
-      await expect(callback!(gameDoc as never)).rejects.toThrow('Invalid JSON')
+      await expect(callback!(gameDoc as never)).rejects.toThrow(
+        'Invalid JSON stored for game game-1 answers',
+      )
 
-      expect(redis.del).not.toHaveBeenCalled()
+      expect(gameAnswerRepository.clear).not.toHaveBeenCalled()
       expect(buildQuestionResultTask).not.toHaveBeenCalled()
       expect(gameDoc.previousTasks).not.toContain(task)
     })
