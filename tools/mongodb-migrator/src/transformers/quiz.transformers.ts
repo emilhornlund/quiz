@@ -24,53 +24,50 @@ export function transformQuizDocument(document: BSONDocument): BSONDocument {
     languageCode: extractValueOrThrow<string>(document, {}, 'languageCode'),
     questions: buildQuizQuestions(document),
     owner: extractValueOrThrow<string>(document, {}, 'owner'),
-    gameplaySummary: ((gameplaySummary: BSONDocument | null) => {
-      if (gameplaySummary) {
-        return {
-          count: extractValueOrThrow<number>(gameplaySummary, {}, 'count'),
-          totalPlayerCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalPlayerCount',
-          ),
-          totalClassicCorrectCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalClassicCorrectCount',
-          ),
-          totalClassicIncorrectCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalClassicIncorrectCount',
-          ),
-          totalClassicUnansweredCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalClassicUnansweredCount',
-          ),
-          totalZeroToOneHundredPrecisionSum: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalZeroToOneHundredPrecisionSum',
-          ),
-          totalZeroToOneHundredAnsweredCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalZeroToOneHundredAnsweredCount',
-          ),
-          totalZeroToOneHundredUnansweredCount: extractValueOrThrow<number>(
-            gameplaySummary,
-            {},
-            'totalZeroToOneHundredUnansweredCount',
-          ),
-          lastPlayedAt: toDate(
-            extractValue<string>(gameplaySummary, {}, 'lastPlayedAt'),
-          ),
-          updated: toDate(extractValue<string>(gameplaySummary, {}, 'updated')),
-        }
-      }
-      return null
-    })(extractValue<BSONDocument>(document, {}, 'gameplaySummary')),
+    gameplaySummary: {
+      count: extractValueOrThrow<number>(document, {}, 'gameplaySummary.count'),
+      totalPlayerCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalPlayerCount',
+      ),
+      totalClassicCorrectCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalClassicCorrectCount',
+      ),
+      totalClassicIncorrectCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalClassicIncorrectCount',
+      ),
+      totalClassicUnansweredCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalClassicUnansweredCount',
+      ),
+      totalZeroToOneHundredPrecisionSum: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalZeroToOneHundredPrecisionSum',
+      ),
+      totalZeroToOneHundredAnsweredCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalZeroToOneHundredAnsweredCount',
+      ),
+      totalZeroToOneHundredUnansweredCount: extractValueOrThrow<number>(
+        document,
+        {},
+        'gameplaySummary.totalZeroToOneHundredUnansweredCount',
+      ),
+      lastPlayedAt: toDate(
+        extractValue<string>(document, {}, 'gameplaySummary.lastPlayedAt'),
+      ),
+      updated: toDate(
+        extractValue<string>(document, {}, 'gameplaySummary.updated'),
+      ),
+    },
     ratingSummary: {
       count: extractValueOrThrow<number>(document, {}, 'ratingSummary.count'),
       avg: extractValueOrThrow<number>(document, {}, 'ratingSummary.avg'),

@@ -22,9 +22,7 @@ export function transformGameDocument(document: BSONDocument): BSONDocument {
     mode: extractValueOrThrow<string>(document, {}, 'mode'),
     status: extractValueOrThrow<string>(document, {}, 'status'),
     pin: extractValueOrThrow<string>(document, {}, 'pin'),
-    quiz:
-      extractValue<string>(document, {}, 'quiz._id') ||
-      extractValueOrThrow<string>(document, {}, 'quiz'),
+    quiz: extractValueOrThrow<string>(document, {}, 'quiz'),
     questions,
     nextQuestion: extractValueOrThrow<number>(document, {}, 'nextQuestion'),
     participants: buildGameParticipants(document),
