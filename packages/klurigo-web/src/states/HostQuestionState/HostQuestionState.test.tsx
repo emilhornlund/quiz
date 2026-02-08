@@ -382,4 +382,56 @@ describe('HostQuestionState', () => {
     )
     expect(screen.getByText(/7 \/ 12/)).toBeInTheDocument()
   })
+
+  it('does not show submissions counter when total is zero', () => {
+    render(
+      <MemoryRouter>
+        <HostQuestionState
+          event={{
+            type: GameEventType.GameQuestionHost,
+            game: { pin: '123456' },
+            question: {
+              type: QuestionType.TrueFalse,
+              question: 'No players?',
+              duration: 30,
+            },
+            countdown: {
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 30 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
+            },
+            submissions: { current: 0, total: 0 },
+            pagination: { current: 1, total: 2 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+    expect(screen.queryByText(/0 \/ 0/)).not.toBeInTheDocument()
+  })
+
+  it('shows submissions counter when total is greater than zero', () => {
+    render(
+      <MemoryRouter>
+        <HostQuestionState
+          event={{
+            type: GameEventType.GameQuestionHost,
+            game: { pin: '123456' },
+            question: {
+              type: QuestionType.TrueFalse,
+              question: 'Has players?',
+              duration: 30,
+            },
+            countdown: {
+              initiatedTime: new Date(now).toISOString(),
+              expiryTime: new Date(now + 30 * 1000).toISOString(),
+              serverTime: new Date(now).toISOString(),
+            },
+            submissions: { current: 1, total: 3 },
+            pagination: { current: 1, total: 2 },
+          }}
+        />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText(/1 \/ 3/)).toBeInTheDocument()
+  })
 })

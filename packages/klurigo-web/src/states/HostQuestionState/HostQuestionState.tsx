@@ -75,16 +75,20 @@ const HostQuestionState: FC<HostQuestionStateProps> = ({
           </Typography>
         </div>
       </div>
-      <div className={classNames(styles.row, styles.flexibleHeight)}>
-        <div className={styles.column}>
-          <div className={classNames(styles.iconInfo)}>
-            <FontAwesomeIcon icon={faUserGroup} />
-            <span>
-              {currentSubmission} / {totalSubmissions}
-            </span>
+
+      {!!totalSubmissions && (
+        <div className={classNames(styles.row, styles.flexibleHeight)}>
+          <div className={styles.column}>
+            <div className={classNames(styles.iconInfo)}>
+              <FontAwesomeIcon icon={faUserGroup} />
+              <span>
+                {currentSubmission} / {totalSubmissions}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       <QuestionMedia
         type={question.type}
         media={media}
