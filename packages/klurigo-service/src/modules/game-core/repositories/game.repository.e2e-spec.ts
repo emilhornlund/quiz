@@ -194,6 +194,8 @@ const buildMockGame = (
     shouldAutoCompleteQuestionResultTask: false,
     shouldAutoCompleteLeaderboardTask: false,
     shouldAutoCompletePodiumTask: false,
+    randomizeQuestionOrder: false,
+    randomizeAnswerOrder: false,
   },
   questions: [],
   nextQuestion: 0,
