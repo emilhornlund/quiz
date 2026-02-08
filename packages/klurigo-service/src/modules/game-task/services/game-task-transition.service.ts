@@ -6,6 +6,7 @@ import {
   GameDocument,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
+import { isParticipantPlayer } from '../../game-core/utils'
 import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 import {
@@ -101,6 +102,15 @@ export class GameTaskTransitionService {
         TaskType.Lobby,
       )
     }
+    const hasNoPlayerParticipants =
+      !gameDocument.participants.some(isParticipantPlayer)
+
+    gameDocument.settings.shouldAutoCompleteQuestionResultTask =
+      hasNoPlayerParticipants
+    gameDocument.settings.shouldAutoCompleteLeaderboardTask =
+      hasNoPlayerParticipants
+    gameDocument.settings.shouldAutoCompletePodiumTask = hasNoPlayerParticipants
+
     gameDocument.previousTasks.push(gameDocument.currentTask)
     gameDocument.currentTask = buildQuestionTask(gameDocument)
     gameDocument.nextQuestion = gameDocument.nextQuestion + 1

@@ -190,6 +190,11 @@ const buildMockGame = (
   status: GameStatus.Active,
   pin: '000000',
   quiz: { _id: uuidv4() } as Quiz,
+  settings: {
+    shouldAutoCompleteQuestionResultTask: false,
+    shouldAutoCompleteLeaderboardTask: false,
+    shouldAutoCompletePodiumTask: false,
+  },
   questions: [],
   nextQuestion: 0,
   participants: [],

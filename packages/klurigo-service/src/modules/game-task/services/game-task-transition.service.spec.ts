@@ -114,6 +114,65 @@ describe('GameTaskTransitionService', () => {
       expect(buildQuestionTask).toHaveBeenCalledWith(gameDoc as never)
     })
 
+    it('lobby completed sets all auto-complete settings to true when no player participants exist', async () => {
+      const host = createMockGameHostParticipantDocument()
+      const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+      const gameDoc = createMockGameDocument({
+        currentTask: lobbyTask,
+        participants: [host],
+        nextQuestion: 0,
+      })
+
+      const nextTask = createMockQuestionTaskDocument({
+        status: 'pending',
+        questionIndex: 0,
+      })
+      ;(buildQuestionTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(nextTask as never)
+
+      mockIsParticipantPlayer.mockReturnValue(false)
+
+      const callback = service.getTaskTransitionCallback(gameDoc as never)
+      expect(callback).toBeDefined()
+
+      await callback!(gameDoc as never)
+
+      expect(gameDoc.settings.shouldAutoCompleteQuestionResultTask).toBe(true)
+      expect(gameDoc.settings.shouldAutoCompleteLeaderboardTask).toBe(true)
+      expect(gameDoc.settings.shouldAutoCompletePodiumTask).toBe(true)
+    })
+
+    it('lobby completed sets all auto-complete settings to false when player participants exist', async () => {
+      const host = createMockGameHostParticipantDocument()
+      const player = createMockGamePlayerParticipantDocument()
+      const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+      const gameDoc = createMockGameDocument({
+        currentTask: lobbyTask,
+        participants: [host, player],
+        nextQuestion: 0,
+      })
+
+      const nextTask = createMockQuestionTaskDocument({
+        status: 'pending',
+        questionIndex: 0,
+      })
+      ;(buildQuestionTask as jest.Mock)
+        .mockReset()
+        .mockReturnValue(nextTask as never)
+
+      mockIsParticipantPlayer.mockImplementation((p: any) => p !== host)
+
+      const callback = service.getTaskTransitionCallback(gameDoc as never)
+      expect(callback).toBeDefined()
+
+      await callback!(gameDoc as never)
+
+      expect(gameDoc.settings.shouldAutoCompleteQuestionResultTask).toBe(false)
+      expect(gameDoc.settings.shouldAutoCompleteLeaderboardTask).toBe(false)
+      expect(gameDoc.settings.shouldAutoCompletePodiumTask).toBe(false)
+    })
+
     it('question pending sets presented timestamp', async () => {
       const task = createMockQuestionTaskDocument({
         status: 'pending',

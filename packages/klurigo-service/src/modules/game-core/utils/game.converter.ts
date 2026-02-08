@@ -30,6 +30,11 @@ export function buildGameModel(
     status: GameStatus.Active,
     pin: gamePIN,
     quiz,
+    settings: {
+      shouldAutoCompleteQuestionResultTask: false,
+      shouldAutoCompleteLeaderboardTask: false,
+      shouldAutoCompletePodiumTask: false,
+    },
     questions: quiz.questions,
     nextQuestion: 0,
     participants: [

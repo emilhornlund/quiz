@@ -844,6 +844,11 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
     mode: GameMode.Classic,
     nextQuestion: 4,
     pin: '520612',
+    settings: {
+      shouldAutoCompleteQuestionResultTask: false,
+      shouldAutoCompleteLeaderboardTask: false,
+      shouldAutoCompletePodiumTask: false,
+    },
     participants: [
       {
         type: GameParticipantType.HOST,
@@ -1230,6 +1235,11 @@ function buildMockZeroToOneHundredModeGame(
     name: '0-100 Quiz Debug',
     nextQuestion: 4,
     pin: '520612',
+    settings: {
+      shouldAutoCompleteQuestionResultTask: false,
+      shouldAutoCompleteLeaderboardTask: false,
+      shouldAutoCompletePodiumTask: false,
+    },
     participants: [
       {
         type: GameParticipantType.HOST,
