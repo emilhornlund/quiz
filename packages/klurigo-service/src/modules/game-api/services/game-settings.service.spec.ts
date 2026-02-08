@@ -6,6 +6,7 @@ import {
   GameDocument,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
+import { GameEventPublisher } from '../../game-event/services'
 
 import { GameSettingsService } from './game-settings.service'
 
@@ -14,6 +15,7 @@ describe(GameSettingsService.name, () => {
   let gameRepository: jest.Mocked<
     Pick<GameRepository, 'findGameByIDOrThrow' | 'findAndSaveWithLock'>
   >
+  let gameEventPublisher: jest.Mocked<Pick<GameEventPublisher, 'publish'>>
 
   beforeEach(async () => {
     gameRepository = {
@@ -21,10 +23,15 @@ describe(GameSettingsService.name, () => {
       findAndSaveWithLock: jest.fn(),
     }
 
+    gameEventPublisher = {
+      publish: jest.fn().mockResolvedValue(undefined),
+    }
+
     const moduleRef = await Test.createTestingModule({
       providers: [
         GameSettingsService,
         { provide: GameRepository, useValue: gameRepository },
+        { provide: GameEventPublisher, useValue: gameEventPublisher },
       ],
     }).compile()
 
@@ -51,6 +58,8 @@ describe(GameSettingsService.name, () => {
 
       gameRepository.findGameByIDOrThrow.mockResolvedValue(mockGame)
 
+      let savedGame: GameDocument
+
       gameRepository.findAndSaveWithLock.mockImplementation(
         async (id, callback) => {
           const doc = {
@@ -60,13 +69,14 @@ describe(GameSettingsService.name, () => {
             },
           } as GameDocument
           const result = await callback(doc)
-          return {
+          savedGame = {
             ...result,
             settings: {
               randomizeQuestionOrder: result.settings.randomizeQuestionOrder,
               randomizeAnswerOrder: result.settings.randomizeAnswerOrder,
             },
           } as GameDocument
+          return savedGame
         },
       )
 
@@ -77,6 +87,11 @@ describe(GameSettingsService.name, () => {
         gameId,
         expect.any(Function),
       )
+      expect(gameEventPublisher.publish).toHaveBeenCalledTimes(1)
+      expect(gameEventPublisher.publish).toHaveBeenCalledWith(savedGame!)
+      expect(
+        gameRepository.findAndSaveWithLock.mock.invocationCallOrder[0],
+      ).toBeLessThan(gameEventPublisher.publish.mock.invocationCallOrder[0])
       expect(result).toEqual({
         randomizeQuestionOrder: true,
         randomizeAnswerOrder: false,
@@ -121,6 +136,8 @@ describe(GameSettingsService.name, () => {
       expect(capturedDocument).not.toBeNull()
       expect(capturedDocument!.settings.randomizeQuestionOrder).toBe(true)
       expect(capturedDocument!.settings.randomizeAnswerOrder).toBe(true)
+      expect(gameEventPublisher.publish).toHaveBeenCalledTimes(1)
+      expect(gameEventPublisher.publish).toHaveBeenCalledWith(capturedDocument)
     })
 
     it('should return persisted values not request values', async () => {
@@ -155,6 +172,8 @@ describe(GameSettingsService.name, () => {
         randomizeQuestionOrder: false,
         randomizeAnswerOrder: true,
       })
+      expect(gameEventPublisher.publish).toHaveBeenCalledTimes(1)
+      expect(gameEventPublisher.publish).toHaveBeenCalledWith(mockSavedGame)
     })
 
     it('should throw BadRequestException when task type is not Lobby', async () => {
@@ -185,6 +204,7 @@ describe(GameSettingsService.name, () => {
       )
 
       expect(gameRepository.findAndSaveWithLock).not.toHaveBeenCalled()
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
     })
 
     it('should throw BadRequestException when task status is not active', async () => {
@@ -215,6 +235,7 @@ describe(GameSettingsService.name, () => {
       )
 
       expect(gameRepository.findAndSaveWithLock).not.toHaveBeenCalled()
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
     })
 
     it('should throw BadRequestException when task status is completed', async () => {
@@ -239,6 +260,7 @@ describe(GameSettingsService.name, () => {
       ).rejects.toThrow(BadRequestException)
 
       expect(gameRepository.findAndSaveWithLock).not.toHaveBeenCalled()
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
     })
 
     it('should propagate error when findGameByIDOrThrow fails', async () => {
@@ -256,6 +278,7 @@ describe(GameSettingsService.name, () => {
       ).rejects.toThrow(error)
 
       expect(gameRepository.findAndSaveWithLock).not.toHaveBeenCalled()
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
     })
 
     it('should propagate error when findAndSaveWithLock fails', async () => {
@@ -281,6 +304,48 @@ describe(GameSettingsService.name, () => {
       await expect(
         service.saveGameSettings(gameId, requestedSettings),
       ).rejects.toThrow(error)
+
+      expect(gameEventPublisher.publish).not.toHaveBeenCalled()
+    })
+
+    it('should propagate error when publish fails', async () => {
+      const gameId = 'game-123'
+      const requestedSettings = {
+        randomizeQuestionOrder: true,
+        randomizeAnswerOrder: false,
+      }
+
+      const mockGame = {
+        _id: gameId,
+        currentTask: {
+          type: TaskType.Lobby,
+          status: 'active',
+        },
+      } as GameDocument
+
+      gameRepository.findGameByIDOrThrow.mockResolvedValue(mockGame)
+
+      const mockSavedGame = {
+        settings: {
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: false,
+        },
+      } as GameDocument
+
+      gameRepository.findAndSaveWithLock.mockResolvedValue(mockSavedGame)
+
+      const error = new Error('Event publishing failed')
+      gameEventPublisher.publish.mockRejectedValue(error)
+
+      await expect(
+        service.saveGameSettings(gameId, requestedSettings),
+      ).rejects.toThrow(error)
+
+      expect(gameRepository.findAndSaveWithLock).toHaveBeenCalledWith(
+        gameId,
+        expect.any(Function),
+      )
+      expect(gameEventPublisher.publish).toHaveBeenCalledWith(mockSavedGame)
     })
   })
 })

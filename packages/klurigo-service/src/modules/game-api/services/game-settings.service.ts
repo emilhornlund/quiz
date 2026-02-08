@@ -3,6 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { GameRepository } from '../../game-core/repositories'
 import { TaskType } from '../../game-core/repositories/models/schemas'
+import { GameEventPublisher } from '../../game-event/services'
 
 /**
  * Service responsible for validating and persisting runtime settings for a game.
@@ -15,8 +16,12 @@ export class GameSettingsService {
    * Creates a new service for managing game runtime settings.
    *
    * @param gameRepository Repository used for loading and persisting game documents.
+   * @param gameEventPublisher - Service responsible for publishing game events to clients.
    */
-  constructor(private readonly gameRepository: GameRepository) {}
+  constructor(
+    private readonly gameRepository: GameRepository,
+    private readonly gameEventPublisher: GameEventPublisher,
+  ) {}
 
   /**
    * Persists new runtime settings for a game.
@@ -54,6 +59,8 @@ export class GameSettingsService {
         return currentDocument
       },
     )
+
+    await this.gameEventPublisher.publish(savedGame)
 
     const { randomizeQuestionOrder, randomizeAnswerOrder } = savedGame.settings
 
