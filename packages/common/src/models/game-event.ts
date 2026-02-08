@@ -45,6 +45,10 @@ export type GameLobbyHostEvent = {
   game: {
     id: string
     pin: string
+    settings: {
+      randomizeQuestionOrder: boolean
+      randomizeAnswerOrder: boolean
+    }
   }
   players: {
     id: string

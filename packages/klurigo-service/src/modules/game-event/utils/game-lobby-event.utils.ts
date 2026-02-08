@@ -23,9 +23,17 @@ import { isParticipantPlayer } from '../../game-core/utils'
 export function buildGameLobbyHostEvent(
   game: GameDocument & { currentTask: { type: TaskType.Lobby } },
 ): GameLobbyHostEvent {
+  const { randomizeQuestionOrder, randomizeAnswerOrder } = game.settings
   return {
     type: GameEventType.GameLobbyHost,
-    game: { id: game._id, pin: game.pin },
+    game: {
+      id: game._id,
+      pin: game.pin,
+      settings: {
+        randomizeQuestionOrder,
+        randomizeAnswerOrder,
+      },
+    },
     players: game.participants
       .filter(isParticipantPlayer)
       .map(({ participantId: id, nickname }) => ({
