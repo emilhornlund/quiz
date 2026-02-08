@@ -45,6 +45,11 @@ describe('GameTaskTransitionScheduler', () => {
   ): GameDocument => {
     const base: GameDocument = {
       _id: 'game-1',
+      settings: {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      },
       currentTask: {
         _id: 'task-1',
         type: 'Lobby' as unknown as TaskType,
@@ -741,8 +746,17 @@ describe('GameTaskTransitionScheduler', () => {
       expect(scheduleSpy).toHaveBeenCalledTimes(1)
     })
 
-    it('does not schedule next transition when status is active and delay <= 0', async () => {
-      const game = buildGameDocument(undefined, { status: 'active' })
+    it('does not schedule next transition when status is active and delay <= 0 and no settings flags enabled', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: false,
+            shouldAutoCompleteLeaderboardTask: false,
+            shouldAutoCompletePodiumTask: false,
+          },
+        },
+        { status: 'active' },
+      )
 
       gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
 
@@ -753,6 +767,125 @@ describe('GameTaskTransitionScheduler', () => {
       await (scheduler as any).performPostTransition(game)
 
       expect(scheduleSpy).not.toHaveBeenCalled()
+    })
+
+    it('schedules next transition when status is active, delay is 0, and shouldAutoCompleteQuestionResultTask is enabled for QuestionResult task', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: true,
+            shouldAutoCompleteLeaderboardTask: false,
+            shouldAutoCompletePodiumTask: false,
+          },
+        },
+        { status: 'active', type: TaskType.QuestionResult },
+      )
+
+      gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
+
+      const scheduleSpy = jest
+        .spyOn(scheduler, 'scheduleTaskTransition')
+        .mockResolvedValue(undefined)
+
+      await (scheduler as any).performPostTransition(game)
+
+      expect(scheduleSpy).toHaveBeenCalledTimes(1)
+      expect(scheduleSpy).toHaveBeenCalledWith(game)
+    })
+
+    it('schedules next transition when status is active, delay is 0, and shouldAutoCompleteLeaderboardTask is enabled for Leaderboard task', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: false,
+            shouldAutoCompleteLeaderboardTask: true,
+            shouldAutoCompletePodiumTask: false,
+          },
+        },
+        { status: 'active', type: TaskType.Leaderboard },
+      )
+
+      gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
+
+      const scheduleSpy = jest
+        .spyOn(scheduler, 'scheduleTaskTransition')
+        .mockResolvedValue(undefined)
+
+      await (scheduler as any).performPostTransition(game)
+
+      expect(scheduleSpy).toHaveBeenCalledTimes(1)
+      expect(scheduleSpy).toHaveBeenCalledWith(game)
+    })
+
+    it('schedules next transition when status is active, delay is 0, and shouldAutoCompletePodiumTask is enabled for Podium task', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: false,
+            shouldAutoCompleteLeaderboardTask: false,
+            shouldAutoCompletePodiumTask: true,
+          },
+        },
+        { status: 'active', type: TaskType.Podium },
+      )
+
+      gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
+
+      const scheduleSpy = jest
+        .spyOn(scheduler, 'scheduleTaskTransition')
+        .mockResolvedValue(undefined)
+
+      await (scheduler as any).performPostTransition(game)
+
+      expect(scheduleSpy).toHaveBeenCalledTimes(1)
+      expect(scheduleSpy).toHaveBeenCalledWith(game)
+    })
+
+    it('does not schedule when status is active, delay is 0, task is QuestionResult but flag is disabled', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: false,
+            shouldAutoCompleteLeaderboardTask: false,
+            shouldAutoCompletePodiumTask: false,
+          },
+        },
+        { status: 'active', type: TaskType.QuestionResult },
+      )
+
+      gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
+
+      const scheduleSpy = jest
+        .spyOn(scheduler, 'scheduleTaskTransition')
+        .mockResolvedValue(undefined)
+
+      await (scheduler as any).performPostTransition(game)
+
+      expect(scheduleSpy).not.toHaveBeenCalled()
+    })
+
+    it('schedules next transition when status is completed (regardless of delay and settings)', async () => {
+      const game = buildGameDocument(
+        {
+          settings: {
+            shouldAutoCompleteQuestionResultTask: false,
+            shouldAutoCompleteLeaderboardTask: false,
+            shouldAutoCompletePodiumTask: false,
+          },
+        },
+        { status: 'completed' },
+      )
+
+      gameTaskTransitionService.getTaskTransitionDelay.mockReturnValue(0)
+
+      const scheduleSpy = jest
+        .spyOn(scheduler, 'scheduleTaskTransition')
+        .mockResolvedValue(undefined)
+
+      await (scheduler as any).performPostTransition(game)
+
+      expect(scheduleSpy).toHaveBeenCalledTimes(1)
+      expect(scheduleSpy).toHaveBeenCalledWith(game)
     })
 
     it('rethrows after logging when scheduling next transition fails', async () => {
@@ -768,6 +901,215 @@ describe('GameTaskTransitionScheduler', () => {
         (scheduler as any).performPostTransition(game),
       ).rejects.toThrow('schedule-fail')
       expect(logger.error).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('shouldSchedulePostTaskTransition', () => {
+    it('returns true when taskStatus is pending (regardless of delay and settings)', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Lobby,
+          'pending',
+          0,
+          settings,
+        ),
+      ).toBe(true)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Question,
+          'pending',
+          5000,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns true when taskStatus is completed (regardless of delay and settings)', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Lobby,
+          'completed',
+          0,
+          settings,
+        ),
+      ).toBe(true)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Question,
+          'completed',
+          5000,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns true when taskStatus is active and delay > 0 (regardless of settings)', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Question,
+          'active',
+          1000,
+          settings,
+        ),
+      ).toBe(true)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.QuestionResult,
+          'active',
+          5000,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns true when taskStatus is active, delay is 0, and shouldAutoCompleteQuestionResultTask is enabled for QuestionResult task', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: true,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.QuestionResult,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns true when taskStatus is active, delay is 0, and shouldAutoCompleteLeaderboardTask is enabled for Leaderboard task', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: true,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Leaderboard,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns true when taskStatus is active, delay is 0, and shouldAutoCompletePodiumTask is enabled for Podium task', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: true,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Podium,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(true)
+    })
+
+    it('returns false when taskStatus is active, delay is 0, and no matching settings flag is enabled', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: false,
+        shouldAutoCompletePodiumTask: false,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.QuestionResult,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Leaderboard,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Podium,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
+    })
+
+    it('returns false when taskStatus is active, delay is 0, task is QuestionResult but only other flags are enabled', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: false,
+        shouldAutoCompleteLeaderboardTask: true,
+        shouldAutoCompletePodiumTask: true,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.QuestionResult,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
+    })
+
+    it('returns false when taskStatus is active, delay is 0, and task type does not match any auto-complete flags', () => {
+      const settings = {
+        shouldAutoCompleteQuestionResultTask: true,
+        shouldAutoCompleteLeaderboardTask: true,
+        shouldAutoCompletePodiumTask: true,
+      }
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Question,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
+
+      expect(
+        (GameTaskTransitionScheduler as any).shouldSchedulePostTaskTransition(
+          TaskType.Lobby,
+          'active',
+          0,
+          settings,
+        ),
+      ).toBe(false)
     })
   })
 

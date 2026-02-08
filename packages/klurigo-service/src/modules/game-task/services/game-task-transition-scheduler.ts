@@ -6,6 +6,7 @@ import { Job, Queue } from 'bullmq'
 import { GameRepository } from '../../game-core/repositories'
 import {
   GameDocument,
+  GameSettings,
   TaskType,
 } from '../../game-core/repositories/models/schemas'
 import { GameEventPublisher } from '../../game-event/services'
@@ -258,12 +259,16 @@ export class GameTaskTransitionScheduler extends WorkerHost {
     const delay =
       this.gameTaskTransitionService.getTaskTransitionDelay(gameDocument)
 
+    const doTransition =
+      GameTaskTransitionScheduler.shouldSchedulePostTaskTransition(
+        type,
+        status,
+        delay,
+        gameDocument.settings,
+      )
+
     try {
-      if (
-        (status === 'active' && delay > 0) ||
-        status === 'pending' ||
-        status === 'completed'
-      ) {
+      if (doTransition) {
         this.logger.debug(
           `Scheduling next task transition for task ${type} with status ${status} for Game ID: ${_id}`,
         )
@@ -369,5 +374,45 @@ export class GameTaskTransitionScheduler extends WorkerHost {
       case 'completed':
         return undefined
     }
+  }
+
+  /**
+   * Determines whether a post-task transition should be scheduled for a given
+   * task state.
+   *
+   * Rules:
+   * - For `pending` and `completed`, transitions are always scheduled (they
+   *   represent entering/leaving a task state that should progress the flow).
+   * - For `active`, transitions are scheduled if:
+   *   - the computed delay is greater than 0, or
+   *   - the task is configured to auto-complete immediately via game settings
+   *     (used primarily for host-only games without player participants).
+   *
+   * @param taskType - The task type being evaluated for scheduling.
+   * @param taskStatus - The current status of the task.
+   * @param delay - The computed transition delay (milliseconds) for the current task state.
+   * @param settings - The persisted game settings that may allow immediate auto-completion.
+   * @returns `true` if the scheduler should enqueue the next transition; otherwise `false`.
+   * @private
+   */
+  private static shouldSchedulePostTaskTransition(
+    taskType: TaskType,
+    taskStatus: 'pending' | 'active' | 'completed',
+    delay: number,
+    settings: GameSettings,
+  ): boolean {
+    if (taskStatus === 'active') {
+      if (delay > 0) return true
+
+      return (
+        (settings.shouldAutoCompleteQuestionResultTask &&
+          taskType === TaskType.QuestionResult) ||
+        (settings.shouldAutoCompleteLeaderboardTask &&
+          taskType === TaskType.Leaderboard) ||
+        (settings.shouldAutoCompletePodiumTask && taskType === TaskType.Podium)
+      )
+    }
+
+    return taskStatus === 'pending' || taskStatus === 'completed'
   }
 }

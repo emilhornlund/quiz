@@ -19,6 +19,7 @@ import {
   Quiz,
 } from '../../../../quiz-core/repositories/models/schemas'
 
+import { GameSettings, GameSettingsSchema } from './game-settings.schema'
 import {
   Participant,
   ParticipantHostSchema,
@@ -67,6 +68,12 @@ export class Game {
    */
   @Prop({ type: String, ref: 'Quiz' })
   quiz: Quiz
+
+  /**
+   * Runtime settings for this game instance.
+   */
+  @Prop({ type: GameSettingsSchema, required: true })
+  settings: GameSettings
 
   /**
    * The associated questions of the game.

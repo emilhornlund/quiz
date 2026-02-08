@@ -71,6 +71,11 @@ export function createMockGameDocument(game?: Partial<Game>): Game {
     status: GameStatus.Active,
     pin: '123456',
     quiz: { _id: uuidv4() } as Quiz, //TODO: build mock quiz
+    settings: {
+      shouldAutoCompleteQuestionResultTask: false,
+      shouldAutoCompleteLeaderboardTask: false,
+      shouldAutoCompletePodiumTask: false,
+    },
     questions: [],
     nextQuestion: 0,
     participants: [],
