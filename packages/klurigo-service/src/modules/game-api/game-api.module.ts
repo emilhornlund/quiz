@@ -10,11 +10,12 @@ import { UserModule } from '../user'
 
 import {
   GameController,
+  GameSettingsController,
   ProfileGameController,
   QuizGameController,
 } from './controllers'
 import { GameListener } from './handlers'
-import { GameService } from './services'
+import { GameService, GameSettingsService } from './services'
 
 /**
  * GameModule sets up the necessary controllers, providers, and Mongoose schemas
@@ -30,8 +31,13 @@ import { GameService } from './services'
     QuizCoreModule,
     UserModule,
   ],
-  controllers: [GameController, QuizGameController, ProfileGameController],
-  providers: [Logger, GameService, GameListener],
+  controllers: [
+    GameController,
+    GameSettingsController,
+    QuizGameController,
+    ProfileGameController,
+  ],
+  providers: [Logger, GameService, GameSettingsService, GameListener],
   exports: [],
 })
 export class GameApiModule {}

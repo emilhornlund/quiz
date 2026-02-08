@@ -848,6 +848,8 @@ function buildMockClassicModeGame(hostUser: User, playerUser: User): Game {
       shouldAutoCompleteQuestionResultTask: false,
       shouldAutoCompleteLeaderboardTask: false,
       shouldAutoCompletePodiumTask: false,
+      randomizeQuestionOrder: false,
+      randomizeAnswerOrder: false,
     },
     participants: [
       {
@@ -1239,6 +1241,8 @@ function buildMockZeroToOneHundredModeGame(
       shouldAutoCompleteQuestionResultTask: false,
       shouldAutoCompleteLeaderboardTask: false,
       shouldAutoCompletePodiumTask: false,
+      randomizeQuestionOrder: false,
+      randomizeAnswerOrder: false,
     },
     participants: [
       {

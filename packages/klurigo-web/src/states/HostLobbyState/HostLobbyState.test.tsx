@@ -34,7 +34,14 @@ describe('HostLobbyState', () => {
         <HostLobbyState
           event={{
             type: GameEventType.GameLobbyHost,
-            game: { id: 'de6f4af5-f472-4e30-bbeb-97b881e0a569', pin: '123456' },
+            game: {
+              id: 'de6f4af5-f472-4e30-bbeb-97b881e0a569',
+              pin: '123456',
+              settings: {
+                randomizeQuestionOrder: false,
+                randomizeAnswerOrder: false,
+              },
+            },
             players: [
               { id: uuidv4(), nickname: 'ShadowCyborg' },
               { id: uuidv4(), nickname: 'Radar' },
@@ -57,7 +64,14 @@ describe('HostLobbyState', () => {
 
   const sampleEvent = {
     type: GameEventType.GameLobbyHost,
-    game: { id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', pin: '654321' },
+    game: {
+      id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+      pin: '654321',
+      settings: {
+        randomizeQuestionOrder: false,
+        randomizeAnswerOrder: false,
+      },
+    },
     players: [
       { id: 'p1', nickname: 'Alice' },
       { id: 'p2', nickname: 'Bob' },
@@ -116,6 +130,10 @@ describe('HostLobbyState', () => {
               game: {
                 id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
                 pin: '111111',
+                settings: {
+                  randomizeQuestionOrder: false,
+                  randomizeAnswerOrder: false,
+                },
               },
               players: [],
               // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -75,6 +75,8 @@ export function createMockGameDocument(game?: Partial<Game>): Game {
       shouldAutoCompleteQuestionResultTask: false,
       shouldAutoCompleteLeaderboardTask: false,
       shouldAutoCompletePodiumTask: false,
+      randomizeQuestionOrder: false,
+      randomizeAnswerOrder: false,
     },
     questions: [],
     nextQuestion: 0,

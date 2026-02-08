@@ -34,6 +34,8 @@ export function buildGameModel(
       shouldAutoCompleteQuestionResultTask: false,
       shouldAutoCompleteLeaderboardTask: false,
       shouldAutoCompletePodiumTask: false,
+      randomizeQuestionOrder: false,
+      randomizeAnswerOrder: false,
     },
     questions: quiz.questions,
     nextQuestion: 0,
