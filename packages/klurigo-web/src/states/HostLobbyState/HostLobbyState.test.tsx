@@ -11,6 +11,7 @@ const h = vi.hoisted(() => ({
   // @ts-ignore
   completeTask: vi.fn<[], Promise<void>>().mockResolvedValue(),
   leaveGame: vi.fn<(id: string) => Promise<void>>().mockResolvedValue(),
+  updateGameSettings: vi.fn().mockResolvedValue({}),
 }))
 
 vi.mock('../../context/game', () => ({
@@ -18,6 +19,7 @@ vi.mock('../../context/game', () => ({
     gameID: h.gameID,
     completeTask: h.completeTask,
     leaveGame: h.leaveGame,
+    updateGameSettings: h.updateGameSettings,
   }),
 }))
 
@@ -82,6 +84,7 @@ describe('HostLobbyState', () => {
     h.gameID = 'game-1'
     h.completeTask.mockClear()
     h.leaveGame.mockClear()
+    h.updateGameSettings.mockClear()
   })
 
   it('shows join URL and PIN', () => {
@@ -267,5 +270,87 @@ describe('HostLobbyState', () => {
     )
     const userGroupIcon = document.querySelector('.playerIcon')
     expect(userGroupIcon).toBeInTheDocument()
+  })
+
+  it('renders Settings button', () => {
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={sampleEvent as any} />
+      </MemoryRouter>,
+    )
+    const settingsButton = screen.getByRole('button', { name: /settings/i })
+    expect(settingsButton).toBeInTheDocument()
+  })
+
+  it('opens GameSettingsModal when Settings button is clicked', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={sampleEvent as any} />
+      </MemoryRouter>,
+    )
+
+    const settingsButton = screen.getByRole('button', { name: /settings/i })
+    await user.click(settingsButton)
+
+    expect(screen.getByText('Game Settings')).toBeInTheDocument()
+  })
+
+  it('passes correct settings to GameSettingsModal', async () => {
+    const user = userEvent.setup()
+    const customSettings = {
+      ...sampleEvent,
+      game: {
+        ...sampleEvent.game,
+        settings: {
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: true,
+        },
+      },
+    }
+
+    render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={customSettings as any} />
+      </MemoryRouter>,
+    )
+
+    const settingsButton = screen.getByRole('button', { name: /settings/i })
+    await user.click(settingsButton)
+
+    const questionOrderSwitch = screen.getByRole('switch', {
+      name: /randomize order of questions/i,
+    })
+    const answerOrderSwitch = screen.getByRole('switch', {
+      name: /randomize order of answers/i,
+    })
+
+    expect(questionOrderSwitch).toBeChecked()
+    expect(answerOrderSwitch).toBeChecked()
+  })
+
+  it('closes GameSettingsModal', async () => {
+    const user = userEvent.setup()
+    const { container } = render(
+      <MemoryRouter>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <HostLobbyState event={sampleEvent as any} />
+      </MemoryRouter>,
+    )
+
+    const settingsButton = screen.getByRole('button', { name: /settings/i })
+    await user.click(settingsButton)
+
+    expect(screen.getByText('Game Settings')).toBeInTheDocument()
+
+    const closeButton = container.querySelector(
+      '#close-modal-button',
+    ) as HTMLButtonElement
+    await user.click(closeButton)
+
+    expect(screen.queryByText('Game Settings')).not.toBeInTheDocument()
   })
 })

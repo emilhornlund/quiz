@@ -59,6 +59,7 @@ const mockGameHostContext: GameContextType = {
         nickname: 'ScarletFlame',
       },
     ]),
+  updateGameSettings: (settings) => Promise.resolve(settings),
   toggleFullscreen: () => Promise.reject(),
   quitGame: () => Promise.reject(),
 }

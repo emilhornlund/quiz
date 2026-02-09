@@ -1,4 +1,4 @@
-import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { GameLobbyHostEvent } from '@klurigo/common'
 import { GAME_MAX_PLAYERS } from '@klurigo/common'
@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import QRCode from 'react-qr-code'
 
 import {
+  Button,
   ConfirmDialog,
   IconButtonArrowRight,
   NicknameChip,
@@ -16,6 +17,7 @@ import { useGameContext } from '../../context/game'
 import { classNames, extractUrl } from '../../utils/helpers'
 import GamePage from '../common/GamePage'
 
+import GameSettingsModal from './components/GameSettingsModal'
 import styles from './HostLobbyState.module.scss'
 
 export interface HostLobbyStateProps {
@@ -31,7 +33,7 @@ interface PlayerAnimationState {
 
 const HostLobbyState: FC<HostLobbyStateProps> = ({
   event: {
-    game: { id, pin },
+    game: { id, pin, settings },
     players,
   },
 }) => {
@@ -45,13 +47,15 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
   }>()
   const [isRemovingPlayer, setIsRemovingPlayer] = useState<boolean>(false)
 
+  const [showGameSettingsModal, setShowGameSettingsModal] =
+    useState<boolean>(false)
+
   // Animation state management
   const [playerAnimations, setPlayerAnimations] =
     useState<PlayerAnimationState>({})
   const prevPlayersRef = useRef<string[]>([])
 
-  const { gameID } = useGameContext()
-  const { completeTask, leaveGame } = useGameContext()
+  const { gameID, completeTask, leaveGame } = useGameContext()
 
   // Handle player join/leave animations
   useEffect(() => {
@@ -169,12 +173,35 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
             <div className={styles.qrScanLine} />
           </div>
         </div>
-        <div className={styles.playerCounter}>
-          <FontAwesomeIcon icon={faUserGroup} className={styles.playerIcon} />
-          <span className={styles.playerCount}>
-            {players.length} / {GAME_MAX_PLAYERS}
-          </span>
+
+        <div className={styles.misc}>
+          <div className={styles.item} />
+
+          <div className={styles.item}>
+            <div className={styles.playerCounter}>
+              <FontAwesomeIcon
+                icon={faUserGroup}
+                className={styles.playerIcon}
+              />
+              <span className={styles.playerCount}>
+                {players.length} / {GAME_MAX_PLAYERS}
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.item}>
+            <Button
+              id="game-settings-button"
+              type="button"
+              size="small"
+              hideValue="mobile"
+              icon={faGear}
+              onClick={() => setShowGameSettingsModal(true)}>
+              Settings
+            </Button>
+          </div>
         </div>
+
         <div className={styles.content}>
           <div className={styles.players}>
             {players.map(({ id, nickname }) => (
@@ -206,6 +233,12 @@ const HostLobbyState: FC<HostLobbyStateProps> = ({
         confirmTitle="Start Game"
         onConfirm={handleStartGame}
         onClose={() => setShowConfirmStartGameDialog(false)}
+      />
+      <GameSettingsModal
+        randomizeQuestionOrder={settings.randomizeQuestionOrder}
+        randomizeAnswerOrder={settings.randomizeAnswerOrder}
+        open={showGameSettingsModal}
+        onClose={() => setShowGameSettingsModal(false)}
       />
     </>
   )
