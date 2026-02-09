@@ -1,4 +1,4 @@
-import type { QuestionCorrectAnswerDto } from '@klurigo/common'
+import type { GameSettingsDto, QuestionCorrectAnswerDto } from '@klurigo/common'
 import { type FC, type ReactNode, useCallback } from 'react'
 import { useMemo } from 'react'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
@@ -44,6 +44,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
     addCorrectAnswer,
     deleteCorrectAnswer,
     getPlayers,
+    updateGameSettings,
     quitGame,
   } = useKlurigoServiceClient()
 
@@ -95,6 +96,8 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       deleteCorrectAnswer: (answer: QuestionCorrectAnswerDto) =>
         gameID ? deleteCorrectAnswer(gameID, answer) : Promise.reject(),
       getPlayers: () => (gameID ? getPlayers(gameID) : Promise.reject()),
+      updateGameSettings: (settings: GameSettingsDto) =>
+        gameID ? updateGameSettings(gameID, settings) : Promise.reject(),
       toggleFullscreen: fullScreenHandle.active
         ? fullScreenHandle.exit
         : fullScreenHandle.enter,
@@ -112,6 +115,7 @@ const GameContextProvider: FC<GameContextProviderProps> = ({ children }) => {
       addCorrectAnswer,
       deleteCorrectAnswer,
       getPlayers,
+      updateGameSettings,
       quitGame,
     ],
   )

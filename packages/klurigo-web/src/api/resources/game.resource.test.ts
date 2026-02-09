@@ -14,22 +14,24 @@ const makeApi = (): {
   api: ApiClientCore
   apiPost: ReturnType<typeof vi.fn>
   apiGet: ReturnType<typeof vi.fn>
+  apiPut: ReturnType<typeof vi.fn>
   apiDelete: ReturnType<typeof vi.fn>
 } => {
   const apiPost = vi.fn()
   const apiGet = vi.fn()
+  const apiPut = vi.fn()
   const apiDelete = vi.fn()
 
   const api = {
     apiFetch: vi.fn(),
     apiGet,
     apiPost,
-    apiPut: vi.fn(),
+    apiPut,
     apiPatch: vi.fn(),
     apiDelete,
   } as unknown as ApiClientCore
 
-  return { api, apiPost, apiGet, apiDelete }
+  return { api, apiPost, apiGet, apiPut, apiDelete }
 }
 
 const makeDeps = (): {
@@ -138,7 +140,36 @@ describe('createGameResource', () => {
 
     await expect(game.getPlayers('g1')).rejects.toBe(err)
     expect(notifyError).toHaveBeenCalledWith(
-      'Couldn’t load players for this game. Please try again.',
+      "Couldn't load players for this game. Please try again.",
+    )
+  })
+
+  it('updateGameSettings puts to /games/:gameId/settings with game scope; notifies and rethrows on failure', async () => {
+    const { api, apiPut } = makeApi()
+    const { deps, notifyError } = makeDeps()
+
+    const game = createGameResource(api, deps)
+
+    const settings = {
+      randomizeQuestionOrder: true,
+      randomizeAnswerOrder: false,
+    }
+
+    apiPut.mockResolvedValue(settings)
+    await expect(game.updateGameSettings('g1', settings)).resolves.toEqual(
+      settings,
+    )
+
+    expect(apiPut).toHaveBeenCalledWith('/games/g1/settings', settings, {
+      scope: TokenScope.Game,
+    })
+
+    const err = new Error('fail')
+    apiPut.mockRejectedValueOnce(err)
+
+    await expect(game.updateGameSettings('g1', settings)).rejects.toBe(err)
+    expect(notifyError).toHaveBeenCalledWith(
+      "Couldn't update game settings right now. Please try again.",
     )
   })
 
