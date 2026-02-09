@@ -1,0 +1,169 @@
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+$mobile-switch-height: helpers.pxToRem(30px);
+$mobile-switch-padding: helpers.pxToRem(2px);
+$mobile-switch-slider-size: $mobile-switch-height - ($mobile-switch-padding * 2);
+$mobile-switch-width: ($mobile-switch-slider-size * 2) + ($mobile-switch-padding * 2);
+$mobile-switch-visible-border-width: helpers.pxToRem(1px);
+
+$tablet-switch-height: helpers.pxToRem(34px);
+$tablet-switch-padding: helpers.pxToRem(3px);
+$tablet-switch-slider-size: $tablet-switch-height - ($tablet-switch-padding * 2);
+$tablet-switch-width: ($tablet-switch-slider-size * 2) + ($tablet-switch-padding * 2);
+$tablet-switch-visible-border-width: helpers.pxToRem(2px);
+
+$desktop-switch-height: helpers.pxToRem(38px);
+$desktop-switch-padding: helpers.pxToRem(4px);
+$desktop-switch-slider-size: $desktop-switch-height - ($desktop-switch-padding * 2);
+$desktop-switch-width: ($desktop-switch-slider-size * 2) + ($desktop-switch-padding * 2);
+$desktop-switch-visible-border-width: helpers.pxToRem(3px);
+
+.switchContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  @include helpers.mobile {
+    gap: variables.$mobile-control-normal-layout-gutter;
+  }
+  @include helpers.tablet {
+    gap: variables.$tablet-control-normal-layout-gutter;
+  }
+  @include helpers.desktop {
+    gap: variables.$desktop-control-normal-layout-gutter;
+  }
+
+  .labelText {
+    cursor: pointer;
+    display: block;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include helpers.mobile {
+      @include helpers.fontSize(16px);
+    }
+    @include helpers.tablet {
+      @include helpers.fontSize(20px);
+    }
+    @include helpers.desktop {
+      @include helpers.fontSize(22px);
+    }
+  }
+
+  .switch {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+
+    @include helpers.mobile {
+      width: $mobile-switch-width;
+      height: $mobile-switch-height;
+    }
+    @include helpers.tablet {
+      width: $tablet-switch-width;
+      height: $tablet-switch-height;
+    }
+    @include helpers.desktop {
+      width: $desktop-switch-width;
+      height: $desktop-switch-height;
+    }
+
+    input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      margin: 0;
+      cursor: pointer;
+
+      &:checked + .slider {
+        background-color: colors.$green-2;
+      }
+
+      &:focus-visible + .slider {
+        @include helpers.mobile {
+          box-shadow: 0 0 0 $mobile-switch-visible-border-width colors.$green-2;
+        }
+        @include helpers.tablet {
+          box-shadow: 0 0 0 $tablet-switch-visible-border-width colors.$green-2;
+        }
+        @include helpers.desktop {
+          box-shadow: 0 0 0 $desktop-switch-visible-border-width colors.$green-2;
+        }
+      }
+
+      &:checked + .slider:before {
+        @include helpers.mobile {
+          -webkit-transform: translateX($mobile-switch-slider-size);
+          -ms-transform: translateX($mobile-switch-slider-size);
+          transform: translateX($mobile-switch-slider-size);
+        }
+        @include helpers.tablet {
+          -webkit-transform: translateX($tablet-switch-slider-size);
+          -ms-transform: translateX($tablet-switch-slider-size);
+          transform: translateX($tablet-switch-slider-size);
+        }
+        @include helpers.desktop {
+          -webkit-transform: translateX($desktop-switch-slider-size);
+          -ms-transform: translateX($desktop-switch-slider-size);
+          transform: translateX($desktop-switch-slider-size);
+        }
+      }
+    }
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: colors.$gray-1;
+      -webkit-transition: .4s;
+      transition: .4s;
+
+      @include helpers.mobile {
+        border-radius: $mobile-switch-height;
+      }
+      @include helpers.tablet {
+        border-radius: $tablet-switch-height;
+      }
+      @include helpers.desktop {
+        border-radius: $desktop-switch-height;
+      }
+
+      &:before {
+        position: absolute;
+        content: "";
+        background-color: colors.$white;
+        border-radius: 50%;
+        -webkit-transition: .4s;
+        transition: .4s;
+
+        @include helpers.mobile {
+          height: $mobile-switch-slider-size;
+          width: $mobile-switch-slider-size;
+          left: $mobile-switch-padding;
+          bottom: $mobile-switch-padding;
+        }
+        @include helpers.tablet {
+          height: $tablet-switch-slider-size;
+          width: $tablet-switch-slider-size;
+          left: $tablet-switch-padding;
+          bottom: $tablet-switch-padding;
+        }
+        @include helpers.desktop {
+          height: $desktop-switch-slider-size;
+          width: $desktop-switch-slider-size;
+          left: $desktop-switch-padding;
+          bottom: $desktop-switch-padding;
+        }
+      }
+    }
+  }
+}
