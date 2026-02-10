@@ -11,6 +11,8 @@ import {
   createMockQuestionResultTaskDocument,
   createMockQuestionTaskDocument,
   createMockQuitTaskDocument,
+  createMockRangeQuestionDocument,
+  createMockTrueFalseQuestionDocument,
 } from '../../../../test-utils/data'
 import { GameAnswerRepository } from '../../game-core/repositories'
 import { isParticipantPlayer } from '../../game-core/utils'
@@ -18,6 +20,11 @@ import { GameResultService } from '../../game-result/services'
 import { IllegalTaskTypeException } from '../exceptions'
 
 import { GameTaskTransitionService } from './game-task-transition.service'
+
+jest.mock('@klurigo/common', () => ({
+  ...jest.requireActual('@klurigo/common'),
+  shuffleArray: jest.fn(),
+}))
 
 jest.mock('../../game-core/utils')
 
@@ -40,8 +47,15 @@ import {
   updateParticipantsAndBuildLeaderboard,
 } from '../utils'
 
+// eslint-disable-next-line import/order
+import { shuffleArray } from '@klurigo/common'
+
 const mockIsParticipantPlayer = isParticipantPlayer as jest.MockedFunction<
   typeof isParticipantPlayer
+>
+
+const mockShuffleArray = shuffleArray as jest.MockedFunction<
+  typeof shuffleArray
 >
 
 describe('GameTaskTransitionService', () => {
@@ -71,6 +85,9 @@ describe('GameTaskTransitionService', () => {
 
     mockIsParticipantPlayer.mockReset()
     mockIsParticipantPlayer.mockReturnValue(true)
+
+    mockShuffleArray.mockReset()
+    mockShuffleArray.mockImplementation((arr) => [...arr].reverse())
   })
 
   afterEach(() => {
@@ -171,6 +188,229 @@ describe('GameTaskTransitionService', () => {
       expect(gameDoc.settings.shouldAutoCompleteQuestionResultTask).toBe(false)
       expect(gameDoc.settings.shouldAutoCompleteLeaderboardTask).toBe(false)
       expect(gameDoc.settings.shouldAutoCompletePodiumTask).toBe(false)
+    })
+
+    describe('lobby completed with randomization', () => {
+      it('does not shuffle when both randomization flags are false', async () => {
+        const multiChoiceQ = createMockMultiChoiceQuestionDocument({
+          text: 'MultiChoice question',
+          options: [
+            { value: 'A', correct: true },
+            { value: 'B', correct: false },
+            { value: 'C', correct: false },
+          ],
+        })
+        const trueFalseQ = createMockTrueFalseQuestionDocument({
+          text: 'TrueFalse question',
+        })
+        const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+        const gameDoc = createMockGameDocument({
+          currentTask: lobbyTask,
+          nextQuestion: 0,
+          questions: [multiChoiceQ, trueFalseQ],
+        })
+        gameDoc.settings.randomizeQuestionOrder = false
+        gameDoc.settings.randomizeAnswerOrder = false
+
+        const nextTask = createMockQuestionTaskDocument({
+          status: 'pending',
+          questionIndex: 0,
+        })
+        ;(buildQuestionTask as jest.Mock)
+          .mockReset()
+          .mockReturnValue(nextTask as never)
+
+        const callback = service.getTaskTransitionCallback(gameDoc as never)
+        expect(callback).toBeDefined()
+
+        await callback!(gameDoc as never)
+
+        expect(mockShuffleArray).not.toHaveBeenCalled()
+        expect(gameDoc.questions).toEqual([multiChoiceQ, trueFalseQ])
+        expect(gameDoc.questions[0]).toBe(multiChoiceQ)
+        expect((gameDoc.questions[0] as any).options).toEqual([
+          { value: 'A', correct: true },
+          { value: 'B', correct: false },
+          { value: 'C', correct: false },
+        ])
+      })
+
+      it('shuffles question order when randomizeQuestionOrder is true', async () => {
+        const q1 = createMockMultiChoiceQuestionDocument({
+          text: 'Question 1',
+        })
+        const q2 = createMockTrueFalseQuestionDocument({
+          text: 'Question 2',
+        })
+        const q3 = createMockRangeQuestionDocument({
+          text: 'Question 3',
+        })
+        const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+        const gameDoc = createMockGameDocument({
+          currentTask: lobbyTask,
+          nextQuestion: 0,
+          questions: [q1, q2, q3],
+        })
+        gameDoc.settings.randomizeQuestionOrder = true
+        gameDoc.settings.randomizeAnswerOrder = false
+
+        const nextTask = createMockQuestionTaskDocument({
+          status: 'pending',
+          questionIndex: 0,
+        })
+        ;(buildQuestionTask as jest.Mock)
+          .mockReset()
+          .mockReturnValue(nextTask as never)
+
+        const callback = service.getTaskTransitionCallback(gameDoc as never)
+        expect(callback).toBeDefined()
+
+        await callback!(gameDoc as never)
+
+        expect(mockShuffleArray).toHaveBeenCalledTimes(1)
+        expect(mockShuffleArray).toHaveBeenCalledWith([q1, q2, q3])
+        expect(gameDoc.questions).toEqual([q3, q2, q1])
+        expect((gameDoc.questions[0] as any).options).toBeUndefined()
+      })
+
+      it('shuffles MultiChoice options only when randomizeAnswerOrder is true', async () => {
+        const multiChoiceQ = createMockMultiChoiceQuestionDocument({
+          text: 'MultiChoice question',
+          options: [
+            { value: 'A', correct: true },
+            { value: 'B', correct: false },
+            { value: 'C', correct: false },
+          ],
+        })
+        const trueFalseQ = createMockTrueFalseQuestionDocument({
+          text: 'TrueFalse question',
+        })
+        const rangeQ = createMockRangeQuestionDocument({
+          text: 'Range question',
+        })
+        const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+        const gameDoc = createMockGameDocument({
+          currentTask: lobbyTask,
+          nextQuestion: 0,
+          questions: [multiChoiceQ, trueFalseQ, rangeQ],
+        })
+        gameDoc.settings.randomizeQuestionOrder = false
+        gameDoc.settings.randomizeAnswerOrder = true
+
+        const nextTask = createMockQuestionTaskDocument({
+          status: 'pending',
+          questionIndex: 0,
+        })
+        ;(buildQuestionTask as jest.Mock)
+          .mockReset()
+          .mockReturnValue(nextTask as never)
+
+        const callback = service.getTaskTransitionCallback(gameDoc as never)
+        expect(callback).toBeDefined()
+
+        await callback!(gameDoc as never)
+
+        expect(mockShuffleArray).toHaveBeenCalledTimes(1)
+        expect(mockShuffleArray).toHaveBeenCalledWith([
+          { value: 'A', correct: true },
+          { value: 'B', correct: false },
+          { value: 'C', correct: false },
+        ])
+        expect(gameDoc.questions).toEqual([multiChoiceQ, trueFalseQ, rangeQ])
+        expect((gameDoc.questions[0] as any).options).toEqual([
+          { value: 'C', correct: false },
+          { value: 'B', correct: false },
+          { value: 'A', correct: true },
+        ])
+      })
+
+      it('shuffles both questions and MultiChoice options when both flags are true', async () => {
+        const multiChoiceQ = createMockMultiChoiceQuestionDocument({
+          text: 'MultiChoice question',
+          options: [
+            { value: 'A', correct: true },
+            { value: 'B', correct: false },
+          ],
+        })
+        const trueFalseQ = createMockTrueFalseQuestionDocument({
+          text: 'TrueFalse question',
+        })
+        const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+        const gameDoc = createMockGameDocument({
+          currentTask: lobbyTask,
+          nextQuestion: 0,
+          questions: [multiChoiceQ, trueFalseQ],
+        })
+        gameDoc.settings.randomizeQuestionOrder = true
+        gameDoc.settings.randomizeAnswerOrder = true
+
+        const nextTask = createMockQuestionTaskDocument({
+          status: 'pending',
+          questionIndex: 0,
+        })
+        ;(buildQuestionTask as jest.Mock)
+          .mockReset()
+          .mockReturnValue(nextTask as never)
+
+        const callback = service.getTaskTransitionCallback(gameDoc as never)
+        expect(callback).toBeDefined()
+
+        await callback!(gameDoc as never)
+
+        expect(mockShuffleArray).toHaveBeenCalledTimes(2)
+        const calls = mockShuffleArray.mock.calls
+        expect(calls[0][0]).toEqual([multiChoiceQ, trueFalseQ])
+        expect(calls[1][0]).toEqual([
+          { value: 'A', correct: true },
+          { value: 'B', correct: false },
+        ])
+        expect(gameDoc.questions).toHaveLength(2)
+        expect(gameDoc.questions[0].text).toBe('TrueFalse question')
+        expect(gameDoc.questions[1].text).toBe('MultiChoice question')
+        expect((gameDoc.questions[1] as any).options).toEqual([
+          { value: 'B', correct: false },
+          { value: 'A', correct: true },
+        ])
+      })
+
+      it('preserves question properties after randomization', async () => {
+        const multiChoiceQ = createMockMultiChoiceQuestionDocument({
+          text: 'Original text',
+          points: 1000,
+          duration: 30,
+          options: [
+            { value: 'A', correct: true },
+            { value: 'B', correct: false },
+          ],
+        })
+        const lobbyTask = createMockLobbyTaskDocument({ status: 'completed' })
+        const gameDoc = createMockGameDocument({
+          currentTask: lobbyTask,
+          nextQuestion: 0,
+          questions: [multiChoiceQ],
+        })
+        gameDoc.settings.randomizeQuestionOrder = false
+        gameDoc.settings.randomizeAnswerOrder = true
+
+        const nextTask = createMockQuestionTaskDocument({
+          status: 'pending',
+          questionIndex: 0,
+        })
+        ;(buildQuestionTask as jest.Mock)
+          .mockReset()
+          .mockReturnValue(nextTask as never)
+
+        const callback = service.getTaskTransitionCallback(gameDoc as never)
+        expect(callback).toBeDefined()
+
+        await callback!(gameDoc as never)
+
+        const resultQuestion = gameDoc.questions[0]
+        expect(resultQuestion.text).toBe('Original text')
+        expect(resultQuestion.points).toBe(1000)
+        expect(resultQuestion.duration).toBe(30)
+        expect((resultQuestion as any).type).toBeDefined()
+      })
     })
 
     it('question pending sets presented timestamp', async () => {

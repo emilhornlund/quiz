@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 
   @include helpers.mobile {
     gap: variables.$mobile-layout-gutter;
@@ -66,6 +67,7 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: flex-start;
+    flex: 1;
 
     @include helpers.mobile {
       padding: variables.$mobile-layout-gutter;
@@ -90,6 +92,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
 
     @include helpers.mobile {
       padding: variables.$mobile-layout-gutter;
@@ -154,39 +157,60 @@
   }
 }
 
-.playerCounter {
+.misc {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  background-color: colors.$white-1-50;
-  font-weight: bold;
+  justify-content: space-between;
+  width: 100%;
 
-  @mixin info-dimensions($size) {
-    column-gap: $size * 0.4;
-    height: $size;
-    padding: 0 $size * 0.5;
-    border-radius: calc($size / 2);
+  .item {
+    display: flex;
+    flex: 1;
+    justify-content: center;
 
-    .playerIcon {
-      @include helpers.fontSize($size * 0.5);
+    &:first-child {
+      justify-content: flex-start;
     }
-
-    .playerCount {
-      @include helpers.fontSize($size * 0.6);
+    &:last-child {
+      justify-content: flex-end;
     }
   }
 
-  @include helpers.mobile {
-    @include info-dimensions(26px);
-  }
+  .playerCounter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: colors.$white-1-50;
+    font-weight: bold;
 
-  @include helpers.tablet {
-    @include info-dimensions(36px);
-  }
+    @mixin info-dimensions($size) {
+      column-gap: $size * 0.4;
+      height: $size;
+      padding: 0 $size * 0.5;
+      border-radius: calc($size / 2);
 
-  @include helpers.desktop {
-    @include info-dimensions(46px);
+      .playerIcon {
+        @include helpers.fontSize($size * 0.5);
+      }
+
+      .playerCount {
+        @include helpers.fontSize($size * 0.6);
+      }
+    }
+
+    @include helpers.mobile {
+      @include info-dimensions(26px);
+    }
+
+    @include helpers.tablet {
+      @include info-dimensions(36px);
+    }
+
+    @include helpers.desktop {
+      @include info-dimensions(46px);
+    }
   }
 }
 

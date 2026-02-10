@@ -1,5 +1,6 @@
 import type {
   GameParticipantPlayerDto,
+  GameSettingsDto,
   QuestionCorrectAnswerDto,
   SubmitQuestionAnswerRequestDto,
 } from '@klurigo/common'
@@ -28,6 +29,7 @@ export type GameContextType = {
   addCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
   deleteCorrectAnswer?: (answer: QuestionCorrectAnswerDto) => Promise<void>
   getPlayers?: () => Promise<GameParticipantPlayerDto[]>
+  updateGameSettings?: (settings: GameSettingsDto) => Promise<GameSettingsDto>
   quitGame?: () => Promise<void>
 }
 

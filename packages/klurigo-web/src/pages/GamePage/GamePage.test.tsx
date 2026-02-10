@@ -427,7 +427,14 @@ describe('GamePage', () => {
     h.context.participantType = GameParticipantType.HOST
     h.control.event = {
       type: GameEventType.GameLobbyHost,
-      game: { id: 'game-123', pin: '1234' },
+      game: {
+        id: 'game-123',
+        pin: '1234',
+        settings: {
+          randomizeQuestionOrder: false,
+          randomizeAnswerOrder: false,
+        },
+      },
       players: [],
     }
 

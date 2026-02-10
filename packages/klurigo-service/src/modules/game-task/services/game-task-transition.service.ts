@@ -1,4 +1,4 @@
-import { GameStatus } from '@klurigo/common'
+import { GameStatus, shuffleArray } from '@klurigo/common'
 import { Injectable } from '@nestjs/common'
 
 import { GameAnswerRepository } from '../../game-core/repositories'
@@ -8,6 +8,7 @@ import {
 } from '../../game-core/repositories/models/schemas'
 import { isParticipantPlayer } from '../../game-core/utils'
 import { GameResultService } from '../../game-result/services'
+import { isMultiChoiceQuestion } from '../../quiz-core/utils'
 import { IllegalTaskTypeException } from '../exceptions'
 import {
   buildLeaderboardTask,
@@ -110,6 +111,19 @@ export class GameTaskTransitionService {
     gameDocument.settings.shouldAutoCompleteLeaderboardTask =
       hasNoPlayerParticipants
     gameDocument.settings.shouldAutoCompletePodiumTask = hasNoPlayerParticipants
+
+    if (gameDocument.settings.randomizeQuestionOrder) {
+      gameDocument.questions = shuffleArray(gameDocument.questions)
+    }
+
+    if (gameDocument.settings.randomizeAnswerOrder) {
+      gameDocument.questions = gameDocument.questions.map((question) => {
+        if (isMultiChoiceQuestion(question)) {
+          question.options = shuffleArray(question.options)
+        }
+        return question
+      })
+    }
 
     gameDocument.previousTasks.push(gameDocument.currentTask)
     gameDocument.currentTask = buildQuestionTask(gameDocument)

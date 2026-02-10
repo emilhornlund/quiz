@@ -31,6 +31,13 @@ describe('Game Lobby Event Utils', () => {
         pin: '123456',
         participants: [player1, player2, host],
         currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: false,
+          randomizeAnswerOrder: false,
+        },
       })
 
       const result = buildGameLobbyHostEvent(game as never)
@@ -38,6 +45,10 @@ describe('Game Lobby Event Utils', () => {
       expect(result.type).toBe(GameEventType.GameLobbyHost)
       expect(result.game.id).toBe('game-123')
       expect(result.game.pin).toBe('123456')
+      expect(result.game.settings).toEqual({
+        randomizeQuestionOrder: false,
+        randomizeAnswerOrder: false,
+      })
       expect(result.players).toHaveLength(2)
       expect(result.players).toEqual([
         { id: 'player-1', nickname: 'PlayerOne' },
@@ -52,6 +63,13 @@ describe('Game Lobby Event Utils', () => {
         pin: '654321',
         participants: [host],
         currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: true,
+        },
       })
 
       const result = buildGameLobbyHostEvent(game as never)
@@ -59,6 +77,10 @@ describe('Game Lobby Event Utils', () => {
       expect(result.type).toBe(GameEventType.GameLobbyHost)
       expect(result.game.id).toBe('game-456')
       expect(result.game.pin).toBe('654321')
+      expect(result.game.settings).toEqual({
+        randomizeQuestionOrder: true,
+        randomizeAnswerOrder: true,
+      })
       expect(result.players).toHaveLength(0)
       expect(result.players).toEqual([])
     })
@@ -75,11 +97,22 @@ describe('Game Lobby Event Utils', () => {
         pin: '999999',
         participants: players,
         currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: false,
+          randomizeAnswerOrder: false,
+        },
       })
 
       const result = buildGameLobbyHostEvent(game as never)
 
       expect(result.type).toBe(GameEventType.GameLobbyHost)
+      expect(result.game.settings).toEqual({
+        randomizeQuestionOrder: false,
+        randomizeAnswerOrder: false,
+      })
       expect(result.players).toHaveLength(10)
       expect(result.players[0]).toEqual({
         id: 'player-0',
@@ -89,6 +122,130 @@ describe('Game Lobby Event Utils', () => {
         id: 'player-9',
         nickname: 'Player9',
       })
+    })
+
+    it('should copy settings verbatim with true/false combinations', () => {
+      const game1 = createMockGameDocument({
+        _id: 'game-settings-1',
+        pin: '111111',
+        currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: false,
+        },
+      })
+
+      const result1 = buildGameLobbyHostEvent(game1 as never)
+
+      expect(result1.game.settings).toEqual({
+        randomizeQuestionOrder: true,
+        randomizeAnswerOrder: false,
+      })
+
+      const game2 = createMockGameDocument({
+        _id: 'game-settings-2',
+        pin: '222222',
+        currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: false,
+          randomizeAnswerOrder: true,
+        },
+      })
+
+      const result2 = buildGameLobbyHostEvent(game2 as never)
+
+      expect(result2.game.settings).toEqual({
+        randomizeQuestionOrder: false,
+        randomizeAnswerOrder: true,
+      })
+
+      const game3 = createMockGameDocument({
+        _id: 'game-settings-3',
+        pin: '333333',
+        currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: true,
+        },
+      })
+
+      const result3 = buildGameLobbyHostEvent(game3 as never)
+
+      expect(result3.game.settings).toEqual({
+        randomizeQuestionOrder: true,
+        randomizeAnswerOrder: true,
+      })
+    })
+
+    it('should include only randomizeQuestionOrder and randomizeAnswerOrder in settings', () => {
+      const game = createMockGameDocument({
+        _id: 'game-strict',
+        pin: '444444',
+        currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: true,
+          shouldAutoCompleteLeaderboardTask: true,
+          shouldAutoCompletePodiumTask: true,
+          randomizeQuestionOrder: true,
+          randomizeAnswerOrder: false,
+        },
+      })
+
+      const result = buildGameLobbyHostEvent(game as never)
+
+      expect(result.game.settings).toEqual({
+        randomizeQuestionOrder: true,
+        randomizeAnswerOrder: false,
+      })
+      expect(Object.keys(result.game.settings)).toEqual([
+        'randomizeQuestionOrder',
+        'randomizeAnswerOrder',
+      ])
+    })
+
+    it('should map only player participants and not include host in players array', () => {
+      const player1 = createMockGamePlayerParticipantDocument({
+        participantId: 'player-1',
+        nickname: 'Alice',
+      })
+      const player2 = createMockGamePlayerParticipantDocument({
+        participantId: 'player-2',
+        nickname: 'Bob',
+      })
+      const host = createMockGameHostParticipantDocument({
+        participantId: 'host-123',
+      })
+      const game = createMockGameDocument({
+        _id: 'game-mapping',
+        pin: '555555',
+        participants: [host, player1, player2],
+        currentTask: createMockLobbyTaskDocument(),
+        settings: {
+          shouldAutoCompleteQuestionResultTask: false,
+          shouldAutoCompleteLeaderboardTask: false,
+          shouldAutoCompletePodiumTask: false,
+          randomizeQuestionOrder: false,
+          randomizeAnswerOrder: false,
+        },
+      })
+
+      const result = buildGameLobbyHostEvent(game as never)
+
+      expect(result.players).toHaveLength(2)
+      expect(result.players).toEqual([
+        { id: 'player-1', nickname: 'Alice' },
+        { id: 'player-2', nickname: 'Bob' },
+      ])
+      expect(result.players.some((p) => p.id === 'host-123')).toBe(false)
     })
   })
 

@@ -2,6 +2,7 @@ import {
   type CreateGameResponseDto,
   type GameParticipantPlayerDto,
   type GameResultDto,
+  type GameSettingsDto,
   type PaginatedGameHistoryDto,
   type QuestionCorrectAnswerDto,
   type SubmitQuestionAnswerRequestDto,
@@ -115,7 +116,32 @@ export const createGameResource = (
       })
       .catch((error) => {
         deps.notifyError(
-          'Couldn’t load players for this game. Please try again.',
+          "Couldn't load players for this game. Please try again.",
+        )
+        throw error
+      })
+
+  /**
+   * Updates the runtime settings for a specific game instance.
+   *
+   * Modifies game behavior settings such as question and answer randomization.
+   * Uses Game token scope for authorization.
+   *
+   * @param gameId - The unique identifier of the game to update.
+   * @param settings - The game settings payload containing the updated configuration.
+   * @returns A promise that resolves to the updated game settings as returned by the backend.
+   */
+  const updateGameSettings = (
+    gameId: string,
+    settings: GameSettingsDto,
+  ): Promise<GameSettingsDto> =>
+    api
+      .apiPut<GameSettingsDto>(`/games/${gameId}/settings`, settings, {
+        scope: TokenScope.Game,
+      })
+      .catch((error) => {
+        deps.notifyError(
+          "Couldn't update game settings right now. Please try again.",
         )
         throw error
       })
@@ -271,6 +297,7 @@ export const createGameResource = (
     joinGame,
     leaveGame,
     getPlayers,
+    updateGameSettings,
     completeTask,
     submitQuestionAnswer,
     addCorrectAnswer,
