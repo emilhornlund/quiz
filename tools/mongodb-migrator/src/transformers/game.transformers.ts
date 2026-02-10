@@ -22,6 +22,35 @@ export function transformGameDocument(document: BSONDocument): BSONDocument {
     mode: extractValueOrThrow<string>(document, {}, 'mode'),
     status: extractValueOrThrow<string>(document, {}, 'status'),
     pin: extractValueOrThrow<string>(document, {}, 'pin'),
+    settings: {
+      shouldAutoCompleteQuestionResultTask:
+        extractValue<boolean>(
+          document,
+          {},
+          'settings.shouldAutoCompleteQuestionResultTask',
+        ) ?? false,
+      shouldAutoCompleteLeaderboardTask:
+        extractValue<boolean>(
+          document,
+          {},
+          'settings.shouldAutoCompleteLeaderboardTask',
+        ) ?? false,
+      shouldAutoCompletePodiumTask:
+        extractValue<boolean>(
+          document,
+          {},
+          'settings.shouldAutoCompletePodiumTask',
+        ) ?? false,
+      randomizeQuestionOrder:
+        extractValue<boolean>(
+          document,
+          {},
+          'settings.randomizeQuestionOrder',
+        ) ?? false,
+      randomizeAnswerOrder:
+        extractValue<boolean>(document, {}, 'settings.randomizeAnswerOrder') ??
+        false,
+    },
     quiz: extractValueOrThrow<string>(document, {}, 'quiz'),
     questions,
     nextQuestion: extractValueOrThrow<number>(document, {}, 'nextQuestion'),
