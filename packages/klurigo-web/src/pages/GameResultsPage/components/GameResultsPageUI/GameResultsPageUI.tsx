@@ -1,11 +1,13 @@
-import type { GameResultDto } from '@klurigo/common'
-import type { FC } from 'react'
+import { type GameResultDto } from '@klurigo/common'
+import { type FC } from 'react'
 import { useState } from 'react'
 
+import { useKlurigoServiceClient } from '../../../../api'
 import { Page, SegmentedControl, Typography } from '../../../../components'
 
 import styles from './GameResultsPageUI.module.scss'
 import { PlayerSection, QuestionSection, SummarySection } from './sections'
+import { useQuizRatingDraft } from './sections/SummarySection/useQuizRatingDraft'
 
 export type GameResultsPageUIProps = {
   results: GameResultDto
@@ -48,6 +50,20 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({
   const [selectedSection, setSelectedSection] = useState<GameResultSection>(
     GameResultSection.Summary,
   )
+
+  const { createOrUpdateQuizRating } = useKlurigoServiceClient()
+
+  const { stars, commentDraft, setStars, setCommentDraft } = useQuizRatingDraft(
+    {
+      quizId: results.quiz.id,
+      canRateQuiz: results.quiz.canRateQuiz,
+      initialStars: results.rating?.stars,
+      initialComment: results.rating?.comment,
+      createOrUpdateQuizRating,
+      debounceMs: 600,
+    },
+  )
+
   return (
     <Page align="start" height="normal" discover profile>
       <div className={styles.gameResultsPage}>
@@ -80,9 +96,12 @@ const GameResultsPageUI: FC<GameResultsPageUIProps> = ({
             numberOfQuestions={results.numberOfQuestions}
             playerMetrics={results.playerMetrics}
             questionMetrics={results.questionMetrics}
-            rating={results.rating}
             duration={results.duration}
             created={results.created}
+            stars={stars}
+            comment={commentDraft}
+            onRatingChange={setStars}
+            onCommentChange={setCommentDraft}
           />
         )}
 

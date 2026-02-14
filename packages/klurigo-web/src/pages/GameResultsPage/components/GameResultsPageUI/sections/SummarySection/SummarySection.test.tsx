@@ -37,13 +37,11 @@ vi.mock('react-router-dom', async () => {
 
 const createGameMock = vi.fn()
 const authenticateGameMock = vi.fn()
-const createOrUpdateQuizRatingMock = vi.fn()
 
 vi.mock('../../../../../../api', () => ({
   useKlurigoServiceClient: () => ({
     createGame: createGameMock,
     authenticateGame: authenticateGameMock,
-    createOrUpdateQuizRating: createOrUpdateQuizRatingMock,
   }),
 }))
 
@@ -102,16 +100,6 @@ vi.mock('../../utils', () => ({
   formatRoundedSeconds: h.formatRoundedSeconds,
 }))
 
-const ratingHook = vi.hoisted(() => {
-  return {
-    useQuizRatingDraft: vi.fn(),
-  }
-})
-
-vi.mock('./useQuizRatingDraft', () => ({
-  useQuizRatingDraft: ratingHook.useQuizRatingDraft,
-}))
-
 vi.mock('./RatingCard', () => ({
   default: ({
     canRateQuiz,
@@ -160,17 +148,6 @@ beforeEach(() => {
   h.formatRoundedDuration.mockReset()
   h.formatRoundedSeconds.mockReset()
 
-  createOrUpdateQuizRatingMock.mockReset()
-  ratingHook.useQuizRatingDraft.mockReset()
-
-  ratingHook.useQuizRatingDraft.mockReturnValue({
-    stars: undefined,
-    commentDraft: '',
-    setStars: vi.fn(),
-    setCommentDraft: vi.fn(),
-    hasInteracted: false,
-  })
-
   vi.spyOn(Math, 'random').mockReturnValue(0.5)
 })
 
@@ -217,6 +194,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={123}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -285,6 +266,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={45}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -329,6 +314,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={0}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -368,6 +357,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={10}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -414,6 +407,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={10}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -480,6 +477,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={10}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -530,6 +531,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={10}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -584,6 +589,10 @@ describe('SummarySection', () => {
         questionMetrics={questionMetrics}
         duration={10}
         created={CREATED_DATE}
+        stars={undefined}
+        comment=""
+        onRatingChange={vi.fn()}
+        onCommentChange={vi.fn()}
       />,
     )
 
@@ -597,19 +606,12 @@ describe('SummarySection', () => {
     })
   })
 
-  it('passes rating props into useQuizRatingDraft and renders RatingCard with hook state', () => {
+  it('passes rating props to RatingCard and wires callbacks', async () => {
+    const user = userEvent.setup()
     h.getCorrectPercentage.mockImplementationOnce(() => 100)
 
-    const setStars = vi.fn()
-    const setCommentDraft = vi.fn()
-
-    ratingHook.useQuizRatingDraft.mockReturnValue({
-      stars: 4,
-      commentDraft: 'Nice',
-      setStars,
-      setCommentDraft,
-      hasInteracted: false,
-    })
+    const onRatingChange = vi.fn()
+    const onCommentChange = vi.fn()
 
     const playerMetrics = [
       {
@@ -634,131 +636,26 @@ describe('SummarySection', () => {
         numberOfQuestions={1}
         playerMetrics={playerMetrics}
         questionMetrics={questionMetrics}
-        rating={{ stars: 4, comment: 'Nice' }}
         duration={10}
         created={CREATED_DATE}
+        stars={4}
+        comment="Nice quiz"
+        onRatingChange={onRatingChange}
+        onCommentChange={onCommentChange}
       />,
     )
-
-    expect(ratingHook.useQuizRatingDraft).toHaveBeenCalledTimes(1)
-    expect(ratingHook.useQuizRatingDraft).toHaveBeenCalledWith({
-      quizId: 'quizId',
-      canRateQuiz: true,
-      initialStars: 4,
-      initialComment: 'Nice',
-      createOrUpdateQuizRating: createOrUpdateQuizRatingMock,
-      debounceMs: 600,
-    })
 
     expect(screen.getByTestId('rating-card')).toBeInTheDocument()
     expect(screen.getByTestId('rating-can-rate')).toHaveTextContent('true')
     expect(screen.getByTestId('rating-stars')).toHaveTextContent('4')
-    expect(screen.getByTestId('rating-comment')).toHaveTextContent('Nice')
-
-    expect(setStars).not.toHaveBeenCalled()
-    expect(setCommentDraft).not.toHaveBeenCalled()
-  })
-
-  it('wires RatingCard callbacks to hook setters', async () => {
-    const user = userEvent.setup()
-    h.getCorrectPercentage.mockImplementationOnce(() => 100)
-
-    const setStars = vi.fn()
-    const setCommentDraft = vi.fn()
-
-    ratingHook.useQuizRatingDraft.mockReturnValue({
-      stars: undefined,
-      commentDraft: '',
-      setStars,
-      setCommentDraft,
-      hasInteracted: false,
-    })
-
-    const playerMetrics = [
-      {
-        rank: 1,
-        score: 100,
-        averageResponseTime: 2,
-        longestCorrectStreak: 3,
-        player: { nickname: 'Alice' },
-      },
-    ] as unknown as GameResultDto['playerMetrics']
-
-    const questionMetrics = [
-      { text: 'Q1' },
-    ] as unknown as GameResultDto['questionMetrics']
-
-    render(
-      <SummarySection
-        hostNickname="FrostyBear"
-        mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canRateQuiz: true, canHostLiveGame: false }}
-        numberOfPlayers={1}
-        numberOfQuestions={1}
-        playerMetrics={playerMetrics}
-        questionMetrics={questionMetrics}
-        rating={undefined}
-        duration={10}
-        created={CREATED_DATE}
-      />,
-    )
+    expect(screen.getByTestId('rating-comment')).toHaveTextContent('Nice quiz')
 
     await user.click(screen.getByTestId('rating-set-stars'))
-    expect(setStars).toHaveBeenCalledTimes(1)
-    expect(setStars).toHaveBeenCalledWith(5)
+    expect(onRatingChange).toHaveBeenCalledTimes(1)
+    expect(onRatingChange).toHaveBeenCalledWith(5)
 
     await user.click(screen.getByTestId('rating-set-comment'))
-    expect(setCommentDraft).toHaveBeenCalledTimes(1)
-    expect(setCommentDraft).toHaveBeenCalledWith('hello')
-  })
-
-  it('does not call createOrUpdateQuizRating directly from SummarySection when interacting with RatingCard', async () => {
-    const user = userEvent.setup()
-    h.getCorrectPercentage.mockImplementationOnce(() => 100)
-
-    const setStars = vi.fn()
-    const setCommentDraft = vi.fn()
-
-    ratingHook.useQuizRatingDraft.mockReturnValue({
-      stars: 2,
-      commentDraft: 'x',
-      setStars,
-      setCommentDraft,
-      hasInteracted: true,
-    })
-
-    const playerMetrics = [
-      {
-        rank: 1,
-        score: 100,
-        averageResponseTime: 2,
-        longestCorrectStreak: 3,
-        player: { nickname: 'Alice' },
-      },
-    ] as unknown as GameResultDto['playerMetrics']
-
-    const questionMetrics = [
-      { text: 'Q1' },
-    ] as unknown as GameResultDto['questionMetrics']
-
-    render(
-      <SummarySection
-        hostNickname="FrostyBear"
-        mode={GameMode.Classic}
-        quiz={{ id: 'quizId', canRateQuiz: true, canHostLiveGame: false }}
-        numberOfPlayers={1}
-        numberOfQuestions={1}
-        playerMetrics={playerMetrics}
-        questionMetrics={questionMetrics}
-        rating={undefined}
-        duration={10}
-        created={CREATED_DATE}
-      />,
-    )
-
-    await user.click(screen.getByTestId('rating-set-stars'))
-    await user.click(screen.getByTestId('rating-set-comment'))
-
-    expect(createOrUpdateQuizRatingMock).not.toHaveBeenCalled()
+    expect(onCommentChange).toHaveBeenCalledTimes(1)
+    expect(onCommentChange).toHaveBeenCalledWith('hello')
   })
 })
