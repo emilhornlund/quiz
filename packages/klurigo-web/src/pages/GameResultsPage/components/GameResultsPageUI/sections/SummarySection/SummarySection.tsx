@@ -14,7 +14,6 @@ import {
   type GameResultClassicModeQuestionMetricDto,
   type GameResultDto,
   type GameResultQuizDto,
-  type GameResultRatingDto,
   type GameResultZeroToOneHundredModeQuestionMetricDto,
 } from '@klurigo/common'
 import { type FC, type ReactElement, useMemo, useState } from 'react'
@@ -43,7 +42,7 @@ import {
   getQuizDifficultyMessage,
 } from '../../utils'
 
-import RatingCard from './RatingCard'
+import RatingCard, { type RatingCardProps } from './RatingCard'
 import {
   getComebackRankGainMetric,
   getFastestOverallPlayerMetric,
@@ -53,7 +52,6 @@ import {
   type Metric,
 } from './summary-section.metrics'
 import styles from './SummarySection.module.scss'
-import { useQuizRatingDraft } from './useQuizRatingDraft'
 
 const DetailsItem: FC<{
   title: string
@@ -87,7 +85,7 @@ const MetricCard: FC<{ title: string; value: string; nicknames: string[] }> = ({
   </div>
 )
 
-export interface SummarySectionProps {
+export type SummarySectionProps = {
   mode: GameMode
   quiz: GameResultQuizDto
   hostNickname: string
@@ -95,10 +93,9 @@ export interface SummarySectionProps {
   numberOfQuestions: number
   playerMetrics: GameResultDto['playerMetrics']
   questionMetrics: GameResultDto['questionMetrics']
-  rating?: GameResultRatingDto
   duration: number
   created: Date
-}
+} & Omit<RatingCardProps, 'canRateQuiz'>
 
 const SummarySection: FC<SummarySectionProps> = ({
   mode,
@@ -108,29 +105,20 @@ const SummarySection: FC<SummarySectionProps> = ({
   numberOfQuestions,
   playerMetrics,
   questionMetrics,
-  rating,
   duration,
   created,
+  stars,
+  comment,
+  onRatingChange,
+  onCommentChange,
 }) => {
   const navigate = useNavigate()
 
-  const { createGame, authenticateGame, createOrUpdateQuizRating } =
-    useKlurigoServiceClient()
+  const { createGame, authenticateGame } = useKlurigoServiceClient()
 
   const [showConfirmHostGameModal, setShowConfirmHostGameModal] =
     useState<boolean>(false)
   const [isHostGameLoading, setIsHostGameLoading] = useState<boolean>(false)
-
-  const { stars, commentDraft, setStars, setCommentDraft } = useQuizRatingDraft(
-    {
-      quizId: quiz.id,
-      canRateQuiz: quiz.canRateQuiz,
-      initialStars: rating?.stars,
-      initialComment: rating?.comment,
-      createOrUpdateQuizRating,
-      debounceMs: 600,
-    },
-  )
 
   const percentage = useMemo<number>(
     () =>
@@ -233,9 +221,9 @@ const SummarySection: FC<SummarySectionProps> = ({
         <RatingCard
           canRateQuiz={quiz.canRateQuiz}
           stars={stars}
-          comment={commentDraft}
-          onRatingChange={setStars}
-          onCommentChange={setCommentDraft}
+          comment={comment}
+          onRatingChange={onRatingChange}
+          onCommentChange={onCommentChange}
         />
 
         <button
