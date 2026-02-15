@@ -14,8 +14,8 @@
     "check-types": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "bson": "^7.0.0",
-    "commander": "^14.0.2",
+    "bson": "^7.2.0",
+    "commander": "^14.0.3",
     "json-diff": "^1.0.6",
     "uuid": "^13.0.0"
   },
