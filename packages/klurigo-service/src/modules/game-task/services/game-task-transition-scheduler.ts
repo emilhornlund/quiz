@@ -288,7 +288,7 @@ export class GameTaskTransitionScheduler extends WorkerHost {
    *
    * @param job - The scheduled transition job.
    */
-  async process(job: Job<GameDocument, void, string>): Promise<void> {
+  async process(job: Job<GameDocument, void>): Promise<void> {
     if (job.name === TASK_TRANSITION_JOB_NAME) {
       const gameDocument = job.data
       const { currentTask } = job.data
@@ -334,8 +334,9 @@ export class GameTaskTransitionScheduler extends WorkerHost {
           error,
         )
       }
+    } else {
+      throw new Error('Method not implemented.')
     }
-    throw new Error('Method not implemented.')
   }
 
   /**

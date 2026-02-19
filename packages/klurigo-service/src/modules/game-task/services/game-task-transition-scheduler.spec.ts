@@ -1153,9 +1153,7 @@ describe('GameTaskTransitionScheduler', () => {
         .spyOn(scheduler as any, 'performTransition')
         .mockResolvedValue(undefined)
 
-      await expect(scheduler.process(job)).rejects.toThrow(
-        'Method not implemented.',
-      )
+      await expect(scheduler.process(job)).resolves.toBeUndefined()
 
       expect(gameRepository.findGameByIDOrThrow).toHaveBeenCalledTimes(1)
       expect(taskQueue.remove).toHaveBeenCalledTimes(1)
@@ -1189,9 +1187,7 @@ describe('GameTaskTransitionScheduler', () => {
         .spyOn(scheduler as any, 'performTransition')
         .mockResolvedValue(undefined)
 
-      await expect(scheduler.process(job)).rejects.toThrow(
-        'Method not implemented.',
-      )
+      await expect(scheduler.process(job)).resolves.toBeUndefined()
 
       expect(performSpy).not.toHaveBeenCalled()
       expect(taskQueue.remove).not.toHaveBeenCalled()
@@ -1215,9 +1211,7 @@ describe('GameTaskTransitionScheduler', () => {
 
       taskQueue.getJob.mockResolvedValue({ id: job.id } as any)
 
-      await expect(scheduler.process(job)).rejects.toThrow(
-        'Method not implemented.',
-      )
+      await expect(scheduler.process(job)).resolves.toBeUndefined()
 
       expect(taskQueue.remove).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledTimes(1)
