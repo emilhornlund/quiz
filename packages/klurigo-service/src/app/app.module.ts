@@ -122,6 +122,10 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           password: config.get('REDIS_PASSWORD'),
           db: Number(config.get('REDIS_DB')),
         },
+        defaultJobOptions: {
+          removeOnComplete: { count: 0 },
+          removeOnFail: { count: 50 },
+        },
       }),
       inject: [ConfigService],
     }),
