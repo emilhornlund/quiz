@@ -164,22 +164,22 @@ heuristic, and (b) quality scoring sub-scores are made explicit and comprehensiv
 None.
 
 ### Documentation Tasks
-- [ ] JSDoc on `isDiscoveryEligible`: describe every predicate clause, document each
+- [x] JSDoc on `isDiscoveryEligible`: describe every predicate clause, document each
   threshold constant, add the draft-visibility note
-- [ ] JSDoc on `computeQualityScore`: explain why `globalMean` and `minRatingCount` are
+- [x] JSDoc on `computeQualityScore`: explain why `globalMean` and `minRatingCount` are
   explicit parameters (Bayesian rating sub-score requires them; keeps the function
   deterministic and free of hidden global state); list all six sub-scores and their weights;
   document the normalization formula
-- [ ] JSDoc on `computeBayesianRatingScore`: document the formula inline; describe
+- [x] JSDoc on `computeBayesianRatingScore`: document the formula inline; describe
   why `minCount` pulls low-rating-count quizzes toward the mean
-- [ ] JSDoc on `computeTrendingScore`: document `RecentActivityStats`, the score formula,
+- [x] JSDoc on `computeTrendingScore`: document `RecentActivityStats`, the score formula,
   `TRENDING_PLAY_WEIGHT`, `TRENDING_WINDOW_DAYS`, `TRENDING_SCALE_MAX`, and that
   stats are provided by the compute service; include the future-enhancement note
   about unique-player support
-- [ ] JSDoc on every exported constant explaining what it controls and its default value
+- [x] JSDoc on every exported constant explaining what it controls and its default value
 
 ### Tests
-- Jest unit tests covering:
+- [x] Jest unit tests covering:
   - `isDiscoveryEligible`: boundary cases (missing cover, short description, 9 vs 10 questions,
     non-public visibility)
   - `computeQualityScore`: monotonicity (more plays → higher score); Bayesian pull at low
@@ -194,21 +194,40 @@ None.
 - No schema changes. Safe to merge independently.
 
 ### Acceptance Criteria
-- [ ] `isDiscoveryEligible` returns `false` for any quiz missing cover, with description
+- [x] `isDiscoveryEligible` returns `false` for any quiz missing cover, with description
   shorter than 20 chars, or with fewer than **10** questions
-- [ ] `MIN_QUESTION_COUNT` constant equals `10`
-- [ ] `computeTrendingScore` accepts `RecentActivityStats` with only `recentPlayCount`;
+- [x] `MIN_QUESTION_COUNT` constant equals `10`
+- [x] `computeTrendingScore` accepts `RecentActivityStats` with only `recentPlayCount`;
   does not use "days since last played" and does not reference unique-player counts
-- [ ] `computeQualityScore` accepts `globalMean` and `minRatingCount` as explicit
+- [x] `computeQualityScore` accepts `globalMean` and `minRatingCount` as explicit
   parameters; computes all six sub-scores; result is within [0, 100]
-- [ ] All weight/threshold constants are exported with JSDoc
-- [ ] All unit tests pass (`yarn workspace @klurigo/klurigo-service test`)
+- [x] All weight/threshold constants are exported with JSDoc
+- [x] All unit tests pass (`yarn workspace @klurigo/klurigo-service test`)
 
 ### Risks
 - **Score calibration** — thresholds and weights are conservative for v1; validate against
   real content before enabling the scheduler in Phase 5.
 - **Mitigation:** All thresholds and weights are named exported constants; tuning requires
   no function-signature changes.
+
+### Phase 2 Implementation Notes
+
+- Files were placed under
+  `packages/klurigo-service/src/modules/quiz-core/utils/discovery/` as specified, with a
+  barrel `index.ts` re-exporting both utility modules. `utils/index.ts` was updated to
+  `export * from './discovery'`.
+- `computeTrendingScore` normalises linearly (not logarithmically) because the plan's
+  formula `normalize(recentPlayCount * TRENDING_PLAY_WEIGHT)` implies a simple
+  `min(100, weighted / TRENDING_SCALE_MAX * 100)` expression; this keeps the function
+  purely arithmetic and deterministic.
+- `PLAYER_SCALE_MAX` was added as a named constant for the unique-player log-scaling, mirroring
+  `PLAY_SCALE_MAX`. The plan described the same pattern for both fields; a separate export
+  makes independent tuning possible without a signature change.
+- The `Quiz` type used in function signatures is the Mongoose DAO class from
+  `quiz-core/repositories/models/schemas`, consistent with how all other `quiz-core` utilities
+  operate. No DTO or common type alias was introduced for Phase 2.
+- 62 Jest tests pass across the two spec files
+  (`discovery-eligibility.utils.spec.ts`, `discovery-scoring.utils.spec.ts`).
 
 ---
 
