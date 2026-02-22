@@ -49,30 +49,40 @@ None.
 - Unit tests: `discovery.dto.spec.ts` (enum value guards, DTO field-shape type tests)
 
 ### Documentation Tasks
-- [ ] JSDoc block on `DiscoverySectionKey` describing the purpose of each enum value
-- [ ] JSDoc blocks on all five DTO types (`DiscoveryQuizCardDto`, `DiscoverySectionDto`,
+- [x] JSDoc block on `DiscoverySectionKey` describing the purpose of each enum value
+- [x] JSDoc blocks on all five DTO types (`DiscoveryQuizCardDto`, `DiscoverySectionDto`,
   `DiscoveryResponseDto`, `DiscoverySectionPageResponseDto`) — fields, constraints, examples;
   document that `snapshotTotal` in `DiscoverySectionPageResponseDto` is bounded by snapshot
   capacity constants (`DISCOVERY_RAIL_CAP_FEATURED` / `DISCOVERY_RAIL_CAP_STANDARD`) and
   is not a database row count
 
 ### Tests
-- Vitest unit tests validating enum values and DTO shape type guards
+- [x] Vitest unit tests validating enum values and DTO shape type guards
+  (32 tests in `discovery.dto.spec.ts`: enum value guards with exact-count + membership
+  assertions, per-key `it.each` checks, and field-shape tests for all four DTO types)
 
 ### Migration / Rollout Notes
 - Pure additive change; no runtime impact. Safe to merge at any time.
 
 ### Acceptance Criteria
-- [ ] `DiscoverySectionKey` enum exported from `@klurigo/common` with all six keys
-- [ ] `DiscoverySectionPageResponseDto` uses `results`, `snapshotTotal`, `limit`, `offset`
+- [x] `DiscoverySectionKey` enum exported from `@klurigo/common` with all six keys
+- [x] `DiscoverySectionPageResponseDto` uses `results`, `snapshotTotal`, `limit`, `offset`
   (no cursor fields, no database-count `total` field)
-- [ ] All DTO types exported and importable in both backend and frontend workspaces
-- [ ] All public types have JSDoc documentation
-- [ ] Unit tests pass (`yarn workspace @klurigo/common test`)
-- [ ] No breaking changes to existing exports
+- [x] All DTO types exported and importable in both backend and frontend workspaces
+- [x] All public types have JSDoc documentation
+- [x] Unit tests pass (`yarn workspace @klurigo/common test`)
+- [x] No breaking changes to existing exports
 
 ### Risks
 - **None.** Pure additions.
+
+### Implementation Notes (Phase 1)
+- `DiscoveryQuizCardDto` reuses `QuizAuthorResponseDto`, `QuizGameplaySummaryDto`, and
+  `QuizRatingSummaryDto` from `quiz.dto.ts` to avoid duplicating field definitions.
+- Test approach uses object literals typed as each DTO (`const x: FooDto = { ... }`) to
+  express field-shape intent at compile time; runtime assertions confirm key field values.
+  `it.each` is used for per-enum-value membership tests.
+- No HTML tags used in any JSDoc comment.
 
 ---
 
