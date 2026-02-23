@@ -505,35 +505,35 @@ for `FEATURED`) so "see all" can paginate consistently from the snapshot.
 None.
 
 ### Documentation Tasks
-- [ ] JSDoc on `DiscoveryComputeService`: class-level description covering all 6 pipeline
+- [x] JSDoc on `DiscoveryComputeService`: class-level description covering all 6 pipeline
   steps; document the per-rail dedupe policy and its rationale
-- [ ] JSDoc on `compute()`: step-by-step description; side effects (upserts snapshot)
-- [ ] JSDoc on the `FEATURED` rail logic: document `featuredRank` sort, fallback to
+- [x] JSDoc on `compute()`: step-by-step description; side effects (upserts snapshot)
+- [x] JSDoc on the `FEATURED` rail logic: document `featuredRank` sort, fallback to
   quality score, cap at `DISCOVERY_RAIL_CAP_FEATURED`
-- [ ] JSDoc on the trending aggregation: document `TRENDING_WINDOW_DAYS`, the
+- [x] JSDoc on the trending aggregation: document `TRENDING_WINDOW_DAYS`, the
   `GameRepository.findRecentGameStats` call, and the O(1) Map lookup pattern; include
   future-enhancement note about unique-player support matching the note in Phase 2
-- [ ] JSDoc on `findEligiblePublicQuizzes`: `offset`, `limit`, which filters are applied
-- [ ] JSDoc on `GameRepository.findRecentGameStats`: `windowDays` parameter, aggregation
+- [x] JSDoc on `findEligiblePublicQuizzes`: `offset`, `limit`, which filters are applied
+- [x] JSDoc on `GameRepository.findRecentGameStats`: `windowDays` parameter, aggregation
   logic (`games` collection grouped by `quizId`), return shape
   `[{ quizId: string; playCount: number }]`
 
 ### Tests
-- Unit: `FEATURED` section — quizzes with `featuredRank` appear first, sorted by rank asc;
+- [x] Unit: `FEATURED` section — quizzes with `featuredRank` appear first, sorted by rank asc;
   quizzes without `featuredRank` fill remaining slots by quality score; result capped at
   `DISCOVERY_RAIL_CAP_FEATURED`
-- Unit: `FEATURED` section — a quiz with `featuredRank` is not re-assigned to `TRENDING`
+- [x] Unit: `FEATURED` section — a quiz with `featuredRank` is not re-assigned to `TRENDING`
   or any other rail (hard-exclusive)
-- Unit: `TRENDING` — higher `recentPlayCount` → higher rank; quiz in `TRENDING` excluded
+- [x] Unit: `TRENDING` — higher `recentPlayCount` → higher rank; quiz in `TRENDING` excluded
   from `MOST_PLAYED` (hard-exclusive)
-- Unit: soft-dedupe — a quiz excluded from `FEATURED`/`TRENDING`/`TOP_RATED` may appear
+- [x] Unit: soft-dedupe — a quiz excluded from `FEATURED`/`TRENDING`/`TOP_RATED` may appear
   in both `MOST_PLAYED` and `NEW_AND_NOTEWORTHY`; verify this is intentional and correct
-- Unit: cap — `FEATURED` ≤ `DISCOVERY_RAIL_CAP_FEATURED` entries; all other sections ≤
+- [x] Unit: cap — `FEATURED` ≤ `DISCOVERY_RAIL_CAP_FEATURED` entries; all other sections ≤
   `DISCOVERY_RAIL_CAP_STANDARD` entries
-- Unit: `entries` array is ordered descending by `score` within each section
-- Unit: `findEligiblePublicQuizzes` — pagination offset/limit forwarded correctly to query
-- Unit: `GameRepository.findRecentGameStats` — returns `{ playCount: 0 }` for quizzes
-  with no games in the window
+- [x] Unit: `entries` array is ordered descending by `score` within each section
+- [x] Unit: `findEligiblePublicQuizzes` — pagination offset/limit forwarded correctly to query
+- [x] Unit: `GameRepository.findRecentGameStats` — returns empty array for quizzes
+  with no games in the window; compute treats missing as playCount 0
 
 ### Migration / Rollout Notes
 - After deploying Phase 4, run `compute()` once via an admin script or bootstrap flag
@@ -542,19 +542,19 @@ None.
   entirely by quality score — this is the graceful fallback and is correct behaviour.
 
 ### Acceptance Criteria
-- [ ] `DiscoveryComputeService.compute()` produces a snapshot with ≤ `DISCOVERY_RAIL_CAP_FEATURED`
+- [x] `DiscoveryComputeService.compute()` produces a snapshot with ≤ `DISCOVERY_RAIL_CAP_FEATURED`
   entries for `FEATURED` and ≤ `DISCOVERY_RAIL_CAP_STANDARD` entries for all other sections
-- [ ] `FEATURED` rail uses `discovery.featuredRank` (ascending) as primary sort,
+- [x] `FEATURED` rail uses `discovery.featuredRank` (ascending) as primary sort,
   quality score as fallback
-- [ ] `computeTrendingScore` is called with `RecentActivityStats` (containing only
+- [x] `computeTrendingScore` is called with `RecentActivityStats` (containing only
   `recentPlayCount`) gathered from `GameRepository.findRecentGameStats` — not from
   `QuizRepository` and not using "days since last played"
-- [ ] Hard-exclusive rails (`FEATURED`, `TRENDING`, `TOP_RATED`): a quiz ID does not
+- [x] Hard-exclusive rails (`FEATURED`, `TRENDING`, `TOP_RATED`): a quiz ID does not
   appear in any other rail once claimed
-- [ ] Soft-deduped rails (`MOST_PLAYED`, `NEW_AND_NOTEWORTHY`, `CATEGORY_SPOTLIGHT`):
+- [x] Soft-deduped rails (`MOST_PLAYED`, `NEW_AND_NOTEWORTHY`, `CATEGORY_SPOTLIGHT`):
   quizzes from exclusive rails are excluded; cross-overlap among the three is permitted
-- [ ] Each section's `entries` array is ordered descending by `score`
-- [ ] All compute service unit tests pass
+- [x] Each section's `entries` array is ordered descending by `score`
+- [x] All compute service unit tests pass
 
 ### Risks
 - **Recent-activity aggregation performance** — querying `games` by date range on every
@@ -565,6 +565,56 @@ None.
   `sections` array; `GET /discover` returns only non-empty sections.
 - **`featuredRank` gaps** — e.g. ranks 1, 3, 5 are set but 2, 4 are not. **Mitigation:**
   sort is by raw value ascending, not by contiguous rank, so gaps are fine.
+
+### Implementation Notes (Phase 4)
+
+- **Files added:**
+  - `discovery-api/services/discovery-compute.service.ts` — full compute pipeline
+  - `discovery-api/services/discovery-compute.service.spec.ts` — 10 unit tests
+  - `discovery-api/services/index.ts` — barrel export
+
+- **Files changed:**
+  - `quiz-core/repositories/quiz.repository.ts` — added `findEligiblePublicQuizzes(offset, limit)`
+    using Mongoose query filter mirroring `isDiscoveryEligible` predicates
+  - `quiz-core/repositories/quiz.repository.spec.ts` — 2 new tests for offset/limit forwarding
+  - `game-core/repositories/game.repository.ts` — added `findRecentGameStats(windowDays)` using
+    Mongoose aggregation pipeline (`$match` → `$group` → `$project`)
+  - `game-core/repositories/game.repository.spec.ts` — 3 new tests (empty result, data shape,
+    match-stage date filtering)
+  - `quiz-core/utils/discovery/discovery-scoring.utils.ts` — added `MIN_RATING_COUNT = 10` constant
+  - `discovery-api/discovery-api.module.ts` — registered `DiscoveryComputeService`, imported
+    `QuizCoreModule` and `GameCoreModule`
+
+- **FEATURED score mapping:** To reconcile FEATURED's `featuredRank`-ascending ordering with
+  the snapshot invariant (entries stored descending by score), ranked entries receive a
+  synthetic score of `FEATURED_RANK_BASE_SCORE (10000) - featuredRank`. Unranked entries
+  use their raw quality score (0–100). This ensures ranked entries always sort ahead of
+  unranked, and lower ranks produce higher scores.
+
+- **Game completion timestamp:** The `Game` schema includes a dedicated `completedAt`
+  field (optional `Date`). It is set in every code path that transitions a game to
+  `Completed`: `podiumTaskCompletedCallback` (via `new Date()`) and
+  `updateCompletedGames` (via `$$NOW` in the `$set` aggregation stage). No other
+  mutation path sets `status: Completed`. `findRecentGameStats` filters exclusively on
+  `completedAt` (not `updated`).
+
+- **Compound index:** `{ status: 1, completedAt: 1 }` on the `games` collection.
+  The aggregation matches on equality (`status: Completed`) then range
+  (`completedAt >= cutoff`), so `status` leads for selectivity and `completedAt`
+  follows for the range seek. The previous `{ quiz: 1, completedAt: 1 }` index was
+  replaced because `quiz` is not part of the `$match` stage.
+
+- **Eligibility filter:** The `findEligiblePublicQuizzes` query is both trim-aware and
+  null-safe. `imageCoverURL` and `description` are guarded with `{ $exists: true, $ne: null }`
+  to short-circuit null values before the `$expr` evaluation. The `$expr` block uses
+  `$trim` + `$strLenCP` to reject whitespace-only cover URLs (length > 0) and enforce
+  a minimum trimmed description length (≥ 20 chars).
+
+- **Test coverage:** Tests were added or updated in the following spec files:
+  - `discovery-compute.service.spec.ts`
+  - `quiz.repository.spec.ts`
+  - `game.repository.spec.ts`
+  - `game-task-transition.service.spec.ts`
 
 ---
 

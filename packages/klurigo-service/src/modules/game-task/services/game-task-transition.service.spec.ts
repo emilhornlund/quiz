@@ -672,6 +672,7 @@ describe('GameTaskTransitionService', () => {
       expect(buildQuitTask).toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(quitTask)
       expect(gameDoc.status).toBe(GameStatus.Completed)
+      expect(gameDoc.completedAt).toBeInstanceOf(Date)
     })
 
     it('podium completed transitions to quit and sets status Completed when no players exist', async () => {
@@ -699,6 +700,7 @@ describe('GameTaskTransitionService', () => {
       expect(buildQuitTask).toHaveBeenCalled()
       expect(gameDoc.currentTask).toBe(quitTask)
       expect(gameDoc.status).toBe(GameStatus.Completed)
+      expect(gameDoc.completedAt).toBeInstanceOf(Date)
     })
 
     it('returns undefined for unsupported task type/status combinations', () => {

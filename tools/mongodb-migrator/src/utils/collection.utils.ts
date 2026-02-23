@@ -271,6 +271,14 @@ function getCollectionMetadataObject(
             key: { _id: { $numberInt: '1' } },
             name: '_id_',
           },
+          {
+            v: { $numberInt: '2' },
+            key: {
+              status: { $numberInt: '1' },
+              completedAt: { $numberInt: '1' },
+            },
+            name: 'status_1_completedAt_1',
+          },
         ],
         uuid: '4231303ad7b24b42aeb2815f5317eb45',
         collectionName,
