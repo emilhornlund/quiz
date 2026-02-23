@@ -291,4 +291,67 @@ describe('QuizRepository', () => {
       ).toHaveBeenCalledWith(quizId)
     })
   })
+
+  describe('findEligiblePublicQuizzes', () => {
+    let findMock: jest.Mock
+    let sortMock: jest.Mock
+    let skipMock: jest.Mock
+    let limitMock: jest.Mock
+    let execMock: jest.Mock
+
+    beforeEach(() => {
+      execMock = jest.fn().mockResolvedValue([])
+      limitMock = jest.fn().mockReturnValue({ exec: execMock })
+      skipMock = jest.fn().mockReturnValue({ limit: limitMock })
+      sortMock = jest.fn().mockReturnValue({ skip: skipMock })
+      findMock = jest.fn().mockReturnValue({ sort: sortMock })
+      ;(repo as unknown as { quizModel: { find: jest.Mock } }).quizModel = {
+        find: findMock,
+      } as never
+    })
+
+    it('forwards offset and limit correctly to the query chain', async () => {
+      await repo.findEligiblePublicQuizzes(100, 500)
+
+      expect(findMock).toHaveBeenCalledTimes(1)
+      expect(skipMock).toHaveBeenCalledWith(100)
+      expect(limitMock).toHaveBeenCalledWith(500)
+      expect(execMock).toHaveBeenCalledTimes(1)
+    })
+
+    it('returns the documents from the query', async () => {
+      const docs = [{ _id: 'q1' }, { _id: 'q2' }]
+      execMock.mockResolvedValueOnce(docs)
+
+      const result = await repo.findEligiblePublicQuizzes(0, 10)
+      expect(result).toEqual(docs)
+    })
+
+    it('uses a trim-aware filter for imageCoverURL via $expr', async () => {
+      await repo.findEligiblePublicQuizzes(0, 500)
+
+      const filter = findMock.mock.calls[0][0]
+
+      expect(filter.$expr.$and).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            $gt: [{ $strLenCP: { $trim: { input: '$imageCoverURL' } } }, 0],
+          }),
+        ]),
+      )
+    })
+
+    it('applies null guards on imageCoverURL and description', async () => {
+      await repo.findEligiblePublicQuizzes(0, 500)
+
+      const filter = findMock.mock.calls[0][0]
+
+      expect(filter.imageCoverURL).toEqual(
+        expect.objectContaining({ $exists: true, $ne: null }),
+      )
+      expect(filter.description).toEqual(
+        expect.objectContaining({ $exists: true, $ne: null }),
+      )
+    })
+  })
 })

@@ -134,6 +134,22 @@ export const QUALITY_WEIGHT_PLAYERS = 15
 export const QUALITY_WEIGHT_RATING = 15
 
 // ---------------------------------------------------------------------------
+// Bayesian rating confidence threshold
+// ---------------------------------------------------------------------------
+
+/**
+ * Confidence threshold for Bayesian-adjusted rating.
+ *
+ * A quiz needs at least this many ratings before its own average begins to
+ * dominate the Bayesian result. With fewer ratings the global mean pulls the
+ * score toward the platform average, preventing a single 5-star review from
+ * outranking widely-rated quizzes.
+ *
+ * Default: `10`
+ */
+export const MIN_RATING_COUNT = 10
+
+// ---------------------------------------------------------------------------
 // RecentActivityStats type
 // ---------------------------------------------------------------------------
 

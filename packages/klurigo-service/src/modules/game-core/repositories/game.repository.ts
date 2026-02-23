@@ -210,6 +210,50 @@ export class GameRepository extends BaseRepository<Game> {
   }
 
   /**
+   * Aggregates per-quiz play counts for games completed within a recent
+   * time window.
+   *
+   * Queries the `games` collection for documents with
+   * `status === Completed` whose `completedAt` timestamp falls within the
+   * last `windowDays` days. Groups by the `quiz` reference field (a UUID
+   * string matching `Quiz._id`) and counts documents per group.
+   *
+   * The query is backed by the `{ status: 1, completedAt: 1 }` compound index.
+   *
+   * @param windowDays - Number of trailing days defining the "recent" window.
+   * @returns Array of `{ quizId, playCount }` objects, one per quiz that had
+   *   at least one completed game in the window. Quizzes with no recent
+   *   activity are omitted (callers should treat absence as `playCount: 0`).
+   */
+  public async findRecentGameStats(
+    windowDays: number,
+  ): Promise<Array<{ quizId: string; playCount: number }>> {
+    const cutoff = new Date(Date.now() - windowDays * 24 * 60 * 60 * 1000)
+
+    return this.gameModel.aggregate<{ quizId: string; playCount: number }>([
+      {
+        $match: {
+          status: GameStatus.Completed,
+          completedAt: { $gte: cutoff },
+        },
+      },
+      {
+        $group: {
+          _id: '$quiz',
+          playCount: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          quizId: '$_id',
+          playCount: 1,
+        },
+      },
+    ])
+  }
+
+  /**
    * Generates a unique 6-digit game PIN. It checks the database to ensure that no other active game
    * with the same PIN exists. If such a game exists, it keeps generating
    * new PINs until a unique one is found.
@@ -248,7 +292,7 @@ export class GameRepository extends BaseRepository<Game> {
 
     const game = buildGameModel(quiz, gamePIN, user, buildLobbyTask())
 
-    return this.create(game) as Promise<GameDocument>
+    return (await this.create(game)) as GameDocument
   }
 
   /**
@@ -276,6 +320,7 @@ export class GameRepository extends BaseRepository<Game> {
           },
           currentTask: quitTask,
           status: GameStatus.Completed,
+          completedAt: '$$NOW',
         },
       },
     ])
