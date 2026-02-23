@@ -18,9 +18,9 @@ export const TRENDING_PLAY_WEIGHT = 1
  * Number of days defining the "recent" activity window used to gather
  * `recentPlayCount` for trending score computation.
  *
- * The actual aggregation over this window is performed by
- * `DiscoveryComputeService` (Phase 4); this constant is exported so that
- * the compute service and unit tests share the same value.
+ * The aggregation over this window is performed by the discovery snapshot
+ * computation service; this constant is exported so that the compute service
+ * and unit tests share the same value.
  *
  * Default: `7`
  */
@@ -304,9 +304,9 @@ export function computeQualityScore(
  *   `min(100, (recentStats.recentPlayCount * TRENDING_PLAY_WEIGHT) / TRENDING_SCALE_MAX * 100)`
  *
  * The function is **deterministic and pure** — it receives precomputed stats
- * and applies only arithmetic. The `recentStats` are gathered by
- * `DiscoveryComputeService` during the compute run (Phase 4) by querying the
- * games collection for games completed within `TRENDING_WINDOW_DAYS` days.
+ * and applies only arithmetic. The `recentStats` are gathered during snapshot
+ * computation by querying the games collection for plays completed within
+ * `TRENDING_WINDOW_DAYS` days.
  *
  * This approach replaces a previous "days since last played" heuristic with a
  * proper recent-window play score.
