@@ -329,21 +329,21 @@ Declare in `discovery-api/constants/discovery.constants.ts` (exported from the m
 None.
 
 ### Documentation Tasks
-- [ ] JSDoc on `DISCOVERY_RAIL_CAP_FEATURED`: value, which rail it applies to, why smaller
+- [x] JSDoc on `DISCOVERY_RAIL_CAP_FEATURED`: value, which rail it applies to, why smaller
   than the standard cap
-- [ ] JSDoc on `DISCOVERY_RAIL_CAP_STANDARD`: value, which rails it applies to
-- [ ] JSDoc on `DISCOVERY_RAIL_PREVIEW_SIZE`: value, where it is applied (the rail card row
+- [x] JSDoc on `DISCOVERY_RAIL_CAP_STANDARD`: value, which rails it applies to
+- [x] JSDoc on `DISCOVERY_RAIL_PREVIEW_SIZE`: value, where it is applied (the rail card row
   in `GET /discover`)
-- [ ] JSDoc on `DiscoverySnapshotRepository`: class-level description + method-level
+- [x] JSDoc on `DiscoverySnapshotRepository`: class-level description + method-level
   docs for `findLatest` and `upsertLatest`; document that `upsertLatest` replaces the
   singleton document atomically and preserves `_id: 'latest'`
-- [ ] JSDoc on the `DiscoverySnapshotSchema` subdocument `entries`: explain `quizId` +
+- [x] JSDoc on the `DiscoverySnapshotSchema` subdocument `entries`: explain `quizId` +
   `score` fields, ordering invariant (desc by score), capacity limits expressed via
   the named constants
-- [ ] JSDoc on `DiscoveryController` class and `GET /discover` stub handler
-- [ ] Swagger `@ApiOperation`, `@ApiOkResponse`, `@ApiTags('discovery')` on controller
-- [ ] JSDoc on `findManyByIds` in `QuizRepository`
-- [ ] JSDoc on `discovery.featuredRank` schema field: what it controls, how it's managed,
+- [x] JSDoc on `DiscoveryController` class and `GET /discover` stub handler
+- [x] Swagger `@ApiOperation`, `@ApiOkResponse`, `@ApiTags('discovery')` on controller
+- [x] JSDoc on `findManyByIds` in `QuizRepository`
+- [x] JSDoc on `discovery.featuredRank` schema field: what it controls, how it's managed,
   and that lower values rank higher
 
 ### Tests
@@ -361,34 +361,59 @@ None.
 
 ### MongoDB Migrator Tasks
 *(Phase 3 introduces the transformer; Phase 5 adds tests and README — see Phase 5 for those)*
-- [ ] Register `discovery_snapshots` in the collection manifest of `tools/mongodb-migrator`
+- [x] Register `discovery_snapshots` in the collection manifest of `tools/mongodb-migrator`
   so it is included in all export/import runs
-- [ ] Add `transformDiscoverySnapshotDocument` in
+- [x] Add `transformDiscoverySnapshotDocument` in
   `tools/mongodb-migrator/src/transformers/discovery-snapshot.transformers.ts` following
   the pattern of `transformQuizDocument`:
   - Preserve `_id: 'latest'` sentinel
   - Extract and validate `generatedAt` as `Date`
   - Extract `sections[]` with `key` (string), and `entries[]` with `quizId` (string)
     and `score` (number)
-- [ ] Export new transformer from `tools/mongodb-migrator/src/transformers/index.ts`
+- [x] Export new transformer from `tools/mongodb-migrator/src/transformers/index.ts`
 
 ### Acceptance Criteria
-- [ ] `GET /discover` responds `200` with `DiscoveryResponseDto` shape (empty sections)
-- [ ] `DiscoverySnapshotRepository` unit tests pass including the `entries` shape test
-- [ ] `DISCOVERY_RAIL_CAP_FEATURED`, `DISCOVERY_RAIL_CAP_STANDARD`, and
+- [x] `GET /discover` responds `200` with `DiscoveryResponseDto` shape (empty sections)
+- [x] `DiscoverySnapshotRepository` unit tests pass including the `entries` shape test
+- [x] `DISCOVERY_RAIL_CAP_FEATURED`, `DISCOVERY_RAIL_CAP_STANDARD`, and
   `DISCOVERY_RAIL_PREVIEW_SIZE` constants are declared, exported, and JSDoc-documented
-- [ ] Quiz schema contains `discovery.featuredRank?: number` field
+- [x] Quiz schema contains `discovery.featuredRank?: number` field
 - [ ] `set-featured-rank.ts` script exists and is documented in `scripts/README.md`
-- [ ] `discovery_snapshots` collection transformer exists in `mongodb-migrator` and handles
+  *(deferred — see Change Notes below)*
+- [x] `discovery_snapshots` collection transformer exists in `mongodb-migrator` and handles
   `entries: [{ quizId, score }]`
-- [ ] Swagger UI shows `GET /discover` with correct operation metadata and response schema
-- [ ] All tests pass (`yarn workspace @klurigo/klurigo-service test`)
+- [x] Swagger UI shows `GET /discover` with correct operation metadata and response schema
+- [x] All tests pass (`yarn workspace @klurigo/klurigo-service test`)
 
 ### Risks
 - **Singleton correctness** — `upsertLatest` must use `{ upsert: true }` with `_id: 'latest'`
   filter. **Mitigation:** covered by repository unit test.
 - **Schema migration on existing environments** — `discovery.featuredRank` is fully optional;
   no migration script needed for the quiz collection.
+
+### Implementation Notes (Phase 3)
+
+- The discovery snapshot uses a true singleton document identified by
+  `DISCOVERY_SNAPSHOT_SINGLETON_ID = '00000000-0000-0000-0000-000000000000'`. This replaces
+  the earlier `'latest'` sentinel everywhere it was referenced (schema default, repository
+  filter, tests, and migrator validation).
+- `DiscoverySnapshot` is defined with `_id: true` (top-level document). Subdocuments
+  (`DiscoverySnapshotSection`, `DiscoverySnapshotEntry`) remain `_id: false` to avoid unnecessary
+  ObjectId noise in nested arrays.
+- Swagger response typing is implemented via dedicated response models that implement the
+  shared DTO contracts from `@klurigo/common` (`DiscoveryResponse`, `DiscoverySectionResponse`,
+  `DiscoveryQuizCardResponse`) and are referenced from the controller using
+  `@ApiOkResponse({ type: DiscoveryResponse })`.
+- `tools/mongodb-migrator` registers the `discovery_snapshots` collection and validates/normalizes
+  its shape via `transformDiscoverySnapshotDocument`, including:
+  - strict singleton `_id` enforcement
+  - `generatedAt` conversion to `Date`
+  - `sections[].entries[]` extraction as `{ quizId: string, score: number }`
+- Repository tests use `DiscoverySectionKey.TRENDING` directly (no `'TRENDING' as never` casts).
+
+**Excluded:**
+- Admin tooling for managing `discovery.featuredRank` (`scripts/set-featured-rank.ts` +
+  `scripts/README.md`) is deferred to a later phase/PR.
 
 ---
 

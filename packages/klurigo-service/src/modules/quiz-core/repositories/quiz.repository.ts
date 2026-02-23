@@ -161,6 +161,23 @@ export class QuizRepository extends BaseRepository<Quiz> {
   }
 
   /**
+   * Finds multiple quiz documents by their IDs.
+   *
+   * Returns all documents whose `_id` is in the provided array. The order of
+   * the returned documents is not guaranteed to match the order of `ids`.
+   * Documents that do not exist are silently omitted from the result.
+   *
+   * @param ids - Array of quiz document `_id` values to look up.
+   * @returns Array of matching quiz documents (may be shorter than `ids` if some are missing).
+   */
+  public async findManyByIds(ids: string[]): Promise<Quiz[]> {
+    return this.quizModel
+      .find({ _id: { $in: ids } })
+      .populate('owner')
+      .exec()
+  }
+
+  /**
    * Deletes a quiz by ID.
    *
    * @param quizId - The unique identifier of the quiz to delete.

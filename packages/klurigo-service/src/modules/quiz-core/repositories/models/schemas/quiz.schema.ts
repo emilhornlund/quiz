@@ -8,6 +8,29 @@ import {
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Model, Schema as MongooseSchema } from 'mongoose'
 
+/**
+ * Internal discovery metadata embedded on a Quiz document.
+ *
+ * These fields are intentionally excluded from public-facing DTOs
+ * (e.g. QuizResponseDto) and are only used by the discovery compute pipeline.
+ */
+@Schema({ _id: false })
+export class QuizDiscovery {
+  /**
+   * Optional ranking value that places this quiz in the FEATURED discovery
+   * rail. Lower values indicate higher priority (e.g. 1 appears before 2).
+   *
+   * When set, the quiz is eligible for manual curation in the FEATURED rail.
+   * Quizzes without this field fall back to quality-score ordering within
+   * the FEATURED rail. Managed via an admin operation; not exposed in any
+   * response DTO.
+   */
+  @Prop({ type: Number, required: false })
+  featuredRank?: number
+}
+
+export const QuizDiscoverySchema = SchemaFactory.createForClass(QuizDiscovery)
+
 import { User } from '../../../../user/repositories'
 
 import {
@@ -152,6 +175,15 @@ export class Quiz {
     }),
   })
   ratingSummary: QuizRatingSummary
+
+  /**
+   * Internal discovery metadata used by the discovery compute pipeline.
+   *
+   * This field is optional and is not exposed in any public response DTO.
+   * See {@link QuizDiscovery} for field-level documentation.
+   */
+  @Prop({ type: QuizDiscoverySchema, required: false })
+  discovery?: QuizDiscovery
 
   /**
    * The date and time when the quiz was created.
