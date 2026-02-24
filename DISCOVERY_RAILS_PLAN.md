@@ -684,20 +684,20 @@ Also finalizes all Swagger documentation and adds the remaining MongoDB migrator
 None.
 
 ### Documentation Tasks
-- [ ] JSDoc on `DiscoverySchedulerService`: class-level description, cron expression,
+- [x] JSDoc on `DiscoverySchedulerService`: class-level description, cron expression,
   lock key name and timeout purpose
-- [ ] JSDoc on the `GET /discover` hydration handler: document the
+- [x] JSDoc on the `GET /discover` hydration handler: document the
   `DISCOVERY_RAIL_PREVIEW_SIZE` slice, the fixed section ordering
   (`FEATURED` → `TRENDING` → `TOP_RATED` → `MOST_PLAYED` → `NEW_AND_NOTEWORTHY` →
   `CATEGORY_SPOTLIGHT`), batch-fetch pattern, and ordering-preservation guarantee
-- [ ] JSDoc on `GET /discover/section/:key` handler: document snapshot-based pagination,
+- [x] JSDoc on `GET /discover/section/:key` handler: document snapshot-based pagination,
   the `snapshotTotal` semantics (bounded by `DISCOVERY_RAIL_CAP_FEATURED` or
   `DISCOVERY_RAIL_CAP_STANDARD`; not a database row count), the empty-section behaviour
-- [ ] `@ApiProperty` on all fields of `PaginatedDiscoverySectionResponse` (description,
+- [x] `@ApiProperty` on all fields of `PaginatedDiscoverySectionResponse` (description,
   example, `minimum`/`maximum` where applicable) — aligned with `PaginatedQuizResponse`
   style; `snapshotTotal` property must document that it is bounded by snapshot capacity
   and is not the total eligible quiz count in the database
-- [ ] Finalize all `@ApiOperation`, `@ApiOkResponse`, `@ApiQuery`, `@ApiParam`
+- [x] Finalize all `@ApiOperation`, `@ApiOkResponse`, `@ApiQuery`, `@ApiParam`
   decorators on `DiscoveryController`
 
 ### MongoDB Migrator Tasks
@@ -707,25 +707,26 @@ None.
   - A full snapshot: all six section keys, multiple entries each with `score` values
   - Verify transformer round-trips `generatedAt` as `Date`, preserves `_id: 'latest'`,
     and correctly handles the `entries: [{ quizId, score }]` array
-- [ ] Update `tools/mongodb-migrator/README.md` to list `discovery_snapshots` in the
+  *(deferred — see Implementation Notes below)*
+- [x] Update `tools/mongodb-migrator/README.md` to list `discovery_snapshots` in the
   collections table with: collection name, singleton pattern note, entry schema summary
 
 ### Tests
-- Unit: `DiscoverySchedulerService` — fires `compute()` on cron tick (mock `DiscoveryComputeService`)
-- Unit: `GET /discover` handler — slices `entries[0..DISCOVERY_RAIL_PREVIEW_SIZE - 1]` and
+- [x] Unit: `DiscoverySchedulerService` — fires `compute()` on cron tick (mock `DiscoveryComputeService`)
+- [x] Unit: `GET /discover` handler — slices `entries[0..DISCOVERY_RAIL_PREVIEW_SIZE - 1]` and
   calls `findManyByIds` with those IDs (mock repository)
-- Unit: `GET /discover` handler — output `quizzes` array preserves snapshot entry order
-- Unit: `GET /discover` handler — sections are returned in the fixed order `FEATURED`,
+- [x] Unit: `GET /discover` handler — output `quizzes` array preserves snapshot entry order
+- [x] Unit: `GET /discover` handler — sections are returned in the fixed order `FEATURED`,
   `TRENDING`, `TOP_RATED`, `MOST_PLAYED`, `NEW_AND_NOTEWORTHY`, `CATEGORY_SPOTLIGHT`;
   empty sections are skipped
-- Unit: `GET /discover/section/TOP_RATED?limit=10&offset=0` — slices entries, returns
+- [x] Unit: `GET /discover/section/TOP_RATED?limit=10&offset=0` — slices entries, returns
   `{ results, snapshotTotal, limit: 10, offset: 0 }`
-- Unit: `GET /discover/section/TOP_RATED?limit=10&offset=10` — offset applied; returns
+- [x] Unit: `GET /discover/section/TOP_RATED?limit=10&offset=10` — offset applied; returns
   entries 10–19 from snapshot
-- Unit: `GET /discover/section/TOP_RATED` — `snapshotTotal` equals `entries.length` in
+- [x] Unit: `GET /discover/section/TOP_RATED` — `snapshotTotal` equals `entries.length` in
   snapshot (e.g. 150), not the total count of quizzes in the database
-- Unit: unknown section key returns `{ results: [], snapshotTotal: 0, ... }`
-- e2e: `GET /discover/section/TOP_RATED?limit=10&offset=20` — offset applied correctly
+- [x] Unit: unknown section key returns `{ results: [], snapshotTotal: 0, ... }`
+- [x] e2e: `GET /discover/section/TOP_RATED?limit=10&offset=20` — offset applied correctly
 
 ### Migration / Rollout Notes
 - Scheduler begins firing within 12 hours of deploy; no manual seeding required
@@ -734,23 +735,23 @@ None.
   that section; an empty snapshot returns empty results rather than an error.
 
 ### Acceptance Criteria
-- [ ] `GET /discover` returns populated `DiscoveryResponseDto` with each section's
+- [x] `GET /discover` returns populated `DiscoveryResponseDto` with each section's
   `quizzes` ordered by snapshot `entries` order (descending by score)
-- [ ] `GET /discover` returns sections in fixed order: `FEATURED`, `TRENDING`,
+- [x] `GET /discover` returns sections in fixed order: `FEATURED`, `TRENDING`,
   `TOP_RATED`, `MOST_PLAYED`, `NEW_AND_NOTEWORTHY`, `CATEGORY_SPOTLIGHT` (empty sections
   skipped)
-- [ ] `GET /discover/section/TOP_RATED?limit=10&offset=0` returns
+- [x] `GET /discover/section/TOP_RATED?limit=10&offset=0` returns
   `DiscoverySectionPageResponseDto` with `results`, `snapshotTotal`, `limit`, `offset`
-- [ ] `snapshotTotal` in section response equals the number of stored entries in the
+- [x] `snapshotTotal` in section response equals the number of stored entries in the
   snapshot (not the DB count); bounded at ≤ `DISCOVERY_RAIL_CAP_STANDARD` for standard
   rails, ≤ `DISCOVERY_RAIL_CAP_FEATURED` for `FEATURED`
-- [ ] Section response ordering is consistent with the rail preview ordering (snapshot-based)
-- [ ] Scheduler fires at 06:00 and 18:00 UTC (verified via mocked Cron test)
-- [ ] Swagger UI shows both endpoints with complete metadata, query-param descriptions,
+- [x] Section response ordering is consistent with the rail preview ordering (snapshot-based)
+- [x] Scheduler fires at 06:00 and 18:00 UTC (verified via mocked Cron test)
+- [x] Swagger UI shows both endpoints with complete metadata, query-param descriptions,
   and response schemas; `snapshotTotal` is described in the response schema
-- [ ] Migrator transformer tests pass
-- [ ] `tools/mongodb-migrator/README.md` lists `discovery_snapshots`
-- [ ] All unit and e2e tests pass
+- [ ] Migrator transformer tests pass *(deferred — see Implementation Notes below)*
+- [x] `tools/mongodb-migrator/README.md` lists `discovery_snapshots`
+- [x] All unit and e2e tests pass
 
 ### Risks
 - **Stale section data** — users can see "see all" results from the previous compute
@@ -759,6 +760,52 @@ None.
 - **Large `entries` array in section response** — the batch hydration query fetches at
   most `limit` docs (bounded at 50). **Mitigation:** `limit` max is 50; batch query is
   bounded regardless of `DISCOVERY_RAIL_CAP_STANDARD`.
+
+### Implementation Notes (Phase 5)
+
+- **Files added:**
+  - `discovery-api/services/discovery-scheduler.service.ts` — cron scheduler with
+    `@Cron('0 0 6,18 * * *')` and `@MurLock(30000, 'discovery_snapshot_lock')`
+  - `discovery-api/services/discovery-scheduler.service.spec.ts` — 2 unit tests
+  - `discovery-api/controllers/discovery.controller.spec.ts` — 10 unit tests
+  - `discovery-api/controllers/models/paginated-discovery-section.response.ts` — NestJS
+    response class implementing `DiscoverySectionPageResponseDto`
+  - `discovery-api/constants/discovery-section-metadata.constants.ts` — section title/
+    description mapping and fixed display order array
+
+- **Files changed:**
+  - `discovery-api/controllers/discovery.controller.ts` — hydrated `GET /discover` with
+    snapshot slicing, batch-fetch, and card mapping; added `GET /discover/section/:key`
+    with offset pagination; full Swagger annotations on both handlers
+  - `discovery-api/controllers/discovery.controller.e2e-spec.ts` — added e2e test for
+    section endpoint
+  - `discovery-api/discovery-api.module.ts` — registered `DiscoverySchedulerService`
+  - `discovery-api/services/index.ts` — barrel export for scheduler service
+  - `discovery-api/controllers/models/index.ts` — barrel export for paginated response
+  - `discovery-api/constants/index.ts` — barrel export for section metadata constants
+  - `tools/mongodb-migrator/README.md` — listed `discovery_snapshots` in collections
+
+- **Quiz-to-card mapping:** The controller maps Quiz documents to `DiscoveryQuizCardDto`
+  using the same field mapping pattern as `QuizService.mapQuizToResponseDto`. The
+  `gameplaySummary.difficultyPercentage` is computed via the existing
+  `toQuizGameplaySummaryDifficultyPercentage` utility. Author data is derived from the
+  populated `owner` document (`owner._id`, `owner.defaultNickname`).
+
+- **Snapshot entry order preservation:** `findManyByIds` returns documents in arbitrary
+  Mongo order. The controller builds a `Map<id, Quiz>` and iterates the snapshot's entry
+  array to produce the output `quizzes`/`results` array, guaranteeing the ordering
+  matches the snapshot (descending by score at compute time).
+
+- **Section metadata:** A `DISCOVERY_SECTION_METADATA` record maps each
+  `DiscoverySectionKey` to `{ title, description? }`. A separate `DISCOVERY_SECTION_ORDER`
+  array defines the fixed display order for `GET /discover`.
+
+- **Limit clamping:** The section endpoint clamps `limit` to [1, 50] and `offset` to
+  [0, ∞) server-side, avoiding invalid slice arguments.
+
+**Excluded:**
+- Migrator transformer tests (`discovery-snapshot.transformers.spec.ts`) are deferred
+  (the migrator tool has no test runner configured).
 
 ---
 

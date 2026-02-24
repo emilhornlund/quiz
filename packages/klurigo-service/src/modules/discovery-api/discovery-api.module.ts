@@ -10,7 +10,7 @@ import {
   DiscoverySnapshot,
   DiscoverySnapshotSchema,
 } from './repositories/models/schemas'
-import { DiscoveryComputeService } from './services'
+import { DiscoveryComputeService, DiscoverySchedulerService } from './services'
 
 /**
  * NestJS module for the discovery API surface.
@@ -19,6 +19,7 @@ import { DiscoveryComputeService } from './services'
  * - `DiscoveryController` for the `GET /discover` endpoint.
  * - `DiscoverySnapshotRepository` for reading and writing the discovery snapshot
  * - `DiscoveryComputeService` for computing discovery snapshots
+ * - `DiscoverySchedulerService` for scheduling periodic snapshot refreshes
  *
  * Imports:
  * - `MongooseModule` registering the `discovery_snapshots` collection schema.
@@ -37,7 +38,15 @@ import { DiscoveryComputeService } from './services'
     GameCoreModule,
   ],
   controllers: [DiscoveryController],
-  providers: [DiscoverySnapshotRepository, DiscoveryComputeService],
-  exports: [DiscoverySnapshotRepository, DiscoveryComputeService],
+  providers: [
+    DiscoverySnapshotRepository,
+    DiscoveryComputeService,
+    DiscoverySchedulerService,
+  ],
+  exports: [
+    DiscoverySnapshotRepository,
+    DiscoveryComputeService,
+    DiscoverySchedulerService,
+  ],
 })
 export class DiscoveryApiModule {}
