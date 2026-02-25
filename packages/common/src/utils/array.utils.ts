@@ -49,10 +49,12 @@ export function shuffleArray<T>(arr: T[]): T[] {
 export function shuffleDifferent<T>(arr: T[]): T[] {
   if (arr.length <= 1) return arr
 
+  const hasDistinctPermutation = new Set(arr).size > 1
+
   let shuffled: T[]
   do {
     shuffled = shuffleArray(arr)
-  } while (arraysEqual(shuffled, arr))
+  } while (hasDistinctPermutation && arraysEqual(shuffled, arr))
 
   return shuffled
 }
