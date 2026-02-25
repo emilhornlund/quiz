@@ -164,6 +164,13 @@ describe('shuffleDifferent', () => {
     expect(out).not.toEqual(input)
   })
 
+  it('returns a shuffled copy without infinite loop when all elements are identical', () => {
+    const input = ['Test', 'Test', 'Test']
+    const out = shuffleDifferent(input)
+    expect(out).toHaveLength(input.length)
+    expect([...out].sort()).toEqual([...input].sort())
+  })
+
   it('eventually differs even if the first few shuffles match the original', () => {
     // For a 3-element array, each shuffle consumes 2 random calls (i=2,1).
     // Force two identity shuffles, then a different one.
