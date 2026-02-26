@@ -27,7 +27,7 @@ const AnswerPicker: FC<AnswerPickerProps> = ({
       return submittedAnswer.value
     }
     if (submittedAnswer?.type === QuestionType.TrueFalse) {
-      return submittedAnswer.value ? 1 : 0
+      return submittedAnswer.value ? 0 : 1 //True is index 0, False is index 1
     }
     return null
   }, [submittedAnswer])
