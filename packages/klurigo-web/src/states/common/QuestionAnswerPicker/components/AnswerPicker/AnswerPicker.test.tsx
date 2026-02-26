@@ -167,7 +167,7 @@ describe('AnswerPicker', () => {
       expect(buttons[2]).toHaveClass('unselected')
     })
 
-    it('applies selection class to TrueFalse answer when true (index 1)', () => {
+    it('applies selection class to TrueFalse answer when true (index 0)', () => {
       const submittedAnswer: GameQuestionPlayerAnswerEvent = {
         type: QuestionType.TrueFalse,
         value: true,
@@ -175,28 +175,7 @@ describe('AnswerPicker', () => {
 
       render(
         <AnswerPicker
-          answers={['False', 'True']}
-          submittedAnswer={submittedAnswer}
-          interactive={false}
-          loading={false}
-          onClick={vi.fn()}
-        />,
-      )
-
-      const buttons = screen.getAllByRole('button')
-      expect(buttons[0]).toHaveClass('unselected')
-      expect(buttons[1]).toHaveClass('selection')
-    })
-
-    it('applies selection class to TrueFalse answer when false (index 0)', () => {
-      const submittedAnswer: GameQuestionPlayerAnswerEvent = {
-        type: QuestionType.TrueFalse,
-        value: false,
-      }
-
-      render(
-        <AnswerPicker
-          answers={['No', 'Yes']}
+          answers={['True', 'False']}
           submittedAnswer={submittedAnswer}
           interactive={false}
           loading={false}
@@ -207,6 +186,27 @@ describe('AnswerPicker', () => {
       const buttons = screen.getAllByRole('button')
       expect(buttons[0]).toHaveClass('selection')
       expect(buttons[1]).toHaveClass('unselected')
+    })
+
+    it('applies selection class to TrueFalse answer when false (index 1)', () => {
+      const submittedAnswer: GameQuestionPlayerAnswerEvent = {
+        type: QuestionType.TrueFalse,
+        value: false,
+      }
+
+      render(
+        <AnswerPicker
+          answers={['Yes', 'No']}
+          submittedAnswer={submittedAnswer}
+          interactive={false}
+          loading={false}
+          onClick={vi.fn()}
+        />,
+      )
+
+      const buttons = screen.getAllByRole('button')
+      expect(buttons[0]).toHaveClass('unselected')
+      expect(buttons[1]).toHaveClass('selection')
     })
 
     it('disables all buttons when submittedAnswer is present', () => {
