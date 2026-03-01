@@ -20,6 +20,7 @@ import {
   AuthPasswordResetPage,
   AuthRegisterPage,
   AuthVerifyPage,
+  DiscoverRailsPage,
   ErrorPage,
   GameJoinPage,
   GamePage,
@@ -107,6 +108,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <QuizDiscoverPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/discover/rails',
+        element: (
+          <ProtectedRoute>
+            <DiscoverRailsPage />
           </ProtectedRoute>
         ),
       },
