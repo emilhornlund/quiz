@@ -107,28 +107,6 @@ export const createQuizResource = (
     })
 
   /**
-   * Retrieves a paginated list of public quizzes.
-   *
-   * @param options.search - Optional search term to filter quizzes by title.
-   * @param options.limit - The maximum number of quizzes to retrieve per page.
-   * @param options.offset - The number of quizzes to skip before starting retrieval.
-   * @returns A promise resolving to public quizzes in a paginated format.
-   */
-  const getPublicQuizzes = (options: {
-    search?: string
-    limit: number
-    offset: number
-  }): Promise<PaginatedQuizResponseDto> =>
-    api
-      .apiGet<PaginatedQuizResponseDto>(`/quizzes${parseQueryParams(options)}`)
-      .catch((error) => {
-        deps.notifyError(
-          'We couldn’t load public quizzes right now. Please try again.',
-        )
-        throw error
-      })
-
-  /**
    * Updates an existing quiz with the specified request data.
    *
    * @param quizId - The ID of the quiz to update.
@@ -300,7 +278,6 @@ export const createQuizResource = (
     getProfileQuizzes,
     createQuiz,
     getQuiz,
-    getPublicQuizzes,
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,

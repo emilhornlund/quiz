@@ -32,7 +32,6 @@ import {
   ProfileUserPage,
   QuizCreatorPage,
   QuizDetailsPage,
-  QuizDiscoverPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -106,14 +105,6 @@ const router = createBrowserRouter([
       },
       {
         path: '/discover',
-        element: (
-          <ProtectedRoute>
-            <QuizDiscoverPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/discover/rails',
         element: (
           <ProtectedRoute>
             <DiscoverRailsPage />
