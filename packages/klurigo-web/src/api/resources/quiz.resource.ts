@@ -1,5 +1,7 @@
 import {
   type DiscoveryResponseDto,
+  type DiscoverySectionKey,
+  type DiscoverySectionPageResponseDto,
   type PaginatedQuizRatingDto,
   type PaginatedQuizResponseDto,
   type QuestionDto,
@@ -265,6 +267,35 @@ export const createQuizResource = (
       throw error
     })
 
+  /**
+   * Retrieves a paginated page of quizzes for a specific discovery section.
+   *
+   * Calls GET /discover/section/:key with limit and offset as query params.
+   * The response includes a snapshotTotal field that reflects the number of
+   * scored entries stored in the snapshot for this rail — bounded by snapshot
+   * capacity constants, not a live database row count. Use snapshotTotal to
+   * determine whether more results are available for "Load more" pagination.
+   *
+   * @param key - The discovery section key identifying the rail.
+   * @param options.limit - Maximum number of quiz cards to retrieve per page.
+   * @param options.offset - Zero-based index of the first item to retrieve.
+   * @returns A promise resolving to a DiscoverySectionPageResponseDto.
+   */
+  const getSectionQuizzes = (
+    key: DiscoverySectionKey,
+    options: { limit: number; offset: number },
+  ): Promise<DiscoverySectionPageResponseDto> =>
+    api
+      .apiGet<DiscoverySectionPageResponseDto>(
+        `/discover/section/${key}${parseQueryParams(options)}`,
+      )
+      .catch((error) => {
+        deps.notifyError(
+          'We couldn\u2019t load this section right now. Please try again.',
+        )
+        throw error
+      })
+
   return {
     getProfileQuizzes,
     createQuiz,
@@ -276,5 +307,6 @@ export const createQuizResource = (
     getQuizRatings,
     createOrUpdateQuizRating,
     getDiscovery,
+    getSectionQuizzes,
   }
 }

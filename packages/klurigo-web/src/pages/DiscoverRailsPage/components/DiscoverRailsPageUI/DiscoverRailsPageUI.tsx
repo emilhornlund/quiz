@@ -1,7 +1,11 @@
-import { type DiscoverySectionDto, DiscoverySectionKey } from '@klurigo/common'
+import type { DiscoverySectionDto } from '@klurigo/common'
 import type { FC } from 'react'
 
 import { Page, Typography } from '../../../../components'
+import {
+  DISCOVERY_SECTION_DESCRIPTIONS,
+  DISCOVERY_SECTION_TITLES,
+} from '../../../../utils/discovery.utils'
 
 import { DiscoveryRailSection } from './components'
 import styles from './DiscoverRailsPageUI.module.scss'
@@ -22,30 +26,6 @@ const LOADING_SKELETON_SECTIONS = [
   'skeleton-2',
   'skeleton-3',
 ] as const
-
-/** Optional mapping of discovery section keys to human-readable titles. */
-const DISCOVERY_SECTION_TITLES: { [key in DiscoverySectionKey]: string } = {
-  [DiscoverySectionKey.FEATURED]: 'Featured',
-  [DiscoverySectionKey.TRENDING]: 'Trending',
-  [DiscoverySectionKey.TOP_RATED]: 'Top Rated',
-  [DiscoverySectionKey.MOST_PLAYED]: 'Most Played',
-  [DiscoverySectionKey.NEW_AND_NOTEWORTHY]: 'New & Noteworthy',
-  [DiscoverySectionKey.CATEGORY_SPOTLIGHT]: 'Category Spotlight',
-}
-
-/** Optional mapping of discovery section keys to descriptive subtitles. */
-const DISCOVERY_SECTION_DESCRIPTIONS: {
-  [key in DiscoverySectionKey]?: string
-} = {
-  [DiscoverySectionKey.FEATURED]: 'Handpicked quizzes we think you’ll love',
-  [DiscoverySectionKey.TRENDING]: 'Quizzes that are gaining popularity fast',
-  [DiscoverySectionKey.TOP_RATED]: 'Highest rated quizzes by players',
-  [DiscoverySectionKey.MOST_PLAYED]: 'Quizzes with the most plays',
-  [DiscoverySectionKey.NEW_AND_NOTEWORTHY]:
-    'Recently published quizzes worth checking out',
-  [DiscoverySectionKey.CATEGORY_SPOTLIGHT]:
-    'Top quizzes from a specific category',
-}
 
 /**
  * Presentational component for the discovery rails page.
@@ -84,11 +64,8 @@ const DiscoverRailsPageUI: FC<DiscoverRailsPageUIProps> = ({
             <DiscoveryRailSection
               key={section.key}
               sectionKey={section.key}
-              title={section.title ?? DISCOVERY_SECTION_TITLES[section.key]}
-              description={
-                section.description ??
-                DISCOVERY_SECTION_DESCRIPTIONS[section.key]
-              }
+              title={DISCOVERY_SECTION_TITLES[section.key]}
+              description={DISCOVERY_SECTION_DESCRIPTIONS[section.key]}
               quizzes={section.quizzes}
               isLoading={false}
             />
