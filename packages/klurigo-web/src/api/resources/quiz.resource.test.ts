@@ -381,4 +381,31 @@ describe('createQuizResource', () => {
     )
     expect(deps.notifySuccess).not.toHaveBeenCalled()
   })
+
+  it('getDiscovery calls apiGet with /discover and returns response', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = { sections: [], generatedAt: null }
+    apiGet.mockResolvedValue(res)
+
+    await expect(quiz.getDiscovery()).resolves.toBe(res)
+    expect(apiGet).toHaveBeenCalledWith('/discover')
+    expect(deps.notifyError).not.toHaveBeenCalled()
+  })
+
+  it('getDiscovery notifies error and rethrows on failure', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const err = new Error('fail')
+    apiGet.mockRejectedValue(err)
+
+    await expect(quiz.getDiscovery()).rejects.toBe(err)
+    expect(deps.notifyError).toHaveBeenCalledWith(
+      'We couldn\u2019t load discovery right now. Please try again.',
+    )
+  })
 })

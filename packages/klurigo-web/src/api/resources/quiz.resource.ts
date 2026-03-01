@@ -1,4 +1,5 @@
 import {
+  type DiscoveryResponseDto,
   type PaginatedQuizRatingDto,
   type PaginatedQuizResponseDto,
   type QuestionDto,
@@ -248,6 +249,22 @@ export const createQuizResource = (
         throw error
       })
 
+  /**
+   * Retrieves the discovery page payload containing all curated rails.
+   *
+   * Calls `GET /discover` and returns the full set of discovery sections
+   * with their preview quiz cards.
+   *
+   * @returns A promise resolving to the discovery response as a `DiscoveryResponseDto`.
+   */
+  const getDiscovery = (): Promise<DiscoveryResponseDto> =>
+    api.apiGet<DiscoveryResponseDto>('/discover').catch((error) => {
+      deps.notifyError(
+        'We couldn\u2019t load discovery right now. Please try again.',
+      )
+      throw error
+    })
+
   return {
     getProfileQuizzes,
     createQuiz,
@@ -258,5 +275,6 @@ export const createQuizResource = (
     getQuizQuestions,
     getQuizRatings,
     createOrUpdateQuizRating,
+    getDiscovery,
   }
 }

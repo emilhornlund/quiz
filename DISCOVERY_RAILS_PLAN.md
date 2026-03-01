@@ -842,7 +842,7 @@ directly but it is not yet the default.
 ### Frontend Changes
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/` — new page
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/`
-- `packages/klurigo-web/src/components/DiscoveryRailSection/` — new shared component
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection`
 - `packages/klurigo-web/src/components/QuizDiscoveryCard/` — new shared component
 - `packages/klurigo-web/src/api/resources/quiz.resource.ts` — add `getDiscovery()`
 - `packages/klurigo-web/src/api/useKlurigoServiceClient.tsx` — expose `getDiscovery`
@@ -852,11 +852,11 @@ directly but it is not yet the default.
 None.
 
 ### Documentation Tasks
-- [ ] TSDoc on `DiscoverRailsPage`: describe props, data flow, query key
-- [ ] TSDoc on `DiscoveryRailSection`: describe all props (`key`, `title`, `description`,
+- [x] TSDoc on `DiscoverRailsPage`: describe props, data flow, query key
+- [x] TSDoc on `DiscoveryRailSection`: describe all props (`key`, `title`, `description`,
   `quizzes`, `isLoading`), scroll/keyboard accessibility notes
-- [ ] TSDoc on `QuizDiscoveryCard`: describe all props, fallback behaviour for missing cover
-- [ ] TSDoc on `getDiscovery()` API resource function: URL, return type, error handling
+- [x] TSDoc on `QuizDiscoveryCard`: describe all props, fallback behaviour for missing cover
+- [x] TSDoc on `getDiscovery()` API resource function: URL, return type, error handling
 
 ### Tests
 - Vitest unit: `DiscoverRailsPageUI` renders correct number of sections
@@ -872,19 +872,38 @@ None.
   message ("More quizzes coming soon — check back later!").
 
 ### Acceptance Criteria
-- [ ] `/discover/rails` renders all sections returned by `GET /discover`
-- [ ] Each section shows a horizontal scrollable row of quiz cards
-- [ ] Skeleton displayed while loading
-- [ ] "See all" link visible but navigates to `/discover/section/:key`
+- [x] `/discover/rails` renders all sections returned by `GET /discover`
+- [x] Each section shows a horizontal scrollable row of quiz cards
+- [x] Skeleton displayed while loading
+- [x] "See all" link visible but navigates to `/discover/section/:key`
   (may 404 until Phase 7)
-- [ ] Empty state renders without error when `sections` is empty
-- [ ] All public components and API functions have TSDoc documentation
-- [ ] All unit tests pass
+- [x] Empty state renders without error when `sections` is empty
+- [x] All public components and API functions have TSDoc documentation
+- [x] All unit tests pass
 
 ### Risks
 - **API shape mismatch** — mitigated by shared `@klurigo/common` DTOs from Phase 1.
 - **Scroll accessibility** — ensure horizontal list is keyboard-navigable
   (tabIndex on cards, overflow-x with visible focus ring).
+
+### Implementation Notes (Phase 6)
+- `QuizDiscoveryCard` renders cover image with `faImage` FontAwesome fallback SVG when
+  `imageCoverURL` is absent; cards are keyboard-accessible via `tabIndex={0}` with
+  Enter/Space key handlers and visible focus ring via `:focus-visible`.
+- `DiscoveryRailSection` uses CSS `scroll-snap-type: x mandatory` on the rail container
+  with `scroll-snap-align: start` on each card for horizontal scroll snapping.
+- Skeleton loading uses 10 placeholder cards (`DISCOVERY_RAIL_SKELETON_COUNT`) matching
+  the backend `DISCOVERY_RAIL_PREVIEW_SIZE`; shimmer animation via CSS `@keyframes`.
+- `DiscoverRailsPageUI` renders 3 skeleton rail sections during loading to approximate
+  the page layout before data arrives.
+- `getDiscovery()` added to `quiz.resource.ts` calling `GET /discover`; automatically
+  exposed via `useKlurigoServiceClient` through the existing spread pattern.
+- React Query key: `['discover']`.
+- Empty state message: "More quizzes coming soon — check back later!"
+- Route `/discover/rails` added behind `ProtectedRoute`; legacy `/discover` unchanged.
+- Storybook stories added for `QuizDiscoveryCard` (4 variants) and
+  `DiscoveryRailSection` (4 variants) and `DiscoverRailsPageUI` (3 variants).
+- 40 new Vitest tests across 5 test files (all passing).
 
 ---
 
