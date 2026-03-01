@@ -144,40 +144,6 @@ describe('createQuizResource', () => {
     )
   })
 
-  it('getPublicQuizzes calls apiGet with query params and returns response', async () => {
-    const { api, apiGet } = makeApi()
-    const deps = makeDeps()
-    const quiz = createQuizResource(api, deps)
-
-    const res = { items: [], limit: 10, offset: 20, total: 0 }
-    apiGet.mockResolvedValue(res)
-
-    await expect(
-      quiz.getPublicQuizzes({ search: 'cat', limit: 10, offset: 20 }),
-    ).resolves.toBe(res)
-
-    expect(apiGet).toHaveBeenCalledWith(
-      '/quizzes?search=cat&limit=10&offset=20',
-    )
-  })
-
-  it('getPublicQuizzes notifies error and rethrows on failure', async () => {
-    const { api, apiGet } = makeApi()
-    const deps = makeDeps()
-    const quiz = createQuizResource(api, deps)
-
-    const err = new Error('fail')
-    apiGet.mockRejectedValue(err)
-
-    await expect(
-      quiz.getPublicQuizzes({ search: 'cat', limit: 10, offset: 20 }),
-    ).rejects.toBe(err)
-
-    expect(deps.notifyError).toHaveBeenCalledWith(
-      'We couldn’t load public quizzes right now. Please try again.',
-    )
-  })
-
   it('updateQuiz calls apiPut, notifies success, and returns response', async () => {
     const { api, apiPut } = makeApi()
     const deps = makeDeps()

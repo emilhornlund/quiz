@@ -1043,21 +1043,42 @@ None.
 - **Rollback plan:** revert this PR alone to restore the old behaviour instantly.
 
 ### Acceptance Criteria
-- [ ] `/discover` renders `DiscoverRailsPage`
-- [ ] `/discover/rails` no longer exists as a separate route
-- [ ] `QuizDiscoverPage` directory and all exclusively-associated components deleted
-- [ ] No dead discover-specific SCSS files remain
-- [ ] No discover-only API resource functions remain
-- [ ] No exclusively-old-discover unit/snapshot tests remain
-- [ ] All existing navigation links pointing at `/discover` work correctly
-- [ ] E2E Playwright tests updated and passing
-- [ ] `yarn build` and `yarn lint` pass with zero warnings related to removed code
+- [x] `/discover` renders `DiscoverRailsPage`
+- [x] `/discover/rails` no longer exists as a separate route
+- [x] `QuizDiscoverPage` directory and all exclusively-associated components deleted
+- [x] No dead discover-specific SCSS files remain
+- [x] No discover-only API resource functions remain
+- [x] No exclusively-old-discover unit/snapshot tests remain
+- [x] All existing navigation links pointing at `/discover` work correctly
+- [x] E2E Playwright tests updated and passing
+- [x] `yarn build` and `yarn lint` pass with zero warnings related to removed code
 
 ### Risks
 - **Inadvertent deletion of shared code** — review component usage before deleting;
   `QuizDiscoveryCard` introduced in Phase 6 is shared and must be kept.
 - **SEO** — no server-side rendering in this stack, so no HTTP redirect needed;
   the canonical path `/discover` remains unchanged.
+
+### Implementation Notes (Phase 8)
+- `main.tsx`: `/discover` route now renders `DiscoverRailsPage`; `/discover/rails` alias
+  removed entirely. `QuizDiscoverPage` import removed.
+- `pages/index.ts`: `QuizDiscoverPage` re-export removed.
+- `pages/QuizDiscoverPage/` directory deleted in full (container, `QuizDiscoverPageUI`
+  presentational component, snapshot, Storybook story, unit test, barrel files).
+- `quiz.resource.ts`: `getPublicQuizzes` function removed (was the only caller of
+  `GET /quizzes` with filter params). `PaginatedQuizResponseDto` import kept because
+  `getProfileQuizzes` still uses it.
+- `quiz.resource.test.ts`: Two `getPublicQuizzes` test cases removed; 21 remaining tests
+  pass.
+- Shared components verified before deletion: `QuizTable`, `QuizTableFilter`, and
+  `useQuizzesSearchOptions` are still used by `ProfileQuizzesPage` and were kept.
+  `QuizDiscoveryCard` (introduced in Phase 6) is used by `DiscoverRailsPage` and kept.
+- Navigation links in `Page.tsx` already pointed to `/discover` (unchanged canonical path);
+  `DiscoverRailsPageUI` already used `<Page discover profile>` so nav active state works.
+- No `<title>` / `<meta description>` mechanism exists in the app (no react-helmet,
+  no `document.title` usage); no SEO metadata changes were needed.
+- New Playwright e2e test `e2e-tests/Discovery.spec.ts` added: asserts `/discover`
+  renders discovery rails page and `/discover/rails` shows the error page.
 
 ---
 
