@@ -939,35 +939,55 @@ because both draw from the same snapshot data (see Phase 5).
 None (endpoint shipped in Phase 5).
 
 ### Documentation Tasks
-- [ ] TSDoc on `DiscoverSectionPage`: describe route param `key`, query key structure,
+- [x] TSDoc on `DiscoverSectionPage`: describe route param `key`, query key structure,
   pagination state (`limit`, `offset`, `snapshotTotal`); note that ordering matches the
   rail preview and that `snapshotTotal` is bounded by snapshot capacity (not a DB count)
-- [ ] TSDoc on `getSectionQuizzes()`: document `key`, `limit`, `offset` params, return
+- [x] TSDoc on `getSectionQuizzes()`: document `key`, `limit`, `offset` params, return
   type; note the `snapshotTotal` field semantics
 
 ### Tests
-- Vitest unit: `DiscoverSectionPage` renders section title from route key
-- Vitest unit: "Load more" button increments offset and appends results
-- Vitest unit: "Load more" hidden when `offset + results.length >= snapshotTotal`
-- Vitest unit: unknown section key shows graceful empty/error state
+- [x] Vitest unit: `DiscoverSectionPage` renders section title from route key
+- [x] Vitest unit: "Load more" button increments offset and appends results
+- [x] Vitest unit: "Load more" hidden when `offset + results.length >= snapshotTotal`
+- [x] Vitest unit: unknown section key shows graceful empty/error state
 
 ### Migration / Rollout Notes
 - "See all" links from Phase 6 now resolve correctly.
 
 ### Acceptance Criteria
-- [ ] `/discover/section/TOP_RATED` renders the top-rated quiz list in snapshot order
-- [ ] Offset pagination ("Load more") works against `GET /discover/section/:key`
-- [ ] `getSectionQuizzes` passes `limit` and `offset` as query params (no cursor params)
-- [ ] "Load more" visibility is controlled by `snapshotTotal` from the response
-- [ ] Ordering on the "see all" page matches the ordering of quizzes shown in the rail
+- [x] `/discover/section/TOP_RATED` renders the top-rated quiz list in snapshot order
+- [x] Offset pagination ("Load more") works against `GET /discover/section/:key`
+- [x] `getSectionQuizzes` passes `limit` and `offset` as query params (no cursor params)
+- [x] "Load more" visibility is controlled by `snapshotTotal` from the response
+- [x] Ordering on the "see all" page matches the ordering of quizzes shown in the rail
   preview (both sourced from the same snapshot)
-- [ ] Unknown key renders graceful empty/error state
-- [ ] Back navigation returns to `/discover/rails`
-- [ ] All unit tests pass
+- [x] Unknown key renders graceful empty/error state
+- [x] Back navigation returns to `/discover/rails`
+- [x] All unit tests pass
 
 ### Risks
 - **Section key validation** — `DiscoverySectionKey` enum used for type-checking in
   API layer; unknown keys return empty result from backend (not a 500).
+
+### Implementation Notes (Phase 7)
+- Route `/discover/section/:key` added to `main.tsx` behind `ProtectedRoute`, alongside
+  the existing `/discover/rails` route.
+- `getSectionQuizzes(key, { limit, offset })` added to `quiz.resource.ts`; calls
+  `GET /discover/section/:key` with limit/offset as query params; returns
+  `DiscoverySectionPageResponseDto`.
+- `DiscoverSectionPage` container manages `offset` state and accumulates quiz results
+  across pages in local state. React Query key: `['discoverSection', key, limit, offset]`.
+  Default page size is 20. "Load more" increments offset by the default limit and appends
+  results to the accumulated list.
+- `DiscoverSectionPageUI` renders a back link to `/discover/rails`, the section title,
+  a responsive grid of `QuizDiscoveryCard` components, and a "Load more" button that is
+  hidden when `offset + allQuizzes.length >= snapshotTotal`.
+- Error/unknown key handling: when the API call fails or the key is empty, a graceful
+  empty state message is shown instead of crashing.
+- Tests: 5 Vitest tests in `DiscoverSectionPage.test.tsx` (title rendering, load more
+  appending, load more hidden, error state, back link) and 2 tests added to
+  `quiz.resource.test.ts` (success and error paths for `getSectionQuizzes`).
+- All 1403 frontend tests pass; lint is clean.
 
 ---
 

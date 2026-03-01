@@ -1,3 +1,4 @@
+import { DiscoverySectionKey } from '@klurigo/common'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ApiClientCore } from '../api-client-core'
@@ -406,6 +407,54 @@ describe('createQuizResource', () => {
     await expect(quiz.getDiscovery()).rejects.toBe(err)
     expect(deps.notifyError).toHaveBeenCalledWith(
       'We couldn\u2019t load discovery right now. Please try again.',
+    )
+  })
+
+  it('getSectionQuizzes calls apiGet with key and query params and returns response', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = {
+      key: 'TOP_RATED',
+      title: 'Top Rated',
+      results: [],
+      snapshotTotal: 0,
+      limit: 20,
+      offset: 0,
+    }
+    apiGet.mockResolvedValue(res)
+
+    await expect(
+      quiz.getSectionQuizzes(DiscoverySectionKey.TOP_RATED, {
+        limit: 20,
+        offset: 0,
+      }),
+    ).resolves.toBe(res)
+
+    expect(apiGet).toHaveBeenCalledWith(
+      '/discover/section/TOP_RATED?limit=20&offset=0',
+    )
+    expect(deps.notifyError).not.toHaveBeenCalled()
+  })
+
+  it('getSectionQuizzes notifies error and rethrows on failure', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const err = new Error('fail')
+    apiGet.mockRejectedValue(err)
+
+    await expect(
+      quiz.getSectionQuizzes(DiscoverySectionKey.TOP_RATED, {
+        limit: 20,
+        offset: 0,
+      }),
+    ).rejects.toBe(err)
+
+    expect(deps.notifyError).toHaveBeenCalledWith(
+      'We couldn\u2019t load this section right now. Please try again.',
     )
   })
 })
