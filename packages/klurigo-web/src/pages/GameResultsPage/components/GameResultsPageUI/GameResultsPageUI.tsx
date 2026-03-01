@@ -20,7 +20,7 @@ export type GameResultsPageUIProps = {
  * These values are used at runtime to control which result section
  * is rendered or selected.
  */
-export const GameResultSection = {
+const GameResultSection = {
   Summary: 'SUMMARY',
   Players: 'PLAYERS',
   Questions: 'QUESTIONS',

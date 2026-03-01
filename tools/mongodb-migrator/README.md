@@ -96,6 +96,7 @@ The tool auto-generates metadata for known collections like:
 * `quizzes`
 * `tokens`
 * `game_results`
+* `discovery_snapshots`
 
 UUIDs and index definitions are embedded in `getMetadata()`.
 

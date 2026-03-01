@@ -1,3 +1,4 @@
+export * from './discovery-snapshot.transformers'
 export * from './game.transformers'
 export * from './game-results.transformers'
 export * from './quiz.transformers'

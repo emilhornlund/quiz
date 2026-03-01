@@ -1,0 +1,149 @@
+@use '../../styles/colors';
+@use '../../styles/helpers';
+@use '../../styles/variables';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background-color: colors.$white-1-15;
+  border: variables.$control-outside-border-width solid colors.$white-1-25;
+  cursor: pointer;
+  overflow: hidden;
+  scroll-snap-align: start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 6px colors.$black-1-15;
+  }
+
+  &:focus-visible {
+    outline: 2px solid colors.$blue-2;
+    outline-offset: 2px;
+  }
+
+  @include helpers.mobile {
+    width: 200px;
+    border-radius: variables.$mobile-control-normal-border-radius;
+  }
+
+  @include helpers.tablet {
+    width: 220px;
+    border-radius: variables.$tablet-control-normal-border-radius;
+  }
+
+  @include helpers.desktop {
+    width: 240px;
+    border-radius: variables.$desktop-control-normal-border-radius;
+  }
+
+  .cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: colors.$gray-3;
+
+    .coverImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .coverFallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: colors.$white-1-40;
+      font-size: 2rem;
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.625rem;
+
+    .title {
+      margin: 0;
+      font-size: variables.$mobile-control-small-font-size;
+      font-weight: 600;
+      color: colors.$white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @media (min-width: variables.$tablet-width) {
+        font-size: variables.$tablet-control-small-font-size;
+      }
+
+      @include helpers.mobile {
+        @include helpers.fontSize(14px);
+      }
+      @include helpers.tablet {
+        @include helpers.fontSize(16px);
+      }
+      @include helpers.desktop {
+        @include helpers.fontSize(18px);
+      }
+    }
+
+    .author {
+      font-size: 0.75rem;
+      color: colors.$white-1-70;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @include helpers.mobile {
+        @include helpers.fontSize(12px);
+      }
+      @include helpers.tablet {
+        @include helpers.fontSize(13px);
+      }
+      @include helpers.desktop {
+        @include helpers.fontSize(14px);
+      }
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-top: 0.25rem;
+
+      .metaItem {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        color: colors.$white-1-50;
+
+        svg {
+          font-size: 0.625rem;
+        }
+
+        @include helpers.mobile {
+          @include helpers.fontSize(12px);
+        }
+        @include helpers.tablet {
+          @include helpers.fontSize(13px);
+        }
+        @include helpers.desktop {
+          @include helpers.fontSize(14px);
+        }
+
+        &.rating {
+          color: colors.$gold;
+        }
+      }
+    }
+  }
+}

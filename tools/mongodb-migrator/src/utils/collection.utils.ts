@@ -3,6 +3,7 @@ import { join } from 'path'
 import { diffString } from 'json-diff'
 
 import {
+  transformDiscoverySnapshotDocument,
   transformGameDocument,
   transformGameResultsDocument,
   transformPlayerOrUserDocument,
@@ -18,6 +19,7 @@ import {
   writeBsonDocuments,
 } from './bson.utils'
 import {
+  COLLECTION_NAME_DISCOVERY_SNAPSHOTS,
   COLLECTION_NAME_GAME_RESULTS,
   COLLECTION_NAME_GAMES,
   COLLECTION_NAME_QUIZ_RATINGS,
@@ -198,6 +200,8 @@ function transformDocument(
 ): BSONDocument | null {
   try {
     switch (collectionName) {
+      case COLLECTION_NAME_DISCOVERY_SNAPSHOTS:
+        return transformDiscoverySnapshotDocument(originalDocument)
       case COLLECTION_NAME_GAME_RESULTS:
         return transformGameResultsDocument(originalDocument)
       case COLLECTION_NAME_GAMES:
@@ -231,6 +235,20 @@ function getCollectionMetadataObject(
   collectionName: string,
 ): JSONObject | null {
   switch (collectionName) {
+    case COLLECTION_NAME_DISCOVERY_SNAPSHOTS:
+      return {
+        indexes: [
+          {
+            v: { $numberInt: '2' },
+            key: { _id: { $numberInt: '1' } },
+            name: '_id_',
+          },
+        ],
+        uuid: '66fdfc377a474767a6e73ec0b87ab04b',
+        collectionName,
+        type: 'collection',
+      }
+
     case COLLECTION_NAME_GAME_RESULTS:
       return {
         indexes: [
@@ -252,6 +270,14 @@ function getCollectionMetadataObject(
             v: { $numberInt: '2' },
             key: { _id: { $numberInt: '1' } },
             name: '_id_',
+          },
+          {
+            v: { $numberInt: '2' },
+            key: {
+              status: { $numberInt: '1' },
+              completedAt: { $numberInt: '1' },
+            },
+            name: 'status_1_completedAt_1',
           },
         ],
         uuid: '4231303ad7b24b42aeb2815f5317eb45',

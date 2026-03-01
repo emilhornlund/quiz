@@ -1,3 +1,4 @@
+export const COLLECTION_NAME_DISCOVERY_SNAPSHOTS = 'discovery_snapshots'
 export const COLLECTION_NAME_GAMES = 'games'
 export const COLLECTION_NAME_GAME_RESULTS = 'game_results'
 export const COLLECTION_NAME_QUIZZES = 'quizzes'

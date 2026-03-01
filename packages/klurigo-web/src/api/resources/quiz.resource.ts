@@ -1,4 +1,7 @@
 import {
+  type DiscoveryResponseDto,
+  type DiscoverySectionKey,
+  type DiscoverySectionPageResponseDto,
   type PaginatedQuizRatingDto,
   type PaginatedQuizResponseDto,
   type QuestionDto,
@@ -102,28 +105,6 @@ export const createQuizResource = (
       deps.notifyError('We couldn’t load that quiz. Please try again.')
       throw error
     })
-
-  /**
-   * Retrieves a paginated list of public quizzes.
-   *
-   * @param options.search - Optional search term to filter quizzes by title.
-   * @param options.limit - The maximum number of quizzes to retrieve per page.
-   * @param options.offset - The number of quizzes to skip before starting retrieval.
-   * @returns A promise resolving to public quizzes in a paginated format.
-   */
-  const getPublicQuizzes = (options: {
-    search?: string
-    limit: number
-    offset: number
-  }): Promise<PaginatedQuizResponseDto> =>
-    api
-      .apiGet<PaginatedQuizResponseDto>(`/quizzes${parseQueryParams(options)}`)
-      .catch((error) => {
-        deps.notifyError(
-          'We couldn’t load public quizzes right now. Please try again.',
-        )
-        throw error
-      })
 
   /**
    * Updates an existing quiz with the specified request data.
@@ -248,15 +229,61 @@ export const createQuizResource = (
         throw error
       })
 
+  /**
+   * Retrieves the discovery page payload containing all curated rails.
+   *
+   * Calls `GET /discover` and returns the full set of discovery sections
+   * with their preview quiz cards.
+   *
+   * @returns A promise resolving to the discovery response as a `DiscoveryResponseDto`.
+   */
+  const getDiscovery = (): Promise<DiscoveryResponseDto> =>
+    api.apiGet<DiscoveryResponseDto>('/discover').catch((error) => {
+      deps.notifyError(
+        'We couldn\u2019t load discovery right now. Please try again.',
+      )
+      throw error
+    })
+
+  /**
+   * Retrieves a paginated page of quizzes for a specific discovery section.
+   *
+   * Calls GET /discover/section/:key with limit and offset as query params.
+   * The response includes a snapshotTotal field that reflects the number of
+   * scored entries stored in the snapshot for this rail — bounded by snapshot
+   * capacity constants, not a live database row count. Use snapshotTotal to
+   * determine whether more results are available for "Load more" pagination.
+   *
+   * @param key - The discovery section key identifying the rail.
+   * @param options.limit - Maximum number of quiz cards to retrieve per page.
+   * @param options.offset - Zero-based index of the first item to retrieve.
+   * @returns A promise resolving to a DiscoverySectionPageResponseDto.
+   */
+  const getSectionQuizzes = (
+    key: DiscoverySectionKey,
+    options: { limit: number; offset: number },
+  ): Promise<DiscoverySectionPageResponseDto> =>
+    api
+      .apiGet<DiscoverySectionPageResponseDto>(
+        `/discover/section/${key}${parseQueryParams(options)}`,
+      )
+      .catch((error) => {
+        deps.notifyError(
+          'We couldn\u2019t load this section right now. Please try again.',
+        )
+        throw error
+      })
+
   return {
     getProfileQuizzes,
     createQuiz,
     getQuiz,
-    getPublicQuizzes,
     updateQuiz,
     deleteQuiz,
     getQuizQuestions,
     getQuizRatings,
     createOrUpdateQuizRating,
+    getDiscovery,
+    getSectionQuizzes,
   }
 }

@@ -20,6 +20,8 @@ import {
   AuthPasswordResetPage,
   AuthRegisterPage,
   AuthVerifyPage,
+  DiscoverRailsPage,
+  DiscoverSectionPage,
   ErrorPage,
   GameJoinPage,
   GamePage,
@@ -30,7 +32,6 @@ import {
   ProfileUserPage,
   QuizCreatorPage,
   QuizDetailsPage,
-  QuizDiscoverPage,
 } from './pages'
 
 import './styles/fonts.scss'
@@ -106,7 +107,15 @@ const router = createBrowserRouter([
         path: '/discover',
         element: (
           <ProtectedRoute>
-            <QuizDiscoverPage />
+            <DiscoverRailsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/discover/section/:key',
+        element: (
+          <ProtectedRoute>
+            <DiscoverSectionPage />
           </ProtectedRoute>
         ),
       },

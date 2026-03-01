@@ -113,6 +113,9 @@ export class Game {
 
   @Prop({ type: Date, required: true })
   created: Date
+
+  @Prop({ type: Date, required: false })
+  completedAt?: Date
 }
 
 /**
@@ -121,6 +124,12 @@ export class Game {
 export type GameModel = Model<Game>
 
 export const GameSchema = SchemaFactory.createForClass(Game)
+
+// Supports the recent-activity aggregation in findRecentGameStats, which
+// matches on { status: Completed, completedAt: { $gte: cutoff } }.
+// Leading equality on `status` lets MongoDB narrow the scan, followed by
+// a range seek on `completedAt`.
+GameSchema.index({ status: 1, completedAt: 1 })
 
 const participantsSchema =
   GameSchema.path<MongooseSchema.Types.Array>('participants')

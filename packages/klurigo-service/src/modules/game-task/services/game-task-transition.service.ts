@@ -266,6 +266,7 @@ export class GameTaskTransitionService {
     gameDocument.previousTasks.push(gameDocument.currentTask)
     gameDocument.currentTask = buildQuitTask()
     gameDocument.status = GameStatus.Completed
+    gameDocument.completedAt = new Date()
   }
 
   /**
