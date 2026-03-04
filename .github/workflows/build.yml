@@ -73,14 +73,14 @@ jobs:
 
       - name: Upload Klurigo artifacts for Sentry
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: klurigo-sentry-artifacts
           path: packages/klurigo-web/dist/assets/**/*.map
 
       - name: Upload Klurigo Service artifacts for Sentry
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: klurigo-service-sentry-artifacts
           path: packages/klurigo-service/dist/**/*.map
