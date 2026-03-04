@@ -30,17 +30,6 @@ export class PaginatedDiscoverySectionResponse implements DiscoverySectionPageRe
   public readonly key: DiscoverySectionKey
 
   /**
-   * Human-readable section heading, matching the value from DiscoverySectionDto.
-   */
-  @ApiProperty({
-    title: 'Title',
-    description:
-      'Human-readable section heading, matching the value from DiscoverySectionDto.',
-    example: 'Top Rated',
-  })
-  public readonly title: string
-
-  /**
    * Ordered quiz cards for the current page.
    *
    * The ordering mirrors the snapshot's stored entry order (descending by

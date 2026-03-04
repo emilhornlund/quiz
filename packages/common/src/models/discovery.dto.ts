@@ -123,27 +123,14 @@ export type DiscoveryQuizCardDto = {
  * A single horizontal discovery rail containing a curated list of quizzes.
  *
  * The rail is identified by its key, which determines the curation algorithm
- * used to populate it. The title and optional description are display strings
- * localized or formatted by the backend before delivery.
+ * used to populate it. Display strings such as titles and descriptions are
+ * handled by the frontend based on the key.
  */
 export type DiscoverySectionDto = {
   /**
    * The algorithmic identifier for this rail.
    */
   readonly key: DiscoverySectionKey
-
-  /**
-   * Human-readable section heading shown above the rail.
-   */
-  readonly title: string
-
-  /**
-   * Optional subtitle or contextual description for the rail.
-   *
-   * @remarks
-   * For CATEGORY_SPOTLIGHT this typically names the featured category.
-   */
-  readonly description?: string
 
   /**
    * Ordered list of quiz cards to display in this rail.
@@ -194,11 +181,6 @@ export type DiscoverySectionPageResponseDto = {
    * The rail identifier this page belongs to.
    */
   readonly key: DiscoverySectionKey
-
-  /**
-   * Human-readable section heading, matching the value from DiscoverySectionDto.
-   */
-  readonly title: string
 
   /**
    * Ordered quiz cards for the current page.

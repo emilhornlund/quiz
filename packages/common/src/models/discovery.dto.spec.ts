@@ -100,7 +100,6 @@ describe('DiscoveryQuizCardDto shape', () => {
 describe('DiscoverySectionDto shape', () => {
   const section: DiscoverySectionDto = {
     key: DiscoverySectionKey.TRENDING,
-    title: 'Trending Now',
     quizzes: [],
   }
 
@@ -108,20 +107,8 @@ describe('DiscoverySectionDto shape', () => {
     expect(section.key).toBe(DiscoverySectionKey.TRENDING)
   })
 
-  it('has a title field', () => {
-    expect(section.title).toBe('Trending Now')
-  })
-
   it('has a quizzes array', () => {
     expect(Array.isArray(section.quizzes)).toBe(true)
-  })
-
-  it('allows an optional description', () => {
-    const withDesc: DiscoverySectionDto = {
-      ...section,
-      description: 'Hot right now',
-    }
-    expect(withDesc.description).toBe('Hot right now')
   })
 })
 
@@ -147,7 +134,6 @@ describe('DiscoveryResponseDto shape', () => {
 describe('DiscoverySectionPageResponseDto shape', () => {
   const page: DiscoverySectionPageResponseDto = {
     key: DiscoverySectionKey.TOP_RATED,
-    title: 'Top Rated',
     results: [],
     snapshotTotal: 50,
     limit: 10,
@@ -173,10 +159,6 @@ describe('DiscoverySectionPageResponseDto shape', () => {
 
   it('has a key field', () => {
     expect(page.key).toBe(DiscoverySectionKey.TOP_RATED)
-  })
-
-  it('has a title field', () => {
-    expect(page.title).toBe('Top Rated')
   })
 
   it('does not have a cursor field', () => {

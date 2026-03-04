@@ -28,7 +28,6 @@ import { QuizRepository } from '../../quiz-core/repositories'
 import { Quiz } from '../../quiz-core/repositories/models/schemas'
 import {
   DISCOVERY_RAIL_PREVIEW_SIZE,
-  DISCOVERY_SECTION_METADATA,
   DISCOVERY_SECTION_ORDER,
 } from '../constants'
 import { DiscoverySnapshotRepository } from '../repositories'
@@ -130,11 +129,8 @@ export class DiscoveryController {
       sectionSlices.has(key),
     ).map((key) => {
       const ids = sectionSlices.get(key)!
-      const metadata = DISCOVERY_SECTION_METADATA[key]
       return {
         key,
-        title: metadata.title,
-        description: metadata.description,
         quizzes: this.hydrateCards(ids, quizMap),
       }
     })
@@ -212,15 +208,12 @@ export class DiscoveryController {
     const clampedLimit = Math.max(1, Math.min(50, limit))
     const clampedOffset = Math.max(0, offset)
 
-    const metadata = DISCOVERY_SECTION_METADATA[key] ?? { title: key }
-
     const snapshot = await this.discoverySnapshotRepository.findLatest()
     const section = snapshot?.sections.find((s) => s.key === key)
 
     if (!section || section.entries.length === 0) {
       return {
         key,
-        title: metadata.title,
         results: [],
         snapshotTotal: 0,
         limit: clampedLimit,
@@ -237,7 +230,6 @@ export class DiscoveryController {
 
     return {
       key,
-      title: metadata.title,
       results: this.hydrateCards(slicedIds, quizMap),
       snapshotTotal,
       limit: clampedLimit,

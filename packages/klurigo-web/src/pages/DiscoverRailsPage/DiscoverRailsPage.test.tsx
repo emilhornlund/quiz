@@ -37,8 +37,6 @@ const mockResponse: DiscoveryResponseDto = {
   sections: [
     {
       key: DiscoverySectionKey.FEATURED,
-      title: 'Featured',
-      description: 'Top picks',
       quizzes: [
         {
           id: 'q1',

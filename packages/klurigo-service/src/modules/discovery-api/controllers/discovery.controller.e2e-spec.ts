@@ -35,7 +35,6 @@ describe('DiscoveryController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('key', 'TOP_RATED')
-          expect(res.body).toHaveProperty('title', 'Top Rated')
           expect(res.body).toHaveProperty('results')
           expect(res.body.results).toEqual([])
           expect(res.body).toHaveProperty('snapshotTotal', 0)

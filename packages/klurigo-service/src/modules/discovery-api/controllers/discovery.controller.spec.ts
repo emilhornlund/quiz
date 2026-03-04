@@ -195,7 +195,6 @@ describe(DiscoveryController.name, () => {
       )
 
       expect(result.key).toBe(DiscoverySectionKey.TOP_RATED)
-      expect(result.title).toBe('Top Rated')
       expect(result.results).toHaveLength(10)
       expect(result.snapshotTotal).toBe(150)
       expect(result.limit).toBe(10)

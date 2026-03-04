@@ -14,7 +14,8 @@ import { DiscoveryQuizCardResponse } from './discovery-quiz-card.response'
  * against the shared contract defined in `@klurigo/common`.
  *
  * A section represents one horizontal rail containing a curated list of quizzes.
- * The `key` determines which curation algorithm populated the rail.
+ * The `key` determines which curation algorithm populated the rail. Display
+ * strings such as titles and descriptions are handled by the frontend.
  */
 export class DiscoverySectionResponse implements DiscoverySectionDto {
   /**
@@ -27,30 +28,6 @@ export class DiscoverySectionResponse implements DiscoverySectionDto {
     example: DiscoverySectionKey.TRENDING,
   })
   public readonly key: DiscoverySectionKey
-
-  /**
-   * Human-readable section heading shown above the rail.
-   */
-  @ApiProperty({
-    title: 'Title',
-    description: 'Human-readable section heading shown above the rail.',
-    example: 'Trending right now',
-  })
-  public readonly title: string
-
-  /**
-   * Optional subtitle or contextual description for the rail.
-   *
-   * For CATEGORY_SPOTLIGHT this typically names the featured category.
-   */
-  @ApiProperty({
-    title: 'Description',
-    description:
-      'Optional subtitle or contextual description for the rail. For CATEGORY_SPOTLIGHT this typically names the featured category.',
-    required: false,
-    example: 'Fresh picks in Geography',
-  })
-  public readonly description?: string
 
   /**
    * Ordered list of quiz cards to display in this rail.

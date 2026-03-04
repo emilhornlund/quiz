@@ -1137,3 +1137,31 @@ for a single deploy. Remove or set to `false` once the scheduler takes over.
 - In a multi-instance deployment, `DISCOVERY_SEED_ON_INIT` will trigger compute on
   every pod that starts. If this is a concern, extend `onModuleInit` to acquire the
   same `discovery_snapshot_lock` used by `refreshSnapshot`.
+
+### Remove `title` and `description` from section DTOs
+
+**Change:** Removed the `title` (string) and `description` (optional string) fields from
+`DiscoverySectionDto` and removed `title` from `DiscoverySectionPageResponseDto` in
+`@klurigo/common`. Correspondingly removed those fields from the NestJS response
+classes (`DiscoverySectionResponse`, `PaginatedDiscoverySectionResponse`), the
+controller mapping logic, and the `DISCOVERY_SECTION_METADATA` constant (which
+is now deleted; only `DISCOVERY_SECTION_ORDER` remains in that file).
+
+**Motivation:** The frontend already maintains its own key-to-label mapping via
+`DISCOVERY_SECTION_TITLES` and `DISCOVERY_SECTION_DESCRIPTIONS` utilities and
+does not consume the backend-supplied strings. Shipping redundant display strings
+in every API response adds unnecessary payload and creates a dual source of truth
+for UI copy.
+
+**Files changed:**
+- `packages/common/src/models/discovery.dto.ts` — removed `title`/`description` from `DiscoverySectionDto`; removed `title` from `DiscoverySectionPageResponseDto`
+- `packages/common/src/models/discovery.dto.spec.ts` — removed corresponding field tests
+- `packages/klurigo-service/src/modules/discovery-api/controllers/models/discovery-section.response.ts` — removed `title`/`description` fields
+- `packages/klurigo-service/src/modules/discovery-api/controllers/models/paginated-discovery-section.response.ts` — removed `title` field
+- `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.ts` — removed `DISCOVERY_SECTION_METADATA` import and usage
+- `packages/klurigo-service/src/modules/discovery-api/constants/discovery-section-metadata.constants.ts` — removed `SectionMetadata` type and `DISCOVERY_SECTION_METADATA` constant
+- `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.spec.ts` — removed `title` assertion
+- `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.e2e-spec.ts` — removed `title` assertion
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/DiscoverRailsPage.test.tsx` — removed `title`/`description` from mock section fixture
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.stories.tsx` — removed `title`/`description` from story fixtures
+- `packages/klurigo-web/src/pages/DiscoverSectionPage/DiscoverSectionPage.test.tsx` — removed `title` from mock response fixtures

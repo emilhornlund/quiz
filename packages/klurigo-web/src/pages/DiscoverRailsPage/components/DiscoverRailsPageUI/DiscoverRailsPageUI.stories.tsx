@@ -15,8 +15,6 @@ import DiscoverRailsPageUI from './DiscoverRailsPageUI'
 const makeSections = (): DiscoverySectionDto[] => [
   {
     key: DiscoverySectionKey.FEATURED,
-    title: 'Featured',
-    description: 'Hand-picked quizzes',
     quizzes: Array.from({ length: 10 }, (_, i) => ({
       id: `featured-${i}`,
       title: `Featured Quiz ${i + 1}`,
@@ -37,8 +35,6 @@ const makeSections = (): DiscoverySectionDto[] => [
   },
   {
     key: DiscoverySectionKey.TRENDING,
-    title: 'Trending',
-    description: 'Quizzes with the most recent activity',
     quizzes: Array.from({ length: 8 }, (_, i) => ({
       id: `trending-${i}`,
       title: `Trending Quiz ${i + 1}`,
@@ -59,7 +55,6 @@ const makeSections = (): DiscoverySectionDto[] => [
   },
   {
     key: DiscoverySectionKey.TOP_RATED,
-    title: 'Top Rated',
     quizzes: Array.from({ length: 6 }, (_, i) => ({
       id: `toprated-${i}`,
       title: `Top Rated Quiz ${i + 1}`,

@@ -53,7 +53,6 @@ const makeQuiz = (id: string, title: string) => ({
 
 const mockResponse: DiscoverySectionPageResponseDto = {
   key: DiscoverySectionKey.TOP_RATED,
-  title: 'Top Rated',
   results: [makeQuiz('q1', 'Quiz 1'), makeQuiz('q2', 'Quiz 2')],
   snapshotTotal: 5,
   limit: 2,
@@ -114,7 +113,6 @@ describe('DiscoverSectionPage', () => {
 
     const secondPage: DiscoverySectionPageResponseDto = {
       key: DiscoverySectionKey.TOP_RATED,
-      title: 'Top Rated',
       results: [makeQuiz('q3', 'Quiz 3'), makeQuiz('q4', 'Quiz 4')],
       snapshotTotal: 5,
       limit: 2,
@@ -142,7 +140,6 @@ describe('DiscoverSectionPage', () => {
   it('"Load more" hidden when offset + results.length >= snapshotTotal', async () => {
     const fullResponse: DiscoverySectionPageResponseDto = {
       key: DiscoverySectionKey.TOP_RATED,
-      title: 'Top Rated',
       results: [makeQuiz('q1', 'Quiz 1'), makeQuiz('q2', 'Quiz 2')],
       snapshotTotal: 2,
       limit: 2,
