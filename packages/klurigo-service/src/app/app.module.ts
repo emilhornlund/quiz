@@ -82,6 +82,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         GOOGLE_CLIENT_ID: Joi.string().required(),
         GOOGLE_CLIENT_SECRET: Joi.string().required(),
         GOOGLE_REDIRECT_URI: Joi.string().required(),
+        DISCOVERY_SEED_ON_INIT: Joi.boolean().optional().default(false),
       }),
       isGlobal: true,
     }),

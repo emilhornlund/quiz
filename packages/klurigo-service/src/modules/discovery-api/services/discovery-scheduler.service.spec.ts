@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
 
 import { DiscoveryComputeService } from './discovery-compute.service'
@@ -16,8 +17,9 @@ jest.mock('murlock', () => ({
 describe(DiscoverySchedulerService.name, () => {
   let service: DiscoverySchedulerService
   let computeService: jest.Mocked<DiscoveryComputeService>
+  let configService: jest.Mocked<ConfigService>
 
-  beforeEach(async () => {
+  const createModule = async (seedOnInit: boolean) => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         DiscoverySchedulerService,
@@ -27,44 +29,90 @@ describe(DiscoverySchedulerService.name, () => {
             compute: jest.fn(),
           },
         },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockReturnValue(seedOnInit),
+          },
+        },
       ],
     }).compile()
 
     service = moduleRef.get(DiscoverySchedulerService)
     computeService = moduleRef.get(DiscoveryComputeService)
+    configService = moduleRef.get(ConfigService)
+  }
+
+  describe('onModuleInit', () => {
+    it('calls compute() and logs when DISCOVERY_SEED_ON_INIT is true', async () => {
+      await createModule(true)
+      computeService.compute.mockResolvedValueOnce(undefined)
+
+      const logSpy = jest
+        .spyOn((service as any).logger as Logger, 'log')
+        .mockImplementation(() => undefined)
+
+      await service.onModuleInit()
+
+      expect(configService.get).toHaveBeenCalledWith('DISCOVERY_SEED_ON_INIT')
+      expect(computeService.compute).toHaveBeenCalledTimes(1)
+      expect(logSpy).toHaveBeenCalledTimes(2)
+      expect(logSpy).toHaveBeenNthCalledWith(
+        1,
+        'DISCOVERY_SEED_ON_INIT is enabled — running initial discovery snapshot computation.',
+      )
+      expect(logSpy).toHaveBeenNthCalledWith(
+        2,
+        'Initial discovery snapshot computation completed.',
+      )
+    })
+
+    it('does not call compute() when DISCOVERY_SEED_ON_INIT is false', async () => {
+      await createModule(false)
+
+      await service.onModuleInit()
+
+      expect(computeService.compute).not.toHaveBeenCalled()
+    })
   })
 
-  it('calls compute() on cron tick and logs start/completion', async () => {
-    computeService.compute.mockResolvedValueOnce(undefined)
+  describe('refreshSnapshot', () => {
+    beforeEach(async () => {
+      await createModule(false)
+    })
 
-    const logSpy = jest
-      .spyOn((service as any).logger as Logger, 'log')
-      .mockImplementation(() => undefined)
+    it('calls compute() on cron tick and logs start/completion', async () => {
+      computeService.compute.mockResolvedValueOnce(undefined)
 
-    await service.refreshSnapshot()
+      const logSpy = jest
+        .spyOn((service as any).logger as Logger, 'log')
+        .mockImplementation(() => undefined)
 
-    expect(computeService.compute).toHaveBeenCalledTimes(1)
-    expect(logSpy).toHaveBeenCalledTimes(2)
-    expect(logSpy).toHaveBeenNthCalledWith(
-      1,
-      'Starting discovery snapshot computation.',
-    )
-    expect(logSpy).toHaveBeenNthCalledWith(
-      2,
-      'Discovery snapshot computation completed.',
-    )
-  })
+      await service.refreshSnapshot()
 
-  it('propagates errors from compute()', async () => {
-    const err = new Error('compute failed')
-    computeService.compute.mockRejectedValueOnce(err)
+      expect(computeService.compute).toHaveBeenCalledTimes(1)
+      expect(logSpy).toHaveBeenCalledTimes(2)
+      expect(logSpy).toHaveBeenNthCalledWith(
+        1,
+        'Starting discovery snapshot computation.',
+      )
+      expect(logSpy).toHaveBeenNthCalledWith(
+        2,
+        'Discovery snapshot computation completed.',
+      )
+    })
 
-    jest
-      .spyOn((service as any).logger as Logger, 'log')
-      .mockImplementation(() => undefined)
+    it('propagates errors from compute()', async () => {
+      const err = new Error('compute failed')
+      computeService.compute.mockRejectedValueOnce(err)
 
-    await expect(service.refreshSnapshot()).rejects.toThrow('compute failed')
+      jest
+        .spyOn((service as any).logger as Logger, 'log')
+        .mockImplementation(() => undefined)
 
-    expect(computeService.compute).toHaveBeenCalledTimes(1)
+      await expect(service.refreshSnapshot()).rejects.toThrow('compute failed')
+
+      expect(computeService.compute).toHaveBeenCalledTimes(1)
+    })
   })
 })

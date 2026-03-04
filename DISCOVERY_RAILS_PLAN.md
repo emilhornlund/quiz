@@ -1104,3 +1104,36 @@ This ordering ensures:
 - **No legacy `/discover/search` route** — the old page is removed entirely at cutover.
 - **Ordering consistency** — the "see all" page always shows the same ranking as the
   rail preview because both read from the same snapshot entries.
+
+---
+
+## Additional Changes & Improvements
+
+This section tracks incremental changes made after the main phased plan was drafted.
+Each entry describes the change, the motivation, and any open considerations.
+
+### Startup seed via `DISCOVERY_SEED_ON_INIT`
+
+**Change:** `DiscoverySchedulerService` now implements `OnModuleInit`. When the
+`DISCOVERY_SEED_ON_INIT` environment variable is set to `true`, a one-time
+`DiscoveryComputeService.compute()` call is executed at application startup,
+before the first scheduled cron tick fires.
+
+**Motivation:** After deploying a fresh environment the `discovery_snapshots`
+collection is empty. The `GET /discover` endpoint returns an empty sections
+array until the scheduler fires at 06:00 or 18:00 UTC. Setting
+`DISCOVERY_SEED_ON_INIT=true` on first deploy seeds the snapshot immediately
+without manual intervention or a separate admin script.
+
+**Usage:** Set `DISCOVERY_SEED_ON_INIT=true` in the environment (e.g. `.env.production`)
+for a single deploy. Remove or set to `false` once the scheduler takes over.
+
+**Files changed:**
+- `packages/klurigo-service/src/app/config/environment.ts` — added `DISCOVERY_SEED_ON_INIT: boolean`
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-scheduler.service.ts` — added `OnModuleInit`, injected `ConfigService`
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-scheduler.service.spec.ts` — added 2 new tests for `onModuleInit`
+
+**Open considerations:**
+- In a multi-instance deployment, `DISCOVERY_SEED_ON_INIT` will trigger compute on
+  every pod that starts. If this is a concern, extend `onModuleInit` to acquire the
+  same `discovery_snapshot_lock` used by `refreshSnapshot`.

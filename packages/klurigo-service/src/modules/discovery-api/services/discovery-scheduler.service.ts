@@ -1,6 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Cron } from '@nestjs/schedule'
 import { MurLock } from 'murlock'
+
+import { EnvironmentVariables } from '../../../app/config'
 
 import { DiscoveryComputeService } from './discovery-compute.service'
 
@@ -15,19 +18,43 @@ import { DiscoveryComputeService } from './discovery-compute.service'
  * A distributed lock (`discovery_snapshot_lock`, 30 s timeout) ensures that
  * only one instance across the cluster executes the compute pipeline per
  * trigger, preventing duplicate writes and wasted work.
+ *
+ * When the `DISCOVERY_SEED_ON_INIT` environment variable is set to `true`,
+ * the service also runs a one-time compute pass during application startup
+ * (via `OnModuleInit`). This is useful for seeding an initial snapshot after
+ * deploying a new environment before the first scheduled cron tick fires.
  */
 @Injectable()
-export class DiscoverySchedulerService {
+export class DiscoverySchedulerService implements OnModuleInit {
   private readonly logger = new Logger(DiscoverySchedulerService.name)
 
   /**
    * Creates a DiscoverySchedulerService.
    *
+   * @param configService - NestJS config service used to read `DISCOVERY_SEED_ON_INIT`.
    * @param discoveryComputeService - Service that computes and persists the discovery snapshot.
    */
   constructor(
+    private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly discoveryComputeService: DiscoveryComputeService,
   ) {}
+
+  /**
+   * Runs a one-time discovery snapshot computation on application startup when
+   * the `DISCOVERY_SEED_ON_INIT` environment variable is `true`.
+   *
+   * This allows operators to seed an initial snapshot immediately after deploying
+   * a new environment, without waiting for the next scheduled cron tick.
+   */
+  async onModuleInit(): Promise<void> {
+    if (this.configService.get('DISCOVERY_SEED_ON_INIT')) {
+      this.logger.log(
+        'DISCOVERY_SEED_ON_INIT is enabled — running initial discovery snapshot computation.',
+      )
+      await this.discoveryComputeService.compute()
+      this.logger.log('Initial discovery snapshot computation completed.')
+    }
+  }
 
   /**
    * Recomputes and persists the discovery snapshot.
