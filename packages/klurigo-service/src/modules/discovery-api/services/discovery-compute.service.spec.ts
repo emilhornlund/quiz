@@ -357,10 +357,10 @@ describe(DiscoveryComputeService.name, () => {
   })
 
   // -----------------------------------------------------------------------
-  // Missing stats → playCount 0
+  // Missing stats → excluded from TRENDING
   // -----------------------------------------------------------------------
   describe('missing recent stats', () => {
-    it('quizzes with no game stats get recentPlayCount 0 in trending', async () => {
+    it('quizzes with no game stats are excluded from TRENDING', async () => {
       // Provide enough quizzes with one having a featured rank so the
       // quiz-under-test doesn't get claimed by FEATURED before TRENDING
       const quiz = makeQuiz()
@@ -377,11 +377,11 @@ describe(DiscoveryComputeService.name, () => {
 
       await service.compute()
 
+      // Zero-score quizzes must not occupy TRENDING slots — they would
+      // otherwise be claimed as exclusive and starve other rails.
       const trending = getSection(DiscoverySectionKey.TRENDING)
-      expect(trending).toBeDefined()
-      // Score should be 0 (no recent plays)
-      const entry = trending!.entries.find((e) => e.quizId === quiz._id)
-      expect(entry?.score).toBe(0)
+      const entry = trending?.entries.find((e) => e.quizId === quiz._id)
+      expect(entry).toBeUndefined()
     })
   })
 
@@ -421,8 +421,8 @@ describe(DiscoveryComputeService.name, () => {
       )
 
       expect(entryWith).toBeDefined()
-      expect(entryWithout).toBeDefined()
-      expect(entryWith!.score).toBeGreaterThan(entryWithout!.score)
+      expect(entryWithout).toBeUndefined()
+      expect(entryWith!.score).toBeGreaterThan(0)
     })
   })
 

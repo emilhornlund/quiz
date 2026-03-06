@@ -15,6 +15,7 @@ import {
 import {
   DISCOVERY_RAIL_CAP_FEATURED,
   DISCOVERY_RAIL_CAP_STANDARD,
+  DISCOVERY_RAIL_PREVIEW_SIZE,
 } from '../constants'
 import { DiscoverySnapshotRepository } from '../repositories'
 import type { DiscoverySnapshotSection } from '../repositories/models/schemas'
@@ -287,17 +288,21 @@ export class DiscoveryComputeService {
     })
 
     scored.sort((a, b) => b.score - a.score)
-    return scored.slice(0, DISCOVERY_RAIL_CAP_STANDARD)
+    return scored
+      .filter((e) => e.score > 0)
+      .slice(0, DISCOVERY_RAIL_CAP_STANDARD)
   }
 
   private scoreTopRated(
     quizzes: Quiz[],
     globalMean: number,
   ): Array<{ quizId: string; score: number }> {
-    const scored = quizzes.map((quiz) => ({
-      quizId: quiz._id,
-      score: computeBayesianRatingScore(quiz, globalMean, MIN_RATING_COUNT),
-    }))
+    const scored = quizzes
+      .filter((quiz) => (quiz.ratingSummary?.count ?? 0) > 0)
+      .map((quiz) => ({
+        quizId: quiz._id,
+        score: computeBayesianRatingScore(quiz, globalMean, MIN_RATING_COUNT),
+      }))
 
     scored.sort((a, b) => b.score - a.score)
     return scored.slice(0, DISCOVERY_RAIL_CAP_STANDARD)
@@ -394,7 +399,10 @@ export class DiscoveryComputeService {
     for (const key of exclusiveKeys) {
       const entries = rawSections.get(key) ?? []
       const deduped = entries.filter((e) => !claimed.has(e.quizId))
-      for (const e of deduped) {
+      // Only claim the first DISCOVERY_RAIL_PREVIEW_SIZE entries to avoid
+      // consuming the entire pool and starving soft rails on small deployments.
+      // Deeper "see all" entries do not need to be exclusively reserved.
+      for (const e of deduped.slice(0, DISCOVERY_RAIL_PREVIEW_SIZE)) {
         claimed.add(e.quizId)
       }
       result.push({ key, entries: deduped })

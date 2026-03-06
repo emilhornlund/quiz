@@ -1214,3 +1214,49 @@ quizzes first while guaranteeing content in every section even when the corpus i
 - `packages/klurigo-service/src/modules/quiz-core/repositories/quiz.repository.spec.ts` —
   removed `'uses a trim-aware filter for imageCoverURL via $expr'` and
   `'applies null guards on imageCoverURL and description'` tests
+
+### Fix discovery compute: TRENDING exclusivity starves soft rails; TOP_RATED shows unrated quizzes
+
+**Problem:** With a small quiz corpus (e.g. 63 quizzes), two bugs caused most rails to
+be missing from every snapshot:
+
+1. **TRENDING claimed all quizzes with zero recent activity.** `scoreTrending` included
+   every eligible quiz regardless of score. Quizzes with no recent plays received
+   `computeTrendingScore` = 0. Since TRENDING is a hard-exclusive rail processed before
+   TOP_RATED, all 43 quizzes remaining after FEATURED were claimed by TRENDING even though
+   none actually had any recent activity — leaving nothing for TOP_RATED, MOST_PLAYED,
+   NEW_AND_NOTEWORTHY, and CATEGORY_SPOTLIGHT.
+
+2. **`applyDedupePolicy` claimed all cap-many entries, not just the preview row.** Even
+   after fixing the TRENDING zero-score issue, TOP_RATED claimed up to 200 entries
+   exclusively. With ≤63 quizzes this consumed the entire corpus, again starving soft rails.
+
+3. **TOP_RATED surfaced unrated quizzes.** Bayesian scoring pulls quizzes with zero
+   ratings toward `globalMean`. When the global mean is above 0 (set by the few quizzes
+   that do have ratings), unrated quizzes score exactly at the mean — ranking higher than
+   quizzes with a below-average rating. The section therefore displayed quizzes with no
+   ratings at all.
+
+**Fix:**
+- `scoreTrending`: added `.filter((e) => e.score > 0)` before `.slice()` — quizzes with
+  no recent plays are excluded from TRENDING entirely (they should not occupy exclusive
+  slots when they have no trending signal).
+- `scoreTopRated`: added `.filter((quiz) => (quiz.ratingSummary?.count ?? 0) > 0)` before
+  mapping to Bayesian scores — only quizzes that have been rated at least once appear in
+  TOP_RATED.
+- `applyDedupePolicy`: each hard-exclusive rail now only claims the first
+  `DISCOVERY_RAIL_PREVIEW_SIZE` (10) entries into the `claimed` set instead of all entries
+  up to the cap. The full scored list is still stored in the snapshot for "see all"
+  pagination; only the homepage preview row needs to be truly exclusive. This caps the
+  maximum exclusive consumption at `3 × DISCOVERY_RAIL_PREVIEW_SIZE = 30` quizzes,
+  leaving ample supply for soft rails even on small corpora.
+- Two unit tests in `discovery-compute.service.spec.ts` updated to reflect the new
+  behaviour (zero-score quizzes excluded from TRENDING; `quizWithoutStats` not present in
+  TRENDING rather than present with score 0).
+
+**Files changed:**
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.ts`
+  — `scoreTrending` filter, `scoreTopRated` rating filter, `applyDedupePolicy` preview-size
+  claim limit, added `DISCOVERY_RAIL_PREVIEW_SIZE` import
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.spec.ts`
+  — updated two tests: "missing recent stats" and "trending stats influence"
