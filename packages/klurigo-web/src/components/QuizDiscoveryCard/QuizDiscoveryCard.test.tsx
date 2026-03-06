@@ -10,6 +10,12 @@ import { describe, expect, it, vi } from 'vitest'
 
 import QuizDiscoveryCard from './QuizDiscoveryCard'
 
+vi.mock('../ResponsiveImage', () => ({
+  default: ({ imageURL, alt }: { imageURL?: string; alt?: string }) => (
+    <img src={imageURL} alt={alt ?? ''} />
+  ),
+}))
+
 const navigateMock = vi.fn()
 
 vi.mock('react-router-dom', async () => {
@@ -24,7 +30,7 @@ const makeQuiz = (
   id: 'quiz-1',
   title: 'Test Quiz',
   description: 'A test quiz description',
-  imageCoverURL: 'https://example.com/cover.jpg',
+  imageCoverURL: 'https://picsum.photos/seed/geography/400/250',
   category: QuizCategory.Science,
   languageCode: LanguageCode.English,
   mode: GameMode.Classic,
@@ -66,7 +72,10 @@ describe('QuizDiscoveryCard', () => {
     )
 
     const img = screen.getByAltText('Test Quiz')
-    expect(img).toHaveAttribute('src', 'https://example.com/cover.jpg')
+    expect(img).toHaveAttribute(
+      'src',
+      'https://picsum.photos/seed/geography/400/250',
+    )
   })
 
   it('renders fallback when imageCoverURL is missing', () => {

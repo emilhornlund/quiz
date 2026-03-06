@@ -6,8 +6,6 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  background-color: colors.$white-1-15;
-  border: variables.$control-outside-border-width solid colors.$white-1-25;
   cursor: pointer;
   overflow: hidden;
   scroll-snap-align: start;
@@ -45,7 +43,7 @@
     width: 100%;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: colors.$gray-3;
+    background: colors.$gray-2;
 
     .coverImage {
       width: 100%;
@@ -59,7 +57,7 @@
       justify-content: center;
       width: 100%;
       height: 100%;
-      color: colors.$white-1-40;
+      color: colors.$white-1-50;
       font-size: 2rem;
     }
   }
@@ -69,12 +67,13 @@
     flex-direction: column;
     gap: 0.25rem;
     padding: 0.625rem;
+    background-color: colors.$white;
 
     .title {
       margin: 0;
       font-size: variables.$mobile-control-small-font-size;
       font-weight: 600;
-      color: colors.$white;
+      color: colors.$gray-4;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -96,7 +95,7 @@
 
     .author {
       font-size: 0.75rem;
-      color: colors.$white-1-70;
+      color: colors.$gray-3;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -124,7 +123,7 @@
         gap: 0.25rem;
         font-size: 0.75rem;
         font-weight: bold;
-        color: colors.$white-1-50;
+        color: colors.$gray-3;
 
         svg {
           font-size: 0.625rem;

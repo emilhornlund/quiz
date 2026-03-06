@@ -10,6 +10,7 @@ import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { classNames } from '../../utils/helpers'
+import ResponsiveImage from '../ResponsiveImage'
 
 import styles from './QuizDiscoveryCard.module.scss'
 
@@ -52,10 +53,12 @@ const QuizDiscoveryCard: FC<QuizDiscoveryCardProps> = ({ quiz }) => {
       data-testid="quiz-discovery-card">
       <div className={styles.cover}>
         {quiz.imageCoverURL ? (
-          <img
-            src={quiz.imageCoverURL}
+          <ResponsiveImage
+            imageURL={quiz.imageCoverURL}
             alt={quiz.title}
-            className={styles.coverImage}
+            fit="fill"
+            noCornerRadius
+            noBorder
           />
         ) : (
           <div className={styles.coverFallback} data-testid="cover-fallback">
