@@ -165,14 +165,12 @@ export class QuizRepository extends BaseRepository<Quiz> {
    * Returns eligible public quizzes in paginated batches for discovery
    * snapshot computation.
    *
-   * A quiz is eligible when it satisfies the same criteria checked by
-   * `isDiscoveryEligible` (from the scoring utilities), translated into a
-   * Mongoose query filter:
+   * A quiz is eligible when it satisfies all of the following criteria:
    *
    * - `visibility` is `QuizVisibility.Public`
    * - `imageCoverURL` is non-null and non-empty after trimming whitespace
-   * - `description` is non-null with trimmed length at least `MIN_DESCRIPTION_LENGTH` (20 chars)
-   * - `questions` array size is at least `MIN_QUESTION_COUNT` (10)
+   * - `description` is non-null with trimmed length at least 20 characters
+   * - `questions` array size is at least 10
    *
    * Results are returned in `_id` order (deterministic for batched iteration).
    *

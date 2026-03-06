@@ -1165,3 +1165,24 @@ for UI copy.
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/DiscoverRailsPage.test.tsx` — removed `title`/`description` from mock section fixture
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.stories.tsx` — removed `title`/`description` from story fixtures
 - `packages/klurigo-web/src/pages/DiscoverSectionPage/DiscoverSectionPage.test.tsx` — removed `title` from mock response fixtures
+
+### Remove `isDiscoveryEligible` utility and related constants
+
+**Change:** Deleted `discovery-eligibility.utils.ts` and its test file
+`discovery-eligibility.utils.spec.ts`. Removed the re-export from
+`utils/discovery/index.ts`. Updated the JSDoc on
+`QuizRepository.findEligiblePublicQuizzes` to inline the eligibility
+criteria directly (removing the reference to the now-deleted function
+and its `MIN_*` constants).
+
+**Motivation:** `isDiscoveryEligible` was dead code in production — it was
+never called outside of tests. The eligibility logic is fully expressed as a
+Mongoose query filter in `findEligiblePublicQuizzes`, which is the only place
+the criteria are enforced at runtime. Keeping a parallel in-memory utility
+created a dual source of truth with no practical benefit.
+
+**Files changed:**
+- `packages/klurigo-service/src/modules/quiz-core/utils/discovery/discovery-eligibility.utils.ts` — deleted
+- `packages/klurigo-service/src/modules/quiz-core/utils/discovery/discovery-eligibility.utils.spec.ts` — deleted
+- `packages/klurigo-service/src/modules/quiz-core/utils/discovery/index.ts` — removed re-export of deleted file
+- `packages/klurigo-service/src/modules/quiz-core/repositories/quiz.repository.ts` — updated JSDoc to inline criteria (removed `isDiscoveryEligible`/`MIN_*` references)
