@@ -1,6 +1,5 @@
 import { QuestionImageRevealEffectType } from '@klurigo/common'
 import { act, render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ResponsiveImage from './ResponsiveImage'
@@ -58,12 +57,6 @@ vi.mock('../LoadingSpinner', () => ({
   default: () => <div data-testid="loading-spinner" />,
 }))
 
-vi.mock('../Typography', () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="typography">{children}</div>
-  ),
-}))
-
 vi.mock('./components', () => ({
   ImageSquareEffect: ({
     effect,
@@ -89,9 +82,7 @@ describe('ResponsiveImage', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByTestId('typography')).toHaveTextContent(
-        'Oh no! Unable to load image',
-      )
+      expect(container.querySelector('[class*="icon"]')).toBeTruthy()
     })
 
     expect(container.querySelector('img')).toBeNull()
@@ -234,6 +225,50 @@ describe('ResponsiveImage', () => {
     expect(bordered).toBeNull()
   })
 
+  it('renders with fill fit — box uses 100% width and height ignoring aspect ratio', async () => {
+    const { container } = render(
+      <ResponsiveImage imageURL="https://cdn/fill.jpg" alt="fill" fit="fill" />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
+
+    const box = container.querySelector('[class*="box"]') as HTMLElement | null
+    expect(box).toBeTruthy()
+    expect(box?.style.width).toBe('100%')
+    expect(box?.style.height).toBe('100%')
+  })
+
+  it('applies noRadius class when noCornerRadius is true', async () => {
+    const { container } = render(
+      <ResponsiveImage
+        imageURL="https://cdn/noradius.jpg"
+        alt="noRadius"
+        noCornerRadius
+      />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
+
+    const box = container.querySelector('[class*="noRadius"]')
+    expect(box).toBeTruthy()
+  })
+
+  it('does not apply noRadius class when noCornerRadius is false', async () => {
+    const { container } = render(
+      <ResponsiveImage imageURL="https://cdn/radius.jpg" alt="radius" />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
+
+    expect(container.querySelector('[class*="noRadius"]')).toBeNull()
+  })
+
   it('resets to idle (no content) when imageURL becomes undefined after being set', async () => {
     const { rerender, container } = render(
       <ResponsiveImage imageURL="https://cdn/once.jpg" alt="once" />,
@@ -249,7 +284,6 @@ describe('ResponsiveImage', () => {
 
     expect(container.querySelector('img')).toBeNull()
     expect(screen.queryByTestId('loading-spinner')).toBeNull()
-    expect(screen.queryByTestId('typography')).toBeNull()
   })
 
   it('renders nothing in ready phase if container has no measurable size (box=null)', async () => {
@@ -268,7 +302,6 @@ describe('ResponsiveImage', () => {
 
     expect(container.querySelector('img')).toBeNull()
     expect(screen.queryByTestId('loading-spinner')).toBeNull()
-    expect(screen.queryByTestId('typography')).toBeNull()
 
     resizeObserverImpl.mockReset()
   })

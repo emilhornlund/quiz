@@ -1,4 +1,4 @@
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faLinkSlash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { CountdownEvent } from '@klurigo/common'
 import { QuestionImageRevealEffectType } from '@klurigo/common'
@@ -6,8 +6,8 @@ import type { FC, ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
+import { classNames } from '../../utils/helpers'
 import LoadingSpinner from '../LoadingSpinner'
-import Typography from '../Typography'
 
 import { ImageSquareEffect } from './components'
 import { useImageBlurEffect } from './hook'
@@ -23,7 +23,8 @@ export type ResponsiveImageProps = {
   alt?: string
   revealEffect?: RevealEffect
   noBorder?: boolean
-  fit?: 'contain' | 'width'
+  noCornerRadius?: boolean
+  fit?: 'contain' | 'fill' | 'width'
   children?: ReactNode | ReactNode[]
 }
 
@@ -34,6 +35,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   imageURL,
   alt,
   noBorder = false,
+  noCornerRadius = false,
   fit = 'contain',
   revealEffect,
   children,
@@ -108,7 +110,9 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
 
     let s: number | undefined
 
-    if (fit === 'width') {
+    if (fit === 'fill') {
+      return { w: Math.max(1, cw), h: Math.max(1, ch) }
+    } else if (fit === 'width') {
       // Full width = derive size from width (fallback to height if width is unknown)
       if (cw > 0) s = cw / iw
       else if (ch > 0) s = ch / ih
@@ -130,15 +134,27 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
     endAt: 0.1,
   })
 
+  const iconSize = Math.max(
+    16,
+    Math.round(
+      Math.min(containerSize.width ?? 0, containerSize.height ?? 0) * 0.15,
+    ),
+  )
+
   return (
     <div ref={ref} className={styles.container}>
       {phase === 'ready' && displaySrc && box && (
         <div
-          className={noBorder ? styles.boxNoBorder : styles.box}
+          className={classNames(
+            noBorder ? styles.boxNoBorder : styles.box,
+            noCornerRadius ? styles.noRadius : undefined,
+          )}
           style={
-            fit === 'width'
-              ? { width: '100%', height: box.h }
-              : { width: box.w, height: box.h }
+            fit === 'fill'
+              ? { width: '100%', height: '100%' }
+              : fit === 'width'
+                ? { width: '100%', height: box.h }
+                : { width: box.w, height: box.h }
           }>
           {(revealEffect?.type === QuestionImageRevealEffectType.Square3x3 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
@@ -169,16 +185,17 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
       )}
 
       {phase === 'error' && (
-        <div className={styles.centerOverlay}>
-          <div className={styles.inner}>
-            <FontAwesomeIcon
-              icon={faTriangleExclamation}
-              className={styles.icon}
-            />
-            <Typography variant="subtitle">
-              Oh no! Unable to load image
-            </Typography>
-          </div>
+        <div
+          className={classNames(
+            styles.centerOverlay,
+            noBorder ? styles.boxNoBorder : styles.box,
+            noCornerRadius ? styles.noRadius : undefined,
+          )}>
+          <FontAwesomeIcon
+            icon={faLinkSlash}
+            className={styles.icon}
+            style={{ fontSize: iconSize }}
+          />
         </div>
       )}
     </div>
