@@ -1186,3 +1186,31 @@ created a dual source of truth with no practical benefit.
 - `packages/klurigo-service/src/modules/quiz-core/utils/discovery/discovery-eligibility.utils.spec.ts` — deleted
 - `packages/klurigo-service/src/modules/quiz-core/utils/discovery/index.ts` — removed re-export of deleted file
 - `packages/klurigo-service/src/modules/quiz-core/repositories/quiz.repository.ts` — updated JSDoc to inline criteria (removed `isDiscoveryEligible`/`MIN_*` references)
+
+### Relax discovery eligibility filter — include quizzes without cover/description
+
+**Change:** Removed the `imageCoverURL` and `description` hard-filter conditions from
+`QuizRepository.findEligiblePublicQuizzes`. The query now includes any public quiz with
+at least 10 questions, regardless of whether a cover image or description is present.
+The two corresponding unit tests (asserting `imageCoverURL` null-guards and the
+trim-aware `$expr` filter) were removed from `quiz.repository.spec.ts`.
+
+**Motivation:** The previous filter was too strict for a small quiz corpus — sections
+were left empty or severely under-populated when few quizzes had both a cover image
+and a description. Quizzes without these fields are not excluded; instead they
+naturally receive lower quality sub-scores:
+
+- Missing cover image: **−10 pts** (`QUALITY_WEIGHT_COVER`)
+- Missing / too-short description: **−15 pts** (`QUALITY_WEIGHT_DESCRIPTION`)
+
+This means an incomplete quiz can score at most 75/100 quality, while a fully-populated
+quiz can reach 100/100. All discovery rails therefore still surface complete, high-quality
+quizzes first while guaranteeing content in every section even when the corpus is small.
+
+**Files changed:**
+- `packages/klurigo-service/src/modules/quiz-core/repositories/quiz.repository.ts` —
+  removed `imageCoverURL` and `description` filter conditions and `$expr` block;
+  updated JSDoc to document the relaxed criteria and explain the score-penalty approach
+- `packages/klurigo-service/src/modules/quiz-core/repositories/quiz.repository.spec.ts` —
+  removed `'uses a trim-aware filter for imageCoverURL via $expr'` and
+  `'applies null guards on imageCoverURL and description'` tests

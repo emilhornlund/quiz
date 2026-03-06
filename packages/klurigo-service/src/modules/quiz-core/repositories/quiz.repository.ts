@@ -162,15 +162,19 @@ export class QuizRepository extends BaseRepository<Quiz> {
   }
 
   /**
-   * Returns eligible public quizzes in paginated batches for discovery
-   * snapshot computation.
+   * Returns public quizzes in paginated batches for discovery snapshot
+   * computation.
    *
-   * A quiz is eligible when it satisfies all of the following criteria:
+   * A quiz is included when it satisfies the following minimum criteria:
    *
    * - `visibility` is `QuizVisibility.Public`
-   * - `imageCoverURL` is non-null and non-empty after trimming whitespace
-   * - `description` is non-null with trimmed length at least 20 characters
    * - `questions` array size is at least 10
+   *
+   * Quizzes without a cover image or without a meaningful description are
+   * **not** excluded — they are included but receive lower quality sub-scores
+   * (`QUALITY_WEIGHT_COVER` and `QUALITY_WEIGHT_DESCRIPTION` respectively),
+   * so they naturally rank below fully-populated quizzes. This ensures all
+   * discovery rails have content even when the quiz corpus is small.
    *
    * Results are returned in `_id` order (deterministic for batched iteration).
    *
@@ -186,18 +190,6 @@ export class QuizRepository extends BaseRepository<Quiz> {
     return this.quizModel
       .find({
         visibility: QuizVisibility.Public,
-        imageCoverURL: { $exists: true, $ne: null },
-        description: { $exists: true, $ne: null },
-        $expr: {
-          $and: [
-            {
-              $gt: [{ $strLenCP: { $trim: { input: '$imageCoverURL' } } }, 0],
-            },
-            {
-              $gte: [{ $strLenCP: { $trim: { input: '$description' } } }, 20],
-            },
-          ],
-        },
         'questions.9': { $exists: true },
       })
       .sort({ _id: 1 })

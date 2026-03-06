@@ -326,32 +326,5 @@ describe('QuizRepository', () => {
       const result = await repo.findEligiblePublicQuizzes(0, 10)
       expect(result).toEqual(docs)
     })
-
-    it('uses a trim-aware filter for imageCoverURL via $expr', async () => {
-      await repo.findEligiblePublicQuizzes(0, 500)
-
-      const filter = findMock.mock.calls[0][0]
-
-      expect(filter.$expr.$and).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            $gt: [{ $strLenCP: { $trim: { input: '$imageCoverURL' } } }, 0],
-          }),
-        ]),
-      )
-    })
-
-    it('applies null guards on imageCoverURL and description', async () => {
-      await repo.findEligiblePublicQuizzes(0, 500)
-
-      const filter = findMock.mock.calls[0][0]
-
-      expect(filter.imageCoverURL).toEqual(
-        expect.objectContaining({ $exists: true, $ne: null }),
-      )
-      expect(filter.description).toEqual(
-        expect.objectContaining({ $exists: true, $ne: null }),
-      )
-    })
   })
 })
