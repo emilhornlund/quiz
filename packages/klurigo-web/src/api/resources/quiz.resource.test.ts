@@ -75,6 +75,63 @@ describe('createQuizResource', () => {
     )
   })
 
+  it('getPublicQuizzes calls apiGet with query params and returns response', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = { results: [], limit: 10, offset: 0, total: 5 }
+    apiGet.mockResolvedValue(res)
+
+    await expect(quiz.getPublicQuizzes({ limit: 10, offset: 0 })).resolves.toBe(
+      res,
+    )
+    expect(apiGet).toHaveBeenCalledWith('/quizzes?limit=10&offset=0')
+    expect(deps.notifyError).not.toHaveBeenCalled()
+  })
+
+  it('getPublicQuizzes passes all optional filters as query params', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = { results: [], limit: 20, offset: 0, total: 0 }
+    apiGet.mockResolvedValue(res)
+
+    await expect(
+      quiz.getPublicQuizzes({
+        search: 'history',
+        mode: 'Classic' as import('@klurigo/common').GameMode,
+        category: 'History' as import('@klurigo/common').QuizCategory,
+        languageCode: 'en' as import('@klurigo/common').LanguageCode,
+        sort: 'title',
+        order: 'asc',
+        limit: 20,
+        offset: 0,
+      }),
+    ).resolves.toBe(res)
+
+    expect(apiGet).toHaveBeenCalledWith(
+      '/quizzes?search=history&mode=Classic&category=History&languageCode=en&sort=title&order=asc&limit=20&offset=0',
+    )
+  })
+
+  it('getPublicQuizzes notifies error and rethrows on failure', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const err = new Error('fail')
+    apiGet.mockRejectedValue(err)
+
+    await expect(quiz.getPublicQuizzes({ limit: 10, offset: 0 })).rejects.toBe(
+      err,
+    )
+    expect(deps.notifyError).toHaveBeenCalledWith(
+      'We couldn\u2019t load public quizzes right now. Please try again.',
+    )
+  })
+
   it('createQuiz posts request, notifies success, and returns response', async () => {
     const { api, apiPost } = makeApi()
     const deps = makeDeps()

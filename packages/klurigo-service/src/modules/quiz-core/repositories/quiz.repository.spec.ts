@@ -327,4 +327,78 @@ describe('QuizRepository', () => {
       expect(result).toEqual(docs)
     })
   })
+
+  describe('replaceQuiz', () => {
+    it('returns the replaced document when replace succeeds', async () => {
+      const quizId = 'quiz-1'
+      const patch: Partial<Quiz> = { title: 'Replaced title' }
+      const replaced = { id: quizId, title: 'Replaced title' }
+
+      ;(repo as unknown as { replace: jest.Mock }).replace = jest
+        .fn()
+        .mockResolvedValue(replaced)
+
+      await expect(repo.replaceQuiz(quizId, patch as never)).resolves.toBe(
+        replaced as never,
+      )
+
+      expect(
+        (repo as unknown as { replace: jest.Mock }).replace,
+      ).toHaveBeenCalledTimes(1)
+      expect(
+        (repo as unknown as { replace: jest.Mock }).replace,
+      ).toHaveBeenCalledWith(quizId, patch, { populate: { path: 'owner' } })
+    })
+
+    it('throws QuizNotFoundException when replace returns null', async () => {
+      const quizId = 'missing'
+      const patch: Partial<Quiz> = { title: 'Does not matter' }
+
+      ;(repo as unknown as { replace: jest.Mock }).replace = jest
+        .fn()
+        .mockResolvedValue(null)
+
+      await expect(
+        repo.replaceQuiz(quizId, patch as never),
+      ).rejects.toBeInstanceOf(QuizNotFoundException)
+
+      expect(
+        (repo as unknown as { replace: jest.Mock }).replace,
+      ).toHaveBeenCalledWith(quizId, patch, { populate: { path: 'owner' } })
+    })
+  })
+
+  describe('findManyByIds', () => {
+    let findMock: jest.Mock
+    let populateMock: jest.Mock
+    let execMock: jest.Mock
+
+    beforeEach(() => {
+      execMock = jest.fn().mockResolvedValue([])
+      populateMock = jest.fn().mockReturnValue({ exec: execMock })
+      findMock = jest.fn().mockReturnValue({ populate: populateMock })
+      ;(repo as unknown as { quizModel: { find: jest.Mock } }).quizModel = {
+        find: findMock,
+      } as never
+    })
+
+    it('calls find with $in filter and populates owner', async () => {
+      const ids = ['q1', 'q2', 'q3']
+
+      await repo.findManyByIds(ids)
+
+      expect(findMock).toHaveBeenCalledTimes(1)
+      expect(findMock).toHaveBeenCalledWith({ _id: { $in: ids } })
+      expect(populateMock).toHaveBeenCalledWith('owner')
+      expect(execMock).toHaveBeenCalledTimes(1)
+    })
+
+    it('returns the documents from the query', async () => {
+      const docs = [{ _id: 'q1' }, { _id: 'q2' }]
+      execMock.mockResolvedValueOnce(docs)
+
+      const result = await repo.findManyByIds(['q1', 'q2'])
+      expect(result).toEqual(docs)
+    })
+  })
 })
