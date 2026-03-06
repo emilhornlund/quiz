@@ -1289,3 +1289,25 @@ calling the endpoints.
   updated class JSDoc
 - `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.e2e-spec.ts` —
   updated both tests to authenticate via `createDefaultUserAndAuthenticate`
+
+### Search & Filter on Discovery Rails Page
+
+**Implemented:** Search and filter capability added directly to the discovery rails page (`/discover`).
+
+**Summary:**
+The `DiscoverRailsPage` now includes a `QuizTableFilter` bar (search field + category, language, mode, sort filters) at the top of the page. When a filter is active, the curated rails are replaced with a live search-results grid backed by the existing `GET /quizzes` API. A "Back to discovery" button clears the filter and restores the rails view.
+
+**Behaviour:**
+- Typing a search term or selecting any filter triggers `GET /quizzes` with the corresponding query params.
+- Results are displayed in a responsive grid identical in layout to the section "See All" page (`DiscoverSectionPageUI`), using `QuizDiscoveryCard` for each result.
+- A "Load more" button appears when `total > currentlyLoaded`, appending the next page.
+- Clearing the filter (via "Back to discovery" button or the inline "clear the filter" link in the empty-state message) resets all filter state and returns to the curated rails view.
+- While a filter is active, the rails React Query fetch is disabled to avoid unnecessary backend calls.
+
+**Files changed:**
+- `packages/klurigo-web/src/api/resources/quiz.resource.ts` — re-added `getPublicQuizzes` (removed in commit `5a2730e0`) supporting `search`, `mode`, `category`, `languageCode`, `sort`, `order`, `limit`, `offset` params
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/DiscoverRailsPage.tsx` — added `FilterOptions` state, `searchOffset`/`allSearchResults`/`searchTotal` pagination state; conditionally fetches public quizzes when filter is active; passes all filter + search props to UI
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.tsx` — added `QuizTableFilter`, conditional grid/rails rendering, "Back to discovery" button, and inline "clear" link in empty-state
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.module.scss` — added `.filterBar`, `.grid`, `.loadMoreContainer`, `.clearLink` styles
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.test.tsx` — updated all existing tests for new required props; added tests for search grid, search empty-state, clear filter callback, and "Load more" button
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.stories.tsx` — updated all stories with new required props

@@ -87,8 +87,19 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const defaultFilterProps = {
+  filter: {},
+  onFilterChange: () => {},
+  onClearFilter: () => {},
+  searchResults: [],
+  isSearchLoading: false,
+  hasMore: false,
+  onLoadMore: () => {},
+}
+
 export const Default = {
   args: {
+    ...defaultFilterProps,
     sections: makeSections(),
     isLoading: false,
   },
@@ -96,6 +107,7 @@ export const Default = {
 
 export const Loading = {
   args: {
+    ...defaultFilterProps,
     sections: [],
     isLoading: true,
   },
@@ -103,6 +115,7 @@ export const Loading = {
 
 export const Empty = {
   args: {
+    ...defaultFilterProps,
     sections: [],
     isLoading: false,
   },

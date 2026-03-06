@@ -32,6 +32,12 @@
   gap: 0.25rem;
 }
 
+.filterBar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .rails {
   display: flex;
   flex-direction: column;
@@ -70,5 +76,48 @@
     padding: 2rem 0;
 
     @include helpers.fontSize(24px);
+  }
+}
+
+.grid {
+  display: grid;
+
+  @include helpers.mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: variables.$mobile-narrow-layout-gutter;
+  }
+
+  @include helpers.tablet {
+    grid-template-columns: repeat(3, 1fr);
+    gap: variables.$tablet-narrow-layout-gutter;
+  }
+
+  @include helpers.desktop {
+    grid-template-columns: repeat(4, 1fr);
+    gap: variables.$desktop-narrow-layout-gutter;
+  }
+
+  :global([data-testid='quiz-discovery-card']) {
+    width: 100%;
+  }
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.clearLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: underline;
+  font: inherit;
+
+  &:hover {
+    opacity: 0.8;
   }
 }

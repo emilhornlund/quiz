@@ -2,9 +2,12 @@ import {
   type DiscoveryResponseDto,
   type DiscoverySectionKey,
   type DiscoverySectionPageResponseDto,
+  type GameMode,
+  type LanguageCode,
   type PaginatedQuizRatingDto,
   type PaginatedQuizResponseDto,
   type QuestionDto,
+  type QuizCategory,
   type QuizRatingDto,
   type QuizRequestDto,
   type QuizResponseDto,
@@ -68,6 +71,34 @@ export const createQuizResource = (
       .catch((error) => {
         deps.notifyError(
           'We couldn’t load your quizzes right now. Please try again.',
+        )
+        throw error
+      })
+
+  /**
+   * Retrieves a paginated list of public quizzes.
+   *
+   * Supports optional filtering by search term, mode, category, and language,
+   * as well as sorting and pagination.
+   *
+   * @param options - Query options controlling filtering, sorting, and pagination.
+   * @returns A promise resolving to public quizzes in a paginated format.
+   */
+  const getPublicQuizzes = (options: {
+    search?: string
+    mode?: GameMode
+    category?: QuizCategory
+    languageCode?: LanguageCode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
+    limit: number
+    offset: number
+  }): Promise<PaginatedQuizResponseDto> =>
+    api
+      .apiGet<PaginatedQuizResponseDto>(`/quizzes${parseQueryParams(options)}`)
+      .catch((error) => {
+        deps.notifyError(
+          'We couldn\u2019t load public quizzes right now. Please try again.',
         )
         throw error
       })
@@ -275,6 +306,7 @@ export const createQuizResource = (
       })
 
   return {
+    getPublicQuizzes,
     getProfileQuizzes,
     createQuiz,
     getQuiz,
