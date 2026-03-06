@@ -1260,3 +1260,32 @@ be missing from every snapshot:
   claim limit, added `DISCOVERY_RAIL_PREVIEW_SIZE` import
 - `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.spec.ts`
   — updated two tests: "missing recent stats" and "trending stats influence"
+
+### Secure discovery endpoints with new `DISCOVERY` authority
+
+**Change:** The discovery endpoints (`GET /api/discover` and `GET /api/discover/section/:key`)
+were previously decorated with `@Public()`, making them accessible without authentication.
+They are now secured behind a new `Authority.Discovery` authority, consistent with the
+pattern used by other protected endpoints (e.g. `GET /api/quizzes`).
+
+A new `Discovery = 'DISCOVERY'` value was added to the `Authority` enum in `@klurigo/common`
+and automatically included in `DEFAULT_USER_AUTHORITIES`, so every user token receives it
+on sign-in without any action required from existing users.
+
+The discovery controller now carries class-level `@ApiBearerAuth()`,
+`@RequiresScopes(TokenScope.User)`, and `@RequiredAuthorities(Authority.Discovery)`
+decorators (mirroring `QuizController`), and the per-endpoint `@Public()` calls were removed.
+
+The two discovery e2e tests were updated to authenticate with a valid user token before
+calling the endpoints.
+
+**Files changed:**
+- `packages/common/src/models/authority.enum.ts` — added `Discovery = 'DISCOVERY'` with JSDoc
+- `packages/klurigo-service/src/app/shared/token/token.constants.ts` — added `Authority.Discovery`
+  to `DEFAULT_USER_AUTHORITIES`
+- `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.ts` —
+  removed `@Public()` and `Public` import; added `@ApiBearerAuth()`,
+  `@RequiresScopes(TokenScope.User)`, `@RequiredAuthorities(Authority.Discovery)` at class level;
+  updated class JSDoc
+- `packages/klurigo-service/src/modules/discovery-api/controllers/discovery.controller.e2e-spec.ts` —
+  updated both tests to authenticate via `createDefaultUserAndAuthenticate`

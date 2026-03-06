@@ -1,7 +1,9 @@
 import {
+  Authority,
   DiscoveryQuizCardDto,
   DiscoveryResponseDto,
   DiscoverySectionKey,
+  TokenScope,
 } from '@klurigo/common'
 import {
   Controller,
@@ -15,6 +17,7 @@ import {
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -22,7 +25,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 
-import { Public } from '../../authentication/controllers/decorators'
+import {
+  RequiredAuthorities,
+  RequiresScopes,
+} from '../../authentication/controllers/decorators'
 import { toQuizGameplaySummaryDifficultyPercentage } from '../../quiz-api/services/utils'
 import { QuizRepository } from '../../quiz-core/repositories'
 import { Quiz } from '../../quiz-core/repositories/models/schemas'
@@ -50,9 +56,12 @@ import { DiscoveryResponse, PaginatedDiscoverySectionResponse } from './models'
  *   of a single rail, reading directly from the snapshot's stored entries to
  *   guarantee ordering consistency with the rail preview.
  *
- * All endpoints in this controller are public (no authentication required).
+ * All endpoints require a valid bearer token with the DISCOVERY authority.
  */
+@ApiBearerAuth()
 @ApiTags('discovery')
+@RequiresScopes(TokenScope.User)
+@RequiredAuthorities(Authority.Discovery)
 @Controller('discover')
 export class DiscoveryController {
   /**
@@ -84,7 +93,6 @@ export class DiscoveryController {
    * @returns The discovery response with hydrated rails and the snapshot timestamp.
    */
   @Get()
-  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Retrieve the discovery snapshot.',
@@ -165,7 +173,6 @@ export class DiscoveryController {
    * @returns The paginated section response with hydrated quiz cards.
    */
   @Get('section/:key')
-  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Retrieve a paginated discovery section.',

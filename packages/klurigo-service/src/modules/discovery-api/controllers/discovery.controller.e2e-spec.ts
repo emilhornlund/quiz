@@ -1,7 +1,11 @@
 import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
 
-import { closeTestApp, createTestApp } from '../../../../test-utils/utils'
+import {
+  closeTestApp,
+  createDefaultUserAndAuthenticate,
+  createTestApp,
+} from '../../../../test-utils/utils'
 
 describe('DiscoveryController (e2e)', () => {
   let app: INestApplication
@@ -16,8 +20,10 @@ describe('DiscoveryController (e2e)', () => {
 
   describe('/api/discover (GET)', () => {
     it('returns 200 with empty sections and null generatedAt when no snapshot exists', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
       return supertest(app.getHttpServer())
         .get('/api/discover')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('sections')
@@ -30,8 +36,10 @@ describe('DiscoveryController (e2e)', () => {
 
   describe('/api/discover/section/:key (GET)', () => {
     it('returns 200 with empty results when no snapshot exists', async () => {
+      const { accessToken } = await createDefaultUserAndAuthenticate(app)
       return supertest(app.getHttpServer())
         .get('/api/discover/section/TOP_RATED?limit=10&offset=20')
+        .set({ Authorization: `Bearer ${accessToken}` })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('key', 'TOP_RATED')
