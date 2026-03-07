@@ -1,3 +1,5 @@
+import { QuestionType } from '@klurigo/common'
+
 import { Quiz } from '../../repositories/models/schemas'
 
 // ---------------------------------------------------------------------------
@@ -94,13 +96,13 @@ export const QUALITY_WEIGHT_DESCRIPTION = 15
  *
  * The sub-score is bucketed by number of questions:
  * - 10–14 → 4
- * - 15–19 → 8
- * - 20–29 → 12
- * - 30+ → 15
+ * - 15–19 → 6
+ * - 20–29 → 8
+ * - 30+ → 10
  *
- * Default: `15`
+ * Default: `10`
  */
-export const QUALITY_WEIGHT_QUESTIONS = 15
+export const QUALITY_WEIGHT_QUESTIONS = 10
 
 /**
  * Weight of the play-engagement sub-score within the overall quality score.
@@ -108,9 +110,9 @@ export const QUALITY_WEIGHT_QUESTIONS = 15
  * Derived from `gameplaySummary.count` (total completed plays) using
  * log-scaling against `PLAY_SCALE_MAX`.
  *
- * Default: `30`
+ * Default: `25`
  */
-export const QUALITY_WEIGHT_PLAYS = 30
+export const QUALITY_WEIGHT_PLAYS = 25
 
 /**
  * Weight of the unique-player sub-score within the overall quality score.
@@ -118,9 +120,9 @@ export const QUALITY_WEIGHT_PLAYS = 30
  * Derived from `gameplaySummary.totalPlayerCount` using the same log-scaling
  * pattern as the play-engagement sub-score.
  *
- * Default: `15`
+ * Default: `10`
  */
-export const QUALITY_WEIGHT_PLAYERS = 15
+export const QUALITY_WEIGHT_PLAYERS = 10
 
 /**
  * Weight of the Bayesian-adjusted rating sub-score within the overall quality
@@ -129,9 +131,52 @@ export const QUALITY_WEIGHT_PLAYERS = 15
  * The raw Bayesian rating (0–5) is mapped to [0, `QUALITY_WEIGHT_RATING`] via
  * `bayesianRating * (QUALITY_WEIGHT_RATING / 5)`.
  *
- * Default: `15`
+ * Default: `10`
  */
-export const QUALITY_WEIGHT_RATING = 15
+export const QUALITY_WEIGHT_RATING = 10
+
+/**
+ * Weight of the question media density sub-score within the overall quality
+ * score.
+ *
+ * The sub-score is the proportion of questions that have an associated media
+ * attachment (any `MediaType`: image, audio, or video), scaled to this weight:
+ * `(questionsWithMedia / totalQuestions) * QUALITY_WEIGHT_QUESTION_MEDIA`.
+ *
+ * `Pin` questions are treated as always having media because they carry a
+ * required `imageURL` field instead of the standard `media` subdocument.
+ *
+ * A quiz where every question has media receives the full weight; a quiz with
+ * no media on any question receives 0.
+ *
+ * Default: `10`
+ */
+export const QUALITY_WEIGHT_QUESTION_MEDIA = 10
+
+/**
+ * Weight of the question type variety sub-score within the overall quality
+ * score.
+ *
+ * The sub-score is the proportion of distinct question types used, scaled to
+ * this weight:
+ * `(uniqueTypeCount / TOTAL_QUESTION_TYPES) * QUALITY_WEIGHT_QUESTION_VARIETY`.
+ *
+ * A quiz that uses only one question type receives a low score; a quiz that
+ * uses all available types receives the full weight.
+ *
+ * Default: `10`
+ */
+export const QUALITY_WEIGHT_QUESTION_VARIETY = 10
+
+/**
+ * Total number of distinct question types supported by the platform.
+ *
+ * Used as the denominator when computing the question type variety sub-score.
+ * Must be kept in sync with the `QuestionType` enum in `@klurigo/common`.
+ *
+ * Default: `6` (MultiChoice, Range, TrueFalse, TypeAnswer, Pin, Puzzle)
+ */
+export const TOTAL_QUESTION_TYPES = Object.keys(QuestionType).length
 
 // ---------------------------------------------------------------------------
 // Bayesian rating confidence threshold
@@ -215,7 +260,7 @@ export function computeBayesianRatingScore(
 /**
  * Computes an overall quality score for a quiz in the range [0, 100].
  *
- * The score is a weighted sum of six independent sub-scores. Accepting
+ * The score is a weighted sum of eight independent sub-scores. Accepting
  * `globalMean` and `minRatingCount` as explicit parameters (rather than
  * reading from global state) keeps this function **deterministic and pure**:
  * the same inputs always produce the same output, making it trivially
@@ -227,14 +272,22 @@ export function computeBayesianRatingScore(
  *    non-whitespace → 10, absent/blank → 0.
  * 2. Description (`QUALITY_WEIGHT_DESCRIPTION` = 15): bucketed by trimmed
  *    length — 20–49 → 4, 50–99 → 8, 100–199 → 12, 200+ → 15.
- * 3. Questions (`QUALITY_WEIGHT_QUESTIONS` = 15): bucketed by count —
- *    10–14 → 4, 15–19 → 8, 20–29 → 12, 30+ → 15.
- * 4. Play engagement (`QUALITY_WEIGHT_PLAYS` = 30): log-scaled from
- *    `gameplaySummary.count` — `min(30, 30 * log10(count+1) / log10(PLAY_SCALE_MAX))`.
- * 5. Unique players (`QUALITY_WEIGHT_PLAYERS` = 15): same log-scale pattern
- *    on `gameplaySummary.totalPlayerCount`, capped at 15.
- * 6. Rating (`QUALITY_WEIGHT_RATING` = 15): `computeBayesianRatingScore(...)
+ * 3. Questions (`QUALITY_WEIGHT_QUESTIONS` = 10): bucketed by count —
+ *    10–14 → 4, 15–19 → 6, 20–29 → 8, 30+ → 10.
+ * 4. Play engagement (`QUALITY_WEIGHT_PLAYS` = 25): log-scaled from
+ *    `gameplaySummary.count` — `min(25, 25 * log10(count+1) / log10(PLAY_SCALE_MAX))`.
+ * 5. Unique players (`QUALITY_WEIGHT_PLAYERS` = 10): same log-scale pattern
+ *    on `gameplaySummary.totalPlayerCount`, capped at 10.
+ * 6. Rating (`QUALITY_WEIGHT_RATING` = 10): `computeBayesianRatingScore(...)
  *    * (QUALITY_WEIGHT_RATING / 5)`.
+ * 7. Question media density (`QUALITY_WEIGHT_QUESTION_MEDIA` = 10): proportion
+ *    of questions that have any media attachment (image, audio, or video) —
+ *    `(questionsWithMedia / totalQuestions) * 10`. `Pin` questions are treated
+ *    as always having media because they carry a required `imageURL` field
+ *    instead of the standard `media` subdocument.
+ * 8. Question type variety (`QUALITY_WEIGHT_QUESTION_VARIETY` = 10): proportion
+ *    of distinct question types used out of `TOTAL_QUESTION_TYPES` (6) —
+ *    `(uniqueTypeCount / TOTAL_QUESTION_TYPES) * 10`.
  *
  * Missing or partially populated sub-documents (`gameplaySummary`,
  * `ratingSummary`, `questions`) are treated as zero-valued defaults so the
@@ -272,11 +325,11 @@ export function computeQualityScore(
   const qCount = (quiz.questions ?? []).length
   let questionScore = 0
   if (qCount >= 30) {
-    questionScore = 15
+    questionScore = 10
   } else if (qCount >= 20) {
-    questionScore = 12
-  } else if (qCount >= 15) {
     questionScore = 8
+  } else if (qCount >= 15) {
+    questionScore = 6
   } else if (qCount >= 10) {
     questionScore = 4
   }
@@ -302,13 +355,39 @@ export function computeQualityScore(
   const bayesian = computeBayesianRatingScore(quiz, globalMean, minRatingCount)
   const ratingScore = bayesian * (QUALITY_WEIGHT_RATING / 5)
 
+  // Sub-score 7: question media density — proportion of questions with any media.
+  // Pin questions use a dedicated `imageURL` field instead of `media`, so they
+  // are treated as always having media when `imageURL` is non-empty.
+  const questions = quiz.questions ?? []
+  const mediaScore =
+    questions.length > 0
+      ? (questions.filter(
+          (q) =>
+            q.media != null ||
+            (q.type === QuestionType.Pin &&
+              (q as unknown as { imageURL?: string }).imageURL != null),
+        ).length /
+          questions.length) *
+        QUALITY_WEIGHT_QUESTION_MEDIA
+      : 0
+
+  // Sub-score 8: question type variety — proportion of distinct types out of total
+  const uniqueTypeCount = new Set(questions.map((q) => q.type)).size
+  const varietyScore =
+    questions.length > 0
+      ? (uniqueTypeCount / TOTAL_QUESTION_TYPES) *
+        QUALITY_WEIGHT_QUESTION_VARIETY
+      : 0
+
   return (
     coverScore +
     descScore +
     questionScore +
     playScore +
     playerScore +
-    ratingScore
+    ratingScore +
+    mediaScore +
+    varietyScore
   )
 }
 

@@ -1,3 +1,5 @@
+import { QuestionType } from '@klurigo/common'
+
 import { Quiz } from '../../repositories/models/schemas'
 
 import {
@@ -10,9 +12,12 @@ import {
   QUALITY_WEIGHT_DESCRIPTION,
   QUALITY_WEIGHT_PLAYERS,
   QUALITY_WEIGHT_PLAYS,
+  QUALITY_WEIGHT_QUESTION_MEDIA,
+  QUALITY_WEIGHT_QUESTION_VARIETY,
   QUALITY_WEIGHT_QUESTIONS,
   QUALITY_WEIGHT_RATING,
   RecentActivityStats,
+  TOTAL_QUESTION_TYPES,
   TRENDING_PLAY_WEIGHT,
   TRENDING_SCALE_MAX,
   TRENDING_WINDOW_DAYS,
@@ -71,20 +76,32 @@ describe('Discovery Scoring Utils — constants', () => {
     expect(QUALITY_WEIGHT_DESCRIPTION).toBe(15)
   })
 
-  it('QUALITY_WEIGHT_QUESTIONS should be 15', () => {
-    expect(QUALITY_WEIGHT_QUESTIONS).toBe(15)
+  it('QUALITY_WEIGHT_QUESTIONS should be 10', () => {
+    expect(QUALITY_WEIGHT_QUESTIONS).toBe(10)
   })
 
-  it('QUALITY_WEIGHT_PLAYS should be 30', () => {
-    expect(QUALITY_WEIGHT_PLAYS).toBe(30)
+  it('QUALITY_WEIGHT_PLAYS should be 25', () => {
+    expect(QUALITY_WEIGHT_PLAYS).toBe(25)
   })
 
-  it('QUALITY_WEIGHT_PLAYERS should be 15', () => {
-    expect(QUALITY_WEIGHT_PLAYERS).toBe(15)
+  it('QUALITY_WEIGHT_PLAYERS should be 10', () => {
+    expect(QUALITY_WEIGHT_PLAYERS).toBe(10)
   })
 
-  it('QUALITY_WEIGHT_RATING should be 15', () => {
-    expect(QUALITY_WEIGHT_RATING).toBe(15)
+  it('QUALITY_WEIGHT_RATING should be 10', () => {
+    expect(QUALITY_WEIGHT_RATING).toBe(10)
+  })
+
+  it('QUALITY_WEIGHT_QUESTION_MEDIA should be 10', () => {
+    expect(QUALITY_WEIGHT_QUESTION_MEDIA).toBe(10)
+  })
+
+  it('QUALITY_WEIGHT_QUESTION_VARIETY should be 10', () => {
+    expect(QUALITY_WEIGHT_QUESTION_VARIETY).toBe(10)
+  })
+
+  it('TOTAL_QUESTION_TYPES should be 6', () => {
+    expect(TOTAL_QUESTION_TYPES).toBe(6)
   })
 })
 
@@ -243,15 +260,17 @@ describe('computeQualityScore', () => {
   })
 
   describe('question count bucket boundaries', () => {
+    // Use a 1-question baseline (same type) so the variety sub-score is equal
+    // for both quizzes and doesn't leak into the diff.
     it.each([
       [9, 0],
       [10, 4],
       [14, 4],
-      [15, 8],
-      [19, 8],
-      [20, 12],
-      [29, 12],
-      [30, 15],
+      [15, 6],
+      [19, 6],
+      [20, 8],
+      [29, 8],
+      [30, 10],
     ])(
       'question count %i should produce question sub-score %i',
       (count, expectedQScore) => {
@@ -260,16 +279,17 @@ describe('computeQualityScore', () => {
           description: undefined,
           questions: Array.from({ length: count }, (_, i) => ({
             _id: `q${i}`,
+            type: QuestionType.MultiChoice,
           })) as any,
         })
-        const withZero = makeQuiz({
+        const baseline = makeQuiz({
           imageCoverURL: undefined,
           description: undefined,
-          questions: [] as any,
+          questions: [{ _id: 'base', type: QuestionType.MultiChoice }] as any,
         })
         const diff =
           computeQualityScore(withN, globalMean, minRatingCount) -
-          computeQualityScore(withZero, globalMean, minRatingCount)
+          computeQualityScore(baseline, globalMean, minRatingCount)
         expect(diff).toBeCloseTo(expectedQScore, 5)
       },
     )
@@ -291,12 +311,19 @@ describe('computeQualityScore', () => {
   })
 
   it('maximum possible score should be 100', () => {
+    // 30 questions: 5 of each of the 6 types, all with media
+    const allTypes = Object.values(QuestionType)
+    const questions = allTypes.flatMap((type, ti) =>
+      Array.from({ length: 5 }, (_, i) => ({
+        _id: `q${ti}_${i}`,
+        type,
+        media: { type: 'IMAGE', url: `https://img.com/q${ti}_${i}.jpg` },
+      })),
+    )
     const quiz = makeQuiz({
       imageCoverURL: 'https://img.com/c.jpg',
       description: 'A'.repeat(200),
-      questions: Array.from({ length: 30 }, (_, i) => ({
-        _id: `q${i}`,
-      })) as any,
+      questions: questions as any,
       gameplaySummary: {
         count: PLAY_SCALE_MAX,
         totalPlayerCount: PLAYER_SCALE_MAX,
@@ -371,6 +398,222 @@ describe('computeQualityScore', () => {
       expect(
         computeQualityScore(withPaddedDesc, globalMean, minRatingCount),
       ).toEqual(computeQualityScore(withExactDesc, globalMean, minRatingCount))
+    })
+  })
+
+  describe('question media density sub-score', () => {
+    it('quiz with media on all questions should score higher than quiz with none', () => {
+      const withoutMedia = makeQuiz()
+      const withAllMedia = makeQuiz({
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          media: { type: 'IMAGE', url: `https://img.com/q${i}.jpg` },
+        })) as any,
+      })
+      expect(
+        computeQualityScore(withAllMedia, globalMean, minRatingCount),
+      ).toBeGreaterThan(
+        computeQualityScore(withoutMedia, globalMean, minRatingCount),
+      )
+    })
+
+    it('all questions with media should yield the full media weight', () => {
+      const withoutMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withAllMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          media: { type: 'IMAGE', url: `https://img.com/q${i}.jpg` },
+        })) as any,
+      })
+      const diff =
+        computeQualityScore(withAllMedia, globalMean, minRatingCount) -
+        computeQualityScore(withoutMedia, globalMean, minRatingCount)
+      expect(diff).toBeCloseTo(QUALITY_WEIGHT_QUESTION_MEDIA, 5)
+    })
+
+    it('half questions with media should yield half the media weight', () => {
+      const withoutMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withHalfMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          media:
+            i < 5
+              ? { type: 'IMAGE', url: `https://img.com/q${i}.jpg` }
+              : undefined,
+        })) as any,
+      })
+      const diff =
+        computeQualityScore(withHalfMedia, globalMean, minRatingCount) -
+        computeQualityScore(withoutMedia, globalMean, minRatingCount)
+      expect(diff).toBeCloseTo(QUALITY_WEIGHT_QUESTION_MEDIA / 2, 5)
+    })
+
+    it('media of any type (image, audio, video) should count toward the score', () => {
+      const withoutMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withAudio = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          media: { type: 'AUDIO', url: `https://cdn.com/q${i}.mp3` },
+        })) as any,
+      })
+      const diff =
+        computeQualityScore(withAudio, globalMean, minRatingCount) -
+        computeQualityScore(withoutMedia, globalMean, minRatingCount)
+      expect(diff).toBeCloseTo(QUALITY_WEIGHT_QUESTION_MEDIA, 5)
+    })
+
+    it('Pin questions with imageURL should count as having media', () => {
+      const withoutMedia = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withPinQuestions = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          type: QuestionType.Pin,
+          imageURL: `https://img.com/pin${i}.jpg`,
+        })) as any,
+      })
+      // Pin questions have imageURL instead of media — they should receive the full
+      // media weight. The diff also includes a variety contribution (Pin is 1 type),
+      // so we assert >= full media weight rather than exactly equal.
+      const diff =
+        computeQualityScore(withPinQuestions, globalMean, minRatingCount) -
+        computeQualityScore(withoutMedia, globalMean, minRatingCount)
+      expect(diff).toBeGreaterThanOrEqual(QUALITY_WEIGHT_QUESTION_MEDIA)
+    })
+
+    it('Pin questions without imageURL should not count as having media', () => {
+      const allPinNoImage = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          type: QuestionType.Pin,
+          imageURL: undefined,
+        })) as any,
+      })
+      const allPinWithImage = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          type: QuestionType.Pin,
+          imageURL: `https://img.com/pin${i}.jpg`,
+        })) as any,
+      })
+      expect(
+        computeQualityScore(allPinWithImage, globalMean, minRatingCount),
+      ).toBeGreaterThan(
+        computeQualityScore(allPinNoImage, globalMean, minRatingCount),
+      )
+    })
+
+    it('should score 0 when questions array is empty', () => {
+      const withEmpty = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: [] as any,
+      })
+      const withUndefined = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: undefined as any,
+      })
+      expect(
+        computeQualityScore(withEmpty, globalMean, minRatingCount),
+      ).toBeCloseTo(
+        computeQualityScore(withUndefined, globalMean, minRatingCount),
+        5,
+      )
+    })
+  })
+
+  describe('question type variety sub-score', () => {
+    it('all same question type should yield a lower score than a mixed quiz', () => {
+      const singleType = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 6 }, (_, i) => ({
+          _id: `q${i}`,
+          type: QuestionType.MultiChoice,
+        })) as any,
+      })
+      const mixedTypes = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Object.values(QuestionType).map((type, i) => ({
+          _id: `q${i}`,
+          type,
+        })) as any,
+      })
+      expect(
+        computeQualityScore(mixedTypes, globalMean, minRatingCount),
+      ).toBeGreaterThan(
+        computeQualityScore(singleType, globalMean, minRatingCount),
+      )
+    })
+
+    it('all 6 question types should yield the full variety weight', () => {
+      const withoutVariety = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 6 }, (_, i) => ({
+          _id: `q${i}`,
+          type: QuestionType.MultiChoice,
+        })) as any,
+      })
+      const withAllTypes = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Object.values(QuestionType).map((type, i) => ({
+          _id: `q${i}`,
+          type,
+        })) as any,
+      })
+      // withAllTypes gets QUALITY_WEIGHT_QUESTION_VARIETY; withoutVariety gets 1/6 * weight
+      const diff =
+        computeQualityScore(withAllTypes, globalMean, minRatingCount) -
+        computeQualityScore(withoutVariety, globalMean, minRatingCount)
+      const expected =
+        QUALITY_WEIGHT_QUESTION_VARIETY -
+        (1 / TOTAL_QUESTION_TYPES) * QUALITY_WEIGHT_QUESTION_VARIETY
+      expect(diff).toBeCloseTo(expected, 5)
+    })
+
+    it('variety score should increase proportionally with number of distinct types', () => {
+      const types = Object.values(QuestionType)
+      const scores = [1, 2, 3, 4, 5, 6].map((n) => {
+        const quiz = makeQuiz({
+          imageCoverURL: undefined,
+          description: undefined,
+          questions: types.slice(0, n).map((type, i) => ({
+            _id: `q${i}`,
+            type,
+          })) as any,
+        })
+        return computeQualityScore(quiz, globalMean, minRatingCount)
+      })
+      for (let i = 1; i < scores.length; i++) {
+        expect(scores[i]).toBeGreaterThan(scores[i - 1])
+      }
     })
   })
 })

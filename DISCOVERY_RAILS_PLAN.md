@@ -1373,3 +1373,65 @@ Two issues were identified in the discovery compute pipeline on small corpora (6
 - `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.spec.ts`
   — replaced exclusive/soft-dedup tests with no-dedup tests; simplified missing-stats and
   trending-stats tests; added MOST_PLAYED filtering test (11 tests total, all passing)
+
+### Add Question Media Density & Type Variety Sub-Scores to Quality Scoring
+
+**Change:** Added two new sub-scores to `computeQualityScore` and redistributed
+existing weights so the maximum total quality score remains **100 pts**.
+
+**New sub-scores:**
+
+- **Question media density** (`QUALITY_WEIGHT_QUESTION_MEDIA = 10`): Proportion of
+  questions that have any associated media attachment (image, audio, or video).
+  Formula: `(questionsWithMedia / totalQuestions) * 10`. A quiz where every question
+  has media receives the full weight; a quiz with no question media receives 0.
+  Any `MediaType` (Image, Audio, Video) qualifies — presence of the `media` field
+  is sufficient.
+
+- **Question type variety** (`QUALITY_WEIGHT_QUESTION_VARIETY = 10`): Proportion of
+  distinct question types used across the quiz out of the total possible
+  (`TOTAL_QUESTION_TYPES = 6`).
+  Formula: `(uniqueTypeCount / 6) * 10`. A quiz using only one type (e.g. all
+  MultiChoice) receives ~1.67 pts; a quiz using all six types receives 10 pts.
+
+**Weight redistribution (total stays 100):**
+
+| Sub-score              | Old weight | New weight |
+|------------------------|------------|------------|
+| Questions count        | 15         | 10 (−5)    |
+| Play engagement        | 30         | 25 (−5)    |
+| Unique players         | 15         | 10 (−5)    |
+| Rating                 | 15         | 10 (−5)    |
+| Question media density | —          | 10 (new)   |
+| Question type variety  | —          | 10 (new)   |
+
+The question count bucket values were also adjusted to fit the new weight ceiling:
+10–14 → 4, 15–19 → 6, 20–29 → 8, 30+ → 10.
+
+**Motivation:** Discovery rails should surface quizzes that are more engaging to
+play. Quizzes where questions have associated media (images, audio clips, videos)
+offer a richer experience than text-only quizzes. Similarly, quizzes that mix
+question types (MultiChoice, Range, TrueFalse, TypeAnswer, Pin, Puzzle) keep
+players more engaged than single-type quizzes. These signals are independent of
+engagement or rating data and reward quiz creator effort at authoring time.
+
+**New constants exported:**
+- `QUALITY_WEIGHT_QUESTION_MEDIA = 10`
+- `QUALITY_WEIGHT_QUESTION_VARIETY = 10`
+- `TOTAL_QUESTION_TYPES = Object.keys(QuestionType).length` (evaluates to 6)
+
+**Files changed:**
+- `packages/klurigo-service/src/modules/quiz-core/utils/discovery/discovery-scoring.utils.ts` —
+  added `QuestionType` import; added `QUALITY_WEIGHT_QUESTION_MEDIA`,
+  `QUALITY_WEIGHT_QUESTION_VARIETY`, `TOTAL_QUESTION_TYPES` constants with JSDoc;
+  reduced `QUALITY_WEIGHT_QUESTIONS` (15→10), `QUALITY_WEIGHT_PLAYS` (30→25),
+  `QUALITY_WEIGHT_PLAYERS` (15→10), `QUALITY_WEIGHT_RATING` (15→10); updated question
+  count bucket values; added sub-scores 7 and 8 to `computeQualityScore`; updated JSDoc
+- `packages/klurigo-service/src/modules/quiz-core/utils/discovery/discovery-scoring.utils.spec.ts` —
+  added `QuestionType`, `QUALITY_WEIGHT_QUESTION_MEDIA`, `QUALITY_WEIGHT_QUESTION_VARIETY`,
+  `TOTAL_QUESTION_TYPES` imports; updated constant assertions for all changed weights;
+  updated question count bucket expected values; updated "maximum possible score" fixture
+  to use 30 questions (5 of each type, all with media); added "question media density
+  sub-score" describe block (5 tests) and "question type variety sub-score" describe
+  block (3 tests); restructured bucket boundary test to use a 1-question typed baseline
+  so the variety sub-score does not leak into the question-count diff
