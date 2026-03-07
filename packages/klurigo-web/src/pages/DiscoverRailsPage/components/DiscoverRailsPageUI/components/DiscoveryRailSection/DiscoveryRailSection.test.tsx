@@ -6,6 +6,7 @@ import {
   QuizCategory,
 } from '@klurigo/common'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -120,5 +121,110 @@ describe('DiscoveryRailSection', () => {
     expect(screen.getByText('Trending')).toBeInTheDocument()
     const section = screen.getByTestId('discovery-rail-section')
     expect(section.querySelector('p')).not.toBeInTheDocument()
+  })
+
+  it('renders prev and next arrow buttons', () => {
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[makeQuiz('q1')]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByTestId('rail-arrow-prev')).toBeInTheDocument()
+    expect(screen.getByTestId('rail-arrow-next')).toBeInTheDocument()
+  })
+
+  it('arrow buttons have correct aria-labels', () => {
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByLabelText('Scroll left')).toBeInTheDocument()
+    expect(screen.getByLabelText('Scroll right')).toBeInTheDocument()
+  })
+
+  it('clicking prev arrow calls scrollBy on the rail', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[makeQuiz('q1')]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    const rail = screen.getByTestId('discovery-rail-scroll')
+    const scrollBySpy = vi.fn()
+    Object.defineProperty(rail, 'scrollBy', { value: scrollBySpy })
+    Object.defineProperty(rail, 'clientWidth', {
+      value: 800,
+      configurable: true,
+    })
+
+    await user.click(screen.getByTestId('rail-arrow-prev'))
+
+    expect(scrollBySpy).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: 'smooth' }),
+    )
+    expect(scrollBySpy.mock.calls[0][0].left).toBeLessThan(0)
+  })
+
+  it('clicking next arrow calls scrollBy on the rail', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[makeQuiz('q1')]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    const rail = screen.getByTestId('discovery-rail-scroll')
+    const scrollBySpy = vi.fn()
+    Object.defineProperty(rail, 'scrollBy', { value: scrollBySpy })
+
+    await user.click(screen.getByTestId('rail-arrow-next'))
+
+    expect(scrollBySpy).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: 'smooth' }),
+    )
+    expect(scrollBySpy.mock.calls[0][0].left).toBeGreaterThanOrEqual(0)
+  })
+
+  it('rail wrapper does not have scroll classes when rail cannot scroll', () => {
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    const wrapper = screen.getByTestId('discovery-rail-wrapper')
+    // jsdom doesn't do layout, so scrollLeft/scrollWidth will be 0
+    // — the wrapper should not carry scroll-indicator classes
+    expect(wrapper.className).not.toContain('hasScrollLeft')
+    expect(wrapper.className).not.toContain('hasScrollRight')
   })
 })

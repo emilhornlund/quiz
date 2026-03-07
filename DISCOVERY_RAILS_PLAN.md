@@ -1311,3 +1311,23 @@ The `DiscoverRailsPage` now includes a `QuizTableFilter` bar (search field + cat
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.module.scss` — added `.filterBar`, `.grid`, `.loadMoreContainer`, `.clearLink` styles
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.test.tsx` — updated all existing tests for new required props; added tests for search grid, search empty-state, clear filter callback, and "Load more" button
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/DiscoverRailsPageUI.stories.tsx` — updated all stories with new required props
+
+### Rail Scroll Polish — Edge Fades & Arrow Navigation
+
+**Implemented:** Visual polish update to `DiscoveryRailSection` adding subtle scroll-direction cues and keyboard-friendly arrow navigation for the horizontal quiz card rails.
+
+**Summary:**
+Each rail now has a lightweight scroll wrapper (`railWrapper`) that tracks scroll state and renders:
+
+1. **Edge fade shadows** — CSS pseudo-elements (`::before` / `::after`) on the wrapper overlay a short gradient that fades from the page background colour (`$blue-2`) to transparent at both horizontal edges. The left fade is shown only when the rail has scrolled past the start; the right fade is shown only when more content remains to the right. Both fade in/out with a CSS transition keyed on the `.hasScrollLeft` / `.hasScrollRight` classes toggled by React state.
+
+2. **Prev / Next arrow buttons** — Absolutely positioned circle buttons (`.arrowPrev`, `.arrowNext`) sit inside the wrapper at z-index 2, above the fades. They are hidden on mobile and tablet (`display: none`) and invisible by default on desktop (`opacity: 0 / pointer-events: none`). On desktop they become visible (`opacity: 1 / pointer-events: auto`) only while the parent `<section>` is hovered *and* the wrapper carries the corresponding `.hasScrollLeft` or `.hasScrollRight` class — achieved with two targeted CSS descendant rules rather than JS event listeners. Clicking an arrow calls `el.scrollBy({ left: ±clientWidth, behavior: 'smooth' })` to page the rail by one visible viewport width.
+
+3. **Scroll state tracking** — A `useEffect` attaches a passive `scroll` listener and a `ResizeObserver` to the rail `<div>` (via `railRef`). Both call `updateScrollState` to keep `canScrollLeft` / `canScrollRight` in sync. The effect also re-runs when `quizzes` or `isLoading` change so the state is correct after content loads.
+
+**Accessibility:** Arrow buttons carry descriptive `aria-label` attributes (`"Scroll left"` / `"Scroll right"`) and `tabIndex={-1}` to keep them out of the tab order (the rail itself is natively keyboard-scrollable). All existing card links and keyboard navigation behaviour are unaffected.
+
+**Files changed:**
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.tsx` — converted from stateless FC to a hooks-based component; added `railRef`, `canScrollLeft`/`canScrollRight` state, `updateScrollState` callback, `scroll` helper, `railWrapper` div with conditional `hasScrollLeft`/`hasScrollRight` classes, and two arrow `<button>` elements
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.module.scss` — added `.railWrapper` (position: relative, `::before`/`::after` fade pseudo-elements, `.hasScrollLeft`/`.hasScrollRight` opacity transitions), `.arrowButton` (desktop-only, circular, hover-reveal via `.section:hover` descendant selector), `.arrowPrev`/`.arrowNext` positioning
+- `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.test.tsx` — added five new tests: arrow buttons rendered, correct aria-labels, prev/next `scrollBy` calls, and absence of scroll classes when layout is flat (jsdom)
