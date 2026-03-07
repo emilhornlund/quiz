@@ -187,6 +187,15 @@ const QuizSettingsModal: FC<QuizSettingsModalProps> = ({
             }
           />
         </div>
+        <div className={styles.actions}>
+          <Button
+            id="close-button"
+            type="button"
+            kind="secondary"
+            value="Close"
+            onClick={onClose}
+          />
+        </div>
       </div>
       {showMediaModal && (
         <MediaModal

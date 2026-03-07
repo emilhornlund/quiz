@@ -54,4 +54,30 @@ $outline-offset: helpers.pxToRem(2px);
       }
     }
   }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 100%;
+    max-width: variables.$mobile-width;
+
+    @include helpers.mobile {
+      column-gap: variables.$mobile-narrow-layout-gutter;
+    }
+
+    @include helpers.tablet {
+      column-gap: variables.$tablet-narrow-layout-gutter;
+    }
+
+    @include helpers.desktop {
+      column-gap: variables.$desktop-narrow-layout-gutter;
+    }
+
+    div[class*='buttonInputContainer'] {
+      flex: 1;
+    }
+  }
 }
