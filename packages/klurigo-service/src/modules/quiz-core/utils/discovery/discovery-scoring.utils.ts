@@ -24,7 +24,7 @@ export const TRENDING_PLAY_WEIGHT = 1
  *
  * Default: `7`
  */
-export const TRENDING_WINDOW_DAYS = 7
+export const TRENDING_WINDOW_DAYS = 30
 
 /**
  * Maximum weighted recent-play value used to normalise the trending score

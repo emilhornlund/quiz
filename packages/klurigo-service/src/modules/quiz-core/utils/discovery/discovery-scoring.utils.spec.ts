@@ -47,8 +47,8 @@ describe('Discovery Scoring Utils — constants', () => {
     expect(TRENDING_PLAY_WEIGHT).toBe(1)
   })
 
-  it('TRENDING_WINDOW_DAYS should be 7', () => {
-    expect(TRENDING_WINDOW_DAYS).toBe(7)
+  it('TRENDING_WINDOW_DAYS should be 30', () => {
+    expect(TRENDING_WINDOW_DAYS).toBe(30)
   })
 
   it('TRENDING_SCALE_MAX should be 10000', () => {

@@ -15,7 +15,6 @@ import {
 import {
   DISCOVERY_RAIL_CAP_FEATURED,
   DISCOVERY_RAIL_CAP_STANDARD,
-  DISCOVERY_RAIL_PREVIEW_SIZE,
 } from '../constants'
 import { DiscoverySnapshotRepository } from '../repositories'
 import type { DiscoverySnapshotSection } from '../repositories/models/schemas'
@@ -60,12 +59,10 @@ const FEATURED_RANK_BASE_SCORE = 10_000
  *    Bayesian scoring.
  * 4. **Score all rails** — for each `DiscoverySectionKey`, produce a ranked
  *    list of `{ quizId, score }` entries capped at the rail-specific limit.
- * 5. **Apply dedupe policy** — hard-exclusive rails (`FEATURED`, `TRENDING`,
- *    `TOP_RATED`) claim quizzes in priority order so that a quiz appears in
- *    at most one exclusive rail. Soft-deduped rails (`MOST_PLAYED`,
- *    `NEW_AND_NOTEWORTHY`, `CATEGORY_SPOTLIGHT`) remove exclusive-claimed
- *    quizzes but allow overlap among themselves. This maximises variety at
- *    the top while tolerating some repetition in secondary sections.
+ * 5. **Convert sections** — flatten the scored sections map to an array in
+ *    display order. Rails are fully independent; no inter-rail deduplication
+ *    is applied so every section can show its strongest candidates even when
+ *    the quiz corpus is small.
  * 6. **Persist** — upsert the singleton snapshot document with the scored,
  *    deduped sections and a `generatedAt` timestamp.
  */
@@ -85,7 +82,7 @@ export class DiscoveryComputeService {
    * 2. Gather recent game stats for trending (O(1) map lookup per quiz).
    * 3. Compute global Bayesian mean from eligible quizzes.
    * 4. Score each rail and cap entries.
-   * 5. Apply hard-exclusive then soft-dedupe policy.
+   * 5. Convert sections to ordered array (no inter-rail deduplication).
    * 6. Upsert the discovery snapshot.
    *
    * Side effects: replaces the singleton discovery snapshot document.
@@ -317,7 +314,9 @@ export class DiscoveryComputeService {
     }))
 
     scored.sort((a, b) => b.score - a.score)
-    return scored.slice(0, DISCOVERY_RAIL_CAP_STANDARD)
+    return scored
+      .filter((e) => e.score > 0)
+      .slice(0, DISCOVERY_RAIL_CAP_STANDARD)
   }
 
   private scoreNewAndNoteworthy(
@@ -385,42 +384,22 @@ export class DiscoveryComputeService {
       Array<{ quizId: string; score: number }>
     >,
   ): DiscoverySnapshotSection[] {
-    const claimed = new Set<string>()
-
-    // Hard-exclusive rails processed in priority order
-    const exclusiveKeys = [
+    // Each rail is fully independent — no inter-rail deduplication.
+    // With a small quiz corpus the cost of a quiz appearing in multiple rails
+    // (e.g. FEATURED and TRENDING simultaneously) is far outweighed by the
+    // benefit of keeping every rail populated.
+    const sectionKeys = [
       DiscoverySectionKey.FEATURED,
       DiscoverySectionKey.TRENDING,
       DiscoverySectionKey.TOP_RATED,
-    ] as const
-
-    const result: DiscoverySnapshotSection[] = []
-
-    for (const key of exclusiveKeys) {
-      const entries = rawSections.get(key) ?? []
-      const deduped = entries.filter((e) => !claimed.has(e.quizId))
-      // Only claim the first DISCOVERY_RAIL_PREVIEW_SIZE entries to avoid
-      // consuming the entire pool and starving soft rails on small deployments.
-      // Deeper "see all" entries do not need to be exclusively reserved.
-      for (const e of deduped.slice(0, DISCOVERY_RAIL_PREVIEW_SIZE)) {
-        claimed.add(e.quizId)
-      }
-      result.push({ key, entries: deduped })
-    }
-
-    // Soft-deduped rails: remove exclusive-claimed, allow overlap among each other
-    const softKeys = [
       DiscoverySectionKey.MOST_PLAYED,
       DiscoverySectionKey.NEW_AND_NOTEWORTHY,
       DiscoverySectionKey.CATEGORY_SPOTLIGHT,
     ] as const
 
-    for (const key of softKeys) {
-      const entries = rawSections.get(key) ?? []
-      const deduped = entries.filter((e) => !claimed.has(e.quizId))
-      result.push({ key, entries: deduped })
-    }
-
-    return result
+    return sectionKeys.map((key) => ({
+      key,
+      entries: rawSections.get(key) ?? [],
+    }))
   }
 }

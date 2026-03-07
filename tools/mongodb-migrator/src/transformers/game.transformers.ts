@@ -65,6 +65,9 @@ export function transformGameDocument(document: BSONDocument): BSONDocument {
     ).map((task) => buildGameTask(task)),
     updated: toDate(extractValueOrThrow<string>(document, {}, 'updated')),
     created: toDate(extractValueOrThrow<string>(document, {}, 'created')),
+    completedAt:
+      toDate(extractValue<string>(document, {}, 'completedAt')) ||
+      toDate(extractValueOrThrow<string>(document, {}, 'updated')),
   }
 }
 

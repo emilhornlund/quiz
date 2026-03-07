@@ -1331,3 +1331,45 @@ Each rail now has a lightweight scroll wrapper (`railWrapper`) that tracks scrol
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.tsx` — converted from stateless FC to a hooks-based component; added `railRef`, `canScrollLeft`/`canScrollRight` state, `updateScrollState` callback, `scroll` helper, `railWrapper` div with conditional `hasScrollLeft`/`hasScrollRight` classes, and two arrow `<button>` elements
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.module.scss` — added `.railWrapper` (position: relative, `::before`/`::after` fade pseudo-elements, `.hasScrollLeft`/`.hasScrollRight` opacity transitions), `.arrowButton` (desktop-only, circular, hover-reveal via `.section:hover` descendant selector), `.arrowPrev`/`.arrowNext` positioning
 - `packages/klurigo-web/src/pages/DiscoverRailsPage/components/DiscoverRailsPageUI/components/DiscoveryRailSection/DiscoveryRailSection.test.tsx` — added five new tests: arrow buttons rendered, correct aria-labels, prev/next `scrollBy` calls, and absence of scroll classes when layout is flat (jsdom)
+
+### Remove inter-rail deduplication & filter MOST_PLAYED to played quizzes
+
+**Problem:**
+Two issues were identified in the discovery compute pipeline on small corpora (63 quizzes):
+
+1. **TRENDING rail missing.** Hard-exclusive deduplication in `applyDedupePolicy` claimed the
+   top-10 FEATURED entries before TRENDING was evaluated. Because quality score rewards total
+   play count, the quizzes with the strongest trending signal (most recent plays) were
+   simultaneously the highest-quality quizzes — and therefore claimed by FEATURED. With only
+   63 quizzes this meant TRENDING was consistently empty.
+
+2. **MOST_PLAYED surfaced unplayed quizzes.** `scoreMostPlayed` did not filter out quizzes
+   where `gameplaySummary.count == 0`, so quizzes that had never been played appeared in the
+   "Most Played" rail (score 0, sorted to the bottom but still present).
+
+**Fix:**
+- `applyDedupePolicy`: Removed all inter-rail deduplication. The `claimed` set, the
+  `exclusiveKeys` / `softKeys` split, and the preview-size claim logic were deleted. The
+  method now simply converts the scored sections map to an ordered `DiscoverySnapshotSection[]`
+  with no filtering. Each rail independently surfaces its best candidates; a quiz appearing in
+  both FEATURED and TRENDING is valid and expected.
+- `scoreMostPlayed`: Added `.filter((e) => e.score > 0)` before `.slice()` — identical to the
+  existing pattern in `scoreTrending`. Quizzes with zero plays are excluded from MOST_PLAYED.
+- Removed the now-unused `DISCOVERY_RAIL_PREVIEW_SIZE` import from the compute service.
+- Updated unit tests:
+  - Replaced "exclusive dedupe" describe block (two tests) with "no inter-rail deduplication"
+    (two tests asserting quizzes *can* appear in multiple rails simultaneously).
+  - Replaced "soft dedupe overlap" describe block with a simplified version of the same idea.
+  - Simplified "missing recent stats" and "trending stats influence" tests: removed the
+    FEATURED-filler quizzes that were only needed to prevent the test quiz from being claimed
+    by the old dedup policy.
+  - Added "MOST_PLAYED filtering" describe block with a test that a quiz with 0 plays is
+    excluded while a played quiz is included.
+
+**Files changed:**
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.ts`
+  — removed `DISCOVERY_RAIL_PREVIEW_SIZE` import; simplified `applyDedupePolicy`; added
+  `.filter((e) => e.score > 0)` in `scoreMostPlayed`; updated JSDoc for `compute()` step 5
+- `packages/klurigo-service/src/modules/discovery-api/services/discovery-compute.service.spec.ts`
+  — replaced exclusive/soft-dedup tests with no-dedup tests; simplified missing-stats and
+  trending-stats tests; added MOST_PLAYED filtering test (11 tests total, all passing)

@@ -156,16 +156,14 @@ describe(DiscoveryComputeService.name, () => {
   })
 
   // -----------------------------------------------------------------------
-  // Exclusive dedupe
+  // No inter-rail deduplication — quizzes appear in all applicable rails
   // -----------------------------------------------------------------------
-  describe('exclusive dedupe', () => {
-    it('a featured quiz does not appear in trending or any other rail', async () => {
+  describe('no inter-rail deduplication', () => {
+    it('a quiz can appear in FEATURED and TRENDING simultaneously', async () => {
       const featuredQuiz = makeQuiz({
         discovery: { featuredRank: 1 },
         gameplaySummary: { count: 9999, totalPlayerCount: 5000 } as never,
-        ratingSummary: { count: 500, avg: 5.0 } as never,
       })
-
       const otherQuiz = makeQuiz({
         gameplaySummary: { count: 10, totalPlayerCount: 5 } as never,
       })
@@ -180,109 +178,31 @@ describe(DiscoveryComputeService.name, () => {
 
       await service.compute()
 
-      const featuredIds = getSectionEntryIds(DiscoverySectionKey.FEATURED)
-      expect(featuredIds).toContain(featuredQuiz._id)
-
-      // Should not appear in any other rail
-      for (const key of [
-        DiscoverySectionKey.TRENDING,
-        DiscoverySectionKey.TOP_RATED,
-        DiscoverySectionKey.MOST_PLAYED,
-        DiscoverySectionKey.NEW_AND_NOTEWORTHY,
-        DiscoverySectionKey.CATEGORY_SPOTLIGHT,
-      ]) {
-        expect(getSectionEntryIds(key)).not.toContain(featuredQuiz._id)
-      }
-    })
-
-    it('a trending quiz does not appear in most_played', async () => {
-      // Create many quizzes so the trending quiz doesn't also land in FEATURED
-      const trendingQuiz = makeQuiz({
-        gameplaySummary: { count: 500, totalPlayerCount: 200 } as never,
-      })
-      // Fill FEATURED cap so trendingQuiz is pushed out
-      const featuredFillers = Array.from(
-        { length: DISCOVERY_RAIL_CAP_FEATURED },
-        (_, i) => makeQuiz({ discovery: { featuredRank: i + 1 } }),
+      expect(getSectionEntryIds(DiscoverySectionKey.FEATURED)).toContain(
+        featuredQuiz._id,
       )
-
-      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([
-        ...featuredFillers,
-        trendingQuiz,
-      ])
-      gameRepo.findRecentGameStats.mockResolvedValueOnce([
-        { quizId: trendingQuiz._id, playCount: 5000 },
-      ])
-
-      await service.compute()
-
-      const trendingIds = getSectionEntryIds(DiscoverySectionKey.TRENDING)
-      expect(trendingIds).toContain(trendingQuiz._id)
-
-      const mostPlayedIds = getSectionEntryIds(DiscoverySectionKey.MOST_PLAYED)
-      expect(mostPlayedIds).not.toContain(trendingQuiz._id)
+      // With no dedup the featured quiz also appears in TRENDING
+      expect(getSectionEntryIds(DiscoverySectionKey.TRENDING)).toContain(
+        featuredQuiz._id,
+      )
     })
-  })
 
-  // -----------------------------------------------------------------------
-  // Soft dedupe overlap
-  // -----------------------------------------------------------------------
-  describe('soft dedupe overlap', () => {
-    it('a quiz can appear in both MOST_PLAYED and NEW_AND_NOTEWORTHY if not claimed by exclusive rails', async () => {
+    it('a quiz can appear in both MOST_PLAYED and NEW_AND_NOTEWORTHY', async () => {
       const sharedQuiz = makeQuiz({
         gameplaySummary: { count: 100, totalPlayerCount: 50 } as never,
         created: new Date('2026-01-15'),
-        category: QuizCategory.History,
       })
-
-      // Fill exclusive rails so sharedQuiz is excluded from them
-      const featuredFillers = Array.from(
-        { length: DISCOVERY_RAIL_CAP_FEATURED },
-        (_, i) =>
-          makeQuiz({
-            discovery: { featuredRank: i + 1 },
-            category: QuizCategory.Science,
-          }),
-      )
-      // Give trending fillers high recent play counts
-      const trendingFillers = Array.from(
-        { length: DISCOVERY_RAIL_CAP_STANDARD },
-        () =>
-          makeQuiz({
-            ratingSummary: { count: 200, avg: 4.8 } as never,
-            category: QuizCategory.Science,
-          }),
-      )
-
-      const allQuizzes = [...featuredFillers, ...trendingFillers, sharedQuiz]
-      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce(allQuizzes)
-
-      // Give trending fillers high recent plays so they fill trending
-      const trendingStats = trendingFillers.map((q, i) => ({
-        quizId: q._id,
-        playCount: 9000 - i,
-      }))
-      gameRepo.findRecentGameStats.mockResolvedValueOnce(trendingStats)
+      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([sharedQuiz])
+      gameRepo.findRecentGameStats.mockResolvedValueOnce([])
 
       await service.compute()
 
-      // sharedQuiz should not be in any exclusive rail
-      for (const key of [
-        DiscoverySectionKey.FEATURED,
-        DiscoverySectionKey.TRENDING,
-        DiscoverySectionKey.TOP_RATED,
-      ]) {
-        expect(getSectionEntryIds(key)).not.toContain(sharedQuiz._id)
-      }
-
-      // But should be in soft rails
-      const mostPlayed = getSectionEntryIds(DiscoverySectionKey.MOST_PLAYED)
-      const newNoteworthy = getSectionEntryIds(
-        DiscoverySectionKey.NEW_AND_NOTEWORTHY,
+      expect(getSectionEntryIds(DiscoverySectionKey.MOST_PLAYED)).toContain(
+        sharedQuiz._id,
       )
-
-      expect(mostPlayed).toContain(sharedQuiz._id)
-      expect(newNoteworthy).toContain(sharedQuiz._id)
+      expect(
+        getSectionEntryIds(DiscoverySectionKey.NEW_AND_NOTEWORTHY),
+      ).toContain(sharedQuiz._id)
     })
   })
 
@@ -357,28 +277,41 @@ describe(DiscoveryComputeService.name, () => {
   })
 
   // -----------------------------------------------------------------------
+  // MOST_PLAYED filtering
+  // -----------------------------------------------------------------------
+  describe('MOST_PLAYED filtering', () => {
+    it('quizzes with 0 plays are excluded from MOST_PLAYED', async () => {
+      const playedQuiz = makeQuiz({
+        gameplaySummary: { count: 5, totalPlayerCount: 3 } as never,
+      })
+      const unplayedQuiz = makeQuiz()
+
+      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([
+        playedQuiz,
+        unplayedQuiz,
+      ])
+      gameRepo.findRecentGameStats.mockResolvedValueOnce([])
+
+      await service.compute()
+
+      const mostPlayed = getSectionEntryIds(DiscoverySectionKey.MOST_PLAYED)
+      expect(mostPlayed).toContain(playedQuiz._id)
+      expect(mostPlayed).not.toContain(unplayedQuiz._id)
+    })
+  })
+
+  // -----------------------------------------------------------------------
   // Missing stats → excluded from TRENDING
   // -----------------------------------------------------------------------
   describe('missing recent stats', () => {
     it('quizzes with no game stats are excluded from TRENDING', async () => {
-      // Provide enough quizzes with one having a featured rank so the
-      // quiz-under-test doesn't get claimed by FEATURED before TRENDING
       const quiz = makeQuiz()
-      const featuredFillers = Array.from(
-        { length: DISCOVERY_RAIL_CAP_FEATURED },
-        (_, i) => makeQuiz({ discovery: { featuredRank: i + 1 } }),
-      )
-      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([
-        ...featuredFillers,
-        quiz,
-      ])
+      quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([quiz])
       // No game stats returned
       gameRepo.findRecentGameStats.mockResolvedValueOnce([])
 
       await service.compute()
 
-      // Zero-score quizzes must not occupy TRENDING slots — they would
-      // otherwise be claimed as exclusive and starve other rails.
       const trending = getSection(DiscoverySectionKey.TRENDING)
       const entry = trending?.entries.find((e) => e.quizId === quiz._id)
       expect(entry).toBeUndefined()
@@ -390,17 +323,10 @@ describe(DiscoveryComputeService.name, () => {
   // -----------------------------------------------------------------------
   describe('trending stats influence', () => {
     it('a quiz with non-zero recent stats scores higher in TRENDING than one without', async () => {
-      // Fill FEATURED so test quizzes don't land there
-      const featuredFillers = Array.from(
-        { length: DISCOVERY_RAIL_CAP_FEATURED },
-        (_, i) => makeQuiz({ discovery: { featuredRank: i + 1 } }),
-      )
-
       const quizWithStats = makeQuiz()
       const quizWithoutStats = makeQuiz()
 
       quizRepo.findEligiblePublicQuizzes.mockResolvedValueOnce([
-        ...featuredFillers,
         quizWithStats,
         quizWithoutStats,
       ])
