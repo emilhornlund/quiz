@@ -67,7 +67,9 @@ const QuizDiscoveryCard: FC<QuizDiscoveryCardProps> = ({ quiz }) => {
         )}
       </div>
       <div className={styles.body}>
-        <h3 className={styles.title}>{quiz.title}</h3>
+        <h3 className={styles.title} title={quiz.title}>
+          {quiz.title}
+        </h3>
         <span className={styles.author}>{quiz.author.name}</span>
         <div className={styles.meta}>
           <span className={styles.metaItem}>
