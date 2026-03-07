@@ -33,6 +33,7 @@ describe('UserService', () => {
   let tokenService: {
     signVerifyEmailToken: jest.Mock
     signPasswordResetToken: jest.Mock
+    consumePasswordResetToken: jest.Mock
   }
   let emailService: {
     sendWelcomeEmail: jest.Mock
@@ -57,6 +58,7 @@ describe('UserService', () => {
     tokenService = {
       signVerifyEmailToken: jest.fn(),
       signPasswordResetToken: jest.fn(),
+      consumePasswordResetToken: jest.fn(),
     }
 
     emailService = {
@@ -791,14 +793,18 @@ describe('UserService', () => {
 
       userRepository.findUserByIdOrThrow.mockResolvedValue(mockUser)
       userRepository.findUserByIdAndUpdateOrThrow.mockResolvedValue(mockUser)
+      tokenService.consumePasswordResetToken.mockResolvedValue(undefined)
 
-      await service.setPassword('user-123', newPassword)
+      await service.setPassword('user-123', newPassword, 'test-jti')
 
       expect(userRepository.findUserByIdAndUpdateOrThrow).toHaveBeenCalledWith(
         'user-123',
         expect.objectContaining({
           hashedPassword: expect.any(String),
         }),
+      )
+      expect(tokenService.consumePasswordResetToken).toHaveBeenCalledWith(
+        'test-jti',
       )
       expect(logger.log).toHaveBeenCalledWith(
         expect.stringContaining('Updated password'),
@@ -816,7 +822,7 @@ describe('UserService', () => {
       userRepository.findUserByIdOrThrow.mockResolvedValue(mockGoogleUser)
 
       await expect(
-        service.setPassword('user-123', 'password'),
+        service.setPassword('user-123', 'password', 'test-jti'),
       ).rejects.toBeInstanceOf(ForbiddenException)
 
       expect(logger.debug).toHaveBeenCalledWith(

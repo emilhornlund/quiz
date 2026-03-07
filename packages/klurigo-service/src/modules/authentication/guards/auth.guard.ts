@@ -87,6 +87,14 @@ export class AuthGuard implements CanActivate {
     this.verifyAuthorizedScopesOrThrows(scope, context)
     this.verifyAuthorizedAuthoritiesOrThrows(authorities, context)
 
+    if (authorities.includes(Authority.ResetPassword)) {
+      try {
+        await this.tokenService.tokenExistsOrThrow(payload.jti)
+      } catch {
+        throw new UnauthorizedException()
+      }
+    }
+
     if (scope === TokenScope.User) {
       try {
         request.user = await this.userRepository.findUserByIdOrThrow(sub)

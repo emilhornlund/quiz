@@ -51,15 +51,17 @@ export class Token {
 
   /**
    * The IP address from which the token was issued.
+   * Optional for non-interactive tokens such as password reset tokens.
    */
-  @Prop({ type: String, required: true })
-  ipAddress: string
+  @Prop({ type: String, required: false })
+  ipAddress?: string
 
   /**
    * The User-Agent string of the client when the token was issued.
+   * Optional for non-interactive tokens such as password reset tokens.
    */
-  @Prop({ type: String, required: true })
-  userAgent: string
+  @Prop({ type: String, required: false })
+  userAgent?: string
 
   /**
    * Timestamp when the token was created (ISO-8601 string).

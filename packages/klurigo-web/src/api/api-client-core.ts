@@ -73,7 +73,10 @@ export type ApiClientCoreDeps = {
    * @param type - Token type (Access/Refresh) to retrieve.
    * @returns The token string if present; otherwise `undefined`.
    */
-  getToken: (scope: TokenScope, type: TokenType) => string | undefined
+  getToken: (
+    scope: TokenScope,
+    type: TokenType.Access | TokenType.Refresh,
+  ) => string | undefined
 
   /**
    * Persists a new access/refresh token pair for the provided scope.
