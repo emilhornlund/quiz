@@ -167,7 +167,11 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
           />
           <DetailItem
             icon={faStar}
-            value={`${quiz.ratingSummary.stars || 'N/A'}`}
+            value={
+              quiz.ratingSummary.stars
+                ? `${quiz.ratingSummary.stars} / 5`
+                : 'N/A'
+            }
             title="Average rating"
           />
           <DetailItem

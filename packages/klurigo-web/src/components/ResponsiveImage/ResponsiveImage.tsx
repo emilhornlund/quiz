@@ -24,6 +24,7 @@ export type ResponsiveImageProps = {
   revealEffect?: RevealEffect
   noBorder?: boolean
   noCornerRadius?: boolean
+  borderColor?: string
   fit?: 'contain' | 'fill' | 'width'
   children?: ReactNode | ReactNode[]
 }
@@ -36,6 +37,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   alt,
   noBorder = false,
   noCornerRadius = false,
+  borderColor,
   fit = 'contain',
   revealEffect,
   children,
@@ -149,13 +151,14 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             noBorder ? styles.boxNoBorder : styles.box,
             noCornerRadius ? styles.noRadius : undefined,
           )}
-          style={
-            fit === 'fill'
+          style={{
+            ...(fit === 'fill'
               ? { width: '100%', height: '100%' }
               : fit === 'width'
                 ? { width: '100%', height: box.h }
-                : { width: box.w, height: box.h }
-          }>
+                : { width: box.w, height: box.h }),
+            ...(borderColor ? { borderColor } : undefined),
+          }}>
           {(revealEffect?.type === QuestionImageRevealEffectType.Square3x3 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square5x5 ||
             revealEffect?.type === QuestionImageRevealEffectType.Square8x8) && (
@@ -190,7 +193,8 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             styles.centerOverlay,
             noBorder ? styles.boxNoBorder : styles.box,
             noCornerRadius ? styles.noRadius : undefined,
-          )}>
+          )}
+          style={borderColor ? { borderColor } : undefined}>
           <FontAwesomeIcon
             icon={faLinkSlash}
             className={styles.icon}

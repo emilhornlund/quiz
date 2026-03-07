@@ -305,4 +305,42 @@ describe('ResponsiveImage', () => {
 
     resizeObserverImpl.mockReset()
   })
+
+  it('applies borderColor inline style to box in ready phase', async () => {
+    const { container } = render(
+      <ResponsiveImage
+        imageURL="https://cdn/border.jpg"
+        alt="border"
+        borderColor="red"
+      />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('img')).toBeTruthy()
+    })
+
+    const box = container.querySelector('[class*="box"]') as HTMLElement | null
+    expect(box).toBeTruthy()
+    expect(box?.style.borderColor).toBe('red')
+  })
+
+  it('applies borderColor inline style to error state overlay', async () => {
+    const { container } = render(
+      <ResponsiveImage
+        imageURL="invalid-url"
+        alt="error-border"
+        borderColor="blue"
+      />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('[class*="icon"]')).toBeTruthy()
+    })
+
+    const overlay = container.querySelector(
+      '[class*="centerOverlay"]',
+    ) as HTMLElement | null
+    expect(overlay).toBeTruthy()
+    expect(overlay?.style.borderColor).toBe('blue')
+  })
 })
