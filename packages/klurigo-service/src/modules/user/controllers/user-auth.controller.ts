@@ -160,6 +160,7 @@ export class UserAuthController {
    * Completes the password-reset flow for an authenticated user.
    *
    * @param userId - The unique identifier of the user to reset the password for.
+   * @param payload – The decoded JWT payload; its `jti` is consumed after a successful reset.
    * @param authPasswordResetRequest – DTO containing the user’s new password.
    * @returns A promise that resolves when the password has been reset.
    */
@@ -188,11 +189,13 @@ export class UserAuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   public async setPassword(
     @PrincipalId() userId: string,
+    @JwtPayload() payload: TokenDto,
     @Body() authPasswordResetRequest: AuthPasswordResetRequest,
   ): Promise<void> {
     return this.userService.setPassword(
       userId,
       authPasswordResetRequest.password,
+      payload.jti,
     )
   }
 }

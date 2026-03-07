@@ -166,22 +166,49 @@ export class TokenService {
    * Signs a JWT token for password reset.
    *
    * Generates a token with the `RESET_PASSWORD` authority that expires in 1 hour.
+   * The token is persisted so it can be validated and consumed on use.
    *
    * @param userId – The user ID (JWT `sub` claim) for whom the token is issued.
    * @returns A promise that resolves to the signed password reset token string.
    */
   public async signPasswordResetToken(userId: string): Promise<string> {
-    return this.jwtService.signAsync(
+    const jwtId = uuidv4()
+
+    const token = await this.jwtService.signAsync(
       {
         scope: TokenScope.User,
         authorities: [Authority.ResetPassword],
       },
       {
-        jwtid: uuidv4(),
+        jwtid: jwtId,
         subject: userId,
         expiresIn: '1h',
       },
     )
+
+    await this.tokenRepository.createToken({
+      _id: jwtId,
+      pairId: jwtId,
+      type: TokenType.PasswordReset,
+      scope: TokenScope.User,
+      principalId: userId,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + ms('1h')),
+    })
+
+    return token
+  }
+
+  /**
+   * Consumes a password reset token by deleting it from persistence.
+   *
+   * Should be called after a successful password reset to prevent token reuse.
+   *
+   * @param jti – The JWT ID of the password reset token to consume.
+   * @returns A promise that resolves when the token has been deleted.
+   */
+  public async consumePasswordResetToken(jti: string): Promise<void> {
+    await this.tokenRepository.deleteTokensByPairId(jti)
   }
 
   /**

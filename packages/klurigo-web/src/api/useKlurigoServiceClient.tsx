@@ -39,7 +39,10 @@ export const useKlurigoServiceClient = () => {
    * @returns The token string if present; otherwise `undefined`.
    */
   const getToken = useCallback(
-    (scope: TokenScope, type: TokenType): string | undefined => {
+    (
+      scope: TokenScope,
+      type: TokenType.Access | TokenType.Refresh,
+    ): string | undefined => {
       switch (scope) {
         case TokenScope.User:
           return userAuth?.[type]?.token

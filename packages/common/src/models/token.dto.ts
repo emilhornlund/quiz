@@ -17,6 +17,11 @@ export enum TokenType {
    * Long-lived JSON Web Token used to refresh an access token.
    */
   Refresh = 'REFRESH',
+
+  /**
+   * Single-use JSON Web Token issued to complete a password reset flow.
+   */
+  PasswordReset = 'PASSWORD_RESET',
 }
 
 /**

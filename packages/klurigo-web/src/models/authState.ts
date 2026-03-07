@@ -19,6 +19,6 @@ export type ScopePayload<S extends TokenScope> = (S extends TokenScope.User
  */
 export type AuthState = Partial<{
   [S in TokenScope]: {
-    [T in TokenType]: ScopePayload<S>
+    [T in TokenType.Access | TokenType.Refresh]: ScopePayload<S>
   }
 }>

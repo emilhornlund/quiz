@@ -17,7 +17,10 @@ export type MediaResourceDeps = {
   /**
    * Resolves the current token from storage/context.
    */
-  getToken: (scope: TokenScope, type: TokenType) => string | undefined
+  getToken: (
+    scope: TokenScope,
+    type: TokenType.Access | TokenType.Refresh,
+  ) => string | undefined
 
   /**
    * Emits a success notification to the user.

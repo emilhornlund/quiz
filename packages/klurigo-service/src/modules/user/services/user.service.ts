@@ -434,14 +434,20 @@ export class UserService {
   }
 
   /**
-   * Updates a local user’s password.
+   * Updates a local user’s password and consumes the password reset token.
    *
    * @param userId – The user’s unique identifier.
    * @param password – The new plain-text password to set.
+   * @param jti – The JWT ID of the password reset token; consumed after a successful reset
+   *              to prevent the token from being reused.
    * @returns A promise that resolves when the password has been successfully updated.
    * @throws ForbiddenException if the user is not a local account.
    */
-  public async setPassword(userId: string, password: string): Promise<void> {
+  public async setPassword(
+    userId: string,
+    password: string,
+    jti: string,
+  ): Promise<void> {
     this.logger.log(`Setting password for user '${userId}'.`)
 
     const user = await this.userRepository.findUserByIdOrThrow(userId)
@@ -455,6 +461,8 @@ export class UserService {
       } as LocalUser)
 
       this.logger.log(`Updated password for user '${userId}'.`)
+
+      await this.tokenService.consumePasswordResetToken(jti)
     } else {
       this.logger.debug(`User '${userId}' is not a local account.`)
       throw new ForbiddenException('Incorrect user type')
