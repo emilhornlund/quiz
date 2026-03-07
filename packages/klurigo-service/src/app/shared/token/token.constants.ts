@@ -6,6 +6,7 @@ export const DEFAULT_ACCESS_TOKEN_EXPIRATION_TIME: StringValue = '15m'
 
 export const DEFAULT_GAME_AUTHORITIES: Authority[] = [Authority.Game]
 export const DEFAULT_USER_AUTHORITIES: Authority[] = [
+  Authority.Discovery,
   Authority.Game,
   Authority.Media,
   Authority.Quiz,

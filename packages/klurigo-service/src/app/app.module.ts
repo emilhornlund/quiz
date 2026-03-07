@@ -16,6 +16,7 @@ import Keyv from 'keyv'
 import { MurLockModule } from 'murlock'
 
 import { AuthenticationModule } from '../modules/authentication'
+import { DiscoveryApiModule } from '../modules/discovery-api'
 import { GameApiModule } from '../modules/game-api'
 import { GameAuthenticationModule } from '../modules/game-authentication'
 import { GameCleanupModule } from '../modules/game-cleanup/game-cleanup.module'
@@ -81,6 +82,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
         GOOGLE_CLIENT_ID: Joi.string().required(),
         GOOGLE_CLIENT_SECRET: Joi.string().required(),
         GOOGLE_REDIRECT_URI: Joi.string().required(),
+        DISCOVERY_SEED_ON_INIT: Joi.boolean().optional().default(false),
       }),
       isGlobal: true,
     }),
@@ -196,6 +198,7 @@ const isTestEnv = process.env.NODE_ENV === 'test'
           }),
         ]),
     AuthenticationModule,
+    DiscoveryApiModule,
     GameApiModule,
     GameAuthenticationModule,
     GameCleanupModule,

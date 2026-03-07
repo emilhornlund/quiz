@@ -1,0 +1,302 @@
+@use '../../../../../../styles/colors';
+@use '../../../../../../styles/helpers';
+@use '../../../../../../styles/variables';
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+
+  a {
+    font-weight: bold;
+    color: colors.$white;
+
+    @include helpers.mobile {
+      @include helpers.fontSize(14px);
+    }
+    @include helpers.tablet {
+      @include helpers.fontSize(16px);
+    }
+    @include helpers.desktop {
+      @include helpers.fontSize(18px);
+    }
+  }
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+
+  h2 {
+    @include helpers.mobile {
+      @include helpers.fontSize(20px);
+    }
+    @include helpers.tablet {
+      @include helpers.fontSize(24px);
+    }
+    @include helpers.desktop {
+      @include helpers.fontSize(28px);
+    }
+  }
+
+  p {
+    @include helpers.mobile {
+      @include helpers.fontSize(16px);
+    }
+    @include helpers.tablet {
+      @include helpers.fontSize(18px);
+    }
+    @include helpers.desktop {
+      @include helpers.fontSize(20px);
+    }
+  }
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+  color: colors.$white;
+
+  @include helpers.mobile {
+    @include helpers.fontSize(20px);
+  }
+  @include helpers.tablet {
+    @include helpers.fontSize(22px);
+  }
+  @include helpers.desktop {
+    @include helpers.fontSize(24px);
+  }
+}
+
+.description {
+  margin: 0;
+  color: colors.$white-1-70;
+
+  @include helpers.mobile {
+    @include helpers.fontSize(14px);
+  }
+  @include helpers.tablet {
+    @include helpers.fontSize(16px);
+  }
+  @include helpers.desktop {
+    @include helpers.fontSize(18px);
+  }
+}
+
+.seeAll {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  font-weight: 600;
+  color: colors.$blue-2;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include helpers.mobile {
+    @include helpers.fontSize(12px);
+  }
+  @include helpers.tablet {
+    @include helpers.fontSize(14px);
+  }
+  @include helpers.desktop {
+    @include helpers.fontSize(16px);
+  }
+}
+
+.railWrapper {
+  position: relative;
+
+  // Left edge fade — only when the rail can scroll left
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1rem;
+    background: linear-gradient(to right, colors.$black-1-30, transparent);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  // Right edge fade — only when the rail can scroll right
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 1rem;
+    background: linear-gradient(to left, colors.$black-1-30, transparent);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &.hasScrollLeft::before {
+    opacity: 1;
+  }
+
+  &.hasScrollRight::after {
+    opacity: 1;
+  }
+}
+
+.arrowButton {
+  display: none; // hidden on mobile and tablet
+  position: absolute;
+  top: calc(50% - #{helpers.pxToRem(12px)}); // centre above scrollbar strip
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid colors.$white-1-25;
+  background: rgba(0, 0, 0, 0.35);
+  color: colors.$white;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    background 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  @include helpers.desktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.arrowPrev {
+  left: 0.5rem;
+}
+
+.arrowNext {
+  right: 0.5rem;
+}
+
+// Show arrows on desktop when the section is hovered and the rail can scroll
+// in that direction. The .hasScrollLeft / .hasScrollRight classes on the
+// wrapper gate each arrow independently.
+@include helpers.desktop {
+  .section:hover .railWrapper.hasScrollLeft > .arrowPrev {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .section:hover .railWrapper.hasScrollRight > .arrowNext {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-top: helpers.pxToRem(2px);
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: colors.$white-1-25;
+    border-radius: 3px;
+  }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background-color: colors.$white-1-15;
+  overflow: hidden;
+  scroll-snap-align: start;
+
+  @include helpers.mobile {
+    width: 200px;
+    border-radius: variables.$mobile-control-normal-border-radius;
+  }
+
+  @include helpers.tablet {
+    width: 220px;
+    border-radius: variables.$tablet-control-normal-border-radius;
+  }
+
+  @include helpers.desktop {
+    width: 240px;
+    border-radius: variables.$desktop-control-normal-border-radius;
+  }
+}
+
+.skeletonCover {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: colors.$white-1-70;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.625rem;
+}
+
+.skeletonLine {
+  height: 0.75rem;
+  border-radius: 0.25rem;
+  background: colors.$white-1-70;
+  animation: shimmer 1.5s ease-in-out infinite;
+
+  &:first-child {
+    width: 80%;
+    height: 0.875rem;
+  }
+
+  &:nth-child(2) {
+    width: 50%;
+  }
+
+  &:last-child {
+    width: 60%;
+    margin-top: 0.125rem;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

@@ -1,3 +1,4 @@
+import { QuizVisibility } from '@klurigo/common'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { QueryFilter } from 'mongoose'
@@ -158,6 +159,60 @@ export class QuizRepository extends BaseRepository<Quiz> {
     }
 
     return document
+  }
+
+  /**
+   * Returns public quizzes in paginated batches for discovery snapshot
+   * computation.
+   *
+   * A quiz is included when it satisfies the following minimum criteria:
+   *
+   * - `visibility` is `QuizVisibility.Public`
+   * - `questions` array size is at least 10
+   *
+   * Quizzes without a cover image or without a meaningful description are
+   * **not** excluded — they are included but receive lower quality sub-scores
+   * (`QUALITY_WEIGHT_COVER` and `QUALITY_WEIGHT_DESCRIPTION` respectively),
+   * so they naturally rank below fully-populated quizzes. This ensures all
+   * discovery rails have content even when the quiz corpus is small.
+   *
+   * Results are returned in `_id` order (deterministic for batched iteration).
+   *
+   * @param offset - Number of documents to skip (for batch iteration).
+   * @param limit - Maximum number of documents to return per batch.
+   * @returns Array of matching quiz documents (may be shorter than `limit`
+   *   when the end of the result set is reached).
+   */
+  public async findEligiblePublicQuizzes(
+    offset: number,
+    limit: number,
+  ): Promise<Quiz[]> {
+    return this.quizModel
+      .find({
+        visibility: QuizVisibility.Public,
+        'questions.9': { $exists: true },
+      })
+      .sort({ _id: 1 })
+      .skip(offset)
+      .limit(limit)
+      .exec()
+  }
+
+  /**
+   * Finds multiple quiz documents by their IDs.
+   *
+   * Returns all documents whose `_id` is in the provided array. The order of
+   * the returned documents is not guaranteed to match the order of `ids`.
+   * Documents that do not exist are silently omitted from the result.
+   *
+   * @param ids - Array of quiz document `_id` values to look up.
+   * @returns Array of matching quiz documents (may be shorter than `ids` if some are missing).
+   */
+  public async findManyByIds(ids: string[]): Promise<Quiz[]> {
+    return this.quizModel
+      .find({ _id: { $in: ids } })
+      .populate('owner')
+      .exec()
   }
 
   /**

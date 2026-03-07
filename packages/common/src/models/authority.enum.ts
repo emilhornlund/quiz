@@ -4,6 +4,13 @@
  */
 export enum Authority {
   /**
+   * Permission to access the discovery page endpoints, including the curated
+   * discovery snapshot and paginated section views. Granted to all users by
+   * default.
+   */
+  Discovery = 'DISCOVERY',
+
+  /**
    * Permission to host and manage quiz games, including creating new games,
    * joining existing ones, and tracking game progress.
    */

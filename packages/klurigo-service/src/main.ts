@@ -20,6 +20,7 @@ async function bootstrap() {
     .setTitle('Klurigo Service')
     .setVersion('1.0.0')
     .addTag('auth', 'Operations for user authentication and authorization.')
+    .addTag('discovery', 'Operations for retrieving curated discovery rails.')
     .addTag('game', 'Operations for creating and managing quiz games.')
     .addTag('health', 'Operations determining service health.')
     .addTag('media', 'Operations for uploading and retrieving media assets.')
