@@ -13,14 +13,15 @@ import { AuthContext, type AuthContextType } from '../../context/auth'
 
 import GamePage from './GamePage'
 
-const makeLocation = (overrides: Partial<Location> = {}): Location => ({
-  pathname: '/somewhere',
-  search: '',
-  hash: '',
-  state: null,
-  key: 'test',
-  ...overrides,
-})
+const makeLocation = (overrides: Partial<Location> = {}): Location =>
+  ({
+    pathname: '/somewhere',
+    search: '',
+    hash: '',
+    state: null,
+    key: 'test',
+    ...overrides,
+  }) as Location
 
 vi.mock('./GamePage.module.scss', () => ({
   default: { leaveModalActionButtons: 'leave-modal-actions' },
