@@ -28,6 +28,9 @@ jobs:
   deploy:
     runs-on: self-hosted
     environment: ${{ inputs.target_env }}
+    concurrency:
+      group: deploy-infra-${{ inputs.target_env }}
+      cancel-in-progress: false
     env:
       REGISTRY_HOST: emils-nuc-server:5000
       TAG: ${{ inputs.tag }}

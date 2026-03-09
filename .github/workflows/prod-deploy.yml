@@ -4,6 +4,10 @@ permissions: {}
 on:
   workflow_dispatch:
 
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: false
+
 jobs:
   build:
     permissions:
