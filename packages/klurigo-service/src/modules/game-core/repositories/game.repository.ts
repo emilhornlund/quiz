@@ -49,8 +49,8 @@ export class GameRepository extends BaseRepository<Game> {
     active: boolean = true,
   ): Promise<GameDocument | null> {
     const filter = {
-      _id: gameID,
-      ...(active ? { status: GameStatus.Active } : {}),
+      _id: { $eq: gameID },
+      ...(active ? { status: { $eq: GameStatus.Active } } : {}),
     }
 
     return this.gameModel
@@ -97,7 +97,7 @@ export class GameRepository extends BaseRepository<Game> {
     active: boolean = true,
   ): Promise<GameDocument | null> {
     const filter = {
-      pin: gamePIN,
+      pin: { $eq: gamePIN },
       ...(active ? { status: { $eq: GameStatus.Active } } : {}),
     }
 
