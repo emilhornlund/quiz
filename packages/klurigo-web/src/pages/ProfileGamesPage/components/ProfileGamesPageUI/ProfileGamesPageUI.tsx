@@ -1,41 +1,42 @@
-import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRotateLeft,
+  faMagnifyingGlass,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons'
 import type { GameHistoryDto } from '@klurigo/common'
 import { GameStatus } from '@klurigo/common'
-import { type FC, useMemo } from 'react'
+import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import {
-  Button,
-  Page,
-  PageDivider,
-  Pagination,
-  Typography,
-} from '../../../components'
+import { Button, Page, PageDivider, Typography } from '../../../../components'
 
-import GameTable from './components/GameTable'
+import { ProfileGameCard, ProfileGameCardSkeleton } from './components'
+import styles from './ProfileGamesPageUI.module.scss'
 
 export interface ProfileGamesPageUIProps {
-  items: GameHistoryDto[]
-  total: number
-  limit: number
-  offset: number
+  games: GameHistoryDto[]
+  isLoading: boolean
+  isLoadingMore: boolean
+  isError: boolean
+  hasMore: boolean
+  skeletonCount: number
+  onLoadMore: () => void
   onClick: (id: string, status: GameStatus) => void
-  onChangePagination: (limit: number, offset: number) => void
 }
 
 const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
-  items,
-  total,
-  limit,
-  offset,
+  games,
+  isLoading,
+  isLoadingMore,
+  isError,
+  hasMore,
+  skeletonCount,
+  onLoadMore,
   onClick,
-  onChangePagination,
 }) => {
   const navigate = useNavigate()
 
-  const isEmpty = useMemo(() => !items.length, [items])
-
-  if (isEmpty) {
+  if (!isLoading && !isError && games.length === 0) {
     return (
       <Page align="start" width="medium" discover profile>
         <Typography variant="title">No Games Yet</Typography>
@@ -86,21 +87,48 @@ const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
   }
 
   return (
-    <Page align="start" width="medium" discover profile>
+    <Page align="start" discover profile>
       <Typography variant="title">Game History</Typography>
-
-      <Typography variant="text">
+      <Typography variant="text" size="medium">
         Review your past games and track your performance.
       </Typography>
-
-      <GameTable items={items} onClick={onClick} />
-
-      <Pagination
-        total={total}
-        limit={limit}
-        offset={offset}
-        onChange={onChangePagination}
-      />
+      {isError ? (
+        <p
+          className={styles.emptyState}
+          data-testid="profile-games-empty-state">
+          Oops! Your game history is playing hide-and-seek right now. Please try
+          again.
+        </p>
+      ) : (
+        <>
+          <div className={styles.grid} data-testid="profile-game-grid">
+            {isLoading && games.length === 0
+              ? Array.from({ length: skeletonCount }).map((_, i) => (
+                  <ProfileGameCardSkeleton key={i} />
+                ))
+              : games.map((game) => (
+                  <ProfileGameCard
+                    key={game.id}
+                    game={game}
+                    onClick={onClick}
+                  />
+                ))}
+          </div>
+          {hasMore && (
+            <div className={styles.loadMoreContainer}>
+              <Button
+                id="load-more-games-button"
+                type="button"
+                icon={faArrowRotateLeft}
+                loading={isLoadingMore}
+                onClick={onLoadMore}
+                data-testid="load-more-games-button">
+                Load more games
+              </Button>
+            </div>
+          )}
+        </>
+      )}
     </Page>
   )
 }
