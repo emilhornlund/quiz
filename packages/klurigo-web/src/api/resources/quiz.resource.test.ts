@@ -75,6 +75,33 @@ describe('createQuizResource', () => {
     )
   })
 
+  it('getProfileQuizzes passes all optional filters as query params', async () => {
+    const { api, apiGet } = makeApi()
+    const deps = makeDeps()
+    const quiz = createQuizResource(api, deps)
+
+    const res = { results: [], limit: 20, offset: 0, total: 0 }
+    apiGet.mockResolvedValue(res)
+
+    await expect(
+      quiz.getProfileQuizzes({
+        search: 'history',
+        mode: 'Classic' as import('@klurigo/common').GameMode,
+        visibility: 'Public' as import('@klurigo/common').QuizVisibility,
+        category: 'History' as import('@klurigo/common').QuizCategory,
+        languageCode: 'en' as import('@klurigo/common').LanguageCode,
+        sort: 'title',
+        order: 'asc',
+        limit: 20,
+        offset: 0,
+      }),
+    ).resolves.toBe(res)
+
+    expect(apiGet).toHaveBeenCalledWith(
+      '/profile/quizzes?search=history&mode=Classic&visibility=Public&category=History&languageCode=en&sort=title&order=asc&limit=20&offset=0',
+    )
+  })
+
   it('getPublicQuizzes calls apiGet with query params and returns response', async () => {
     const { api, apiGet } = makeApi()
     const deps = makeDeps()
