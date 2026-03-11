@@ -1,71 +1,82 @@
 import { GameStatus } from '@klurigo/common'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
-import { useEffect, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import { LoadingSpinner, Page } from '../../components'
-import { parseNumber } from '../../utils/helpers'
+import { DeviceType } from '../../utils/device-size.types'
+import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
 
-import ProfileGamesPageUI from './ProfileGamesPageUI'
+import { ProfileGamesPageUI } from './components'
 
 const ProfileGamesPage: FC = () => {
   const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const offset = useMemo(
-    () => Math.max(parseNumber(searchParams.get('offset'), 0), 0),
-    [searchParams],
-  )
-
-  const setOffset = (nextOffset: number) => {
-    const normalized = Math.max(nextOffset ?? 0, 0)
-    const cur = searchParams.get('offset') ?? '0'
-    if (cur !== String(normalized)) {
-      const params = new URLSearchParams(searchParams)
-      params.set('offset', String(normalized))
-      setSearchParams(params, { replace: true })
-    }
-  }
 
   const { getProfileGames, authenticateGame } = useKlurigoServiceClient()
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['myProfileGames', offset],
-    queryFn: () => getProfileGames({ offset, limit: 5 }),
+  const deviceType = useDeviceSizeType()
+
+  // Calculate items per page based on device to avoid partial rows
+  // Desktop: 4 cols × 5 rows = 20
+  // Tablet: 3 cols × 5 rows = 15
+  // Mobile: 2 cols × 5 rows = 10
+  const itemsPerPage = useMemo(() => {
+    if (deviceType === DeviceType.Desktop) return 20
+    if (deviceType === DeviceType.Tablet) return 15
+    return 10
+  }, [deviceType])
+
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['myProfileGames', itemsPerPage],
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) =>
+      getProfileGames({ limit: itemsPerPage, offset: pageParam }),
+    getNextPageParam: (lastPage, allPages) => {
+      const loadedCount = allPages.flatMap((page) => page.results).length
+      return loadedCount < lastPage.total ? loadedCount : undefined
+    },
   })
 
-  const handleClickGame = (id: string, status: GameStatus) => {
-    if (status === GameStatus.Active) {
-      authenticateGame({ gameId: id }).then(() => navigate('/game'))
-    } else if (status === GameStatus.Completed) {
-      navigate(`/game/results/${id}`)
-    }
-  }
+  const games = data?.pages.flatMap((page) => page.results) ?? []
 
-  useEffect(() => {
-    if (isError) {
-      navigate('/')
-    }
-  }, [isError, navigate])
+  const handleLoadMore = useCallback(() => {
+    fetchNextPage().then()
+  }, [fetchNextPage])
 
-  if (isLoading || !data) {
-    return (
-      <Page align="center" discover profile>
-        <LoadingSpinner />
-      </Page>
-    )
-  }
+  const handleClickGame = useCallback(
+    async (id: string, status: GameStatus) => {
+      if (status === GameStatus.Active) {
+        try {
+          await authenticateGame({ gameId: id })
+          navigate('/game')
+        } catch {
+          // Authentication failed — do not navigate
+        }
+      } else if (status === GameStatus.Completed) {
+        navigate(`/game/results/${id}`)
+      }
+    },
+    [authenticateGame, navigate],
+  )
 
   return (
     <ProfileGamesPageUI
-      items={data.results}
-      total={data.total}
-      limit={data.limit}
-      offset={data.offset}
+      games={games}
+      isLoading={isLoading}
+      isLoadingMore={isFetchingNextPage}
+      isError={isError}
+      hasMore={hasNextPage}
+      skeletonCount={itemsPerPage}
+      onLoadMore={handleLoadMore}
       onClick={handleClickGame}
-      onChangePagination={(_, nextOffset) => setOffset(nextOffset)}
     />
   )
 }

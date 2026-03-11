@@ -1,0 +1,560 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProfileGamesPageUI > should render ProfileGamesPageUI empty state with no results 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content startAlign"
+    >
+      <div
+        class="contentWrapper mediumWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <h1
+            class="typography title full"
+          >
+            No Games Yet
+          </h1>
+          <p
+            class="typography text full"
+          >
+            Host live quizzes and play together with others. Your games will appear here once you start.
+          </p>
+          <div
+            class="pageDivider"
+          />
+          <h2
+            class="typography subtitle medium"
+          >
+            Looking for something to play?
+          </h2>
+          <p
+            class="typography text medium"
+          >
+            Browse quizzes made by others and host a live game in seconds.
+          </p>
+          <div
+            class="buttonInputContainer buttonInputKindPrimary buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-discover-quizzes-button-button"
+              id="discover-quizzes-button"
+              name="discover-quizzes-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-magnifying-glass"
+                data-icon="magnifying-glass"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376C296.3 401.1 253.9 416 208 416 93.1 416 0 322.9 0 208S93.1 0 208 0 416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Discover quizzes
+              </span>
+            </button>
+          </div>
+          <div
+            class="pageDivider"
+          />
+          <h2
+            class="typography subtitle medium"
+          >
+            Want to make your own?
+          </h2>
+          <p
+            class="typography text medium"
+          >
+            Create a quiz in minutes and reuse it for future games.
+          </p>
+          <div
+            class="buttonInputContainer buttonInputKindCallToAction buttonInputSizeSmall"
+          >
+            <button
+              data-testid="test-create-quiz-button-button"
+              id="create-quiz-button"
+              name="create-quiz-button"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-plus"
+                data-icon="plus"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 448 512"
+              >
+                <path
+                  d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span>
+                Create a quiz
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`] = `
+<div>
+  <div
+    class="main"
+  >
+    <div
+      class="header"
+    >
+      <button
+        class="logo"
+      >
+        <img
+          alt="Klurigo"
+          class="icon"
+          src="/src/assets/images/klurigo-icon.svg"
+        />
+        <span
+          class="text"
+        >
+          Klurigo
+        </span>
+      </button>
+      <div
+        class="side"
+      >
+        <a
+          data-discover="true"
+          href="/auth/login"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+    <div
+      class="content startAlign"
+    >
+      <div
+        class="contentWrapper fullWidth"
+      >
+        <div
+          class="contentInner"
+        >
+          <h1
+            class="typography title full"
+          >
+            Game History
+          </h1>
+          <p
+            class="typography text medium"
+          >
+            Review your past games and track your performance.
+          </p>
+          <div
+            class="grid"
+            data-testid="profile-game-grid"
+          >
+            <button
+              class="card"
+              data-testid="profile-game-card"
+              type="button"
+            >
+              <div
+                class="cover"
+              >
+                <div
+                  class="coverFallback"
+                  data-testid="cover-fallback"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-image"
+                    data-icon="image"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm64 80a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM272 224c8.4 0 16.1 4.4 20.5 11.5l88 144c4.5 7.4 4.7 16.7 .5 24.3S368.7 416 360 416L88 416c-8.9 0-17.2-5-21.3-12.9s-3.5-17.5 1.6-24.8l56-80c4.5-6.4 11.8-10.2 19.7-10.2s15.2 3.8 19.7 10.2l26.4 37.8 61.4-100.5c4.4-7.1 12.1-11.5 20.5-11.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="body"
+              >
+                <h3
+                  class="title"
+                  title="Math Marathon"
+                >
+                  Math Marathon
+                </h3>
+                <div
+                  class="info"
+                >
+                  <span
+                    class="item active"
+                    data-testid="info-active"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-circle-play"
+                      data-icon="circle-play"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zM188.3 147.1c-7.6 4.2-12.3 12.3-12.3 20.9l0 176c0 8.7 4.7 16.7 12.3 20.9s16.8 4.1 24.3-.5l144-88c7.1-4.4 11.5-12.1 11.5-20.5s-4.4-16.1-11.5-20.5l-144-88c-7.4-4.5-16.7-4.7-24.3-.5z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Ongoing
+                  </span>
+                </div>
+                <div
+                  class="meta"
+                >
+                  <span
+                    class="metaItem"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-gamepad"
+                      data-icon="gamepad"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    0 to 100
+                  </span>
+                  <span
+                    class="metaItem"
+                    title="2025-04-27 09:49:14"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-clock"
+                      data-icon="clock"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    5 minutes ago
+                  </span>
+                </div>
+              </div>
+            </button>
+            <button
+              class="card"
+              data-testid="profile-game-card"
+              type="button"
+            >
+              <div
+                class="cover"
+              >
+                <div
+                  class="coverFallback"
+                  data-testid="cover-fallback"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-image"
+                    data-icon="image"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm64 80a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM272 224c8.4 0 16.1 4.4 20.5 11.5l88 144c4.5 7.4 4.7 16.7 .5 24.3S368.7 416 360 416L88 416c-8.9 0-17.2-5-21.3-12.9s-3.5-17.5 1.6-24.8l56-80c4.5-6.4 11.8-10.2 19.7-10.2s15.2 3.8 19.7 10.2l26.4 37.8 61.4-100.5c4.4-7.1 12.1-11.5 20.5-11.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="body"
+              >
+                <h3
+                  class="title"
+                  title="Science Challenge"
+                >
+                  Science Challenge
+                </h3>
+                <div
+                  class="info"
+                >
+                  <span
+                    class="item host"
+                    data-testid="info-host"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-user-tie"
+                      data-icon="user-tie"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 448 512"
+                    >
+                      <path
+                        d="M224 248a120 120 0 1 1 0-240 120 120 0 1 1 0 240zm-30.5 56l61 0c9.7 0 17.5 7.8 17.5 17.5 0 4.2-1.5 8.2-4.2 11.4l-27.4 32 31 115.1 .6 0 34.6-138.5c2.2-8.7 11.1-14 19.5-10.8 61.9 23.6 105.9 83.6 105.9 153.8 0 15.1-12.3 27.4-27.4 27.4L43.4 512c-15.1 0-27.4-12.3-27.4-27.4 0-70.2 44-130.2 105.9-153.8 8.4-3.2 17.3 2.1 19.5 10.8l34.6 138.5 .6 0 31-115.1-27.4-32c-2.7-3.2-4.2-7.2-4.2-11.4 0-9.7 7.8-17.5 17.5-17.5z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Host
+                  </span>
+                </div>
+                <div
+                  class="meta"
+                >
+                  <span
+                    class="metaItem"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-gamepad"
+                      data-icon="gamepad"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    0 to 100
+                  </span>
+                  <span
+                    class="metaItem"
+                    title="2025-04-27 09:42:14"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-clock"
+                      data-icon="clock"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    12 minutes ago
+                  </span>
+                </div>
+              </div>
+            </button>
+            <button
+              class="card"
+              data-testid="profile-game-card"
+              type="button"
+            >
+              <div
+                class="cover"
+              >
+                <div
+                  class="coverFallback"
+                  data-testid="cover-fallback"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-image"
+                    data-icon="image"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm64 80a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM272 224c8.4 0 16.1 4.4 20.5 11.5l88 144c4.5 7.4 4.7 16.7 .5 24.3S368.7 416 360 416L88 416c-8.9 0-17.2-5-21.3-12.9s-3.5-17.5 1.6-24.8l56-80c4.5-6.4 11.8-10.2 19.7-10.2s15.2 3.8 19.7 10.2l26.4 37.8 61.4-100.5c4.4-7.1 12.1-11.5 20.5-11.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="body"
+              >
+                <h3
+                  class="title"
+                  title="World History Battle"
+                >
+                  World History Battle
+                </h3>
+                <div
+                  class="info"
+                >
+                  <span
+                    class="item rank"
+                    data-testid="info-rank"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-ranking-star"
+                      data-icon="ranking-star"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 576 512"
+                    >
+                      <path
+                        d="M321.8 54.1L298.2 6.3c-3.9-8.3-16.1-8.6-20.4 0l-23.6 47.8-52.3 7.5c-9.3 1.4-13.3 12.9-6.4 19.8l38 37-9 52.1c-1.4 9.3 8.2 16.5 16.8 12.2l46.9-24.8 46.6 24.4c8.6 4.3 18.3-2.9 16.8-12.2l-9-52.1 38-36.6c6.8-6.8 2.9-18.3-6.4-19.8l-52.3-7.5zM256 256c-26.5 0-48 21.5-48 48l0 160c0 26.5 21.5 48 48 48l64 0c26.5 0 48-21.5 48-48l0-160c0-26.5-21.5-48-48-48l-64 0zM48 320c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48l64 0c26.5 0 48-21.5 48-48l0-96c0-26.5-21.5-48-48-48l-64 0zM416 432l0 32c0 26.5 21.5 48 48 48l64 0c26.5 0 48-21.5 48-48l0-32c0-26.5-21.5-48-48-48l-64 0c-26.5 0-48 21.5-48 48z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    1
+                  </span>
+                  <span
+                    class="item score"
+                    data-testid="info-score"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-star"
+                      data-icon="star"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 576 512"
+                    >
+                      <path
+                        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    9200
+                  </span>
+                </div>
+                <div
+                  class="meta"
+                >
+                  <span
+                    class="metaItem"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-gamepad"
+                      data-icon="gamepad"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 640 512"
+                    >
+                      <path
+                        d="M448 64c106 0 192 86 192 192S554 448 448 448l-256 0C86 448 0 362 0 256S86 64 192 64l256 0zM192 176c-13.3 0-24 10.7-24 24l0 32-32 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l32 0 0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-32 32 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-32 0 0-32c0-13.3-10.7-24-24-24zm240 96a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm64-96a32 32 0 1 0 0 64 32 32 0 1 0 0-64z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Classic
+                  </span>
+                  <span
+                    class="metaItem"
+                    title="2025-04-27 07:54:14"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-clock"
+                      data-icon="clock"
+                      data-prefix="fas"
+                      role="img"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    2 hours ago
+                  </span>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            class="loadMoreContainer"
+          >
+            <div
+              class="buttonInputContainer buttonInputKindPrimary"
+            >
+              <button
+                data-testid="test-load-more-games-button-button"
+                id="load-more-games-button"
+                name="load-more-games-button"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-arrow-rotate-left"
+                  data-icon="arrow-rotate-left"
+                  data-prefix="fas"
+                  role="img"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M256 64c-56.8 0-107.9 24.7-143.1 64l47.1 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 192c-17.7 0-32-14.3-32-32L0 32C0 14.3 14.3 0 32 0S64 14.3 64 32l0 54.7C110.9 33.6 179.5 0 256 0 397.4 0 512 114.6 512 256S397.4 512 256 512c-87 0-163.9-43.4-210.1-109.7-10.1-14.5-6.6-34.4 7.9-44.6s34.4-6.6 44.6 7.9c34.8 49.8 92.4 82.3 157.6 82.3 106 0 192-86 192-192S362 64 256 64z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>
+                  Load more games
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
