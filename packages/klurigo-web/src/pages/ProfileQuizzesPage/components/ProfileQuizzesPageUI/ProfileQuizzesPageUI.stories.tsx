@@ -137,10 +137,47 @@ export const Default = {
       },
     ],
     filter: {},
-    pagination: { total: 10, limit: 5, offset: 0 },
     isLoading: false,
     isError: false,
+    hasMore: true,
+    skeletonCount: 10,
+    onLoadMore: () => undefined,
     onChangeSearchParams: () => undefined,
     onCreateQuiz: () => undefined,
+  },
+} satisfies Story
+
+export const AllLoaded = {
+  args: {
+    ...Default.args,
+    hasMore: false,
+  },
+} satisfies Story
+
+export const Empty = {
+  args: {
+    quizzes: [],
+    filter: {},
+    isLoading: false,
+    isError: false,
+    hasMore: false,
+    skeletonCount: 10,
+    onLoadMore: () => undefined,
+    onChangeSearchParams: () => undefined,
+    onCreateQuiz: () => undefined,
+  },
+} satisfies Story
+
+export const Loading = {
+  args: {
+    ...Empty.args,
+    isLoading: true,
+  },
+} satisfies Story
+
+export const Error = {
+  args: {
+    ...Empty.args,
+    isError: true,
   },
 } satisfies Story

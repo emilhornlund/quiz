@@ -49,9 +49,9 @@ describe('useQuizzesSearchOptions', () => {
     expect(options.category).toBeUndefined()
     expect(options.languageCode).toBeUndefined()
     expect(options.mode).toBeUndefined()
-    expect(options.sort).toBeUndefined()
-    expect(options.order).toBeUndefined()
-    expect(options.limit).toBe(25)
+    expect(options.sort).toBe('updated')
+    expect(options.order).toBe('desc')
+    expect(options.limit).toBe(20)
     expect(options.offset).toBe(0)
   })
 
@@ -103,8 +103,8 @@ describe('useQuizzesSearchOptions', () => {
     expect(options.category).toBeUndefined()
     expect(options.languageCode).toBeUndefined()
     expect(options.mode).toBeUndefined()
-    expect(options.sort).toBeUndefined()
-    expect(options.order).toBeUndefined()
+    expect(options.sort).toBe('updated')
+    expect(options.order).toBe('desc')
   })
 
   it('falls back for invalid or missing limit/offset', () => {
@@ -113,7 +113,7 @@ describe('useQuizzesSearchOptions', () => {
     const { result } = renderHook(() => useQuizzesSearchOptions())
     const { options } = result.current
 
-    expect(options.limit).toBe(25)
+    expect(options.limit).toBe(20)
     expect(options.offset).toBe(0)
   })
 

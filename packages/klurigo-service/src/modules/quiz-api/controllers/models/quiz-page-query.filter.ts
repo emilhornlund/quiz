@@ -93,8 +93,8 @@ export class QuizPageQueryFilter {
     description: 'The field by which to sort the results.',
     enum: ['title', 'created', 'updated'],
     required: false,
-    default: 'title',
-    example: 'title',
+    default: 'updated',
+    example: 'updated',
   })
   @IsOptional()
   @IsEnum(['title', 'created', 'updated'], {

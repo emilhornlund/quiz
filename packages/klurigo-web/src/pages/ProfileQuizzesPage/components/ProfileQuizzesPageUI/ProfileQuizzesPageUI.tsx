@@ -1,4 +1,4 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRotateLeft, faPlus } from '@fortawesome/free-solid-svg-icons'
 import type { QuizResponseDto } from '@klurigo/common'
 import {
   GameMode,
@@ -7,16 +7,12 @@ import {
   QuizVisibility,
 } from '@klurigo/common'
 import type { FC } from 'react'
-import { useState } from 'react'
 
-import {
-  Button,
-  LoadingSpinner,
-  Page,
-  QuizTable,
-  Typography,
-} from '../../../../components'
+import { Button, Page, Typography } from '../../../../components'
 import QuizTableFilter from '../../../../components/QuizTableFilter'
+
+import { ProfileQuizCard, ProfileQuizCardSkeleton } from './components'
+import styles from './ProfileQuizzesPageUI.module.scss'
 
 export interface ProfileQuizzesPageUISearchParams {
   search?: string
@@ -32,56 +28,48 @@ export interface ProfileQuizzesPageUISearchParams {
 
 export interface ProfileQuizzesPageUIProps {
   quizzes: QuizResponseDto[]
-  pagination: { total: number; limit: number; offset: number }
   filter: ProfileQuizzesPageUISearchParams
   isLoading: boolean
   isError: boolean
+  hasMore: boolean
+  skeletonCount: number
+  onLoadMore: () => void
   onChangeSearchParams: (params: ProfileQuizzesPageUISearchParams) => void
   onCreateQuiz: () => void
 }
 
 const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
   quizzes,
-  pagination,
   filter,
   isLoading,
   isError,
+  hasMore,
+  skeletonCount,
+  onLoadMore,
   onChangeSearchParams,
   onCreateQuiz,
 }) => {
-  const [hasSearchFilter, setHasSearchFilter] = useState<boolean>(false)
-
-  const handleSearchFilterChange = (
-    params: ProfileQuizzesPageUISearchParams,
-  ) => {
-    onChangeSearchParams({ ...params, offset: 0 })
-    setHasSearchFilter(
-      !!params.search?.length ||
-        !!params.mode ||
-        !!params.languageCode ||
-        !!params.visibility,
-    )
-  }
+  const hasSearchFilter = !!(
+    filter.search?.length ||
+    filter.visibility ||
+    filter.category ||
+    filter.languageCode ||
+    filter.mode
+  )
 
   return (
     <Page align="start" discover profile>
-      <Typography variant="title">
-        {quizzes.length || hasSearchFilter
-          ? 'Your Quizzes'
-          : "You Haven't Created Any Quizzes Yet"}
-      </Typography>
+      <Typography variant="title">Your Quiz Shelf</Typography>
       <Typography variant="text" size="medium">
-        {quizzes.length || hasSearchFilter
-          ? "Here's a list of your quizzes. You can edit them or host live games as needed."
-          : 'Start creating engaging quizzes and share them with your audience.\n' +
-            'Your creations will appear here!'}
+        All your quiz creations, lined up and ready for their next moment in the
+        spotlight.
       </Typography>
       <Button
         id="create-quiz-button"
         type="button"
         kind="call-to-action"
         size="small"
-        value="Create New Quiz"
+        value="Create Quiz"
         icon={faPlus}
         iconPosition="leading"
         onClick={onCreateQuiz}
@@ -89,24 +77,42 @@ const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
       {(!!quizzes.length || hasSearchFilter) && (
         <QuizTableFilter
           filter={filter}
-          onChange={handleSearchFilterChange}
+          onChange={onChangeSearchParams}
           showVisibilityFilter
         />
       )}
-      {!isLoading && !isError && quizzes ? (
-        <QuizTable
-          items={quizzes}
-          pagination={{
-            total: pagination.total,
-            limit: pagination.limit,
-            offset: pagination.offset,
-          }}
-          onPagination={(newLimit, newOffset) =>
-            onChangeSearchParams({ limit: newLimit, offset: newOffset })
-          }
-        />
+      {isError || (!isLoading && quizzes.length === 0) ? (
+        <p className={styles.emptyState} data-testid="profile-empty-state">
+          {isError
+            ? 'Oops! Your quizzes are playing hide-and-seek right now. Please try again.'
+            : hasSearchFilter
+              ? 'No quiz cards matched that combo. Try mixing up your filters.'
+              : 'Your quiz shelf is empty. Time to create your first one!'}
+        </p>
       ) : (
-        <LoadingSpinner />
+        <>
+          <div className={styles.grid} data-testid="profile-quiz-grid">
+            {isLoading && quizzes.length === 0
+              ? Array.from({ length: skeletonCount }).map((_, i) => (
+                  <ProfileQuizCardSkeleton key={i} />
+                ))
+              : quizzes.map((quiz) => (
+                  <ProfileQuizCard key={quiz.id} quiz={quiz} />
+                ))}
+          </div>
+          {hasMore && !isLoading && (
+            <div className={styles.loadMoreContainer}>
+              <Button
+                id="load-more-button"
+                type="button"
+                icon={faArrowRotateLeft}
+                onClick={onLoadMore}
+                data-testid="load-more-button">
+                Load more quizzes
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </Page>
   )
