@@ -1,5 +1,4 @@
 import {
-  DEFAULT_QUIZ_PAGINATION_LIMIT,
   GameMode,
   LanguageCode,
   QuizCategory,
@@ -8,7 +7,9 @@ import {
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { DeviceType } from './device-size.types'
 import { parseNumber } from './helpers'
+import { useDeviceSizeType } from './useDeviceSizeType'
 
 type Sort = 'title' | 'created' | 'updated'
 type Order = 'asc' | 'desc'
@@ -59,6 +60,18 @@ const parseEnum = <T extends string>(
 export function useQuizzesSearchOptions() {
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const deviceType = useDeviceSizeType()
+
+  // Calculate items per page based on device to avoid partial rows
+  // Desktop: 4 cols × 5 rows = 20
+  // Tablet: 3 cols × 5 rows = 15
+  // Mobile: 2 cols × 5 rows = 10
+  const itemsPerPage = useMemo(() => {
+    if (deviceType === DeviceType.Desktop) return 20
+    if (deviceType === DeviceType.Tablet) return 15
+    return 10
+  }, [deviceType])
+
   const options: ProfileQuizzesOptions = useMemo(() => {
     const search = searchParams.get('search') || undefined
     const visibility = parseEnum<QuizVisibility>(
@@ -81,19 +94,18 @@ export function useQuizzesSearchOptions() {
       GameMode as any,
       searchParams.get('mode'),
     )
-    const sort = parseEnum<Sort>(
-      { title: 'title', created: 'created', updated: 'updated' },
-      searchParams.get('sort'),
-    )
-    const order = parseEnum<Order>(
-      { asc: 'asc', desc: 'desc' },
-      searchParams.get('order'),
-    )
+    const sort =
+      parseEnum<Sort>(
+        { title: 'title', created: 'created', updated: 'updated' },
+        searchParams.get('sort'),
+      ) || 'updated'
+    const order =
+      parseEnum<Order>(
+        { asc: 'asc', desc: 'desc' },
+        searchParams.get('order'),
+      ) || 'desc'
 
-    const limit = parseNumber(
-      searchParams.get('limit'),
-      DEFAULT_QUIZ_PAGINATION_LIMIT,
-    )
+    const limit = parseNumber(searchParams.get('limit'), itemsPerPage)
     const offset = parseNumber(searchParams.get('offset'), 0)
 
     return {
@@ -107,7 +119,7 @@ export function useQuizzesSearchOptions() {
       limit,
       offset,
     }
-  }, [searchParams])
+  }, [itemsPerPage, searchParams])
 
   /**
    * Merge patch into current options and write to the URL.

@@ -11,6 +11,7 @@ import {
   type QuizRatingDto,
   type QuizRequestDto,
   type QuizResponseDto,
+  type QuizVisibility,
 } from '@klurigo/common'
 
 import type { ApiClientCore } from '../api-client-core'
@@ -55,12 +56,20 @@ export const createQuizResource = (
   /**
    * Retrieves the quizzes associated with the current user.
    *
-   * @param options.limit - The maximum number of quizzes to retrieve per page.
-   * @param options.offset - The number of quizzes to skip before starting retrieval.
+   * Supports optional filtering by search term, mode, visibility, category, and language,
+   * as well as sorting and pagination.
    *
+   * @param options - Query options controlling filtering, sorting, and pagination.
    * @returns A promise resolving to the quizzes in a paginated format as a `PaginatedQuizResponseDto`.
    */
   const getProfileQuizzes = (options: {
+    search?: string
+    mode?: GameMode
+    visibility?: QuizVisibility
+    category?: QuizCategory
+    languageCode?: LanguageCode
+    sort?: 'title' | 'created' | 'updated'
+    order?: 'asc' | 'desc'
     limit: number
     offset: number
   }): Promise<PaginatedQuizResponseDto> =>

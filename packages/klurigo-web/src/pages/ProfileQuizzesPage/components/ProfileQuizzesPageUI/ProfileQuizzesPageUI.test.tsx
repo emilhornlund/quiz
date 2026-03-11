@@ -4,17 +4,19 @@ import {
   QuizCategory,
   QuizVisibility,
 } from '@klurigo/common'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import ProfileQuizzesPageUI from './ProfileQuizzesPageUI'
 
 const authorId = uuidv4()
 
 describe('ProfileQuizzesPageUI', () => {
-  it('should render ProfileQuizzesPageUI', async () => {
+  const FIXED_DATE = new Date('2025-06-15T12:00:00.000Z')
+
+  it('should render ProfileQuizzesPageUI with card grid', async () => {
     const { container } = render(
       <MemoryRouter>
         <ProfileQuizzesPageUI
@@ -35,11 +37,11 @@ describe('ProfileQuizzesPageUI', () => {
                 count: 9,
                 totalPlayerCount: 102,
                 difficultyPercentage: 0.22,
-                lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
+                lastPlayed: FIXED_DATE,
               },
               ratingSummary: { stars: 0, comments: 0 },
-              created: new Date(),
-              updated: new Date(),
+              created: FIXED_DATE,
+              updated: FIXED_DATE,
             },
             {
               id: 'cb9e0c33-3f19-4b93-a976-acba28db8f82',
@@ -56,11 +58,11 @@ describe('ProfileQuizzesPageUI', () => {
                 count: 6,
                 totalPlayerCount: 58,
                 difficultyPercentage: 0.41,
-                lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6),
+                lastPlayed: FIXED_DATE,
               },
               ratingSummary: { stars: 0, comments: 0 },
-              created: new Date(),
-              updated: new Date(),
+              created: FIXED_DATE,
+              updated: FIXED_DATE,
             },
             {
               id: '8b6323a1-21ab-467b-b0d2-b835d7831ba7',
@@ -77,11 +79,11 @@ describe('ProfileQuizzesPageUI', () => {
                 count: 4,
                 totalPlayerCount: 31,
                 difficultyPercentage: 0.56,
-                lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12),
+                lastPlayed: FIXED_DATE,
               },
               ratingSummary: { stars: 0, comments: 0 },
-              created: new Date(),
-              updated: new Date(),
+              created: FIXED_DATE,
+              updated: FIXED_DATE,
             },
             {
               id: 'cc11c2f4-7d2d-4630-8780-d3e4e2dae743',
@@ -98,11 +100,11 @@ describe('ProfileQuizzesPageUI', () => {
                 count: 2,
                 totalPlayerCount: 17,
                 difficultyPercentage: 0.74,
-                lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 25),
+                lastPlayed: FIXED_DATE,
               },
               ratingSummary: { stars: 0, comments: 0 },
-              created: new Date(),
-              updated: new Date(),
+              created: FIXED_DATE,
+              updated: FIXED_DATE,
             },
             {
               id: 'c3550303-7f77-48bf-b114-e0d0c1152c0f',
@@ -119,17 +121,19 @@ describe('ProfileQuizzesPageUI', () => {
                 count: 1,
                 totalPlayerCount: 9,
                 difficultyPercentage: 0.86,
-                lastPlayed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 40),
+                lastPlayed: FIXED_DATE,
               },
               ratingSummary: { stars: 0, comments: 0 },
-              created: new Date(),
-              updated: new Date(),
+              created: FIXED_DATE,
+              updated: FIXED_DATE,
             },
           ]}
           filter={{}}
-          pagination={{ total: 10, limit: 5, offset: 0 }}
           isLoading={false}
           isError={false}
+          hasMore={true}
+          skeletonCount={10}
+          onLoadMore={() => undefined}
           onChangeSearchParams={() => undefined}
           onCreateQuiz={() => undefined}
         />
@@ -137,5 +141,57 @@ describe('ProfileQuizzesPageUI', () => {
     )
 
     expect(container).toMatchSnapshot()
+  })
+
+  it('shows "no quizzes yet" empty state when no quizzes and no filter', () => {
+    render(
+      <MemoryRouter>
+        <ProfileQuizzesPageUI
+          quizzes={[]}
+          filter={{}}
+          isLoading={false}
+          isError={false}
+          hasMore={false}
+          skeletonCount={10}
+          onLoadMore={vi.fn()}
+          onChangeSearchParams={vi.fn()}
+          onCreateQuiz={vi.fn()}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByTestId('profile-empty-state')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Your quiz shelf is empty. Time to create your first one!',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId('profile-quiz-grid')).not.toBeInTheDocument()
+  })
+
+  it('shows "no matching quizzes" empty state when filters active but no results', () => {
+    render(
+      <MemoryRouter>
+        <ProfileQuizzesPageUI
+          quizzes={[]}
+          filter={{ search: 'xyz' }}
+          isLoading={false}
+          isError={false}
+          hasMore={false}
+          skeletonCount={10}
+          onLoadMore={vi.fn()}
+          onChangeSearchParams={vi.fn()}
+          onCreateQuiz={vi.fn()}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByTestId('profile-empty-state')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'No quiz cards matched that combo. Try mixing up your filters.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId('profile-quiz-grid')).not.toBeInTheDocument()
   })
 })
