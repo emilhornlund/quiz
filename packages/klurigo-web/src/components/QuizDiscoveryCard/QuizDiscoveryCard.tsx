@@ -1,18 +1,10 @@
-import {
-  faImage,
-  faListOl,
-  faPlay,
-  faStar,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faListOl, faPlay, faStar } from '@fortawesome/free-solid-svg-icons'
 import type { DiscoveryQuizCardDto } from '@klurigo/common'
 import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { classNames } from '../../utils/helpers'
-import ResponsiveImage from '../ResponsiveImage'
-
-import styles from './QuizDiscoveryCard.module.scss'
+import colors from '../../styles/colors.module.scss'
+import { CardInfoItem, CardMetaItem, MediaInfoCard } from '../MediaInfoCard'
 
 /**
  * Props for the QuizDiscoveryCard component.
@@ -36,59 +28,43 @@ const QuizDiscoveryCard: FC<QuizDiscoveryCardProps> = ({ quiz }) => {
     navigate(`/quiz/details/${quiz.id}`)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleClick()
-    }
-  }
+  const info = (
+    <CardInfoItem size="small" data-testid="info-author">
+      {quiz.author.name}
+    </CardInfoItem>
+  )
+
+  const meta = (
+    <>
+      <CardMetaItem icon={faListOl} data-testid="meta-number-of-questions">
+        {quiz.numberOfQuestions}
+      </CardMetaItem>
+
+      <CardMetaItem icon={faPlay} data-testid="meta-number-of-plays">
+        {quiz.gameplaySummary.count}
+      </CardMetaItem>
+
+      {quiz.ratingSummary.stars > 0 && (
+        <CardMetaItem
+          icon={faStar}
+          textColor={colors.gold}
+          data-testid="meta-rating">
+          {quiz.ratingSummary.stars.toFixed(1)}
+        </CardMetaItem>
+      )}
+    </>
+  )
 
   return (
-    <div
-      className={styles.card}
-      role="button"
-      tabIndex={0}
+    <MediaInfoCard
+      title={quiz.title}
+      imageURL={quiz.imageCoverURL}
+      imageAlt={quiz.title}
+      info={info}
+      meta={meta}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      data-testid="quiz-discovery-card">
-      <div className={styles.cover}>
-        {quiz.imageCoverURL ? (
-          <ResponsiveImage
-            imageURL={quiz.imageCoverURL}
-            alt={quiz.title}
-            fit="fill"
-            noCornerRadius
-            noBorder
-          />
-        ) : (
-          <div className={styles.coverFallback} data-testid="cover-fallback">
-            <FontAwesomeIcon icon={faImage} />
-          </div>
-        )}
-      </div>
-      <div className={styles.body}>
-        <h3 className={styles.title} title={quiz.title}>
-          {quiz.title}
-        </h3>
-        <span className={styles.author}>{quiz.author.name}</span>
-        <div className={styles.meta}>
-          <span className={styles.metaItem}>
-            <FontAwesomeIcon icon={faListOl} />
-            {quiz.numberOfQuestions}
-          </span>
-          <span className={styles.metaItem}>
-            <FontAwesomeIcon icon={faPlay} />
-            {quiz.gameplaySummary.count}
-          </span>
-          {quiz.ratingSummary.stars > 0 && (
-            <span className={classNames(styles.metaItem, styles.rating)}>
-              <FontAwesomeIcon icon={faStar} />
-              {quiz.ratingSummary.stars.toFixed(1)}
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
+      data-testid="quiz-discovery-card"
+    />
   )
 }
 

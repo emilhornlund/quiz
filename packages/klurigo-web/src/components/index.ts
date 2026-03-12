@@ -10,6 +10,11 @@ export type { ConfirmDialogProps } from './ConfirmDialog'
 export type { DropzoneProps } from './Dropzone'
 export type { IconTooltipProps } from './IconTooltip'
 export type { LeaderboardProps } from './Leaderboard'
+export type {
+  CardInfoItemProps,
+  CardMetaItemProps,
+  MediaInfoCardProps,
+} from './MediaInfoCard'
 export type { MediaModalProps } from './MediaModal'
 export type { MenuProps, MenuItemProps } from './Menu'
 export type { ModalProps } from './Modal'
@@ -65,6 +70,7 @@ export { default as IconTooltip } from './IconTooltip'
 export { default as InfiniteScrollContainer } from './InfiniteScrollContainer'
 export { default as Leaderboard } from './Leaderboard'
 export { default as LoadingSpinner } from './LoadingSpinner'
+export { CardInfoItem, CardMetaItem, MediaInfoCard } from './MediaInfoCard'
 export { default as MediaModal } from './MediaModal'
 export { Menu, MenuItem, MenuSeparator } from './Menu'
 export { default as Modal } from './Modal'

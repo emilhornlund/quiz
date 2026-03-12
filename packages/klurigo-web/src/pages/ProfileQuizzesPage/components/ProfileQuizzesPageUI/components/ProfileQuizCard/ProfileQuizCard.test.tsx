@@ -113,6 +113,16 @@ describe('ProfileQuizCard', () => {
     expect(screen.getByTestId('cover-fallback')).toBeInTheDocument()
   })
 
+  it('does not display fallback icon when cover image is provided', () => {
+    render(
+      <MemoryRouter>
+        <ProfileQuizCard quiz={mockQuiz} />
+      </MemoryRouter>,
+    )
+
+    expect(screen.queryByTestId('cover-fallback')).not.toBeInTheDocument()
+  })
+
   it('displays correct visibility label for private quiz', () => {
     const privateQuiz = { ...mockQuiz, visibility: QuizVisibility.Private }
 
