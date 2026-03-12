@@ -4,7 +4,6 @@ export {
   type CallToActionCardProps,
   default as CallToActionCard,
 } from './CallToActionCard'
-export type { CardProps } from './Card'
 export type { CircularProgressBarProps } from './CircularProgressBar'
 export type { ConfettiProps, ConfettiIntensity } from './Confetti'
 export type { ConfirmDialogProps } from './ConfirmDialog'
@@ -54,7 +53,6 @@ export {
   IconButtonArrowLeft,
   IconButtonArrowRight,
 } from './Button'
-export { default as Card } from './Card'
 export {
   default as CircularProgressBar,
   CircularProgressBarSize,
