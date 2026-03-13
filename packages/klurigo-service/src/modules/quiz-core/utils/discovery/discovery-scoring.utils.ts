@@ -154,6 +154,21 @@ export const QUALITY_WEIGHT_RATING = 10
 export const QUALITY_WEIGHT_QUESTION_MEDIA = 10
 
 /**
+ * Weight of the question info density sub-score within the overall quality
+ * score.
+ *
+ * The sub-score is the proportion of questions that have a non-blank `info`
+ * property, scaled to this weight:
+ * `(questionsWithInfo / totalQuestions) * QUALITY_WEIGHT_QUESTION_INFO`.
+ *
+ * A quiz where every question has info receives the full weight; a quiz with
+ * no question info receives 0.
+ *
+ * Default: `10`
+ */
+export const QUALITY_WEIGHT_QUESTION_INFO = 10
+
+/**
  * Weight of the question type variety sub-score within the overall quality
  * score.
  *
@@ -260,7 +275,7 @@ export function computeBayesianRatingScore(
 /**
  * Computes an overall quality score for a quiz in the range [0, 100].
  *
- * The score is a weighted sum of eight independent sub-scores. Accepting
+ * The score is a weighted sum of nine independent sub-scores. Accepting
  * `globalMean` and `minRatingCount` as explicit parameters (rather than
  * reading from global state) keeps this function **deterministic and pure**:
  * the same inputs always produce the same output, making it trivially
@@ -285,7 +300,10 @@ export function computeBayesianRatingScore(
  *    `(questionsWithMedia / totalQuestions) * 10`. `Pin` questions are treated
  *    as always having media because they carry a required `imageURL` field
  *    instead of the standard `media` subdocument.
- * 8. Question type variety (`QUALITY_WEIGHT_QUESTION_VARIETY` = 10): proportion
+ * 8. Question info density (`QUALITY_WEIGHT_QUESTION_INFO` = 10): proportion
+ *    of questions that have a non-blank `info` property —
+ *    `(questionsWithInfo / totalQuestions) * 10`.
+ * 9. Question type variety (`QUALITY_WEIGHT_QUESTION_VARIETY` = 10): proportion
  *    of distinct question types used out of `TOTAL_QUESTION_TYPES` (6) —
  *    `(uniqueTypeCount / TOTAL_QUESTION_TYPES) * 10`.
  *
@@ -371,7 +389,14 @@ export function computeQualityScore(
         QUALITY_WEIGHT_QUESTION_MEDIA
       : 0
 
-  // Sub-score 8: question type variety — proportion of distinct types out of total
+  // Sub-score 8: question info density — proportion of questions with non-blank info.
+  const infoScore =
+    questions.length > 0
+      ? (questions.filter((q) => q.info?.trim()).length / questions.length) *
+        QUALITY_WEIGHT_QUESTION_INFO
+      : 0
+
+  // Sub-score 9: question type variety — proportion of distinct types out of total
   const uniqueTypeCount = new Set(questions.map((q) => q.type)).size
   const varietyScore =
     questions.length > 0
@@ -379,15 +404,17 @@ export function computeQualityScore(
         QUALITY_WEIGHT_QUESTION_VARIETY
       : 0
 
-  return (
+  return Math.min(
+    100,
     coverScore +
-    descScore +
-    questionScore +
-    playScore +
-    playerScore +
-    ratingScore +
-    mediaScore +
-    varietyScore
+      descScore +
+      questionScore +
+      playScore +
+      playerScore +
+      ratingScore +
+      mediaScore +
+      infoScore +
+      varietyScore,
   )
 }
 
