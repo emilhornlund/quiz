@@ -1,4 +1,9 @@
-import { QuestionType, RangeQuestionCorrectAnswerDto } from '@klurigo/common'
+import {
+  QuestionType,
+  QUIZ_RANGE_MAX_VALUE,
+  QUIZ_RANGE_MIN_VALUE,
+  RangeQuestionCorrectAnswerDto,
+} from '@klurigo/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min } from 'class-validator'
 
@@ -23,13 +28,13 @@ export class RangeQuestionCorrectAnswerRequest implements RangeQuestionCorrectAn
     title: 'Value',
     description: 'The correct value for the range answer.',
     required: true,
-    minimum: -10000,
-    maximum: 10000,
+    minimum: QUIZ_RANGE_MIN_VALUE,
+    maximum: QUIZ_RANGE_MAX_VALUE,
     type: Number,
     example: 50,
   })
   @IsNumber()
-  @Min(-10000)
-  @Max(10000)
+  @Min(QUIZ_RANGE_MIN_VALUE)
+  @Max(QUIZ_RANGE_MAX_VALUE)
   value: number
 }

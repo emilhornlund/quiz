@@ -1,4 +1,8 @@
-import type { QuestionRangeDto } from '@klurigo/common'
+import {
+  type QuestionRangeDto,
+  QUIZ_RANGE_MAX_VALUE,
+  QUIZ_RANGE_MIN_VALUE,
+} from '@klurigo/common'
 import {
   MediaType,
   QuestionRangeAnswerMargin,
@@ -68,6 +72,8 @@ export const classicRangeRules = defineRules<QuestionRangeDto>()({
   min: {
     kind: 'number',
     integer: true,
+    min: QUIZ_RANGE_MIN_VALUE,
+    max: QUIZ_RANGE_MAX_VALUE,
     custom: mustBeLessThanOrEqual<QuestionRangeDto>(
       (dto) => dto.max,
       'Min must be less than or equal to max.',
@@ -77,6 +83,8 @@ export const classicRangeRules = defineRules<QuestionRangeDto>()({
   max: {
     kind: 'number',
     integer: true,
+    min: QUIZ_RANGE_MIN_VALUE,
+    max: QUIZ_RANGE_MAX_VALUE,
     custom: mustBeGreaterThanOrEqual<QuestionRangeDto>(
       (dto) => dto.min,
       'Max must be greater than or equal to min.',

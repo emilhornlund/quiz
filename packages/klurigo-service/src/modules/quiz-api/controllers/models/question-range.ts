@@ -2,6 +2,8 @@ import {
   QuestionRangeAnswerMargin,
   QuestionRangeDto,
   QuestionType,
+  QUIZ_RANGE_MAX_VALUE,
+  QUIZ_RANGE_MIN_VALUE,
 } from '@klurigo/common'
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger'
 import { IsNumber, Max, Min, Validate } from 'class-validator'
@@ -81,13 +83,13 @@ export class QuestionRange implements QuestionRangeDto {
       'The correct value for the range question, which must be within the range of min and max.',
     example: 50,
     required: true,
-    minimum: -10000,
-    maximum: 10000,
+    minimum: QUIZ_RANGE_MIN_VALUE,
+    maximum: QUIZ_RANGE_MAX_VALUE,
     type: Number,
   })
   @IsNumber()
-  @Min(-10000)
-  @Max(10000)
+  @Min(QUIZ_RANGE_MIN_VALUE)
+  @Max(QUIZ_RANGE_MAX_VALUE)
   @Validate(InRangeValidator, ['correct', 'min', 'max'])
   correct: number
 
