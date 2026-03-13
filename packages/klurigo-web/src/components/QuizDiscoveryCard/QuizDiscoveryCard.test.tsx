@@ -4,7 +4,8 @@ import {
   LanguageCode,
   QuizCategory,
 } from '@klurigo/common'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -102,40 +103,44 @@ describe('QuizDiscoveryCard', () => {
     expect(screen.queryByText('0.0')).not.toBeInTheDocument()
   })
 
-  it('navigates to quiz details on click', () => {
+  it('navigates to quiz details on click', async () => {
+    const user = userEvent.setup()
+
     render(
       <MemoryRouter>
         <QuizDiscoveryCard quiz={makeQuiz()} />
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByTestId('quiz-discovery-card'))
+    await user.click(screen.getByTestId('quiz-discovery-card'))
     expect(navigateMock).toHaveBeenCalledWith('/quiz/details/quiz-1')
   })
 
-  it('navigates on Enter key press', () => {
+  it('navigates on Enter key press', async () => {
+    const user = userEvent.setup()
+
     render(
       <MemoryRouter>
         <QuizDiscoveryCard quiz={makeQuiz()} />
       </MemoryRouter>,
     )
 
-    fireEvent.keyDown(screen.getByTestId('quiz-discovery-card'), {
-      key: 'Enter',
-    })
+    screen.getByTestId('quiz-discovery-card').focus()
+    await user.keyboard('{Enter}')
     expect(navigateMock).toHaveBeenCalledWith('/quiz/details/quiz-1')
   })
 
-  it('navigates on Space key press', () => {
+  it('navigates on Space key press', async () => {
+    const user = userEvent.setup()
+
     render(
       <MemoryRouter>
         <QuizDiscoveryCard quiz={makeQuiz()} />
       </MemoryRouter>,
     )
 
-    fireEvent.keyDown(screen.getByTestId('quiz-discovery-card'), {
-      key: ' ',
-    })
+    screen.getByTestId('quiz-discovery-card').focus()
+    await user.keyboard(' ')
     expect(navigateMock).toHaveBeenCalledWith('/quiz/details/quiz-1')
   })
 })

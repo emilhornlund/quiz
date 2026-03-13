@@ -235,12 +235,13 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   class="info"
                 >
                   <span
-                    class="item active"
+                    class="infoItem"
                     data-testid="info-active"
                   >
                     <svg
                       aria-hidden="true"
                       class="svg-inline--fa fa-circle-play"
+                      color="orange2"
                       data-icon="circle-play"
                       data-prefix="fas"
                       role="img"
@@ -259,6 +260,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-gamemode"
                   >
                     <svg
                       aria-hidden="true"
@@ -277,6 +279,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   </span>
                   <span
                     class="metaItem"
+                    data-testid="meta-created"
                     title="2025-04-27 09:49:14"
                   >
                     <svg
@@ -337,12 +340,13 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   class="info"
                 >
                   <span
-                    class="item host"
+                    class="infoItem"
                     data-testid="info-host"
                   >
                     <svg
                       aria-hidden="true"
                       class="svg-inline--fa fa-user-tie"
+                      color="blue2"
                       data-icon="user-tie"
                       data-prefix="fas"
                       role="img"
@@ -361,6 +365,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-gamemode"
                   >
                     <svg
                       aria-hidden="true"
@@ -379,6 +384,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   </span>
                   <span
                     class="metaItem"
+                    data-testid="meta-created"
                     title="2025-04-27 09:42:14"
                   >
                     <svg
@@ -439,12 +445,13 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   class="info"
                 >
                   <span
-                    class="item rank"
+                    class="infoItem"
                     data-testid="info-rank"
                   >
                     <svg
                       aria-hidden="true"
                       class="svg-inline--fa fa-ranking-star"
+                      color="green2"
                       data-icon="ranking-star"
                       data-prefix="fas"
                       role="img"
@@ -458,12 +465,13 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                     1
                   </span>
                   <span
-                    class="item score"
+                    class="infoItem"
                     data-testid="info-score"
                   >
                     <svg
                       aria-hidden="true"
                       class="svg-inline--fa fa-star"
+                      color="yellow2"
                       data-icon="star"
                       data-prefix="fas"
                       role="img"
@@ -482,6 +490,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-gamemode"
                   >
                     <svg
                       aria-hidden="true"
@@ -500,6 +509,7 @@ exports[`ProfileGamesPageUI > should render ProfileGamesPageUI with card grid 1`
                   </span>
                   <span
                     class="metaItem"
+                    data-testid="meta-created"
                     title="2025-04-27 07:54:14"
                   >
                     <svg

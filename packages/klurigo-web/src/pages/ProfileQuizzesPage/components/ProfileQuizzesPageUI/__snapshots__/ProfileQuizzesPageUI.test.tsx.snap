@@ -166,11 +166,10 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
             class="grid"
             data-testid="profile-quiz-grid"
           >
-            <div
+            <button
               class="card"
               data-testid="profile-quiz-card"
-              role="button"
-              tabindex="0"
+              type="button"
             >
               <div
                 class="cover"
@@ -206,6 +205,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-visibility"
                   >
                     <svg
                       aria-hidden="true"
@@ -223,8 +223,9 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                     Public
                   </span>
                   <span
-                    class="metaItem updated"
-                    title="Updated 2025-06-15 12:00:00"
+                    class="metaItem"
+                    data-testid="meta-updated"
+                    title="2025-06-15 12:00:00"
                   >
                     <svg
                       aria-hidden="true"
@@ -239,16 +240,15 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                         fill="currentColor"
                       />
                     </svg>
-                    8 months ago
+                    9 months ago
                   </span>
                 </div>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               class="card"
               data-testid="profile-quiz-card"
-              role="button"
-              tabindex="0"
+              type="button"
             >
               <div
                 class="cover"
@@ -286,6 +286,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-visibility"
                   >
                     <svg
                       aria-hidden="true"
@@ -303,8 +304,9 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                     Private
                   </span>
                   <span
-                    class="metaItem updated"
-                    title="Updated 2025-06-15 12:00:00"
+                    class="metaItem"
+                    data-testid="meta-updated"
+                    title="2025-06-15 12:00:00"
                   >
                     <svg
                       aria-hidden="true"
@@ -319,16 +321,15 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                         fill="currentColor"
                       />
                     </svg>
-                    8 months ago
+                    9 months ago
                   </span>
                 </div>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               class="card"
               data-testid="profile-quiz-card"
-              role="button"
-              tabindex="0"
+              type="button"
             >
               <div
                 class="cover"
@@ -366,6 +367,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-visibility"
                   >
                     <svg
                       aria-hidden="true"
@@ -383,8 +385,9 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                     Public
                   </span>
                   <span
-                    class="metaItem updated"
-                    title="Updated 2025-06-15 12:00:00"
+                    class="metaItem"
+                    data-testid="meta-updated"
+                    title="2025-06-15 12:00:00"
                   >
                     <svg
                       aria-hidden="true"
@@ -399,16 +402,15 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                         fill="currentColor"
                       />
                     </svg>
-                    8 months ago
+                    9 months ago
                   </span>
                 </div>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               class="card"
               data-testid="profile-quiz-card"
-              role="button"
-              tabindex="0"
+              type="button"
             >
               <div
                 class="cover"
@@ -446,6 +448,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-visibility"
                   >
                     <svg
                       aria-hidden="true"
@@ -463,8 +466,9 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                     Private
                   </span>
                   <span
-                    class="metaItem updated"
-                    title="Updated 2025-06-15 12:00:00"
+                    class="metaItem"
+                    data-testid="meta-updated"
+                    title="2025-06-15 12:00:00"
                   >
                     <svg
                       aria-hidden="true"
@@ -479,16 +483,15 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                         fill="currentColor"
                       />
                     </svg>
-                    8 months ago
+                    9 months ago
                   </span>
                 </div>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               class="card"
               data-testid="profile-quiz-card"
-              role="button"
-              tabindex="0"
+              type="button"
             >
               <div
                 class="cover"
@@ -526,6 +529,7 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                 >
                   <span
                     class="metaItem"
+                    data-testid="meta-visibility"
                   >
                     <svg
                       aria-hidden="true"
@@ -543,8 +547,9 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                     Public
                   </span>
                   <span
-                    class="metaItem updated"
-                    title="Updated 2025-06-15 12:00:00"
+                    class="metaItem"
+                    data-testid="meta-updated"
+                    title="2025-06-15 12:00:00"
                   >
                     <svg
                       aria-hidden="true"
@@ -559,11 +564,11 @@ exports[`ProfileQuizzesPageUI > should render ProfileQuizzesPageUI with card gri
                         fill="currentColor"
                       />
                     </svg>
-                    8 months ago
+                    9 months ago
                   </span>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
           <div
             class="loadMoreContainer"
