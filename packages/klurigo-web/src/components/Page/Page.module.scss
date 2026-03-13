@@ -45,21 +45,15 @@
     width: 100%;
 
     @include helpers.mobile {
-      padding: variables.$mobile-narrow-layout-gutter
-        variables.$mobile-narrow-layout-gutter 0
-        variables.$mobile-narrow-layout-gutter;
+      padding: variables.$mobile-narrow-layout-gutter;
       column-gap: variables.$mobile-narrow-layout-gutter;
     }
     @include helpers.tablet {
-      padding: variables.$tablet-narrow-layout-gutter
-        variables.$tablet-narrow-layout-gutter 0
-        variables.$tablet-narrow-layout-gutter;
+      padding: variables.$tablet-narrow-layout-gutter;
       column-gap: variables.$tablet-narrow-layout-gutter;
     }
     @include helpers.desktop {
-      padding: variables.$desktop-narrow-layout-gutter
-        variables.$desktop-narrow-layout-gutter 0
-        variables.$desktop-narrow-layout-gutter;
+      padding: variables.$desktop-narrow-layout-gutter;
       column-gap: variables.$desktop-narrow-layout-gutter;
     }
 

@@ -169,7 +169,7 @@ const QuizDetailsPageUI: FC<QuizDetailsPageUIProps> = ({
             icon={faStar}
             value={
               quiz.ratingSummary.stars
-                ? `${quiz.ratingSummary.stars} / 5`
+                ? `${quiz.ratingSummary.stars.toFixed(1)} / 5.0`
                 : 'N/A'
             }
             title="Average rating"

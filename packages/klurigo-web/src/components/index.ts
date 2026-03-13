@@ -32,11 +32,6 @@ export type { PodiumProps, PodiumValue } from './Podium'
 export type { ProgressBarProps } from './ProgressBar'
 export type { ProtectedRouteProps } from './ProtectedRoute'
 export type { QuizDiscoveryCardProps } from './QuizDiscoveryCard'
-export type {
-  QuizTableItem,
-  QuizTablePagination,
-  QuizTableProps,
-} from './QuizTable'
 export type { QuizTableFilterProps } from './QuizTableFilter'
 export type { ResponsiveImageProps } from './ResponsiveImage'
 export type { ResponsivePlayerProps } from './ResponsivePlayer'
@@ -85,7 +80,6 @@ export { default as Podium } from './Podium'
 export { default as ProgressBar } from './ProgressBar'
 export { default as ProtectedRoute } from './ProtectedRoute'
 export { default as QuizDiscoveryCard } from './QuizDiscoveryCard'
-export { default as QuizTable } from './QuizTable'
 export { default as QuizTableFilter } from './QuizTableFilter'
 export { default as ResponsiveImage } from './ResponsiveImage'
 export { default as ResponsivePlayer } from './ResponsivePlayer'
