@@ -12,6 +12,7 @@ import {
   QUALITY_WEIGHT_DESCRIPTION,
   QUALITY_WEIGHT_PLAYERS,
   QUALITY_WEIGHT_PLAYS,
+  QUALITY_WEIGHT_QUESTION_INFO,
   QUALITY_WEIGHT_QUESTION_MEDIA,
   QUALITY_WEIGHT_QUESTION_VARIETY,
   QUALITY_WEIGHT_QUESTIONS,
@@ -94,6 +95,10 @@ describe('Discovery Scoring Utils — constants', () => {
 
   it('QUALITY_WEIGHT_QUESTION_MEDIA should be 10', () => {
     expect(QUALITY_WEIGHT_QUESTION_MEDIA).toBe(10)
+  })
+
+  it('QUALITY_WEIGHT_QUESTION_INFO should be 10', () => {
+    expect(QUALITY_WEIGHT_QUESTION_INFO).toBe(10)
   })
 
   it('QUALITY_WEIGHT_QUESTION_VARIETY should be 10', () => {
@@ -317,6 +322,7 @@ describe('computeQualityScore', () => {
       Array.from({ length: 5 }, (_, i) => ({
         _id: `q${ti}_${i}`,
         type,
+        info: `Info ${ti}_${i}`,
         media: { type: 'IMAGE', url: `https://img.com/q${ti}_${i}.jpg` },
       })),
     )
@@ -541,6 +547,82 @@ describe('computeQualityScore', () => {
         computeQualityScore(withEmpty, globalMean, minRatingCount),
       ).toBeCloseTo(
         computeQualityScore(withUndefined, globalMean, minRatingCount),
+        5,
+      )
+    })
+  })
+
+  describe('question info density sub-score', () => {
+    it('quiz with info on all questions should score higher than quiz with none', () => {
+      const withoutInfo = makeQuiz()
+      const withAllInfo = makeQuiz({
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          info: `Helpful info ${i}`,
+        })) as any,
+      })
+      expect(
+        computeQualityScore(withAllInfo, globalMean, minRatingCount),
+      ).toBeGreaterThan(
+        computeQualityScore(withoutInfo, globalMean, minRatingCount),
+      )
+    })
+
+    it('all questions with info should yield the full info weight', () => {
+      const withoutInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withAllInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          info: `Helpful info ${i}`,
+        })) as any,
+      })
+      const diff =
+        computeQualityScore(withAllInfo, globalMean, minRatingCount) -
+        computeQualityScore(withoutInfo, globalMean, minRatingCount)
+      expect(diff).toBeCloseTo(QUALITY_WEIGHT_QUESTION_INFO, 5)
+    })
+
+    it('half questions with info should yield half the info weight', () => {
+      const withoutInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withHalfInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          info: i < 5 ? `Helpful info ${i}` : undefined,
+        })) as any,
+      })
+      const diff =
+        computeQualityScore(withHalfInfo, globalMean, minRatingCount) -
+        computeQualityScore(withoutInfo, globalMean, minRatingCount)
+      expect(diff).toBeCloseTo(QUALITY_WEIGHT_QUESTION_INFO / 2, 5)
+    })
+
+    it('blank or whitespace-only info should not count toward the score', () => {
+      const withoutInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+      })
+      const withBlankInfo = makeQuiz({
+        imageCoverURL: undefined,
+        description: undefined,
+        questions: Array.from({ length: 10 }, (_, i) => ({
+          _id: `q${i}`,
+          info: i < 5 ? '   ' : '',
+        })) as any,
+      })
+      expect(
+        computeQualityScore(withBlankInfo, globalMean, minRatingCount),
+      ).toBeCloseTo(
+        computeQualityScore(withoutInfo, globalMean, minRatingCount),
         5,
       )
     })
