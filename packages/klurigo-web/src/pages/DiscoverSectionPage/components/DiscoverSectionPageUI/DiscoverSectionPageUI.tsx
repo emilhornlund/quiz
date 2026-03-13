@@ -18,9 +18,11 @@ export type DiscoverSectionPageUIProps = {
   /** The validated discovery section key, or null for unknown keys. */
   readonly sectionKey: DiscoverySectionKey | null
   /** Accumulated list of quiz cards across all loaded pages. */
-  readonly quizzes: DiscoveryQuizCardDto[]
+  readonly quizzes: readonly DiscoveryQuizCardDto[]
   /** Whether the initial data fetch is in progress. */
   readonly isLoading: boolean
+  /** Indicates whether an additional page is currently loading. */
+  readonly isLoadingMore: boolean
   /** Whether more results can be loaded. */
   readonly hasMore: boolean
   /** Callback invoked when the user clicks "Load more". */
@@ -41,6 +43,7 @@ const DiscoverSectionPageUI: FC<DiscoverSectionPageUIProps> = ({
   sectionKey,
   quizzes,
   isLoading,
+  isLoadingMore,
   hasMore,
   onLoadMore,
   isError,
@@ -75,12 +78,13 @@ const DiscoverSectionPageUI: FC<DiscoverSectionPageUIProps> = ({
             {hasMore && (
               <div className={styles.loadMoreContainer}>
                 <Button
-                  id="load-more-button"
+                  id="load-more-quizzes-button"
                   type="button"
                   icon={faArrowRotateLeft}
+                  loading={isLoadingMore}
                   onClick={onLoadMore}
-                  data-testid="load-more-button">
-                  Load more
+                  data-testid="load-more-quizzes-button">
+                  Load more quizzes
                 </Button>
               </div>
             )}

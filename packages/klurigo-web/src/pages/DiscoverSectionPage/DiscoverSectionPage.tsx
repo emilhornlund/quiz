@@ -1,15 +1,11 @@
-import type { DiscoveryQuizCardDto } from '@klurigo/common'
-import { useQuery } from '@tanstack/react-query'
-import { type FC, useCallback, useMemo, useState } from 'react'
+import { type FC, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
 import { isDiscoverySectionKey } from '../../utils/discovery.utils'
+import { useResponsiveInfiniteOffsetQuery } from '../../utils/hooks'
 
 import { DiscoverSectionPageUI } from './components'
-
-/** Default number of quiz cards fetched per page. */
-const DEFAULT_LIMIT = 20
 
 /**
  * Container component for the discovery section "See All" page.
@@ -39,40 +35,35 @@ const DiscoverSectionPage: FC = () => {
     [rawKey],
   )
 
-  const [offset, setOffset] = useState(0)
-  const [allQuizzes, setAllQuizzes] = useState<DiscoveryQuizCardDto[]>([])
-  const [snapshotTotal, setSnapshotTotal] = useState(0)
-
-  const { isLoading, isError } = useQuery({
-    queryKey: ['discoverSection', sectionKey, DEFAULT_LIMIT, offset],
-    queryFn: async () => {
-      const data = await getSectionQuizzes(sectionKey!, {
-        limit: DEFAULT_LIMIT,
-        offset,
-      })
-      setSnapshotTotal(data.snapshotTotal)
-      setAllQuizzes((prev) =>
-        offset === 0 ? data.results : [...prev, ...data.results],
-      )
-      return data
+  const {
+    items: quizzes,
+    isLoading,
+    isError,
+    hasMore,
+    isLoadingMore,
+    loadMore,
+  } = useResponsiveInfiniteOffsetQuery({
+    queryKey: ['discoverSection', sectionKey],
+    queryFn: ({ limit, offset }) =>
+      getSectionQuizzes(sectionKey!, { limit, offset }),
+    getResults: (page) => page.results,
+    getTotal: (page) => page.snapshotTotal,
+    pageSize: {
+      desktop: 20,
+      tablet: 15,
+      mobile: 10,
     },
     enabled: sectionKey !== null,
-    retry: false,
   })
-
-  const handleLoadMore = useCallback(() => {
-    setOffset((prev) => prev + DEFAULT_LIMIT)
-  }, [])
-
-  const hasMore = offset + allQuizzes.length < snapshotTotal
 
   return (
     <DiscoverSectionPageUI
       sectionKey={sectionKey}
-      quizzes={allQuizzes}
-      isLoading={isLoading && offset === 0}
-      hasMore={hasMore}
-      onLoadMore={handleLoadMore}
+      quizzes={quizzes}
+      isLoading={isLoading}
+      isLoadingMore={isLoadingMore}
+      hasMore={!!hasMore}
+      onLoadMore={loadMore}
       isError={isError}
     />
   )

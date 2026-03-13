@@ -1,55 +1,36 @@
 import { GameStatus } from '@klurigo/common'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useKlurigoServiceClient } from '../../api'
-import { DeviceType } from '../../utils/device-size.types'
-import { useDeviceSizeType } from '../../utils/useDeviceSizeType'
+import { useResponsiveInfiniteOffsetQuery } from '../../utils/hooks'
 
 import { ProfileGamesPageUI } from './components'
 
 const ProfileGamesPage: FC = () => {
   const navigate = useNavigate()
-
   const { getProfileGames, authenticateGame } = useKlurigoServiceClient()
 
-  const deviceType = useDeviceSizeType()
-
-  // Calculate items per page based on device to avoid partial rows
-  // Desktop: 4 cols × 5 rows = 20
-  // Tablet: 3 cols × 5 rows = 15
-  // Mobile: 2 cols × 5 rows = 10
-  const itemsPerPage = useMemo(() => {
-    if (deviceType === DeviceType.Desktop) return 20
-    if (deviceType === DeviceType.Tablet) return 15
-    return 10
-  }, [deviceType])
-
   const {
-    data,
+    items: games,
+    itemsPerPage,
     isLoading,
     isError,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['myProfileGames', itemsPerPage],
-    initialPageParam: 0,
-    queryFn: ({ pageParam }) =>
-      getProfileGames({ limit: itemsPerPage, offset: pageParam }),
-    getNextPageParam: (lastPage, allPages) => {
-      const loadedCount = allPages.flatMap((page) => page.results).length
-      return loadedCount < lastPage.total ? loadedCount : undefined
+    hasMore,
+    isLoadingMore,
+    loadMore,
+  } = useResponsiveInfiniteOffsetQuery({
+    queryKey: ['myProfileGames'],
+    queryFn: ({ limit, offset }) => getProfileGames({ limit, offset }),
+    getResults: (page) => page.results,
+    getTotal: (page) => page.total,
+    pageSize: {
+      desktop: 20,
+      tablet: 15,
+      mobile: 10,
     },
   })
-
-  const games = data?.pages.flatMap((page) => page.results) ?? []
-
-  const handleLoadMore = useCallback(() => {
-    fetchNextPage().then()
-  }, [fetchNextPage])
 
   const handleClickGame = useCallback(
     async (id: string, status: GameStatus) => {
@@ -60,7 +41,10 @@ const ProfileGamesPage: FC = () => {
         } catch {
           // Authentication failed — do not navigate
         }
-      } else if (status === GameStatus.Completed) {
+        return
+      }
+
+      if (status === GameStatus.Completed) {
         navigate(`/game/results/${id}`)
       }
     },
@@ -71,11 +55,11 @@ const ProfileGamesPage: FC = () => {
     <ProfileGamesPageUI
       games={games}
       isLoading={isLoading}
-      isLoadingMore={isFetchingNextPage}
+      isLoadingMore={isLoadingMore}
       isError={isError}
-      hasMore={hasNextPage}
-      skeletonCount={itemsPerPage}
-      onLoadMore={handleLoadMore}
+      hasMore={!!hasMore}
+      skeletonCount={itemsPerPage ?? 20}
+      onLoadMore={loadMore}
       onClick={handleClickGame}
     />
   )

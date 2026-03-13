@@ -125,11 +125,13 @@ describe('ProfileQuizzesPage', () => {
       results: [makeQuiz('q3', 'Quiz 3'), makeQuiz('q4', 'Quiz 4')],
       total: 5,
       limit: 10,
-      offset: 10,
+      offset: 2,
     }
     h.getProfileQuizzesMock.mockResolvedValueOnce(secondPage)
 
-    const loadMoreButton = screen.getByTestId('test-load-more-button-button')
+    const loadMoreButton = screen.getByTestId(
+      'test-load-more-quizzes-button-button',
+    )
     await userEvent.click(loadMoreButton)
 
     await waitFor(() => {
@@ -143,7 +145,7 @@ describe('ProfileQuizzesPage', () => {
     expect(h.getProfileQuizzesMock).toHaveBeenCalledWith(
       expect.objectContaining({
         limit: 10,
-        offset: 10,
+        offset: 2,
       }),
     )
   })
@@ -163,7 +165,9 @@ describe('ProfileQuizzesPage', () => {
       expect(screen.getByText('Quiz 1')).toBeInTheDocument()
     })
 
-    expect(screen.queryByTestId('load-more-button')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('test-load-more-quizzes-button-button'),
+    ).not.toBeInTheDocument()
   })
 
   it('shows error state on API failure', async () => {
@@ -254,6 +258,50 @@ describe('ProfileQuizzesPage', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('shows the loading-more state while another page is being fetched', async () => {
+    h.getProfileQuizzesMock.mockResolvedValueOnce(mockResponse)
+
+    renderProfileQuizzesPage()
+
+    await waitFor(() => {
+      expect(screen.getByText('Quiz 1')).toBeInTheDocument()
+    })
+
+    let resolveNextPage!: (value: PaginatedQuizResponseDto) => void
+    const nextPage = new Promise<PaginatedQuizResponseDto>((resolve) => {
+      resolveNextPage = resolve
+    })
+    h.getProfileQuizzesMock.mockReturnValueOnce(nextPage)
+
+    const loadMoreButton = screen.getByTestId(
+      'test-load-more-quizzes-button-button',
+    )
+    await userEvent.click(loadMoreButton)
+
+    await waitFor(() => {
+      expect(h.getProfileQuizzesMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          limit: 10,
+          offset: 2,
+        }),
+      )
+    })
+
+    expect(loadMoreButton).toBeDisabled()
+    expect(screen.getByText('Quiz 1')).toBeInTheDocument()
+
+    resolveNextPage({
+      results: [makeQuiz('q3', 'Quiz 3'), makeQuiz('q4', 'Quiz 4')],
+      total: 5,
+      limit: 10,
+      offset: 2,
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('Quiz 3')).toBeInTheDocument()
+    })
+  })
+
   it('uses device-specific pagination limits', async () => {
     h.useDeviceSizeTypeMock.mockReturnValue(DeviceType.Desktop)
     h.getProfileQuizzesMock.mockResolvedValue(mockResponse)
@@ -300,6 +348,66 @@ describe('ProfileQuizzesPage', () => {
       const lastCall = calls[calls.length - 1][0] as Record<string, unknown>
       expect(lastCall).toMatchObject({ limit: 20, search: 'Quiz' })
     })
+  })
+
+  it('resets the query to the first page when filters change', async () => {
+    h.getProfileQuizzesMock.mockResolvedValueOnce(mockResponse)
+    h.getProfileQuizzesMock.mockResolvedValueOnce({
+      results: [makeQuiz('q3', 'Quiz 3'), makeQuiz('q4', 'Quiz 4')],
+      total: 5,
+      limit: 10,
+      offset: 2,
+    })
+
+    renderProfileQuizzesPage()
+
+    await waitFor(() => {
+      expect(screen.getByText('Quiz 1')).toBeInTheDocument()
+    })
+
+    await userEvent.click(
+      screen.getByTestId('test-load-more-quizzes-button-button'),
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('Quiz 3')).toBeInTheDocument()
+    })
+
+    let resolveFilteredPage!: (value: PaginatedQuizResponseDto) => void
+    const filteredPage = new Promise<PaginatedQuizResponseDto>((resolve) => {
+      resolveFilteredPage = resolve
+    })
+    h.getProfileQuizzesMock.mockReturnValueOnce(filteredPage)
+
+    await userEvent.type(screen.getByPlaceholderText('Search'), 'Filtered')
+    await userEvent.click(screen.getByTestId('test-search-button-button'))
+
+    await waitFor(() => {
+      expect(h.getProfileQuizzesMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          limit: 10,
+          offset: 0,
+          search: 'Filtered',
+        }),
+      )
+    })
+
+    expect(screen.queryByText('Quiz 3')).not.toBeInTheDocument()
+    expect(screen.getAllByTestId('profile-quiz-card-skeleton')).toHaveLength(10)
+
+    resolveFilteredPage({
+      results: [makeQuiz('q5', 'Filtered Quiz')],
+      total: 1,
+      limit: 10,
+      offset: 0,
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('Filtered Quiz')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByText('Quiz 1')).not.toBeInTheDocument()
+    expect(screen.queryByText('Quiz 3')).not.toBeInTheDocument()
   })
 
   it('filter bar stays visible after clearing search', async () => {

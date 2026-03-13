@@ -14,34 +14,66 @@ import QuizTableFilter from '../../../../components/QuizTableFilter'
 import { ProfileQuizCard, ProfileQuizCardSkeleton } from './components'
 import styles from './ProfileQuizzesPageUI.module.scss'
 
+/**
+ * Search and filter parameters used by the `ProfileQuizzesPageUI` component.
+ */
 export interface ProfileQuizzesPageUISearchParams {
-  search?: string
-  visibility?: QuizVisibility
-  category?: QuizCategory
-  languageCode?: LanguageCode
-  mode?: GameMode
-  sort?: 'title' | 'created' | 'updated'
-  order?: 'asc' | 'desc'
-  limit?: number
-  offset?: number
+  /** The free-text search term used to filter quizzes. */
+  readonly search?: string
+  /** The quiz visibility filter. */
+  readonly visibility?: QuizVisibility
+  /** The quiz category filter. */
+  readonly category?: QuizCategory
+  /** The quiz language filter. */
+  readonly languageCode?: LanguageCode
+  /** The quiz mode filter. */
+  readonly mode?: GameMode
+  /** The field used to sort the quizzes. */
+  readonly sort?: 'title' | 'created' | 'updated'
+  /** The sort direction. */
+  readonly order?: 'asc' | 'desc'
+  /** The maximum number of quizzes to return per page. */
+  readonly limit?: number
+  /** The current pagination offset. */
+  readonly offset?: number
 }
 
+/**
+ * Props for the `ProfileQuizzesPageUI` component.
+ */
 export interface ProfileQuizzesPageUIProps {
-  quizzes: QuizResponseDto[]
-  filter: ProfileQuizzesPageUISearchParams
-  isLoading: boolean
-  isError: boolean
-  hasMore: boolean
-  skeletonCount: number
-  onLoadMore: () => void
-  onChangeSearchParams: (params: ProfileQuizzesPageUISearchParams) => void
-  onCreateQuiz: () => void
+  /** The quizzes to display in the grid. */
+  readonly quizzes: readonly QuizResponseDto[]
+  /** The currently applied search and filter values. */
+  readonly filter: ProfileQuizzesPageUISearchParams
+  /** Indicates whether the initial page data is loading. */
+  readonly isLoading: boolean
+  /** Indicates whether an additional page is currently loading. */
+  readonly isLoadingMore: boolean
+  /** Indicates whether loading the quizzes failed. */
+  readonly isError: boolean
+  /** Indicates whether more quizzes are available to load. */
+  readonly hasMore: boolean
+  /** The number of skeleton cards to render while loading. */
+  readonly skeletonCount: number
+  /** Loads the next page of quizzes. */
+  readonly onLoadMore: () => void
+  /** Updates the current search and filter parameters. */
+  readonly onChangeSearchParams: (
+    params: ProfileQuizzesPageUISearchParams,
+  ) => void
+  /** Navigates to the quiz creation flow. */
+  readonly onCreateQuiz: () => void
 }
 
+/**
+ * Renders the profile quizzes page UI including filters, loading, error, empty, and paginated quiz states.
+ */
 const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
   quizzes,
   filter,
   isLoading,
+  isLoadingMore,
   isError,
   hasMore,
   skeletonCount,
@@ -100,14 +132,15 @@ const ProfileQuizzesPageUI: FC<ProfileQuizzesPageUIProps> = ({
                   <ProfileQuizCard key={quiz.id} quiz={quiz} />
                 ))}
           </div>
-          {hasMore && !isLoading && (
+          {hasMore && (
             <div className={styles.loadMoreContainer}>
               <Button
-                id="load-more-button"
+                id="load-more-quizzes-button"
                 type="button"
                 icon={faArrowRotateLeft}
+                loading={isLoadingMore}
                 onClick={onLoadMore}
-                data-testid="load-more-button">
+                data-testid="load-more-quizzes-button">
                 Load more quizzes
               </Button>
             </div>

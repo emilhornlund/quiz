@@ -13,17 +13,31 @@ import { Button, Page, PageDivider, Typography } from '../../../../components'
 import { ProfileGameCard, ProfileGameCardSkeleton } from './components'
 import styles from './ProfileGamesPageUI.module.scss'
 
+/**
+ * Props for the `ProfileGamesPageUI` component.
+ */
 export interface ProfileGamesPageUIProps {
-  games: GameHistoryDto[]
-  isLoading: boolean
-  isLoadingMore: boolean
-  isError: boolean
-  hasMore: boolean
-  skeletonCount: number
-  onLoadMore: () => void
-  onClick: (id: string, status: GameStatus) => void
+  /** The games to display in the grid. */
+  readonly games: readonly GameHistoryDto[]
+  /** Indicates whether the initial page data is loading. */
+  readonly isLoading: boolean
+  /** Indicates whether an additional page is currently loading. */
+  readonly isLoadingMore: boolean
+  /** Indicates whether loading the games failed. */
+  readonly isError: boolean
+  /** Indicates whether more games are available to load. */
+  readonly hasMore: boolean
+  /** The number of skeleton cards to render while loading. */
+  readonly skeletonCount: number
+  /** Loads the next page of games. */
+  readonly onLoadMore: () => void
+  /** Handles navigation when a game card is clicked. */
+  readonly onClick: (id: string, status: GameStatus) => void
 }
 
+/**
+ * Renders the profile games page UI including loading, error, empty, and paginated game states.
+ */
 const ProfileGamesPageUI: FC<ProfileGamesPageUIProps> = ({
   games,
   isLoading,
