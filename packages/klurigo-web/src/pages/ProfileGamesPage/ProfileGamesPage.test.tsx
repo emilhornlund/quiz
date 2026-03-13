@@ -135,6 +135,47 @@ describe('ProfileGamesPage', () => {
     )
   })
 
+  it('shows the loading-more state while another page is being fetched', async () => {
+    h.getProfileGamesMock.mockResolvedValueOnce(
+      makePage([makeGame('g1', 'Game 1'), makeGame('g2', 'Game 2')], 5),
+    )
+
+    renderProfileGamesPage()
+
+    await waitFor(() => {
+      expect(screen.getByText('Game 1')).toBeInTheDocument()
+    })
+
+    let resolveNextPage!: (value: PaginatedGameHistoryDto) => void
+    const nextPage = new Promise<PaginatedGameHistoryDto>((resolve) => {
+      resolveNextPage = resolve
+    })
+    h.getProfileGamesMock.mockReturnValueOnce(nextPage)
+
+    const loadMoreButton = screen.getByTestId(
+      'test-load-more-games-button-button',
+    )
+    await userEvent.click(loadMoreButton)
+
+    await waitFor(() => {
+      expect(h.getProfileGamesMock).toHaveBeenLastCalledWith({
+        limit: 10,
+        offset: 2,
+      })
+    })
+
+    expect(loadMoreButton).toBeDisabled()
+    expect(screen.getByText('Game 1')).toBeInTheDocument()
+
+    resolveNextPage(
+      makePage([makeGame('g3', 'Game 3'), makeGame('g4', 'Game 4')], 5, 10, 2),
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('Game 3')).toBeInTheDocument()
+    })
+  })
+
   it('"Load more games" button disappears when all games are loaded', async () => {
     h.getProfileGamesMock.mockResolvedValue(
       makePage([makeGame('g1', 'Game 1'), makeGame('g2', 'Game 2')], 2),
