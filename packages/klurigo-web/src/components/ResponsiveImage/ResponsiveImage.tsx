@@ -133,7 +133,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   }, [phase, containerSize, intrinsic, fit])
 
   const blurStyle = useImageBlurEffect(box, revealEffect?.countdown, {
-    endAt: 0.1,
+    endAt: 0.25,
   })
 
   const iconSize = Math.max(
