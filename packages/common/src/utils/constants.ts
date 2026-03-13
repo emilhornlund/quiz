@@ -25,14 +25,14 @@ const EMOJI_RANGE =
 export const QUIZ_TITLE_MIN_LENGTH = 3
 export const QUIZ_TITLE_MAX_LENGTH = 95
 export const QUIZ_TITLE_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{3,95}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{3,95}$`,
   'u',
 )
 
 /* Quiz Description */
 export const QUIZ_DESCRIPTION_MAX_LENGTH = 500
 export const QUIZ_DESCRIPTION_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}\\n\\r]{1,500}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}\\n\\r]{1,500}$`,
   'u',
 )
 
@@ -63,7 +63,7 @@ export const QUIZ_QUESTION_MAX = 50
 export const QUIZ_QUESTION_TEXT_MIN_LENGTH = 3
 export const QUIZ_QUESTION_TEXT_MAX_LENGTH = 120
 export const QUIZ_QUESTION_TEXT_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{3,120}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{3,120}$`,
   'u',
 )
 
@@ -71,7 +71,7 @@ export const QUIZ_QUESTION_TEXT_REGEX = new RegExp(
 export const QUIZ_QUESTION_INFO_MIN_LENGTH = 1
 export const QUIZ_QUESTION_INFO_MAX_LENGTH = 256
 export const QUIZ_QUESTION_INFO_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,256}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{1,256}$`,
   'u',
 )
 
@@ -81,17 +81,23 @@ export const QUIZ_MULTI_CHOICE_OPTIONS_MAX = 6
 export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MIN_LENGTH = 1
 export const QUIZ_MULTI_CHOICE_OPTION_VALUE_MAX_LENGTH = 75
 export const QUIZ_MULTI_CHOICE_OPTION_VALUE_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
   'u',
 )
+
+/* Quiz Question Range */
+export const QUIZ_RANGE_MIN_VALUE = -999_999_999
+export const QUIZ_RANGE_MAX_VALUE = 999_999_999
 
 /* Quiz Question Type Answer Options */
 export const QUIZ_TYPE_ANSWER_OPTIONS_MIN = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_MAX = 4
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MIN_LENGTH = 1
 export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_MAX_LENGTH = 20
-export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX =
-  /^[\p{L}\p{N}\p{P}\p{Zs}]{1,20}$/u
+export const QUIZ_TYPE_ANSWER_OPTIONS_VALUE_REGEX = new RegExp(
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
+  'u',
+)
 
 /* Quiz Question Pin Tolerance Radius's */
 export const QUESTION_PIN_TOLERANCE_RADIUS: Record<
@@ -110,7 +116,7 @@ export const QUIZ_PUZZLE_VALUES_MAX = 6
 export const QUIZ_PUZZLE_VALUE_MIN_LENGTH = 1
 export const QUIZ_PUZZLE_VALUE_MAX_LENGTH = 75
 export const QUIZ_PUZZLE_VALUE_REGEX = new RegExp(
-  `^[\\p{L}\\p{N}\\p{P}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
+  `^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}${EMOJI_RANGE}]{1,75}$`,
   'u',
 )
 

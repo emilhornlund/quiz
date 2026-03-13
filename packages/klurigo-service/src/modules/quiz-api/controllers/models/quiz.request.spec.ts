@@ -92,7 +92,7 @@ describe('QuizRequest', () => {
   it('should fail if `title` does not match the regex pattern', async () => {
     const response = plainToInstance(QuizClassicRequest, {
       ...validData,
-      title: 'Invalid<>Title!!',
+      title: 'Invalid\nTitle',
     })
     const errors = await validate(response)
     expect(errors).toHaveLength(1)
