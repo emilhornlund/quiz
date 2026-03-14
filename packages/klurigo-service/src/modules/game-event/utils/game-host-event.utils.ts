@@ -1,4 +1,4 @@
-import { GameEvent } from '@klurigo/common'
+import { GameEvent, GameStatus } from '@klurigo/common'
 
 import { GameDocument } from '../../game-core/repositories/models/schemas'
 import {
@@ -88,6 +88,9 @@ export function buildHostGameEvent(
   }
 
   if (isPodiumTask(game)) {
+    if (game.status === GameStatus.Completed) {
+      return buildGameQuitEvent(game.status)
+    }
     switch (game.currentTask.status) {
       case 'pending':
         return buildGameLoadingEvent()

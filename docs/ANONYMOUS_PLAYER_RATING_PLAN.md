@@ -243,7 +243,7 @@ removing unused imports.
 
 ---
 
-### 6. Host Quit Event Logic Should Consider Completed Status
+### 6. Host Quit Event Logic Should Consider Completed Status [DONE]
 
 **File:** `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`
 
