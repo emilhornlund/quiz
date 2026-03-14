@@ -9,6 +9,7 @@ import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { QuizDiscoveryCard } from '../../../../../../components'
+import { classNames } from '../../../../../../utils/helpers'
 
 import styles from './DiscoveryRailSection.module.scss'
 
@@ -114,7 +115,7 @@ const DiscoveryRailSection: FC<DiscoveryRailSectionProps> = ({
       </div>
       <div className={wrapperClasses} data-testid="discovery-rail-wrapper">
         <button
-          className={[styles.arrowButton, styles.arrowPrev].join(' ')}
+          className={classNames(styles.arrowButton, styles.arrowPrev)}
           onClick={() => scroll('left')}
           aria-label="Scroll left"
           tabIndex={-1}
@@ -146,7 +147,7 @@ const DiscoveryRailSection: FC<DiscoveryRailSectionProps> = ({
               ))}
         </div>
         <button
-          className={[styles.arrowButton, styles.arrowNext].join(' ')}
+          className={classNames(styles.arrowButton, styles.arrowNext)}
           onClick={() => scroll('right')}
           aria-label="Scroll right"
           tabIndex={-1}

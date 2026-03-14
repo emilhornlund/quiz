@@ -48,7 +48,7 @@
   }
 
   @include helpers.mobile {
-    width: 100%;
+    width: 75%;
     border-radius: variables.$mobile-control-normal-border-radius;
   }
 

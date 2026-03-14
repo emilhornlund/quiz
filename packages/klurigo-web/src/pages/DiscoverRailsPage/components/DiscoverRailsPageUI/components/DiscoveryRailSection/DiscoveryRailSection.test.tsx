@@ -5,7 +5,7 @@ import {
   LanguageCode,
   QuizCategory,
 } from '@klurigo/common'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
@@ -13,6 +13,7 @@ import { describe, expect, it, vi } from 'vitest'
 import DiscoveryRailSection, {
   DISCOVERY_RAIL_SKELETON_COUNT,
 } from './DiscoveryRailSection'
+import styles from './DiscoveryRailSection.module.scss'
 
 vi.mock('react-router-dom', async () => {
   const actual =
@@ -37,6 +38,34 @@ const makeQuiz = (id: string): DiscoveryQuizCardDto => ({
   ratingSummary: { stars: 4.0, comments: 2 },
   created: new Date(),
 })
+
+const setRailScrollState = (
+  rail: HTMLElement,
+  {
+    scrollLeft,
+    clientWidth,
+    scrollWidth,
+  }: {
+    readonly scrollLeft: number
+    readonly clientWidth: number
+    readonly scrollWidth: number
+  },
+): void => {
+  Object.defineProperties(rail, {
+    scrollLeft: {
+      value: scrollLeft,
+      configurable: true,
+    },
+    clientWidth: {
+      value: clientWidth,
+      configurable: true,
+    },
+    scrollWidth: {
+      value: scrollWidth,
+      configurable: true,
+    },
+  })
+}
 
 describe('DiscoveryRailSection', () => {
   it('renders skeleton cards when isLoading is true', () => {
@@ -135,8 +164,11 @@ describe('DiscoveryRailSection', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByTestId('rail-arrow-prev')).toBeInTheDocument()
-    expect(screen.getByTestId('rail-arrow-next')).toBeInTheDocument()
+    const previousArrow = screen.getByRole('button', { name: 'Scroll left' })
+    const nextArrow = screen.getByRole('button', { name: 'Scroll right' })
+
+    expect(previousArrow).toBe(screen.getByTestId('rail-arrow-prev'))
+    expect(nextArrow).toBe(screen.getByTestId('rail-arrow-next'))
   })
 
   it('arrow buttons have correct aria-labels', () => {
@@ -151,8 +183,12 @@ describe('DiscoveryRailSection', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByLabelText('Scroll left')).toBeInTheDocument()
-    expect(screen.getByLabelText('Scroll right')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Scroll left' })).toBe(
+      screen.getByLabelText('Scroll left'),
+    )
+    expect(screen.getByRole('button', { name: 'Scroll right' })).toBe(
+      screen.getByLabelText('Scroll right'),
+    )
   })
 
   it('clicking prev arrow calls scrollBy on the rail', async () => {
@@ -176,7 +212,7 @@ describe('DiscoveryRailSection', () => {
       configurable: true,
     })
 
-    await user.click(screen.getByTestId('rail-arrow-prev'))
+    await user.click(screen.getByRole('button', { name: 'Scroll left' }))
 
     expect(scrollBySpy).toHaveBeenCalledWith(
       expect.objectContaining({ behavior: 'smooth' }),
@@ -200,13 +236,92 @@ describe('DiscoveryRailSection', () => {
     const rail = screen.getByTestId('discovery-rail-scroll')
     const scrollBySpy = vi.fn()
     Object.defineProperty(rail, 'scrollBy', { value: scrollBySpy })
+    Object.defineProperty(rail, 'clientWidth', {
+      value: 800,
+      configurable: true,
+    })
 
-    await user.click(screen.getByTestId('rail-arrow-next'))
+    await user.click(screen.getByRole('button', { name: 'Scroll right' }))
 
     expect(scrollBySpy).toHaveBeenCalledWith(
       expect.objectContaining({ behavior: 'smooth' }),
     )
-    expect(scrollBySpy.mock.calls[0][0].left).toBeGreaterThanOrEqual(0)
+    expect(scrollBySpy.mock.calls[0][0].left).toBeGreaterThan(0)
+  })
+
+  it('applies shared and directional classes to each arrow button', () => {
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[makeQuiz('q1')]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Scroll left' })).toHaveClass(
+      styles.arrowButton,
+      styles.arrowPrev,
+    )
+    expect(screen.getByRole('button', { name: 'Scroll right' })).toHaveClass(
+      styles.arrowButton,
+      styles.arrowNext,
+    )
+  })
+
+  it('updates wrapper scroll state classes as the rail moves', async () => {
+    render(
+      <MemoryRouter>
+        <DiscoveryRailSection
+          sectionKey={DiscoverySectionKey.TRENDING}
+          title="Trending"
+          quizzes={[makeQuiz('q1'), makeQuiz('q2'), makeQuiz('q3')]}
+          isLoading={false}
+        />
+      </MemoryRouter>,
+    )
+
+    const wrapper = screen.getByTestId('discovery-rail-wrapper')
+    const rail = screen.getByTestId('discovery-rail-scroll')
+
+    setRailScrollState(rail, {
+      scrollLeft: 0,
+      clientWidth: 300,
+      scrollWidth: 900,
+    })
+    fireEvent.scroll(rail)
+
+    await waitFor(() => {
+      expect(wrapper).toHaveClass(styles.railWrapper)
+      expect(wrapper).not.toHaveClass(styles.hasScrollLeft)
+      expect(wrapper).toHaveClass(styles.hasScrollRight)
+    })
+
+    setRailScrollState(rail, {
+      scrollLeft: 300,
+      clientWidth: 300,
+      scrollWidth: 900,
+    })
+    fireEvent.scroll(rail)
+
+    await waitFor(() => {
+      expect(wrapper).toHaveClass(styles.hasScrollLeft)
+      expect(wrapper).toHaveClass(styles.hasScrollRight)
+    })
+
+    setRailScrollState(rail, {
+      scrollLeft: 0,
+      clientWidth: 300,
+      scrollWidth: 900,
+    })
+    fireEvent.scroll(rail)
+
+    await waitFor(() => {
+      expect(wrapper).not.toHaveClass(styles.hasScrollLeft)
+      expect(wrapper).toHaveClass(styles.hasScrollRight)
+    })
   })
 
   it('rail wrapper does not have scroll classes when rail cannot scroll', () => {
@@ -222,8 +337,6 @@ describe('DiscoveryRailSection', () => {
     )
 
     const wrapper = screen.getByTestId('discovery-rail-wrapper')
-    // jsdom doesn't do layout, so scrollLeft/scrollWidth will be 0
-    // — the wrapper should not carry scroll-indicator classes
     expect(wrapper.className).not.toContain('hasScrollLeft')
     expect(wrapper.className).not.toContain('hasScrollRight')
   })
