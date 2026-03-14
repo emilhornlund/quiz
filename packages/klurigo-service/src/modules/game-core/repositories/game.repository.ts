@@ -174,21 +174,24 @@ export class GameRepository extends BaseRepository<Game> {
   }
 
   /**
-   * Finds a game by its ID, updates it using the provided callback, and saves the changes.
+   * Finds a game by its ID (active or completed), updates it using the provided callback, and saves the changes.
    *
    * @param {string} gameID - The ID of the game to find and update.
    * @param {Function} callback - A callback function to modify the game document.
    *
    * @returns {Promise<GameDocument>} A promise that resolves to the updated `GameDocument`.
    *
-   * @throws {ActiveGameNotFoundByIDException} If no active game is found.
+   * @throws {GameNotFoundException} If no active or completed game is found with the given ID.
    */
   @MurLock(5000, 'game', 'gameID')
   public async findAndSaveWithLock(
     gameID: string,
     callback: (gameDocument: GameDocument) => Promise<GameDocument>,
   ): Promise<GameDocument> {
-    const gameDocument = await this.findGameByIDOrThrow(gameID)
+    const gameDocument = await this.findGameByIDWithStatusesOrThrow(gameID, [
+      GameStatus.Active,
+      GameStatus.Completed,
+    ])
 
     const updatedGameDocument = await callback(gameDocument)
     updatedGameDocument.updated = new Date()
