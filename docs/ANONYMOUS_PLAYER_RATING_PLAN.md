@@ -57,7 +57,7 @@ Last question result task is completed
 
 ## Backend Changes
 
-### 1. Keep SSE Subscriptions Alive for Completed Games
+### 1. Keep SSE Subscriptions Alive for Completed Games [DONE]
 
 **File:** `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`
 
@@ -84,7 +84,7 @@ quiz metadata (title, ID) and the participant's existing rating for the quiz,
 so this data can be included in the `GameOverPlayerEvent` payload. This likely
 means injecting `QuizRepository` and `QuizRatingRepository` into the
 subscriber's constructor and performing these lookups when building podium
-events. See §7 for what data the event needs.
+events. See §13 for what data the event needs.
 
 **Tip:** Look at how the subscriber currently builds event metadata for other
 task types. The enrichment should follow the same pattern — fetch extra data,
@@ -92,7 +92,7 @@ attach it to the metadata object that gets passed to the event builder utils.
 
 ---
 
-### 2. Add New `GameOverPlayer` Event Type
+### 2. Add New `GameOverPlayer` Event Type [DONE]
 
 **Files:**
 
@@ -114,7 +114,7 @@ all new types are exported from both `packages/common/src/models/index.ts` and
 
 ---
 
-### 3. Define `GameOverPlayerEvent`
+### 3. Define `GameOverPlayerEvent` [DONE]
 
 **File:** `packages/common/src/models/game-event.ts`
 
@@ -181,7 +181,7 @@ naming conventions.
 
 ---
 
-### 4. Emit `GameOverPlayerEvent` During Podium Task
+### 4. Emit `GameOverPlayerEvent` During Podium Task [DONE]
 
 **File:** `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`
 
@@ -198,7 +198,8 @@ of `buildGameResultPlayerEvent(...)`.
 `packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.ts`
 with a `buildGameOverPlayerEvent` function. This function receives the game
 document, the player participant, and enriched metadata (quiz info + existing
-rating) and assembles the `GameOverPlayerEvent`. See §7 for full data mapping.
+rating) and assembles the `GameOverPlayerEvent`. See §13 for the full metadata
+enrichment that supplies the rating fields.
 
 Export the new builder from
 `packages/klurigo-service/src/modules/game-event/utils/index.ts`.
@@ -210,7 +211,7 @@ for the podium-specific data access patterns.
 
 ---
 
-### 5. Keep Podium as Current Task When Host Completes the Game
+### 5. Keep Podium as Current Task When Host Completes the Game [DONE]
 
 **File:** `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`
 
@@ -273,58 +274,44 @@ non-podium quit scenarios.
 
 ---
 
-### 7. Build `GameOverPlayerEvent` from Existing Data
-
-**File:** `packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.ts`
-
-The builder function `buildGameOverPlayerEvent` must assemble the event from
-data that is already available in the game document and the enriched metadata
-(§1). No additional database calls should happen in the builder itself — all
-data must be pre-fetched.
-
-**Data sources:**
-
-| Event field               | Source                                                                |
-|---------------------------|-----------------------------------------------------------------------|
-| `game.id`                 | `game._id`                                                            |
-| `game.mode`               | `game.mode`                                                           |
-| `quiz.id`                 | `game.quiz._id`                                                       |
-| `quiz.title`              | `game.name`                                                           |
-| `player.nickname`         | `playerParticipant.nickname`                                          |
-| `player.rank`             | `playerParticipant.rank` (already calculated on podium)               |
-| `player.totalPlayers`     | Count of player-type participants in `game.participants`              |
-| `player.score`            | `playerParticipant.score`                                             |
-| `player.currentStreak`    | `playerParticipant.currentStreak`                                     |
-| `player.comebackRankGain` | `playerParticipant.comebackRankGain`                                  |
-| `player.behind`           | Find participant at `rank - 1`, compute point difference and nickname |
-| `rating.canRateQuiz`      | `true` unless participant's userId === quiz owner                     |
-| `rating.stars`            | From enriched metadata (existing rating lookup in subscriber)         |
-| `rating.comment`          | From enriched metadata (existing rating lookup in subscriber)         |
-
-**Behind calculation:** Sort participants by rank. Find the participant whose
-rank is exactly `playerRank - 1`. If found:
-`{ points: theirScore - playerScore, nickname: theirNickname }`. If the player
-is rank 1: `null`.
-
-**Rating eligibility (`canRateQuiz`):**
-
-- Anonymous players: always `true` (they cannot own a quiz).
-- Logged-in players: `true` unless their `userId` matches the quiz's `author`
-  (owner). This matches the existing guard logic in `QuizRatingGuard`.
-
-**Tip:** Reference `buildGameResultPlayerEvent` in
-`game-result-event.utils.ts` for how to extract rank, score, streak, and
-behind data from the game participants. The patterns are very similar.
-
----
-
-### 8. Quiz Rating Schema Update — Discriminated Author
+### 7. Add `QuizRatingAuthorType` Enum to Common Package
 
 **Files:**
 
 - `packages/common/src/models/quiz-rating-author-type.enum.ts` (new)
+- `packages/common/src/models/index.ts` (modify)
+- `packages/common/src/index.ts` (modify)
+
+**Dependency:** None. This is a pure common-package addition.
+
+**Why this must come before §8:** The author subdocument schemas in
+`quiz-rating-author.schema.ts` import `QuizRatingAuthorType` from
+`@klurigo/common`. The service package cannot build until this enum is in
+place. Similarly, the service and subscriber code in §9 and §13 reference this
+type.
+
+Create the enum file:
+
+```typescript
+export enum QuizRatingAuthorType {
+  User = 'USER',
+  Anonymous = 'ANONYMOUS',
+}
+```
+
+Export from `models/index.ts` and `packages/common/src/index.ts`.
+
+---
+
+### 8. Quiz Rating Schema — Author Subdocuments and Updated Rating Schema
+
+**Files:**
+
 - `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating-author.schema.ts` (new)
 - `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts` (modify)
+- `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/index.ts` (modify)
+
+**Dependency:** §7 (`QuizRatingAuthorType` enum must exist in `@klurigo/common`).
 
 The current schema stores `author` as a required `User` reference:
 
@@ -337,19 +324,6 @@ This only supports logged-in users. To support anonymous players, the author
 field is replaced with a **discriminated subdocument** — the same pattern
 used throughout the codebase for participants (`ParticipantBase` →
 `ParticipantHost` | `ParticipantPlayer`), tasks, and questions.
-
-#### New Enum
-
-**File:** `packages/common/src/models/quiz-rating-author-type.enum.ts`
-
-```typescript
-export enum QuizRatingAuthorType {
-  User = 'USER',
-  Anonymous = 'ANONYMOUS',
-}
-```
-
-Export from `models/index.ts` and `packages/common/src/index.ts`.
 
 #### Author Subdocument Schemas
 
@@ -393,6 +367,8 @@ In `quiz-rating.schema.ts`, replace the flat `author: User` prop with a
 `author` path after creating the schema, just like participant discriminators
 are registered.
 
+Export the new schema file from `schemas/index.ts`.
+
 #### Indexes
 
 Replace the existing `author` index with partial unique indexes that enforce
@@ -422,6 +398,9 @@ one-rating-per-author-per-quiz for each type independently:
 ---
 
 ### 9. Update Repository, Service, and DTO Mapping
+
+**Dependency:** §8 (author schema classes and `QuizRatingAuthor` type must
+exist before repository and service signatures can be updated).
 
 #### Repository Changes
 
@@ -478,12 +457,48 @@ Add a `toQuizRatingAuthorDto` mapping that switches on `author.type`:
 
 ---
 
-### 10. MongoDB Migrator Update
+### 10. Adapt Profile Rating Endpoint
+
+**File:** `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts`
+
+**Dependency:** §9 (`createOrUpdateQuizRating` now accepts `QuizRatingAuthor`
+instead of a flat `User`).
+
+`PUT /profile/quizzes/:quizId/ratings` remains unchanged from a product
+perspective. Internally, it must now wrap the `User` object in a
+`QuizRatingUserAuthor` subdocument before calling the updated service method.
+
+This is a small adapter change — build
+`{ type: QuizRatingAuthorType.User, user: authenticatedUser }` and pass it to
+`createOrUpdateQuizRating`.
+
+---
+
+### 11. Update Game Result Service
+
+**File:** `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`
+
+**Dependency:** §9 (`findQuizRatingByAuthor` is removed; the type-specific
+methods must be used instead).
+
+This service looks up ratings for display on the game results page. It
+currently calls `findQuizRatingByAuthor(quizId, user)`. Update this to call
+the new `findQuizRatingByUserAuthor(quizId, userId)` method.
+
+This is a straightforward call-site update — the game results page is only
+accessible to logged-in users, so it always deals with user-authored ratings.
+
+---
+
+### 12. MongoDB Migrator Update
 
 **Files:**
 
 - `tools/mongodb-migrator/src/transformers/quiz-rating.transformers.ts`
 - `tools/mongodb-migrator/src/utils/collection.utils.ts`
+
+**Dependency:** §8 (must understand the new discriminated author shape before
+writing the transformer).
 
 #### Transformer
 
@@ -514,9 +529,117 @@ updated to reflect the new nested author structure:
 
 ---
 
-### 11. Only One New Game-Scoped Endpoint
+### 13. Enrich Rating Metadata in Subscriber
+
+**Files:**
+
+- `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`
+- `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.interface.ts`
+
+**Dependency:** §9 (the subscriber must call `findQuizRatingByUserAuthor` and
+`findQuizRatingByAnonymousAuthor`, which are introduced in §9; those methods
+cannot be called until the repository is updated).
+
+The existing `buildGameOverPlayerEvent` implementation already builds the event
+from game document data plus enriched metadata. At this stage, the missing work
+is not the builder itself, but the **subscriber-side enrichment** for the
+rating-related metadata that the builder expects.
+
+**Required change:** Extend the metadata enrichment process in the subscriber so
+that the metadata passed into `buildGameOverPlayerEvent(...)` includes the
+rating-related fields needed for the final player game-over event.
+
+**The enrichment added here must provide:**
+
+| Metadata field         | Purpose                                                       |
+| ---------------------- | ------------------------------------------------------------- |
+| `podiumCanRateQuiz`    | Whether the participant is allowed to rate the quiz           |
+| `podiumRatingStars`    | Existing rating stars, if the participant has already rated   |
+| `podiumRatingComment`  | Existing rating comment, if the participant has already rated |
+
+**Scope clarification:** This task only adds the missing metadata enrichment.
+Do not rework `buildGameOverPlayerEvent` logic that is already implemented.
+Do not move calculations into the subscriber that already belong to the event
+builder.
+
+#### Required repository lookups
+
+The subscriber must perform the lookups needed to enrich the podium player
+event before calling `buildGameOverPlayerEvent(...)`.
+
+This likely requires injecting:
+
+- `QuizRepository`
+- `QuizRatingRepository`
+
+into the subscriber constructor.
+
+These lookups should only be performed when building metadata for podium player
+events that will produce `GameOverPlayerEvent`.
+
+#### Quiz ownership lookup
+
+The subscriber must load the quiz using `QuizRepository` so it can determine
+whether the current logged-in participant is the quiz owner.
+
+This ownership data is only needed to determine `podiumCanRateQuiz`.
+
+#### Existing rating lookup
+
+The subscriber must also check whether the current participant has already
+rated the quiz.
+
+This lookup uses the type-specific methods introduced in §9:
+
+- **Logged-in player:** call `findQuizRatingByUserAuthor(quizId, userId)`
+- **Anonymous player:** call `findQuizRatingByAnonymousAuthor(quizId, participantId)`
+
+If a rating exists, enrich metadata with `podiumRatingStars` and
+`podiumRatingComment`. If no rating exists, both values should remain absent.
+
+#### Rating eligibility rules
+
+After loading the quiz owner, the subscriber must determine
+`podiumCanRateQuiz` using these rules:
+
+- **Anonymous players:** always `true`
+- **Logged-in players:** `true` unless the participant `userId` matches the
+  quiz owner
+
+This matches the same owner restriction used by the quiz rating flow.
+
+#### Metadata model
+
+The `GameEventMetaData` interface in `game-event-metadata.interface.ts`
+already declares `podiumCanRateQuiz`, `podiumRatingStars`, and
+`podiumRatingComment`. No model changes are needed — only the subscriber must
+be updated to populate these fields.
+
+#### Subscriber responsibilities
+
+The subscriber enrichment flow must:
+
+1. Resolve the current participant
+2. Load the quiz using `QuizRepository`
+3. Determine whether the participant can rate the quiz
+4. Look up any existing rating using the correct `QuizRatingRepository`
+   method for the participant type
+5. Attach `podiumCanRateQuiz`, `podiumRatingStars`, and `podiumRatingComment`
+   to the metadata object
+6. Pass that enriched metadata into the existing player event builder flow
+
+The repositories used for these lookups must remain in the subscriber layer,
+not in `buildGameOverPlayerEvent(...)`.
+
+---
+
+### 14. Game-Scoped Rating Endpoint
 
 **Route:** `PUT /games/:gameID/ratings`
+
+**Dependency:** §9 (updated service signature) and §13 (subscriber enrichment
+must be in place so players already have their existing rating data on the
+game-over screen before they might submit an update via this endpoint).
 
 This is the only new game-scoped endpoint needed. The
 `GET /games/:gameID/player-stats` and `GET /games/:gameID/ratings/me`
@@ -577,33 +700,6 @@ Register the new controller and guard in
 `packages/klurigo-service/src/modules/game-api/game-api.module.ts`. The
 controller needs access to `QuizRatingService` — import the quiz-rating module
 or the specific service as needed.
-
----
-
-### 12. Existing Profile Rating Endpoint Still Works
-
-**File:** `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts`
-
-`PUT /profile/quizzes/:quizId/ratings` remains unchanged from a product
-perspective. Internally, it must now wrap the `User` object in a
-`QuizRatingUserAuthor` subdocument before calling the updated service method.
-
-This is a small adapter change — build
-`{ type: QuizRatingAuthorType.User, user: authenticatedUser }` and pass it to
-`createOrUpdateQuizRating`.
-
----
-
-### 13. Update Game Result Service for New Author Structure
-
-**File:** `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`
-
-This service looks up ratings for display on the game results page. It
-currently calls `findQuizRatingByAuthor(quizId, user)`. Update this to call
-the new `findQuizRatingByUserAuthor(quizId, userId)` method.
-
-This is a straightforward call-site update — the game results page is only
-accessible to logged-in users, so it always deals with user-authored ratings.
 
 ---
 
@@ -878,7 +974,7 @@ how the existing quit handling in `GamePage` uses it — the same patterns apply
 | `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`                   | Extract podium case, route to `buildGameOverPlayerEvent`                   |
 | `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`                     | Add completed-status check for host quit in podium block                   |
 | `packages/klurigo-service/src/modules/game-event/utils/index.ts`                                     | Export new builder                                                         |
-| `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.ts`                      | Add `existingRating`, `quizTitle`, `quizId`, `canRateQuiz` metadata fields |
+| `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.interface.ts`            | Already has `podiumCanRateQuiz`, `podiumRatingStars`, `podiumRatingComment`|
 | `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`            | Keep podium as current task when marking game completed                    |
 | `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts`   | Replace flat author with discriminated subdocument                         |
 | `packages/klurigo-service/src/modules/quiz-core/repositories/quiz-rating.repository.ts`              | Split author lookup into type-specific methods, update create and populate |
