@@ -120,36 +120,6 @@
 .railWrapper {
   position: relative;
 
-  // Left edge fade — only when the rail can scroll left
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 1rem;
-    background: linear-gradient(to right, colors.$black-1-30, transparent);
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  // Right edge fade — only when the rail can scroll right
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 1rem;
-    background: linear-gradient(to left, colors.$black-1-30, transparent);
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
   &.hasScrollLeft::before {
     opacity: 1;
   }
@@ -160,7 +130,9 @@
 }
 
 .arrowButton {
-  display: none; // hidden on mobile and tablet
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: calc(50% - #{helpers.pxToRem(12px)}); // centre above scrollbar strip
   transform: translateY(-50%);
@@ -181,12 +153,6 @@
   &:hover {
     background: rgba(0, 0, 0, 0.55);
   }
-
-  @include helpers.desktop {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 
 .arrowPrev {
@@ -197,19 +163,14 @@
   right: 0.5rem;
 }
 
-// Show arrows on desktop when the section is hovered and the rail can scroll
-// in that direction. The .hasScrollLeft / .hasScrollRight classes on the
-// wrapper gate each arrow independently.
-@include helpers.desktop {
-  .section:hover .railWrapper.hasScrollLeft > .arrowPrev {
-    opacity: 1;
-    pointer-events: auto;
-  }
+.section:hover .railWrapper.hasScrollLeft > .arrowPrev {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-  .section:hover .railWrapper.hasScrollRight > .arrowNext {
-    opacity: 1;
-    pointer-events: auto;
-  }
+.section:hover .railWrapper.hasScrollRight > .arrowNext {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .rail {
