@@ -1,6 +1,7 @@
 import {
   GameEventType,
   GameParticipantType,
+  GameStatus,
   HEARTBEAT_INTERVAL,
 } from '@klurigo/common'
 import { MessageEvent } from '@nestjs/common'
@@ -59,7 +60,7 @@ describe('GameEventSubscriber', () => {
 
     // Minimal gameRepository mock
     gameRepository = {
-      findGameByIDOrThrow: jest.fn(),
+      findGameByIDWithStatusesOrThrow: jest.fn(),
     }
 
     gameAnswerRepository = {
@@ -192,7 +193,7 @@ describe('GameEventSubscriber', () => {
 
   it('emits heartbeats while a subscription is active and stops after unsubscribe', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: true })
 
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
@@ -214,7 +215,7 @@ describe('GameEventSubscriber', () => {
 
   it('keeps heartbeat running until the last concurrent connection unsubscribes', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: true })
 
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
@@ -286,9 +287,15 @@ describe('GameEventSubscriber', () => {
   })
 
   it('subscribe throws when participant not found', async () => {
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(buildGameDoc())
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(
+      buildGameDoc(),
+    )
     await expect(service.subscribe('game-1', 'missing')).rejects.toBeInstanceOf(
       PlayerNotFoundException,
+    )
+    expect(gameRepository.findGameByIDWithStatusesOrThrow).toHaveBeenCalledWith(
+      'game-1',
+      [GameStatus.Active, GameStatus.Completed],
     )
   })
 
@@ -296,7 +303,7 @@ describe('GameEventSubscriber', () => {
     const doc = buildGameDoc({
       currentTask: { type: TaskType.Question }, // so player metadata is merged
     })
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
       initial: 'player',
     })
@@ -336,6 +343,10 @@ describe('GameEventSubscriber', () => {
     expect(gameAnswerRepository.findAllAnswersByGameId).toHaveBeenCalledWith(
       'game-1',
     )
+    expect(gameRepository.findGameByIDWithStatusesOrThrow).toHaveBeenCalledWith(
+      'game-1',
+      [GameStatus.Active, GameStatus.Completed],
+    )
     expect(toGameEventMetaData).toHaveBeenCalled()
     expect(toPlayerQuestionPlayerEventMetaData).toHaveBeenCalled()
     expect(buildPlayerGameEvent).toHaveBeenCalledWith(
@@ -347,7 +358,7 @@ describe('GameEventSubscriber', () => {
 
   it('subscribe filters out undefined events emitted on the local channel', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({ initial: 'player' })
 
     const stream$ = await service.subscribe('game-1', 'p1')
@@ -365,7 +376,7 @@ describe('GameEventSubscriber', () => {
 
   it('subscribe (HOST) uses buildHostGameEvent and still filters by playerId', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildHostGameEvent as jest.Mock).mockReturnValue({
       initial: 'host',
     })
@@ -379,12 +390,56 @@ describe('GameEventSubscriber', () => {
       doc,
       expect.objectContaining({ meta: true }),
     )
+    expect(gameRepository.findGameByIDWithStatusesOrThrow).toHaveBeenCalledWith(
+      'game-1',
+      [GameStatus.Active, GameStatus.Completed],
+    )
     expect(buildPlayerGameEvent).not.toHaveBeenCalled()
+  })
+
+  it('subscribe allows completed games to open an initial SSE snapshot', async () => {
+    const doc = buildGameDoc({
+      status: GameStatus.Completed,
+      currentTask: { type: TaskType.Podium, status: 'active' },
+    })
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
+    ;(buildPlayerGameEvent as jest.Mock).mockReturnValue({
+      initial: 'completed-game-player',
+    })
+
+    const stream$ = await service.subscribe('game-1', 'p1')
+    const first = await firstValueFrom(stream$.pipe(take(1)))
+
+    expect(JSON.parse(first.data as string)).toEqual({
+      initial: 'completed-game-player',
+    })
+    expect(gameRepository.findGameByIDWithStatusesOrThrow).toHaveBeenCalledWith(
+      'game-1',
+      [GameStatus.Active, GameStatus.Completed],
+    )
+    expect(buildPlayerGameEvent).toHaveBeenCalledWith(
+      doc,
+      doc.participants[0],
+      expect.objectContaining({ meta: true }),
+    )
+  })
+
+  it('subscribe rejects games outside active and completed statuses', async () => {
+    gameRepository.findGameByIDWithStatusesOrThrow.mockRejectedValue(
+      new Error('not found'),
+    )
+
+    await expect(service.subscribe('game-1', 'p1')).rejects.toThrow('not found')
+
+    expect(gameRepository.findGameByIDWithStatusesOrThrow).toHaveBeenCalledWith(
+      'game-1',
+      [GameStatus.Active, GameStatus.Completed],
+    )
   })
 
   it('subscribe tolerates build* error and still relays future events', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     ;(buildHostGameEvent as jest.Mock).mockImplementation(() => {
       throw new Error('boom in builder')
     })
@@ -408,7 +463,7 @@ describe('GameEventSubscriber', () => {
 
   it('subscribe falls back to heartbeat when gameAnswerRepository.findAllAnswersByGameId fails during initial snapshot', async () => {
     const doc = buildGameDoc()
-    gameRepository.findGameByIDOrThrow.mockResolvedValue(doc)
+    gameRepository.findGameByIDWithStatusesOrThrow.mockResolvedValue(doc)
     gameAnswerRepository.findAllAnswersByGameId.mockRejectedValue(
       new Error('Repository failed'),
     )

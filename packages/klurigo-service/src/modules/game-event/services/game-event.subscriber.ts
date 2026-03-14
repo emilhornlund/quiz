@@ -1,6 +1,7 @@
 import {
   GameEventType,
   GameParticipantType,
+  GameStatus,
   HEARTBEAT_INTERVAL,
   isDefined,
 } from '@klurigo/common'
@@ -268,13 +269,16 @@ export class GameEventSubscriber implements OnModuleInit, OnModuleDestroy {
    * @returns An observable of {@link MessageEvent} where `data` is a JSON-encoded game event payload.
    *
    * @throws {PlayerNotFoundException} If the participant does not exist in the game.
-   * @throws {ActiveGameNotFoundByIDException} If the game does not exist or cannot be loaded.
+   * @throws {GameNotFoundException} If the game does not exist or is not active/completed.
    */
   public async subscribe(
     gameId: string,
     participantId: string,
   ): Promise<Observable<MessageEvent>> {
-    const document = await this.gameRepository.findGameByIDOrThrow(gameId)
+    const document = await this.gameRepository.findGameByIDWithStatusesOrThrow(
+      gameId,
+      [GameStatus.Active, GameStatus.Completed],
+    )
 
     const participant = document.participants.find(
       (p) => p.participantId === participantId,
