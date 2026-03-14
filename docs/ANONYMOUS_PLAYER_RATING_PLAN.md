@@ -1,0 +1,902 @@
+# Anonymous Player Rating & Player Game Over State
+
+## Problem Statement
+
+When a game completes, player participants are currently redirected either to
+`/game/results/:gameID` (authenticated users) or `/` (everyone else). This
+means:
+
+1. **Anonymous players** see nothing after the game ends — they are sent
+   straight to the home page.
+2. **Logged-in players** skip any player-focused summary and land directly on
+   the full results page.
+3. **No player can rate the quiz** from the game context — only from the
+   results page, which requires a User-scoped token.
+
+This plan introduces a dedicated **PlayerGameOverState** rendered inside
+`GamePage` and adds **game-scoped quiz rating** so both anonymous and
+authenticated players can rate the quiz they just played.
+
+---
+
+## Proposed Approach
+
+### High-Level Flow
+
+```
+Last question result task is completed
+  → Backend creates Podium task (pending)
+  → Host receives GamePodiumHost event (existing behavior)
+  → Players receive new GameOverPlayer event
+  → GamePage renders PlayerGameOverState from that event
+  → No route change and no revoke happen here
+  → Player sees final rank, score, behind info, rating UI, confetti
+  → Player can create/update rating with PUT /games/:gameID/ratings
+  → Player chooses:
+      - Back to Home → revoke game token → /
+      - View Full Results (logged-in only) → revoke game token → /game/results/:gameID
+  → Host clicks "Game Results"
+  → Backend marks game as completed but keeps podium as current task
+  → SSE remains subscribable for completed games
+  → Host receives GameQuitEvent because the game is completed
+  → Players continue to receive GameOverPlayerEvent while reopening/reconnecting
+```
+
+**Key design decisions:**
+
+- The player game-over experience stays inside `GamePage` as a normal game
+  state — no new route is needed.
+- `Podium` becomes the durable final task — no quit task is created on
+  completion.
+- `GameOverPlayerEvent` is the terminal player-facing event. It carries all
+  data the game-over UI needs, so no read endpoints are required.
+- `GameQuitEvent` is still used for the host completion flow, unchanged.
+- Only one new endpoint: `PUT /games/:gameID/ratings`.
+
+---
+
+## Backend Changes
+
+### 1. Keep SSE Subscriptions Alive for Completed Games
+
+**File:** `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`
+
+**Current behavior:** The `subscribe` method calls `findGameByIDOrThrow` which
+defaults to `active = true`, meaning completed games throw a 404. This blocks
+both host quit delivery and player reconnect after the game ends.
+
+**Required change:** The `findGameByIDOrThrow` call in `subscribe` (around
+line 277) must also accept completed games. The method already has an
+`active: boolean = true` parameter — pass `false` to allow both active and
+completed games.
+
+**Why this matters:**
+
+- After the host clicks "Game Results" on the podium, the game transitions to
+  `GameStatus.Completed`. The host SSE stream needs to stay open to deliver
+  the `GameQuitEvent` that triggers the host redirect.
+- If a player refreshes or reconnects while the game is completed (and still
+  on the podium task), the SSE stream must reopen and deliver the
+  `GameOverPlayerEvent` again.
+
+**Additional enrichment needed:** The `subscribe` method must also look up
+quiz metadata (title, ID) and the participant's existing rating for the quiz,
+so this data can be included in the `GameOverPlayerEvent` payload. This likely
+means injecting `QuizRepository` and `QuizRatingRepository` into the
+subscriber's constructor and performing these lookups when building podium
+events. See §7 for what data the event needs.
+
+**Tip:** Look at how the subscriber currently builds event metadata for other
+task types. The enrichment should follow the same pattern — fetch extra data,
+attach it to the metadata object that gets passed to the event builder utils.
+
+---
+
+### 2. Add New `GameOverPlayer` Event Type
+
+**Files:**
+
+- `packages/common/src/models/game-event-type.enum.ts`
+- `packages/common/src/models/game-event.ts`
+
+Add a new value to the `GameEventType` enum:
+
+```typescript
+GameOverPlayer = 'GAME_OVER_PLAYER'
+```
+
+Place it between `GamePodiumHost` and `GameQuitEvent` to maintain logical
+ordering (podium → game over → quit).
+
+Also update `game-event.ts` (see §3 for the event type definition) and ensure
+all new types are exported from both `packages/common/src/models/index.ts` and
+`packages/common/src/index.ts`.
+
+---
+
+### 3. Define `GameOverPlayerEvent`
+
+**File:** `packages/common/src/models/game-event.ts`
+
+This event must carry **everything** the player game-over UI needs so that no
+read endpoints are required on mount. Define the following types and add
+`GameOverPlayerEvent` to the `GameEvent` union:
+
+```typescript
+type GameOverPlayerEventBehind = {
+  readonly points: number
+  readonly nickname: string
+}
+
+type GameOverPlayerEventRating = {
+  readonly canRateQuiz: boolean
+  readonly stars?: number
+  readonly comment?: string
+}
+
+type GameOverPlayerEvent = {
+  type: GameEventType.GameOverPlayer
+  game: {
+    id: string
+    mode: GameMode
+  }
+  quiz: {
+    id: string
+    title: string
+  }
+  player: {
+    nickname: string
+    rank: number
+    totalPlayers: number
+    score: number
+    currentStreak: number
+    comebackRankGain: number
+    behind: GameOverPlayerEventBehind | null
+  }
+  rating: GameOverPlayerEventRating
+}
+```
+
+**Field explanations:**
+
+- `game.id` / `game.mode` — needed for the rating API call and for the
+  "View Full Results" redirect URL.
+- `quiz.id` / `quiz.title` — displayed as the quiz name on the game-over
+  screen; quiz ID needed for rating context.
+- `player.rank` / `totalPlayers` — "Rank X out of Y players".
+- `player.score` — final score displayed prominently.
+- `player.currentStreak` / `comebackRankGain` — used for celebration level
+  calculation (same logic as `PlayerResultState`).
+- `player.behind` — the player directly ahead: their nickname and the point
+  gap. `null` when the player is rank 1. This mirrors how `PlayerResultState`
+  shows behind info — look at `PointsBehindIndicator` for the UI pattern.
+- `rating.canRateQuiz` — `false` if the player is the quiz owner (logged-in
+  users who own the quiz should not rate their own content).
+- `rating.stars` / `rating.comment` — pre-populated from an existing rating
+  if one exists, so the UI shows the current state on mount.
+
+**Follow existing patterns:** Look at how other event types in `game-event.ts`
+are defined (e.g., `GameResultPlayerEvent`). Use the same readonly style and
+naming conventions.
+
+---
+
+### 4. Emit `GameOverPlayerEvent` During Podium Task
+
+**File:** `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`
+
+**Current behavior (lines 70–83):** The podium task type is currently grouped
+together with `QuestionResult` and `Leaderboard` in the player event builder
+switch, and returns `buildGameResultPlayerEvent`. This means players on the
+podium just see another result screen.
+
+**Required change:** Extract the `TaskType.Podium` case into its own block.
+When the current task is podium, return `buildGameOverPlayerEvent(...)` instead
+of `buildGameResultPlayerEvent(...)`.
+
+**New builder function:** Create a new utility file
+`packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.ts`
+with a `buildGameOverPlayerEvent` function. This function receives the game
+document, the player participant, and enriched metadata (quiz info + existing
+rating) and assembles the `GameOverPlayerEvent`. See §7 for full data mapping.
+
+Export the new builder from
+`packages/klurigo-service/src/modules/game-event/utils/index.ts`.
+
+**Tip:** Reference `buildGameResultPlayerEvent` in
+`game-result-event.utils.ts` for how player stats are currently extracted.
+Also reference `buildGamePodiumHostEvent` in `game-podium-event.utils.ts`
+for the podium-specific data access patterns.
+
+---
+
+### 5. Keep Podium as Current Task When Host Completes the Game
+
+**File:** `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`
+
+**Current behavior (lines 256–270):** `podiumTaskCompletedCallback` does
+three things:
+1. Pushes the podium task into `previousTasks`.
+2. Sets `currentTask = buildQuitTask()`.
+3. Marks `status = GameStatus.Completed` and `completedAt = new Date()`.
+
+**Required change:** Remove steps 1 and 2. The podium task must remain as
+`currentTask` after the game is marked completed. Only update:
+
+- `gameDocument.status = GameStatus.Completed`
+- `gameDocument.completedAt = new Date()`
+
+**Why this is critical:**
+
+- If podium stays as the current task, reconnecting players will re-enter the
+  podium code path in the event builder → receive `GameOverPlayerEvent`.
+- If podium stays as the current task, the host event builder checks
+  `game.status === Completed` on a podium task → returns `GameQuitEvent` for
+  the host (see §6).
+- No special "suppress quit for players" logic is needed because no quit task
+  exists.
+
+**Tip:** The `buildQuitTask()` import and `task-quit.utils.ts` are no longer
+used in this callback after the change. Check if they're used elsewhere before
+removing unused imports.
+
+---
+
+### 6. Host Quit Event Logic Should Consider Completed Status
+
+**File:** `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`
+
+**Current behavior (lines 90–103):** The host event builder for podium only
+handles the active podium state, returning `GamePodiumHostEvent`. The quit
+check (`isQuitTask(game)`) is in a separate branch.
+
+**Required change:** In the podium case for host events, add a check for
+`game.status === GameStatus.Completed`. When the game is completed (even
+though the current task is still podium), return `buildGameQuitEvent(game.status)`
+for the host.
+
+The logic should be:
+
+- Host + podium task + game is `Active` → return `GamePodiumHostEvent`
+  (existing behavior).
+- Host + podium task + game is `Completed` → return `GameQuitEvent` with
+  completed status (triggers the existing host redirect to results page).
+
+**For players:** The player event builder (§4) always returns
+`GameOverPlayerEvent` when on the podium task, regardless of game status. This
+means players see game-over whether the game is active (just reached podium)
+or completed (host already clicked results).
+
+**Keep the existing `isQuitTask` fallback** for backward compatibility with
+any games that were already mid-transition when this deploys, or for
+non-podium quit scenarios.
+
+---
+
+### 7. Build `GameOverPlayerEvent` from Existing Data
+
+**File:** `packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.ts`
+
+The builder function `buildGameOverPlayerEvent` must assemble the event from
+data that is already available in the game document and the enriched metadata
+(§1). No additional database calls should happen in the builder itself — all
+data must be pre-fetched.
+
+**Data sources:**
+
+| Event field               | Source                                                                |
+|---------------------------|-----------------------------------------------------------------------|
+| `game.id`                 | `game._id`                                                            |
+| `game.mode`               | `game.mode`                                                           |
+| `quiz.id`                 | From enriched metadata (quiz lookup in subscriber)                    |
+| `quiz.title`              | From enriched metadata (quiz lookup in subscriber)                    |
+| `player.nickname`         | `playerParticipant.nickname`                                          |
+| `player.rank`             | `playerParticipant.rank` (already calculated on podium)               |
+| `player.totalPlayers`     | Count of player-type participants in `game.participants`              |
+| `player.score`            | `playerParticipant.score`                                             |
+| `player.currentStreak`    | `playerParticipant.currentStreak`                                     |
+| `player.comebackRankGain` | `playerParticipant.comebackRankGain`                                  |
+| `player.behind`           | Find participant at `rank - 1`, compute point difference and nickname |
+| `rating.canRateQuiz`      | `true` unless participant's userId === quiz owner                     |
+| `rating.stars`            | From enriched metadata (existing rating lookup in subscriber)         |
+| `rating.comment`          | From enriched metadata (existing rating lookup in subscriber)         |
+
+**Behind calculation:** Sort participants by rank. Find the participant whose
+rank is exactly `playerRank - 1`. If found:
+`{ points: theirScore - playerScore, nickname: theirNickname }`. If the player
+is rank 1: `null`.
+
+**Rating eligibility (`canRateQuiz`):**
+
+- Anonymous players: always `true` (they cannot own a quiz).
+- Logged-in players: `true` unless their `userId` matches the quiz's `author`
+  (owner). This matches the existing guard logic in `QuizRatingGuard`.
+
+**Tip:** Reference `buildGameResultPlayerEvent` in
+`game-result-event.utils.ts` for how to extract rank, score, streak, and
+behind data from the game participants. The patterns are very similar.
+
+---
+
+### 8. Quiz Rating Schema Update — Discriminated Author
+
+**Files:**
+
+- `packages/common/src/models/quiz-rating-author-type.enum.ts` (new)
+- `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating-author.schema.ts` (new)
+- `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts` (modify)
+
+The current schema stores `author` as a required `User` reference:
+
+```typescript
+@Prop({ type: String, ref: 'User', required: true, index: true })
+author: User
+```
+
+This only supports logged-in users. To support anonymous players, the author
+field is replaced with a **discriminated subdocument** — the same pattern
+used throughout the codebase for participants (`ParticipantBase` →
+`ParticipantHost` | `ParticipantPlayer`), tasks, and questions.
+
+#### New Enum
+
+**File:** `packages/common/src/models/quiz-rating-author-type.enum.ts`
+
+```typescript
+export enum QuizRatingAuthorType {
+  User = 'USER',
+  Anonymous = 'ANONYMOUS',
+}
+```
+
+Export from `models/index.ts` and `packages/common/src/index.ts`.
+
+#### Author Subdocument Schemas
+
+**File:** `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating-author.schema.ts`
+
+Define three schema classes following the discriminator pattern used by
+`ParticipantBase`/`ParticipantHost`/`ParticipantPlayer` in the codebase:
+
+1. **`QuizRatingAuthorBase`** — Base schema with
+   `@Schema({ _id: false, discriminatorKey: 'type' })`. Single `type` prop
+   using `QuizRatingAuthorType` enum. This serves as the discriminator root.
+
+2. **`QuizRatingUserAuthor`** — For logged-in users.
+   `@Schema({ _id: false })`. Contains only a `user` prop as a `String` ref
+   to `'User'`. The `type` field is declared but not decorated (the
+   discriminator handles it). Nickname is NOT stored — it is always resolved
+   at query time from `User.defaultNickname` via populate. If the user
+   changes their display name, all their ratings reflect it immediately.
+
+3. **`QuizRatingAnonymousAuthor`** — For anonymous game participants.
+   `@Schema({ _id: false })`. Contains `participantId` (the game session
+   participant UUID) and `nickname` (captured at rating time from the game
+   participant data). The nickname must be stored because there is no User
+   document to resolve from.
+
+Create schemas with `SchemaFactory.createForClass` and export a union type:
+
+```typescript
+export type QuizRatingAuthor =
+  | (QuizRatingAuthorBase & QuizRatingUserAuthor)
+  | (QuizRatingAuthorBase & QuizRatingAnonymousAuthor)
+```
+
+**Tip:** Look at `participant.schema.ts` for the exact discriminator setup
+pattern — the structure is identical.
+
+#### Updated QuizRating Schema
+
+In `quiz-rating.schema.ts`, replace the flat `author: User` prop with a
+`QuizRatingAuthorBase` subdocument prop. Register the discriminators on the
+`author` path after creating the schema, just like participant discriminators
+are registered.
+
+#### Indexes
+
+Replace the existing `author` index with partial unique indexes that enforce
+one-rating-per-author-per-quiz for each type independently:
+
+- `{ quizId: 1, 'author.user': 1 }` — unique, partial filter on
+  `author.type === 'USER'`. Ensures one rating per logged-in user per quiz.
+- `{ quizId: 1, 'author.participantId': 1 }` — unique, partial filter on
+  `author.type === 'ANONYMOUS'`. Ensures one rating per anonymous participant
+  per quiz.
+- Keep existing `{ quizId: 1, created: -1 }` for chronological listing.
+- `{ 'author.user': 1, created: -1 }` for user profile rating queries.
+
+#### Why This Design
+
+- **Two distinct author types** — each with exactly the fields it needs.
+  No compromise fields, no nullables, no confusing shared columns.
+- **User authors** store only a `User` ref. Nickname is always resolved live
+  from `User.defaultNickname` — no stale data.
+- **Anonymous authors** store `participantId` and `nickname`. Nickname must be
+  stored because there is no User document to resolve from.
+- **Partial unique indexes** enforce one-rating-per-author-per-quiz for each
+  type independently without cross-type collisions.
+- **Follows existing codebase patterns** — identical discriminator approach
+  used for participants, tasks, questions, and user auth providers.
+
+---
+
+### 9. Update Repository, Service, and DTO Mapping
+
+#### Repository Changes
+
+**File:** `packages/klurigo-service/src/modules/quiz-core/repositories/quiz-rating.repository.ts`
+
+The current repository has `findQuizRatingByAuthor(quizId, author: User)`.
+This must be split into two type-specific lookup methods:
+
+- **`findQuizRatingByUserAuthor(quizId, userId)`** — queries
+  `{ quizId, 'author.type': 'USER', 'author.user': userId }`.
+- **`findQuizRatingByAnonymousAuthor(quizId, participantId)`** — queries
+  `{ quizId, 'author.type': 'ANONYMOUS', 'author.participantId': participantId }`.
+
+Update `createQuizRating` to accept `QuizRatingAuthor` (the discriminated
+subdocument) instead of a flat `User` reference.
+
+Update any `populate` calls that currently populate `author` (as a flat User
+ref) to instead populate `author.user` — only relevant when the author type is
+`USER`.
+
+**Tip:** Search for all usages of `findQuizRatingByAuthor` across the codebase
+to find every call site that needs updating. There are usages in the rating
+service and the game result service.
+
+#### Service Changes
+
+**File:** `packages/klurigo-service/src/modules/quiz-rating-api/services/quiz-rating.service.ts`
+
+The `createOrUpdateQuizRating` method currently receives a `User` object.
+Change it to receive a `QuizRatingAuthor` subdocument instead. The service
+must:
+
+1. Route to the correct repository lookup based on `author.type`:
+   - `QuizRatingAuthorType.User` → `findQuizRatingByUserAuthor`
+   - `QuizRatingAuthorType.Anonymous` → `findQuizRatingByAnonymousAuthor`
+2. Pass the author subdocument to `createQuizRating` for new ratings.
+3. Leave update logic (which modifies stars/comment/updated) mostly unchanged.
+
+The `@MurLock` concurrency control should remain. Verify the lock key
+generation still works with the new author structure.
+
+#### DTO Mapping
+
+The external DTO shape `QuizRatingAuthorDto = { id, nickname }` remains
+**unchanged** — consumers do not need to know whether the author was logged in
+or anonymous.
+
+Add a `toQuizRatingAuthorDto` mapping that switches on `author.type`:
+
+- **User author:** `{ id: author.user._id, nickname: author.user.defaultNickname }`
+  (nickname resolved at query time from the populated User).
+- **Anonymous author:** `{ id: author.participantId, nickname: author.nickname }`
+  (nickname stored at rating time).
+
+---
+
+### 10. MongoDB Migrator Update
+
+**Files:**
+
+- `tools/mongodb-migrator/src/transformers/quiz-rating.transformers.ts`
+- `tools/mongodb-migrator/src/utils/collection.utils.ts`
+
+#### Transformer
+
+All existing ratings are user-authored. The migration transformer must convert
+the flat `author` field to the new discriminated subdocument:
+
+```
+Before: { author: 'user-id-string', ... }
+After:  { author: { type: 'USER', user: 'user-id-string' }, ... }
+```
+
+The transformer should be idempotent: if `author` is already an object with a
+`type` field, skip the transformation (in case the migration runs twice).
+
+**Tip:** Look at how other transformers in
+`tools/mongodb-migrator/src/transformers/` handle document-level
+transformations. The pattern is straightforward — map over documents and
+restructure the field.
+
+#### Index Updates
+
+In `collection.utils.ts`, the `quiz_ratings` collection indexes must be
+updated to reflect the new nested author structure:
+
+- Remove the old `{ author: 1 }` index.
+- Add the four new indexes from §8 (the two partial unique indexes, the
+  chronological listing index, and the user profile query index).
+
+---
+
+### 11. Only One New Game-Scoped Endpoint
+
+**Route:** `PUT /games/:gameID/ratings`
+
+This is the only new game-scoped endpoint needed. The
+`GET /games/:gameID/player-stats` and `GET /games/:gameID/ratings/me`
+endpoints that were in earlier plan iterations have been removed — the
+`GameOverPlayerEvent` payload covers all read data.
+
+#### Controller
+
+**File:** `packages/klurigo-service/src/modules/game-api/controllers/game-rating.controller.ts` (new)
+
+Create a new controller in the game-api module. It should:
+
+- Use the `@AuthorizedGame(GameParticipantType.Player)` decorator to ensure
+  only players can rate (not hosts).
+- Accept a `CreateQuizRatingDto` body (the same DTO used by the existing
+  profile rating endpoint — contains `stars` and optional `comment`).
+- Return a `QuizRatingDto`.
+
+**Request handling logic:**
+
+1. Extract `participantId` and `userId` (if any) from the game-scoped JWT
+   token claims.
+2. Load the game and resolve the quiz.
+3. Build the correct author subdocument:
+   - If the token has a `userId` → build `QuizRatingUserAuthor` with the user
+     reference.
+   - If the token has no `userId` (anonymous) → build
+     `QuizRatingAnonymousAuthor` with `participantId` and the player's
+     nickname from the game's participants array.
+4. Delegate to `QuizRatingService.createOrUpdateQuizRating`.
+5. Return the result DTO.
+
+**Tip:** Look at `game.controller.ts` in the same module for the decorator
+patterns, token extraction, and how game-scoped endpoints are structured.
+
+#### Guard
+
+**File:** `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.ts` (new)
+
+Create a guard similar to the existing `QuizRatingGuard` (in
+`packages/klurigo-service/src/modules/quiz-rating-api/guards/quiz-rating.guard.ts`)
+but adapted for the game-scoped context:
+
+1. Verify the game exists and is in a state where rating is allowed (game
+   should be on podium task or completed).
+2. Verify the participant is a PLAYER (not host).
+3. If the participant resolves to a logged-in user, verify they are NOT the
+   quiz owner (no self-rating).
+
+**Tip:** The existing `QuizRatingGuard` checks: user is authenticated, user is
+not the quiz owner, and user has played a completed game for the quiz. The
+game-scoped guard is simpler because the game context already confirms
+participation — just check participant type and owner status.
+
+#### Module Registration
+
+Register the new controller and guard in
+`packages/klurigo-service/src/modules/game-api/game-api.module.ts`. The
+controller needs access to `QuizRatingService` — import the quiz-rating module
+or the specific service as needed.
+
+---
+
+### 12. Existing Profile Rating Endpoint Still Works
+
+**File:** `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts`
+
+`PUT /profile/quizzes/:quizId/ratings` remains unchanged from a product
+perspective. Internally, it must now wrap the `User` object in a
+`QuizRatingUserAuthor` subdocument before calling the updated service method.
+
+This is a small adapter change — build
+`{ type: QuizRatingAuthorType.User, user: authenticatedUser }` and pass it to
+`createOrUpdateQuizRating`.
+
+---
+
+### 13. Update Game Result Service for New Author Structure
+
+**File:** `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`
+
+This service looks up ratings for display on the game results page. It
+currently calls `findQuizRatingByAuthor(quizId, user)`. Update this to call
+the new `findQuizRatingByUserAuthor(quizId, userId)` method.
+
+This is a straightforward call-site update — the game results page is only
+accessible to logged-in users, so it always deals with user-authored ratings.
+
+---
+
+## Frontend Changes
+
+### 1. Relocate `RatingCard` to Shared Components
+
+**From:** `packages/klurigo-web/src/pages/GameResultsPage/components/GameResultsPageUI/sections/SummarySection/RatingCard.tsx` (and its test file)
+
+**To:** `packages/klurigo-web/src/components/RatingCard/`
+
+The `RatingCard` is currently embedded inside `SummarySection` and imports
+styles from `SummarySection.module.scss`. To share it between `GameResultsPage`
+and the new `PlayerGameOverState`, it must become a standalone shared
+component.
+
+**Steps:**
+
+- Move `RatingCard.tsx` and `RatingCard.test.tsx` to the new directory.
+- Extract rating-specific styles from `SummarySection.module.scss` into a new
+  `RatingCard.module.scss`. The rating-specific classes (`.rating`, `.content`,
+  `.title`, `.stars`, `.starButton`, `.active`, `.comment`,
+  `.disabledMessage`, etc.) should be extracted. Update imports in the
+  component accordingly.
+- Create an `index.ts` barrel export.
+- Export from `src/components/index.ts`.
+- Update `SummarySection.tsx` to import `RatingCard` from the new shared
+  location instead of the local file.
+- Remove the old file from `SummarySection/`.
+- Verify the existing `RatingCard.test.tsx` tests still pass after relocation.
+
+**The `RatingCard` props interface remains unchanged** — `canRateQuiz`,
+`stars?`, `comment?`, `onRatingChange`, `onCommentChange`.
+
+---
+
+### 2. Add `PlayerGameOverState` Component
+
+**Location:** `packages/klurigo-web/src/states/PlayerGameOverState/`
+
+```
+PlayerGameOverState/
+├── PlayerGameOverState.tsx
+├── PlayerGameOverState.module.scss
+├── PlayerGameOverState.test.tsx
+└── index.ts
+```
+
+This is a new in-game state component rendered by `GamePage`, similar to the
+existing `PlayerResultState` and other state components in `src/states/`.
+
+**Props:** The component receives the full `GameOverPlayerEvent` as its
+`event` prop.
+
+**Behavior:**
+
+- Renders entirely from the event payload — no API calls on mount.
+- Displays final rank (as a `Badge`), score, behind info with the next
+  player's nickname and point difference (using `PointsBehindIndicator` from
+  `src/states/common`), quiz title, and a rank-based header message.
+- Shows confetti on mount with intensity based on rank. Reference the
+  celebration logic in `PlayerResultState` — it uses rank thresholds (e.g.,
+  rank 1 = epic, rank 2–3 = major, rank 4–10 = normal, rank > 10 = none).
+- Shows the relocated `RatingCard` pre-populated with the existing rating data
+  from the event payload (`stars`, `comment`, `canRateQuiz`).
+- On star/comment change, calls `createOrUpdateGameRating` (§Frontend 5) to
+  persist the rating via `PUT /games/:gameID/ratings`.
+- Shows "Back to Home" button always, and "View Full Results" button only for
+  logged-in users (check `isUserAuthenticated` from the auth context).
+
+**Styling:** Reference `PlayerResultState.module.scss` for tone, responsive
+patterns, and score display. Use SCSS modules (`.module.scss`).
+
+**Design / UX:**
+
+| Section      | Content                                                                       |
+|--------------|-------------------------------------------------------------------------------|
+| **Header**   | Rank-based celebration message (e.g., "🏆 You won!", "Game Over!")            |
+| **Subtitle** | Quiz title                                                                    |
+| **Confetti** | Triggered on mount; intensity based on final rank                             |
+| **Rank**     | `Badge` component showing rank number + "out of X players" text               |
+| **Score**    | Prominently displayed final score                                             |
+| **Behind**   | `PointsBehindIndicator` showing points/nickname of the player directly ahead  |
+| **Rating**   | Shared `RatingCard`, pre-populated from event payload                         |
+| **Actions**  | "Back to Home" always visible; "View Full Results" for logged-in players only |
+
+**Tip:** Look at `PlayerResultState.tsx` closely — the celebration level
+calculation, `Badge` usage, `PointsBehindIndicator`, and overall layout are
+all directly reusable patterns. The game-over state is essentially a
+"terminal" version of the result state with an added rating card and exit
+buttons.
+
+---
+
+### 3. Do Not Add a New Route
+
+No new route is needed. The player game-over experience is just another
+rendered state inside `GamePage`. The `GameContextProvider` and auth state
+remain active — the player is still "in the game" while viewing the game-over
+screen. This avoids all issues with route guards, SSE cleanup, and context
+provider availability.
+
+---
+
+### 4. Render from Event Payload
+
+`PlayerGameOverState` renders directly from the `GameOverPlayerEvent` payload.
+No initial API fetches are needed. The event payload is the source of truth
+for all displayed data: rank, score, behind info, streak, comeback, quiz
+title/id, existing rating, and `canRateQuiz`.
+
+---
+
+### 5. Add Rating Write API Function
+
+**File:** `packages/klurigo-web/src/api/resources/game.resource.ts`
+
+Add a `createOrUpdateGameRating` function that sends a `PUT` request to
+`/games/<gameId>/ratings` with a `CreateQuizRatingDto` body and returns a
+`QuizRatingDto`.
+
+**Tip:** Follow the existing pattern in `game.resource.ts` — all functions use
+`deps.apiPut` / `deps.apiPost` with `deps.notifyError` callbacks. Match that
+style exactly.
+
+---
+
+### 6. Update `GamePage` Rendering and Navigation Blocker
+
+**File:** `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`
+
+**Rendering switch (lines 212–242):**
+
+- Import `PlayerGameOverState` from `../../states/PlayerGameOverState`.
+- Add a `case GameEventType.GameOverPlayer:` that returns
+  `<PlayerGameOverState event={eventToRender} />`.
+- Place the case between `GamePodiumHost` and the default, following the
+  existing ordering convention.
+
+This keeps the player inside the existing game shell — no route change occurs.
+
+**Navigation blocker (lines 158–168):**
+
+Add `GameEventType.GameOverPlayer` to the allowed event types array alongside
+`GamePodiumHost` and `GameQuitEvent`, so that when a player on the game-over
+screen clicks "Back to Home" or "View Full Results", the programmatic
+navigation triggered by `revokeGame` is not blocked.
+
+---
+
+### 7. `GamePage` QUIT Handling — No Changes Needed
+
+No changes needed to the existing quit handling code (lines 171–183). The
+`GameQuitEvent` `useEffect` continues to work as-is and is relevant for:
+
+- Host flow (redirect to results or home).
+- Premature game exits (host quits during an earlier task).
+- Non-podium quit scenarios.
+
+In the new flow, players receive `GameOverPlayerEvent` on the podium — they
+never see `GameQuitEvent` during the normal completion flow.
+
+---
+
+### 8. `PlayerGameOverState` Exit Flow
+
+When the player clicks **"Back to Home":**
+
+- Call `revokeGame({ redirectTo: '/' })`.
+- This revokes the game-scoped JWT (best-effort), navigates to `/`, and
+  clears local auth state.
+
+When the player clicks **"View Full Results"** (logged-in only):
+
+- Call `revokeGame({ redirectTo: '/game/results/<gameID>' })`.
+- This revokes the game token, navigates to the results page (which requires
+  `TokenScope.User`), and clears game auth state.
+- The user's User-scoped token remains valid, so the results page loads
+  normally.
+
+**Important:** Revoke only happens when the player explicitly exits. While the
+player is on the game-over screen, the game token remains active — enabling
+the rating API call and SSE reconnection.
+
+**Tip:** The `revokeGame` function is available from the auth context. Look at
+how the existing quit handling in `GamePage` uses it — the same patterns apply.
+
+---
+
+## Testing Plan
+
+### Backend Tests
+
+| Area                            | Type             | Key Scenarios                                                                        |
+|---------------------------------|------------------|--------------------------------------------------------------------------------------|
+| SSE subscribe behavior          | Unit/Integration | Completed games can still subscribe successfully                                     |
+| `GameOverPlayerEvent` builder   | Unit             | Produces correct rank, score, behind (with nickname), rating snapshot for all cases  |
+| Podium event dispatch           | Unit             | Active podium: host gets `GamePodiumHostEvent`, player gets `GameOverPlayerEvent`    |
+| Completed podium event dispatch | Unit             | Completed podium: host gets `GameQuitEvent`, player still gets `GameOverPlayerEvent` |
+| Podium completion callback      | Unit             | Marks game completed, keeps podium as current task, does NOT create quit task        |
+| Quiz rating author schema       | Unit             | User vs Anonymous author discriminators serialize/deserialize correctly              |
+| Quiz rating repository          | Unit             | `findByUserAuthor` and `findByAnonymousAuthor` return correct results                |
+| Quiz rating service             | Unit             | createOrUpdate works for both author types, routes to correct lookup                 |
+| Game-scoped rating endpoint     | Unit/Integration | create/update for anonymous players, create/update for logged-in players             |
+| Game rating guard               | Unit             | Rejects hosts, rejects quiz owners, allows valid players, allows anonymous players   |
+| Profile rating endpoint         | Regression       | Still creates/updates user-authored ratings correctly with new subdocument           |
+| Game result service             | Regression       | Rating lookup works with new `findQuizRatingByUserAuthor` method                     |
+| Migration transformer           | Unit             | flat `author: 'user-id'` becomes `{ type: 'USER', user: 'user-id' }`                 |
+| DTO mapping                     | Unit             | User author maps to `{ id: userId, nickname: defaultNickname }`                      |
+| DTO mapping                     | Unit             | Anonymous author maps to `{ id: participantId, nickname: storedNickname }`           |
+
+### Frontend Tests
+
+| Area                    | Type      | Key Scenarios                                                                     |
+|-------------------------|-----------|-----------------------------------------------------------------------------------|
+| `GamePage` rendering    | Component | `GameOverPlayerEvent` renders `PlayerGameOverState`                               |
+| `GamePage` blocker      | Component | Navigation is allowed when event type is `GameOverPlayer`                         |
+| `PlayerGameOverState`   | Component | Renders rank badge, score, behind info (nickname + points), quiz title from event |
+| Celebration logic       | Component | Confetti intensity: rank 1=epic, rank 2-3=major, rank 4-10=normal, rank >10=none  |
+| Header messages         | Component | Rank-based messages display correctly                                             |
+| Rating display          | Component | `RatingCard` receives correct initial stars/comment/canRateQuiz from event        |
+| Rating disabled         | Component | `canRateQuiz=false` disables rating UI (quiz owner scenario)                      |
+| Rating submit           | Component | Star change triggers `PUT /games/:gameID/ratings`, updates local state            |
+| Exit - home             | Component | "Back to Home" calls `revokeGame({ redirectTo: '/' })`                            |
+| Exit - results          | Component | "View Full Results" calls `revokeGame({ redirectTo: '/game/results/...' })`       |
+| Exit - auth visibility  | Component | "View Full Results" only visible when `isUserAuthenticated` is true               |
+| `RatingCard` relocation | Component | Tests still pass after relocation; works in both locations                        |
+| Reconnect behavior      | Component | Reopening a completed podium game renders `PlayerGameOverState` again             |
+
+### Common Package Tests
+
+| Area                        | Type | Key Scenarios                                                   |
+|-----------------------------|------|-----------------------------------------------------------------|
+| `GameOverPlayerEvent` types | Unit | Type definitions compile correctly, event shape is valid        |
+| `QuizRatingAuthorType` enum | Unit | Enum values (`USER`, `ANONYMOUS`) are exported and stable       |
+| `GameEventType` enum        | Unit | `GameOverPlayer` value is present and correctly placed in union |
+
+---
+
+## File Change Summary
+
+### New Files
+
+| File                                                                                                      | Description                            |
+|-----------------------------------------------------------------------------------------------------------|----------------------------------------|
+| `packages/common/src/models/quiz-rating-author-type.enum.ts`                                              | Author type enum                       |
+| `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating-author.schema.ts` | Author discriminator schemas           |
+| `packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.ts`                          | `GameOverPlayerEvent` builder function |
+| `packages/klurigo-service/src/modules/game-event/utils/game-over-event.utils.spec.ts`                     | Builder tests                          |
+| `packages/klurigo-service/src/modules/game-api/controllers/game-rating.controller.ts`                     | Game-scoped rating endpoint            |
+| `packages/klurigo-service/src/modules/game-api/controllers/game-rating.controller.spec.ts`                | Endpoint tests                         |
+| `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.ts`                          | Rating authorization guard             |
+| `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.spec.ts`                     | Guard tests                            |
+| `packages/klurigo-web/src/components/RatingCard/RatingCard.tsx`                                           | Relocated shared rating card           |
+| `packages/klurigo-web/src/components/RatingCard/RatingCard.module.scss`                                   | Extracted rating card styles           |
+| `packages/klurigo-web/src/components/RatingCard/RatingCard.test.tsx`                                      | Relocated tests                        |
+| `packages/klurigo-web/src/components/RatingCard/index.ts`                                                 | Barrel export                          |
+| `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.tsx`                             | New player game-over state component   |
+| `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.module.scss`                     | Styles                                 |
+| `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.test.tsx`                        | Tests                                  |
+| `packages/klurigo-web/src/states/PlayerGameOverState/index.ts`                                            | Barrel export                          |
+
+### Modified Files
+
+| File                                                                                                 | Change                                                                     |
+|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `packages/common/src/models/game-event-type.enum.ts`                                                 | Add `GameOverPlayer`                                                       |
+| `packages/common/src/models/game-event.ts`                                                           | Add `GameOverPlayerEvent` and sub-types, update `GameEvent` union          |
+| `packages/common/src/models/index.ts`                                                                | Export new types, enum, and author type                                    |
+| `packages/common/src/index.ts`                                                                       | Export new types and enum                                                  |
+| `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`                  | Allow subscriptions for completed games, enrich podium metadata            |
+| `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`                   | Extract podium case, route to `buildGameOverPlayerEvent`                   |
+| `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`                     | Add completed-status check for host quit in podium block                   |
+| `packages/klurigo-service/src/modules/game-event/utils/index.ts`                                     | Export new builder                                                         |
+| `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.ts`                      | Add `existingRating`, `quizTitle`, `quizId`, `canRateQuiz` metadata fields |
+| `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`            | Keep podium as current task when marking game completed                    |
+| `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts`   | Replace flat author with discriminated subdocument                         |
+| `packages/klurigo-service/src/modules/quiz-core/repositories/quiz-rating.repository.ts`              | Split author lookup into type-specific methods, update create and populate |
+| `packages/klurigo-service/src/modules/quiz-rating-api/services/quiz-rating.service.ts`               | Accept `QuizRatingAuthor`, route lookups by type, update DTO mapping       |
+| `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts` | Build `QuizRatingUserAuthor` subdocument before calling service            |
+| `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`                   | Update rating lookup to `findQuizRatingByUserAuthor`                       |
+| `packages/klurigo-service/src/modules/game-api/game-api.module.ts`                                   | Register new controller, guard, and service imports                        |
+| `tools/mongodb-migrator/src/transformers/quiz-rating.transformers.ts`                                | Migrate flat author to discriminated author subdocument                    |
+| `tools/mongodb-migrator/src/utils/collection.utils.ts`                                               | Update rating indexes for nested author structure                          |
+| `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`                                               | Add `GameOverPlayer` case to rendering switch and navigation blocker       |
+| `packages/klurigo-web/src/api/resources/game.resource.ts`                                            | Add `createOrUpdateGameRating` function                                    |
+| `packages/klurigo-web/src/components/index.ts`                                                       | Export relocated `RatingCard`                                              |
+| `packages/klurigo-web/src/pages/GameResultsPage/.../SummarySection/SummarySection.tsx`               | Import `RatingCard` from shared components                                 |
+
+### Relocated Files
+
+| From                                                    | To                                                 |
+|---------------------------------------------------------|----------------------------------------------------|
+| `.../SummarySection/RatingCard.tsx`                     | `src/components/RatingCard/RatingCard.tsx`         |
+| `.../SummarySection/RatingCard.test.tsx`                | `src/components/RatingCard/RatingCard.test.tsx`    |
+| (styles extracted from `SummarySection.module.scss`)    | `src/components/RatingCard/RatingCard.module.scss` |
