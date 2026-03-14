@@ -274,7 +274,7 @@ non-podium quit scenarios.
 
 ---
 
-### 7. Add `QuizRatingAuthorType` Enum to Common Package
+### 7. Add `QuizRatingAuthorType` Enum to Common Package [DONE]
 
 **Files:**
 
