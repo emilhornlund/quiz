@@ -19,6 +19,7 @@ import {
   buildGameBeginPlayerEvent,
   buildGameLobbyPlayerEvent,
 } from './game-lobby-event.utils'
+import { buildGameOverPlayerEvent } from './game-over-event.utils'
 import {
   buildGameQuestionPlayerEvent,
   buildGameQuestionPreviewPlayerEvent,
@@ -67,11 +68,7 @@ export function buildPlayerGameEvent(
     }
   }
 
-  if (
-    isQuestionResultTask(game) ||
-    isLeaderboardTask(game) ||
-    isPodiumTask(game)
-  ) {
+  if (isQuestionResultTask(game) || isLeaderboardTask(game)) {
     switch (game.currentTask.status) {
       case 'pending':
         return buildGameLoadingEvent()
@@ -79,6 +76,16 @@ export function buildPlayerGameEvent(
         return buildGameResultPlayerEvent(game, player)
       case 'completed':
         return buildGameLoadingEvent()
+    }
+  }
+
+  if (isPodiumTask(game)) {
+    switch (game.currentTask.status) {
+      case 'pending':
+        return buildGameLoadingEvent()
+      case 'active':
+      case 'completed':
+        return buildGameOverPlayerEvent(game, player, metadata)
     }
   }
 

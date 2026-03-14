@@ -288,8 +288,8 @@ data must be pre-fetched.
 |---------------------------|-----------------------------------------------------------------------|
 | `game.id`                 | `game._id`                                                            |
 | `game.mode`               | `game.mode`                                                           |
-| `quiz.id`                 | From enriched metadata (quiz lookup in subscriber)                    |
-| `quiz.title`              | From enriched metadata (quiz lookup in subscriber)                    |
+| `quiz.id`                 | `game.quiz._id`                                                       |
+| `quiz.title`              | `game.name`                                                           |
 | `player.nickname`         | `playerParticipant.nickname`                                          |
 | `player.rank`             | `playerParticipant.rank` (already calculated on podium)               |
 | `player.totalPlayers`     | Count of player-type participants in `game.participants`              |
