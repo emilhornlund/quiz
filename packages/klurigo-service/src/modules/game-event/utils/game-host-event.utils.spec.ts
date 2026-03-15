@@ -211,14 +211,43 @@ describe('buildHostGameEvent', () => {
       expect(result.type).toBe(GameEventType.GameLoading)
     })
 
-    it('should return podium host event when podium task status is active', () => {
+    it('should return podium host event when podium task status is active and game is active', () => {
       const game = createMockGameDocument({
+        status: GameStatus.Active,
         currentTask: createMockPodiumTaskDocument({ status: 'active' }),
       })
 
       const result = buildHostGameEvent(game as never)
 
       expect(result.type).toBe(GameEventType.GamePodiumHost)
+    })
+
+    it('should return quit event when podium task status is active and game is completed', () => {
+      const game = createMockGameDocument({
+        status: GameStatus.Completed,
+        currentTask: createMockPodiumTaskDocument({ status: 'active' }),
+      })
+
+      const result = buildHostGameEvent(game as never)
+
+      expect(result.type).toBe(GameEventType.GameQuitEvent)
+      if (result.type === GameEventType.GameQuitEvent) {
+        expect(result.status).toBe(GameStatus.Completed)
+      }
+    })
+
+    it('should return quit event when podium task status is pending and game is completed', () => {
+      const game = createMockGameDocument({
+        status: GameStatus.Completed,
+        currentTask: createMockPodiumTaskDocument({ status: 'pending' }),
+      })
+
+      const result = buildHostGameEvent(game as never)
+
+      expect(result.type).toBe(GameEventType.GameQuitEvent)
+      if (result.type === GameEventType.GameQuitEvent) {
+        expect(result.status).toBe(GameStatus.Completed)
+      }
     })
 
     it('should return loading event when podium task status is completed', () => {

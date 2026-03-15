@@ -192,25 +192,26 @@ describe('buildPlayerGameEvent', () => {
       expect(result.type).toBe(GameEventType.GameLoading)
     })
 
-    it('should return result player event when podium task status is active', () => {
+    it('should return game over player event when podium task status is active', () => {
       const game = createMockGameDocument({
         currentTask: createMockPodiumTaskDocument({ status: 'active' }),
-        previousTasks: [createMockQuestionResultTaskDocument()],
+        participants: [mockPlayer],
       })
 
       const result = buildPlayerGameEvent(game as never, mockPlayer)
 
-      expect(result.type).toBe(GameEventType.GameResultPlayer)
+      expect(result.type).toBe(GameEventType.GameOverPlayer)
     })
 
-    it('should return loading event when podium task status is completed', () => {
+    it('should return game over player event when podium task status is completed', () => {
       const game = createMockGameDocument({
         currentTask: createMockPodiumTaskDocument({ status: 'completed' }),
+        participants: [mockPlayer],
       })
 
       const result = buildPlayerGameEvent(game as never, mockPlayer)
 
-      expect(result.type).toBe(GameEventType.GameLoading)
+      expect(result.type).toBe(GameEventType.GameOverPlayer)
     })
   })
 
