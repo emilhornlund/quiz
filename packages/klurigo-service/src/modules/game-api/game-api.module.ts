@@ -11,6 +11,7 @@ import { UserModule } from '../user'
 
 import {
   GameController,
+  GameRatingController,
   GameSettingsController,
   ProfileGameController,
   QuizGameController,
@@ -35,6 +36,7 @@ import { GameRatingService, GameService, GameSettingsService } from './services'
   ],
   controllers: [
     GameController,
+    GameRatingController,
     GameSettingsController,
     QuizGameController,
     ProfileGameController,

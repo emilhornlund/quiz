@@ -722,7 +722,7 @@ are already imported.
 
 ---
 
-### 15. Game-Scoped Rating Endpoint
+### 15. Game-Scoped Rating Endpoint [DONE]
 
 **Route:** `PUT /games/:gameID/ratings`
 
