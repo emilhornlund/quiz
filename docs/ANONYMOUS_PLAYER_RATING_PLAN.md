@@ -821,38 +821,7 @@ pattern.
 
 ## Frontend Changes
 
-### 1. Relocate `RatingCard` to Shared Components
-
-**From:** `packages/klurigo-web/src/pages/GameResultsPage/components/GameResultsPageUI/sections/SummarySection/RatingCard.tsx` (and its test file)
-
-**To:** `packages/klurigo-web/src/components/RatingCard/`
-
-The `RatingCard` is currently embedded inside `SummarySection` and imports
-styles from `SummarySection.module.scss`. To share it between `GameResultsPage`
-and the new `PlayerGameOverState`, it must become a standalone shared
-component.
-
-**Steps:**
-
-- Move `RatingCard.tsx` and `RatingCard.test.tsx` to the new directory.
-- Extract rating-specific styles from `SummarySection.module.scss` into a new
-  `RatingCard.module.scss`. The rating-specific classes (`.rating`, `.content`,
-  `.title`, `.stars`, `.starButton`, `.active`, `.comment`,
-  `.disabledMessage`, etc.) should be extracted. Update imports in the
-  component accordingly.
-- Create an `index.ts` barrel export.
-- Export from `src/components/index.ts`.
-- Update `SummarySection.tsx` to import `RatingCard` from the new shared
-  location instead of the local file.
-- Remove the old file from `SummarySection/`.
-- Verify the existing `RatingCard.test.tsx` tests still pass after relocation.
-
-**The `RatingCard` props interface remains unchanged** — `canRateQuiz`,
-`stars?`, `comment?`, `onRatingChange`, `onCommentChange`.
-
----
-
-### 2. Add Rating Write API Function
+### 1. Add Rating Write API Function
 
 **File:** `packages/klurigo-web/src/api/resources/game.resource.ts`
 
@@ -866,10 +835,9 @@ style exactly.
 
 ---
 
-### 3. Add `PlayerGameOverState` Component
+### 2. Add `PlayerGameOverState` Component
 
-**Depends on:** Task 1 (relocated `RatingCard`) and Task 2 (rating API
-function).
+**Depends on:** Task 1 (rating API function).
 
 **Location:** `packages/klurigo-web/src/states/PlayerGameOverState/`
 
@@ -878,6 +846,8 @@ PlayerGameOverState/
 ├── PlayerGameOverState.tsx
 ├── PlayerGameOverState.module.scss
 ├── PlayerGameOverState.test.tsx
+├── RatingCard.tsx
+├── RatingCard.test.tsx
 └── index.ts
 ```
 
@@ -900,10 +870,9 @@ existing rating, and `canRateQuiz`.
 - Shows confetti on mount with intensity based on rank. Reference the
   celebration logic in `PlayerResultState` — it uses rank thresholds (e.g.,
   rank 1 = epic, rank 2–3 = major, rank 4–10 = normal, rank > 10 = none).
-- Shows the relocated `RatingCard` (from Task 1), pre-populated with the
-  existing rating data from the event payload (`stars`, `comment`,
-  `canRateQuiz`).
-- On star/comment change, calls `createOrUpdateGameRating` (from Task 2) to
+- Shows a local `RatingCard` (see below) pre-populated with the existing
+  rating data from the event payload (`stars`, `comment`, `canRateQuiz`).
+- On star/comment change, calls `createOrUpdateGameRating` (from Task 1) to
   persist the rating via `PUT /games/:gameID/ratings`.
 - Shows "Back to Home" button always, and "View Full Results" button only for
   logged-in users (check `isUserAuthenticated` from the auth context).
@@ -931,6 +900,34 @@ the rating API call and SSE reconnection.
 **Tip:** The `revokeGame` function is available from the auth context. Look at
 how the existing quit handling in `GamePage` uses it — the same patterns apply.
 
+#### `RatingCard` — Local Sub-Component
+
+A new `RatingCard` component is created inside the `PlayerGameOverState/`
+directory. It is **not** shared with `GameResultsPage` — the existing
+`RatingCard` in `SummarySection/` remains untouched.
+
+**Why not relocate the existing one?** The existing `RatingCard` in
+`SummarySection` has deep styling dependencies on `SummarySection.module.scss`
+(it uses the shared `.card` base class alongside five other card variants).
+Extracting it cleanly would require either duplicating the base styles or
+introducing a fragile shared dependency. Since `RatingCard` is a simple
+presentational component (~60 lines of JSX, zero internal state, zero hooks),
+creating a fresh version with its own styles is simpler and lower-risk.
+
+**Props:** Same interface as the existing `RatingCard` — `canRateQuiz`,
+`stars?`, `comment?`, `onRatingChange`, `onCommentChange`.
+
+**Behavior:** Identical to the existing `RatingCard` — renders a "Rate this
+quiz" title, five interactive star buttons, an optional comment textarea (shown
+after selecting a rating), and a disabled message when `canRateQuiz` is false.
+
+**Styling:** The new `RatingCard` styles live in
+`PlayerGameOverState.module.scss` (or a dedicated `RatingCard.module.scss` if
+preferred). Reference the existing rating styles in
+`SummarySection.module.scss` for visual consistency (star sizing, colors, hover
+states, responsive breakpoints), but adapt the container styling to fit the
+game-over layout rather than the card grid layout of the results page.
+
 **Styling:** Reference `PlayerResultState.module.scss` for tone, responsive
 patterns, and score display. Use SCSS modules (`.module.scss`).
 
@@ -944,7 +941,7 @@ patterns, and score display. Use SCSS modules (`.module.scss`).
 | **Rank**     | `Badge` component showing rank number + "out of X players" text               |
 | **Score**    | Prominently displayed final score                                             |
 | **Behind**   | `PointsBehindIndicator` showing points/nickname of the player directly ahead  |
-| **Rating**   | Shared `RatingCard`, pre-populated from event payload                         |
+| **Rating**   | Local `RatingCard`, pre-populated from event payload                          |
 | **Actions**  | "Back to Home" always visible; "View Full Results" for logged-in players only |
 
 **Tip:** Look at `PlayerResultState.tsx` closely — the celebration level
@@ -955,9 +952,9 @@ buttons.
 
 ---
 
-### 4. Integrate `PlayerGameOverState` into `GamePage`
+### 3. Integrate `PlayerGameOverState` into `GamePage`
 
-**Depends on:** Task 3 (`PlayerGameOverState` component).
+**Depends on:** Task 2 (`PlayerGameOverState` component).
 
 **File:** `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`
 
@@ -1015,21 +1012,21 @@ new flow, players receive `GameOverPlayerEvent` on the podium — they never see
 
 ### Frontend Tests
 
-| Area                    | Type      | Key Scenarios                                                                     |
-|-------------------------|-----------|-----------------------------------------------------------------------------------|
-| `GamePage` rendering    | Component | `GameOverPlayerEvent` renders `PlayerGameOverState`                               |
-| `GamePage` blocker      | Component | Navigation is allowed when event type is `GameOverPlayer`                         |
-| `PlayerGameOverState`   | Component | Renders rank badge, score, behind info (nickname + points), quiz title from event |
-| Celebration logic       | Component | Confetti intensity: rank 1=epic, rank 2-3=major, rank 4-10=normal, rank >10=none  |
-| Header messages         | Component | Rank-based messages display correctly                                             |
-| Rating display          | Component | `RatingCard` receives correct initial stars/comment/canRateQuiz from event        |
-| Rating disabled         | Component | `canRateQuiz=false` disables rating UI (quiz owner scenario)                      |
-| Rating submit           | Component | Star change triggers `PUT /games/:gameID/ratings`, updates local state            |
-| Exit - home             | Component | "Back to Home" calls `revokeGame({ redirectTo: '/' })`                            |
-| Exit - results          | Component | "View Full Results" calls `revokeGame({ redirectTo: '/game/results/...' })`       |
-| Exit - auth visibility  | Component | "View Full Results" only visible when `isUserAuthenticated` is true               |
-| `RatingCard` relocation | Component | Tests still pass after relocation; works in both locations                        |
-| Reconnect behavior      | Component | Reopening a completed podium game renders `PlayerGameOverState` again             |
+| Area                   | Type      | Key Scenarios                                                                     |
+|------------------------|-----------|-----------------------------------------------------------------------------------|
+| `GamePage` rendering   | Component | `GameOverPlayerEvent` renders `PlayerGameOverState`                               |
+| `GamePage` blocker     | Component | Navigation is allowed when event type is `GameOverPlayer`                         |
+| `PlayerGameOverState`  | Component | Renders rank badge, score, behind info (nickname + points), quiz title from event |
+| Celebration logic      | Component | Confetti intensity: rank 1=epic, rank 2-3=major, rank 4-10=normal, rank >10=none  |
+| Header messages        | Component | Rank-based messages display correctly                                             |
+| Rating display         | Component | `RatingCard` receives correct initial stars/comment/canRateQuiz from event        |
+| Rating disabled        | Component | `canRateQuiz=false` disables rating UI (quiz owner scenario)                      |
+| Rating submit          | Component | Star change triggers `PUT /games/:gameID/ratings`, updates local state            |
+| Exit - home            | Component | "Back to Home" calls `revokeGame({ redirectTo: '/' })`                            |
+| Exit - results         | Component | "View Full Results" calls `revokeGame({ redirectTo: '/game/results/...' })`       |
+| Exit - auth visibility | Component | "View Full Results" only visible when `isUserAuthenticated` is true               |
+| `RatingCard`           | Component | Renders stars, comment textarea, disabled state; delegates callbacks to parent    |
+| Reconnect behavior     | Component | Reopening a completed podium game renders `PlayerGameOverState` again             |
 
 ### Common Package Tests
 
@@ -1055,13 +1052,11 @@ new flow, players receive `GameOverPlayerEvent` on the podium — they never see
 | `packages/klurigo-service/src/modules/game-api/controllers/game-rating.controller.spec.ts`                | Endpoint tests                         |
 | `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.ts`                          | Rating authorization guard             |
 | `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.spec.ts`                     | Guard tests                            |
-| `packages/klurigo-web/src/components/RatingCard/RatingCard.tsx`                                           | Relocated shared rating card           |
-| `packages/klurigo-web/src/components/RatingCard/RatingCard.module.scss`                                   | Extracted rating card styles           |
-| `packages/klurigo-web/src/components/RatingCard/RatingCard.test.tsx`                                      | Relocated tests                        |
-| `packages/klurigo-web/src/components/RatingCard/index.ts`                                                 | Barrel export                          |
 | `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.tsx`                             | New player game-over state component   |
 | `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.module.scss`                     | Styles                                 |
 | `packages/klurigo-web/src/states/PlayerGameOverState/PlayerGameOverState.test.tsx`                        | Tests                                  |
+| `packages/klurigo-web/src/states/PlayerGameOverState/RatingCard.tsx`                                      | Local rating card sub-component        |
+| `packages/klurigo-web/src/states/PlayerGameOverState/RatingCard.test.tsx`                                 | Rating card tests                      |
 | `packages/klurigo-web/src/states/PlayerGameOverState/index.ts`                                            | Barrel export                          |
 
 ### Modified Files
@@ -1088,13 +1083,4 @@ new flow, players receive `GameOverPlayerEvent` on the podium — they never see
 | `tools/mongodb-migrator/src/utils/collection.utils.ts`                                               | Update rating indexes for nested author structure                           |
 | `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`                                               | Add `GameOverPlayer` case to rendering switch and navigation blocker        |
 | `packages/klurigo-web/src/api/resources/game.resource.ts`                                            | Add `createOrUpdateGameRating` function                                     |
-| `packages/klurigo-web/src/components/index.ts`                                                       | Export relocated `RatingCard`                                               |
-| `packages/klurigo-web/src/pages/GameResultsPage/.../SummarySection/SummarySection.tsx`               | Import `RatingCard` from shared components                                  |
 
-### Relocated Files
-
-| From                                                    | To                                                 |
-|---------------------------------------------------------|----------------------------------------------------|
-| `.../SummarySection/RatingCard.tsx`                     | `src/components/RatingCard/RatingCard.tsx`         |
-| `.../SummarySection/RatingCard.test.tsx`                | `src/components/RatingCard/RatingCard.test.tsx`    |
-| (styles extracted from `SummarySection.module.scss`)    | `src/components/RatingCard/RatingCard.module.scss` |
