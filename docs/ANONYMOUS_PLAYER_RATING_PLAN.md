@@ -303,7 +303,7 @@ Export from `models/index.ts` and `packages/common/src/index.ts`.
 
 ---
 
-### 8. Quiz Rating Schema — Author Subdocuments and Updated Rating Schema
+### 8. Quiz Rating Schema — Author Subdocuments and Updated Rating Schema [DONE]
 
 **Files:**
 

@@ -1,10 +1,21 @@
-import { PaginatedQuizRatingDto, QuizRatingDto } from '@klurigo/common'
+import {
+  PaginatedQuizRatingDto,
+  QuizRatingAuthorType,
+  QuizRatingDto,
+} from '@klurigo/common'
 import { Injectable, Logger } from '@nestjs/common'
 import { MurLock } from 'murlock'
 
 import { QuizRepository } from '../../quiz-core/repositories'
 import { QuizRatingRepository } from '../../quiz-core/repositories'
-import { QuizRating } from '../../quiz-core/repositories/models/schemas'
+import {
+  QuizRating,
+  QuizRatingUserAuthorWithBase,
+} from '../../quiz-core/repositories/models/schemas'
+import {
+  isQuizRatingAnonymousAuthor,
+  isQuizRatingUserAuthor,
+} from '../../quiz-core/utils'
 import { User } from '../../user/repositories'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
 import { updateQuizRatingSummary } from '../utils'
@@ -134,7 +145,10 @@ export class QuizRatingService {
         )
       : await this.quizRatingRepository.createQuizRating(
           quizId,
-          author,
+          {
+            type: QuizRatingAuthorType.User,
+            user: author,
+          } as QuizRatingUserAuthorWithBase,
           now,
           stars,
           comment,
@@ -164,18 +178,36 @@ export class QuizRatingService {
   /**
    * Maps a rating persistence model to a public DTO.
    *
+   * Resolves the author identity from the discriminated author subdocument.
+   * For user-authored ratings, the author nickname is resolved from the
+   * populated User document. For anonymous ratings, the stored nickname is used.
+   *
    * @param quizRating - The rating document.
    * @returns The mapped DTO.
    */
   private static toQuizRatingDto(quizRating: QuizRating): QuizRatingDto {
+    const { author } = quizRating
+    let authorId: string
+    let authorNickname: string
+
+    if (isQuizRatingUserAuthor(author)) {
+      authorId = author.user._id
+      authorNickname = author.user.defaultNickname
+    } else if (isQuizRatingAnonymousAuthor(author)) {
+      authorId = author.participantId
+      authorNickname = author.nickname
+    } else {
+      throw new Error('Unknown author')
+    }
+
     return {
       id: quizRating._id,
       quizId: quizRating.quizId,
       stars: quizRating.stars,
       comment: quizRating.comment,
       author: {
-        id: quizRating.author._id,
-        nickname: quizRating.author.defaultNickname,
+        id: authorId,
+        nickname: authorNickname,
       },
       createdAt: quizRating.created,
       updatedAt: quizRating.updated,

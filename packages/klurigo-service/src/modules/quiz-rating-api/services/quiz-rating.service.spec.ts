@@ -1,3 +1,4 @@
+import { QuizRatingAuthorType } from '@klurigo/common'
 import { Logger } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 
@@ -7,7 +8,11 @@ import {
 } from '../../../../test-utils/data'
 import { QuizRepository } from '../../quiz-core/repositories'
 import { QuizRatingRepository } from '../../quiz-core/repositories'
-import { QuizRating } from '../../quiz-core/repositories/models/schemas'
+import {
+  QuizRating,
+  QuizRatingUserAuthorWithBase,
+} from '../../quiz-core/repositories/models/schemas'
+import { LocalUser } from '../../user/repositories'
 import { QuizRatingByQuizAndAuthorNotFoundException } from '../exceptions'
 import { updateQuizRatingSummary } from '../utils'
 
@@ -81,17 +86,30 @@ describe(QuizRatingService.name, () => {
     jest.useRealTimers()
   })
 
-  const createRating = (args?: Partial<QuizRating>): QuizRating =>
-    ({
+  const createRating = (
+    args?: Partial<Omit<QuizRating, 'author'>> & {
+      author?: LocalUser | QuizRatingUserAuthorWithBase
+    },
+  ): QuizRating => {
+    const rawAuthor = args?.author ?? buildMockPrimaryUser()
+    const author: QuizRatingUserAuthorWithBase =
+      'type' in rawAuthor
+        ? (rawAuthor as QuizRatingUserAuthorWithBase)
+        : ({
+            type: QuizRatingAuthorType.User,
+            user: rawAuthor,
+          } as QuizRatingUserAuthorWithBase)
+    return {
       _id: 'rating-1',
       quizId: 'quiz-1',
       stars: 5,
       comment: 'Great quiz',
-      author: buildMockPrimaryUser(),
       created: new Date('2026-01-10T10:00:00.000Z'),
       updated: new Date('2026-01-10T11:00:00.000Z'),
-      ...(args ?? {}),
-    }) as unknown as QuizRating
+      ...args,
+      author,
+    } as unknown as QuizRating
+  }
 
   describe('findQuizRatingByQuizIdAndAuthor', () => {
     it('returns mapped DTO when rating exists', async () => {
@@ -303,7 +321,7 @@ describe(QuizRatingService.name, () => {
       expect(quizRatingRepository.createQuizRating).toHaveBeenCalledTimes(1)
       expect(quizRatingRepository.createQuizRating).toHaveBeenCalledWith(
         quizId,
-        author,
+        { type: QuizRatingAuthorType.User, user: author },
         fixedNow,
         stars,
         comment,
@@ -710,7 +728,7 @@ describe(QuizRatingService.name, () => {
 
       expect(quizRatingRepository.createQuizRating).toHaveBeenCalledWith(
         quizId,
-        author,
+        { type: QuizRatingAuthorType.User, user: author },
         fixedNow,
         1,
         undefined,
@@ -792,7 +810,7 @@ describe(QuizRatingService.name, () => {
 
       expect(quizRatingRepository.createQuizRating).toHaveBeenCalledWith(
         quizId,
-        author,
+        { type: QuizRatingAuthorType.User, user: author },
         fixedNow,
         stars,
         undefined,
