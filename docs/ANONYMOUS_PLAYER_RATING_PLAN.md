@@ -852,7 +852,24 @@ component.
 
 ---
 
-### 2. Add `PlayerGameOverState` Component
+### 2. Add Rating Write API Function
+
+**File:** `packages/klurigo-web/src/api/resources/game.resource.ts`
+
+Add a `createOrUpdateGameRating` function that sends a `PUT` request to
+`/games/<gameId>/ratings` with a `CreateQuizRatingDto` body and returns a
+`QuizRatingDto`.
+
+**Tip:** Follow the existing pattern in `game.resource.ts` — all functions use
+`deps.apiPut` / `deps.apiPost` with `deps.notifyError` callbacks. Match that
+style exactly.
+
+---
+
+### 3. Add `PlayerGameOverState` Component
+
+**Depends on:** Task 1 (relocated `RatingCard`) and Task 2 (rating API
+function).
 
 **Location:** `packages/klurigo-web/src/states/PlayerGameOverState/`
 
@@ -870,21 +887,49 @@ existing `PlayerResultState` and other state components in `src/states/`.
 **Props:** The component receives the full `GameOverPlayerEvent` as its
 `event` prop.
 
+**Rendering:** The component renders entirely from the `GameOverPlayerEvent`
+payload — no API calls on mount. The event is the source of truth for all
+displayed data: rank, score, behind info, streak, comeback, quiz title/id,
+existing rating, and `canRateQuiz`.
+
 **Behavior:**
 
-- Renders entirely from the event payload — no API calls on mount.
 - Displays final rank (as a `Badge`), score, behind info with the next
   player's nickname and point difference (using `PointsBehindIndicator` from
   `src/states/common`), quiz title, and a rank-based header message.
 - Shows confetti on mount with intensity based on rank. Reference the
   celebration logic in `PlayerResultState` — it uses rank thresholds (e.g.,
   rank 1 = epic, rank 2–3 = major, rank 4–10 = normal, rank > 10 = none).
-- Shows the relocated `RatingCard` pre-populated with the existing rating data
-  from the event payload (`stars`, `comment`, `canRateQuiz`).
-- On star/comment change, calls `createOrUpdateGameRating` (§Frontend 5) to
+- Shows the relocated `RatingCard` (from Task 1), pre-populated with the
+  existing rating data from the event payload (`stars`, `comment`,
+  `canRateQuiz`).
+- On star/comment change, calls `createOrUpdateGameRating` (from Task 2) to
   persist the rating via `PUT /games/:gameID/ratings`.
 - Shows "Back to Home" button always, and "View Full Results" button only for
   logged-in users (check `isUserAuthenticated` from the auth context).
+
+**Exit flow:**
+
+When the player clicks **"Back to Home":**
+
+- Call `revokeGame({ redirectTo: '/' })`.
+- This revokes the game-scoped JWT (best-effort), navigates to `/`, and
+  clears local auth state.
+
+When the player clicks **"View Full Results"** (logged-in only):
+
+- Call `revokeGame({ redirectTo: '/game/results/<gameID>' })`.
+- This revokes the game token, navigates to the results page (which requires
+  `TokenScope.User`), and clears game auth state.
+- The user's User-scoped token remains valid, so the results page loads
+  normally.
+
+**Important:** Revoke only happens when the player explicitly exits. While the
+player is on the game-over screen, the game token remains active — enabling
+the rating API call and SSE reconnection.
+
+**Tip:** The `revokeGame` function is available from the auth context. Look at
+how the existing quit handling in `GamePage` uses it — the same patterns apply.
 
 **Styling:** Reference `PlayerResultState.module.scss` for tone, responsive
 patterns, and score display. Use SCSS modules (`.module.scss`).
@@ -910,42 +955,17 @@ buttons.
 
 ---
 
-### 3. Do Not Add a New Route
+### 4. Integrate `PlayerGameOverState` into `GamePage`
 
-No new route is needed. The player game-over experience is just another
-rendered state inside `GamePage`. The `GameContextProvider` and auth state
-remain active — the player is still "in the game" while viewing the game-over
-screen. This avoids all issues with route guards, SSE cleanup, and context
-provider availability.
-
----
-
-### 4. Render from Event Payload
-
-`PlayerGameOverState` renders directly from the `GameOverPlayerEvent` payload.
-No initial API fetches are needed. The event payload is the source of truth
-for all displayed data: rank, score, behind info, streak, comeback, quiz
-title/id, existing rating, and `canRateQuiz`.
-
----
-
-### 5. Add Rating Write API Function
-
-**File:** `packages/klurigo-web/src/api/resources/game.resource.ts`
-
-Add a `createOrUpdateGameRating` function that sends a `PUT` request to
-`/games/<gameId>/ratings` with a `CreateQuizRatingDto` body and returns a
-`QuizRatingDto`.
-
-**Tip:** Follow the existing pattern in `game.resource.ts` — all functions use
-`deps.apiPut` / `deps.apiPost` with `deps.notifyError` callbacks. Match that
-style exactly.
-
----
-
-### 6. Update `GamePage` Rendering and Navigation Blocker
+**Depends on:** Task 3 (`PlayerGameOverState` component).
 
 **File:** `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`
+
+No new route is needed. The player game-over experience is rendered as another
+state inside `GamePage`, just like all other state components. The
+`GameContextProvider` and auth state remain active — the player is still
+"in the game" while viewing the game-over screen. This avoids all issues with
+route guards, SSE cleanup, and context provider availability.
 
 **Rendering switch (lines 212–242):**
 
@@ -955,8 +975,6 @@ style exactly.
 - Place the case between `GamePodiumHost` and the default, following the
   existing ordering convention.
 
-This keeps the player inside the existing game shell — no route change occurs.
-
 **Navigation blocker (lines 158–168):**
 
 Add `GameEventType.GameOverPlayer` to the allowed event types array alongside
@@ -964,44 +982,12 @@ Add `GameEventType.GameOverPlayer` to the allowed event types array alongside
 screen clicks "Back to Home" or "View Full Results", the programmatic
 navigation triggered by `revokeGame` is not blocked.
 
----
+**Quit handling — no changes needed:**
 
-### 7. `GamePage` QUIT Handling — No Changes Needed
-
-No changes needed to the existing quit handling code (lines 171–183). The
-`GameQuitEvent` `useEffect` continues to work as-is and is relevant for:
-
-- Host flow (redirect to results or home).
-- Premature game exits (host quits during an earlier task).
-- Non-podium quit scenarios.
-
-In the new flow, players receive `GameOverPlayerEvent` on the podium — they
-never see `GameQuitEvent` during the normal completion flow.
-
----
-
-### 8. `PlayerGameOverState` Exit Flow
-
-When the player clicks **"Back to Home":**
-
-- Call `revokeGame({ redirectTo: '/' })`.
-- This revokes the game-scoped JWT (best-effort), navigates to `/`, and
-  clears local auth state.
-
-When the player clicks **"View Full Results"** (logged-in only):
-
-- Call `revokeGame({ redirectTo: '/game/results/<gameID>' })`.
-- This revokes the game token, navigates to the results page (which requires
-  `TokenScope.User`), and clears game auth state.
-- The user's User-scoped token remains valid, so the results page loads
-  normally.
-
-**Important:** Revoke only happens when the player explicitly exits. While the
-player is on the game-over screen, the game token remains active — enabling
-the rating API call and SSE reconnection.
-
-**Tip:** The `revokeGame` function is available from the auth context. Look at
-how the existing quit handling in `GamePage` uses it — the same patterns apply.
+The existing `GameQuitEvent` `useEffect` (lines 171–183) continues to work
+as-is. It handles host-initiated redirects and premature game exits. In the
+new flow, players receive `GameOverPlayerEvent` on the podium — they never see
+`GameQuitEvent` during the normal completion flow.
 
 ---
 
@@ -1080,30 +1066,30 @@ how the existing quit handling in `GamePage` uses it — the same patterns apply
 
 ### Modified Files
 
-| File                                                                                                 | Change                                                                     |
-|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| `packages/common/src/models/game-event-type.enum.ts`                                                 | Add `GameOverPlayer`                                                       |
-| `packages/common/src/models/game-event.ts`                                                           | Add `GameOverPlayerEvent` and sub-types, update `GameEvent` union          |
-| `packages/common/src/models/index.ts`                                                                | Export new types, enum, and author type                                    |
-| `packages/common/src/index.ts`                                                                       | Export new types and enum                                                  |
-| `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`                  | Allow subscriptions for completed games, enrich podium metadata            |
-| `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`                   | Extract podium case, route to `buildGameOverPlayerEvent`                   |
-| `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`                     | Add completed-status check for host quit in podium block                   |
-| `packages/klurigo-service/src/modules/game-event/utils/index.ts`                                     | Export new builder                                                         |
-| `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.interface.ts`            | Already has `podiumCanRateQuiz`, `podiumRatingStars`, `podiumRatingComment`|
-| `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`            | Keep podium as current task when marking game completed                    |
-| `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts`   | Replace flat author with discriminated subdocument                         |
-| `packages/klurigo-service/src/modules/quiz-core/repositories/quiz-rating.repository.ts`              | Split author lookup into type-specific methods, update create and populate |
-| `packages/klurigo-service/src/modules/quiz-rating-api/services/quiz-rating.service.ts`               | Accept `QuizRatingAuthor`, route lookups by type, update DTO mapping       |
-| `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts` | Build `QuizRatingUserAuthor` subdocument before calling service            |
-| `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`                   | Update rating lookup to `findQuizRatingByUserAuthor`                       |
-| `packages/klurigo-service/src/modules/game-api/game-api.module.ts`                                   | Register new controller, guard, and service imports                        |
-| `tools/mongodb-migrator/src/transformers/quiz-rating.transformers.ts`                                | Migrate flat author to discriminated author subdocument                    |
-| `tools/mongodb-migrator/src/utils/collection.utils.ts`                                               | Update rating indexes for nested author structure                          |
-| `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`                                               | Add `GameOverPlayer` case to rendering switch and navigation blocker       |
-| `packages/klurigo-web/src/api/resources/game.resource.ts`                                            | Add `createOrUpdateGameRating` function                                    |
-| `packages/klurigo-web/src/components/index.ts`                                                       | Export relocated `RatingCard`                                              |
-| `packages/klurigo-web/src/pages/GameResultsPage/.../SummarySection/SummarySection.tsx`               | Import `RatingCard` from shared components                                 |
+| File                                                                                                 | Change                                                                      |
+|------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| `packages/common/src/models/game-event-type.enum.ts`                                                 | Add `GameOverPlayer`                                                        |
+| `packages/common/src/models/game-event.ts`                                                           | Add `GameOverPlayerEvent` and sub-types, update `GameEvent` union           |
+| `packages/common/src/models/index.ts`                                                                | Export new types, enum, and author type                                     |
+| `packages/common/src/index.ts`                                                                       | Export new types and enum                                                   |
+| `packages/klurigo-service/src/modules/game-event/services/game-event.subscriber.ts`                  | Allow subscriptions for completed games, enrich podium metadata             |
+| `packages/klurigo-service/src/modules/game-event/utils/game-player-event.utils.ts`                   | Extract podium case, route to `buildGameOverPlayerEvent`                    |
+| `packages/klurigo-service/src/modules/game-event/utils/game-host-event.utils.ts`                     | Add completed-status check for host quit in podium block                    |
+| `packages/klurigo-service/src/modules/game-event/utils/index.ts`                                     | Export new builder                                                          |
+| `packages/klurigo-service/src/modules/game-event/models/game-event-metadata.interface.ts`            | Already has `podiumCanRateQuiz`, `podiumRatingStars`, `podiumRatingComment` |
+| `packages/klurigo-service/src/modules/game-task/services/game-task-transition.service.ts`            | Keep podium as current task when marking game completed                     |
+| `packages/klurigo-service/src/modules/quiz-core/repositories/models/schemas/quiz-rating.schema.ts`   | Replace flat author with discriminated subdocument                          |
+| `packages/klurigo-service/src/modules/quiz-core/repositories/quiz-rating.repository.ts`              | Split author lookup into type-specific methods, update create and populate  |
+| `packages/klurigo-service/src/modules/quiz-rating-api/services/quiz-rating.service.ts`               | Accept `QuizRatingAuthor`, route lookups by type, update DTO mapping        |
+| `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts` | Build `QuizRatingUserAuthor` subdocument before calling service             |
+| `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`                   | Update rating lookup to `findQuizRatingByUserAuthor`                        |
+| `packages/klurigo-service/src/modules/game-api/game-api.module.ts`                                   | Register new controller, guard, and service imports                         |
+| `tools/mongodb-migrator/src/transformers/quiz-rating.transformers.ts`                                | Migrate flat author to discriminated author subdocument                     |
+| `tools/mongodb-migrator/src/utils/collection.utils.ts`                                               | Update rating indexes for nested author structure                           |
+| `packages/klurigo-web/src/pages/GamePage/GamePage.tsx`                                               | Add `GameOverPlayer` case to rendering switch and navigation blocker        |
+| `packages/klurigo-web/src/api/resources/game.resource.ts`                                            | Add `createOrUpdateGameRating` function                                     |
+| `packages/klurigo-web/src/components/index.ts`                                                       | Export relocated `RatingCard`                                               |
+| `packages/klurigo-web/src/pages/GameResultsPage/.../SummarySection/SummarySection.tsx`               | Import `RatingCard` from shared components                                  |
 
 ### Relocated Files
 
