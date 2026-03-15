@@ -633,7 +633,7 @@ not in `buildGameOverPlayerEvent(...)`.
 
 ---
 
-### 14. Game Rating Service
+### 14. Game Rating Service [DONE]
 
 **Dependency:** §9 (updated service signature — `createOrUpdateQuizRating`
 accepts the discriminated `QuizRatingAuthor` union).
