@@ -490,7 +490,7 @@ accessible to logged-in users, so it always deals with user-authored ratings.
 
 ---
 
-### 12. MongoDB Migrator Update
+### 12. MongoDB Migrator Update [DONE]
 
 **Files:**
 
