@@ -633,13 +633,102 @@ not in `buildGameOverPlayerEvent(...)`.
 
 ---
 
-### 14. Game-Scoped Rating Endpoint
+### 14. Game Rating Service
+
+**Dependency:** §9 (updated service signature — `createOrUpdateQuizRating`
+accepts the discriminated `QuizRatingAuthor` union).
+
+Create a new service in the `game-api` module that bridges the game context
+with the existing `QuizRatingService`. All game-specific resolution logic
+(participant → user lookup, author construction, ownership validation) lives
+here so neither the controller (§15) nor `QuizRatingService` need to change.
+
+#### Export `QuizRatingService`
+
+**File:** `packages/klurigo-service/src/modules/quiz-rating-api/quiz-rating-api.module.ts` (modify)
+
+`QuizRatingService` is currently not exported. Add it to the module's
+`exports` array so the `game-api` module can import and use it:
+
+```ts
+exports: [QuizRatingService],
+```
+
+#### Service
+
+**File:** `packages/klurigo-service/src/modules/game-api/services/game-rating.service.ts` (new)
+
+Create `GameRatingService` with a single public method:
+
+```ts
+public async createOrUpdateRating(
+  gameId: string,
+  participantId: string,
+  stars: number,
+  comment?: string,
+): Promise<QuizRatingDto>
+```
+
+**Injected dependencies** (all already available in `game-api` module):
+
+- `GameRepository` — via `GameCoreModule`.
+- `QuizRepository` — via `QuizCoreModule`.
+- `UserRepository` — via `UserModule`.
+- `QuizRatingService` — via `QuizRatingApiModule` (after the export above).
+
+**Method logic:**
+
+1. Load the game via `GameRepository.findGameByIDOrThrow(gameId, false)`.
+2. Resolve the quiz via `QuizRepository.findQuizByIdOrThrow(game.quiz._id)`.
+3. Attempt to find a `User` document by `participantId` via
+   `UserRepository.findUserById(participantId)`. This is how the system
+   determines logged-in vs anonymous — a game token's `sub` claim equals
+   the `userId` for authenticated players or a random UUID for anonymous
+   ones. There is no `userId` field on the token itself.
+4. Determine the author type and validate ownership:
+   - If a `User` is found (logged-in player):
+     - Verify the user is **not** the quiz owner
+       (`String(quiz.owner._id) !== participantId`). Throw
+       `ForbiddenException` if they are — quiz owners must not rate their
+       own quiz.
+     - Build a `QuizRatingUserAuthorWithBase` with the resolved `User`.
+   - If no `User` is found (anonymous player):
+     - Find the player's nickname from `game.participants` (match on
+       `participantId`).
+     - Build a `QuizRatingAnonymousAuthorWithBase` with `participantId`
+       and the nickname.
+5. Delegate to `QuizRatingService.createOrUpdateQuizRating(quizId, author,
+   stars, comment)` and return the result.
+
+This pattern mirrors the resolution logic already used by
+`enrichPodiumPlayerMetaData` in the game-event subscriber (§13).
+
+**Tip:** Keep this service focused on bridging game context to rating context.
+All rating persistence, locking, and summary updates remain in
+`QuizRatingService`.
+
+#### Module Registration
+
+**File:** `packages/klurigo-service/src/modules/game-api/game-api.module.ts` (modify)
+
+1. Add `QuizRatingApiModule` to the `imports` array (provides
+   `QuizRatingService`).
+2. Add `GameRatingService` to the `providers` array.
+3. Export the barrel: add `GameRatingService` to
+   `packages/klurigo-service/src/modules/game-api/services/index.ts`.
+
+All other required modules (`GameCoreModule`, `QuizCoreModule`, `UserModule`)
+are already imported.
+
+---
+
+### 15. Game-Scoped Rating Endpoint
 
 **Route:** `PUT /games/:gameID/ratings`
 
-**Dependency:** §9 (updated service signature) and §13 (subscriber enrichment
-must be in place so players already have their existing rating data on the
-game-over screen before they might submit an update via this endpoint).
+**Dependency:** §14 (`GameRatingService` must exist) and §13 (subscriber
+enrichment must be in place so players already have their existing rating data
+on the game-over screen before they might submit an update via this endpoint).
 
 This is the only new game-scoped endpoint needed. The
 `GET /games/:gameID/player-stats` and `GET /games/:gameID/ratings/me`
@@ -650,56 +739,83 @@ endpoints that were in earlier plan iterations have been removed — the
 
 **File:** `packages/klurigo-service/src/modules/game-api/controllers/game-rating.controller.ts` (new)
 
-Create a new controller in the game-api module. It should:
+Create a new controller in the `game-api` module alongside the existing
+`GameController`, `GameSettingsController`, etc.
 
-- Use the `@AuthorizedGame(GameParticipantType.Player)` decorator to ensure
-  only players can rate (not hosts).
-- Accept a `CreateQuizRatingDto` body (the same DTO used by the existing
-  profile rating endpoint — contains `stars` and optional `comment`).
-- Return a `QuizRatingDto`.
+**Class-level decorators** (game-scoped API surface):
 
-**Request handling logic:**
+- `@ApiBearerAuth()`
+- `@ApiTags('game')`
+- `@RequiresScopes(TokenScope.Game)` — restricts to game-scoped JWTs only.
+- `@RequiredAuthorities(Authority.Game)` — requires game authority.
+- `@Controller('games/:gameID')` — route prefix.
 
-1. Extract `participantId` and `userId` (if any) from the game-scoped JWT
-   token claims.
-2. Load the game and resolve the quiz.
-3. Build the correct author subdocument:
-   - If the token has a `userId` → build `QuizRatingUserAuthor` with the user
-     reference.
-   - If the token has no `userId` (anonymous) → build
-     `QuizRatingAnonymousAuthor` with `participantId` and the player's
-     nickname from the game's participants array.
-4. Delegate to `QuizRatingService.createOrUpdateQuizRating`.
-5. Return the result DTO.
+**Single method — `PUT /ratings`:**
 
-**Tip:** Look at `game.controller.ts` in the same module for the decorator
-patterns, token extraction, and how game-scoped endpoints are structured.
+- `@Put('/ratings')`
+- `@AuthorizedGame(GameParticipantType.PLAYER)` — ensures only players (not
+  hosts) can call this, and validates that the game token's `gameId` matches
+  the route's `:gameID`.
+- `@HttpCode(HttpStatus.OK)`
+- Swagger decorators (`@ApiOperation`, `@ApiOkResponse`, etc.) following
+  the patterns on the existing rating controllers.
+
+**Method parameters:**
+
+- `@RouteGameIdParam() gameId: string` — extracts and UUID-validates the
+  game ID from the route.
+- `@PrincipalId() participantId: string` — extracts the `sub` claim from
+  the game token (this is the participantId, not a userId).
+- `@Body() request: CreateQuizRatingRequest` — the validated request body
+  (implements `CreateQuizRatingDto`; contains `stars` and optional
+  `comment`). Import from
+  `packages/klurigo-service/src/modules/quiz-rating-api/controllers/models/create-quiz-rating.request.ts`.
+
+**Return type:** `Promise<QuizRatingResponse>` (implements `QuizRatingDto`).
+Import from
+`packages/klurigo-service/src/modules/quiz-rating-api/controllers/models/quiz-rating.response.ts`.
+
+**Body:** Delegates entirely to the game-api service:
+
+```ts
+return this.gameRatingService.createOrUpdateRating(
+  gameId,
+  participantId,
+  request.stars,
+  request.comment,
+)
+```
+
+The controller is intentionally thin — all authorization checks beyond "is a
+player in this game" are handled by `GameRatingService`.
+
+**Tip:** Follow the same decorator and parameter patterns used by
+`GameController` for the game-scoped decorators, and
+`ProfileQuizRatingController` for the rating-specific Swagger annotations.
 
 #### Guard
 
-**File:** `packages/klurigo-service/src/modules/game-api/guards/game-quiz-rating.guard.ts` (new)
+No new guard is needed. The existing `@AuthorizedGame(GameParticipantType.PLAYER)`
+decorator applies `GameAuthGuard`, which already:
 
-Create a guard similar to the existing `QuizRatingGuard` (in
-`packages/klurigo-service/src/modules/quiz-rating-api/guards/quiz-rating.guard.ts`)
-but adapted for the game-scoped context:
+- Verifies the game token's `gameId` matches the route's `:gameID`.
+- Verifies the participant type is `PLAYER` (not `HOST`).
 
-1. Verify the game exists and is in a state where rating is allowed (game
-   should be on podium task or completed).
-2. Verify the participant is a PLAYER (not host).
-3. If the participant resolves to a logged-in user, verify they are NOT the
-   quiz owner (no self-rating).
-
-**Tip:** The existing `QuizRatingGuard` checks: user is authenticated, user is
-not the quiz owner, and user has played a completed game for the quiz. The
-game-scoped guard is simpler because the game context already confirms
-participation — just check participant type and owner status.
+The remaining authorization check — "participant is not the quiz owner" —
+requires a database lookup (resolve `participantId` → `User` → compare with
+`quiz.owner._id`) and is delegated to `GameRatingService` as described in §14.
+This keeps guard logic simple and avoids duplicating the user-resolution
+pattern.
 
 #### Module Registration
 
-Register the new controller and guard in
-`packages/klurigo-service/src/modules/game-api/game-api.module.ts`. The
-controller needs access to `QuizRatingService` — import the quiz-rating module
-or the specific service as needed.
+**File:** `packages/klurigo-service/src/modules/game-api/game-api.module.ts` (modify)
+
+1. Add `GameRatingController` to the `controllers` array.
+2. Export the barrel: add `GameRatingController` to
+   `packages/klurigo-service/src/modules/game-api/controllers/index.ts`.
+
+`GameRatingService` was already registered as a provider in §14.
 
 ---
 
