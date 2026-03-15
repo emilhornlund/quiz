@@ -41,25 +41,25 @@ export class QuizRatingRepository extends BaseRepository<QuizRating> {
   }
 
   /**
-   * Finds a user's rating for a specific quiz.
+   * Finds an authenticated user's rating for a specific quiz.
    *
    * Resolves the author's User reference so the returned document is
    * compatible with DTO mapping (which reads `author.user._id` and
    * `author.user.defaultNickname`).
    *
    * @param quizId - The quiz identifier.
-   * @param author - The author (user) who created the rating.
+   * @param userId - The ID of the user who created the rating.
    * @returns The rating with populated author if found, otherwise `null`.
    */
-  public async findQuizRatingByAuthor(
+  public async findQuizRatingByUserAuthor(
     quizId: string,
-    author: User,
+    userId: string,
   ): Promise<QuizRating | null> {
     const doc = await this.quizRatingModel
       .findOne({
         quizId,
         'author.type': QuizRatingAuthorType.User,
-        'author.user': author._id,
+        'author.user': userId,
       })
       .lean<QuizRating>()
       .exec()
@@ -68,6 +68,30 @@ export class QuizRatingRepository extends BaseRepository<QuizRating> {
 
     const [resolved] = await this.resolveUserAuthors([doc])
     return resolved
+  }
+
+  /**
+   * Finds an anonymous participant's rating for a specific quiz.
+   *
+   * Anonymous ratings store all necessary author data inline, so no
+   * User reference resolution is needed.
+   *
+   * @param quizId - The quiz identifier.
+   * @param participantId - The game-session participant UUID used as the author identifier.
+   * @returns The rating document if found, otherwise `null`.
+   */
+  public async findQuizRatingByAnonymousAuthor(
+    quizId: string,
+    participantId: string,
+  ): Promise<QuizRating | null> {
+    return this.quizRatingModel
+      .findOne({
+        quizId,
+        'author.type': QuizRatingAuthorType.Anonymous,
+        'author.participantId': participantId,
+      })
+      .lean<QuizRating>()
+      .exec()
   }
 
   /**

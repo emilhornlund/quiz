@@ -397,7 +397,7 @@ one-rating-per-author-per-quiz for each type independently:
 
 ---
 
-### 9. Update Repository, Service, and DTO Mapping
+### 9. Update Repository, Service, and DTO Mapping [DONE]
 
 **Dependency:** §8 (author schema classes and `QuizRatingAuthor` type must
 exist before repository and service signatures can be updated).
@@ -457,7 +457,7 @@ Add a `toQuizRatingAuthorDto` mapping that switches on `author.type`:
 
 ---
 
-### 10. Adapt Profile Rating Endpoint
+### 10. Adapt Profile Rating Endpoint [DONE]
 
 **File:** `packages/klurigo-service/src/modules/quiz-rating-api/controllers/profile-quiz-rating.controller.ts`
 
@@ -474,7 +474,7 @@ This is a small adapter change — build
 
 ---
 
-### 11. Update Game Result Service
+### 11. Update Game Result Service [DONE]
 
 **File:** `packages/klurigo-service/src/modules/game-result/services/game-result.service.ts`
 

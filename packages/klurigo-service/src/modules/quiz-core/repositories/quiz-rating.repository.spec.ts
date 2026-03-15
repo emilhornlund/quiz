@@ -91,10 +91,10 @@ describe(QuizRatingRepository.name, () => {
     jest.useRealTimers()
   })
 
-  describe('findQuizRatingByAuthor', () => {
+  describe('findQuizRatingByUserAuthor', () => {
     /**
      * Helper that mocks the `findOne().lean().exec()` chain used by
-     * `findQuizRatingByAuthor`.
+     * `findQuizRatingByUserAuthor`.
      */
     function setupFindOneChain(doc: QuizRating | null): void {
       const execMock = jest.fn().mockResolvedValue(doc)
@@ -113,9 +113,10 @@ describe(QuizRatingRepository.name, () => {
       quizRatingModel.db.model.mockReturnValue({ find: findMock })
     }
 
-    it('queries by quizId and author, resolves the User ref, and returns the document', async () => {
+    it('queries by quizId and userId, resolves the User ref, and returns the document', async () => {
       const quizId = 'quiz-1'
       const author = buildMockPrimaryUser()
+      const userId = author._id
 
       // findOne returns a lean doc with an unresolved string user ref
       const leanDoc = {
@@ -123,7 +124,7 @@ describe(QuizRatingRepository.name, () => {
         quizId,
         author: {
           type: QuizRatingAuthorType.User,
-          user: author._id,
+          user: userId,
         },
         stars: 5,
         created: fixedNow,
@@ -133,16 +134,13 @@ describe(QuizRatingRepository.name, () => {
       setupFindOneChain(leanDoc)
       setupUserModelMock([author as unknown as { _id: string }])
 
-      const result = await repository.findQuizRatingByAuthor(
-        quizId,
-        author as unknown as any,
-      )
+      const result = await repository.findQuizRatingByUserAuthor(quizId, userId)
 
       expect(quizRatingModel.findOne).toHaveBeenCalledTimes(1)
       expect(quizRatingModel.findOne).toHaveBeenCalledWith({
         quizId,
         'author.type': QuizRatingAuthorType.User,
-        'author.user': author._id,
+        'author.user': userId,
       })
       expect(result).not.toBeNull()
       expect(result!._id).toBe('rating-1')
@@ -150,20 +148,83 @@ describe(QuizRatingRepository.name, () => {
 
     it('returns null when no rating matches', async () => {
       const quizId = 'quiz-1'
-      const author = buildMockPrimaryUser()
+      const userId = 'user-123'
 
       setupFindOneChain(null)
 
-      const result = await repository.findQuizRatingByAuthor(
-        quizId,
-        author as unknown as any,
-      )
+      const result = await repository.findQuizRatingByUserAuthor(quizId, userId)
 
       expect(quizRatingModel.findOne).toHaveBeenCalledTimes(1)
       expect(quizRatingModel.findOne).toHaveBeenCalledWith({
         quizId,
         'author.type': QuizRatingAuthorType.User,
-        'author.user': author._id,
+        'author.user': userId,
+      })
+      expect(result).toBeNull()
+    })
+  })
+
+  describe('findQuizRatingByAnonymousAuthor', () => {
+    /**
+     * Helper that mocks the `findOne().lean().exec()` chain used by
+     * `findQuizRatingByAnonymousAuthor`.
+     */
+    function setupFindOneChain(doc: QuizRating | null): void {
+      const execMock = jest.fn().mockResolvedValue(doc)
+      const leanMock = jest.fn().mockReturnValue({ exec: execMock })
+      quizRatingModel.findOne.mockReturnValue({ lean: leanMock })
+    }
+
+    it('queries by quizId and participantId and returns the document', async () => {
+      const quizId = 'quiz-1'
+      const participantId = 'participant-abc'
+
+      const leanDoc = {
+        _id: 'rating-2',
+        quizId,
+        author: {
+          type: QuizRatingAuthorType.Anonymous,
+          participantId,
+          nickname: 'AnonPlayer',
+        },
+        stars: 3,
+        created: fixedNow,
+        updated: fixedNow,
+      } as unknown as QuizRating
+
+      setupFindOneChain(leanDoc)
+
+      const result = await repository.findQuizRatingByAnonymousAuthor(
+        quizId,
+        participantId,
+      )
+
+      expect(quizRatingModel.findOne).toHaveBeenCalledTimes(1)
+      expect(quizRatingModel.findOne).toHaveBeenCalledWith({
+        quizId,
+        'author.type': QuizRatingAuthorType.Anonymous,
+        'author.participantId': participantId,
+      })
+      expect(result).not.toBeNull()
+      expect(result!._id).toBe('rating-2')
+    })
+
+    it('returns null when no anonymous rating matches', async () => {
+      const quizId = 'quiz-1'
+      const participantId = 'participant-missing'
+
+      setupFindOneChain(null)
+
+      const result = await repository.findQuizRatingByAnonymousAuthor(
+        quizId,
+        participantId,
+      )
+
+      expect(quizRatingModel.findOne).toHaveBeenCalledTimes(1)
+      expect(quizRatingModel.findOne).toHaveBeenCalledWith({
+        quizId,
+        'author.type': QuizRatingAuthorType.Anonymous,
+        'author.participantId': participantId,
       })
       expect(result).toBeNull()
     })
