@@ -2,6 +2,8 @@ import { Logger, Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 
 import { GameCoreModule } from '../game-core'
+import { QuizCoreModule } from '../quiz-core'
+import { UserModule } from '../user'
 
 import { GameEventPublisher, GameEventSubscriber } from './services'
 
@@ -10,7 +12,7 @@ import { GameEventPublisher, GameEventSubscriber } from './services'
  * for handling game-related operations.
  */
 @Module({
-  imports: [EventEmitterModule, GameCoreModule],
+  imports: [EventEmitterModule, GameCoreModule, QuizCoreModule, UserModule],
   controllers: [],
   providers: [Logger, GameEventPublisher, GameEventSubscriber],
   exports: [GameEventPublisher, GameEventSubscriber],

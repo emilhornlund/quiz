@@ -529,7 +529,7 @@ updated to reflect the new nested author structure:
 
 ---
 
-### 13. Enrich Rating Metadata in Subscriber
+### 13. Enrich Rating Metadata in Subscriber [DONE]
 
 **Files:**
 
@@ -551,11 +551,11 @@ rating-related fields needed for the final player game-over event.
 
 **The enrichment added here must provide:**
 
-| Metadata field         | Purpose                                                       |
-| ---------------------- | ------------------------------------------------------------- |
-| `podiumCanRateQuiz`    | Whether the participant is allowed to rate the quiz           |
-| `podiumRatingStars`    | Existing rating stars, if the participant has already rated   |
-| `podiumRatingComment`  | Existing rating comment, if the participant has already rated |
+| Metadata field        | Purpose                                                       |
+|-----------------------|---------------------------------------------------------------|
+| `podiumCanRateQuiz`   | Whether the participant is allowed to rate the quiz           |
+| `podiumRatingStars`   | Existing rating stars, if the participant has already rated   |
+| `podiumRatingComment` | Existing rating comment, if the participant has already rated |
 
 **Scope clarification:** This task only adds the missing metadata enrichment.
 Do not rework `buildGameOverPlayerEvent` logic that is already implemented.
